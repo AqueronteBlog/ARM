@@ -2,7 +2,7 @@
 * @file		functions.h
 * @author	Manuel Caballero
 * @date 	10/9/2016
-* @brief 	Prototipo de funciones.
+* @brief 	Functions header.
 * \copyright
 * 	AqueronteBlog@gmail.com
 *
@@ -23,16 +23,11 @@
 #include <stdint.h>
 
 
-// PROTOTIPO DE FUNCIONES
-//void conf_CLK           (void);
+// FUNCTION PROTOTYPES
+void conf_CLK           (void);
 void conf_WDT           (void);
 void conf_IO            (void);
 void conf_TA	        (void);
-
-
-// VARIABLES EXTERNAS
-// extern volatile uint8_t 	ADC10_Buffer [3];
-
 
 
 

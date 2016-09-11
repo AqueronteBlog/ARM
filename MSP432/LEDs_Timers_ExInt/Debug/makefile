@@ -137,19 +137,19 @@ BIN_OUTPUTS__QUOTED += \
 
 
 # All Target
-all: LEDs_Timers_ExInt.out
+all: LEDs_Timers_ExInt.out secondary-outputs
 
 # Tool invocations
 LEDs_Timers_ExInt.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MSP432 Linker'
-	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.6.0.STS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=all --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"LEDs_Timers_ExInt.map" --heap_size=1024 --stack_size=512 -i"C:/ti/ccsv6/ccs_base/arm/include" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.6.0.STS/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.6.0.STS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="LEDs_Timers_ExInt_linkInfo.xml" --rom_model -o "LEDs_Timers_ExInt.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.6.0.STS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power="all" --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"LEDs_Timers_ExInt.map" --heap_size=1024 --stack_size=512 -i"C:/ti/ccsv6/ccs_base/arm/include" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.6.0.STS/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.6.0.STS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="LEDs_Timers_ExInt_linkInfo.xml" --rom_model -o "LEDs_Timers_ExInt.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 LEDs_Timers_ExInt.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: MSP432 Hex Utility'
-	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.6.0.STS/bin/armhex" --memwidth=8 --romwidth=8 -o "LEDs_Timers_ExInt.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.6.0.STS/bin/armhex" --memwidth=8 --romwidth=8 --intel -o "LEDs_Timers_ExInt.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 
@@ -160,6 +160,8 @@ clean:
 	-$(RM) "functions.obj" "interrupts.obj" "main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
+
+secondary-outputs: $(BIN_OUTPUTS)
 
 .PHONY: all clean dependents
 .SECONDARY:
