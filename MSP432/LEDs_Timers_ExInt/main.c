@@ -24,7 +24,7 @@
 
 /**
  *  \brief     void main( void )
- *  \details   We are going to play with: MSP432P401R.
+ *  \details   We are going to play with: MSP432P401R LaunchPad.
  *
  *  		   This firmware will change the state of the LED1 and LED2 ( RGB LED ) by using
  *  		   the switches SW1 ( LED1 ) and SW2 ( RGB LED2 ).
