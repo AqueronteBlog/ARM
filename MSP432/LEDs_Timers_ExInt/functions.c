@@ -21,7 +21,7 @@
  *  \brief     void conf_CLK (void)
  *  \details   Configuring the CLKs for the uC.
  *  				- MCLK:  MCLK  = DCO    ~ 3 MHz ( default ).
- *  				- ACLK:  ACLK  = VLOCLK ~ 8.3 kHz ( reference manual slau356d 5.1 Clock System Introduction ).
+ *  				- ACLK:  ACLK  = VLOCLK ~ 9.4 kHz ( reference manual slau356d 5.1 Clock System Introduction ).
  *
  *  \author    Manuel Caballero
  *  \version   0.0
