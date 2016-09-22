@@ -33,7 +33,7 @@
  *			   that is why we are going to use the TimerA0 to generate a short delay trying to
  *			   get rid of this fenomenon.
  *
- *  		   The rest of the time, the uC will be in LPM0 low power.
+ *  		   The rest of the time, the uC will be in LPM0 low power
  *
  *
  *  \author    Manuel Caballero
