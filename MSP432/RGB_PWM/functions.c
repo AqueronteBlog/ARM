@@ -55,20 +55,21 @@ void conf_WDT (void)
 /**
  *  \brief     void conf_IO (void)
  *  \details   Configuring all GPIO for this project.
- *  				- Port 1: LED1 & SW1 & SW2.
+ *  				- Port 1: LED1.
  *  					- P1.0: OUT ( LED1: RED ).
- *  					- P1.1: IN  ( SW1).		Interruption ON
- *  					- P1.2: IN  ( SW2 ).	Interruption ON
- *  				- Port 2: LED2 RGB.
+ *  				- Port 2: LED2 RGB & TA0.1, TA0.2 and TA0.3 OUTPUT.
  *  					- P2.0: OUT ( LED2 RGB: RED ).
  *  					- P2.1: OUT ( LED2 RGB: GREEN ).
  *  					- P2.2: OUT ( LED2 RGB: BLUE ).
+ *  					- P2.4: TA0.1.
+ *  					- P2.5: TA0.2.
+ *  					- P2.6: TA0.3.
  *
  *  		   The rest GPIO as OUT for low power.
  *
  *  \author    Manuel Caballero
  *  \version   0.0
- *  \date      25/10/2016
+ *  \date      11/12/2016
  */
 void conf_IO (void)
 {
@@ -86,11 +87,6 @@ void conf_IO (void)
 	PJ->OUT	 = 0x00;	PJ->DIR	 = 0xFF;
 
 
-	// SW 1 & 2
-	P1->DIR	&=	~( BIT1 | BIT4 );
-	P1->OUT	|=	 ( BIT1 | BIT4 );
-	P1->REN	|=	 ( BIT1 | BIT4 );
-
 	// LED1	( Digital GIPO )
 	P1->SEL0	&=	~( BIT0 | BIT1 | BIT4 );
 	P1->SEL1	&=	~( BIT0 | BIT1 | BIT4 );
@@ -99,15 +95,9 @@ void conf_IO (void)
 	P2->SEL0	&=	~( BIT0 | BIT1 | BIT2 );
 	P2->SEL1	&=	~( BIT0 | BIT1 | BIT2 );
 
-
-	P1->IES	|=	 ( BIT1 | BIT4 );
-	P1->IFG	&=	~( BIT1 | BIT4 );
-
-	P1->IE	|=	 ( BIT1 | BIT4 );
-
-
-	NVIC_EnableIRQ		( PORT1_IRQn );
-	NVIC_SetPriority	( PORT1_IRQn, 0 );
+	// TA0.1, TA0.2 and TA0.3 output
+	P2->SEL1	&=	~( BIT4 | BIT5 |BIT6 );
+	P2->SEL0	|=	 ( BIT4 | BIT5 |BIT6 );
 }
 
 
@@ -128,9 +118,9 @@ void conf_IO (void)
 void conf_TA (void)
 {
 	TIMER_A0->CCR[0] =	 1410;														// TAIFG on around ~ 150ms
-	TIMER_A0->CTL	 =	 TIMER_A_CTL_TASSEL_1 | TIMER_A_CTL_CLR | TIMER_A_CTL_IE;	// ACLK, TA0 interrupt ON
+	TIMER_A0->CTL	 =	 TIMER_A_CTL_TASSEL_1 | TIMER_A_CTL_CLR;	// ACLK, TA0
 
-	NVIC_EnableIRQ		( TA0_N_IRQn );
-	NVIC_SetPriority	( TA0_N_IRQn, 0 );
+	//NVIC_EnableIRQ		( TA0_N_IRQn );
+	//NVIC_SetPriority	( TA0_N_IRQn, 0 );
 }
 
