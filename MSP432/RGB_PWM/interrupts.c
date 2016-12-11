@@ -19,64 +19,6 @@
 
 
 /**
- *  \brief     PORT1_IRQHandler(void) PORT1 interrupt service routine
- *  \details   Every time that SW1 or SW2 is pressed, it will generate an interruption
- *  		   and it will turn on the associated LED.
- *
- *  		   It will turn on the TimerA0 trying to eliminate the bouncing
- *
- *  \author    Manuel Caballero
- *  \version   0.0
- *  \date      25/10/2016
- */
-void PORT1_IRQHandler(void)
-{
-    // LED1
-    if ( ( P1->IFG & BIT1 ) == BIT1 )
-    {
-    	P1->OUT	^=	 BIT0;
-    	P1->IFG	&=	~BIT1;
-    }
-
-    // RGB LED2
-    if ( ( P1->IFG & BIT4 ) == BIT4 )
-    {
-    	switch ( cledRGB ){
-        case	1:
-        	P2->OUT	&=	~( BIT0 | BIT1 | BIT2 );
-            P2->OUT	|=	 BIT0;
-            cledRGB	 =	 2;
-            break;
-
-        case	2:
-        	P2->OUT	&=	~( BIT0 | BIT1 | BIT2 );
-            P2->OUT	|=	 BIT1;
-            cledRGB	 =	 3;
-            break;
-
-        case	3:
-           	P2->OUT	&=	~( BIT0 | BIT1 | BIT2 );
-           	P2->OUT	|=	 BIT2;
-           	cledRGB	 =	 1;
-           	break;
-
-        default:
-          	P2->OUT	&=	~( BIT0 | BIT1 | BIT2 );
-          	cledRGB	 =	 1;
-           	break;
-    	}
-
-    	P1->IFG	&=	~BIT4;
-
-    }
-
-    NVIC_DisableIRQ	( PORT1_IRQn );
-    TIMER_A0->CTL	|=	 TIMER_A_CTL_MC_1;		// TimerA0 ON: Try to get rid of the swicth bouncing
-}
-
-
-
-/**
  *  \brief     TA0_N_IRQHandler(void) TIMERA0 IFG interrupt service routine
  *  \details   Generate a short delay trying to get rid of the bouncing
  *
