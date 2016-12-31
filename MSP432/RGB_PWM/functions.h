@@ -24,11 +24,12 @@
 
 
 // FUNCTION PROTOTYPES
-void conf_CLK           (void);
-void conf_WDT           (void);
-void conf_IO            (void);
-void conf_TA	        (void);
+void conf_CLK           ( void );
+void conf_WDT           ( void );
+void conf_IO            ( void );
+void conf_TA	        ( void );
+void conf_UCA2			( void );
 
-
+void mapRGB				( uint8_t [3] );
 
 #endif /* FUNCTIONS_H_ */
