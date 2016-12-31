@@ -49,14 +49,17 @@ void main(void)
 	conf_WDT	();
 	conf_IO 	();
 	conf_TA		();
+	conf_UCA2	();
 
 	
 	__enable_irq();
 
-	// Do not wake up on exit from ISR
-	SCB->SCR	|=	 SCB_SCR_SLEEPONEXIT_Msk;
 
 	while (1){
+		// Do not wake up on exit from ISR
+		SCB->SCR	|=	 SCB_SCR_SLEEPONEXIT_Msk;
 		__sleep	();
+
+		mapRGB ( ledsRGB );
 	}
 }

@@ -27,6 +27,7 @@
  *  							* cledRGB	=	2:	RGB LED2: GREEN colour
  *  							* cledRGB	=	3:	RGB LED2: BLUE colour
  */
-uint8_t	cledRGB	=	1;
+uint8_t	ledsRGB[]	=	{ 0, 0, 0 };
+uint8_t RGBcounter  =   0;
 
 #endif /* VARIABLES_H_ */
