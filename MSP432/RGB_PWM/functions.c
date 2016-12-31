@@ -114,8 +114,8 @@ void conf_IO (void)
  *  \brief     void conf_TimerA (void)
  *  \details   Configuring the TimerA0.
  *
- * 			   TimerA0 will carry out the task trying to eliminate the switch´s bouncing
- * 			   by using a short delay about 100 ms ( 1410/(~9.4kHz) ~ 150ms ).
+ * 			   TimerA0 will carry out the task to create PWM lines to handle the
+ * 			   RGB LED at 100 Hz ( 94/(~9.4kHz) ~ 10ms ).
  *
  * 	\pre	   ACK clock must be at 9.4 kHz.
  *  \author    Manuel Caballero
@@ -124,17 +124,14 @@ void conf_IO (void)
  */
 void conf_TA (void)
 {
-	TIMER_A0->CCR[0]  =	 94;														// [todo]
+	TIMER_A0->CCR[0]  =	 94;														// PWM frequency
 	TIMER_A0->CCTL[1] =  TIMER_A_CCTLN_OUTMOD_6; 									// CCR0  Toggle/Set
-	TIMER_A0->CCR[1]  =	 95;														// [todo]
+	TIMER_A0->CCR[1]  =	 95;														// Initial colour
 	TIMER_A0->CCTL[2] =  TIMER_A_CCTLN_OUTMOD_6; 									// CCR0  Toggle/Set
-	TIMER_A0->CCR[2]  =	 52;														// [todo]
+	TIMER_A0->CCR[2]  =	 52;														// Initial colour
 	TIMER_A0->CCTL[3] =  TIMER_A_CCTLN_OUTMOD_6; 									// CCR0  Toggle/Set
-	TIMER_A0->CCR[3]  =	 0;														// [todo]
+	TIMER_A0->CCR[3]  =	 0;															// Initial colour
 	TIMER_A0->CTL	  =	 TIMER_A_CTL_TASSEL_1 | TIMER_A_CTL_MC_1 | TIMER_A_CTL_CLR;	// ACLK, TA0
-
-	//NVIC_EnableIRQ		( TA0_N_IRQn );
-	//NVIC_SetPriority	( TA0_N_IRQn, 0 );
 }
 
 
@@ -155,13 +152,12 @@ void conf_TA (void)
  *     		UCBRx = INT(N/16) = INT(312/16) = 19
  *     		UCBRFx = ROUND[((N/16) - INT(N/16))·16] = ROUND[((3MHz/9600)/16 - INT((3MHz/9600)/16))·16] ~ 8.5 = 9
  *
- * 		· Activamos UART
- * 	\pre	   [todo] Para ampliar información: Documentos slau144j.pdf, apartado 15 Universal Serial Comunication
- *			   se pueden encontrar datos tabulados a distintas frecuencias.
+ * 		· Activamos UART y RX interruptción.
+ *
  * 	\pre	   El reloj SMCLK debe estar a 3 MHz.
  *  \author    Manuel Caballero
  *  \version   0.0
- *  \date      [todo] 2/2/2015
+ *  \date      31/12/2016
  */
 void conf_UCA2 (void)
 {
@@ -185,6 +181,27 @@ void conf_UCA2 (void)
 
 
 
+/**
+ *  \brief     void mapRGB ( uint8_t [3] )
+ *  \details   This function adapts the data from the UART to the PWM lines to
+ *  		   keep the frequency at 100 Hz.
+ *
+ * 		· Interpolation:
+ * 				* Data IN  min:	 0
+ * 				* Data IN  max:	 255
+ * 				* Data OUT min:	 0
+ * 				* Data OUT max:	 95
+ *
+ * 		· The equation:
+ *
+ * 		  		[ [ ( X - Data_IN_min )·( Data_OUT_max - Data_OUT_min ) ]/( Data_IN_max - Data_IN_min ) ] + Data_OUT_min
+ *
+ *
+ * 	\pre	   El reloj SMCLK debe estar a 3 MHz.
+ *  \author    Manuel Caballero
+ *  \version   0.0
+ *  \date      31/12/2016
+ */
 void mapRGB ( uint8_t cmd[3] )
 {
 	uint8_t i = 0;

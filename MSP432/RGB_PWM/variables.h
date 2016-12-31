@@ -22,10 +22,11 @@
 /**
  *  \brief     Global variables
  *  \details
- *  			- cledRGB:	It is useful to select which RGB LED to choose.
- *  							* cledRGB	=	1:	RGB LED2: RED colour
- *  							* cledRGB	=	2:	RGB LED2: GREEN colour
- *  							* cledRGB	=	3:	RGB LED2: BLUE colour
+ *  			- ledsRGB:		It is useful to tune the PWM width.
+ *  								* ledsRGB[0]:	RGB LED2: RED colour
+ *  								* ledsRGB[1]:	RGB LED2: GREEN colour
+ *  								* ledsRGB[2]:	RGB LED2: BLUE colour
+ *	  			- RGBcounter: 	Counter to store the data from the UART.
  */
 uint8_t	ledsRGB[]	=	{ 0, 0, 0 };
 uint8_t RGBcounter  =   0;

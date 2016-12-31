@@ -26,15 +26,10 @@
  *  \brief     void main( void )
  *  \details   We are going to play with: MSP432P401R LaunchPad.
  *
- *  		   [TODO] This firmware will change the state of the LED1 and LED2 ( RGB LED ) by using
- *  		   the switches SW1 ( LED1 ) and SW2 ( RGB LED2 ).
+ *  		   This firmware will change the colour of the LED2 ( RGB LED ) according to the data
+ *  		   we receive through the UART.
  *
- *			   Every time that one of the switches is pressed, we will notice the case of bouncing,
- *			   that is why we are going to use the TimerA0 to generate a short delay trying to
- *			   get rid of this fenomenon.
- *
- *  		   The rest of the time, the uC will be in LPM0 low power
- *
+ *			   There are three PWM lines which handle the RGB LED at about 100 Hz.
  *
  *  \author    Manuel Caballero
  *  \version   0.0
@@ -56,10 +51,10 @@ void main(void)
 
 
 	while (1){
-		// Do not wake up on exit from ISR
+		// Do not wake up on exit from ISR just when we receive all the data
 		SCB->SCR	|=	 SCB_SCR_SLEEPONEXIT_Msk;
 		__sleep	();
 
-		mapRGB ( ledsRGB );
+		mapRGB ( ledsRGB );							// Adapt the new data for the PWM lines.
 	}
 }
