@@ -17,6 +17,36 @@
 #include "interrupts.h"
 
 
+/**
+ *  \brief     EUSCIA2_IRQHandler(void) UART interrupt service routine
+ *  \details   [todo]Generate a short delay trying to get rid of the bouncing
+ *
+ *  		   [todo]It will turn on the PORT1 interruption when the bouncing has been eliminated
+ *
+ *  \author    Manuel Caballero
+ *  \version   0.0
+ *  \date      [todo] 25/10/2016
+ */
+void EUSCIA2_IRQHandler (void)
+{
+    if (EUSCI_A2->IFG & EUSCI_A_IFG_RXIFG)
+    {
+        if ( RGBcounter < 2 )
+        {
+        	ledsRGB[RGBcounter] = EUSCI_A2->RXBUF;
+        	RGBcounter++;
+        }
+        else
+        {
+        	ledsRGB[2] 	 = 	 EUSCI_A2->RXBUF;
+        	RGBcounter	 =	 0;
+        	SCB->SCR 	&= 	~SCB_SCR_SLEEPONEXIT_Msk;
+        }
+
+    }
+}
+
+
 
 /**
  *  \brief     TA0_N_IRQHandler(void) TIMERA0 IFG interrupt service routine
@@ -28,6 +58,7 @@
  *  \version   0.0
  *  \date      25/10/2016
  */
+/*
 void TA0_N_IRQHandler(void)
 {
 	switch ( TIMER_A0->IV ){
@@ -80,3 +111,4 @@ void TA0_N_IRQHandler(void)
 		NVIC_EnableIRQ	( PORT1_IRQn );
 	}
 }
+*/

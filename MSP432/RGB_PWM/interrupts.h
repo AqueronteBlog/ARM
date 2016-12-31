@@ -23,7 +23,7 @@
 
 
 // EXTERN VARIABLES
-extern uint8_t	cledRGB;
-
+extern uint8_t	ledsRGB[3];
+extern uint8_t  RGBcounter;
 
 #endif /* INTERRUPTS_H_ */
