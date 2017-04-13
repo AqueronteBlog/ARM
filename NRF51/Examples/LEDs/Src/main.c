@@ -20,8 +20,8 @@
 
 int main( void )
 {
-    conf_GPIO ();
-
+    conf_GPIO   ();
+    conf_Timer0 ();
 
     while( 1 )
     {

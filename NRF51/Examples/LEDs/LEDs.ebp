@@ -97,10 +97,15 @@
 		<Unit filename="softdevice\Include\nrf_soc.h" />
 		<Unit filename="softdevice\Include\nrf_svc.h" />
 		<Unit filename="softdevice\Include\softdevice_assert.h" />
+		<Unit filename="Src\board.h" />
 		<Unit filename="Src\functions.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Src\functions.h" />
+		<Unit filename="Src\interrupts.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Src\interrupts.h" />
 		<Unit filename="Src\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
