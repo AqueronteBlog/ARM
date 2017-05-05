@@ -1,4 +1,4 @@
-cscope 15 E:\vsProjects\ARM\NRF51\Examples\LEDs"               0000378968
+cscope 15 E:\vsProjects\ARM\NRF51\Examples\LEDs"               0000380950
 	@E:\vsProjects\ARM\NRF51\Examples\LEDs\Inc\compiler_abstraction.h
 
 30 #i‚de‡
@@ -36151,6 +36151,32 @@ __©åibuã__
 
 	)
 
+	@E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\board.h
+
+4 
+	#LED1
+ 21
+
+	)
+
+5 
+	#LED2
+ 22
+
+	)
+
+6 
+	#LED3
+ 23
+
+	)
+
+7 
+	#LED4
+ 24
+
+	)
+
 	@E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\functions.c
 
 1 
@@ -36161,7 +36187,131 @@ __©åibuã__
 	$c⁄f_GPIO
  ( )
 
-6 
+5 
+uöt32_t
+ 
+i
+ = 0;
+
+7  
+i
+ = 
+LED1
+; i < ( LED1 + 1 ); i++ )
+
+8 
+NRF_GPIO
+->
+PIN_CNF
+[
+i
+] = 
+GPIO_PIN_CNF_DIR_Ouçut
+ << 
+GPIO_PIN_CNF_DIR_Pos
+ |
+
+9 
+GPIO_PIN_CNF_INPUT_Disc⁄√˘
+ << 
+GPIO_PIN_CNF_INPUT_Pos
+ |
+
+10 
+GPIO_PIN_CNF_PULL_DißbÀd
+ << 
+GPIO_PIN_CNF_PULL_Pos
+ |
+
+11 
+GPIO_PIN_CNF_DRIVE_S0S1
+ << 
+GPIO_PIN_CNF_DRIVE_Pos
+ |
+
+12 
+GPIO_PIN_CNF_SENSE_DißbÀd
+ << 
+GPIO_PIN_CNF_SENSE_Pos
+;
+
+13 
+	}
+}
+
+17 
+	$c⁄f_Timî0
+ ( )
+
+19 
+NRF_TIMER0
+->
+TASKS_STOP
+ = 1;
+
+20 
+NRF_TIMER0
+->
+MODE
+ = 
+TIMER_MODE_MODE_Timî
+;
+
+21 
+NRF_TIMER0
+->
+PRESCALER
+ = 5U;
+
+22 
+NRF_TIMER0
+->
+BITMODE
+ = 
+TIMER_BITMODE_BITMODE_32Bô
+ << 
+TIMER_BITMODE_BITMODE_Pos
+;
+
+23 
+NRF_TIMER0
+->
+TASKS_CLEAR
+ = 1;
+
+25 
+NRF_TIMER0
+->
+CC
+[0] = 125000;
+
+27 
+NRF_TIMER0
+->
+INTENSET
+ = 
+TIMER_INTENSET_COMPARE0_E«bÀd
+ << 
+TIMER_INTENSET_COMPARE0_Pos
+;
+
+29 
+NRF_TIMER0
+->
+SHORTS
+ = 
+TIMER_SHORTS_COMPARE1_CLEAR_E«bÀd
+ << 
+TIMER_SHORTS_COMPARE1_CLEAR_Pos
+;
+
+32 
+	`NVIC_E«bÀIRQ
+ ( 
+TIMER0_IRQn
+ );
+
+33 
 	}
 }
 
@@ -36171,8 +36321,100 @@ __©åibuã__
 	~"ƒf.h
 "
 
-4 
+2 
+	~"ƒf51_bôfõlds.h
+"
+
+3 
+	~"v¨übÀs.h
+"
+
+6 
 c⁄fig_GPIO
+ ( );
+
+7 
+c⁄f_Timî0
+ ( );
+
+	@E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\interrupts.c
+
+1 
+	~"öãºu±s.h
+"
+
+4 
+	$TIMER0_IRQH™dÀr
+()
+
+6 i‡––
+NRF_TIMER0
+->
+EVENTS_COMPARE
+[0] !0 ) && ( ( NRF_TIMER0->
+INTENSET
+ & 
+TIMER_INTENSET_COMPARE0_Msk
+ ) != 0 ) )
+
+10 i‡–
+ch™geLEDsSTATE
+ =
+ON
+ )
+
+12 
+NRF_GPIO
+->
+OUTSET
+ |–
+LED1
+ | 
+LED2
+ | 
+LED3
+ | 
+LED4
+ );
+
+13 
+ch™geLEDsSTATE
+ = 
+OFF
+;
+
+17 
+NRF_GPIO
+->
+OUTCLR
+ |–
+LED1
+ | 
+LED2
+ | 
+LED3
+ | 
+LED4
+ );
+
+18 
+ch™geLEDsSTATE
+ = 
+ON
+;
+
+21 
+	}
+}
+
+	@E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\interrupts.h
+
+1 
+	~"v¨übÀs.h
+"
+
+3 
+TIMER0_IRQH™dÀr
  ( );
 
 	@E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\main.c
@@ -36186,18 +36428,32 @@ c⁄fig_GPIO
 "
 
 17 
+	~"v¨übÀs.h
+"
+
+18 
 	~"fun˘i⁄s.h
 "
 
-20 
+21 
 	$maö
 ( )
 
-22 
+23 
 	`c⁄f_GPIO
  ();
 
-29 
+24 
+	`c⁄f_Timî0
+ ();
+
+26 
+NRF_TIMER0
+->
+TASKS_START
+ = 1;
+
+35 
 	}
 }
 
@@ -36404,6 +36660,40 @@ uöt32_t
 119 
 	}
 }
+
+	@E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\variables.h
+
+1 
+	~"ƒf.h
+"
+
+2 
+	~"ƒf51_bôfõlds.h
+"
+
+3 
+	~"bﬂrd.h
+"
+
+5 
+	#ON
+ 1
+
+	)
+
+6 
+	#OFF
+ 0
+
+	)
+
+9 
+uöt32_t
+ 
+	gch™geLEDsSTATE
+ = 
+ON
+;
 
 	@E:\vsProjects\ARM\NRF51\Examples\LEDs\gcc_nrf51_s130_xxaa.ld
 
@@ -51181,8 +51471,8 @@ IRQ
 1
 .
 0
-35
-2218
+39
+2432
 E:\vsProjects\ARM\NRF51\Examples\LEDs\Inc\compiler_abstraction.h
 E:\vsProjects\ARM\NRF51\Examples\LEDs\Inc\nrf.h
 E:\vsProjects\ARM\NRF51\Examples\LEDs\Inc\nrf51.h
@@ -51190,10 +51480,14 @@ E:\vsProjects\ARM\NRF51\Examples\LEDs\Inc\nrf51_bitfields.h
 E:\vsProjects\ARM\NRF51\Examples\LEDs\Inc\nrf51_deprecated.h
 E:\vsProjects\ARM\NRF51\Examples\LEDs\Inc\system_nrf51.h
 E:\vsProjects\ARM\NRF51\Examples\LEDs\S130.c
+E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\board.h
 E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\functions.c
 E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\functions.h
+E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\interrupts.c
+E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\interrupts.h
 E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\main.c
 E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\system_nrf51.c
+E:\vsProjects\ARM\NRF51\Examples\LEDs\Src\variables.h
 E:\vsProjects\ARM\NRF51\Examples\LEDs\gcc_nrf51_s130_xxaa.ld
 E:\vsProjects\ARM\NRF51\Examples\LEDs\readme.txt
 E:\vsProjects\ARM\NRF51\Examples\LEDs\softdevice\Include\ant_error.h
