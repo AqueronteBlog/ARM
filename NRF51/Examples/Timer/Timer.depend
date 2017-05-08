@@ -1,0 +1,108 @@
+# depslib dependency file v1.0
+1494001260 source:e:\vsprojects\arm\nrf51\examples\timer\src\functions.c
+	"functions.h"
+
+1493996187 e:\vsprojects\arm\nrf51\examples\timer\src\functions.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"variables.h"
+
+1493995412 e:\vsprojects\arm\nrf51\examples\timer\inc\nrf.h
+	"nrf51.h"
+	"nrf51_bitfields.h"
+	"nrf51_deprecated.h"
+	"compiler_abstraction.h"
+
+1493995412 e:\vsprojects\arm\nrf51\examples\timer\inc\nrf51.h
+	<core_cm0.h>
+	"system_nrf51.h"
+
+1493995412 e:\vsprojects\arm\nrf51\examples\timer\inc\system_nrf51.h
+	<stdint.h>
+
+1493995412 e:\vsprojects\arm\nrf51\examples\timer\inc\nrf51_bitfields.h
+	<core_cm0.h>
+
+1493995412 e:\vsprojects\arm\nrf51\examples\timer\inc\nrf51_deprecated.h
+
+1493995412 e:\vsprojects\arm\nrf51\examples\timer\inc\compiler_abstraction.h
+
+1493996187 e:\vsprojects\arm\nrf51\examples\timer\src\variables.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"board.h"
+
+1493996187 e:\vsprojects\arm\nrf51\examples\timer\src\board.h
+
+1494001975 source:e:\vsprojects\arm\nrf51\examples\timer\src\interrupts.c
+	"interrupts.h"
+
+1493996187 e:\vsprojects\arm\nrf51\examples\timer\src\interrupts.h
+	"variables.h"
+
+1494001224 source:e:\vsprojects\arm\nrf51\examples\timer\src\main.c
+	"nrf.h"
+	"ble.h"
+	"variables.h"
+	"functions.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\timer\softdevice\include\ble.h
+	"ble_ranges.h"
+	"ble_types.h"
+	"ble_gap.h"
+	"ble_l2cap.h"
+	"ble_gatt.h"
+	"ble_gattc.h"
+	"ble_gatts.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\timer\softdevice\include\ble_ranges.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\timer\softdevice\include\ble_types.h
+	<stdint.h>
+
+1435239910 e:\vsprojects\arm\nrf51\examples\timer\softdevice\include\ble_gap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\timer\softdevice\include\nrf_svc.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\timer\softdevice\include\ble_l2cap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_err.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\timer\softdevice\include\ble_err.h
+	"nrf_error.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\timer\softdevice\include\nrf_error.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\timer\softdevice\include\ble_gatt.h
+	"ble_types.h"
+	"ble_ranges.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\timer\softdevice\include\ble_gattc.h
+	"ble_gatt.h"
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\timer\softdevice\include\ble_gatts.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_l2cap.h"
+	"ble_gap.h"
+	"ble_gatt.h"
+	"nrf_svc.h"
+
+1493995412 source:e:\vsprojects\arm\nrf51\examples\timer\src\system_nrf51.c
+	<stdint.h>
+	<stdbool.h>
+	"nrf.h"
+	"system_nrf51.h"
+
+1493995412 source:e:\vsprojects\arm\nrf51\examples\timer\startup_nrf51.s
+
+1492790081 source:e:\vsprojects\arm\nrf51\examples\timer\s130.c
+
