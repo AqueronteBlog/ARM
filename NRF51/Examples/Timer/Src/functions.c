@@ -50,8 +50,14 @@ void conf_GPIO  ( void )
  *              Timer0:
  *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
  *                  * 32-bits mode.
- *                  * Overflow:             ( 125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.125s.
  *                  * Interrupt ENABLE.
+ *
+ *                 --- Channel 0:
+ *                  * Overflow:             ( 125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.125s.
+ *
+ *                 --- Channel 1:
+ *                  * Overflow:             ( 4*125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.5s.
+ *
  * @return      NA
  *
  * @author      Manuel Caballero
@@ -69,10 +75,13 @@ void conf_Timer0  ( void )
     NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
     NRF_TIMER0->CC[0]       =   125000;                                                                     // ( 125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.125s
+    NRF_TIMER0->CC[1]       =   4*125000;                                                                   // ( 4*125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.5s
 
-    NRF_TIMER0->INTENSET    =   TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos;
+    NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos );// |
+    NRF_TIMER0->INTENSET    =                            ( TIMER_INTENSET_COMPARE1_Enabled << TIMER_INTENSET_COMPARE1_Pos );
 
-    NRF_TIMER0->SHORTS      =   TIMER_SHORTS_COMPARE0_CLEAR_Enabled << TIMER_SHORTS_COMPARE0_CLEAR_Pos;     // Create an Event-Task shortcut to clear TIMER0 on COMPARE[0] event.
+    //NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE0_CLEAR_Enabled << TIMER_SHORTS_COMPARE0_CLEAR_Pos );
+    //NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE1_CLEAR_Enabled << TIMER_SHORTS_COMPARE1_CLEAR_Pos );     // Create an Event-Task shortcut to clear TIMER0 on COMPARE[0] and COMPARE[1] event.
 
 
     NVIC_EnableIRQ ( TIMER0_IRQn );                                                                         // Enable Interrupt for the Timer0 in the core.
