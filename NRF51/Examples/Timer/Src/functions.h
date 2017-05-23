@@ -18,3 +18,6 @@
 /* FUNCTION PROTOTYPES */
 void conf_GPIO      ( void );
 void conf_Timer0    ( void );
+void conf_Timer1    ( void );
+void conf_Timer2    ( void );
+void delay          ( void );
