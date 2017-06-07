@@ -16,15 +16,18 @@
 
 /**
  * @brief       void UART0_IRQHandler ()
- * @details     [TODO] Timer interruption. Checks if there is an interruption
- *              of Timer0 and changes the state of the LED1 and LED4.
+ * @details     It handles both reading and transmitting data through the UART.
+ *
+ *              The reading is just one byte and the transmission finishes when
+ *              the character '\n' is found.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
  * @date        2/June/2017
- * @version     2/June/2017   The ORIGIN
+ * @version     7/June/2017   TX handler added.
+ *              2/June/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  */
@@ -34,6 +37,7 @@ void UART0_IRQHandler(void)
     if ( ( NRF_UART0->EVENTS_RXDRDY != 0 ) && ( NRF_UART0->INTENSET & UART_INTENSET_RXDRDY_Msk ) )
     {
         NRF_UART0->EVENTS_RXDRDY  = 0;
+        myRX_buff = ( uint8_t )( NRF_UART0->RXD & 0xFF );
     }
 
     /* Transmission */
@@ -41,6 +45,16 @@ void UART0_IRQHandler(void)
     {
         // Clear UART TX event flag.
         NRF_UART0->EVENTS_TXDRDY = 0;
-        //on_uart_event(ON_TX_READY);
+
+        // Stop transmitting data when that character is found
+        if ( *myPtr  == '\n' )
+        {
+            NRF_UART0->TASKS_STOPTX      =   1;
+            TX_inProgress                =   NO;
+        }
+        else
+        {
+            NRF_UART0->TXD   =   *++myPtr;
+        }
     }
 }

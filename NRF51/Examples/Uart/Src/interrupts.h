@@ -7,7 +7,8 @@
  *
  * @author      Manuel Caballero
  * @date        2/June/2017
- * @version     2/June/2017    The ORIGIN
+ * @version     7/June/2017    Variables to handle the UART added.
+ *              2/June/2017    The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */
@@ -20,5 +21,7 @@ void UART0_IRQHandler ( void );
 
 
 /* VARIABLES */
-extern uint32_t changeLEDsSTATE;
-extern uint32_t my375msDelay;
+extern uint8_t myRX_buff;
+extern uint8_t myMessage[ TX_BUFF_SIZE ];
+extern uint8_t *myPtr;
+extern uint8_t TX_inProgress;

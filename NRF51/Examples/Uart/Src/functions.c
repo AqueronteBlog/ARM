@@ -79,15 +79,18 @@ void conf_UART  ( void )
     NRF_UART0->ENABLE            =   UART_ENABLE_ENABLE_Disabled << UART_ENABLE_ENABLE_Pos;
 
     /* Configure the pins */
-    NRF_UART0->PSELTXD           =   0 << UART0_TX;
-    NRF_UART0->PSELRXD           =   0 << UART0_RX;
+    NRF_UART0->PSELRTS           =   0xFFFFFFFF;
+    NRF_UART0->PSELCTS           =   0xFFFFFFFF;
+    NRF_UART0->PSELTXD           =   UART0_TX;
+    NRF_UART0->PSELRXD           =   UART0_RX;
 
     /* BaudRate & Configuration */
     NRF_UART0->BAUDRATE          =   UART_BAUDRATE_BAUDRATE_Baud115200 << UART_BAUDRATE_BAUDRATE_Pos;
     NRF_UART0->CONFIG            =   ( UART_CONFIG_HWFC_Disabled   << UART_CONFIG_HWFC_Pos   ) |
                                      ( UART_CONFIG_PARITY_Excluded << UART_CONFIG_PARITY_Pos );
     /* Configure Interrupts */
-    NRF_UART0->INTENSET          =   UART_INTENSET_RXDRDY_Enabled << UART_INTENSET_RXDRDY_Pos;
+    NRF_UART0->INTENSET          =   ( UART_INTENSET_RXDRDY_Enabled << UART_INTENSET_RXDRDY_Pos ) |
+                                     ( UART_INTENSET_TXDRDY_Enabled << UART_INTENSET_TXDRDY_Pos );
 
     NVIC_ClearPendingIRQ    ( UART0_IRQn );
     NVIC_SetPriority        ( UART0_IRQn, 0 );                                                              // Maximum priority
@@ -95,4 +98,6 @@ void conf_UART  ( void )
 
     /* Enable UART0 */
     NRF_UART0->ENABLE            =   UART_ENABLE_ENABLE_Enabled << UART_ENABLE_ENABLE_Pos;                  // UART0 ENABLED
+    // NRF_UART0->TASKS_STARTTX     =   1;
+    NRF_UART0->TASKS_STARTRX     =   1;                                                                     // Enable reception
 }
