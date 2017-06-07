@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1496417490 source:e:\vsprojects\arm\nrf51\examples\uart\src\functions.c
+1496845232 source:e:\vsprojects\arm\nrf51\examples\uart\src\functions.c
 	"functions.h"
 
 1496413744 e:\vsprojects\arm\nrf51\examples\uart\src\functions.h
@@ -27,20 +27,20 @@
 
 1496411739 e:\vsprojects\arm\nrf51\examples\uart\inc\compiler_abstraction.h
 
-1496419393 e:\vsprojects\arm\nrf51\examples\uart\src\variables.h
+1496852098 e:\vsprojects\arm\nrf51\examples\uart\src\variables.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"board.h"
 
 1496414081 e:\vsprojects\arm\nrf51\examples\uart\src\board.h
 
-1496418082 source:e:\vsprojects\arm\nrf51\examples\uart\src\interrupts.c
+1496852218 source:e:\vsprojects\arm\nrf51\examples\uart\src\interrupts.c
 	"interrupts.h"
 
-1496418082 e:\vsprojects\arm\nrf51\examples\uart\src\interrupts.h
+1496844919 e:\vsprojects\arm\nrf51\examples\uart\src\interrupts.h
 	"variables.h"
 
-1496419568 source:e:\vsprojects\arm\nrf51\examples\uart\src\main.c
+1496852218 source:e:\vsprojects\arm\nrf51\examples\uart\src\main.c
 	"nrf.h"
 	"ble.h"
 	"variables.h"
