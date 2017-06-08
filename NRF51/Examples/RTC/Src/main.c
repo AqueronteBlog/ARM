@@ -30,6 +30,7 @@
 int main( void )
 {
     conf_GPIO   ();
+    conf_LFCLK  ();
     conf_RTC0   ();
     conf_RTC1   ();
 
@@ -38,7 +39,7 @@ int main( void )
 
     while( 1 )
     {
-        //NRF_POWER->SYSTEMOFF = 1;
+        // NRF_POWER->SYSTEMOFF    = 1;
         NRF_POWER->TASKS_LOWPWR = 1;        // Sub power mode: Low power.
 
         // Enter System ON sleep mode
