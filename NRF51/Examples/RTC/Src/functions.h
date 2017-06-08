@@ -19,3 +19,4 @@
 void conf_GPIO      ( void );
 void conf_RTC0      ( void );
 void conf_RTC1      ( void );
+void conf_LFCLK     ( void );
