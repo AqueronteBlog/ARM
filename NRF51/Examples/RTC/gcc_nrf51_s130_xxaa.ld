@@ -30,13 +30,23 @@
 
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 ENTRY(Reset_Handler)
-
+ /*
 MEMORY
 {
   SOFTD (rx) : ORIGIN = 0x00000000, LENGTH = 0x20000
   FLASH (rx) : ORIGIN = 0x00020000, LENGTH = 0x20000
   RAM (rwx) :  ORIGIN = 0x20002800, LENGTH = 0x1800
 }
+*/
+
+
+MEMORY
+{
+  SOFTD (rx) : ORIGIN = 0x00000000, LENGTH = 0x1D000        /* [MANUEL] APP_CODE_BASE = SoftDevice + MBR = 112kB + 4kB = 116kB ( 116*2^10 = 118784 = 0x1D000 ) */
+  FLASH (rx) : ORIGIN = 0x0001D000, LENGTH = 0x23000        /* [MANUEL] FLASH (256kB) - SofDevice = 256kB - 116kB = 256*2^10 - 116*2^10 = 143360 = 0x23000 */
+  RAM (rwx) :  ORIGIN = 0x20002200, LENGTH = 0x5600         /* [MANUEL] RAM (32kB) - SoftDevice - MBR - CallStack = 32kB - 8.5kB - 0.0039kB - 2kB ~ 21.5kB ( 21.5*2^10 = 22016 = 0x5600 ) */
+}
+
 
 SECTIONS
 {
