@@ -48,6 +48,33 @@ void conf_GPIO  ( void )
 
 
 /**
+ * @brief       void conf_LFCLK  ( void )
+ * @details     It turns the internal LFCLK clock on for RTCs.
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        8/June/2017
+ * @version     8/June/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+void conf_LFCLK  ( void )
+{
+    NRF_CLOCK->LFCLKSRC             =   ( CLOCK_LFCLKSRC_SRC_RC << CLOCK_LFCLKSRC_SRC_Pos );
+    NRF_CLOCK->EVENTS_LFCLKSTARTED  =   0;
+    NRF_CLOCK->TASKS_LFCLKSTART     =   1;
+
+    while ( NRF_CLOCK->EVENTS_LFCLKSTARTED == 0 )       // [TODO] Insert a counter! otherwise if there is a problem it will get block!!!
+    {
+        //Do nothing.
+    }
+
+    NRF_CLOCK->EVENTS_LFCLKSTARTED  =   0;
+}
+
+
+/**
  * @brief       void conf_RTC0  ( void )
  * @details     [todo] Two channels will create an interrupt. Channel zero at 0.125s and channel two at 0.5s.
  *
@@ -72,20 +99,13 @@ void conf_GPIO  ( void )
  */
 void conf_RTC0  ( void )
 {
-    NRF_TIMER0->TASKS_STOP  =   1;
-    NRF_TIMER0->MODE        =   TIMER_MODE_MODE_Timer;
-    NRF_TIMER0->PRESCALER   =   5U;                                                                         // f_Timer0 = ( 16MHz / 2^5 ) = 500kHz
-    NRF_TIMER0->BITMODE     =   TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos;                   // 32 bit mode.
-    NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
+    NRF_RTC0->TASKS_STOP  =   1;
+    NRF_RTC0->PRESCALER   =   4095;                                                                       // f_RTC0 = ( 32.768kHz / ( 4095 + 1 ) ) = 8Hz ( 125ms )
+    NRF_RTC0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
-    NRF_TIMER0->CC[0]       =   125000;                                                                     // ( 125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.125s
-    NRF_TIMER0->CC[1]       =   4*125000;                                                                   // ( 4*125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.5s
 
-    NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos ) |
-                                ( TIMER_INTENSET_COMPARE1_Enabled << TIMER_INTENSET_COMPARE1_Pos );
-
-    //NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE0_CLEAR_Enabled << TIMER_SHORTS_COMPARE0_CLEAR_Pos );// |
-    //NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE1_CLEAR_Enabled << TIMER_SHORTS_COMPARE1_CLEAR_Pos );     // Create an Event-Task shortcut to clear TIMER0 on COMPARE[0] and COMPARE[1] event.
+    NRF_RTC0->INTENSET   |=   ( RTC_INTENSET_TICK_Enabled << RTC_INTENSET_TICK_Pos );
+    NRF_RTC0->EVTENSET   |=   ( RTC_EVTENSET_TICK_Enabled << RTC_EVTENSET_TICK_Pos );
 
 
     NVIC_EnableIRQ ( RTC0_IRQn );                                                                         // Enable Interrupt for the Timer0 in the core.
@@ -114,20 +134,14 @@ void conf_RTC0  ( void )
  */
 void conf_RTC1  ( void )
 {
-    NRF_TIMER0->TASKS_STOP  =   1;
-    NRF_TIMER0->MODE        =   TIMER_MODE_MODE_Timer;
-    NRF_TIMER0->PRESCALER   =   5U;                                                                         // f_Timer0 = ( 16MHz / 2^5 ) = 500kHz
-    NRF_TIMER0->BITMODE     =   TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos;                   // 32 bit mode.
-    NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
+    NRF_RTC1->TASKS_STOP  =   1;
+    NRF_RTC1->PRESCALER   =   327;                                                                      // f_RTC1 = ( 32.768kHz / ( 32767 + 1 ) ) = 1Hz ( 1s )
+    NRF_RTC1->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
-    NRF_TIMER0->CC[0]       =   125000;                                                                     // ( 125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.125s
-    NRF_TIMER0->CC[1]       =   4*125000;                                                                   // ( 4*125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.5s
+    NRF_RTC1->CC[0]       =   200;                                                                          // ( 1 * (f_RTC1)^(-1) ) = ( 1 * (1Hz)^(-1) ) ~ 1s
 
-    NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos ) |
-                                ( TIMER_INTENSET_COMPARE1_Enabled << TIMER_INTENSET_COMPARE1_Pos );
-
-    //NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE0_CLEAR_Enabled << TIMER_SHORTS_COMPARE0_CLEAR_Pos );// |
-    //NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE1_CLEAR_Enabled << TIMER_SHORTS_COMPARE1_CLEAR_Pos );     // Create an Event-Task shortcut to clear TIMER0 on COMPARE[0] and COMPARE[1] event.
+    NRF_RTC1->INTENSET    =   ( RTC_INTENSET_COMPARE0_Enabled << RTC_INTENSET_COMPARE0_Pos );
+    NRF_RTC1->EVTENSET    =   ( RTC_EVTENSET_COMPARE0_Enabled << RTC_EVTENSET_COMPARE0_Pos );
 
 
     NVIC_EnableIRQ ( RTC1_IRQn );                                                                         // Enable Interrupt for the Timer0 in the core.
