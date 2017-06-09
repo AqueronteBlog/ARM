@@ -1,14 +1,11 @@
 /**
  * @brief       main.c
- * @details     [TODO] It changes the state of the LEDs using the Timers.
+ * @details     It changes the state of the LED1 and LED4 using the RTCs.
  *
- *                  - LED1. Timer0: 32-bit, Channel 0, Interrupt ON.    Blinks every 0.125s.
- *                  - LED2. Timer1: 16-bit, Channel 0, Interrupt OFF.   Blinks every 0.25s.
- *                  - LED3. Timer2:  8-bit, Channel 0, Interrupt ON.    Blinks every 0.375s.
- *                  - LED4. Timer0: 32-bit, Channel 1, Interrupt ON.    Blinks every 0.5s.
+ *                  - LED1. RTC0: Tick, Interrupt ON.           Blinks every 125ms.
+ *                  - LED4. RTC1: Channel 0, Interrupt ON.      Blinks every 2s.
  *
- *              This firmware is just an example about how to use the timers on the nrf51822. On
- *              polling mode or by Interrupts with different channels.
+ *              This firmware is just an example about how to use the RTCs on the nrf51422.
  *
  * @return      NA
  *
