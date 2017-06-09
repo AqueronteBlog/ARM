@@ -76,18 +76,11 @@ void conf_LFCLK  ( void )
 
 /**
  * @brief       void conf_RTC0  ( void )
- * @details     [todo] Two channels will create an interrupt. Channel zero at 0.125s and channel two at 0.5s.
+ * @details     Tick will create an interrupt every 125ms.
  *
- *              Timer0:
- *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
- *                  * 32-bits mode.
+ *              RTC0:
+ *                  * Prescaler:            4095   ( f_RTC0 = ( 32.768kHz / ( 4095 + 1 ) ) = 8Hz ( 125ms ) ).
  *                  * Interrupt ENABLE.
- *
- *                 --- Channel 0:
- *                  * Overflow:             ( 125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.125s.
- *
- *                 --- Channel 1:
- *                  * Overflow:             ( 4*125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.5s.
  *
  * @return      NA
  *
@@ -114,15 +107,12 @@ void conf_RTC0  ( void )
 
 /**
  * @brief       void conf_RTC1  ( void )
- * @details     [todo] One channels will create an interrupt. Channel zero at 0.125s and channel two at 0.5s.
+ * @details     Channel 0 will create an interrupt every 2s.
  *
- *              Timer0:
- *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
- *                  * 32-bits mode.
+ *              RTC1:
+ *                  * Prescaler:            327   ( f_RTC1 = ( 32.768kHz / ( 327 + 1 ) ) ~ 99.9Hz ( ~10ms ) ).
+ *                  * Channel 0:            10ms*200 = 2s
  *                  * Interrupt ENABLE.
- *
- *                 --- Channel 0:
- *                  * Overflow:             ( 65535 * (f_Timer0)^(-1) ) = ( 65535 * (1MHz)^(-1) ) ~ 65.535ms.
  *
  * @return      NA
  *
@@ -135,10 +125,10 @@ void conf_RTC0  ( void )
 void conf_RTC1  ( void )
 {
     NRF_RTC1->TASKS_STOP  =   1;
-    NRF_RTC1->PRESCALER   =   327;                                                                      // f_RTC1 = ( 32.768kHz / ( 32767 + 1 ) ) = 1Hz ( 1s )
+    NRF_RTC1->PRESCALER   =   327;                                                                        // f_RTC1 = ( 32.768kHz / ( 32767 + 1 ) ) = 1Hz ( 1s )
     NRF_RTC1->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
-    NRF_RTC1->CC[0]       =   200;                                                                          // ( 1 * (f_RTC1)^(-1) ) = ( 1 * (1Hz)^(-1) ) ~ 1s
+    NRF_RTC1->CC[0]       =   200;                                                                        // ( 200 * (f_RTC1)^(-1) ) = ( 200 * (99.9Hz)^(-1) ) ~ 2s
 
     NRF_RTC1->INTENSET    =   ( RTC_INTENSET_COMPARE0_Enabled << RTC_INTENSET_COMPARE0_Pos );
     NRF_RTC1->EVTENSET    =   ( RTC_EVTENSET_COMPARE0_Enabled << RTC_EVTENSET_COMPARE0_Pos );

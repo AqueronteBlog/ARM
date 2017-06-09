@@ -7,7 +7,7 @@
  *
  * @author      Manuel Caballero
  * @date        8/June/2017
- * @version     8/June/20175/May/2017    The ORIGIN
+ * @version     8/June/2017    The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */
@@ -22,4 +22,3 @@ void RTC1_IRQHandler ( void );
 
 /* VARIABLES */
 extern uint32_t changeLEDsSTATE;
-extern uint32_t my375msDelay;

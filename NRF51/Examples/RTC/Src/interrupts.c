@@ -16,8 +16,8 @@
 
 /**
  * @brief       void RTC0_IRQHandler ()
- * @details     [todo] Timer interruption. Checks if there is an interruption
- *              of Timer0 and changes the state of the LED1 and LED4.
+ * @details     RTC0 interruption. Checks if there is an interruption
+ *              of RTC0 and changes the state of the LED1 every ~ 125ms.
  *
  *
  * @return      NA
@@ -25,7 +25,7 @@
  * @author      Manuel Caballero
  * @date        8/June/2017
  * @version     8/June/2017   The ORIGIN
- * @pre         The LEDs are connected like Common Anode.
+ * @pre         The LED1 are connected like Common Anode.
  * @warning     NaN
  */
 void RTC0_IRQHandler()
@@ -55,8 +55,8 @@ void RTC0_IRQHandler()
 
 /**
  * @brief       void RTC1_IRQHandler ()
- * @details     [todo] Timer interruption. Checks if there is an interruption
- *              of Timer2 and changes the state of the LED3 every 1470 * 255us ~ 0.375s
+ * @details     RTC1 interruption. Checks if there is an interruption
+ *              of RTC1 and changes the state of the LED4 every ~ 2s.
  *
  *
  * @return      NaN
@@ -64,7 +64,7 @@ void RTC0_IRQHandler()
  * @author      Manuel Caballero
  * @date        8/June/2017
  * @version     8/June/2017   The ORIGIN
- * @pre         The LED3 is connected like Common Anode.
+ * @pre         The LED4 is connected like Common Anode.
  * @warning     NaN
  */
 void RTC1_IRQHandler()
@@ -84,7 +84,7 @@ void RTC1_IRQHandler()
             changeLEDsSTATE  |=  ( 1UL << LED4 );
         }
 
-        NRF_RTC1->CC[0]      +=   200;
-        NRF_RTC1->EVENTS_COMPARE[0] = 0;               // Clear ( flag ) compare register 0 event
+        NRF_RTC1->CC[0]             +=   200;             // New interruption on 2s
+        NRF_RTC1->EVENTS_COMPARE[0]  =   0;               // Clear ( flag ) compare register 0 event
     }
 }

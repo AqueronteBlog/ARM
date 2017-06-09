@@ -23,8 +23,5 @@
 
 
 /* VARIABLES */
-uint32_t changeLEDsSTATE;       /*!<   changeLEDsSTATE = ON:     [todo].
-                                       changeLEDsSTATE = OFF:    [todo]         */
-
-uint32_t my375msDelay;          /*!<   counter for the Timer2 to generate a
-                                       delay of 0.375s                         */
+uint32_t changeLEDsSTATE;       /*!<   changeLEDsSTATE = ON:    Turn LED on
+                                       changeLEDsSTATE = OFF:   Turn LED off   */
