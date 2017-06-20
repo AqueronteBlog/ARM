@@ -18,4 +18,3 @@
 /* FUNCTION PROTOTYPES */
 void conf_GPIO      ( void );
 void conf_GPIOTE    ( void );
-void conf_Timer0    ( void );

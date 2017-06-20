@@ -16,8 +16,7 @@
 
 
 /* INTERRUPT PRTOTYPES */
-void TIMER0_IRQHandler ( void );
-
+void GPIOTE_IRQHandler ( void );
 
 /* VARIABLES */
 extern uint32_t changeLEDsSTATE;

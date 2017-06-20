@@ -1,6 +1,11 @@
 /**
  * @brief       main.c
- * @details     [todo] x.
+ * @details     This firmware changes the state of the LEDs depending on which button
+ *              was pressed.
+ *
+ *              GPIOTE will be associated with the BTNs to generate an interruption.
+ *
+ *              The microcontroller will remain in low power until it occurs an event.
  *
  *
  * @return      NA
@@ -24,9 +29,6 @@ int main( void )
 {
     conf_GPIO   ();
     conf_GPIOTE ();
-    conf_Timer0 ();
-
-    NRF_TIMER0->TASKS_START = 1;    // Start Timer0
 
     while( 1 )
     {

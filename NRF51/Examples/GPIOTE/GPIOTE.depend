@@ -1,0 +1,108 @@
+# depslib dependency file v1.0
+1497964231 source:e:\vsprojects\arm\nrf51\examples\gpiote\src\functions.c
+	"functions.h"
+
+1497964231 e:\vsprojects\arm\nrf51\examples\gpiote\src\functions.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"variables.h"
+
+1497608679 e:\vsprojects\arm\nrf51\examples\gpiote\inc\nrf.h
+	"nrf51.h"
+	"nrf51_bitfields.h"
+	"nrf51_deprecated.h"
+	"compiler_abstraction.h"
+
+1497608679 e:\vsprojects\arm\nrf51\examples\gpiote\inc\nrf51.h
+	<core_cm0.h>
+	"system_nrf51.h"
+
+1497608679 e:\vsprojects\arm\nrf51\examples\gpiote\inc\system_nrf51.h
+	<stdint.h>
+
+1497608679 e:\vsprojects\arm\nrf51\examples\gpiote\inc\nrf51_bitfields.h
+	<core_cm0.h>
+
+1497608679 e:\vsprojects\arm\nrf51\examples\gpiote\inc\nrf51_deprecated.h
+
+1497608679 e:\vsprojects\arm\nrf51\examples\gpiote\inc\compiler_abstraction.h
+
+1497964231 e:\vsprojects\arm\nrf51\examples\gpiote\src\variables.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"board.h"
+
+1497609393 e:\vsprojects\arm\nrf51\examples\gpiote\src\board.h
+
+1497964231 source:e:\vsprojects\arm\nrf51\examples\gpiote\src\interrupts.c
+	"interrupts.h"
+
+1497964231 e:\vsprojects\arm\nrf51\examples\gpiote\src\interrupts.h
+	"variables.h"
+
+1497964404 source:e:\vsprojects\arm\nrf51\examples\gpiote\src\main.c
+	"nrf.h"
+	"ble.h"
+	"variables.h"
+	"functions.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\gpiote\softdevice\include\ble.h
+	"ble_ranges.h"
+	"ble_types.h"
+	"ble_gap.h"
+	"ble_l2cap.h"
+	"ble_gatt.h"
+	"ble_gattc.h"
+	"ble_gatts.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\gpiote\softdevice\include\ble_ranges.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\gpiote\softdevice\include\ble_types.h
+	<stdint.h>
+
+1435239910 e:\vsprojects\arm\nrf51\examples\gpiote\softdevice\include\ble_gap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\gpiote\softdevice\include\nrf_svc.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\gpiote\softdevice\include\ble_l2cap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_err.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\gpiote\softdevice\include\ble_err.h
+	"nrf_error.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\gpiote\softdevice\include\nrf_error.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\gpiote\softdevice\include\ble_gatt.h
+	"ble_types.h"
+	"ble_ranges.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\gpiote\softdevice\include\ble_gattc.h
+	"ble_gatt.h"
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\gpiote\softdevice\include\ble_gatts.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_l2cap.h"
+	"ble_gap.h"
+	"ble_gatt.h"
+	"nrf_svc.h"
+
+1492007275 source:e:\vsprojects\arm\nrf51\examples\gpiote\src\system_nrf51.c
+	<stdint.h>
+	<stdbool.h>
+	"nrf.h"
+	"system_nrf51.h"
+
+1497608679 source:e:\vsprojects\arm\nrf51\examples\gpiote\startup_nrf51.s
+
+1492790081 source:e:\vsprojects\arm\nrf51\examples\gpiote\s130.c
+
