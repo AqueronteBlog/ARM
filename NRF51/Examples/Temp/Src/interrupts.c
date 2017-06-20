@@ -70,6 +70,9 @@ void TIMER0_IRQHandler()
 {
     if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0 ) )
     {
+        NRF_TEMP->TASKS_START    =   1;     // Start another temperature measurement ( one-shot )
+
+
         /*
 		if ( ( changeLEDsSTATE & ( 1UL << LED1 ) ) == ( 1UL << LED1 ) )
         {
@@ -88,3 +91,41 @@ void TIMER0_IRQHandler()
         NRF_TIMER0->EVENTS_COMPARE[0] = 0;                      // Clear ( flag ) compare register 0 event
     }
 }
+
+
+/**
+ * @brief       void TEMP_IRQHandler ()
+ * @details     Temperature measurement complete, data ready.
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        20/June/2017
+ * @version     20/June/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN
+ */
+void TEMP_IRQHandler()
+{
+    if ( NRF_TEMP->EVENTS_DATARDY != 0 )
+    {
+        /*
+		if ( ( changeLEDsSTATE & ( 1UL << LED1 ) ) == ( 1UL << LED1 ) )
+        {
+        // Turn off the LED1
+            NRF_GPIO->OUTSET =   ( 1UL << LED1 );
+            changeLEDsSTATE  &=  ~( 1UL << LED1 );
+        }
+		else
+        {
+        // Turn on the LED1
+            NRF_GPIO->OUTCLR =  ( 1UL << LED1 );
+            changeLEDsSTATE  |=  ( 1UL << LED1 );
+        }
+        */
+
+        NRF_TEMP->EVENTS_DATARDY = 0;                      // Clear ( flag )
+    }
+}
+
