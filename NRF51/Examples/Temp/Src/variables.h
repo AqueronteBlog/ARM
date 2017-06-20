@@ -30,6 +30,7 @@
 
 
 /* VARIABLES */
-uint8_t myMessage[ TX_BUFF_SIZE ];      /*!<   Message to be transmitted through the UART   */
-uint8_t *myPtr;                         /*!<   Pointer to point out myMessage   */
-uint8_t TX_inProgress;                  /*!<   It indicates if a transmission is in progress   */
+//uint8_t myMessage[ TX_BUFF_SIZE ];      /*!<   Message to be transmitted through the UART   */
+//uint8_t *myPtr;                         /*!<   Pointer to point out myMessage   */
+uint32_t myTEMP;                         /*!<   It will store the temperature data from the internal temperature sensor     */
+uint8_t  TX_inProgress;                  /*!<   It indicates if a transmission is in progress                               */
