@@ -138,3 +138,25 @@ void conf_TIMER0  ( void )
 
     NVIC_EnableIRQ ( TIMER0_IRQn );                                                                         // Enable Interrupt for the Timer0 in the core.
 }
+
+
+/**
+ * @brief       void conf_TEMP  ( void )
+ * @details     It enables TEMP sensor with interruption enable.
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        20/June/2017
+ * @version     20/June/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+void conf_TEMP  ( void )
+{
+    NRF_TEMP->TASKS_STOP  =   1;
+    NRF_TEMP->INTENSET    =   ( TEMP_INTENSET_DATARDY_Enabled << TEMP_INTENSET_DATARDY_Pos );
+
+    NVIC_EnableIRQ ( TEMP_IRQn );                                                                         // Enable Interrupt for the TEMP in the core.
+}
+
