@@ -39,7 +39,9 @@ int main( void )
 
     conf_GPIO   ();
     conf_UART   ();
+    conf_TEMP   ();
     conf_TIMER0 ();
+
 
     NRF_TIMER0->TASKS_START = 1;    // Start Timer0
 
@@ -56,7 +58,7 @@ int main( void )
 
         __NOP();
 
-
+        /*
         // Reset and re-start conditions before evaluating the collected data from UART.
         NRF_UART0->TASKS_STOPRX      =   1;
         NRF_UART0->TASKS_STOPTX      =   1;
@@ -78,6 +80,7 @@ int main( void )
                 __WFE();
             }
         }
+        */
 
     }
 }
