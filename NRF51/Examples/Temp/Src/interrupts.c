@@ -16,10 +16,13 @@
 
 /**
  * @brief       void UART0_IRQHandler ()
- * @details     [todo] It handles both reading and transmitting data through the UART.
+ * @details     It sends the temperature through the UART.
  *
- *              The reading is just one byte and the transmission finishes when
- *              the character '\n' is found.
+ *              One byte was just sent, so there are 3-Bytes left
+ *              waiting to be transmitted.
+ *
+ *              The LED1 will be turned off to indicate that the whole
+ *              process ( Read temperature + transmission ) was completed.
  *
  *
  * @return      NA
@@ -38,15 +41,19 @@ void UART0_IRQHandler(void)
         // Clear UART TX event flag.
         NRF_UART0->EVENTS_TXDRDY = 0;
 
-        // Stop transmitting data when that character is found
-        if ( *myPtr  == '\n' )
+        // Send only 3-Bytes
+        if ( dataToBeTX  < ( sizeof( NRF_TEMP->TEMP ) - 1 ) )           // sizeof( NRF_TEMP->TEMP ) - 1 ) = 4 - 1 = 3. NOTE: One byte was just transmitted previously.
         {
-            NRF_UART0->TASKS_STOPTX      =   1;
-            TX_inProgress                =   NO;
+        // Transmit data
+            myTEMP           =   ( myTEMP >> 8 );
+            NRF_UART0->TXD   =   ( myTEMP & 0x000000FF );
+            dataToBeTX++;
         }
         else
         {
-            NRF_UART0->TXD   =   *++myPtr;
+        // Everything was transmitted, stop the UART and turn the LED1 off
+            NRF_UART0->TASKS_STOPTX      =   1;
+            NRF_GPIO->OUTSET             =   ( 1UL << LED1 );
         }
     }
 }
@@ -54,8 +61,10 @@ void UART0_IRQHandler(void)
 
 /**
  * @brief       void TIMER0_IRQHandler ()
- * @details     [todo] Timer interruption. Checks if there is an interruption
- *              of Timer0 and changes the state of the LED1 and LED4.
+ * @details     It starts a new conversion ( internal temperature ) every
+ *              1 second.
+ *
+ *              Turn the LED1 on to indicate that the process has just been started.
  *
  *
  * @return      NA
@@ -63,32 +72,18 @@ void UART0_IRQHandler(void)
  * @author      Manuel Caballero
  * @date        20/June/2017
  * @version     20/June/2017   The ORIGIN
- * @pre         NaN.
+ * @pre         The LED1 will be turned off again when the process is finished.
  * @warning     NaN
  */
 void TIMER0_IRQHandler()
 {
     if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0 ) )
     {
-        NRF_TEMP->TASKS_START    =   1;     // Start another temperature measurement ( one-shot )
+        NRF_GPIO->OUTCLR         =   ( 1UL << LED1 );       // Turn the LED1 on
+        NRF_TEMP->TASKS_START    =   1;                     // Start another temperature measurement ( one-shot )
 
 
-        /*
-		if ( ( changeLEDsSTATE & ( 1UL << LED1 ) ) == ( 1UL << LED1 ) )
-        {
-        // Turn off the LED1
-            NRF_GPIO->OUTSET =   ( 1UL << LED1 );
-            changeLEDsSTATE  &=  ~( 1UL << LED1 );
-        }
-		else
-        {
-        // Turn on the LED1
-            NRF_GPIO->OUTCLR =  ( 1UL << LED1 );
-            changeLEDsSTATE  |=  ( 1UL << LED1 );
-        }
-        */
-
-        NRF_TIMER0->EVENTS_COMPARE[0] = 0;                      // Clear ( flag ) compare register 0 event
+        NRF_TIMER0->EVENTS_COMPARE[0] = 0;                  // Clear ( flag ) compare register 0 event
     }
 }
 
@@ -96,6 +91,8 @@ void TIMER0_IRQHandler()
 /**
  * @brief       void TEMP_IRQHandler ()
  * @details     Temperature measurement complete, data ready.
+ *
+ *              Start transmitting the data through the UART ( LSB first ).
  *
  *
  * @return      NA
@@ -110,22 +107,13 @@ void TEMP_IRQHandler()
 {
     if ( NRF_TEMP->EVENTS_DATARDY != 0 )
     {
-        /*
-		if ( ( changeLEDsSTATE & ( 1UL << LED1 ) ) == ( 1UL << LED1 ) )
-        {
-        // Turn off the LED1
-            NRF_GPIO->OUTSET =   ( 1UL << LED1 );
-            changeLEDsSTATE  &=  ~( 1UL << LED1 );
-        }
-		else
-        {
-        // Turn on the LED1
-            NRF_GPIO->OUTCLR =  ( 1UL << LED1 );
-            changeLEDsSTATE  |=  ( 1UL << LED1 );
-        }
-        */
+        myTEMP                       =   NRF_TEMP->TEMP;                    // Read raw temperature
 
-        NRF_TEMP->EVENTS_DATARDY = 0;                      // Clear ( flag )
+        NRF_TEMP->EVENTS_DATARDY     =   0;                                 // Clear ( flag )
+
+        dataToBeTX                   =   0;                                 // Reset counter
+        NRF_UART0->TASKS_STARTTX     =   1;                                 // Start transmission
+        NRF_UART0->TXD               =   ( myTEMP & 0x000000FF);
     }
 }
 

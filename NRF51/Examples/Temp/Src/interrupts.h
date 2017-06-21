@@ -24,6 +24,5 @@ void TEMP_IRQHandler   ( void );
 
 
 /* VARIABLES */
-extern uint8_t myMessage[ TX_BUFF_SIZE ];
-extern uint8_t *myPtr;
-extern uint8_t TX_inProgress;
+extern uint8_t  dataToBeTX;
+extern uint32_t myTEMP;
