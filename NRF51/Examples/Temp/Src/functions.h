@@ -16,6 +16,7 @@
 #include "variables.h"
 
 /* FUNCTION PROTOTYPES */
+void conf_CLK       ( void );
 void conf_GPIO      ( void );
 void conf_UART      ( void );
 void conf_TIMER0    ( void );
