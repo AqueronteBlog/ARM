@@ -1,22 +1,20 @@
 /**
  * @brief       main.c
- * @details     [todo] It changes the state of the LEDs using the UART.
+ * @details     It reads the internal temperature sensor every one second and send the data ( LSB first )
+ *              through the UART.
  *
- *              It will depend on what character the user sends through the UART:
- *                  - '1':  LED1 ON. Message replay: "LED 1 ON".
- *                  - '2':  LED2 ON. Message replay: "LED 2 ON".
- *                  - '3':  LED3 ON. Message replay: "LED 3 ON".
- *                  - '4':  LED1 ON. Message replay: "LED 4 ON".
- *                  - Another character will turn all the LEDs OFF without any message back through the UART.
+ *              The LED1 will be turned on when the process begins ( reading internal temperature ) and be
+ *              turned off when the process finishes ( all the data is sent through the UART ).
  *
- *              This firmware is just an example about how to use the UART on the nrf51822. The system
- *              will handle everything on the Interrupts ( Low power mode selected ).
+ *              This firmware is just an example about how to read the internal temperature sensor on the nrf51422. The system
+ *              will handle everything on the Interruptions ( Low power mode selected ).
  *
  * @return      NA
  *
  * @author      Manuel Caballero
  * @date        20/June/2017
- * @version     20/June/2017    The ORIGIN
+ * @version     21/June/2017    CLK function added.
+ *              20/June/2017    The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     Softdevice S310 was used although the file's name is S130. The softdevice
@@ -29,14 +27,9 @@
 #include "functions.h"
 
 
-#define TX_ENABLE   1
-#define TX_DISABLE  0
-
-
 int main( void )
 {
-    uint32_t TX_dataEnable   =   TX_DISABLE;
-
+    conf_CLK    ();
     conf_GPIO   ();
     conf_UART   ();
     conf_TEMP   ();
@@ -57,30 +50,5 @@ int main( void )
 		__WFE();
 
         __NOP();
-
-        /*
-        // Reset and re-start conditions before evaluating the collected data from UART.
-        NRF_UART0->TASKS_STOPRX      =   1;
-        NRF_UART0->TASKS_STOPTX      =   1;
-        myPtr                        =   &myMessage[0];
-
-
-        // Send which LED was turned ON back through the UART
-        if ( TX_dataEnable == TX_ENABLE )
-        {
-            TX_inProgress                =   YES;
-            NRF_UART0->TASKS_STARTTX     =   1;
-            NRF_UART0->TXD               =   *myPtr;
-
-            // Wait until the message is transmitted
-            while ( TX_inProgress == YES ){
-                __WFE();
-                // Make sure any pending events are cleared
-                __SEV();
-                __WFE();
-            }
-        }
-        */
-
     }
 }
