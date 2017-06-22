@@ -17,9 +17,11 @@
 
 /* INTERRUPT PRTOTYPES */
 void UART0_IRQHandler ( void );
+void RNG_IRQHandler   ( void );
+
 
 
 /* VARIABLES */
 extern uint8_t myRX_buff;
 extern uint8_t myRandomNumber;
-extern uint8_t TX_inProgress;
+
