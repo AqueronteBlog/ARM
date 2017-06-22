@@ -107,12 +107,15 @@ void conf_UART  ( void )
  * @brief       void conf_RNG  ( void )
  * @details     It configures RNG.
  *
+ *                  * Digital correction    Enable.
+ *                  * Interruption          Enable
+ *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        21/June/2017
- * @version     21/June/2017      The ORIGIN
+ * @date        22/June/2017
+ * @version     22/June/2017      The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */
@@ -126,6 +129,6 @@ void conf_RNG  ( void )
 
     NRF_RNG->INTENSET    =   ( RNG_INTENSET_VALRDY_Enabled << RNG_INTENSET_VALRDY_Pos );
 
-    NVIC_EnableIRQ  ( RNG_IRQn );                                                                 // Enable Interrupt for the UART0 in the core.
+    NVIC_EnableIRQ  ( RNG_IRQn );                                                                           // Enable Interrupt for the RNG in the core.
 }
 

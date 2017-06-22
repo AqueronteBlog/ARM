@@ -5,8 +5,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        21/June/2017
- * @version     21/June/2017   The ORIGIN
+ * @date        22/June/2017
+ * @version     22/June/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */
@@ -18,3 +18,4 @@
 /* FUNCTION PROTOTYPES */
 void conf_GPIO      ( void );
 void conf_UART      ( void );
+void conf_RNG       ( void );
