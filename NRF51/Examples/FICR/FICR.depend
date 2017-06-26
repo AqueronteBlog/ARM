@@ -1,0 +1,108 @@
+# depslib dependency file v1.0
+1498491941 source:e:\vsprojects\arm\nrf51\examples\ficr\src\functions.c
+	"functions.h"
+
+1498491941 e:\vsprojects\arm\nrf51\examples\ficr\src\functions.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"variables.h"
+
+1497608679 e:\vsprojects\arm\nrf51\examples\ficr\inc\nrf.h
+	"nrf51.h"
+	"nrf51_bitfields.h"
+	"nrf51_deprecated.h"
+	"compiler_abstraction.h"
+
+1497608679 e:\vsprojects\arm\nrf51\examples\ficr\inc\nrf51.h
+	<core_cm0.h>
+	"system_nrf51.h"
+
+1497608679 e:\vsprojects\arm\nrf51\examples\ficr\inc\system_nrf51.h
+	<stdint.h>
+
+1497608679 e:\vsprojects\arm\nrf51\examples\ficr\inc\nrf51_bitfields.h
+	<core_cm0.h>
+
+1497608679 e:\vsprojects\arm\nrf51\examples\ficr\inc\nrf51_deprecated.h
+
+1497608679 e:\vsprojects\arm\nrf51\examples\ficr\inc\compiler_abstraction.h
+
+1498493571 e:\vsprojects\arm\nrf51\examples\ficr\src\variables.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"board.h"
+
+1498492002 e:\vsprojects\arm\nrf51\examples\ficr\src\board.h
+
+1498494804 source:e:\vsprojects\arm\nrf51\examples\ficr\src\interrupts.c
+	"interrupts.h"
+
+1498493360 e:\vsprojects\arm\nrf51\examples\ficr\src\interrupts.h
+	"variables.h"
+
+1498494334 source:e:\vsprojects\arm\nrf51\examples\ficr\src\main.c
+	"nrf.h"
+	"ble.h"
+	"variables.h"
+	"functions.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\ficr\softdevice\include\ble.h
+	"ble_ranges.h"
+	"ble_types.h"
+	"ble_gap.h"
+	"ble_l2cap.h"
+	"ble_gatt.h"
+	"ble_gattc.h"
+	"ble_gatts.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\ficr\softdevice\include\ble_ranges.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\ficr\softdevice\include\ble_types.h
+	<stdint.h>
+
+1435239910 e:\vsprojects\arm\nrf51\examples\ficr\softdevice\include\ble_gap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\ficr\softdevice\include\nrf_svc.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\ficr\softdevice\include\ble_l2cap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_err.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\ficr\softdevice\include\ble_err.h
+	"nrf_error.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\ficr\softdevice\include\nrf_error.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\ficr\softdevice\include\ble_gatt.h
+	"ble_types.h"
+	"ble_ranges.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\ficr\softdevice\include\ble_gattc.h
+	"ble_gatt.h"
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\ficr\softdevice\include\ble_gatts.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_l2cap.h"
+	"ble_gap.h"
+	"ble_gatt.h"
+	"nrf_svc.h"
+
+1492007275 source:e:\vsprojects\arm\nrf51\examples\ficr\src\system_nrf51.c
+	<stdint.h>
+	<stdbool.h>
+	"nrf.h"
+	"system_nrf51.h"
+
+1497608679 source:e:\vsprojects\arm\nrf51\examples\ficr\startup_nrf51.s
+
+1492790081 source:e:\vsprojects\arm\nrf51\examples\ficr\s130.c
+
