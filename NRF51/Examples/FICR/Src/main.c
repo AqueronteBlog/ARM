@@ -28,7 +28,9 @@
 int main( void )
 {
     conf_GPIO   ();
+    conf_UART   ();
     conf_GPIOTE ();
+
 
     while( 1 )
     {
