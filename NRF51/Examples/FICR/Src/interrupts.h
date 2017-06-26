@@ -17,6 +17,10 @@
 
 /* INTERRUPT PRTOTYPES */
 void GPIOTE_IRQHandler ( void );
+void UART0_IRQHandler  ( void );
+
 
 /* VARIABLES */
-extern uint32_t changeLEDsSTATE;
+extern uint32_t  myTX;
+extern uint8_t   TX_inProgress;
+extern uint8_t   startCycle;

@@ -32,76 +32,48 @@ void GPIOTE_IRQHandler()
     // Channel 0
     if ( ( NRF_GPIOTE->EVENTS_IN[0] != 0 ) && ( ( NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_IN0_Msk ) != 0 ) )
     {
-		if ( ( changeLEDsSTATE & 0x01 ) == 0x01 )
-        {
-        // Turn off LED1
-            NRF_GPIO->OUTSET  = ( 1 << LED1 );
-            changeLEDsSTATE  &=  ~0x01;
-        }
-		else
-        {
-        // Turn on LED1
-            NRF_GPIO->OUTCLR  = ( 1 << LED1 );
-            changeLEDsSTATE  |=  0x01;
-        }
+        startCycle     =  1;
 
         NRF_GPIOTE->EVENTS_IN[0] = 0;                      // Clear ( flag )
     }
+}
 
-    // Channel 1
-    if ( ( NRF_GPIOTE->EVENTS_IN[1] != 0 ) && ( ( NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_IN1_Msk ) != 0 ) )
+
+/**
+ * @brief       void UART0_IRQHandler ()
+ * @details     [todo] xxx.
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        26/June/2017
+ * @version     26/June/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN
+ */
+void UART0_IRQHandler(void)
+{
+    /* Transmission */
+    if ( ( NRF_UART0->EVENTS_TXDRDY != 0 ) && ( NRF_UART0->INTENSET & UART_INTENSET_TXDRDY_Msk ) )
     {
-		if ( ( changeLEDsSTATE & 0x02 ) == 0x02 )
-        {
-        // Turn off LED2
-            NRF_GPIO->OUTSET  = ( 1 << LED2 );
-            changeLEDsSTATE  &=  ~0x02;
-        }
-		else
-        {
-        // Turn on LED2
-            NRF_GPIO->OUTCLR  = ( 1 << LED2 );
-            changeLEDsSTATE  |=  0x02;
-        }
+        // Clear UART TX event flag.
+        NRF_UART0->EVENTS_TXDRDY = 0;
 
-        NRF_GPIOTE->EVENTS_IN[1] = 0;                      // Clear ( flag )
-    }
-
-    // Channel 2
-    if ( ( NRF_GPIOTE->EVENTS_IN[2] != 0 ) && ( ( NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_IN2_Msk ) != 0 ) )
-    {
-		if ( ( changeLEDsSTATE & 0x04 ) == 0x04 )
+        // Send only 3-Bytes
+        if ( dataToBeTX  < ( sizeof( NRF_FICR->CODESIZE ) - 1 ) )           // sizeof( NRF_FICR->CODESIZE ) - 1 ) = 4 - 1 = 3. NOTE: One byte was just transmitted previously.
         {
-        // Turn off LED3
-            NRF_GPIO->OUTSET  = ( 1 << LED3 );
-            changeLEDsSTATE  &=  ~0x04;
+        // Transmit data
+            myTX             =   ( myTX >> 8 );
+            NRF_UART0->TXD   =   ( myTX & 0x000000FF );
+            dataToBeTX++;
         }
-		else
+        else
         {
-        // Turn on LED3
-            NRF_GPIO->OUTCLR  = ( 1 << LED3 );
-            changeLEDsSTATE  |=  0x04;
+        // Everything was transmitted, stop the UART
+            TX_inProgress                =   NO;
+            dataToBeTX                   =   0;
+            NRF_UART0->TASKS_STOPTX      =   1;
         }
-
-        NRF_GPIOTE->EVENTS_IN[2] = 0;                      // Clear ( flag )
-    }
-
-    // Channel 3
-    if ( ( NRF_GPIOTE->EVENTS_IN[3] != 0 ) && ( ( NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_IN3_Msk ) != 0 ) )
-    {
-		if ( ( changeLEDsSTATE & 0x08 ) == 0x08 )
-        {
-        // Turn off LED4
-            NRF_GPIO->OUTSET  = ( 1 << LED4 );
-            changeLEDsSTATE  &=  ~0x08;
-        }
-		else
-        {
-        // Turn on LED4
-            NRF_GPIO->OUTCLR  = ( 1 << LED4 );
-            changeLEDsSTATE  |=  0x08;
-        }
-
-        NRF_GPIOTE->EVENTS_IN[3] = 0;                      // Clear ( flag )
     }
 }
