@@ -19,12 +19,15 @@
 #include "board.h"
 
 /* CONSTANTS */
-#define ON  1
-#define OFF 0
+#define ON              1
+#define OFF             0
+
+#define YES             1
+#define NO              0
 
 
 /* VARIABLES */
-uint32_t changeLEDsSTATE;       /*!<   0x01 = LED1
-                                       0x02 = LED2
-                                       0x04 = LED3
-                                       0x08 = LED4       */
+uint32_t myTX;                           /*!<   It will store the data from the registers ( FICR ) to be transmitted                */
+uint8_t  dataToBeTX;                     /*!<   A counter. It indicates how many data it will be transmitted through the UART       */
+uint8_t  TX_inProgress;                  /*!<   It indicates if a transmission is in progress                                       */
+uint8_t  startCycle;                     /*!<   It starts a new cycle of reading and transmitting data through the UART             */
