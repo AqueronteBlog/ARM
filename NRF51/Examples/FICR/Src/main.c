@@ -1,11 +1,12 @@
 /**
  * @brief       main.c
- * @details     [todo] This firmware changes the state of the LEDs depending on which button
- *              was pressed.
+ * @details     This firmware sends all the FICR registers through the UART ( LSB first )
+ *              every time the button 1 is pressed.
  *
- *              GPIOTE will be associated with the BTNs to generate an interruption.
+ *              The code is NOT optimized on purpose, this way it is easy to read one
+ *              of the FICR's registers.
  *
- *              The microcontroller will remain in low power until it occurs an event.
+ *              The microcontroller will remain in low power until it occurs an interruption.
  *
  *
  * @return      NA
@@ -17,6 +18,7 @@
  *              ( SDK 1.1.0 ).
  * @warning     Softdevice S310 was used although the file's name is S130. The softdevice
  *              is not used in this example anyway because of Bluetooth was not used.
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
 #include "nrf.h"
@@ -34,20 +36,19 @@ int main( void )
 
     while( 1 )
     {
-        startCycle   =   0;                                 // Reset the variable
-
-
         //NRF_POWER->SYSTEMOFF = 1;
-        NRF_POWER->TASKS_LOWPWR = 1;                        // Sub power mode: Low power.
+        NRF_POWER->TASKS_LOWPWR = 1;                                    // Sub power mode: Low power.
 
-        __SEV();
-        __WFI();
-        __WFI();
+        __WFE();
+		// Make sure any pending events are cleared
+		__SEV();
+		__WFE();
+
 
         if ( startCycle  ==  1 )
         {
         // Read and transmit the data from the registers ( FICR )
-            NRF_GPIO->OUTCLR             =   ( 1 << LED1 );          // Tun the LED1 on
+            NRF_GPIO->OUTCLR             =   ( 1 << LED1 );             // Tun the LED1 on
 
             // Read/Transmit Code Memory Page Size register
             myTX                         =   NRF_FICR->CODEPAGESIZE;
@@ -484,7 +485,7 @@ int main( void )
             }
 
 
-
+            startCycle          =   0;                      // Reset the variable
             NRF_GPIO->OUTSET    =   ( 1 << LED1 );          // Turn the LED1 off
         }
     }
