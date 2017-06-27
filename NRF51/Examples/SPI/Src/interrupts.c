@@ -30,26 +30,17 @@
  */
 void SPI0_IRQHandler()
 {
-    /*
-    if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0 ) )
+    if ( ( NRF_SPI0->EVENTS_READY != 0 ) && ( ( NRF_SPI0->INTENSET & SPI_INTENCLR_READY_Msk ) != 0 ) )
     {
-		if ( ( changeLEDsSTATE & ( 1UL << LED1 ) ) == ( 1UL << LED1 ) )
-        {
-        // Turn off the LED1
-            NRF_GPIO->OUTSET =   ( 1UL << LED1 );
-            changeLEDsSTATE  &=  ~( 1UL << LED1 );
-        }
-		else
-        {
-        // Turn on the LED1
-            NRF_GPIO->OUTCLR =  ( 1UL << LED1 );
-            changeLEDsSTATE  |=  ( 1UL << LED1 );
-        }
+        mySPI_RX         =   ( NRF_SPI0->RXD & 0xFF );  // Dummy value
 
-        NRF_TIMER0->CC[0]       +=   125000;
-        NRF_TIMER0->EVENTS_COMPARE[0] = 0;                      // Clear ( flag ) compare register 0 event
+        // All data was transmitted
+        NRF_GPIO->OUTSET =   ( 1UL << SPI0_CS );        // End communication
+        NRF_GPIO->OUTSET =   ( 1UL << LED1 );           // Turn the LED1 off
+
+
+        NRF_SPI0->EVENTS_READY = 0;                     // Clear ( flag )
     }
-    */
 }
 
 
@@ -70,29 +61,48 @@ void SPI0_IRQHandler()
  */
 void SPIS1_IRQHandler()
 {
-    /*
-    if ( ( NRF_TIMER2->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_TIMER2->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0 ) )
+    // Check for SPI semaphore acquired event.
+    if ( NRF_SPIS1->EVENTS_ACQUIRED != 0 )
     {
-        if ( my375msDelay < 1470 )
-            my375msDelay++;
-        else{
-            if ( ( changeLEDsSTATE & ( 1UL << LED3 ) ) == ( 1UL << LED3 ) )
-            {
-            // Turn off the LED3
-                NRF_GPIO->OUTSET =   ( 1UL << LED3 );
-                changeLEDsSTATE  &=  ~( 1UL << LED3 );
-            }
-            else
-            {
-            // Turn on the LED3
-                NRF_GPIO->OUTCLR =  ( 1UL << LED3 );
-                changeLEDsSTATE  |=  ( 1UL << LED3 );
-            }
+        NRF_SPIS1->EVENTS_ACQUIRED = 0;                 // Clear ( flag ) compare register 0 event
 
-            my375msDelay     =   0;                      // Reset counter
+        /*
+        switch (m_spi_state)
+        {
+            case SPI_BUFFER_RESOURCE_REQUESTED:
+                NRF_SPIS1->TXDPTR = (uint32_t)mp_spi_tx_buf;
+                NRF_SPIS1->RXDPTR = (uint32_t)mp_spi_rx_buf;
+                NRF_SPIS1->MAXRX  = m_spi_rx_buf_size;
+                NRF_SPIS1->MAXTX  = m_spi_tx_buf_size;
+
+                NRF_SPIS1->TASKS_RELEASE = 1u;
+
+                sm_state_change(SPI_BUFFER_RESOURCE_CONFIGURED);
+                break;
+
+            default:
+                // No implementation required.
+                break;
         }
-
-        NRF_TIMER2->EVENTS_COMPARE[0] = 0;               // Clear ( flag ) compare register 0 event
+        */
     }
-    */
+
+    // Check for SPI transaction complete event.
+    if (NRF_SPIS1->EVENTS_END != 0)
+    {
+        NRF_SPIS1->EVENTS_END = 0;                  // Clear ( flag ) compare register 0 event
+
+        /*
+        switch (m_spi_state)
+        {
+            case SPI_BUFFER_RESOURCE_CONFIGURED:
+                sm_state_change(SPI_XFER_COMPLETED);
+                break;
+
+            default:
+                // No implementation required.
+                break;
+        }
+        */
+    }
 }

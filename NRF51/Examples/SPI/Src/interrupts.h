@@ -24,3 +24,6 @@ void SPIS1_IRQHandler   ( void );
 /* VARIABLES */
 extern uint32_t changeLEDsSTATE;
 extern uint32_t my375msDelay;
+
+extern uint8_t   mySPI_RX;
+extern uint8_t   mySPI_TX;
