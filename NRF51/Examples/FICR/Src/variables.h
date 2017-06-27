@@ -7,11 +7,12 @@
  *
  * @author      Manuel Caballero
  * @date        12/April/2017
- * @version     26/June/2017    [todo].
+ * @version     26/June/2017    New variables added to handle the UART transmission.
  *              12/April/2017   The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     NaN
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
 #include "nrf.h"
