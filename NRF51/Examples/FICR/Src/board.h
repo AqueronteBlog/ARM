@@ -12,6 +12,7 @@
  *              12/April/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
 /* LEDs */
