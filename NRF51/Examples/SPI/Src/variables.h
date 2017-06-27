@@ -27,5 +27,6 @@
 uint32_t changeLEDsSTATE;       /*!<   changeLEDsSTATE = ON:     [todo].
                                        changeLEDsSTATE = OFF:    [todo]         */
 
-uint32_t my375msDelay;          /*!<   counter for the Timer2 to generate a
-                                       delay of 0.375s                         */
+
+uint8_t   mySPI_RX;
+uint8_t   mySPI_TX;
