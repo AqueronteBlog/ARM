@@ -7,6 +7,7 @@
  * @author      Manuel Caballero
  * @date        26/June/2017
  * @version     26/June/2017   The ORIGIN
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  * @pre         NaN
  * @warning     NaN
  */
@@ -16,7 +17,7 @@
 
 /**
  * @brief       void GPIOTE_IRQHandler ()
- * @details     [todo] xxx
+ * @details     Button 1 generates an interruption on channel 0.
  *
  *
  * @return      NA
@@ -32,16 +33,16 @@ void GPIOTE_IRQHandler()
     // Channel 0
     if ( ( NRF_GPIOTE->EVENTS_IN[0] != 0 ) && ( ( NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_IN0_Msk ) != 0 ) )
     {
-        startCycle     =  1;
+        startCycle     =  1;                                // Start a new reading cycle.
 
-        NRF_GPIOTE->EVENTS_IN[0] = 0;                      // Clear ( flag )
+        NRF_GPIOTE->EVENTS_IN[0] = 0;                       // Clear ( flag )
     }
 }
 
 
 /**
  * @brief       void UART0_IRQHandler ()
- * @details     [todo] xxx.
+ * @details     It transmits the data through the UART.
  *
  *
  * @return      NA
@@ -70,7 +71,7 @@ void UART0_IRQHandler(void)
         }
         else
         {
-        // Everything was transmitted, stop the UART
+        // Everything was transmitted, stop the UART and reset variables
             TX_inProgress                =   NO;
             dataToBeTX                   =   0;
             NRF_UART0->TASKS_STOPTX      =   1;
