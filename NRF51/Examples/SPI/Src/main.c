@@ -1,6 +1,9 @@
 /**
  * @brief       main.c
- * @details     [todo] xxx
+ * @details     This firmware shows how to work with two peripherals: SPI ( Master )
+ *              and SPIS ( Slave ). Every one second, the Master sends one byte to the
+ *              Slave. It depends on the data transmitted by the Master, the Slave will
+ *              answer with a different byte.
  *
  * @return      NA
  *
@@ -25,6 +28,9 @@ int main( void )
     conf_GPIO   ();
     conf_SPI0   ();
     conf_SPIS1  ();
+    conf_TIMER0 ();
+
+    NRF_TIMER0->TASKS_START = 1;            // Start Timer0
 
 
     while( 1 )
