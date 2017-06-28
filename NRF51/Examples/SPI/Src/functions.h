@@ -20,4 +20,9 @@
 void conf_GPIO      ( void );
 void conf_SPI0      ( void );
 void conf_SPIS1     ( void );
+void conf_TIMER0    ( void );
 
+
+/* VARIABLES */
+extern uint32_t  mySPIS_RX;
+extern uint32_t  mySPIS_TX;
