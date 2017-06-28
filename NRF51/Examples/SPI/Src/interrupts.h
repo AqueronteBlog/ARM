@@ -17,13 +17,13 @@
 
 
 /* INTERRUPT PRTOTYPES */
-void SPI0_IRQHandler    ( void );
-void SPIS1_IRQHandler   ( void );
+void SPI0_TWI0_IRQHandler   ( void );
+void SPI1_TWI1_IRQHandler   ( void );
 
 
 /* VARIABLES */
-extern uint32_t changeLEDsSTATE;
-extern uint32_t my375msDelay;
-
+extern uint32_t  changeDataSPIToBeTX;
 extern uint8_t   mySPI_RX;
 extern uint8_t   mySPI_TX;
+extern uint32_t  mySPIS_RX;
+extern uint32_t  mySPIS_TX;
