@@ -77,10 +77,10 @@ void conf_LFCLK  ( void )
 
 /**
  * @brief       void conf_RTC0  ( void )
- * @details     Tick will create an interrupt every 1s.
+ * @details     Tick will create an interrupt every 125ms.
  *
  *              RTC0:
- *                  * Prescaler:            32767   ( f_RTC0 = ( 32.768kHz / ( 32767 + 1 ) ) = 1Hz ( 1s ) ).
+ *                  * Prescaler:            4095   ( f_RTC0 = ( 32.768kHz / ( 4095 + 1 ) ) = 8Hz ( 125ms ) ).
  *                  * Interrupt ENABLE.
  *
  * @return      NA
@@ -94,7 +94,7 @@ void conf_LFCLK  ( void )
 void conf_RTC0  ( void )
 {
     NRF_RTC0->TASKS_STOP  =   1;
-    NRF_RTC0->PRESCALER   =   32767;                                                                      // f_RTC0 = ( 32.768kHz / ( 32767 + 1 ) ) = 1Hz ( 1s )
+    NRF_RTC0->PRESCALER   =   4095 ;                                                                      // f_RTC0 = ( 32.768kHz / ( 4095 + 1 ) ) = 8Hz ( 125ms )
     NRF_RTC0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
 
@@ -109,7 +109,7 @@ void conf_RTC0  ( void )
 
 /**
  * @brief       void conf_SWI  ( void )
- * @details     Enable all the software interrupts.
+ * @details     Enable 4 software interrupts.
  *
  * @return      NA
  *
@@ -126,6 +126,6 @@ void conf_SWI  ( void )
     NVIC_EnableIRQ ( SWI2_IRQn );                                                                         // Enable Interrupt for the SWI2 in the core.
     NVIC_EnableIRQ ( SWI3_IRQn );                                                                         // Enable Interrupt for the SWI3 in the core.
     NVIC_EnableIRQ ( SWI4_IRQn );                                                                         // Enable Interrupt for the SWI4 in the core.
-    NVIC_EnableIRQ ( SWI5_IRQn );                                                                         // Enable Interrupt for the SWI5 in the core.
+    // NVIC_EnableIRQ ( SWI5_IRQn );                                                                         // Enable Interrupt for the SWI5 in the core.
 }
 
