@@ -1,9 +1,18 @@
 /**
  * @brief       main.c
- * @details     [TODO] XXX
+ * @details     This example shows how the software interrupts work. Every software interrupt
+ *              will be linked to an LED but SI4 which is linked to all the LEDs.
+ *
+ *              Every 125ms, the state of the LEDs will change depending on the following:
+ *
+ *                  - SWI0: Turn on the LED1.
+ *                  - SWI1: Turn on the LED2.
+ *                  - SWI2: Turn on the LED3.
+ *                  - SWI3: Turn on the LED4.
+ *                  - SWI4: Turn off all the LEDs.
  *
  *
- *              This firmware is just an example about how to use the RTCs on the nrf51422.
+ *              This firmware is just an example about how to use the SWIs on the nrf51422.
  *
  * @return      NA
  *
@@ -30,7 +39,7 @@ int main( void )
     conf_SWI    ();
     conf_RTC0   ();
 
-    NRF_RTC0->TASKS_START = 1;    // Start RTC0
+    NRF_RTC0->TASKS_START = 1;              // Start RTC0
 
     while( 1 )
     {
@@ -44,3 +53,4 @@ int main( void )
 		__WFE();
     }
 }
+
