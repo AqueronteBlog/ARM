@@ -5,10 +5,11 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        8/June/2017
- * @version     8/June/2017   The ORIGIN
+ * @date        29/June/2017
+ * @version     29/June/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
 #include "nrf.h"
@@ -18,5 +19,5 @@
 /* FUNCTION PROTOTYPES */
 void conf_GPIO      ( void );
 void conf_RTC0      ( void );
-void conf_RTC1      ( void );
 void conf_LFCLK     ( void );
+void conf_SWI       ( void );

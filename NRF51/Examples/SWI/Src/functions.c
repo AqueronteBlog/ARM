@@ -6,11 +6,12 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        5/May/2017
- * @version     5/May/2017   The ORIGIN
+ * @date        29/June/2017
+ * @version     29/June/2017   The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     NaN
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
 #include "functions.h"
@@ -76,24 +77,24 @@ void conf_LFCLK  ( void )
 
 /**
  * @brief       void conf_RTC0  ( void )
- * @details     Tick will create an interrupt every 125ms.
+ * @details     Tick will create an interrupt every 1s.
  *
  *              RTC0:
- *                  * Prescaler:            4095   ( f_RTC0 = ( 32.768kHz / ( 4095 + 1 ) ) = 8Hz ( 125ms ) ).
+ *                  * Prescaler:            32767   ( f_RTC0 = ( 32.768kHz / ( 32767 + 1 ) ) = 1Hz ( 1s ) ).
  *                  * Interrupt ENABLE.
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        8/June/2017
- * @version     8/June/2017   The ORIGIN
+ * @date        29/June/2017
+ * @version     29/June/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
 void conf_RTC0  ( void )
 {
     NRF_RTC0->TASKS_STOP  =   1;
-    NRF_RTC0->PRESCALER   =   4095;                                                                       // f_RTC0 = ( 32.768kHz / ( 4095 + 1 ) ) = 8Hz ( 125ms )
+    NRF_RTC0->PRESCALER   =   32767;                                                                      // f_RTC0 = ( 32.768kHz / ( 32767 + 1 ) ) = 1Hz ( 1s )
     NRF_RTC0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
 
@@ -101,38 +102,30 @@ void conf_RTC0  ( void )
     NRF_RTC0->EVTENSET   |=   ( RTC_EVTENSET_TICK_Enabled << RTC_EVTENSET_TICK_Pos );
 
 
-    NVIC_EnableIRQ ( RTC0_IRQn );                                                                         // Enable Interrupt for the Timer0 in the core.
+    NVIC_EnableIRQ ( RTC0_IRQn );                                                                         // Enable Interrupt for the RTC0 in the core.
 }
 
 
+
 /**
- * @brief       void conf_RTC1  ( void )
- * @details     Channel 0 will create an interrupt every 2s.
- *
- *              RTC1:
- *                  * Prescaler:            327   ( f_RTC1 = ( 32.768kHz / ( 327 + 1 ) ) ~ 99.9Hz ( ~10ms ) ).
- *                  * Channel 0:            10ms*200 = 2s
- *                  * Interrupt ENABLE.
+ * @brief       void conf_SWI  ( void )
+ * @details     Enable all the software interrupts.
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        8/June/2017
- * @version     8/June/2017   The ORIGIN
+ * @date        29/June/2017
+ * @version     29/June/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-void conf_RTC1  ( void )
+void conf_SWI  ( void )
 {
-    NRF_RTC1->TASKS_STOP  =   1;
-    NRF_RTC1->PRESCALER   =   327;                                                                        // f_RTC1 = ( 32.768kHz / ( 32767 + 1 ) ) = 1Hz ( 1s )
-    NRF_RTC1->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
-
-    NRF_RTC1->CC[0]       =   200;                                                                        // ( 200 * (f_RTC1)^(-1) ) = ( 200 * (99.9Hz)^(-1) ) ~ 2s
-
-    NRF_RTC1->INTENSET    =   ( RTC_INTENSET_COMPARE0_Enabled << RTC_INTENSET_COMPARE0_Pos );
-    NRF_RTC1->EVTENSET    =   ( RTC_EVTENSET_COMPARE0_Enabled << RTC_EVTENSET_COMPARE0_Pos );
-
-
-    NVIC_EnableIRQ ( RTC1_IRQn );                                                                         // Enable Interrupt for the Timer0 in the core.
+    NVIC_EnableIRQ ( SWI0_IRQn );                                                                         // Enable Interrupt for the SWI0 in the core.
+    NVIC_EnableIRQ ( SWI1_IRQn );                                                                         // Enable Interrupt for the SWI1 in the core.
+    NVIC_EnableIRQ ( SWI2_IRQn );                                                                         // Enable Interrupt for the SWI2 in the core.
+    NVIC_EnableIRQ ( SWI3_IRQn );                                                                         // Enable Interrupt for the SWI3 in the core.
+    NVIC_EnableIRQ ( SWI4_IRQn );                                                                         // Enable Interrupt for the SWI4 in the core.
+    NVIC_EnableIRQ ( SWI5_IRQn );                                                                         // Enable Interrupt for the SWI5 in the core.
 }
+
