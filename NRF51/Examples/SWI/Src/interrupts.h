@@ -18,6 +18,12 @@
 
 /* INTERRUPT PRTOTYPES */
 void RTC0_IRQHandler ( void );
+void SWI0_IRQHandler ( void );
+void SWI1_IRQHandler ( void );
+void SWI2_IRQHandler ( void );
+void SWI3_IRQHandler ( void );
+void SWI4_IRQHandler ( void );
+// void SWI5_IRQHandler ( void );
 
 
 /* VARIABLES */
