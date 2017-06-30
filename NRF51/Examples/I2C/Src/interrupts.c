@@ -17,7 +17,7 @@
 
 /**
  * @brief       void UART0_IRQHandler ()
- * @details     It sends the temperature through the UART.
+ * @details     [todo] It sends the temperature through the UART.
  *
  *              One byte was just sent, so there are 3-Bytes left
  *              waiting to be transmitted.
@@ -62,7 +62,7 @@ void UART0_IRQHandler(void)
 
 /**
  * @brief       void TIMER0_IRQHandler ()
- * @details     It starts a new conversion ( internal temperature ) every
+ * @details     [todo] It starts a new conversion ( internal temperature ) every
  *              1 second.
  *
  *              Turn the LED1 on to indicate that the process has just been started.
