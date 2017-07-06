@@ -16,6 +16,9 @@ Common symbol       size              file
 
 myTEMP              0x4               obj\debug\src\functions.o
 dataToBeTX          0x1               obj\debug\src\functions.o
+HTU21D_SDA_pin      0x4               obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+HTU21D_Mode         0x4               obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+HTU21D_SCL_pin      0x4               obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 
 Discarded input sections
 
@@ -34,6 +37,10 @@ Discarded input sections
  .data          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
  .bss           0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
  .ARM.extab     0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .group         0x00000000        0x8 obj\debug\s130.o
+ .text          0x00000000        0x0 obj\debug\s130.o
+ .data          0x00000000        0x0 obj\debug\s130.o
+ .bss           0x00000000        0x0 obj\debug\s130.o
  .group         0x00000000        0x8 obj\debug\src\functions.o
  .group         0x00000000        0x8 obj\debug\src\functions.o
  .group         0x00000000        0x8 obj\debug\src\functions.o
@@ -53,6 +60,7 @@ Discarded input sections
  .text          0x00000000        0x0 obj\debug\src\functions.o
  .data          0x00000000        0x0 obj\debug\src\functions.o
  .bss           0x00000000        0x0 obj\debug\src\functions.o
+ .debug_macro   0x00000000      0x82c obj\debug\src\functions.o
  .group         0x00000000        0x8 obj\debug\src\interrupts.o
  .group         0x00000000        0x8 obj\debug\src\interrupts.o
  .group         0x00000000        0x8 obj\debug\src\interrupts.o
@@ -293,11 +301,42 @@ Discarded input sections
  .data          0x00000000        0x0 obj\debug\startup_nrf51.o
  .bss           0x00000000        0x0 obj\debug\startup_nrf51.o
  .ARM.extab     0x00000000        0x0 obj\debug\startup_nrf51.o
- .group         0x00000000        0x8 obj\debug\s130.o
- .text          0x00000000        0x0 obj\debug\s130.o
- .data          0x00000000        0x0 obj\debug\s130.o
- .bss           0x00000000        0x0 obj\debug\s130.o
- .debug_macro   0x00000000      0x82c obj\debug\s130.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .text          0x00000000        0x0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .data          0x00000000        0x0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .bss           0x00000000        0x0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .text.HTU21D_Init
+                0x00000000       0x64 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .text.HTU21D_SoftReset
+                0x00000000       0x24 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_info    0x00000000      0x198 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_abbrev  0x00000000       0xa6 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_aranges
+                0x00000000       0x28 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_ranges  0x00000000       0x18 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00000000       0x6c obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00000000      0x82c obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00000000       0x22 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00000000       0x87 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00000000       0x44 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00000000       0xfd obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00000000       0x5e obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00000000      0x1df obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00000000       0x8e obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_line    0x00000000      0x22b obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_str     0x00000000     0x3608 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .comment       0x00000000       0x6f obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_frame   0x00000000       0x50 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .ARM.attributes
+                0x00000000       0x31 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ COMMON         0x00000000        0xc obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .text          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
@@ -540,12 +579,13 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
                 0x20007000                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
                 0x20007800                PROVIDE (__stack, __StackTop)
                 0x00000001                ASSERT ((__StackLimit >= __HeapLimit), region RAM overflowed with stack)
+LOAD obj\debug\s130.o
 LOAD obj\debug\src\functions.o
 LOAD obj\debug\src\interrupts.o
 LOAD obj\debug\src\main.o
 LOAD obj\debug\src\system_nrf51.o
 LOAD obj\debug\startup_nrf51.o
-LOAD obj\debug\s130.o
+LOAD obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 START GROUP
 LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a
 LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a
@@ -567,17 +607,17 @@ OUTPUT(bin\Debug\I2C.elf elf32-littlearm)
  .ARM.attributes
                 0x0000001e       0x1b c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
  .ARM.attributes
-                0x00000039       0x31 obj\debug\src\functions.o
+                0x00000039       0x31 obj\debug\s130.o
  .ARM.attributes
-                0x0000006a       0x31 obj\debug\src\interrupts.o
+                0x0000006a       0x31 obj\debug\src\functions.o
  .ARM.attributes
-                0x0000009b       0x31 obj\debug\src\main.o
+                0x0000009b       0x31 obj\debug\src\interrupts.o
  .ARM.attributes
-                0x000000cc       0x31 obj\debug\src\system_nrf51.o
+                0x000000cc       0x31 obj\debug\src\main.o
  .ARM.attributes
-                0x000000fd       0x1b obj\debug\startup_nrf51.o
+                0x000000fd       0x31 obj\debug\src\system_nrf51.o
  .ARM.attributes
-                0x00000118       0x31 obj\debug\s130.o
+                0x0000012e       0x1b obj\debug\startup_nrf51.o
  .ARM.attributes
                 0x00000149       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .ARM.attributes
@@ -592,103 +632,103 @@ OUTPUT(bin\Debug\I2C.elf elf32-littlearm)
                 0x00000225       0x1e c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
 
 .comment        0x00000000       0x6e
- .comment       0x00000000       0x6e obj\debug\src\functions.o
+ .comment       0x00000000       0x6e obj\debug\s130.o
                                  0x6f (size before relaxing)
+ .comment       0x0000006e       0x6f obj\debug\src\functions.o
  .comment       0x0000006e       0x6f obj\debug\src\interrupts.o
  .comment       0x0000006e       0x6f obj\debug\src\main.o
  .comment       0x0000006e       0x6f obj\debug\src\system_nrf51.o
- .comment       0x0000006e       0x6f obj\debug\s130.o
 
 .debug_info     0x00000000     0x3b3e
- .debug_info    0x00000000      0xd45 obj\debug\src\functions.o
- .debug_info    0x00000d45      0x842 obj\debug\src\interrupts.o
- .debug_info    0x00001587     0x2310 obj\debug\src\main.o
- .debug_info    0x00003897      0x1ec obj\debug\src\system_nrf51.o
- .debug_info    0x00003a83       0x5d obj\debug\startup_nrf51.o
- .debug_info    0x00003ae0       0x5e obj\debug\s130.o
+ .debug_info    0x00000000       0x5e obj\debug\s130.o
+ .debug_info    0x0000005e      0xd45 obj\debug\src\functions.o
+ .debug_info    0x00000da3      0x842 obj\debug\src\interrupts.o
+ .debug_info    0x000015e5     0x2310 obj\debug\src\main.o
+ .debug_info    0x000038f5      0x1ec obj\debug\src\system_nrf51.o
+ .debug_info    0x00003ae1       0x5d obj\debug\startup_nrf51.o
 
 .debug_abbrev   0x00000000      0x611
- .debug_abbrev  0x00000000      0x178 obj\debug\src\functions.o
- .debug_abbrev  0x00000178       0xd3 obj\debug\src\interrupts.o
- .debug_abbrev  0x0000024b      0x276 obj\debug\src\main.o
- .debug_abbrev  0x000004c1       0xf4 obj\debug\src\system_nrf51.o
- .debug_abbrev  0x000005b5       0x14 obj\debug\startup_nrf51.o
- .debug_abbrev  0x000005c9       0x48 obj\debug\s130.o
+ .debug_abbrev  0x00000000       0x48 obj\debug\s130.o
+ .debug_abbrev  0x00000048      0x178 obj\debug\src\functions.o
+ .debug_abbrev  0x000001c0       0xd3 obj\debug\src\interrupts.o
+ .debug_abbrev  0x00000293      0x276 obj\debug\src\main.o
+ .debug_abbrev  0x00000509       0xf4 obj\debug\src\system_nrf51.o
+ .debug_abbrev  0x000005fd       0x14 obj\debug\startup_nrf51.o
 
 .debug_aranges  0x00000000      0x2e8
  .debug_aranges
-                0x00000000       0x50 obj\debug\src\functions.o
+                0x00000000       0x18 obj\debug\s130.o
  .debug_aranges
-                0x00000050       0x28 obj\debug\src\interrupts.o
+                0x00000018       0x50 obj\debug\src\functions.o
  .debug_aranges
-                0x00000078      0x200 obj\debug\src\main.o
+                0x00000068       0x28 obj\debug\src\interrupts.o
  .debug_aranges
-                0x00000278       0x38 obj\debug\src\system_nrf51.o
+                0x00000090      0x200 obj\debug\src\main.o
  .debug_aranges
-                0x000002b0       0x20 obj\debug\startup_nrf51.o
+                0x00000290       0x38 obj\debug\src\system_nrf51.o
  .debug_aranges
-                0x000002d0       0x18 obj\debug\s130.o
+                0x000002c8       0x20 obj\debug\startup_nrf51.o
+
+.debug_macro    0x00000000     0x9def
+ .debug_macro   0x00000000       0x26 obj\debug\s130.o
+ .debug_macro   0x00000026      0x82c obj\debug\s130.o
+ .debug_macro   0x00000852       0xe6 obj\debug\src\functions.o
+ .debug_macro   0x00000938       0x22 obj\debug\src\functions.o
+ .debug_macro   0x0000095a       0x3a obj\debug\src\functions.o
+ .debug_macro   0x00000994       0x22 obj\debug\src\functions.o
+ .debug_macro   0x000009b6       0x87 obj\debug\src\functions.o
+ .debug_macro   0x00000a3d       0x44 obj\debug\src\functions.o
+ .debug_macro   0x00000a81       0xfd obj\debug\src\functions.o
+ .debug_macro   0x00000b7e       0x5e obj\debug\src\functions.o
+ .debug_macro   0x00000bdc      0x1df obj\debug\src\functions.o
+ .debug_macro   0x00000dbb      0x241 obj\debug\src\functions.o
+ .debug_macro   0x00000ffc      0x1d2 obj\debug\src\functions.o
+ .debug_macro   0x000011ce     0x74c6 obj\debug\src\functions.o
+ .debug_macro   0x00008694      0x976 obj\debug\src\functions.o
+ .debug_macro   0x0000900a       0x10 obj\debug\src\functions.o
+ .debug_macro   0x0000901a       0x34 obj\debug\src\functions.o
+ .debug_macro   0x0000904e       0x10 obj\debug\src\functions.o
+ .debug_macro   0x0000905e       0xe6 obj\debug\src\interrupts.o
+ .debug_macro   0x00009144      0x173 obj\debug\src\main.o
+ .debug_macro   0x000092b7       0xd6 obj\debug\src\main.o
+ .debug_macro   0x0000938d      0x1f7 obj\debug\src\main.o
+ .debug_macro   0x00009584       0x10 obj\debug\src\main.o
+ .debug_macro   0x00009594      0x375 obj\debug\src\main.o
+ .debug_macro   0x00009909       0x8e obj\debug\src\main.o
+ .debug_macro   0x00009997       0x3a obj\debug\src\main.o
+ .debug_macro   0x000099d1       0x22 obj\debug\src\main.o
+ .debug_macro   0x000099f3      0x1f0 obj\debug\src\main.o
+ .debug_macro   0x00009be3       0x16 obj\debug\src\main.o
+ .debug_macro   0x00009bf9       0xd9 obj\debug\src\main.o
+ .debug_macro   0x00009cd2       0x1c obj\debug\src\main.o
+ .debug_macro   0x00009cee       0xdf obj\debug\src\system_nrf51.o
+ .debug_macro   0x00009dcd       0x22 obj\debug\src\system_nrf51.o
+
+.debug_line     0x00000000     0x12d1
+ .debug_line    0x00000000       0x27 obj\debug\s130.o
+ .debug_line    0x00000027      0x3b5 obj\debug\src\functions.o
+ .debug_line    0x000003dc      0x327 obj\debug\src\interrupts.o
+ .debug_line    0x00000703      0x812 obj\debug\src\main.o
+ .debug_line    0x00000f15      0x34e obj\debug\src\system_nrf51.o
+ .debug_line    0x00001263       0x6e obj\debug\startup_nrf51.o
+
+.debug_str      0x00000000    0x3495b
+ .debug_str     0x00000000     0x23c1 obj\debug\s130.o
+                               0x23cf (size before relaxing)
+ .debug_str     0x000023c1    0x2cf58 obj\debug\src\functions.o
+                              0x2f42a (size before relaxing)
+ .debug_str     0x0002f319       0x5b obj\debug\src\interrupts.o
+                              0x2f198 (size before relaxing)
+ .debug_str     0x0002f374     0x54ad obj\debug\src\main.o
+                              0x345a5 (size before relaxing)
+ .debug_str     0x00034821      0x13a obj\debug\src\system_nrf51.o
+                              0x2efdc (size before relaxing)
 
 .debug_ranges   0x00000000      0x270
  .debug_ranges  0x00000000       0x40 obj\debug\src\functions.o
  .debug_ranges  0x00000040       0x18 obj\debug\src\interrupts.o
  .debug_ranges  0x00000058      0x1f0 obj\debug\src\main.o
  .debug_ranges  0x00000248       0x28 obj\debug\src\system_nrf51.o
-
-.debug_macro    0x00000000     0x9def
- .debug_macro   0x00000000       0xe6 obj\debug\src\functions.o
- .debug_macro   0x000000e6      0x82c obj\debug\src\functions.o
- .debug_macro   0x00000912       0x22 obj\debug\src\functions.o
- .debug_macro   0x00000934       0x3a obj\debug\src\functions.o
- .debug_macro   0x0000096e       0x22 obj\debug\src\functions.o
- .debug_macro   0x00000990       0x87 obj\debug\src\functions.o
- .debug_macro   0x00000a17       0x44 obj\debug\src\functions.o
- .debug_macro   0x00000a5b       0xfd obj\debug\src\functions.o
- .debug_macro   0x00000b58       0x5e obj\debug\src\functions.o
- .debug_macro   0x00000bb6      0x1df obj\debug\src\functions.o
- .debug_macro   0x00000d95      0x241 obj\debug\src\functions.o
- .debug_macro   0x00000fd6      0x1d2 obj\debug\src\functions.o
- .debug_macro   0x000011a8     0x74c6 obj\debug\src\functions.o
- .debug_macro   0x0000866e      0x976 obj\debug\src\functions.o
- .debug_macro   0x00008fe4       0x10 obj\debug\src\functions.o
- .debug_macro   0x00008ff4       0x34 obj\debug\src\functions.o
- .debug_macro   0x00009028       0x10 obj\debug\src\functions.o
- .debug_macro   0x00009038       0xe6 obj\debug\src\interrupts.o
- .debug_macro   0x0000911e      0x173 obj\debug\src\main.o
- .debug_macro   0x00009291       0xd6 obj\debug\src\main.o
- .debug_macro   0x00009367      0x1f7 obj\debug\src\main.o
- .debug_macro   0x0000955e       0x10 obj\debug\src\main.o
- .debug_macro   0x0000956e      0x375 obj\debug\src\main.o
- .debug_macro   0x000098e3       0x8e obj\debug\src\main.o
- .debug_macro   0x00009971       0x3a obj\debug\src\main.o
- .debug_macro   0x000099ab       0x22 obj\debug\src\main.o
- .debug_macro   0x000099cd      0x1f0 obj\debug\src\main.o
- .debug_macro   0x00009bbd       0x16 obj\debug\src\main.o
- .debug_macro   0x00009bd3       0xd9 obj\debug\src\main.o
- .debug_macro   0x00009cac       0x1c obj\debug\src\main.o
- .debug_macro   0x00009cc8       0xdf obj\debug\src\system_nrf51.o
- .debug_macro   0x00009da7       0x22 obj\debug\src\system_nrf51.o
- .debug_macro   0x00009dc9       0x26 obj\debug\s130.o
-
-.debug_line     0x00000000     0x12d1
- .debug_line    0x00000000      0x3b5 obj\debug\src\functions.o
- .debug_line    0x000003b5      0x327 obj\debug\src\interrupts.o
- .debug_line    0x000006dc      0x812 obj\debug\src\main.o
- .debug_line    0x00000eee      0x34e obj\debug\src\system_nrf51.o
- .debug_line    0x0000123c       0x6e obj\debug\startup_nrf51.o
- .debug_line    0x000012aa       0x27 obj\debug\s130.o
-
-.debug_str      0x00000000    0x3495b
- .debug_str     0x00000000    0x2f2a4 obj\debug\src\functions.o
-                              0x2f42a (size before relaxing)
- .debug_str     0x0002f2a4       0x5b obj\debug\src\interrupts.o
-                              0x2f198 (size before relaxing)
- .debug_str     0x0002f2ff     0x54ad obj\debug\src\main.o
-                              0x345a5 (size before relaxing)
- .debug_str     0x000347ac      0x13a obj\debug\src\system_nrf51.o
-                              0x2efdc (size before relaxing)
- .debug_str     0x000348e6       0x75 obj\debug\s130.o
-                               0x23cf (size before relaxing)
 
 .debug_frame    0x00000000      0x630
  .debug_frame   0x00000000       0xe8 obj\debug\src\functions.o

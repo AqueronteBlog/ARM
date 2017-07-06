@@ -64,6 +64,10 @@
 			<Add option="-eb_start_files" />
 			<Add option="-eb_lib=n" />
 		</Linker>
+		<Unit filename="..\..\..\Drivers\HTU21D\HTU21D.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\..\Drivers\HTU21D\HTU21D.h" />
 		<Unit filename="gcc_nrf51_s130_xxaa.ld" />
 		<Unit filename="Inc\compiler_abstraction.h" />
 		<Unit filename="Inc\nrf.h" />
@@ -118,7 +122,7 @@
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="Release" active_interface="J-link">
+				<target_debugging_settings target="Debug" active_interface="J-link">
 					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="..\..\Resources\nRF5_SDK_13.0.0_04a0bfd\svd\nrf51.svd" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="Nordic" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="Nordic">
 							<option opt_id="ID_DEVICE" opt_value="nRF51422_xxAA" />
@@ -140,7 +144,7 @@
 						</family_options>
 					</debug_interface>
 				</target_debugging_settings>
-				<target_debugging_settings target="Debug" active_interface="J-link">
+				<target_debugging_settings target="Release" active_interface="J-link">
 					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="..\..\Resources\nRF5_SDK_13.0.0_04a0bfd\svd\nrf51.svd" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="Nordic" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="Nordic">
 							<option opt_id="ID_DEVICE" opt_value="nRF51422_xxAA" />
