@@ -19,6 +19,7 @@ dataToBeTX          0x1               obj\debug\src\functions.o
 HTU21D_SDA_pin      0x4               obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 HTU21D_Mode         0x4               obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 HTU21D_SCL_pin      0x4               obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+HTU21D_Resolution   0x4               obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 
 Discarded input sections
 
@@ -313,14 +314,22 @@ Discarded input sections
  .data          0x00000000        0x0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .bss           0x00000000        0x0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .text.HTU21D_Init
-                0x00000000       0x64 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+                0x00000000       0xa4 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .text.HTU21D_SoftReset
                 0x00000000       0x24 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- .debug_info    0x00000000      0x198 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .text.HTU21D_TriggerTemperature
+                0x00000000       0x24 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .text.HTU21D_ReadTemperature
+                0x00000000       0x30 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .text.HTU21D_TriggerHumidity
+                0x00000000       0x24 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .text.HTU21D_ReadHumidity
+                0x00000000       0x48 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_info    0x00000000      0x2a1 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_abbrev  0x00000000       0xa6 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_aranges
-                0x00000000       0x28 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- .debug_ranges  0x00000000       0x18 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+                0x00000000       0x48 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_ranges  0x00000000       0x38 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_macro   0x00000000       0x6c obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_macro   0x00000000      0x82c obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_macro   0x00000000       0x22 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
@@ -329,14 +338,14 @@ Discarded input sections
  .debug_macro   0x00000000       0xfd obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_macro   0x00000000       0x5e obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_macro   0x00000000      0x1df obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- .debug_macro   0x00000000       0x8e obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- .debug_line    0x00000000      0x22b obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- .debug_str     0x00000000     0x3608 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00000000       0x94 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_line    0x00000000      0x29a obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_str     0x00000000     0x3699 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .comment       0x00000000       0x6f obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- .debug_frame   0x00000000       0x50 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_frame   0x00000000       0xd0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .ARM.attributes
                 0x00000000       0x31 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- COMMON         0x00000000        0xc obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ COMMON         0x00000000       0x10 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .text          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
