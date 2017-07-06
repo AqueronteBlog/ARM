@@ -1,6 +1,5 @@
-obj\debug\~\#\~\#\~\#\drivers\htu21d\htu21d.o: \
- ..\..\..\Drivers\HTU21D\HTU21D.c ..\..\..\Drivers\HTU21D\HTU21D.h \
- ..\Basics\I2C/i2c.h Inc/nrf.h Inc/nrf51.h \
+obj\debug\~\#\basics\i2c\i2c.o: ..\Basics\I2C\i2c.c ..\Basics\I2C\i2c.h \
+ Inc/nrf.h Inc/nrf51.h \
  c:\program\ files\ (x86)\embitz\1.11\share\em_armgcc\lib\cmsis\include\core_cm0.h \
  c:\program\ files\ (x86)\embitz\1.11\share\em_armgcc\lib\cmsis\include\core_cminstr.h \
  c:\program\ files\ (x86)\embitz\1.11\share\em_armgcc\lib\cmsis\include\core_cmfunc.h \
