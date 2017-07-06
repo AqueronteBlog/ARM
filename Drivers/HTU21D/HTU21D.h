@@ -42,6 +42,7 @@
 #define USER_REGISTER_RESOLUTION_8RH_12TEMP                         0x40
 #define USER_REGISTER_RESOLUTION_10RH_13TEMP                        0x80
 #define USER_REGISTER_RESOLUTION_11RH_11TEMP                        0xC0
+#define USER_REGISTER_RESOLUTION_MASK                               0xC0
 
 /* STATUS */
 #define USER_REGISTER_STATUS_END_BATTERY_HIGH_2V25                  0x00
@@ -71,7 +72,7 @@
 uint32_t    HTU21D_SDA_pin;
 uint32_t    HTU21D_SCL_pin;
 uint32_t    HTU21D_Mode;
-
+uint32_t    HTU21D_Resolution;
 
 
 /**
@@ -89,5 +90,10 @@ typedef struct
 
 
 /* FUNCTIONS PROTOTYPES */
-uint8_t  HTU21D_Init        ( uint32_t SDA, uint32_t SCL, uint32_t MODE, uint32_t RESOLUTION, uint32_t HEATER );
-uint8_t  HTU21D_SoftReset   ( void );
+uint32_t  HTU21D_Init               ( uint32_t SDA, uint32_t SCL, uint32_t MODE, uint8_t RESOLUTION, uint8_t HEATER );
+uint32_t  HTU21D_SoftReset          ( void );
+uint32_t  HTU21D_TriggerTemperature ( void );
+uint32_t  HTU21D_ReadTemperature    ( void );
+uint32_t  HTU21D_TriggerHumidity    ( void );
+uint32_t  HTU21D_ReadHumidity       ( void );
+uint32_t  HTU21D_BatteryStatus      ( uint32_t* battStatus );
