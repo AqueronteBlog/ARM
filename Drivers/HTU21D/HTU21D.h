@@ -16,6 +16,7 @@
 
 
 #include "stdint.h"
+#include "i2c.h"
 
 
 /**
@@ -89,7 +90,9 @@ typedef struct
 
 
 
-/* FUNCTIONS PROTOTYPES */
+/**
+  * @brief   FUNCTION PROTOTYPES
+  */
 uint32_t  HTU21D_Init               ( uint32_t SDA, uint32_t SCL, uint32_t MODE, uint8_t RESOLUTION, uint8_t HEATER );
 uint32_t  HTU21D_SoftReset          ( void );
 uint32_t  HTU21D_TriggerTemperature ( void );

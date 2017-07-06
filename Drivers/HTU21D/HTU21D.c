@@ -51,14 +51,14 @@ uint32_t  HTU21D_Init    ( uint32_t SDA, uint32_t SCL, uint32_t MODE, uint8_t RE
 
 // Reserved bits must not be changed. Therefore, for any writing to user register, default values of reserved bits must be read first
 // Datasheet: User register p.13.
-    // aux = i2c_write ( &cmd[0], 1 );
+    aux = i2c_write ( &cmd[0], 1 );
     // aux = i2c_read  ( &cmd[0], 1 );
 
     cmd[0]          &=   ~( USER_REGISTER_RESOLUTION_MASK | USER_REGISTER_STATUS_END_BATTERY_MASK | USER_REGISTER_HEATER_MASK | USER_REGISTER_OTP_MASK );
     cmd[1]           =   ( cmd[0] | ( ( RESOLUTION | HEATER ) | USER_REGISTER_OTP_DISABLED ) );
     cmd[0]           =   HTU21D_WRITE_REGISTER;
 
-   // aux = i2c_write  ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+   aux = i2c_write  ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
 
    if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
@@ -92,7 +92,7 @@ uint32_t  HTU21D_SoftReset   ( void )
     uint8_t     cmd [] = { HTU21D_SOFT_RESET };
     uint32_t    aux    =   0;
 
-    // aux = i2c_write ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+    aux = i2c_write ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
 
     if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
@@ -126,7 +126,7 @@ uint32_t  HTU21D_TriggerTemperature    ( void )
     uint32_t    aux    =   0;
 
 
-    // aux = i2c_write ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+    aux = i2c_write ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
 
     if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
@@ -195,7 +195,7 @@ uint32_t  HTU21D_TriggerHumidity    ( void )
     uint32_t    aux    =   0;
 
 
-    // aux = i2c_write ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+    aux = i2c_write ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
 
     if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
