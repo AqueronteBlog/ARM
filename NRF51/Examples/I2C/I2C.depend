@@ -1,0 +1,123 @@
+# depslib dependency file v1.0
+1499427384 source:e:\vsprojects\arm\nrf51\examples\basics\i2c\i2c.c
+	"i2c.h"
+
+1499355623 e:\vsprojects\arm\nrf51\examples\basics\i2c\i2c.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+
+1497971746 e:\vsprojects\arm\nrf51\examples\i2c\inc\nrf.h
+	"nrf51.h"
+	"nrf51_bitfields.h"
+	"nrf51_deprecated.h"
+	"compiler_abstraction.h"
+
+1497971746 e:\vsprojects\arm\nrf51\examples\i2c\inc\nrf51.h
+	<core_cm0.h>
+	"system_nrf51.h"
+
+1497971746 e:\vsprojects\arm\nrf51\examples\i2c\inc\system_nrf51.h
+	<stdint.h>
+
+1498831218 e:\vsprojects\arm\nrf51\examples\i2c\inc\nrf51_bitfields.h
+	<core_cm0.h>
+
+1497971746 e:\vsprojects\arm\nrf51\examples\i2c\inc\nrf51_deprecated.h
+
+1497971746 e:\vsprojects\arm\nrf51\examples\i2c\inc\compiler_abstraction.h
+
+1492790081 source:e:\vsprojects\arm\nrf51\examples\i2c\s130.c
+
+1499427015 source:e:\vsprojects\arm\nrf51\examples\i2c\src\functions.c
+	"functions.h"
+
+1498825626 e:\vsprojects\arm\nrf51\examples\i2c\src\functions.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"variables.h"
+
+1498825626 e:\vsprojects\arm\nrf51\examples\i2c\src\variables.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"board.h"
+
+1498830380 e:\vsprojects\arm\nrf51\examples\i2c\src\board.h
+
+1498837233 source:e:\vsprojects\arm\nrf51\examples\i2c\src\interrupts.c
+	"interrupts.h"
+
+1498825626 e:\vsprojects\arm\nrf51\examples\i2c\src\interrupts.h
+	"variables.h"
+
+1499427015 source:e:\vsprojects\arm\nrf51\examples\i2c\src\main.c
+	"nrf.h"
+	"ble.h"
+	"variables.h"
+	"functions.h"
+	"HTU21D.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\i2c\softdevice\include\ble.h
+	"ble_ranges.h"
+	"ble_types.h"
+	"ble_gap.h"
+	"ble_l2cap.h"
+	"ble_gatt.h"
+	"ble_gattc.h"
+	"ble_gatts.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\i2c\softdevice\include\ble_ranges.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\i2c\softdevice\include\ble_types.h
+	<stdint.h>
+
+1435239910 e:\vsprojects\arm\nrf51\examples\i2c\softdevice\include\ble_gap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\i2c\softdevice\include\nrf_svc.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\i2c\softdevice\include\ble_l2cap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_err.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\i2c\softdevice\include\ble_err.h
+	"nrf_error.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\i2c\softdevice\include\nrf_error.h
+
+1435239910 e:\vsprojects\arm\nrf51\examples\i2c\softdevice\include\ble_gatt.h
+	"ble_types.h"
+	"ble_ranges.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\i2c\softdevice\include\ble_gattc.h
+	"ble_gatt.h"
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1435239910 e:\vsprojects\arm\nrf51\examples\i2c\softdevice\include\ble_gatts.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_l2cap.h"
+	"ble_gap.h"
+	"ble_gatt.h"
+	"nrf_svc.h"
+
+1499356619 e:\vsprojects\arm\drivers\htu21d\htu21d.h
+	"stdint.h"
+	"i2c.h"
+
+1496411739 source:e:\vsprojects\arm\nrf51\examples\i2c\src\system_nrf51.c
+	<stdint.h>
+	<stdbool.h>
+	"nrf.h"
+	"system_nrf51.h"
+
+1496411739 source:e:\vsprojects\arm\nrf51\examples\i2c\startup_nrf51.s
+
+1499356660 source:e:\vsprojects\arm\drivers\htu21d\htu21d.c
+	"HTU21D.h"
+
