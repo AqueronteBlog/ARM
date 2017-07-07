@@ -14,11 +14,9 @@ c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/
 Allocating common symbols
 Common symbol       size              file
 
-myTEMP              0x4               obj\debug\src\functions.o
 dataToBeTX          0x1               obj\debug\src\functions.o
-HTU21D_SDA_pin      0x4               obj\debug\src\main.o
 HTU21D_Mode         0x4               obj\debug\src\main.o
-HTU21D_SCL_pin      0x4               obj\debug\src\main.o
+mySTATE             0x4               obj\debug\src\functions.o
 HTU21D_Resolution   0x4               obj\debug\src\main.o
 
 Discarded input sections
@@ -298,7 +296,6 @@ Discarded input sections
  .debug_macro   0x00000000       0x34 obj\debug\src\main.o
  .debug_macro   0x00000000       0x10 obj\debug\src\main.o
  .debug_macro   0x00000000       0x10 obj\debug\src\main.o
- COMMON         0x00000000       0x10 obj\debug\src\main.o
  .group         0x00000000        0x8 obj\debug\src\system_nrf51.o
  .group         0x00000000        0x8 obj\debug\src\system_nrf51.o
  .group         0x00000000        0x8 obj\debug\src\system_nrf51.o
@@ -357,18 +354,12 @@ Discarded input sections
  .text          0x00000000        0x0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .data          0x00000000        0x0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .bss           0x00000000        0x0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- .text.HTU21D_Init
-                0x00000000       0xc4 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- .text.HTU21D_TriggerTemperature
-                0x00000000       0x34 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- .text.HTU21D_ReadTemperature
-                0x00000000       0x30 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .text.HTU21D_TriggerHumidity
                 0x00000000       0x34 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .text.HTU21D_ReadHumidity
                 0x00000000       0x48 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .text.HTU21D_BatteryStatus
-                0x00000000       0x28 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+                0x00000000       0x48 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_macro   0x00000000      0x82c obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_macro   0x00000000       0x22 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_macro   0x00000000       0x87 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
@@ -384,7 +375,7 @@ Discarded input sections
  .debug_macro   0x00000000      0x976 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_macro   0x00000000       0x10 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .debug_macro   0x00000000       0x10 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- .debug_macro   0x00000000       0x94 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00000000       0xa0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
  .text          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
@@ -434,7 +425,7 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
  .softdevice    0x00000000    0x1d000 obj\debug\s130.o
                 0x00000000                Nordic_S130_SD
 
-.text           0x0001d000      0x854
+.text           0x0001d000      0xb64
  *(.Vectors)
  .Vectors       0x0001d000       0xc0 obj\debug\startup_nrf51.o
                 0x0001d000                __Vectors
@@ -443,93 +434,105 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
                 0x0001d0c0                _start
                 0x0001d0c0                _mainCRTStartup
  .text.i2c_write
-                0x0001d138       0x88 obj\debug\~#\basics\i2c\i2c.o
+                0x0001d138       0xb4 obj\debug\~#\basics\i2c\i2c.o
                 0x0001d138                i2c_write
+ .text.i2c_read
+                0x0001d1ec      0x11c obj\debug\~#\basics\i2c\i2c.o
+                0x0001d1ec                i2c_read
  .text.NVIC_EnableIRQ
-                0x0001d1c0       0x2c obj\debug\src\functions.o
+                0x0001d308       0x2c obj\debug\src\functions.o
  .text.NVIC_ClearPendingIRQ
-                0x0001d1ec       0x34 obj\debug\src\functions.o
+                0x0001d334       0x34 obj\debug\src\functions.o
  .text.NVIC_SetPriority
-                0x0001d220       0xdc obj\debug\src\functions.o
+                0x0001d368       0xdc obj\debug\src\functions.o
  .text.conf_GPIO
-                0x0001d2fc       0x68 obj\debug\src\functions.o
-                0x0001d2fc                conf_GPIO
+                0x0001d444       0x68 obj\debug\src\functions.o
+                0x0001d444                conf_GPIO
  .text.conf_UART
-                0x0001d364       0xb8 obj\debug\src\functions.o
-                0x0001d364                conf_UART
+                0x0001d4ac       0xb8 obj\debug\src\functions.o
+                0x0001d4ac                conf_UART
  .text.conf_TIMER0
-                0x0001d41c       0x64 obj\debug\src\functions.o
-                0x0001d41c                conf_TIMER0
+                0x0001d564       0x64 obj\debug\src\functions.o
+                0x0001d564                conf_TIMER0
  .text.conf_TWI0
-                0x0001d480       0x98 obj\debug\src\functions.o
-                0x0001d480                conf_TWI0
+                0x0001d5c8       0x98 obj\debug\src\functions.o
+                0x0001d5c8                conf_TWI0
  .text.UART0_IRQHandler
-                0x0001d518       0x80 obj\debug\src\interrupts.o
-                0x0001d518                UART0_IRQHandler
+                0x0001d660       0x60 obj\debug\src\interrupts.o
+                0x0001d660                UART0_IRQHandler
  .text.TIMER0_IRQHandler
-                0x0001d598       0x50 obj\debug\src\interrupts.o
-                0x0001d598                TIMER0_IRQHandler
- .text.main     0x0001d5e8       0x2c obj\debug\src\main.o
-                0x0001d5e8                main
+                0x0001d6c0       0x54 obj\debug\src\interrupts.o
+                0x0001d6c0                TIMER0_IRQHandler
+ .text.main     0x0001d714       0xc0 obj\debug\src\main.o
+                0x0001d714                main
  .text.SystemInit
-                0x0001d614       0x40 obj\debug\src\system_nrf51.o
-                0x0001d614                SystemInit
+                0x0001d7d4       0x40 obj\debug\src\system_nrf51.o
+                0x0001d7d4                SystemInit
  .text.is_manual_peripheral_setup_needed
-                0x0001d654       0x80 obj\debug\src\system_nrf51.o
+                0x0001d814       0x80 obj\debug\src\system_nrf51.o
  .text.is_disabled_in_debug_needed
-                0x0001d6d4       0x4c obj\debug\src\system_nrf51.o
- .text          0x0001d720       0x54 obj\debug\startup_nrf51.o
-                0x0001d720                Reset_Handler
-                0x0001d768                NMI_Handler
-                0x0001d76a                HardFault_Handler
-                0x0001d76c                SVC_Handler
-                0x0001d76e                PendSV_Handler
-                0x0001d770                SysTick_Handler
-                0x0001d772                GPIOTE_IRQHandler
-                0x0001d772                RTC0_IRQHandler
-                0x0001d772                POWER_CLOCK_IRQHandler
-                0x0001d772                RADIO_IRQHandler
-                0x0001d772                LPCOMP_IRQHandler
-                0x0001d772                SWI4_IRQHandler
-                0x0001d772                SPI0_TWI0_IRQHandler
-                0x0001d772                QDEC_IRQHandler
-                0x0001d772                SWI5_IRQHandler
-                0x0001d772                TIMER2_IRQHandler
-                0x0001d772                SWI0_IRQHandler
-                0x0001d772                TIMER1_IRQHandler
-                0x0001d772                ECB_IRQHandler
-                0x0001d772                Default_Handler
-                0x0001d772                ADC_IRQHandler
-                0x0001d772                SWI3_IRQHandler
-                0x0001d772                CCM_AAR_IRQHandler
-                0x0001d772                WDT_IRQHandler
-                0x0001d772                TEMP_IRQHandler
-                0x0001d772                SWI2_IRQHandler
-                0x0001d772                RNG_IRQHandler
-                0x0001d772                SPI1_TWI1_IRQHandler
-                0x0001d772                RTC1_IRQHandler
-                0x0001d772                SWI1_IRQHandler
+                0x0001d894       0x4c obj\debug\src\system_nrf51.o
+ .text          0x0001d8e0       0x54 obj\debug\startup_nrf51.o
+                0x0001d8e0                Reset_Handler
+                0x0001d928                NMI_Handler
+                0x0001d92a                HardFault_Handler
+                0x0001d92c                SVC_Handler
+                0x0001d92e                PendSV_Handler
+                0x0001d930                SysTick_Handler
+                0x0001d932                GPIOTE_IRQHandler
+                0x0001d932                RTC0_IRQHandler
+                0x0001d932                POWER_CLOCK_IRQHandler
+                0x0001d932                RADIO_IRQHandler
+                0x0001d932                LPCOMP_IRQHandler
+                0x0001d932                SWI4_IRQHandler
+                0x0001d932                SPI0_TWI0_IRQHandler
+                0x0001d932                QDEC_IRQHandler
+                0x0001d932                SWI5_IRQHandler
+                0x0001d932                TIMER2_IRQHandler
+                0x0001d932                SWI0_IRQHandler
+                0x0001d932                TIMER1_IRQHandler
+                0x0001d932                ECB_IRQHandler
+                0x0001d932                Default_Handler
+                0x0001d932                ADC_IRQHandler
+                0x0001d932                SWI3_IRQHandler
+                0x0001d932                CCM_AAR_IRQHandler
+                0x0001d932                WDT_IRQHandler
+                0x0001d932                TEMP_IRQHandler
+                0x0001d932                SWI2_IRQHandler
+                0x0001d932                RNG_IRQHandler
+                0x0001d932                SPI1_TWI1_IRQHandler
+                0x0001d932                RTC1_IRQHandler
+                0x0001d932                SWI1_IRQHandler
+ .text.HTU21D_Init
+                0x0001d934       0xec obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+                0x0001d934                HTU21D_Init
  .text.HTU21D_SoftReset
-                0x0001d774       0x34 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
-                0x0001d774                HTU21D_SoftReset
- .text.exit     0x0001d7a8       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
-                0x0001d7a8                exit
+                0x0001da20       0x34 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+                0x0001da20                HTU21D_SoftReset
+ .text.HTU21D_TriggerTemperature
+                0x0001da54       0x34 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+                0x0001da54                HTU21D_TriggerTemperature
+ .text.HTU21D_ReadTemperature
+                0x0001da88       0x30 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+                0x0001da88                HTU21D_ReadTemperature
+ .text.exit     0x0001dab8       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
+                0x0001dab8                exit
  .text.__libc_init_array
-                0x0001d7d4       0x4c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
-                0x0001d7d4                __libc_init_array
- .text.memset   0x0001d820       0x10 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
-                0x0001d820                memset
- .text._exit    0x0001d830        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
-                0x0001d830                _exit
+                0x0001dae4       0x4c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
+                0x0001dae4                __libc_init_array
+ .text.memset   0x0001db30       0x10 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
+                0x0001db30                memset
+ .text._exit    0x0001db40        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
+                0x0001db40                _exit
  *(.init)
- *fill*         0x0001d832        0x2 
- .init          0x0001d834        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x0001d834                _init
- .init          0x0001d838        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ *fill*         0x0001db42        0x2 
+ .init          0x0001db44        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x0001db44                _init
+ .init          0x0001db48        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
  *(.fini)
- .fini          0x0001d840        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x0001d840                _fini
- .fini          0x0001d844        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ .fini          0x0001db50        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x0001db50                _fini
+ .fini          0x0001db54        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
@@ -542,44 +545,44 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
  *(.dtors)
  *(.rodata*)
  .rodata.str1.1
-                0x0001d84c        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
- *fill*         0x0001d84e        0x2 
+                0x0001db5c        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
+ *fill*         0x0001db5e        0x2 
  .rodata._global_impure_ptr
-                0x0001d850        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
-                0x0001d850                _global_impure_ptr
+                0x0001db60        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
+                0x0001db60                _global_impure_ptr
  *(.eh_frame*)
 
-.glue_7         0x0001d854        0x0
- .glue_7        0x0001d854        0x0 linker stubs
+.glue_7         0x0001db64        0x0
+ .glue_7        0x0001db64        0x0 linker stubs
 
-.glue_7t        0x0001d854        0x0
- .glue_7t       0x0001d854        0x0 linker stubs
+.glue_7t        0x0001db64        0x0
+ .glue_7t       0x0001db64        0x0 linker stubs
 
-.vfp11_veneer   0x0001d854        0x0
- .vfp11_veneer  0x0001d854        0x0 linker stubs
+.vfp11_veneer   0x0001db64        0x0
+ .vfp11_veneer  0x0001db64        0x0 linker stubs
 
-.v4_bx          0x0001d854        0x0
- .v4_bx         0x0001d854        0x0 linker stubs
+.v4_bx          0x0001db64        0x0
+ .v4_bx         0x0001db64        0x0 linker stubs
 
-.iplt           0x0001d854        0x0
- .iplt          0x0001d854        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.iplt           0x0001db64        0x0
+ .iplt          0x0001db64        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0001d854                __exidx_start = .
+                0x0001db64                __exidx_start = .
 
-.ARM.exidx      0x0001d854        0x8
+.ARM.exidx      0x0001db64        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x0001d854        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
- .ARM.exidx     0x0001d85c        0x0 obj\debug\startup_nrf51.o
+ .ARM.exidx     0x0001db64        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .ARM.exidx     0x0001db6c        0x0 obj\debug\startup_nrf51.o
                                   0x8 (size before relaxing)
-                0x0001d85c                __exidx_end = .
-                0x0001d85c                __etext = .
+                0x0001db6c                __exidx_end = .
+                0x0001db6c                __etext = .
 
-.rel.dyn        0x0001d85c        0x0
- .rel.iplt      0x0001d85c        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.rel.dyn        0x0001db6c        0x0
+ .rel.iplt      0x0001db6c        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.data           0x20002200       0x60 load address 0x0001d85c
+.data           0x20002200       0x60 load address 0x0001db6c
                 0x20002200                __data_start__ = .
  *(vtable)
  *(.data*)
@@ -603,32 +606,34 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
                 0x20002260                . = ALIGN (0x4)
                 0x20002260                __data_end__ = .
 
-.igot.plt       0x20002260        0x0 load address 0x0001d8bc
+.igot.plt       0x20002260        0x0 load address 0x0001dbcc
  .igot.plt      0x20002260        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.bss            0x20002260        0x8 load address 0x0001d8bc
+.bss            0x20002260       0x10 load address 0x0001dbcc
                 0x20002260                . = ALIGN (0x4)
                 0x20002260                __bss_start__ = .
  *(.bss*)
  *(COMMON)
- COMMON         0x20002260        0x5 obj\debug\src\functions.o
-                0x20002260                myTEMP
-                0x20002264                dataToBeTX
-                0x20002268                . = ALIGN (0x4)
- *fill*         0x20002265        0x3 
-                0x20002268                __bss_end__ = .
+ COMMON         0x20002260        0x8 obj\debug\src\functions.o
+                0x20002260                dataToBeTX
+                0x20002264                mySTATE
+ COMMON         0x20002268        0x8 obj\debug\src\main.o
+                0x20002268                HTU21D_Mode
+                0x2000226c                HTU21D_Resolution
+                0x20002270                . = ALIGN (0x4)
+                0x20002270                __bss_end__ = .
 
-.heap           0x20002268      0x800
-                0x20002268                __end__ = .
-                0x20002268                end = __end__
+.heap           0x20002270      0x800
+                0x20002270                __end__ = .
+                0x20002270                end = __end__
  *(.heap*)
- .heap          0x20002268      0x800 obj\debug\startup_nrf51.o
-                0x20002268                __HeapBase
-                0x20002a68                __HeapLimit = .
+ .heap          0x20002270      0x800 obj\debug\startup_nrf51.o
+                0x20002270                __HeapBase
+                0x20002a70                __HeapLimit = .
 
-.stack_dummy    0x20002268      0x800
+.stack_dummy    0x20002270      0x800
  *(.stack*)
- .stack         0x20002268      0x800 obj\debug\startup_nrf51.o
+ .stack         0x20002270      0x800 obj\debug\startup_nrf51.o
                 0x20007800                __StackTop = (ORIGIN (RAM) + LENGTH (RAM))
                 0x20007000                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
                 0x20007800                PROVIDE (__stack, __StackTop)
@@ -700,53 +705,53 @@ OUTPUT(bin\Debug\I2C.elf elf32-littlearm)
  .comment       0x0000006e       0x6f obj\debug\src\system_nrf51.o
  .comment       0x0000006e       0x6f obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 
-.debug_info     0x00000000     0x4137
- .debug_info    0x00000000      0x45a obj\debug\~#\basics\i2c\i2c.o
- .debug_info    0x0000045a       0x5e obj\debug\s130.o
- .debug_info    0x000004b8      0xd45 obj\debug\src\functions.o
- .debug_info    0x000011fd      0x842 obj\debug\src\interrupts.o
- .debug_info    0x00001a3f     0x21c0 obj\debug\src\main.o
- .debug_info    0x00003bff      0x1ec obj\debug\src\system_nrf51.o
- .debug_info    0x00003deb       0x5d obj\debug\startup_nrf51.o
- .debug_info    0x00003e48      0x2ef obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+.debug_info     0x00000000     0x4608
+ .debug_info    0x00000000      0x4a6 obj\debug\~#\basics\i2c\i2c.o
+ .debug_info    0x000004a6       0x5e obj\debug\s130.o
+ .debug_info    0x00000504      0xd45 obj\debug\src\functions.o
+ .debug_info    0x00001249      0x842 obj\debug\src\interrupts.o
+ .debug_info    0x00001a8b     0x2693 obj\debug\src\main.o
+ .debug_info    0x0000411e      0x1ec obj\debug\src\system_nrf51.o
+ .debug_info    0x0000430a       0x5d obj\debug\startup_nrf51.o
+ .debug_info    0x00004367      0x2a1 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 
-.debug_abbrev   0x00000000      0x7f6
- .debug_abbrev  0x00000000       0xfc obj\debug\~#\basics\i2c\i2c.o
- .debug_abbrev  0x000000fc       0x48 obj\debug\s130.o
- .debug_abbrev  0x00000144      0x178 obj\debug\src\functions.o
- .debug_abbrev  0x000002bc       0xd3 obj\debug\src\interrupts.o
- .debug_abbrev  0x0000038f      0x25a obj\debug\src\main.o
- .debug_abbrev  0x000005e9       0xf4 obj\debug\src\system_nrf51.o
- .debug_abbrev  0x000006dd       0x14 obj\debug\startup_nrf51.o
- .debug_abbrev  0x000006f1      0x105 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+.debug_abbrev   0x00000000      0x81f
+ .debug_abbrev  0x00000000      0x116 obj\debug\~#\basics\i2c\i2c.o
+ .debug_abbrev  0x00000116       0x48 obj\debug\s130.o
+ .debug_abbrev  0x0000015e      0x178 obj\debug\src\functions.o
+ .debug_abbrev  0x000002d6       0xd3 obj\debug\src\interrupts.o
+ .debug_abbrev  0x000003a9      0x294 obj\debug\src\main.o
+ .debug_abbrev  0x0000063d       0xf4 obj\debug\src\system_nrf51.o
+ .debug_abbrev  0x00000731       0x14 obj\debug\startup_nrf51.o
+ .debug_abbrev  0x00000745       0xda obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 
-.debug_aranges  0x00000000      0x358
+.debug_aranges  0x00000000      0x360
  .debug_aranges
-                0x00000000       0x20 obj\debug\~#\basics\i2c\i2c.o
+                0x00000000       0x28 obj\debug\~#\basics\i2c\i2c.o
  .debug_aranges
-                0x00000020       0x18 obj\debug\s130.o
+                0x00000028       0x18 obj\debug\s130.o
  .debug_aranges
-                0x00000038       0x50 obj\debug\src\functions.o
+                0x00000040       0x50 obj\debug\src\functions.o
  .debug_aranges
-                0x00000088       0x28 obj\debug\src\interrupts.o
+                0x00000090       0x28 obj\debug\src\interrupts.o
  .debug_aranges
-                0x000000b0      0x200 obj\debug\src\main.o
+                0x000000b8      0x200 obj\debug\src\main.o
  .debug_aranges
-                0x000002b0       0x38 obj\debug\src\system_nrf51.o
+                0x000002b8       0x38 obj\debug\src\system_nrf51.o
  .debug_aranges
-                0x000002e8       0x20 obj\debug\startup_nrf51.o
+                0x000002f0       0x20 obj\debug\startup_nrf51.o
  .debug_aranges
-                0x00000308       0x50 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+                0x00000310       0x50 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 
-.debug_ranges   0x00000000      0x2c0
- .debug_ranges  0x00000000       0x10 obj\debug\~#\basics\i2c\i2c.o
- .debug_ranges  0x00000010       0x40 obj\debug\src\functions.o
- .debug_ranges  0x00000050       0x18 obj\debug\src\interrupts.o
- .debug_ranges  0x00000068      0x1f0 obj\debug\src\main.o
- .debug_ranges  0x00000258       0x28 obj\debug\src\system_nrf51.o
- .debug_ranges  0x00000280       0x40 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+.debug_ranges   0x00000000      0x2c8
+ .debug_ranges  0x00000000       0x18 obj\debug\~#\basics\i2c\i2c.o
+ .debug_ranges  0x00000018       0x40 obj\debug\src\functions.o
+ .debug_ranges  0x00000058       0x18 obj\debug\src\interrupts.o
+ .debug_ranges  0x00000070      0x1f0 obj\debug\src\main.o
+ .debug_ranges  0x00000260       0x28 obj\debug\src\system_nrf51.o
+ .debug_ranges  0x00000288       0x40 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 
-.debug_macro    0x00000000     0xa060
+.debug_macro    0x00000000     0xa06c
  .debug_macro   0x00000000       0xd9 obj\debug\~#\basics\i2c\i2c.o
  .debug_macro   0x000000d9      0x82c obj\debug\~#\basics\i2c\i2c.o
  .debug_macro   0x00000905       0x22 obj\debug\~#\basics\i2c\i2c.o
@@ -780,45 +785,45 @@ OUTPUT(bin\Debug\I2C.elf elf32-littlearm)
  .debug_macro   0x00009cde       0x16 obj\debug\src\main.o
  .debug_macro   0x00009cf4       0xd9 obj\debug\src\main.o
  .debug_macro   0x00009dcd       0x1c obj\debug\src\main.o
- .debug_macro   0x00009de9       0x94 obj\debug\src\main.o
- .debug_macro   0x00009e7d       0xdf obj\debug\src\system_nrf51.o
- .debug_macro   0x00009f5c       0x22 obj\debug\src\system_nrf51.o
- .debug_macro   0x00009f7e       0xe2 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_macro   0x00009de9       0xa0 obj\debug\src\main.o
+ .debug_macro   0x00009e89       0xdf obj\debug\src\system_nrf51.o
+ .debug_macro   0x00009f68       0x22 obj\debug\src\system_nrf51.o
+ .debug_macro   0x00009f8a       0xe2 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 
-.debug_line     0x00000000     0x19bf
- .debug_line    0x00000000      0x30b obj\debug\~#\basics\i2c\i2c.o
- .debug_line    0x0000030b       0x27 obj\debug\s130.o
- .debug_line    0x00000332      0x3b5 obj\debug\src\functions.o
- .debug_line    0x000006e7      0x327 obj\debug\src\interrupts.o
- .debug_line    0x00000a0e      0x83c obj\debug\src\main.o
- .debug_line    0x0000124a      0x34e obj\debug\src\system_nrf51.o
- .debug_line    0x00001598       0x6e obj\debug\startup_nrf51.o
- .debug_line    0x00001606      0x3b9 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+.debug_line     0x00000000     0x1a4c
+ .debug_line    0x00000000      0x389 obj\debug\~#\basics\i2c\i2c.o
+ .debug_line    0x00000389       0x27 obj\debug\s130.o
+ .debug_line    0x000003b0      0x3b5 obj\debug\src\functions.o
+ .debug_line    0x00000765      0x325 obj\debug\src\interrupts.o
+ .debug_line    0x00000a8a      0x851 obj\debug\src\main.o
+ .debug_line    0x000012db      0x34e obj\debug\src\system_nrf51.o
+ .debug_line    0x00001629       0x6e obj\debug\startup_nrf51.o
+ .debug_line    0x00001697      0x3b5 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
 
-.debug_str      0x00000000    0x34da8
- .debug_str     0x00000000    0x2ef20 obj\debug\~#\basics\i2c\i2c.o
-                              0x2f09c (size before relaxing)
- .debug_str     0x0002ef20       0x75 obj\debug\s130.o
+.debug_str      0x00000000    0x34ea1
+ .debug_str     0x00000000    0x2ef29 obj\debug\~#\basics\i2c\i2c.o
+                              0x2f0a5 (size before relaxing)
+ .debug_str     0x0002ef29       0x75 obj\debug\s130.o
                                0x23cf (size before relaxing)
- .debug_str     0x0002ef95      0x3e9 obj\debug\src\functions.o
-                              0x2f42a (size before relaxing)
- .debug_str     0x0002f37e       0x5b obj\debug\src\interrupts.o
-                              0x2f198 (size before relaxing)
- .debug_str     0x0002f3d9     0x57c9 obj\debug\src\main.o
-                              0x34965 (size before relaxing)
- .debug_str     0x00034ba2      0x13a obj\debug\src\system_nrf51.o
+ .debug_str     0x0002ef9e      0x3ea obj\debug\src\functions.o
+                              0x2f42b (size before relaxing)
+ .debug_str     0x0002f388       0x60 obj\debug\src\interrupts.o
+                              0x2f199 (size before relaxing)
+ .debug_str     0x0002f3e8     0x5894 obj\debug\src\main.o
+                              0x34aa7 (size before relaxing)
+ .debug_str     0x00034c7c      0x13a obj\debug\src\system_nrf51.o
                               0x2efdc (size before relaxing)
- .debug_str     0x00034cdc       0xcc obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
-                              0x2f337 (size before relaxing)
+ .debug_str     0x00034db6       0xeb obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+                              0x2f375 (size before relaxing)
 
-.debug_frame    0x00000000      0x750
- .debug_frame   0x00000000       0x30 obj\debug\~#\basics\i2c\i2c.o
- .debug_frame   0x00000030       0xe8 obj\debug\src\functions.o
- .debug_frame   0x00000118       0x48 obj\debug\src\interrupts.o
- .debug_frame   0x00000160      0x3ec obj\debug\src\main.o
- .debug_frame   0x0000054c       0x80 obj\debug\src\system_nrf51.o
- .debug_frame   0x000005cc       0xf0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
- .debug_frame   0x000006bc       0x28 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
- .debug_frame   0x000006e4       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
- .debug_frame   0x00000710       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
- .debug_frame   0x00000730       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
+.debug_frame    0x00000000      0x774
+ .debug_frame   0x00000000       0x50 obj\debug\~#\basics\i2c\i2c.o
+ .debug_frame   0x00000050       0xe8 obj\debug\src\functions.o
+ .debug_frame   0x00000138       0x48 obj\debug\src\interrupts.o
+ .debug_frame   0x00000180      0x3f0 obj\debug\src\main.o
+ .debug_frame   0x00000570       0x80 obj\debug\src\system_nrf51.o
+ .debug_frame   0x000005f0       0xf0 obj\debug\~#\~#\~#\drivers\htu21d\htu21d.o
+ .debug_frame   0x000006e0       0x28 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
+ .debug_frame   0x00000708       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
+ .debug_frame   0x00000734       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
+ .debug_frame   0x00000754       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
