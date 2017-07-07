@@ -40,26 +40,32 @@
   */
 /* RESOLUTION */
 #define USER_REGISTER_RESOLUTION_12RH_14TEMP                        0x00
-#define USER_REGISTER_RESOLUTION_8RH_12TEMP                         0x40
+#define USER_REGISTER_RESOLUTION_8RH_12TEMP                         0x01
 #define USER_REGISTER_RESOLUTION_10RH_13TEMP                        0x80
-#define USER_REGISTER_RESOLUTION_11RH_11TEMP                        0xC0
-#define USER_REGISTER_RESOLUTION_MASK                               0xC0
+#define USER_REGISTER_RESOLUTION_11RH_11TEMP                        0x81
+#define USER_REGISTER_RESOLUTION_MASK                               0x81
 
 /* STATUS */
 #define USER_REGISTER_STATUS_END_BATTERY_HIGH_2V25                  0x00
-#define USER_REGISTER_STATUS_END_BATTERY_LOW_2V25                   0x20
-#define USER_REGISTER_STATUS_END_BATTERY_MASK                       0x20
+#define USER_REGISTER_STATUS_END_BATTERY_LOW_2V25                   0x40
+#define USER_REGISTER_STATUS_END_BATTERY_MASK                       0x40
 
 /* ON-CHIP HEATER */
-#define USER_REGISTER_HEATER_ENABLED                                0x02
+#define USER_REGISTER_HEATER_ENABLED                                0x04
 #define USER_REGISTER_HEATER_DISABLED                               0x00
-#define USER_REGISTER_HEATER_MASK                                   0x02
+#define USER_REGISTER_HEATER_MASK                                   0x04
 
 /* OTP RELOAD */
 #define USER_REGISTER_OTP_ENABLED                                   0x00
-#define USER_REGISTER_OTP_DISABLED                                  0x01
-#define USER_REGISTER_OTP_MASK                                      0x01
+#define USER_REGISTER_OTP_DISABLED                                  0x02
+#define USER_REGISTER_OTP_MASK                                      0x02
 
+
+/**
+  * @brief   MODE
+  */
+#define HTU21D_MODE_HOLD_MASTER                                     0x00
+#define HTU21D_MODE_NO_HOLD_MASTER                                  0x01
 
 
 /**
@@ -70,33 +76,21 @@
 
 
 
-uint32_t    HTU21D_SDA_pin;
-uint32_t    HTU21D_SCL_pin;
+/**
+  * @brief   INTERNAL VARIABLES
+  */
 uint32_t    HTU21D_Mode;
 uint32_t    HTU21D_Resolution;
-
-
-/**
-  * @brief   HTU21D Init structure definition
-  */
-typedef struct
-{
-  uint32_t HTU21D_SDA;              /*!<    Specifies the SDA pin                                               */
-  uint32_t HTU21D_SCL;              /*!<    Specifies the SCL pin                                               */
-  uint32_t HTU21D_MODE;             /*!<    Specifies the HTU21D mode to work ( Hold Master or No Hold Master ) */
-  uint32_t HTU21D_RESOLUTION;       /*!<    Specifies the HTU21D resolution according to the user register      */
-  uint32_t HTU21D_ENABLE_HEATER;    /*!<    Specifies the HTU21D'heater according to the user register          */
-}HTU21D_InitTypeDef;
 
 
 
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-uint32_t  HTU21D_Init               ( uint32_t SDA, uint32_t SCL, uint32_t MODE, uint8_t RESOLUTION, uint8_t HEATER );
+uint32_t  HTU21D_Init               ( uint32_t MODE, uint8_t RESOLUTION, uint8_t HEATER );
 uint32_t  HTU21D_SoftReset          ( void );
 uint32_t  HTU21D_TriggerTemperature ( void );
-uint32_t  HTU21D_ReadTemperature    ( void );
+uint32_t  HTU21D_ReadTemperature    ( uint8_t* temperature_buff );
 uint32_t  HTU21D_TriggerHumidity    ( void );
-uint32_t  HTU21D_ReadHumidity       ( void );
+uint32_t  HTU21D_ReadHumidity       ( uint8_t* humidity_buff );
 uint32_t  HTU21D_BatteryStatus      ( uint8_t* battStatus );

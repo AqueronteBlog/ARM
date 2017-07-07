@@ -38,14 +38,12 @@
  * @pre         NaN
  * @warning     NaN.
  */
-uint32_t  HTU21D_Init    ( uint32_t SDA, uint32_t SCL, uint32_t MODE, uint8_t RESOLUTION, uint8_t HEATER )
+uint32_t  HTU21D_Init    ( uint32_t MODE, uint8_t RESOLUTION, uint8_t HEATER )
 {
     uint8_t     cmd [] = { HTU21D_READ_REGISTER, 0 };
     uint32_t    aux    =   0;
 
 
-    HTU21D_SDA_pin      =   SDA;
-    HTU21D_SCL_pin      =   SCL;
     HTU21D_Mode         =   MODE;
     HTU21D_Resolution   =   RESOLUTION;
 
@@ -58,12 +56,18 @@ uint32_t  HTU21D_Init    ( uint32_t SDA, uint32_t SCL, uint32_t MODE, uint8_t RE
     cmd[1]           =   ( cmd[0] | ( ( RESOLUTION | HEATER ) | USER_REGISTER_OTP_DISABLED ) );
     cmd[0]           =   HTU21D_WRITE_REGISTER;
 
-   aux = i2c_write  ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+    aux = i2c_write  ( &cmd[0], 2 );
 
-   if ( aux == HTU21D_SUCCESS )
-       return   HTU21D_SUCCESS;
-   else
-       return   HTU21D_FAILURE;
+    /* REad back the register
+    cmd[0]           =   HTU21D_READ_REGISTER;
+    aux = i2c_write ( &cmd[0], 1 );
+    aux = i2c_read  ( &cmd[0], 1 );
+    */
+
+    if ( aux == HTU21D_SUCCESS )
+        return   HTU21D_SUCCESS;
+    else
+        return   HTU21D_FAILURE;
 
 }
 
@@ -92,7 +96,7 @@ uint32_t  HTU21D_SoftReset   ( void )
     uint8_t     cmd [] = { HTU21D_SOFT_RESET };
     uint32_t    aux    =   0;
 
-    aux = i2c_write ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+    aux = i2c_write ( &cmd[0], 1 );
 
     if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
@@ -126,7 +130,7 @@ uint32_t  HTU21D_TriggerTemperature    ( void )
     uint32_t    aux    =   0;
 
 
-    aux = i2c_write ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+    aux = i2c_write ( &cmd[0], 1 );
 
     if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
@@ -155,13 +159,12 @@ uint32_t  HTU21D_TriggerTemperature    ( void )
  * @warning     No Hold Master is ONLY implemented.
  * @warning     HTU21D_TriggerTemperature MUST be call before.
  */
-uint32_t  HTU21D_ReadTemperature    ( void )
+uint32_t  HTU21D_ReadTemperature    ( uint8_t* temperature_buff )
 {
-    uint8_t     cmd [] = { 0, 0, 0 };
     uint32_t    aux    =   0;
 
 
-    aux = i2c_read ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+    aux = i2c_read ( &temperature_buff[0], 3 );
 
     if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
@@ -195,7 +198,7 @@ uint32_t  HTU21D_TriggerHumidity    ( void )
     uint32_t    aux    =   0;
 
 
-    aux = i2c_write ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+    aux = i2c_write ( &cmd[0], 1 );
 
     if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
@@ -224,9 +227,8 @@ uint32_t  HTU21D_TriggerHumidity    ( void )
  * @warning     No Hold Master is ONLY implemented.
  * @warning     HTU21D_TriggerHumidity MUST be call before.
  */
-uint32_t  HTU21D_ReadHumidity    ( void )
+uint32_t  HTU21D_ReadHumidity    ( uint8_t* humidity_buff )
 {
-    uint8_t     cmd [] = { 0, 0, 0 };
     uint32_t    aux    =   0;
 
     if ( HTU21D_Resolution == USER_REGISTER_RESOLUTION_8RH_12TEMP )
@@ -235,7 +237,7 @@ uint32_t  HTU21D_ReadHumidity    ( void )
         aux  =   3;         // 2-byte Data + Checksum
 
 
-    aux = i2c_read ( &cmd[0], aux );
+    aux = i2c_read ( &humidity_buff[0], aux );
 
     if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
@@ -266,7 +268,7 @@ uint32_t  HTU21D_BatteryStatus      ( uint8_t* battStatus )
     uint8_t     cmd [] = { HTU21D_READ_REGISTER };
     uint32_t    aux    =   0;
 
-    aux = i2c_write ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+    aux = i2c_write ( &cmd[0], 1 );
     aux = i2c_read  ( battStatus, 1 );
 
     if ( aux == HTU21D_SUCCESS )
