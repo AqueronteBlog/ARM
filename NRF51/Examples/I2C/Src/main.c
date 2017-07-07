@@ -26,19 +26,27 @@
 
 int main( void )
 {
+    uint8_t  myTEMPbuff[]   =   { 0, 0, 0 };
+    uint8_t  myRHbuff[]     =   { 0, 0, 0 };
+    uint32_t    aux    =   0;
+
     conf_GPIO   ();
     conf_UART   ();
     conf_TWI0   ();
     conf_TIMER0 ();
 
 
-    //NRF_TIMER0->TASKS_START = 1;    // Start Timer0
-    NRF_TWI0->ADDRESS        =   HTU21D_ADDR;
+    mySTATE                  =   0;                 // Reset counter
+    NRF_TWI0->ADDRESS        =   HTU21D_ADDR;       // HTU21D device address
+
+    HTU21D_SoftReset ();
+    HTU21D_Init      ( HTU21D_MODE_NO_HOLD_MASTER, USER_REGISTER_RESOLUTION_11RH_11TEMP, USER_REGISTER_HEATER_DISABLED );
+
+    NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
+
+
     while( 1 )
     {
-        HTU21D_SoftReset();
-        __NOP();
-        /*
         //NRF_POWER->SYSTEMOFF = 1;
         NRF_POWER->TASKS_LOWPWR = 1;        // Sub power mode: Low power.
 
@@ -48,7 +56,28 @@ int main( void )
 		__SEV();
 		__WFE();
 
-        __NOP();
-        */
+		switch ( mySTATE ){
+        case 1:
+            aux = HTU21D_TriggerTemperature ();
+            break;
+
+        case 2:
+            aux = HTU21D_ReadTemperature    ( &myTEMPbuff[0] );
+            //HTU21D_TriggerHumidity    ();
+            break;
+
+        case 3:
+            //HTU21D_ReadHumidity       ( &myRHbuff[0]   );
+            __NOP();
+            mySTATE =   0;
+            break;
+
+        default:
+            mySTATE =   0;
+            break;
+		}
+
+        //__NOP();
+
     }
 }
