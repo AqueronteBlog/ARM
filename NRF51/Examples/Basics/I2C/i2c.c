@@ -41,17 +41,24 @@ uint32_t    i2c_write   ( uint8_t* i2c_buff, uint32_t i2c_data_length )
     uint32_t    i2c_timeout =   0;
 
 // Start transmission
+    NRF_TWI0->TASKS_STARTTX    =   1;
+
     for ( i = 0; i < i2c_data_length; i++ )
     {
         NRF_TWI0->TXD              =   *i2c_buff;
-        NRF_TWI0->TASKS_STARTTX    =   1;
 
         i2c_timeout                =   232323;
         while( ( NRF_TWI0->EVENTS_TXDSENT == 0 ) && ( --i2c_timeout ) );        // Wait until the data is transmitted or timeout
         NRF_TWI0->EVENTS_TXDSENT   =   0;                                       // reset flag
 
-        i2c_buff++;                                                             // Prepare next data to be transmitted
+        i2c_buff++;
     }
+
+    NRF_TWI0->TASKS_STOP       =   1;
+    i2c_timeout                =   232323;
+    while( ( NRF_TWI0->EVENTS_STOPPED == 0 ) && ( --i2c_timeout ) );
+    NRF_TWI0->EVENTS_STOPPED   =   0;
+
 
 // Check if everything went fine
     if ( i2c_timeout < 1 )
@@ -59,6 +66,7 @@ uint32_t    i2c_write   ( uint8_t* i2c_buff, uint32_t i2c_data_length )
     else
         return I2C_SUCCESS;
 }
+
 
 
 /**
@@ -85,11 +93,13 @@ uint32_t    i2c_read   ( uint8_t* i2c_buff, uint32_t i2c_data_length )
     uint32_t    i2c_timeout =   0;
 
 // Start reading
+    NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_STOP_Disabled << TWI_SHORTS_BB_STOP_Pos );
+    NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_SUSPEND_Enabled << TWI_SHORTS_BB_SUSPEND_Pos );
     NRF_TWI0->TASKS_STARTRX    =   1;
 
     for ( i = 0; i < i2c_data_length - 1; i++ )
     {
-        NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_SUSPEND_Enabled << TWI_SHORTS_BB_SUSPEND_Pos );
+        // NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_SUSPEND_Enabled << TWI_SHORTS_BB_SUSPEND_Pos );
 
         i2c_timeout                =   232323;
         while( ( NRF_TWI0->EVENTS_RXDREADY == 0 ) && ( --i2c_timeout ) );       // Wait until the data is read or timeout
@@ -100,7 +110,7 @@ uint32_t    i2c_read   ( uint8_t* i2c_buff, uint32_t i2c_data_length )
         NRF_TWI0->TASKS_RESUME     =   1;
     }
 
-
+    NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_SUSPEND_Disabled << TWI_SHORTS_BB_SUSPEND_Pos );
     NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_STOP_Enabled << TWI_SHORTS_BB_STOP_Pos );
 
     i2c_timeout                =   232323;
@@ -109,11 +119,13 @@ uint32_t    i2c_read   ( uint8_t* i2c_buff, uint32_t i2c_data_length )
 
     *i2c_buff                  =   NRF_TWI0->RXD;                               // Read the last byte
 
+    //NRF_TWI0->TASKS_STOP       =   1;
     i2c_timeout                =   232323;
     while( ( NRF_TWI0->EVENTS_STOPPED == 0 ) && ( --i2c_timeout ) );
     NRF_TWI0->EVENTS_STOPPED   =   0;
-    NRF_TWI0->TASKS_STOP       =   1;
+    //NRF_TWI0->TASKS_STOP       =   1;
 
+    NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_STOP_Disabled << TWI_SHORTS_BB_STOP_Pos );
 
 // Check if everything went fine
     if ( i2c_timeout < 1 )
