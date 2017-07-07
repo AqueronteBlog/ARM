@@ -21,6 +21,7 @@
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
+#include "HTU21D.h"
 
 
 int main( void )
@@ -31,10 +32,13 @@ int main( void )
     conf_TIMER0 ();
 
 
-    NRF_TIMER0->TASKS_START = 1;    // Start Timer0
-
+    //NRF_TIMER0->TASKS_START = 1;    // Start Timer0
+    NRF_TWI0->ADDRESS        =   HTU21D_ADDR;
     while( 1 )
     {
+        HTU21D_SoftReset();
+        __NOP();
+        /*
         //NRF_POWER->SYSTEMOFF = 1;
         NRF_POWER->TASKS_LOWPWR = 1;        // Sub power mode: Low power.
 
@@ -45,5 +49,6 @@ int main( void )
 		__WFE();
 
         __NOP();
+        */
     }
 }
