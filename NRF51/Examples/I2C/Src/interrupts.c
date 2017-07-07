@@ -46,8 +46,8 @@ void UART0_IRQHandler(void)
         if ( dataToBeTX  < ( sizeof( NRF_TEMP->TEMP ) - 1 ) )           // sizeof( NRF_TEMP->TEMP ) - 1 ) = 4 - 1 = 3. NOTE: One byte was just transmitted previously.
         {
         // Transmit data
-            myTEMP           =   ( myTEMP >> 8 );
-            NRF_UART0->TXD   =   ( myTEMP & 0x000000FF );
+            //myTEMP           =   ( myTEMP >> 8 );
+            //NRF_UART0->TXD   =   ( myTEMP & 0x000000FF );
             dataToBeTX++;
         }
         else
@@ -81,8 +81,8 @@ void TIMER0_IRQHandler()
     if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0 ) )
     {
         NRF_GPIO->OUTCLR         =   ( 1UL << LED1 );       // Turn the LED1 on
-        NRF_TEMP->TASKS_START    =   1;                     // Start another temperature measurement ( one-shot )
 
+        mySTATE++;
 
         NRF_TIMER0->EVENTS_COMPARE[0] = 0;                  // Clear ( flag ) compare register 0 event
     }
