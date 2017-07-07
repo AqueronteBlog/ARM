@@ -24,4 +24,4 @@ void TIMER0_IRQHandler ( void );
 
 /* VARIABLES */
 extern uint8_t  dataToBeTX;
-extern uint32_t myTEMP;
+extern uint32_t mySTATE;
