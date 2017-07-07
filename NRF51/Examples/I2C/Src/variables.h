@@ -25,5 +25,5 @@
 
 
 /* VARIABLES */
-uint32_t myTEMP;                         /*!<   It will store the temperature data from the internal temperature sensor             */
+uint32_t mySTATE;                        /*!<   It will store the temperature data from the internal temperature sensor             */
 uint8_t  dataToBeTX;                     /*!<   A counter. It indicates how many data it will be transmitted through the UART       */
