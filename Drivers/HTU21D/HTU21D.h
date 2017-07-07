@@ -99,4 +99,4 @@ uint32_t  HTU21D_TriggerTemperature ( void );
 uint32_t  HTU21D_ReadTemperature    ( void );
 uint32_t  HTU21D_TriggerHumidity    ( void );
 uint32_t  HTU21D_ReadHumidity       ( void );
-uint32_t  HTU21D_BatteryStatus      ( uint32_t* battStatus );
+uint32_t  HTU21D_BatteryStatus      ( uint8_t* battStatus );

@@ -52,7 +52,7 @@ uint32_t  HTU21D_Init    ( uint32_t SDA, uint32_t SCL, uint32_t MODE, uint8_t RE
 // Reserved bits must not be changed. Therefore, for any writing to user register, default values of reserved bits must be read first
 // Datasheet: User register p.13.
     aux = i2c_write ( &cmd[0], 1 );
-    // aux = i2c_read  ( &cmd[0], 1 );
+    aux = i2c_read  ( &cmd[0], 1 );
 
     cmd[0]          &=   ~( USER_REGISTER_RESOLUTION_MASK | USER_REGISTER_STATUS_END_BATTERY_MASK | USER_REGISTER_HEATER_MASK | USER_REGISTER_OTP_MASK );
     cmd[1]           =   ( cmd[0] | ( ( RESOLUTION | HEATER ) | USER_REGISTER_OTP_DISABLED ) );
@@ -161,7 +161,7 @@ uint32_t  HTU21D_ReadTemperature    ( void )
     uint32_t    aux    =   0;
 
 
-    // aux = i2c_read ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+    aux = i2c_read ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
 
     if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
@@ -235,7 +235,7 @@ uint32_t  HTU21D_ReadHumidity    ( void )
         aux  =   3;         // 2-byte Data + Checksum
 
 
-    // aux = i2c_read ( &cmd[0], aux );
+    aux = i2c_read ( &cmd[0], aux );
 
     if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
@@ -261,13 +261,13 @@ uint32_t  HTU21D_ReadHumidity    ( void )
  * @pre         NaN
  * @warning     NaN.
  */
-uint32_t  HTU21D_BatteryStatus      ( uint32_t* battStatus )
+uint32_t  HTU21D_BatteryStatus      ( uint8_t* battStatus )
 {
     uint8_t     cmd [] = { HTU21D_READ_REGISTER };
     uint32_t    aux    =   0;
 
-
-    // aux = i2c_read ( &battStatus, 1 );
+    aux = i2c_write ( &cmd[0], sizeof(cmd)/sizeof(cmd[0]) );
+    aux = i2c_read  ( battStatus, 1 );
 
     if ( aux == HTU21D_SUCCESS )
        return   HTU21D_SUCCESS;
