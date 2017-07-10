@@ -87,10 +87,10 @@ uint32_t    HTU21D_Resolution;
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-uint32_t  HTU21D_Init               ( uint32_t MODE, uint8_t RESOLUTION, uint8_t HEATER );
-uint32_t  HTU21D_SoftReset          ( void );
-uint32_t  HTU21D_TriggerTemperature ( void );
-uint32_t  HTU21D_ReadTemperature    ( float* mytemperature );
-uint32_t  HTU21D_TriggerHumidity    ( void );
-uint32_t  HTU21D_ReadHumidity       ( float* myhumidity );
-uint32_t  HTU21D_BatteryStatus      ( uint8_t* battStatus );
+uint32_t  HTU21D_Init               ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint32_t MODE, uint32_t RESOLUTION, uint32_t HEATER );
+uint32_t  HTU21D_SoftReset          ( NRF_TWI_Type* myinstance, uint32_t ADDR );
+uint32_t  HTU21D_TriggerTemperature ( NRF_TWI_Type* myinstance, uint32_t ADDR );
+uint32_t  HTU21D_ReadTemperature    ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* mytemperature );
+uint32_t  HTU21D_TriggerHumidity    ( NRF_TWI_Type* myinstance, uint32_t ADDR );
+uint32_t  HTU21D_ReadHumidity       ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* myhumidity );
+uint32_t  HTU21D_BatteryStatus      ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* battStatus );
