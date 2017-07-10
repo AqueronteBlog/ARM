@@ -1,15 +1,16 @@
 /**
  * @brief       main.c
- * @details     [todo] xxx.
+ * @details     This project reads the humidity and the temperature from the external
+ *              sensor: HTU21D.
  *
- *              This firmware is just an example about how to use the I2C on the nrf51422. The system
- *              will handle everything on the Interruptions ( Low power mode selected ).
+ *              This firmware is just an example about how to use the I2C on the nrf51422.
  *
  * @return      NA
  *
  * @author      Manuel Caballero
  * @date        30/June/2017
- * @version     30/June/2017    The ORIGIN
+ * @version     10/July/2017    New features for the external sensor device added.
+ *              30/June/2017    The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     Softdevice S310 was used although the file's name is S130. The softdevice
@@ -39,8 +40,8 @@ int main( void )
     mySTATE                  =   0;                 // Reset counter
     NRF_TWI0->ADDRESS        =   HTU21D_ADDR;       // HTU21D device address
 
-    HTU21D_SoftReset ();
-    HTU21D_Init      ( HTU21D_MODE_NO_HOLD_MASTER, USER_REGISTER_RESOLUTION_12RH_14TEMP, USER_REGISTER_HEATER_DISABLED );
+    HTU21D_SoftReset ( NRF_TWI0, HTU21D_ADDR );
+    HTU21D_Init      ( NRF_TWI0, HTU21D_ADDR, HTU21D_MODE_NO_HOLD_MASTER, USER_REGISTER_RESOLUTION_12RH_14TEMP, USER_REGISTER_HEATER_DISABLED );
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
@@ -58,16 +59,16 @@ int main( void )
 
 		switch ( mySTATE ){
         case 1:
-            aux = HTU21D_TriggerTemperature ();
+            aux = HTU21D_TriggerTemperature ( NRF_TWI0, HTU21D_ADDR );
             break;
 
         case 2:
-            aux = HTU21D_ReadTemperature ( &myTEMP );
-            aux = HTU21D_TriggerHumidity ();
+            aux = HTU21D_ReadTemperature ( NRF_TWI0, HTU21D_ADDR, &myTEMP );
+            aux = HTU21D_TriggerHumidity ( NRF_TWI0, HTU21D_ADDR );
             break;
 
         case 3:
-            HTU21D_ReadHumidity ( &myRH );
+            HTU21D_ReadHumidity ( NRF_TWI0, HTU21D_ADDR, &myRH );
             __NOP();
             mySTATE =   0;
             break;
