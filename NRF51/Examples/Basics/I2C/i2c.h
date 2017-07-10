@@ -24,9 +24,12 @@
 #define I2C_SUCCESS      0x00
 #define I2C_FAILURE      0x01
 
+#define I2C_STOP_BIT     0x00
+#define I2C_NO_STOP_BIT  0x01
+
 
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-uint32_t    i2c_write   ( uint8_t* i2c_buff, uint32_t length );
+uint32_t    i2c_write   ( uint8_t* i2c_buff, uint32_t length, uint32_t i2c_generate_stop );
 uint32_t    i2c_read    ( uint8_t* i2c_buff, uint32_t length );
