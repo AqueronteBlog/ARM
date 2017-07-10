@@ -37,24 +37,25 @@
  * @pre         I2C communication is by polling mode.
  * @warning     This function takes for granted that TWI0 is used.
  */
-uint32_t    i2c_write   ( uint8_t* i2c_buff, uint32_t i2c_data_length, uint32_t i2c_generate_stop )
+uint32_t    i2c_write   ( NRF_TWI_Type* myinstance, uint8_t* i2c_buff, uint32_t i2c_data_length, uint32_t i2c_generate_stop )
 {
     uint32_t    i           =   0;
     uint32_t    i2c_timeout =   0;
 
 // Start transmission
     // Reset flag and start event
-    NRF_TWI0->EVENTS_TXDSENT   =   0;
-    NRF_TWI0->TASKS_STARTTX    =   1;
+    myinstance->EVENTS_TXDSENT   =   0;
+    //NRF_TWI0->EVENTS_TXDSENT   =   0;
+    myinstance->TASKS_STARTTX    =   1;
 
     // Start transmitting data
     for ( i = 0; i < i2c_data_length; i++ )
     {
-        NRF_TWI0->TXD              =   *i2c_buff;
+        myinstance->TXD              =   *i2c_buff;
 
         i2c_timeout                =   232323;
-        while( ( NRF_TWI0->EVENTS_TXDSENT == 0 ) && ( --i2c_timeout ) );        // Wait until the data is transmitted or timeout
-        NRF_TWI0->EVENTS_TXDSENT   =   0;                                       // reset flag
+        while( ( myinstance->EVENTS_TXDSENT == 0 ) && ( --i2c_timeout ) );        // Wait until the data is transmitted or timeout
+        myinstance->EVENTS_TXDSENT   =   0;                                       // reset flag
 
         i2c_buff++;
     }
@@ -62,11 +63,11 @@ uint32_t    i2c_write   ( uint8_t* i2c_buff, uint32_t i2c_data_length, uint32_t 
     // Generate a STOP bit if it is required
     if ( i2c_generate_stop == I2C_STOP_BIT )
     {
-        NRF_TWI0->EVENTS_STOPPED   =   0;
-        NRF_TWI0->TASKS_STOP       =   1;
+        myinstance->EVENTS_STOPPED   =   0;
+        myinstance->TASKS_STOP       =   1;
         i2c_timeout                =   232323;
-        while( ( NRF_TWI0->EVENTS_STOPPED == 0 ) && ( --i2c_timeout ) );
-        NRF_TWI0->EVENTS_STOPPED   =   0;
+        while( ( myinstance->EVENTS_STOPPED == 0 ) && ( --i2c_timeout ) );
+        myinstance->EVENTS_STOPPED   =   0;
     }
 
     // Check if everything went fine
@@ -96,7 +97,7 @@ uint32_t    i2c_write   ( uint8_t* i2c_buff, uint32_t i2c_data_length, uint32_t 
  * @pre         I2C communication is by polling mode.
  * @warning     This function takes for granted that TWI0 is used.
  */
-uint32_t    i2c_read   ( uint8_t* i2c_buff, uint32_t i2c_data_length )
+uint32_t    i2c_read   ( NRF_TWI_Type* myinstance, uint8_t* i2c_buff, uint32_t i2c_data_length )
 {
     uint32_t    i           =   0;
     uint32_t    i2c_timeout =   0;
@@ -104,13 +105,13 @@ uint32_t    i2c_read   ( uint8_t* i2c_buff, uint32_t i2c_data_length )
 
 // Start reading
     // Clear the shortcuts
-    NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_STOP_Disabled   << TWI_SHORTS_BB_STOP_Pos    );
-    NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_SUSPEND_Enabled << TWI_SHORTS_BB_SUSPEND_Pos );
+    myinstance->SHORTS           =   ( TWI_SHORTS_BB_STOP_Disabled   << TWI_SHORTS_BB_STOP_Pos    );
+    myinstance->SHORTS           =   ( TWI_SHORTS_BB_SUSPEND_Enabled << TWI_SHORTS_BB_SUSPEND_Pos );
 
 
     // Reset flag and start reading
-    NRF_TWI0->EVENTS_RXDREADY  =   0;
-    NRF_TWI0->TASKS_STARTRX    =   1;
+    myinstance->EVENTS_RXDREADY  =   0;
+    myinstance->TASKS_STARTRX    =   1;
 
 
     // Read data from i2c bus
@@ -118,34 +119,34 @@ uint32_t    i2c_read   ( uint8_t* i2c_buff, uint32_t i2c_data_length )
     {
     // Enable the right shortcut ( NRF51 Reference Manual 28.5 Master read sequence. Figure 65 )
         if ( i == ( i2c_data_length - 1 ) )
-            NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_STOP_Enabled << TWI_SHORTS_BB_STOP_Pos );
+            myinstance->SHORTS           =   ( TWI_SHORTS_BB_STOP_Enabled << TWI_SHORTS_BB_STOP_Pos );
         else
-            NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_SUSPEND_Enabled << TWI_SHORTS_BB_SUSPEND_Pos );
+            myinstance->SHORTS           =   ( TWI_SHORTS_BB_SUSPEND_Enabled << TWI_SHORTS_BB_SUSPEND_Pos );
 
     // It releases the bus
-        NRF_TWI0->TASKS_RESUME     =   1;                                       // NOTE: This is important to be here otherwise the STOP event
+        myinstance->TASKS_RESUME     =   1;                                     // NOTE: This is important to be here otherwise the STOP event
                                                                                 //       will be clocked one byte later.
 
     // Wait until the data arrives or timeout
         i2c_timeout                =   232323;
-        while( ( NRF_TWI0->EVENTS_RXDREADY == 0 ) && ( --i2c_timeout ) );       // Wait until the data is read or timeout
-        NRF_TWI0->EVENTS_RXDREADY  =   0;                                       // reset flag
+        while( ( myinstance->EVENTS_RXDREADY == 0 ) && ( --i2c_timeout ) );     // Wait until the data is read or timeout
+        myinstance->EVENTS_RXDREADY  =   0;                                     // reset flag
 
     // Read data and prepare the next one
-        *i2c_buff                  =   NRF_TWI0->RXD;
+        *i2c_buff                  =   myinstance->RXD;
         i2c_buff++;
     }
 
 
     // Wait until the STOP event is produced or timeout
     i2c_timeout                =   232323;
-    while( ( NRF_TWI0->EVENTS_STOPPED == 0 ) && ( --i2c_timeout ) );
-    NRF_TWI0->EVENTS_STOPPED   =   0;
+    while( ( myinstance->EVENTS_STOPPED == 0 ) && ( --i2c_timeout ) );
+    myinstance->EVENTS_STOPPED   =   0;
 
 
     // Reset shortcuts
-    NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_SUSPEND_Disabled << TWI_SHORTS_BB_SUSPEND_Pos );
-    NRF_TWI0->SHORTS           =   ( TWI_SHORTS_BB_STOP_Disabled << TWI_SHORTS_BB_STOP_Pos );
+    myinstance->SHORTS           =   ( TWI_SHORTS_BB_SUSPEND_Disabled << TWI_SHORTS_BB_SUSPEND_Pos );
+    myinstance->SHORTS           =   ( TWI_SHORTS_BB_STOP_Disabled << TWI_SHORTS_BB_STOP_Pos );
 
     // Check if everything went fine
     if ( i2c_timeout < 1 )

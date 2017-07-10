@@ -31,5 +31,5 @@
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-uint32_t    i2c_write   ( uint8_t* i2c_buff, uint32_t length, uint32_t i2c_generate_stop );
-uint32_t    i2c_read    ( uint8_t* i2c_buff, uint32_t length );
+uint32_t    i2c_write   ( NRF_TWI_Type* myinstance, uint8_t* i2c_buff, uint32_t length, uint32_t i2c_generate_stop );
+uint32_t    i2c_read    ( NRF_TWI_Type* myinstance, uint8_t* i2c_buff, uint32_t length );
