@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1499697867 source:e:\vsprojects\arm\nrf51\examples\basics\i2c\i2c.c
+1499765341 source:e:\vsprojects\arm\nrf51\examples\basics\i2c\i2c.c
 	"i2c.h"
 
-1499697867 e:\vsprojects\arm\nrf51\examples\basics\i2c\i2c.h
+1499765261 e:\vsprojects\arm\nrf51\examples\basics\i2c\i2c.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 
@@ -36,20 +36,20 @@
 	"nrf51_bitfields.h"
 	"variables.h"
 
-1499434352 e:\vsprojects\arm\nrf51\examples\i2c\src\variables.h
+1499768663 e:\vsprojects\arm\nrf51\examples\i2c\src\variables.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"board.h"
 
 1498830380 e:\vsprojects\arm\nrf51\examples\i2c\src\board.h
 
-1499434352 source:e:\vsprojects\arm\nrf51\examples\i2c\src\interrupts.c
+1499769883 source:e:\vsprojects\arm\nrf51\examples\i2c\src\interrupts.c
 	"interrupts.h"
 
-1499434352 e:\vsprojects\arm\nrf51\examples\i2c\src\interrupts.h
+1499768663 e:\vsprojects\arm\nrf51\examples\i2c\src\interrupts.h
 	"variables.h"
 
-1499700527 source:e:\vsprojects\arm\nrf51\examples\i2c\src\main.c
+1499770176 source:e:\vsprojects\arm\nrf51\examples\i2c\src\main.c
 	"nrf.h"
 	"ble.h"
 	"variables.h"
@@ -106,7 +106,7 @@
 	"ble_gatt.h"
 	"nrf_svc.h"
 
-1499698002 e:\vsprojects\arm\drivers\htu21d\htu21d.h
+1499767187 e:\vsprojects\arm\drivers\htu21d\htu21d.h
 	"stdint.h"
 	"i2c.h"
 
@@ -118,6 +118,6 @@
 
 1496411739 source:e:\vsprojects\arm\nrf51\examples\i2c\startup_nrf51.s
 
-1499698619 source:e:\vsprojects\arm\drivers\htu21d\htu21d.c
+1499767375 source:e:\vsprojects\arm\drivers\htu21d\htu21d.c
 	"HTU21D.h"
 
