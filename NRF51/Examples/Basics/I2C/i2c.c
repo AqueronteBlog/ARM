@@ -37,10 +37,17 @@
  * @pre         I2C communication is by polling mode.
  * @warning     This function takes for granted that TWI0 is used.
  */
-uint32_t    i2c_write   ( NRF_TWI_Type* myinstance, uint8_t* i2c_buff, uint32_t i2c_data_length, uint32_t i2c_generate_stop )
+uint32_t    i2c_write   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_buff, uint32_t i2c_data_length, uint32_t i2c_generate_stop )
 {
-    uint32_t    i           =   0;
-    uint32_t    i2c_timeout =   0;
+    uint32_t    i                   =   0;
+    uint32_t    i2c_timeout         =   0;
+    uint32_t    i2c_default_addr    =   0;
+
+
+    // Save the default i2c address and set the one for this device
+    i2c_default_addr     =   myinstance->ADDRESS;
+    myinstance->ADDRESS  =   ADDR;
+
 
 // Start transmission
     // Reset flag and start event
@@ -70,6 +77,11 @@ uint32_t    i2c_write   ( NRF_TWI_Type* myinstance, uint8_t* i2c_buff, uint32_t 
         myinstance->EVENTS_STOPPED   =   0;
     }
 
+
+    // Restore the default I2C address
+    myinstance->ADDRESS  =   i2c_default_addr;
+
+
     // Check if everything went fine
     if ( i2c_timeout < 1 )
         return I2C_FAILURE;
@@ -97,10 +109,16 @@ uint32_t    i2c_write   ( NRF_TWI_Type* myinstance, uint8_t* i2c_buff, uint32_t 
  * @pre         I2C communication is by polling mode.
  * @warning     This function takes for granted that TWI0 is used.
  */
-uint32_t    i2c_read   ( NRF_TWI_Type* myinstance, uint8_t* i2c_buff, uint32_t i2c_data_length )
+uint32_t    i2c_read   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_buff, uint32_t i2c_data_length )
 {
-    uint32_t    i           =   0;
-    uint32_t    i2c_timeout =   0;
+    uint32_t    i                   =   0;
+    uint32_t    i2c_timeout         =   0;
+    uint32_t    i2c_default_addr    =   0;
+
+
+    // Save the default i2c address and set the one for this device
+    i2c_default_addr     =   myinstance->ADDRESS;
+    myinstance->ADDRESS  =   ADDR;
 
 
 // Start reading
@@ -147,6 +165,11 @@ uint32_t    i2c_read   ( NRF_TWI_Type* myinstance, uint8_t* i2c_buff, uint32_t i
     // Reset shortcuts
     myinstance->SHORTS           =   ( TWI_SHORTS_BB_SUSPEND_Disabled << TWI_SHORTS_BB_SUSPEND_Pos );
     myinstance->SHORTS           =   ( TWI_SHORTS_BB_STOP_Disabled << TWI_SHORTS_BB_STOP_Pos );
+
+
+    // Restore the default I2C address
+    myinstance->ADDRESS  =   i2c_default_addr;
+
 
     // Check if everything went fine
     if ( i2c_timeout < 1 )
