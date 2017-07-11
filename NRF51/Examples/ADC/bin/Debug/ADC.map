@@ -14,8 +14,7 @@ c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/
 Allocating common symbols
 Common symbol       size              file
 
-myTEMP              0x4               obj\debug\src\functions.o
-dataToBeTX          0x1               obj\debug\src\functions.o
+myADCvalue          0x1               obj\debug\src\functions.o
 
 Discarded input sections
 
@@ -371,17 +370,17 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
                 0x0001d374       0x64 obj\debug\src\functions.o
                 0x0001d374                conf_TIMER0
  .text.conf_ADC
-                0x0001d3d8        0xc obj\debug\src\functions.o
+                0x0001d3d8       0x44 obj\debug\src\functions.o
                 0x0001d3d8                conf_ADC
  .text.UART0_IRQHandler
-                0x0001d3e4       0x80 obj\debug\src\interrupts.o
-                0x0001d3e4                UART0_IRQHandler
+                0x0001d41c       0x48 obj\debug\src\interrupts.o
+                0x0001d41c                UART0_IRQHandler
  .text.TIMER0_IRQHandler
                 0x0001d464       0x50 obj\debug\src\interrupts.o
                 0x0001d464                TIMER0_IRQHandler
- .text.TEMP_IRQHandler
+ .text.ADC_IRQHandler
                 0x0001d4b4       0x5c obj\debug\src\interrupts.o
-                0x0001d4b4                TEMP_IRQHandler
+                0x0001d4b4                ADC_IRQHandler
  .text.main     0x0001d510       0x30 obj\debug\src\main.o
                 0x0001d510                main
  .text.SystemInit
@@ -400,22 +399,22 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
                 0x0001d69c                SysTick_Handler
                 0x0001d69e                GPIOTE_IRQHandler
                 0x0001d69e                RTC0_IRQHandler
-                0x0001d69e                POWER_CLOCK_IRQHandler
+                0x0001d69e                SPI0_TWI0_IRQHandler
                 0x0001d69e                RADIO_IRQHandler
                 0x0001d69e                LPCOMP_IRQHandler
                 0x0001d69e                SWI4_IRQHandler
-                0x0001d69e                SPI0_TWI0_IRQHandler
+                0x0001d69e                TEMP_IRQHandler
+                0x0001d69e                QDEC_IRQHandler
                 0x0001d69e                SWI5_IRQHandler
-                0x0001d69e                TIMER2_IRQHandler
+                0x0001d69e                POWER_CLOCK_IRQHandler
                 0x0001d69e                SWI0_IRQHandler
                 0x0001d69e                TIMER1_IRQHandler
                 0x0001d69e                ECB_IRQHandler
                 0x0001d69e                Default_Handler
-                0x0001d69e                ADC_IRQHandler
                 0x0001d69e                SWI3_IRQHandler
                 0x0001d69e                CCM_AAR_IRQHandler
                 0x0001d69e                WDT_IRQHandler
-                0x0001d69e                QDEC_IRQHandler
+                0x0001d69e                TIMER2_IRQHandler
                 0x0001d69e                SWI2_IRQHandler
                 0x0001d69e                RNG_IRQHandler
                 0x0001d69e                SPI1_TWI1_IRQHandler
@@ -515,17 +514,16 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
 .igot.plt       0x20002260        0x0 load address 0x0001d7b4
  .igot.plt      0x20002260        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.bss            0x20002260        0x8 load address 0x0001d7b4
+.bss            0x20002260        0x4 load address 0x0001d7b4
                 0x20002260                . = ALIGN (0x4)
                 0x20002260                __bss_start__ = .
  *(.bss*)
  *(COMMON)
- COMMON         0x20002260        0x5 obj\debug\src\functions.o
-                0x20002260                myTEMP
-                0x20002264                dataToBeTX
-                0x20002268                . = ALIGN (0x4)
- *fill*         0x20002265        0x3 
-                0x20002268                __bss_end__ = .
+ COMMON         0x20002260        0x1 obj\debug\src\functions.o
+                0x20002260                myADCvalue
+                0x20002264                . = ALIGN (0x4)
+ *fill*         0x20002261        0x3 
+                0x20002264                __bss_end__ = .
 
 .heap           0x20002268      0x800
                 0x20002268                __end__ = .
@@ -601,21 +599,21 @@ OUTPUT(bin\Debug\ADC.elf elf32-littlearm)
  .comment       0x0000006e       0x6f obj\debug\src\system_nrf51.o
  .comment       0x0000006e       0x6f obj\debug\s130.o
 
-.debug_info     0x00000000     0x3838
- .debug_info    0x00000000      0xa2e obj\debug\src\functions.o
- .debug_info    0x00000a2e      0x853 obj\debug\src\interrupts.o
- .debug_info    0x00001281     0x2310 obj\debug\src\main.o
- .debug_info    0x00003591      0x1ec obj\debug\src\system_nrf51.o
- .debug_info    0x0000377d       0x5d obj\debug\startup_nrf51.o
- .debug_info    0x000037da       0x5e obj\debug\s130.o
+.debug_info     0x00000000     0x39a0
+ .debug_info    0x00000000      0xb86 obj\debug\src\functions.o
+ .debug_info    0x00000b86      0x874 obj\debug\src\interrupts.o
+ .debug_info    0x000013fa     0x22ff obj\debug\src\main.o
+ .debug_info    0x000036f9      0x1ec obj\debug\src\system_nrf51.o
+ .debug_info    0x000038e5       0x5d obj\debug\startup_nrf51.o
+ .debug_info    0x00003942       0x5e obj\debug\s130.o
 
-.debug_abbrev   0x00000000      0x611
- .debug_abbrev  0x00000000      0x178 obj\debug\src\functions.o
- .debug_abbrev  0x00000178       0xd3 obj\debug\src\interrupts.o
- .debug_abbrev  0x0000024b      0x276 obj\debug\src\main.o
- .debug_abbrev  0x000004c1       0xf4 obj\debug\src\system_nrf51.o
- .debug_abbrev  0x000005b5       0x14 obj\debug\startup_nrf51.o
- .debug_abbrev  0x000005c9       0x48 obj\debug\s130.o
+.debug_abbrev   0x00000000      0x5f9
+ .debug_abbrev  0x00000000      0x160 obj\debug\src\functions.o
+ .debug_abbrev  0x00000160       0xd3 obj\debug\src\interrupts.o
+ .debug_abbrev  0x00000233      0x276 obj\debug\src\main.o
+ .debug_abbrev  0x000004a9       0xf4 obj\debug\src\system_nrf51.o
+ .debug_abbrev  0x0000059d       0x14 obj\debug\startup_nrf51.o
+ .debug_abbrev  0x000005b1       0x48 obj\debug\s130.o
 
 .debug_aranges  0x00000000      0x2f0
  .debug_aranges
@@ -672,24 +670,24 @@ OUTPUT(bin\Debug\ADC.elf elf32-littlearm)
  .debug_macro   0x00009d78       0x22 obj\debug\src\system_nrf51.o
  .debug_macro   0x00009d9a       0x26 obj\debug\s130.o
 
-.debug_line     0x00000000     0x12d7
- .debug_line    0x00000000      0x3a4 obj\debug\src\functions.o
- .debug_line    0x000003a4      0x33e obj\debug\src\interrupts.o
- .debug_line    0x000006e2      0x812 obj\debug\src\main.o
- .debug_line    0x00000ef4      0x34e obj\debug\src\system_nrf51.o
- .debug_line    0x00001242       0x6e obj\debug\startup_nrf51.o
- .debug_line    0x000012b0       0x27 obj\debug\s130.o
+.debug_line     0x00000000     0x12dc
+ .debug_line    0x00000000      0x3aa obj\debug\src\functions.o
+ .debug_line    0x000003aa      0x33d obj\debug\src\interrupts.o
+ .debug_line    0x000006e7      0x812 obj\debug\src\main.o
+ .debug_line    0x00000ef9      0x34e obj\debug\src\system_nrf51.o
+ .debug_line    0x00001247       0x6e obj\debug\startup_nrf51.o
+ .debug_line    0x000012b5       0x27 obj\debug\s130.o
 
-.debug_str      0x00000000    0x347de
- .debug_str     0x00000000    0x2f117 obj\debug\src\functions.o
-                              0x2f29d (size before relaxing)
- .debug_str     0x0002f117       0x6b obj\debug\src\interrupts.o
-                              0x2f0cd (size before relaxing)
- .debug_str     0x0002f182     0x54ad obj\debug\src\main.o
-                              0x344ca (size before relaxing)
- .debug_str     0x0003462f      0x13a obj\debug\src\system_nrf51.o
+.debug_str      0x00000000    0x347d3
+ .debug_str     0x00000000    0x2f134 obj\debug\src\functions.o
+                              0x2f2ba (size before relaxing)
+ .debug_str     0x0002f134       0x43 obj\debug\src\interrupts.o
+                              0x2f0b5 (size before relaxing)
+ .debug_str     0x0002f177     0x54ad obj\debug\src\main.o
+                              0x344c3 (size before relaxing)
+ .debug_str     0x00034624      0x13a obj\debug\src\system_nrf51.o
                               0x2ef18 (size before relaxing)
- .debug_str     0x00034769       0x75 obj\debug\s130.o
+ .debug_str     0x0003475e       0x75 obj\debug\s130.o
                                0x23cf (size before relaxing)
 
 .debug_frame    0x00000000      0x64c
