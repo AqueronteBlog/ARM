@@ -11,6 +11,7 @@
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     NaN
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
 #include "functions.h"
@@ -142,24 +143,43 @@ void conf_TIMER0  ( void )
 
 /**
  * @brief       void conf_ADC  ( void )
- * @details     [todo] xxx
+ * @details     It configures the ADC to measure the VDD.
+ *
+ *              ADC:
+ *                  * 8-bits.
+ *                  * VDD/3
+ *                  * VBG Enabled
+ *
+ *              Input Voltage Range:
+ *                  * 1.2V VBG ( Reference )   1/3 ( Prescaling )   0 - 3.6V ( Range )
  *
  * @return      NA
  *
  * @author      Manuel Caballero
  * @date        11/July/2017
  * @version     11/July/2017   The ORIGIN
- * @pre         NaN
- * @pre         NaN
+ * @pre         Be aware of the Input Voltage Range ( NRF51 Reference Manual p.164
+ *              31.1.4 Input voltage range ).
  * @warning     NaN
  */
 void conf_ADC  ( void )
 {
-    /*
-    NRF_TEMP->TASKS_STOP  =   1;
-    NRF_TEMP->INTENSET    =   ( TEMP_INTENSET_DATARDY_Enabled << TEMP_INTENSET_DATARDY_Pos );
+    NRF_ADC->TASKS_STOP  =   1;
+    NRF_ADC->ENABLE      =   ( ADC_ENABLE_ENABLE_Disabled << ADC_ENABLE_ENABLE_Pos );
 
-    NVIC_EnableIRQ ( TEMP_IRQn );                                                                         // Enable Interrupt for the TEMP in the core.
-    */
+
+    NRF_ADC->CONFIG      =   ( ADC_CONFIG_RES_8bit                        << ADC_CONFIG_RES_Pos    ) |
+                             ( ADC_CONFIG_INPSEL_SupplyOneThirdPrescaling << ADC_CONFIG_INPSEL_Pos ) |
+                             ( ADC_CONFIG_REFSEL_VBG                      << ADC_CONFIG_REFSEL_Pos );
+
+
+    NRF_ADC->INTENSET    =   ( ADC_INTENSET_END_Enabled << ADC_INTENSET_END_Pos );
+
+
+
+    NRF_ADC->ENABLE      =   ( ADC_ENABLE_ENABLE_Enabled << ADC_ENABLE_ENABLE_Pos );
+
+
+    NVIC_EnableIRQ ( ADC_IRQn );                                                                         // Enable Interrupt for the ADC in the core.
 }
 

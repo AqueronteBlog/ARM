@@ -9,6 +9,7 @@
  * @version     20/June/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
 #include "nrf.h"
