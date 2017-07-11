@@ -22,8 +22,13 @@
 #define ON              1
 #define OFF             0
 
+#define YES             1
+#define NO              0
 
 
 /* VARIABLES */
-uint32_t mySTATE;                        /*!<   It will store the temperature data from the internal temperature sensor             */
-uint8_t  dataToBeTX;                     /*!<   A counter. It indicates how many data it will be transmitted through the UART       */
+uint32_t mySTATE;                       /*!<   It will store the temperature data from the internal temperature sensor             */
+uint8_t  dataToBeTX;                    /*!<   A counter. It indicates how many data it will be transmitted through the UART       */
+uint32_t TX_inProgress;                 /*!<   It indicates if a transmission is in progress   */
+uint8_t  TX_buff[6];                    /*!<   UART TX buffer   */
+uint8_t *myPtr;                         /*!<   Pointer to point out myMessage   */
