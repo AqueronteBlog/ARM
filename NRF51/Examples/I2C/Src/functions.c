@@ -118,7 +118,7 @@ void conf_UART  ( void )
 
 /**
  * @brief       void conf_TIMER0  ( void )
- * @details     One channels will create an interrupt about every 1s.
+ * @details     One channels will create an interrupt about every 0.5s.
  *
  *              Timer0:
  *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
