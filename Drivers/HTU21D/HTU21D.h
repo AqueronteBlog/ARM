@@ -91,6 +91,8 @@ uint32_t  HTU21D_Init               ( NRF_TWI_Type* myinstance, uint32_t ADDR, u
 uint32_t  HTU21D_SoftReset          ( NRF_TWI_Type* myinstance, uint32_t ADDR );
 uint32_t  HTU21D_TriggerTemperature ( NRF_TWI_Type* myinstance, uint32_t ADDR );
 uint32_t  HTU21D_ReadTemperature    ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* mytemperature );
+uint32_t  HTU21D_ReadRawTemperature ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myRawtemperature );
 uint32_t  HTU21D_TriggerHumidity    ( NRF_TWI_Type* myinstance, uint32_t ADDR );
 uint32_t  HTU21D_ReadHumidity       ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* myhumidity );
+uint32_t  HTU21D_ReadRawHumidity    ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myRawhumidity );
 uint32_t  HTU21D_BatteryStatus      ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* battStatus );
