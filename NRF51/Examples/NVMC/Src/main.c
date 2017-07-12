@@ -24,6 +24,11 @@
 
 int main( void )
 {
+    uint32_t page_number          =  NRF_FICR->CODESIZE - 1;
+    uint32_t *p_page_base_address =  ( uint32_t * ) ( page_number * NRF_FICR->CODEPAGESIZE );
+    uint32_t myValue              =  0x23232323;
+
+
     conf_GPIO   ();
     conf_LFCLK  ();
     conf_RTC0   ();
@@ -42,5 +47,41 @@ int main( void )
 		// Make sure any pending events are cleared
 		__SEV();
 		__WFE();
+
+
+		if ( writeNVMC  ==  YES )
+        {
+            NRF_GPIO->OUTCLR         =   ( 1UL << LED1 );
+
+            if ( *p_page_base_address != myValue )
+            {
+                NRF_NVMC->CONFIG     =   ( NVMC_CONFIG_WEN_Een << NVMC_CONFIG_WEN_Pos );
+                while ( NRF_NVMC->READY == NVMC_READY_READY_Busy );
+
+                NRF_NVMC->ERASEPAGE  = ( uint32_t )p_page_base_address;
+
+                NRF_NVMC->CONFIG     =   ( NVMC_CONFIG_WEN_Ren << NVMC_CONFIG_WEN_Pos );
+                while ( NRF_NVMC->READY == NVMC_READY_READY_Busy );
+
+                NRF_NVMC->CONFIG     =   ( NVMC_CONFIG_WEN_Wen << NVMC_CONFIG_WEN_Pos );
+                while ( NRF_NVMC->READY == NVMC_READY_READY_Busy );
+
+                *p_page_base_address =   myValue;
+                NRF_NVMC->CONFIG     =   ( NVMC_CONFIG_WEN_Ren << NVMC_CONFIG_WEN_Pos );
+                while ( NRF_NVMC->READY == NVMC_READY_READY_Busy );
+            }
+            else
+            {
+                NRF_NVMC->CONFIG     =   ( NVMC_CONFIG_WEN_Wen << NVMC_CONFIG_WEN_Pos );
+                while ( NRF_NVMC->READY == NVMC_READY_READY_Busy );
+
+                *p_page_base_address =   myValue;
+                NRF_NVMC->CONFIG     =   ( NVMC_CONFIG_WEN_Ren << NVMC_CONFIG_WEN_Pos );
+                while ( NRF_NVMC->READY == NVMC_READY_READY_Busy );
+            }
+
+            writeNVMC                =   NO;
+            NRF_GPIO->OUTSET         =   ( 1UL << LED1 );
+        }
     }
 }
