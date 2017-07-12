@@ -19,10 +19,13 @@
 #include "board.h"
 
 /* CONSTANTS */
-#define ON  1
-#define OFF 0
+#define ON      1
+#define OFF     0
+
+#define YES     1
+#define NO      0
 
 
 /* VARIABLES */
-uint32_t changeLEDsSTATE;       /*!<   changeLEDsSTATE = ON:    Turn LED on
-                                       changeLEDsSTATE = OFF:   Turn LED off   */
+uint32_t writeNVMC;       /*!<   writeNVMC = YES:    Write on NVMC.
+                                 writeNVMC = NO:     Do nothing.    */
