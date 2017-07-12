@@ -22,4 +22,4 @@ void RTC0_IRQHandler ( void );
 
 
 /* VARIABLES */
-extern uint32_t changeLEDsSTATE;
+extern uint32_t writeNVMC;
