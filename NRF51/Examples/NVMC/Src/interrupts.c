@@ -17,7 +17,7 @@
 
 /**
  * @brief       void RTC0_IRQHandler ()
- * @details     [todo] RTC0 interruption. xxx.
+ * @details     RTC0 interruption. Every 125ms, it allows a new operation.
  *
  *
  * @return      NA
