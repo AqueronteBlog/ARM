@@ -16,27 +16,25 @@
 
 
 /**
- * @brief       void ADC_IRQHandler ()
- * @details     ADC measurement is completed, data ready.
- *
- *              Start transmitting the data through the UART.
+ * @brief       void LPCOMP_IRQHandler ()
+ * @details     [TODO] XXX.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        11/July/2017
- * @version     11/July/2017   The ORIGIN
+ * @date        14/July/2017
+ * @version     14/July/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */
-void ADC_IRQHandler()
+void LPCOMP_IRQHandler()
 {
-    if ( ( NRF_ADC->EVENTS_END != 0 ) && ( NRF_ADC->BUSY == 0 ) )
+    if ( ( NRF_LPCOMP->EVENTS_UP != 0 ) && ( NRF_LPCOMP->INTENSET & LPCOMP_INTENSET_UP_Msk ) )
     {
-        myADCvalue                   =   ( NRF_ADC->RESULT & 0x000000FF);   // Read raw ADC
+        NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );                   // Turn the LED1 on
 
-        NRF_ADC->EVENTS_END          =   0;                                 // Clear ( flag )
+        NRF_LPCOMP->EVENTS_UP        =   0;                                 // Clear ( flag )
     }
 }
 
