@@ -79,6 +79,8 @@ void conf_LPCOMP  ( void )
 
     NRF_LPCOMP->ENABLE      =   ( LPCOMP_ENABLE_ENABLE_Enabled << LPCOMP_ENABLE_ENABLE_Pos );
 
+    NRF_LPCOMP->TASKS_START =   1;
+
 
     NVIC_EnableIRQ ( LPCOMP_IRQn );                                                                         // Enable Interrupt for the LPCOMP in the core.
 }
