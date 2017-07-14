@@ -50,136 +50,36 @@ void conf_GPIO  ( void )
 
 
 /**
- * @brief       void conf_Uart  ( void )
- * @details     Uart0 with the following features:
+ * @brief       void conf_LPCOMP  ( void )
+ * @details     It configures the LPCOMP peripheral.
  *
- *                  * Baud Rate:    115200
- *                  * No Parity.
- *                  * No Flow Control.
+ *              LPCOMP:
+ *                  * AIN2 ( P0.01 ).
+ *                  * REFSEL: VDD*4/8
+ *                  * Up-Interrupt Enabled
  *
- * @return      NA
- *
- * @author      Manuel Caballero
- * @date        20/June/2017
- * @version     20/June/2017   The ORIGIN
- * @pre         Only TX pin will be configured.
- * @warning     NaN.
- */
-void conf_UART  ( void )
-{
-    /* GPIO according to Table 273: GPIO configuration ( Reference Manual p.151 ) */
-    NRF_GPIO->OUTSET             =   ( 1 << UART0_TX );
-    // NRF_GPIO->DIRCLR             =   ( 1 << UART0_RX );
-    NRF_GPIO->DIRSET             =   ( 1 << UART0_TX );
-
-    /* Stop UART0 */
-    NRF_UART0->TASKS_STOPRX      =   1;
-    NRF_UART0->TASKS_STOPTX      =   1;
-
-    NRF_UART0->ENABLE            =   UART_ENABLE_ENABLE_Disabled << UART_ENABLE_ENABLE_Pos;
-
-    /* Configure the pins */
-    NRF_UART0->PSELRTS           =   0xFFFFFFFF;
-    NRF_UART0->PSELCTS           =   0xFFFFFFFF;
-    NRF_UART0->PSELTXD           =   UART0_TX;
-    NRF_UART0->PSELRXD           =   0xFFFFFFFF;
-
-    /* BaudRate & Configuration */
-    NRF_UART0->BAUDRATE          =   UART_BAUDRATE_BAUDRATE_Baud115200 << UART_BAUDRATE_BAUDRATE_Pos;
-    NRF_UART0->CONFIG            =   ( UART_CONFIG_HWFC_Disabled   << UART_CONFIG_HWFC_Pos   ) |
-                                     ( UART_CONFIG_PARITY_Excluded << UART_CONFIG_PARITY_Pos );
-    /* Configure Interrupts */
-    NRF_UART0->INTENSET          =   ( UART_INTENSET_TXDRDY_Enabled << UART_INTENSET_TXDRDY_Pos );
-
-    NVIC_ClearPendingIRQ    ( UART0_IRQn );
-    NVIC_SetPriority        ( UART0_IRQn, 0 );                                                              // Maximum priority
-    NVIC_EnableIRQ          ( UART0_IRQn );                                                                 // Enable Interrupt for the UART0 in the core.
-
-    /* Enable UART0 */
-    NRF_UART0->ENABLE            =   UART_ENABLE_ENABLE_Enabled << UART_ENABLE_ENABLE_Pos;                  // UART0 ENABLED
-    // NRF_UART0->TASKS_STARTTX     =   1;
-    // NRF_UART0->TASKS_STARTRX     =   1;                                                                  // Enable reception
-}
-
-
-/**
- * @brief       void conf_TIMER0  ( void )
- * @details     One channels will create an interrupt about every 1s.
- *
- *              Timer0:
- *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
- *                  * 32-bits mode.
- *                  * Interrupt ENABLE.
- *
- *                 --- Channel 0:
- *                  * Overflow:             ( 1000000 * (f_Timer0)^(-1) ) = ( 1000000 * (1MHz)^(-1) ) ~ 1s.
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        20/June/2017
- * @version     20/June/2017   The ORIGIN
+ * @date        14/July/2017
+ * @version     14/July/2017   The ORIGIN
  * @pre         NaN
- * @warning     NaN.
- */
-void conf_TIMER0  ( void )
-{
-    NRF_TIMER0->TASKS_STOP  =   1;
-    NRF_TIMER0->MODE        =   TIMER_MODE_MODE_Timer;
-    NRF_TIMER0->PRESCALER   =   5U;                                                                         // f_Timer0 = ( 16MHz / 2^5 ) = 500kHz
-    NRF_TIMER0->BITMODE     =   TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos;                   // 32 bit mode.
-    NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
-
-    NRF_TIMER0->CC[0]       =   1000000;                                                                    // ( 1000000 * (f_Timer0)^(-1) ) = ( 1000000 * (1MHz)^(-1) ) ~ 1s
-
-    NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos );
-
-    NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE0_CLEAR_Enabled << TIMER_SHORTS_COMPARE0_CLEAR_Pos ); // Create an Event-Task shortcut to clear TIMER0 on COMPARE[0].
-
-
-    NVIC_EnableIRQ ( TIMER0_IRQn );                                                                         // Enable Interrupt for the Timer0 in the core.
-}
-
-
-/**
- * @brief       void conf_ADC  ( void )
- * @details     It configures the ADC to measure the VDD.
- *
- *              ADC:
- *                  * 8-bits.
- *                  * VDD/3
- *                  * VBG Enabled
- *
- *              Input Voltage Range:
- *                  * 1.2V VBG ( Reference )   1/3 ( Prescaling )   0 - 3.6V ( Range )
- *
- * @return      NA
- *
- * @author      Manuel Caballero
- * @date        11/July/2017
- * @version     11/July/2017   The ORIGIN
- * @pre         Be aware of the Input Voltage Range ( NRF51 Reference Manual p.164
- *              31.1.4 Input voltage range ).
  * @warning     NaN
  */
-void conf_ADC  ( void )
+void conf_LPCOMP  ( void )
 {
-    NRF_ADC->TASKS_STOP  =   1;
-    NRF_ADC->ENABLE      =   ( ADC_ENABLE_ENABLE_Disabled << ADC_ENABLE_ENABLE_Pos );
+    NRF_LPCOMP->TASKS_STOP  =   1;
+    NRF_LPCOMP->ENABLE      =   ( LPCOMP_ENABLE_ENABLE_Disabled << LPCOMP_ENABLE_ENABLE_Pos );
+
+    NRF_LPCOMP->PSEL        =   ( LPCOMP_PSEL_PSEL_AnalogInput2 << LPCOMP_PSEL_PSEL_Pos );
+    NRF_LPCOMP->REFSEL      =   ( LPCOMP_REFSEL_REFSEL_SupplyFourEighthsPrescaling << LPCOMP_REFSEL_REFSEL_Pos );
+
+    NRF_LPCOMP->INTENSET    =   ( LPCOMP_INTENSET_UP_Enabled << LPCOMP_INTENSET_UP_Pos );
+
+    NRF_LPCOMP->ENABLE      =   ( LPCOMP_ENABLE_ENABLE_Enabled << LPCOMP_ENABLE_ENABLE_Pos );
 
 
-    NRF_ADC->CONFIG      =   ( ADC_CONFIG_RES_8bit                        << ADC_CONFIG_RES_Pos    ) |
-                             ( ADC_CONFIG_INPSEL_SupplyOneThirdPrescaling << ADC_CONFIG_INPSEL_Pos ) |
-                             ( ADC_CONFIG_REFSEL_VBG                      << ADC_CONFIG_REFSEL_Pos );
-
-
-    NRF_ADC->INTENSET    =   ( ADC_INTENSET_END_Enabled << ADC_INTENSET_END_Pos );
-
-
-
-    NRF_ADC->ENABLE      =   ( ADC_ENABLE_ENABLE_Enabled << ADC_ENABLE_ENABLE_Pos );
-
-
-    NVIC_EnableIRQ ( ADC_IRQn );                                                                         // Enable Interrupt for the ADC in the core.
+    NVIC_EnableIRQ ( LPCOMP_IRQn );                                                                         // Enable Interrupt for the LPCOMP in the core.
 }
 

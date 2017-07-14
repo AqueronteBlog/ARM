@@ -18,6 +18,4 @@
 
 /* FUNCTION PROTOTYPES */
 void conf_GPIO      ( void );
-void conf_UART      ( void );
-void conf_TIMER0    ( void );
-void conf_ADC       ( void );
+void conf_LPCOMP    ( void );
