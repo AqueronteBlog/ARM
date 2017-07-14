@@ -25,12 +25,8 @@
 int main( void )
 {
     conf_GPIO   ();
-    conf_UART   ();
-    conf_ADC    ();
-    conf_TIMER0 ();
+    conf_LPCOMP ();
 
-
-    NRF_TIMER0->TASKS_START = 1;            // Start Timer0
 
     while( 1 )
     {
@@ -42,7 +38,5 @@ int main( void )
 		// Make sure any pending events are cleared
 		__SEV();
 		__WFE();
-
-        __NOP();
     }
 }
