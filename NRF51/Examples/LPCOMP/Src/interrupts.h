@@ -17,7 +17,7 @@
 
 
 /* INTERRUPT PRTOTYPES */
-void ADC_IRQHandler    ( void );
+void LPCOMP_IRQHandler    ( void );
 
 
 
