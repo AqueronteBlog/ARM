@@ -591,13 +591,13 @@ OUTPUT(bin\Debug\LPCOMP.elf elf32-littlearm)
  .debug_info    0x00002c6c       0x60 obj\debug\startup_nrf51.o
  .debug_info    0x00002ccc       0x5e obj\debug\s130.o
 
-.debug_abbrev   0x00000000      0x5b0
+.debug_abbrev   0x00000000      0x5b2
  .debug_abbrev  0x00000000      0x144 obj\debug\src\functions.o
- .debug_abbrev  0x00000144       0xd1 obj\debug\src\interrupts.o
- .debug_abbrev  0x00000215      0x24b obj\debug\src\main.o
- .debug_abbrev  0x00000460       0xf4 obj\debug\src\system_nrf51.o
- .debug_abbrev  0x00000554       0x14 obj\debug\startup_nrf51.o
- .debug_abbrev  0x00000568       0x48 obj\debug\s130.o
+ .debug_abbrev  0x00000144       0xd3 obj\debug\src\interrupts.o
+ .debug_abbrev  0x00000217      0x24b obj\debug\src\main.o
+ .debug_abbrev  0x00000462       0xf4 obj\debug\src\system_nrf51.o
+ .debug_abbrev  0x00000556       0x14 obj\debug\startup_nrf51.o
+ .debug_abbrev  0x0000056a       0x48 obj\debug\s130.o
 
 .debug_aranges  0x00000000      0x2c0
  .debug_aranges
