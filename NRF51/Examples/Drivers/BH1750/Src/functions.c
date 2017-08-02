@@ -6,8 +6,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        30/June/2017
- * @version     30/June/2017   The ORIGIN
+ * @date        2/August/2017
+ * @version     2/August/2017   The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     NaN
@@ -131,8 +131,8 @@ void conf_UART  ( void )
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        20/June/2017
- * @version     20/June/2017   The ORIGIN
+ * @date        2/August/2017
+ * @version     2/August/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */

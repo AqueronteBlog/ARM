@@ -29,9 +29,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        20/June/2017
- * @version     11/July/2017   Data to be transmitted added
- *              20/June/2017   The ORIGIN
+ * @date        2/August/2017
+ * @version     2/August/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  */
@@ -71,8 +70,8 @@ void UART0_IRQHandler(void)
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        10/July/2017
- * @version     10/July/2017   The ORIGIN
+ * @date        2/August/2017
+ * @version     2/August/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */

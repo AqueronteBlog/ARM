@@ -6,8 +6,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        30/June/2017
- * @version     30/June/2017    The ORIGIN
+ * @date        2/August/2017
+ * @version     2/August/2017    The ORIGIN
  * @pre         NaN
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).

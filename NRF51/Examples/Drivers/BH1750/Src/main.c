@@ -1,17 +1,14 @@
 /**
  * @brief       main.c
- * @details     This project reads the humidity and the temperature from the external
- *              sensor: HTU21D, and transmits the raw data through the UART.
+ * @details     [todo]xxx.
  *
  *              This firmware is just an example about how to use the I2C on the nrf51422.
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        30/June/2017
- * @version     11/July/2017    UART is ready to transmit raw data.
- *              10/July/2017    New features for the external sensor device added.
- *              30/June/2017    The ORIGIN
+ * @date        2/August/2017
+ * @version     2/August/2017    The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     Softdevice S310 was used although the file's name is S130. The softdevice
@@ -23,7 +20,7 @@
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
-#include "HTU21D.h"
+#include "BH1750.h"
 
 
 int main( void )
