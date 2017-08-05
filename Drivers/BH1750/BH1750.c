@@ -17,365 +17,289 @@
  #include "BH1750.h"
 
 
- /**
- * @brief       uint32_t  HTU21D_Init    ( NRF_TWI_Type* , uint32_t , uint32_t , uint32_t , uint32_t  )
- * @details     Initialing the HTU21D and defines
+/**
+ * @brief       uint32_t  BH1750_ResetDataRegister   ( NRF_TWI_Type*, uint32_t )
+ * @details     Reseting the data register value.
  *
  * @param[in]    myinstance:    Peripheral's Instance.
  * @param[in]    ADDR:          I2C Device's address.
- * @param[in]    MODE:          HTU21D Hold Master or No Hold Master mode.
- * @param[in]    RESOLUTION:    HTU21D Resolution.
- * @param[in]    HEATER:        HTU21D Heater Enabled or Disabled.
  *
- * @param[out]   Status of HTU21D_Init.
+ * @param[out]   Status of BH1750_ResetDataRegister.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        6/July/2017
- * @version     6/July/2017   The ORIGIN
+ * @date        5/August/2017
+ * @version     5/August/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     Reset command is not acceptable in Power Down mode.
+ */
+uint32_t  BH1750_ResetDataRegister   ( NRF_TWI_Type* myinstance, uint32_t ADDR )
+{
+    uint8_t     cmd[]               =   { BH1750_RESET };
+    uint32_t    aux                 =    0;
+
+
+    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_STOP_BIT );
+
+
+    if ( aux == I2C_SUCCESS )
+       return   BH1750_SUCCESS;
+    else
+       return   BH1750_FAILURE;
+}
+
+
+/**
+ * @brief       uint32_t  BH1750_PowerDown   ( NRF_TWI_Type*, uint32_t )
+ * @details     BH1750 in low power mode.
+ *
+ * @param[in]    myinstance:    Peripheral's Instance.
+ * @param[in]    ADDR:          I2C Device's address.
+ *
+ * @param[out]   Status of BH1750_PowerDown.
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        5/August/2017
+ * @version     5/August/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-uint32_t  HTU21D_Init    ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint32_t MODE, uint32_t RESOLUTION, uint32_t HEATER )
+uint32_t  BH1750_PowerDown   ( NRF_TWI_Type* myinstance, uint32_t ADDR )
 {
-    uint8_t     cmd []              =    { HTU21D_READ_REGISTER, 0 };
+    uint8_t     cmd[]               =   { BH1750_POWER_DOWN };
     uint32_t    aux                 =    0;
 
 
-    HTU21D_Mode         =   MODE;
-
-
-    // Reserved bits must not be changed. Therefore, for any writing to user register, default values of reserved bits must be read first
-    // Datasheet: User register p.13.
     aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[0], 1 );
-
-    cmd[0]          &=   ~( USER_REGISTER_RESOLUTION_MASK | USER_REGISTER_STATUS_END_BATTERY_MASK | USER_REGISTER_HEATER_MASK | USER_REGISTER_OTP_MASK );
-    cmd[1]           =   ( cmd[0] | ( ( RESOLUTION | HEATER ) | USER_REGISTER_OTP_DISABLED ) );
-    cmd[0]           =   HTU21D_WRITE_REGISTER;
-
-    aux = i2c_write  ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
-
-    /*
-    // REad back the register
-    cmd[0]           =   HTU21D_READ_REGISTER;
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[0], 1 );
-    */
 
 
-    if ( aux == HTU21D_SUCCESS )
-        return   HTU21D_SUCCESS;
+    if ( aux == I2C_SUCCESS )
+       return   BH1750_SUCCESS;
     else
-        return   HTU21D_FAILURE;
-
+       return   BH1750_FAILURE;
 }
 
 
-
- /**
- * @brief       uint32_t  HTU21D_SoftReset   ( NRF_TWI_Type*, uint32_t )
- * @details     Rebooting the HTU21D sensor switching the power off and on again.
+/**
+ * @brief       uint32_t  BH1750_PowerOn   ( NRF_TWI_Type*, uint32_t )
+ * @details     BH1750 is on and waiting for measurement command.
  *
  * @param[in]    myinstance:    Peripheral's Instance.
  * @param[in]    ADDR:          I2C Device's address.
  *
- * @param[out]   Status of HTU21D_SoftReset.
+ * @param[out]   Status of BH1750_PowerOn.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        6/July/2017
- * @version     6/July/2017   The ORIGIN
+ * @date        5/August/2017
+ * @version     5/August/2017   The ORIGIN
  * @pre         NaN
- * @warning     The soft reset takes less than 15ms. The user must take this
- *              into account.
+ * @warning     NaN.
  */
-uint32_t  HTU21D_SoftReset   ( NRF_TWI_Type* myinstance, uint32_t ADDR )
+uint32_t  BH1750_PowerOn   ( NRF_TWI_Type* myinstance, uint32_t ADDR )
 {
-    uint8_t     cmd[]               =   { HTU21D_SOFT_RESET };
+    uint8_t     cmd[]               =   { BH1750_POWER_ON };
     uint32_t    aux                 =    0;
 
 
     aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_STOP_BIT );
 
 
-    if ( aux == HTU21D_SUCCESS )
-       return   HTU21D_SUCCESS;
+    if ( aux == I2C_SUCCESS )
+       return   BH1750_SUCCESS;
     else
-       return   HTU21D_FAILURE;
+       return   BH1750_FAILURE;
 }
 
 
  /**
- * @brief       uint32_t  HTU21D_TriggerTemperature   ( NRF_TWI_Type* , uint32_t )
+ * @brief       uint32_t  BH1750_TriggerMeasurement   ( NRF_TWI_Type* , uint32_t, uint32_t )
  * @details     Trigger a new temperature measurement.
  *
  * @param[in]    myinstance:    Peripheral's Instance.
  * @param[in]    ADDR:          I2C Device's address.
+ * @param[in]    MODE:          ONE-SHOT or CONTINUOUSLY measurement ( Normal Mode or Mode2 ).
  *
- * @param[out]   Status of HTU21D_TriggerTemperature.
+ * @param[out]   Status of BH1750_TriggerMeasurement.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        6/July/2017
- * @version     6/July/2017   The ORIGIN
+ * @date        5/August/2017
+ * @version     5/August/2017   The ORIGIN
  * @pre         NaN
- * @warning     The measuring time depends on the chosen resolution. The user
+ * @warning     The measuring time depends on the chosen resolution ( MODE ). The user
  *              must take this into account.
- * @warning     No Hold Master is ONLY implemented.
  */
-uint32_t  HTU21D_TriggerTemperature    ( NRF_TWI_Type* myinstance, uint32_t ADDR )
+uint32_t  BH1750_TriggerMeasurement    ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint32_t MODE )
 {
-    uint8_t     cmd[]               =   { HTU21D_TRIGGER_TEMPERATURE_MEASUREMENT_NO_HOLD_MASTER };
+    uint8_t     cmd[]               =   { MODE };
     uint32_t    aux                 =    0;
+
+    BH1750_Mode                     =    MODE;
 
 
     aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_STOP_BIT );
 
 
-    if ( aux == HTU21D_SUCCESS )
-       return   HTU21D_SUCCESS;
+    if ( aux == I2C_SUCCESS )
+       return   BH1750_SUCCESS;
     else
-       return   HTU21D_FAILURE;
+       return   BH1750_FAILURE;
 }
 
 
  /**
- * @brief       uint32_t  HTU21D_ReadTemperature   ( NRF_TWI_Type* , uint32_t , float* )
- * @details     Read a new temperature measurement.
+ * @brief       uint32_t  BH1750_NewSensitivity     ( NRF_TWI_Type* , uint32_t , uint32_t )
+ * @details     It configures the new sensitivity of the sensor. The sensitivity depends on which
+ *              resolution mode is used:
+ *
+ *                  H-reslution mode  : Illuminance per 1 count ( lx / count ) = 1 / 1.2 *( 69 / X )
+ *                  H-reslution mode2 : Illuminance per 1 count ( lx / count ) = 1 / 1.2 *( 69 / X ) / 2
+ *
+ *              So, by the default:
+ *
+ *                  H-reslution mode  : Sensitivity = 1 / 1.2 *( 69 / 69 )      ~  0.83
+ *                  H-reslution mode2 : Sensitivity = 1 / 1.2 *( 69 / 69 ) / 2  ~  1.67
+ *
+ *
+ *              Example ( H-reslution mode ):
+ *
+ *                  Minimum Sensitivity = 1 / 1.2 *( 69 / 31 )      ~  0.37
+ *                  Maximum Sensitivity = 1 / 1.2 *( 69 / 254 )     ~  3.07
+ *
+ *
  *
  * @param[in]    myinstance:     Peripheral's Instance.
  * @param[in]    ADDR:           I2C Device's address.
- * @param[in]    mytemperature:  Variable to store the temperature.
+ * @param[in]    newSensitivity: New sensitivity value.
  *
- * @param[out]   Status of HTU21D_ReadTemperature.
+ * @param[out]   Status of BH1750_NewSensitivity.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        6/July/2017
- * @version     6/July/2017   The ORIGIN
+ * @date        5/August/2017
+ * @version     5/August/2017   The ORIGIN
  * @pre         NaN
- * @warning     The measuring time depends on the chosen resolution. The user
- *              must take this into account.
- * @warning     No Hold Master is ONLY implemented.
- * @warning     HTU21D_TriggerTemperature MUST be call before.
+ * @warning     newSensitivity can ONLY be from 31 to 254.
  */
-uint32_t  HTU21D_ReadTemperature    ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* mytemperature )
+uint32_t  BH1750_NewSensitivity    ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t newSensitivity )
 {
+    uint8_t     cmd[]               =   { 0x40, 0x60 };                 // 0x40 ( MT High byte ), 0x60 ( MT Low byte )
     uint32_t    aux                 =    0;
-    uint8_t     myRawTemp[]         =   { 0, 0, 0};
 
 
-    aux = i2c_read ( myinstance, ADDR, &myRawTemp[0], 3 );
+    if ( ( newSensitivity > 30 ) && ( newSensitivity < 255 ) )
+    {
+        cmd[0]  |=    ( ( newSensitivity & 0xE0 ) >> 5 );
+        cmd[1]  |=    ( newSensitivity & 0x1F );
 
-
-    *mytemperature    =   ( myRawTemp[0] << 8 ) | myRawTemp[1];
-    *mytemperature   /=   65536.0;
-    *mytemperature    =   ( *mytemperature * 175.72 ) - 46.85;
-
-
-    if ( aux == HTU21D_SUCCESS )
-       return   HTU21D_SUCCESS;
+        aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    }
     else
-       return   HTU21D_FAILURE;
+        aux  =   BH1750_FAILURE;
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   BH1750_SUCCESS;
+    else
+       return   BH1750_FAILURE;
 }
 
 
 
 /**
- * @brief       uint32_t  HTU21D_ReadRawTemperature   ( NRF_TWI_Type*, uint32_t, uint8_t* )
+ * @brief       uint32_t  BH1750_ReadRawData   ( NRF_TWI_Type*, uint32_t, uint32_t* )
  * @details     Read a new raw temperature measurement.
  *
  * @param[in]    myinstance:        Peripheral's Instance.
  * @param[in]    ADDR:              I2C Device's address.
- * @param[in]    myRawtemperature:  Variable to store the temperature.
+ * @param[in]    myRawData:         Variable to store the raw data.
  *
- * @param[out]   Status of HTU21D_ReadTemperature.
- *
- *
- * @return      NA
- *
- * @author      Manuel Caballero
- * @date        11/July/2017
- * @version     11/July/2017   The ORIGIN
- * @pre         NaN
- * @warning     The measuring time depends on the chosen resolution. The user
- *              must take this into account.
- * @warning     No Hold Master is ONLY implemented.
- * @warning     HTU21D_TriggerTemperature MUST be call before.
- */
-uint32_t  HTU21D_ReadRawTemperature    ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myRawtemperature )
-{
-    uint32_t    aux                 =    0;
-
-
-    aux = i2c_read ( myinstance, ADDR, &myRawtemperature[0], 3 );
-
-
-    if ( aux == HTU21D_SUCCESS )
-       return   HTU21D_SUCCESS;
-    else
-       return   HTU21D_FAILURE;
-}
-
-
- /**
- * @brief       uint32_t  HTU21D_TriggerHumidity   ( NRF_TWI_Type* , uint32_t  )
- * @details     Trigger a new humidity measurement.
- *
- * @param[in]    myinstance:    Peripheral's Instance.
- * @param[in]    ADDR:          I2C Device's address.
- *
- * @param[out]   Status of HTU21D_TriggerHumidity.
+ * @param[out]   Status of BH1750_ReadRawData.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        6/July/2017
- * @version     6/July/2017   The ORIGIN
+ * @date        5/August/2017
+ * @version     5/August/2017   The ORIGIN
  * @pre         NaN
- * @warning     The measuring time depends on the chosen resolution. The user
- *              must take this into account.
- * @warning     No Hold Master is ONLY implemented.
+ * @warning     BH1750_TriggerMeasurement MUST be call before.
  */
-uint32_t  HTU21D_TriggerHumidity    ( NRF_TWI_Type* myinstance, uint32_t ADDR )
+uint32_t  BH1750_ReadRawData    ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myRawData )
 {
-    uint8_t     cmd[]               =   { HTU21D_TRIGGER_HUMIDITY_MEASUREMENT_NO_HOLD_MASTER };
     uint32_t    aux                 =    0;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_STOP_BIT );
+    aux = i2c_read ( myinstance, ADDR, &myRawData[0], 2 );
 
 
-    if ( aux == HTU21D_SUCCESS )
-       return   HTU21D_SUCCESS;
+    if ( aux == I2C_SUCCESS )
+       return   BH1750_SUCCESS;
     else
-       return   HTU21D_FAILURE;
+       return   BH1750_FAILURE;
 }
 
 
 /**
- * @brief       uint32_t  HTU21D_ReadHumidity   ( NRF_TWI_Type*, uint32_t, float* )
- * @details     Read a new humidity measurement.
+ * @brief       BH1750_ReadLux   ( NRF_TWI_Type* , uint32_t , float* )
+ * @details     It turns the raw data into a Lux data.
  *
  * @param[in]    myinstance:    Peripheral's Instance.
  * @param[in]    ADDR:          I2C Device's address.
- * @param[in]    myhumidity:    Variable to store the humidity.
+ * @param[in]    myLux:         Variable to store the Lux.
  *
- * @param[out]   Status of HTU21D_ReadHumidity.
+ * @param[out]   Status of BH1750_ReadLux.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        6/July/2017
- * @version     6/July/2017   The ORIGIN
+ * @date        5/August/2017
+ * @version     5/August/2017   The ORIGIN
  * @pre         NaN
- * @warning     The measuring time depends on the chosen resolution. The user
- *              must take this into account.
- * @warning     No Hold Master is ONLY implemented.
- * @warning     HTU21D_TriggerHumidity MUST be call before.
+ * @warning     BH1750_TriggerMeasurement MUST be call before.
  */
-uint32_t  HTU21D_ReadHumidity    ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* myhumidity )
+uint32_t  BH1750_ReadLux    ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* myLux )
 {
     uint32_t    aux                 =    0;
-    uint8_t     myRawRH[]           =    { 0, 0, 0};
+    uint8_t     myRawData[]         =    { 0, 0};
 
 
-    aux = i2c_read ( myinstance, ADDR, &myRawRH[0], 3 );
+    aux = BH1750_ReadRawData ( myinstance, ADDR, &myRawData[0] );
 
 
-    *myhumidity    =   ( myRawRH[0] << 8 ) | myRawRH[1];
-    *myhumidity   /=   65536.0;
-    *myhumidity    =   ( *myhumidity * 125.0 ) - 6.0;
-
-
-    if ( aux == HTU21D_SUCCESS )
-       return   HTU21D_SUCCESS;
+    if ( ( BH1750_Mode == BH1750_CONTINUOUSLY_H_RESOLUTION_MODE ) || ( BH1750_Mode == BH1750_CONTINUOUSLY_L_RESOLUTION_MODE )  || ( BH1750_Mode == BH1750_ONE_TIME_H_RESOLUTION_MODE ) ||
+         ( BH1750_Mode == BH1750_ONE_TIME_L_RESOLUTION_MODE ) )
+    {
+        *myLux   =   ( myRawData[0] << 8 ) | myRawData[1];
+        *myLux   =   ( uint16_t )( *myLux / 1.2 );
+    }
     else
-       return   HTU21D_FAILURE;
-}
+    {
+        *myLux   =   ( ( myRawData[0] << 8 ) | myRawData[1] ) >> 1;
+        *myLux  /=   1.2;
+
+        if ( ( myRawData[1] & 0x01 ) == 0x01 )
+          *myLux  +=   0.5;
+    }
 
 
 
-/**
- * @brief       uint32_t  HTU21D_ReadRawHumidity   ( NRF_TWI_Type*, uint32_t, uint8_t* )
- * @details     Read a new raw humidity measurement.
- *
- * @param[in]    myinstance:    Peripheral's Instance.
- * @param[in]    ADDR:          I2C Device's address.
- * @param[in]    myhumidity:    Variable to store the humidity.
- *
- * @param[out]   Status of HTU21D_ReadHumidity.
- *
- *
- * @return      NA
- *
- * @author      Manuel Caballero
- * @date        11/July/2017
- * @version     11/July/2017   The ORIGIN
- * @pre         NaN
- * @warning     The measuring time depends on the chosen resolution. The user
- *              must take this into account.
- * @warning     No Hold Master is ONLY implemented.
- * @warning     HTU21D_TriggerHumidity MUST be call before.
- */
-uint32_t  HTU21D_ReadRawHumidity    ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myRawhumidity )
-{
-    uint32_t    aux                 =    0;
-
-
-    aux = i2c_read ( myinstance, ADDR, &myRawhumidity[0], 3 );
-
-
-
-    if ( aux == HTU21D_SUCCESS )
-       return   HTU21D_SUCCESS;
+    if ( aux == I2C_SUCCESS )
+       return   BH1750_SUCCESS;
     else
-       return   HTU21D_FAILURE;
-}
-
-
-/**
- * @brief       uint32_t  HTU21D_BatteryStatus   ( NRF_TWI_Type* , uint32_t, uint8_t* )
- * @details     Read the user register to check the battery status.
- *
- * @param[in]    myinstance:    Peripheral's Instance.
- * @param[in]    ADDR:          I2C Device's address.
- * @param[in]    battStatus:    Variable to store the battery status.
- *
- * @param[out]   Status of HTU21D_BatteryStatus.
- *
- *
- * @return      NA
- *
- * @author      Manuel Caballero
- * @date        6/July/2017
- * @version     6/July/2017   The ORIGIN
- * @pre         NaN
- * @warning     NaN.
- */
-uint32_t  HTU21D_BatteryStatus      ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* battStatus )
-{
-    uint8_t     cmd[]               =   { HTU21D_READ_REGISTER };
-    uint32_t    aux                 =    0;
-
-
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, battStatus, 1 );
-
-
-    if ( aux == HTU21D_SUCCESS )
-       return   HTU21D_SUCCESS;
-    else
-       return   HTU21D_FAILURE;
+       return   BH1750_FAILURE;
 }
