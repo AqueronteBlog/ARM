@@ -41,8 +41,8 @@ int main( void )
 
     mySTATE                  =   0;                 // Reset counter
 
-    HTU21D_SoftReset ( NRF_TWI0, HTU21D_ADDR );
-    HTU21D_Init      ( NRF_TWI0, HTU21D_ADDR, HTU21D_MODE_NO_HOLD_MASTER, USER_REGISTER_RESOLUTION_11RH_11TEMP, USER_REGISTER_HEATER_DISABLED );
+    //HTU21D_SoftReset ( NRF_TWI0, HTU21D_ADDR );
+    //HTU21D_Init      ( NRF_TWI0, HTU21D_ADDR, HTU21D_MODE_NO_HOLD_MASTER, USER_REGISTER_RESOLUTION_11RH_11TEMP, USER_REGISTER_HEATER_DISABLED );
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
@@ -61,18 +61,18 @@ int main( void )
 		switch ( mySTATE ){
         default:
         case 1:
-            aux = HTU21D_TriggerTemperature ( NRF_TWI0, HTU21D_ADDR );
+            //aux = HTU21D_TriggerTemperature ( NRF_TWI0, HTU21D_ADDR );
             break;
 
         case 2:
             // aux = HTU21D_ReadTemperature    ( NRF_TWI0, HTU21D_ADDR, &myTEMP );
-            aux = HTU21D_ReadRawTemperature ( NRF_TWI0, HTU21D_ADDR, &myRawTemp[0] );
-            aux = HTU21D_TriggerHumidity    ( NRF_TWI0, HTU21D_ADDR );
+            //aux = HTU21D_ReadRawTemperature ( NRF_TWI0, HTU21D_ADDR, &myRawTemp[0] );
+            //aux = HTU21D_TriggerHumidity    ( NRF_TWI0, HTU21D_ADDR );
             break;
 
         case 3:
             // aux = HTU21D_ReadHumidity       ( NRF_TWI0, HTU21D_ADDR, &myRH );
-            aux = HTU21D_ReadRawTemperature ( NRF_TWI0, HTU21D_ADDR, &myRawRH[0] );
+            //aux = HTU21D_ReadRawTemperature ( NRF_TWI0, HTU21D_ADDR, &myRawRH[0] );
 
             // Store Temperature & Humidity into the UART TX buffer
             for ( ii = 0; ii < 3; ii++ )                            // Temperature + Checksum: 3 first bytes
