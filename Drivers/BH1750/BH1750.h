@@ -28,75 +28,39 @@
 /**
   * @brief   COMMAND REGISTERS
   */
-#define BH1750_POWER_DOWN                                           0x00
-#define BH1750_POWER_ON                                             0x01
-#define BH1750_RESET                                                0x07
-#define BH1750_CONTINUOUSLY_H_RESOLUTION_MODE                       0x10
-#define BH1750_CONTINUOUSLY_H_RESOLUTION_MODE2                      0x11
-#define BH1750_CONTINUOUSLY_L_RESOLUTION_MODE                       0x13
-#define BH1750_ONE_TIME_H_RESOLUTION_MODE                           0x20
-#define BH1750_ONE_TIME_H_RESOLUTION_MODE2                          0x21
-#define BH1750_ONE_TIME_L_RESOLUTION_MODE                           0x23
-
-
-/**
-  * @brief   USER REGISTER
-  */
-/* RESOLUTION */
-#define USER_REGISTER_RESOLUTION_12RH_14TEMP                        0x00
-#define USER_REGISTER_RESOLUTION_8RH_12TEMP                         0x01
-#define USER_REGISTER_RESOLUTION_10RH_13TEMP                        0x80
-#define USER_REGISTER_RESOLUTION_11RH_11TEMP                        0x81
-#define USER_REGISTER_RESOLUTION_MASK                               0x81
-
-/* STATUS */
-#define USER_REGISTER_STATUS_END_BATTERY_HIGH_2V25                  0x00
-#define USER_REGISTER_STATUS_END_BATTERY_LOW_2V25                   0x40
-#define USER_REGISTER_STATUS_END_BATTERY_MASK                       0x40
-
-/* ON-CHIP HEATER */
-#define USER_REGISTER_HEATER_ENABLED                                0x04
-#define USER_REGISTER_HEATER_DISABLED                               0x00
-#define USER_REGISTER_HEATER_MASK                                   0x04
-
-/* OTP RELOAD */
-#define USER_REGISTER_OTP_ENABLED                                   0x00
-#define USER_REGISTER_OTP_DISABLED                                  0x02
-#define USER_REGISTER_OTP_MASK                                      0x02
-
-
-/**
-  * @brief   MODE
-  */
-#define HTU21D_MODE_HOLD_MASTER                                     0x00
-#define HTU21D_MODE_NO_HOLD_MASTER                                  0x01
+#define BH1750_POWER_DOWN                                           0x00        /*!<   No active state                                                                                                                                  */
+#define BH1750_POWER_ON                                             0x01        /*!<   Waiting for measurement command                                                                                                                  */
+#define BH1750_RESET                                                0x07        /*!<   Reset Data register value. Reset command is not acceptable in Power Down mode                                                                    */
+#define BH1750_CONTINUOUSLY_H_RESOLUTION_MODE                       0x10        /*!<   Start measurement at 1lx resolution. Measurement Time is typically 120ms                                                                         */
+#define BH1750_CONTINUOUSLY_H_RESOLUTION_MODE2                      0x11        /*!<   Start measurement at 0.5lx resolution. Measurement Time is typically 120ms                                                                       */
+#define BH1750_CONTINUOUSLY_L_RESOLUTION_MODE                       0x13        /*!<   Start measurement at 4lx resolution. Measurement Time is typically 16ms                                                                          */
+#define BH1750_ONE_TIME_H_RESOLUTION_MODE                           0x20        /*!<   Start measurement at 1lx resolution. Measurement Time is typically 120ms. It is automatically set to Power Down mode after measurement           */
+#define BH1750_ONE_TIME_H_RESOLUTION_MODE2                          0x21        /*!<   Start measurement at 0.5lx resolution. Measurement Time is typically 120ms. It is automatically set to Power Down mode after measurement         */
+#define BH1750_ONE_TIME_L_RESOLUTION_MODE                           0x23        /*!<   Start measurement at 4lx resolution. Measurement Time is typically 16ms. It is automatically set to Power Down mode after measurement            */
 
 
 /**
   * @brief   INTERNAL CONSTANTS
   */
-#define HTU21D_SUCCESS                                              0x00
-#define HTU21D_FAILURE                                              0x01
+#define BH1750_SUCCESS                                              0x00
+#define BH1750_FAILURE                                              0x01
 
 
 
 /**
   * @brief   INTERNAL VARIABLES
   */
-uint32_t    HTU21D_Mode;
-uint32_t    HTU21D_Resolution;
+uint32_t    BH1750_Mode;
 
 
 
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-uint32_t  HTU21D_Init               ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint32_t MODE, uint32_t RESOLUTION, uint32_t HEATER );
-uint32_t  HTU21D_SoftReset          ( NRF_TWI_Type* myinstance, uint32_t ADDR );
-uint32_t  HTU21D_TriggerTemperature ( NRF_TWI_Type* myinstance, uint32_t ADDR );
-uint32_t  HTU21D_ReadTemperature    ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* mytemperature );
-uint32_t  HTU21D_ReadRawTemperature ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myRawtemperature );
-uint32_t  HTU21D_TriggerHumidity    ( NRF_TWI_Type* myinstance, uint32_t ADDR );
-uint32_t  HTU21D_ReadHumidity       ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* myhumidity );
-uint32_t  HTU21D_ReadRawHumidity    ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myRawhumidity );
-uint32_t  HTU21D_BatteryStatus      ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* battStatus );
+uint32_t  BH1750_PowerDown          ( NRF_TWI_Type* myinstance, uint32_t ADDR );
+uint32_t  BH1750_PowerOn            ( NRF_TWI_Type* myinstance, uint32_t ADDR );
+uint32_t  BH1750_ResetDataRegister  ( NRF_TWI_Type* myinstance, uint32_t ADDR );
+uint32_t  BH1750_TriggerMeasurement ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint32_t MODE );
+uint32_t  BH1750_NewSensitivity     ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t newSensitivity );
+uint32_t  BH1750_ReadRawData        ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myRawData );
+uint32_t  BH1750_ReadLux            ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* myLux );
