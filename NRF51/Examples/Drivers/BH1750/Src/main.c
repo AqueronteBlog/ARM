@@ -25,12 +25,9 @@
 
 int main( void )
 {
-    uint32_t ii             =       0;
-    // float    myTEMP         =       0;
-    // float    myRH           =       0;
-    uint8_t  myRawTemp[]    =       { 0, 0, 0 };
-    uint8_t  myRawRH[]      =       { 0, 0, 0 };
-    uint32_t aux            =       0;
+    float    myLux         =       0;
+    // uint8_t  myRawLux[]    =       { 0, 0 };
+    uint32_t aux           =       0;
 
 
     conf_GPIO   ();
@@ -40,9 +37,6 @@ int main( void )
 
 
     mySTATE                  =   0;                 // Reset counter
-
-    //HTU21D_SoftReset ( NRF_TWI0, HTU21D_ADDR );
-    //HTU21D_Init      ( NRF_TWI0, HTU21D_ADDR, HTU21D_MODE_NO_HOLD_MASTER, USER_REGISTER_RESOLUTION_11RH_11TEMP, USER_REGISTER_HEATER_DISABLED );
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
@@ -61,31 +55,20 @@ int main( void )
 		switch ( mySTATE ){
         default:
         case 1:
-            //aux = HTU21D_TriggerTemperature ( NRF_TWI0, HTU21D_ADDR );
+            aux = BH1750_TriggerMeasurement ( NRF_TWI0, BH1750_ADDR_L, BH1750_ONE_TIME_H_RESOLUTION_MODE );
             break;
 
         case 2:
-            // aux = HTU21D_ReadTemperature    ( NRF_TWI0, HTU21D_ADDR, &myTEMP );
-            //aux = HTU21D_ReadRawTemperature ( NRF_TWI0, HTU21D_ADDR, &myRawTemp[0] );
-            //aux = HTU21D_TriggerHumidity    ( NRF_TWI0, HTU21D_ADDR );
+            // aux = BH1750_ReadRawData            ( NRF_TWI0, BH1750_ADDR_L, &myRawLux[0] );
+            aux = BH1750_ReadLux            ( NRF_TWI0, BH1750_ADDR_L, &myLux );
             break;
 
         case 3:
-            // aux = HTU21D_ReadHumidity       ( NRF_TWI0, HTU21D_ADDR, &myRH );
-            //aux = HTU21D_ReadRawTemperature ( NRF_TWI0, HTU21D_ADDR, &myRawRH[0] );
-
-            // Store Temperature & Humidity into the UART TX buffer
-            for ( ii = 0; ii < 3; ii++ )                            // Temperature + Checksum: 3 first bytes
-                TX_buff[ii]  =  myRawTemp[ii];
-
-            for ( ii = 3; ii < 6; ii++ )                            // Humidity + Checksum: The other 3 bytes
-                TX_buff[ii]  =  myRawRH[ii - 3];
-
-
+            /*
             // Start transmitting through the UART
             NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
 
-            myPtr                        =   &TX_buff[0];
+            myPtr                        =   &myRawLux[0];
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   *myPtr++;
@@ -97,6 +80,7 @@ int main( void )
                 __SEV();
                 __WFE();
             }
+            */
 
             mySTATE =   0;
             break;
