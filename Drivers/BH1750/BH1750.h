@@ -40,6 +40,12 @@
 
 
 /**
+  * @brief   SENSITIVITY
+  */
+#define BH1750_SENSITIVITY_DEFAULT                                  0x45        /*!<   Measurement Time Register by default. This is for registration of measurement time                                                                         */
+
+
+/**
   * @brief   INTERNAL CONSTANTS
   */
 #define BH1750_SUCCESS                                              0x00

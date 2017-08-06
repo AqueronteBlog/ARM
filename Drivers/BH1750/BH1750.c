@@ -158,7 +158,7 @@ uint32_t  BH1750_TriggerMeasurement    ( NRF_TWI_Type* myinstance, uint32_t ADDR
 
 
  /**
- * @brief       uint32_t  BH1750_NewSensitivity     ( NRF_TWI_Type* , uint32_t , uint32_t )
+ * @brief       uint32_t  BH1750_NewSensitivity     ( NRF_TWI_Type* , uint32_t , uint8_t )
  * @details     It configures the new sensitivity of the sensor. The sensitivity depends on which
  *              resolution mode is used:
  *
