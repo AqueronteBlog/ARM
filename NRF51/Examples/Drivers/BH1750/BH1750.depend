@@ -1,0 +1,123 @@
+# depslib dependency file v1.0
+1501494396 source:d:\workspace\arm\nrf51\examples\basics\i2c\i2c.c
+	"i2c.h"
+
+1501494396 d:\workspace\arm\nrf51\examples\basics\i2c\i2c.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+
+1501494397 d:\workspace\arm\nrf51\examples\drivers\bh1750\inc\nrf.h
+	"nrf51.h"
+	"nrf51_bitfields.h"
+	"nrf51_deprecated.h"
+	"compiler_abstraction.h"
+
+1501494397 d:\workspace\arm\nrf51\examples\drivers\bh1750\inc\nrf51.h
+	<core_cm0.h>
+	"system_nrf51.h"
+
+1501494397 d:\workspace\arm\nrf51\examples\drivers\bh1750\inc\system_nrf51.h
+	<stdint.h>
+
+1501494397 d:\workspace\arm\nrf51\examples\drivers\bh1750\inc\nrf51_bitfields.h
+	<core_cm0.h>
+
+1501494397 d:\workspace\arm\nrf51\examples\drivers\bh1750\inc\nrf51_deprecated.h
+
+1501494397 d:\workspace\arm\nrf51\examples\drivers\bh1750\inc\compiler_abstraction.h
+
+1501494397 source:d:\workspace\arm\nrf51\examples\drivers\bh1750\s130.c
+
+1501694328 source:d:\workspace\arm\nrf51\examples\drivers\bh1750\src\functions.c
+	"functions.h"
+
+1501694328 d:\workspace\arm\nrf51\examples\drivers\bh1750\src\functions.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"variables.h"
+
+1501694328 d:\workspace\arm\nrf51\examples\drivers\bh1750\src\variables.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"board.h"
+
+1501494397 d:\workspace\arm\nrf51\examples\drivers\bh1750\src\board.h
+
+1502268974 source:d:\workspace\arm\nrf51\examples\drivers\bh1750\src\interrupts.c
+	"interrupts.h"
+
+1501694328 d:\workspace\arm\nrf51\examples\drivers\bh1750\src\interrupts.h
+	"variables.h"
+
+1502268259 source:d:\workspace\arm\nrf51\examples\drivers\bh1750\src\main.c
+	"nrf.h"
+	"ble.h"
+	"variables.h"
+	"functions.h"
+	"BH1750.h"
+
+1501494398 d:\workspace\arm\nrf51\examples\drivers\bh1750\softdevice\include\ble.h
+	"ble_ranges.h"
+	"ble_types.h"
+	"ble_gap.h"
+	"ble_l2cap.h"
+	"ble_gatt.h"
+	"ble_gattc.h"
+	"ble_gatts.h"
+
+1501494398 d:\workspace\arm\nrf51\examples\drivers\bh1750\softdevice\include\ble_ranges.h
+
+1501494398 d:\workspace\arm\nrf51\examples\drivers\bh1750\softdevice\include\ble_types.h
+	<stdint.h>
+
+1501494398 d:\workspace\arm\nrf51\examples\drivers\bh1750\softdevice\include\ble_gap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1501494398 d:\workspace\arm\nrf51\examples\drivers\bh1750\softdevice\include\nrf_svc.h
+
+1501494398 d:\workspace\arm\nrf51\examples\drivers\bh1750\softdevice\include\ble_l2cap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_err.h"
+	"nrf_svc.h"
+
+1501494398 d:\workspace\arm\nrf51\examples\drivers\bh1750\softdevice\include\ble_err.h
+	"nrf_error.h"
+
+1501494398 d:\workspace\arm\nrf51\examples\drivers\bh1750\softdevice\include\nrf_error.h
+
+1501494398 d:\workspace\arm\nrf51\examples\drivers\bh1750\softdevice\include\ble_gatt.h
+	"ble_types.h"
+	"ble_ranges.h"
+
+1501494398 d:\workspace\arm\nrf51\examples\drivers\bh1750\softdevice\include\ble_gattc.h
+	"ble_gatt.h"
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1501494398 d:\workspace\arm\nrf51\examples\drivers\bh1750\softdevice\include\ble_gatts.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_l2cap.h"
+	"ble_gap.h"
+	"ble_gatt.h"
+	"nrf_svc.h"
+
+1502058078 d:\workspace\arm\drivers\bh1750\bh1750.h
+	"stdint.h"
+	"i2c.h"
+
+1501494397 source:d:\workspace\arm\nrf51\examples\drivers\bh1750\src\system_nrf51.c
+	<stdint.h>
+	<stdbool.h>
+	"nrf.h"
+	"system_nrf51.h"
+
+1501494398 source:d:\workspace\arm\nrf51\examples\drivers\bh1750\startup_nrf51.s
+
+1502099256 source:d:\workspace\arm\drivers\bh1750\bh1750.c
+	"BH1750.h"
+

@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <EmBitz_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="..\..\..\..\Drivers\BH1750\BH1750.c" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\..\Drivers\BH1750\BH1750.c" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="8470" topLine="246" />
+			<Cursor1 position="8628" topLine="39" />
 		</Cursor>
 	</File>
-	<File name="..\..\..\..\Drivers\BH1750\BH1750.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\..\Drivers\BH1750\BH1750.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2624" topLine="22" />
+			<Cursor1 position="2389" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\Basics\I2C\i2c.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\Basics\I2C\i2c.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3524" topLine="135" />
+			<Cursor1 position="3524" topLine="82" />
 		</Cursor>
 	</File>
-	<File name="..\..\Basics\I2C\i2c.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\Basics\I2C\i2c.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="829" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="Src\board.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Src\board.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="0" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="Src\functions.c" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Src\functions.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="5513" topLine="129" />
+			<Cursor1 position="5513" topLine="68" />
 		</Cursor>
 	</File>
-	<File name="Src\functions.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Src\functions.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="162" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="Src\interrupts.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Src\interrupts.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2105" topLine="38" />
+			<Cursor1 position="1394" topLine="6" />
 		</Cursor>
 	</File>
-	<File name="Src\interrupts.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Src\interrupts.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="197" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="Src\main.c" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Src\main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1033" topLine="10" />
+			<Cursor1 position="1539" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="Src\variables.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Src\variables.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="819" topLine="0" />
+			<Cursor1 position="1189" topLine="0" />
 		</Cursor>
 	</File>
 </EmBitz_layout_file>
