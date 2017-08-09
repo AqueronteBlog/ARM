@@ -19,7 +19,7 @@
  * @brief       void UART0_IRQHandler ()
  * @details     It sends the collected data from the external sensor through the UART.
  *
- *              One byte was just sent, so there are 5-Bytes left
+ *              One byte was just sent, so there are 1-Byte left
  *              waiting to be transmitted.
  *
  *              The LED1 will be turned off to indicate that the UART
@@ -42,11 +42,11 @@ void UART0_IRQHandler(void)
         // Clear UART TX event flag.
         NRF_UART0->EVENTS_TXDRDY = 0;
 
-        // Send only 5-Bytes
-        if ( dataToBeTX  < 5 )           // 6 ( 3-bytes for Temperature and 3-Bytes for Humidity ) - 1 = 5. NOTE: One byte was just transmitted previously.
+        // Send only 1-Byte
+        if ( dataToBeTX  < 1 )           // 2 ( MSB + LSB ) - 1 = 1. NOTE: One byte was just transmitted previously.
         {
         // Transmit data
-            NRF_UART0->TXD   =   *myPtr++;
+            NRF_UART0->TXD   =   *myPtr;
             dataToBeTX++;
         }
         else
