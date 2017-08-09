@@ -1,6 +1,8 @@
 /**
  * @brief       main.c
- * @details     [todo]xxx.
+ * @details     This project shows how to work with the external light sensor BH1750.
+ *              It performs a new measurement every three seconds and transmits the data
+ *              through the UART.
  *
  *              This firmware is just an example about how to use the I2C on the nrf51422.
  *
@@ -25,8 +27,8 @@
 
 int main( void )
 {
-    float    myLux         =       0;
-    // uint8_t  myRawLux[]    =       { 0, 0 };
+    // float    myLux         =       0;
+    uint8_t  myRawLux[]    =       { 0, 0 };
     uint32_t aux           =       0;
 
 
@@ -59,19 +61,18 @@ int main( void )
             break;
 
         case 2:
-            // aux = BH1750_ReadRawData            ( NRF_TWI0, BH1750_ADDR_L, &myRawLux[0] );
-            aux = BH1750_ReadLux            ( NRF_TWI0, BH1750_ADDR_L, &myLux );
+            aux = BH1750_ReadRawData            ( NRF_TWI0, BH1750_ADDR_L, &myRawLux[0] );
+            // aux = BH1750_ReadLux            ( NRF_TWI0, BH1750_ADDR_L, &myLux );
             break;
 
         case 3:
-            /*
             // Start transmitting through the UART
             NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
 
             myPtr                        =   &myRawLux[0];
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
-            NRF_UART0->TXD               =   *myPtr++;
+            NRF_UART0->TXD               =   *myPtr++;              // MSB to be transmitted
 
             // Wait until the message is transmitted
             while ( TX_inProgress == YES ){
@@ -80,7 +81,6 @@ int main( void )
                 __SEV();
                 __WFE();
             }
-            */
 
             mySTATE =   0;
             break;
