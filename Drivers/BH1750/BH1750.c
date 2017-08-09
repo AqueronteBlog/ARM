@@ -290,7 +290,7 @@ uint32_t  BH1750_ReadLux    ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* my
     else
     {
         *myLux   =   ( ( myRawData[0] << 8 ) | myRawData[1] ) >> 1;
-        *myLux  /=   1.2;
+        *myLux   =   ( uint16_t )( *myLux / 1.2 );
 
         if ( ( myRawData[1] & 0x01 ) == 0x01 )
           *myLux  +=   0.5;
