@@ -19,11 +19,12 @@
 
 
 /**
- * @brief       uint32_t  ADXL345_GetID   ( NRF_TWI_Type*, uint32_t )
+ * @brief       uint32_t  ADXL345_GetID   ( NRF_TWI_Type*, uint32_t, uint8_t* )
  * @details     Reseting the data register value.
  *
  * @param[in]    myinstance:    Peripheral's Instance.
  * @param[in]    ADDR:          I2C Device's address.
+ * @param[in]    myID:          Device's ID, it should be 0xE5.
  *
  * @param[out]   Status of ADXL345_GetID.
  *
@@ -35,14 +36,14 @@
  * @pre         NaN
  * @warning     NaN.
  */
-uint32_t  ADXL345_GetID   ( NRF_TWI_Type* myinstance, uint32_t ADDR )
+uint32_t  ADXL345_GetID   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myID )
 {
     uint8_t     cmd[]               =   { ADXL345_DEVID };
     uint32_t    aux                 =    0;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_STOP_BIT );
-
+    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myinstance, ADDR, &myID[0], 1 );
 
     if ( aux == I2C_SUCCESS )
        return   ADXL345_SUCCESS;
