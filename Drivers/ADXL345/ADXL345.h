@@ -23,8 +23,8 @@
 /**
   * @brief   DEFAULT ADDRESSES
   */
-#define ADXL345_ALT_ADDRESS_LOW                 0x1D
-#define ADXL345_ALT_ADDRESS_HIGH                0x53
+#define ADXL345_ALT_ADDRESS_LOW                 0x53
+#define ADXL345_ALT_ADDRESS_HIGH                0x1D
 
 /**
   * @brief   REGISTERS MAP
@@ -477,5 +477,5 @@ uint32_t    ADXL345_Mode;
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-uint32_t  ADXL345_GetID          ( NRF_TWI_Type* myinstance, uint32_t ADDR );
+uint32_t  ADXL345_GetID          ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myID );
 
