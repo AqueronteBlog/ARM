@@ -26,7 +26,7 @@
 int main( void )
 {
     uint32_t aux           =       0;
-
+    uint8_t  myID[]        =       { 0 };
 
     conf_GPIO   ();
     conf_UART   ();
@@ -53,7 +53,7 @@ int main( void )
 		switch ( mySTATE ){
         default:
         case 1:
-            aux = ADXL345_GetID ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW );
+            aux = ADXL345_GetID ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, &myID[0] );
             mySTATE =   0;
             break;
 
