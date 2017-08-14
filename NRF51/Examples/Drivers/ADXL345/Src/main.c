@@ -34,6 +34,11 @@ int main( void )
     conf_TIMER0 ();
 
 
+    ADXL345_Init   ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, BW_RATE_LOW_POWER_Disabled, BW_RATE_RATE_100HZ,
+                     DATA_FORMAT_INT_INVERT_Disabled, DATA_FORMAT_FULL_RES_Disabled, DATA_FORMAT_JUSTIFY_Disabled,
+                     DATA_FORMAT_RANGE_2_G );
+
+
     mySTATE                  =   0;                 // Reset counter
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
