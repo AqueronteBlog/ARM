@@ -49,7 +49,7 @@
 1502470442 d:\workspace\arm\nrf51\examples\drivers\adxl345\src\interrupts.h
 	"variables.h"
 
-1502472715 source:d:\workspace\arm\nrf51\examples\drivers\adxl345\src\main.c
+1502721092 source:d:\workspace\arm\nrf51\examples\drivers\adxl345\src\main.c
 	"nrf.h"
 	"ble.h"
 	"variables.h"
@@ -106,8 +106,9 @@
 	"ble_gatt.h"
 	"nrf_svc.h"
 
-1502472715 d:\workspace\arm\drivers\adxl345\adxl345.h
+1502719378 d:\workspace\arm\drivers\adxl345\adxl345.h
 	"stdint.h"
+	"stdbool.h"
 	"i2c.h"
 
 1501494397 source:d:\workspace\arm\nrf51\examples\drivers\adxl345\src\system_nrf51.c
@@ -118,6 +119,6 @@
 
 1501494398 source:d:\workspace\arm\nrf51\examples\drivers\adxl345\startup_nrf51.s
 
-1502472715 source:d:\workspace\arm\drivers\adxl345\adxl345.c
+1502720976 source:d:\workspace\arm\drivers\adxl345\adxl345.c
 	"ADXL345.h"
 
