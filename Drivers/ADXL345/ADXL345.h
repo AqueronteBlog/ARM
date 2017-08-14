@@ -17,14 +17,18 @@
 
 
 #include "stdint.h"
+#include "stdbool.h"
 #include "i2c.h"
 
 
 /**
   * @brief   DEFAULT ADDRESSES
   */
-#define ADXL345_ALT_ADDRESS_LOW                 0x53
-#define ADXL345_ALT_ADDRESS_HIGH                0x1D
+typedef enum{
+    ADXL345_ALT_ADDRESS_LOW     =   0x53,
+    ADXL345_ALT_ADDRESS_HIGH    =   0x1D
+} ADXL345_address_t;
+
 
 /**
   * @brief   REGISTERS MAP
@@ -210,31 +214,61 @@
   * @brief   BW_RATE
   */
 /* Bit 4 : LOW_POWER ( D4 ). */
-#define BW_RATE_LOW_POWER_Pos                   0x04        /*!<  Position of LOW_POWER field.                                    */
-#define BW_RATE_LOW_POWER_Mask                  0x10        /*!<  Bit mask of LOW_POWER field.                                    */
-#define BW_RATE_LOW_POWER_Enabled               0x01        /*!<  LOW_POWER Enabled.                                              */
-#define BW_RATE_LOW_POWER_Disabled              0x00        /*!<  LOW_POWER Disabled.                                             */
+//#define BW_RATE_LOW_POWER_Pos                   0x04        /*!<  Position of LOW_POWER field.                                    */
+//#define BW_RATE_LOW_POWER_Mask                  0x10        /*!<  Bit mask of LOW_POWER field.                                    */
+//#define BW_RATE_LOW_POWER_Enabled               0x01        /*!<  LOW_POWER Enabled.                                              */
+//#define BW_RATE_LOW_POWER_Disabled              0x00        /*!<  LOW_POWER Disabled.                                             */
+
+typedef enum{
+    BW_RATE_LOW_POWER_Enabled       =       true,        /*!<  LOW_POWER Enabled.                                              */
+    BW_RATE_LOW_POWER_Disabled      =       false        /*!<  LOW_POWER Disabled.                                             */
+} AXDL345_bw_rate_low_power_t;
+
+
 
 /* Bit 3 - 0 : RATE ( D3 - D0 ). */
 /* Normal operation */
-#define BW_RATE_RATE_Pos                        0x00        /*!<  Position of RATE field.                                         */
-#define BW_RATE_RATE_Mask                       0x0F        /*!<  Bit mask of RATE field.                                         */
-#define BW_RATE_RATE_3200HZ                     0x0F        /*!<  RATE 3200 Hz.                                                   */
-#define BW_RATE_RATE_1600HZ                     0x0E        /*!<  RATE 1600 Hz.                                                   */
-#define BW_RATE_RATE_800HZ                      0x0D        /*!<  RATE 800 Hz.                                                    */
-#define BW_RATE_RATE_400HZ                      0x0C        /*!<  RATE 400 Hz.                                                    */
-#define BW_RATE_RATE_200HZ                      0x0B        /*!<  RATE 200 Hz.                                                    */
-#define BW_RATE_RATE_100HZ                      0x0A        /*!<  RATE 100 Hz. ( DEFAULT )                                        */
-#define BW_RATE_RATE_50HZ                       0x09        /*!<  RATE 50 Hz.                                                     */
-#define BW_RATE_RATE_25HZ                       0x08        /*!<  RATE 25 Hz.                                                     */
-#define BW_RATE_RATE_12_5HZ                     0x07        /*!<  RATE 12.5 Hz.                                                   */
-#define BW_RATE_RATE_6_25HZ                     0x06        /*!<  RATE 6.25 Hz.                                                   */
-#define BW_RATE_RATE_3_13HZ                     0x05        /*!<  RATE 3.13 Hz.                                                   */
-#define BW_RATE_RATE_1_56HZ                     0x04        /*!<  RATE 1.56 Hz.                                                   */
-#define BW_RATE_RATE_0_78HZ                     0x03        /*!<  RATE 0.78 Hz.                                                   */
-#define BW_RATE_RATE_0_39HZ                     0x02        /*!<  RATE 0.39 Hz.                                                   */
-#define BW_RATE_RATE_0_20HZ                     0x01        /*!<  RATE 0.20 Hz.                                                   */
-#define BW_RATE_RATE_0_10HZ                     0x00        /*!<  RATE 0.10 Hz.                                                   */
+//#define BW_RATE_RATE_Pos                        0x00        /*!<  Position of RATE field.                                         */
+//#define BW_RATE_RATE_Mask                       0x0F        /*!<  Bit mask of RATE field.                                         */
+//#define BW_RATE_RATE_3200HZ                     0x0F        /*!<  RATE 3200 Hz.                                                   */
+//#define BW_RATE_RATE_1600HZ                     0x0E        /*!<  RATE 1600 Hz.                                                   */
+//#define BW_RATE_RATE_800HZ                      0x0D        /*!<  RATE 800 Hz.                                                    */
+//#define BW_RATE_RATE_400HZ                      0x0C        /*!<  RATE 400 Hz.                                                    */
+//#define BW_RATE_RATE_200HZ                      0x0B        /*!<  RATE 200 Hz.                                                    */
+//#define BW_RATE_RATE_100HZ                      0x0A        /*!<  RATE 100 Hz. ( DEFAULT )                                        */
+//#define BW_RATE_RATE_50HZ                       0x09        /*!<  RATE 50 Hz.                                                     */
+//#define BW_RATE_RATE_25HZ                       0x08        /*!<  RATE 25 Hz.                                                     */
+//#define BW_RATE_RATE_12_5HZ                     0x07        /*!<  RATE 12.5 Hz.                                                   */
+//#define BW_RATE_RATE_6_25HZ                     0x06        /*!<  RATE 6.25 Hz.                                                   */
+//#define BW_RATE_RATE_3_13HZ                     0x05        /*!<  RATE 3.13 Hz.                                                   */
+//#define BW_RATE_RATE_1_56HZ                     0x04        /*!<  RATE 1.56 Hz.                                                   */
+//#define BW_RATE_RATE_0_78HZ                     0x03        /*!<  RATE 0.78 Hz.                                                   */
+//#define BW_RATE_RATE_0_39HZ                     0x02        /*!<  RATE 0.39 Hz.                                                   */
+//#define BW_RATE_RATE_0_20HZ                     0x01        /*!<  RATE 0.20 Hz.                                                   */
+//#define BW_RATE_RATE_0_10HZ                     0x00        /*!<  RATE 0.10 Hz.                                                   */
+
+
+typedef enum{
+    BW_RATE_RATE_3200HZ         =       0x0F,        /*!<  RATE 3200 Hz.                                                   */
+    BW_RATE_RATE_1600HZ         =       0x0E,        /*!<  RATE 1600 Hz.                                                   */
+    BW_RATE_RATE_800HZ          =       0x0D,        /*!<  RATE 800 Hz.                                                    */
+    BW_RATE_RATE_400HZ          =       0x0C,        /*!<  RATE 400 Hz.                                                    */
+    BW_RATE_RATE_200HZ          =       0x0B,        /*!<  RATE 200 Hz.                                                    */
+    BW_RATE_RATE_100HZ          =       0x0A,        /*!<  RATE 100 Hz. ( DEFAULT )                                        */
+    BW_RATE_RATE_50HZ           =       0x09,        /*!<  RATE 50 Hz.                                                     */
+    BW_RATE_RATE_25HZ           =       0x08,        /*!<  RATE 25 Hz.                                                     */
+    BW_RATE_RATE_12_5HZ         =       0x07,        /*!<  RATE 12.5 Hz.                                                   */
+    BW_RATE_RATE_6_25HZ         =       0x06,        /*!<  RATE 6.25 Hz.                                                   */
+    BW_RATE_RATE_3_13HZ         =       0x05,        /*!<  RATE 3.13 Hz.                                                   */
+    BW_RATE_RATE_1_56HZ         =       0x04,        /*!<  RATE 1.56 Hz.                                                   */
+    BW_RATE_RATE_0_78HZ         =       0x03,        /*!<  RATE 0.78 Hz.                                                   */
+    BW_RATE_RATE_0_39HZ         =       0x02,        /*!<  RATE 0.39 Hz.                                                   */
+    BW_RATE_RATE_0_20HZ         =       0x01,        /*!<  RATE 0.20 Hz.                                                   */
+    BW_RATE_RATE_0_10HZ         =       0x00         /*!<  RATE 0.10 Hz.                                                   */
+} AXDL345_bw_rate_rate_t;
+
+
+
 
 /* Low Power operation */
 #define BW_RATE_RATE_LOW_POWER_400HZ            0x0C        /*!<  RATE 400 Hz.                                                    */
@@ -390,42 +424,83 @@
   * @brief   DATA_FORMAT
   */
 /* Bit 7 : SELF_TEST ( D7 ). */
-#define DATA_FORMAT_SELF_TEST_Pos                0x07        /*!<  Position of SELF_TEST field.                                      */
-#define DATA_FORMAT_SELF_TEST_Mask               0x80        /*!<  Bit mask of SELF_TEST field.                                      */
-#define DATA_FORMAT_SELF_TEST_Enabled            0x01        /*!<  SELF_TEST Enabled.                                                */
-#define DATA_FORMAT_SELF_TEST_Disabled           0x00        /*!<  SELF_TEST Disabled.                                               */
+//#define DATA_FORMAT_SELF_TEST_Pos                0x07        /*!<  Position of SELF_TEST field.                                      */
+//#define DATA_FORMAT_SELF_TEST_Mask               0x80        /*!<  Bit mask of SELF_TEST field.                                      */
+//#define DATA_FORMAT_SELF_TEST_Enabled            0x01        /*!<  SELF_TEST Enabled.                                                */
+//#define DATA_FORMAT_SELF_TEST_Disabled           0x00        /*!<  SELF_TEST Disabled.                                               */
+
+typedef enum{
+    DATA_FORMAT_SELF_TEST_Enabled       =       true,        /*!<  SELF_TEST Enabled.                                                */
+    DATA_FORMAT_SELF_TEST_Disabled      =       false        /*!<  SELF_TEST Disabled.                                               */
+} ADXL345_data_format_self_test_t;
+
 
 /* Bit 6 : SPI ( D6 ). */
-#define DATA_FORMAT_SPI_Pos                      0x06        /*!<  Position of SPI field.                                            */
-#define DATA_FORMAT_SPI_Mask                     0x40        /*!<  Bit mask of SPI field.                                            */
-#define DATA_FORMAT_SPI_Enabled                  0x01        /*!<  SPI Enabled.                                                      */
-#define DATA_FORMAT_SPI_Disabled                 0x00        /*!<  SPI Disabled.                                                     */
+//#define DATA_FORMAT_SPI_Pos                      0x06        /*!<  Position of SPI field.                                            */
+//#define DATA_FORMAT_SPI_Mask                     0x40        /*!<  Bit mask of SPI field.                                            */
+//#define DATA_FORMAT_SPI_Enabled                  0x01        /*!<  SPI Enabled.                                                      */
+//#define DATA_FORMAT_SPI_Disabled                 0x00        /*!<  SPI Disabled.                                                     */
+
+typedef enum{
+    DATA_FORMAT_SPI_Enabled             =       true,        /*!<  3-wire SPI Enabled.                                               */
+    DATA_FORMAT_SPI_Disabled            =       false        /*!<  4-wire SPI Enabled.                                               */
+} ADXL345_data_format_spi_t;
+
 
 /* Bit 5 : INT_INVERT ( D5 ). */
-#define DATA_FORMAT_INT_INVERT_Pos               0x05        /*!<  Position of INT_INVERT field.                                      */
-#define DATA_FORMAT_INT_INVERT_Mask              0x20        /*!<  Bit mask of INT_INVERT field.                                      */
-#define DATA_FORMAT_INT_INVERT_Enabled           0x01        /*!<  INT_INVERT Enabled.                                                */
-#define DATA_FORMAT_INT_INVERT_Disabled          0x00        /*!<  INT_INVERT Disabled.                                               */
+//#define DATA_FORMAT_INT_INVERT_Pos               0x05        /*!<  Position of INT_INVERT field.                                      */
+//#define DATA_FORMAT_INT_INVERT_Mask              0x20        /*!<  Bit mask of INT_INVERT field.                                      */
+//#define DATA_FORMAT_INT_INVERT_Enabled           0x01        /*!<  INT_INVERT Enabled.                                                */
+//#define DATA_FORMAT_INT_INVERT_Disabled          0x00        /*!<  INT_INVERT Disabled.                                               */
+
+typedef enum{
+    DATA_FORMAT_INT_INVERT_Enabled             =       true,        /*!<  INT_INVERT Enabled.                                                */
+    DATA_FORMAT_INT_INVERT_Disabled            =       false        /*!<  INT_INVERT Disabled.                                               */
+} ADXL345_data_format_int_invert_t;
+
+
 
 /* Bit 3 : FULL_RES ( D3 ). */
-#define DATA_FORMAT_FULL_RES_Pos                 0x03        /*!<  Position of FULL_RES field.                                        */
-#define DATA_FORMAT_FULL_RES_Mask                0x08        /*!<  Bit mask of FULL_RES field.                                        */
-#define DATA_FORMAT_FULL_RES_Enabled             0x01        /*!<  FULL_RES Enabled.                                                  */
-#define DATA_FORMAT_FULL_RES_Disabled            0x00        /*!<  FULL_RES Disabled.                                                 */
+//#define DATA_FORMAT_FULL_RES_Pos                 0x03        /*!<  Position of FULL_RES field.                                        */
+//#define DATA_FORMAT_FULL_RES_Mask                0x08        /*!<  Bit mask of FULL_RES field.                                        */
+//#define DATA_FORMAT_FULL_RES_Enabled             0x01        /*!<  FULL_RES Enabled.                                                  */
+//#define DATA_FORMAT_FULL_RES_Disabled            0x00        /*!<  FULL_RES Disabled.                                                 */
+
+
+typedef enum{
+    DATA_FORMAT_FULL_RES_Enabled             =       true,        /*!<  FULL_RES Enabled.                                                */
+    DATA_FORMAT_FULL_RES_Disabled            =       false        /*!<  FULL_RES Disabled.                                               */
+} ADXL345_data_format_full_res_t;
+
 
 /* Bit 2 : JUSTIFY ( D2 ). */
-#define DATA_FORMAT_JUSTIFY_Pos                  0x02        /*!<  Position of JUSTIFY field.                                         */
-#define DATA_FORMAT_JUSTIFY_Mask                 0x04        /*!<  Bit mask of JUSTIFY field.                                         */
-#define DATA_FORMAT_JUSTIFY_Enabled              0x01        /*!<  JUSTIFY Enabled.                                                   */
-#define DATA_FORMAT_JUSTIFY_Disabled             0x00        /*!<  JUSTIFY Disabled.                                                  */
+//#define DATA_FORMAT_JUSTIFY_Pos                  0x02        /*!<  Position of JUSTIFY field.                                         */
+//#define DATA_FORMAT_JUSTIFY_Mask                 0x04        /*!<  Bit mask of JUSTIFY field.                                         */
+//#define DATA_FORMAT_JUSTIFY_Enabled              0x01        /*!<  JUSTIFY Enabled.                                                   */
+//#define DATA_FORMAT_JUSTIFY_Disabled             0x00        /*!<  JUSTIFY Disabled.                                                  */
+
+typedef enum{
+    DATA_FORMAT_JUSTIFY_Enabled             =       true,        /*!<  JUSTIFY Enabled.                                                */
+    DATA_FORMAT_JUSTIFY_Disabled            =       false        /*!<  JUSTIFY Disabled.                                               */
+} ADXL345_data_format_justify_t;
+
+
 
 /* Bit 1 - 0 : RANGE ( D1 - D0 ). */
-#define DATA_FORMAT_RANGE_Pos                    0x00        /*!<  Position of RANGE field.                                           */
-#define DATA_FORMAT_RANGE_Mask                   0x03        /*!<  Bit mask of RANGE field.                                           */
-#define DATA_FORMAT_RANGE_2_G                    0x00        /*!<  RANGE ±2g.                                                         */
-#define DATA_FORMAT_RANGE_4_G                    0x01        /*!<  RANGE ±4g.                                                         */
-#define DATA_FORMAT_RANGE_8_G                    0x02        /*!<  RANGE ±8g.                                                         */
-#define DATA_FORMAT_RANGE_16_G                   0x03        /*!<  RANGE ±16g.                                                        */
+//#define DATA_FORMAT_RANGE_Pos                    0x00        /*!<  Position of RANGE field.                                           */
+//#define DATA_FORMAT_RANGE_Mask                   0x03        /*!<  Bit mask of RANGE field.                                           */
+//#define DATA_FORMAT_RANGE_2_G                    0x00        /*!<  RANGE ±2g.                                                         */
+//#define DATA_FORMAT_RANGE_4_G                    0x01        /*!<  RANGE ±4g.                                                         */
+//#define DATA_FORMAT_RANGE_8_G                    0x02        /*!<  RANGE ±8g.                                                         */
+//#define DATA_FORMAT_RANGE_16_G                   0x03        /*!<  RANGE ±16g.                                                        */
+
+typedef enum{
+    DATA_FORMAT_RANGE_2_G       =       0x00,        /*!<  RANGE ±2g.                                                         */
+    DATA_FORMAT_RANGE_4_G       =       0x01,        /*!<  RANGE ±4g.                                                         */
+    DATA_FORMAT_RANGE_8_G       =       0x02,        /*!<  RANGE ±8g.                                                         */
+    DATA_FORMAT_RANGE_16_G      =       0x03         /*!<  RANGE ±16g.                                                        */
+} ADXL345_data_format_range_t;
+
 
 
 /**
@@ -462,9 +537,14 @@
 /**
   * @brief   INTERNAL CONSTANTS
   */
+typedef enum{
+    ADXL345_SUCCESS     =       0,
+    ADXL345_FAILURE     =       1
+} ADXL345_status_t;
+/*
 #define ADXL345_SUCCESS                                              0x00
 #define ADXL345_FAILURE                                              0x01
-
+*/
 
 
 /**
@@ -477,5 +557,8 @@ uint32_t    ADXL345_Mode;
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-uint32_t  ADXL345_GetID          ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myID );
+ADXL345_status_t  ADXL345_GetID          ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myID );
+ADXL345_status_t  ADXL345_Init           ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_low_power_t LOWPOWER, AXDL345_bw_rate_rate_t RATE,
+                                           ADXL345_data_format_int_invert_t INT_INVERT, ADXL345_data_format_full_res_t FULLRESOLUTION, ADXL345_data_format_justify_t JUSTIFY,
+                                           ADXL345_data_format_range_t RANGE );
 
