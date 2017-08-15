@@ -28,6 +28,10 @@ int main( void )
     uint32_t aux           =       0;
     uint8_t  myID[]        =       { 0 };
 
+    Vector_t                    myXYZVector, *myXYZptr = &myXYZVector;
+    Vector_f                    myScaled_XYZVector, *myScaled_XYZptr = &myScaled_XYZVector;
+    AXDL345_bw_rate_rate_t      myRate, *myRateptr = &myRate;
+
     conf_GPIO   ();
     conf_UART   ();
     conf_TWI0   ();
@@ -37,6 +41,13 @@ int main( void )
     ADXL345_Init   ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, BW_RATE_LOW_POWER_Disabled, BW_RATE_RATE_100HZ,
                      DATA_FORMAT_INT_INVERT_Disabled, DATA_FORMAT_FULL_RES_Disabled, DATA_FORMAT_JUSTIFY_Disabled,
                      DATA_FORMAT_RANGE_2_G );
+
+
+    ADXL345_SetRate  ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, BW_RATE_RATE_400HZ );
+    ADXL345_GetRate  ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, &myRateptr[0] );
+
+
+    ADXL345_PowerMode ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, MEASURE_MODE );
 
 
     mySTATE                  =   0;                 // Reset counter
@@ -58,8 +69,11 @@ int main( void )
 		switch ( mySTATE ){
         default:
         case 1:
-            aux = ADXL345_GetID ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, &myID[0] );
+            aux = ADXL345_GetID             ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, &myID[0] );
+            aux = ADXL345_ReadRawData       ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, &myXYZptr[0] );
+            aux = ADXL345_ReadScaledData    ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, &myScaled_XYZptr[0] );
             mySTATE =   0;
+            __NOP();
             break;
 
         case 2:
