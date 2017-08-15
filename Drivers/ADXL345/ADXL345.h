@@ -269,16 +269,6 @@ typedef enum{
 
 
 
-
-/* Low Power operation */
-#define BW_RATE_RATE_LOW_POWER_400HZ            0x0C        /*!<  RATE 400 Hz.                                                    */
-#define BW_RATE_RATE_LOW_POWER_200HZ            0x0B        /*!<  RATE 200 Hz.                                                    */
-#define BW_RATE_RATE_LOW_POWER_100HZ            0x0A        /*!<  RATE 100 Hz. ( DEFAULT )                                        */
-#define BW_RATE_RATE_LOW_POWER_50HZ             0x09        /*!<  RATE 50 Hz.                                                     */
-#define BW_RATE_RATE_LOW_POWER_25HZ             0x08        /*!<  RATE 25 Hz.                                                     */
-#define BW_RATE_RATE_LOW_POWER_12_5HZ           0x07        /*!<  RATE 12.5 Hz.                                                   */
-
-
 /**
   * @brief   POWER_CTL
   */
@@ -295,10 +285,17 @@ typedef enum{
 #define POWER_CTL_AUTO_SLEEP_Disabled           0x00        /*!<  AUTO_SLEEP Disabled.                                             */
 
 /* Bit 3 : MEASURE ( D3 ). */
-#define POWER_CTL_MEASURE_Pos                   0x03        /*!<  Position of MEASURE field.                                        */
-#define POWER_CTL_MEASURE_Mask                  0x08        /*!<  Bit mask of MEASURE field.                                        */
-#define POWER_CTL_MEASURE_Enabled               0x01        /*!<  MEASURE Enabled.                                                  */
-#define POWER_CTL_MEASURE_Disabled              0x00        /*!<  MEASURE Disabled.                                                 */
+//#define POWER_CTL_MEASURE_Pos                   0x03        /*!<  Position of MEASURE field.                                        */
+//#define POWER_CTL_MEASURE_Mask                  0x08        /*!<  Bit mask of MEASURE field.                                        */
+//#define POWER_CTL_MEASURE_Enabled               0x01        /*!<  MEASURE Enabled.                                                  */
+//#define POWER_CTL_MEASURE_Disabled              0x00        /*!<  MEASURE Disabled.                                                 */
+
+typedef enum{
+    MEASURE_MODE        =       true,        /*!<  MEASURE Enabled.                                                  */
+    STANDBY_MODE        =       false        /*!<  MEASURE Disabled, Standby mode.                                   */
+} AXDL345_power_ctl_measure_t;
+
+
 
 /* Bit 2 : SLEEP ( D2 ). */
 #define POWER_CTL_SLEEP_Pos                     0x02        /*!<  Position of SLEEP field.                                          */
@@ -533,6 +530,22 @@ typedef enum{
 
 
 
+#ifndef VECTOR_STRUCT_H
+#define VECTOR_STRUCT_H
+typedef struct{
+    int16_t XAxis;
+    int16_t YAxis;
+    int16_t ZAxis;
+} Vector_t;
+
+
+typedef struct{
+    float Xmg_Axis;
+    float Ymg_Axis;
+    float Zmg_Axis;
+} Vector_f;
+#endif
+
 
 /**
   * @brief   INTERNAL CONSTANTS
@@ -557,8 +570,20 @@ uint32_t    ADXL345_Mode;
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-ADXL345_status_t  ADXL345_GetID          ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myID );
 ADXL345_status_t  ADXL345_Init           ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_low_power_t LOWPOWER, AXDL345_bw_rate_rate_t RATE,
                                            ADXL345_data_format_int_invert_t INT_INVERT, ADXL345_data_format_full_res_t FULLRESOLUTION, ADXL345_data_format_justify_t JUSTIFY,
                                            ADXL345_data_format_range_t RANGE );
+
+ADXL345_status_t  ADXL345_PowerMode      ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_power_ctl_measure_t MEASUREMODE );
+
+ADXL345_status_t  ADXL345_GetID          ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myID );
+
+ADXL345_status_t  ADXL345_GetRange       ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_data_format_range_t* myRANGE );
+ADXL345_status_t  ADXL345_SetRange       ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_data_format_range_t  myRANGE );
+
+ADXL345_status_t  ADXL345_GetRate        ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_rate_t* myRATE );
+ADXL345_status_t  ADXL345_SetRate        ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_rate_t  myRATE );
+
+ADXL345_status_t  ADXL345_ReadRawData    ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, Vector_t* myXYZVector );
+ADXL345_status_t  ADXL345_ReadScaledData ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, Vector_f* myScaled_XYZVector );
 
