@@ -42,11 +42,11 @@ void UART0_IRQHandler(void)
         // Clear UART TX event flag.
         NRF_UART0->EVENTS_TXDRDY = 0;
 
-        // Send only 1-Byte
-        if ( dataToBeTX  < 1 )           // 2 ( MSB + LSB ) - 1 = 1. NOTE: One byte was just transmitted previously.
+        // Send only 5-Byte
+        if ( dataToBeTX  < 5 )           // 6 - 1 = 5. NOTE: One byte was just transmitted previously.
         {
         // Transmit data
-            NRF_UART0->TXD   =   *myPtr;
+            NRF_UART0->TXD   =   *myPtr++;
             dataToBeTX++;
         }
         else
