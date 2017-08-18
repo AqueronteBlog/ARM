@@ -11,6 +11,7 @@
  * @version     11/August/2017    The ORIGIN
  * @pre         Although the ADXL345 can be handled by SPI or I2C, this library is only
  *              adapted to be used by I2C.
+ * @pre         FIFO functions are NOT implemented.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
@@ -76,62 +77,43 @@ typedef enum{
   * @brief   ACT_INACT_CTL
   */
 /* Bit 7 : ACT ac/dc ( D7 ). */
-#define ACT_INACT_CTL_ACT_DC_Pos                0x07        /*!<  Position of ACT_DC field.                                      */
-#define ACT_INACT_CTL_ACT_DC_Mask               0x80        /*!<  Bit mask of ACT_DC field.                                      */
-#define ACT_INACT_CTL_ACT_DC_Enabled            0x01        /*!<  ACT_DC Enabled.                                                */
-#define ACT_INACT_CTL_ACT_DC_Disabled           0x00        /*!<  ACT_DC Disabled.                                               */
+typedef enum{
+    ACTIVITY_DC_Enabled     =   1,                          /*!<  Activity DC-Coupled Enabled.                                   */
+    ACTIVITY_AC_Enabled     =   2                           /*!<  Activity AC-Coupled Enabled.                                   */
+} ADXL345_act_inact_ctl_activity_dc_coupled_t;
 
-#define ACT_INACT_CTL_ACT_AC_Pos                0x07        /*!<  Position of INACT_AC field.                                    */
-#define ACT_INACT_CTL_ACT_AC_Mask               0x80        /*!<  Bit mask of INACT_AC field.                                    */
-#define ACT_INACT_CTL_ACT_AC_Enabled            0x00        /*!<  INACT_AC Enabled.                                              */
-#define ACT_INACT_CTL_ACT_AC_Disabled           0x01        /*!<  INACT_AC Disabled.                                             */
 
-/* Bit 6 : ACT_X enable ( D6 ). */
-#define ACT_INACT_CTL_ACT_X_Pos                 0x06        /*!<  Position of ACT_X field.                                       */
-#define ACT_INACT_CTL_ACT_X_Mask                0x40        /*!<  Bit mask of ACT_X field.                                       */
-#define ACT_INACT_CTL_ACT_X_Enabled             0x01        /*!<  ACT_X Enabled.                                                 */
-#define ACT_INACT_CTL_ACT_X_Disabled            0x00        /*!<  ACT_X Disabled.                                                */
+/* Bit 6 - 4 : ACT_X ( D6 ), ACT_Y ( D5 ) y ACT_Z enable ( D4 ). */
+typedef enum{
+    ACT_X_Enabled     =   1,                                /*!<  X-axis Enabled.                                                */
+    ACT_Y_Enabled     =   2,                                /*!<  Y-axis Enabled.                                                */
+    ACT_Z_Enabled     =   3,                                /*!<  Z-axis Enabled.                                                */
+    ACT_YZ_Enabled    =   4,                                /*!<  YZ-axis Enabled.                                               */
+    ACT_XZ_Enabled    =   5,                                /*!<  XZ-axis Enabled.                                               */
+    ACT_XY_Enabled    =   6,                                /*!<  XY-axis Enabled.                                               */
+    ACT_XYZ_Enabled   =   7,                                /*!<  XYZ-axis Enabled.                                              */
+    ACT_XYZ_Disabled  =   8                                 /*!<  XYZ-axis Disabled.                                             */
+} ADXL345_act_inact_ctl_activity_axis_t;
 
-/* Bit 5 : ACT_Y enable  ( D5 ). */
-#define ACT_INACT_CTL_ACT_Y_Pos                 0x05        /*!<  Position of ACT_Y field.                                       */
-#define ACT_INACT_CTL_ACT_Y_Mask                0x20        /*!<  Bit mask of ACT_Y field.                                       */
-#define ACT_INACT_CTL_ACT_Y_Enabled             0x01        /*!<  ACT_Y Enabled.                                                 */
-#define ACT_INACT_CTL_ACT_Y_Disabled            0x00        /*!<  ACT_Y Disabled.                                                */
-
-/* Bit 4 : ACT_Z enable ( D4 ). */
-#define ACT_INACT_CTL_ACT_Z_Pos                 0x04        /*!<  Position of ACT_Z field.                                       */
-#define ACT_INACT_CTL_ACT_Z_Mask                0x10        /*!<  Bit mask of ACT_Z field.                                       */
-#define ACT_INACT_CTL_ACT_Z_Enabled             0x01        /*!<  ACT_Z Enabled.                                                 */
-#define ACT_INACT_CTL_ACT_Z_Disabled            0x00        /*!<  ACT_Z Disabled.                                                */
 
 /* Bit 3 : INACT ac/dc ( D3 ). */
-#define ACT_INACT_CTL_INACT_DC_Pos              0x03        /*!<  Position of INACT_DC field.                                    */
-#define ACT_INACT_CTL_INACT_DC_Mask             0x08        /*!<  Bit mask of INACT_DC field.                                    */
-#define ACT_INACT_CTL_INACT_DC_Enabled          0x01        /*!<  INACT_DC Enabled.                                              */
-#define ACT_INACT_CTL_INACT_DC_Disabled         0x00        /*!<  INACT_DC Disabled.                                             */
+typedef enum{
+    INACTIVITY_DC_Enabled     =   1,                        /*!<  Inactivity DC-Coupled Enabled.                                 */
+    INACTIVITY_AC_Enabled     =   2                         /*!<  Inactivity AC-Coupled Enabled.                                 */
+} ADXL345_act_inact_ctl_inactivity_dc_coupled_t;
 
-#define ACT_INACT_CTL_INACT_AC_Pos              0x03        /*!<  Position of INACT_AC field.                                    */
-#define ACT_INACT_CTL_INACT_AC_Mask             0x08        /*!<  Bit mask of INACT_AC field.                                    */
-#define ACT_INACT_CTL_INACT_AC_Enabled          0x00        /*!<  INACT_AC Enabled.                                              */
-#define ACT_INACT_CTL_INACT_AC_Disabled         0x01        /*!<  INACT_AC Disabled.                                             */
 
-/* Bit 2 : INACT_X enable ( D2 ). */
-#define ACT_INACT_CTL_INACT_X_Pos               0x02        /*!<  Position of INACT_X field.                                     */
-#define ACT_INACT_CTL_INACT_X_Mask              0x04        /*!<  Bit mask of INACT_X field.                                     */
-#define ACT_INACT_CTL_INACT_X_Enabled           0x01        /*!<  INACT_X Enabled.                                               */
-#define ACT_INACT_CTL_INACT_X_Disabled          0x00        /*!<  INACT_X Disabled.                                              */
-
-/* Bit 1 : INACT_Y enable ( D1 ). */
-#define ACT_INACT_CTL_INACT_Y_Pos               0x01        /*!<  Position of INACT_Y field.                                     */
-#define ACT_INACT_CTL_INACT_Y_Mask              0x02        /*!<  Bit mask of INACT_Y field.                                     */
-#define ACT_INACT_CTL_INACT_Y_Enabled           0x01        /*!<  INACT_Y Enabled.                                               */
-#define ACT_INACT_CTL_INACT_Y_Disabled          0x00        /*!<  INACT_Y Disabled.                                              */
-
-/* Bit 0 : INACT_Z enable ( D0 ). */
-#define ACT_INACT_CTL_INACT_Z_Pos               0x00        /*!<  Position of INACT_Z field.                                     */
-#define ACT_INACT_CTL_INACT_Z_Mask              0x01        /*!<  Bit mask of INACT_Z field.                                     */
-#define ACT_INACT_CTL_INACT_Z_Enabled           0x01        /*!<  INACT_Z Enabled.                                               */
-#define ACT_INACT_CTL_INACT_Z_Disabled          0x00        /*!<  INACT_Z Disabled.                                              */
+/* Bit 2 - 0 : INACT_X ( D2 ), INACT_X ( D1 ) y INACT_X enable ( D0 ). */
+typedef enum{
+    INACT_X_Enabled     =   1,                              /*!<  X-axis Enabled.                                                */
+    INACT_Y_Enabled     =   2,                              /*!<  Y-axis Enabled.                                                */
+    INACT_Z_Enabled     =   3,                              /*!<  Z-axis Enabled.                                                */
+    INACT_YZ_Enabled    =   4,                              /*!<  YZ-axis Enabled.                                               */
+    INACT_XZ_Enabled    =   5,                              /*!<  XZ-axis Enabled.                                               */
+    INACT_XY_Enabled    =   6,                              /*!<  XY-axis Enabled.                                               */
+    INACT_XYZ_Enabled   =   7,                              /*!<  XYZ-axis Enabled.                                              */
+    INACT_XYZ_Disabled  =   8                               /*!<  XYZ-axis Disabled.                                             */
+} ADXL345_act_inact_ctl_inactivity_axis_t;
 
 
 
@@ -139,115 +121,37 @@ typedef enum{
   * @brief   TAP_AXES
   */
 /* Bit 3 : SUPPRESS ( D3 ). */
-#define TAP_AXES_SUPPRESS_Pos                   0x03        /*!<  Position of SUPPRESS field.                                    */
-#define TAP_AXES_SUPPRESS_Mask                  0x08        /*!<  Bit mask of SUPPRESS field.                                    */
-#define TAP_AXES_SUPPRESS_Enabled               0x01        /*!<  SUPPRESS Enabled.                                              */
-#define TAP_AXES_SUPPRESS_Disabled              0x00        /*!<  SUPPRESS Disabled.                                             */
+typedef enum{
+    SUPPRESS_Enabled     =   1,                             /*!<  SUPPRESS Enabled.                                             */
+    SUPPRESS_Disabled    =   2                              /*!<  SUPPRESS Disabled.                                            */
+} ADXL345_tap_axes_suppress_t;
 
-/* Bit 2 : TAP_X enable ( D2 ). */
-#define TAP_AXES_TAP_X_Pos                      0x02        /*!<  Position of TAP_X field.                                       */
-#define TAP_AXES_TAP_X_Mask                     0x04        /*!<  Bit mask of TAP_X field.                                       */
-#define TAP_AXES_TAP_X_Enabled                  0x01        /*!<  TAP_X Enabled.                                                 */
-#define TAP_AXES_TAP_X_Disabled                 0x00        /*!<  TAP_X Disabled.                                                */
+/* Bit 2 - 0 : TAP_X ( D2 ), TAP_Y ( D1 ) y TAP_Z enable ( D0 ). */
+typedef enum{
+    TAP_X_Enabled     =   1,                                /*!<  X-axis Enabled.                                                */
+    TAP_Y_Enabled     =   2,                                /*!<  Y-axis Enabled.                                                */
+    TAP_Z_Enabled     =   3,                                /*!<  Z-axis Enabled.                                                */
+    TAP_YZ_Enabled    =   4,                                /*!<  YZ-axis Enabled.                                               */
+    TAP_XZ_Enabled    =   5,                                /*!<  XZ-axis Enabled.                                               */
+    TAP_XY_Enabled    =   6,                                /*!<  XY-axis Enabled.                                               */
+    TAP_XYZ_Enabled   =   7,                                /*!<  XYZ-axis Enabled.                                              */
+    TAP_XYZ_Disabled  =   8                                 /*!<  XYZ-axis Disabled.                                             */
+} ADXL345_tap_axes_axis_t;
 
-/* Bit 1 : TAP_Y enable  ( D1 ). */
-#define TAP_AXES_TAP_Y_Pos                      0x01        /*!<  Position of TAP_Y field.                                       */
-#define TAP_AXES_TAP_Y_Mask                     0x02        /*!<  Bit mask of TAP_Y field.                                       */
-#define TAP_AXES_TAP_Y_Enabled                  0x01        /*!<  TAP_Y Enabled.                                                 */
-#define TAP_AXES_TAP_Y_Disabled                 0x00        /*!<  TAP_Y Disabled.                                                */
-
-/* Bit 0 : TAP_Z enable  ( D0 ). */
-#define TAP_AXES_TAP_Z_Pos                      0x00        /*!<  Position of TAP_Z field.                                       */
-#define TAP_AXES_TAP_Z_Mask                     0x01        /*!<  Bit mask of TAP_Z field.                                       */
-#define TAP_AXES_TAP_Z_Enabled                  0x01        /*!<  TAP_Z Enabled.                                                 */
-#define TAP_AXES_TAP_Z_Disabled                 0x00        /*!<  TAP_Z Disabled.                                                */
-
-
-
-/**
-  * @brief   ACT_TAP_STATUS
-  */
-/* Bit 6 : ACT_X source ( D6 ). */
-#define ACT_TAP_STATUS_ACT_X_Pos                0x06        /*!<  Position of ACT_X field.                                       */
-#define ACT_TAP_STATUS_ACT_X_Mask               0x40        /*!<  Bit mask of ACT_X field.                                       */
-#define ACT_TAP_STATUS_ACT_X_Enabled            0x01        /*!<  ACT_X Enabled.                                                 */
-#define ACT_TAP_STATUS_ACT_X_Disabled           0x00        /*!<  ACT_X Disabled.                                                */
-
-/* Bit 5 : ACT_Y source ( D5 ). */
-#define ACT_TAP_STATUS_ACT_Y_Pos                0x05        /*!<  Position of ACT_Y field.                                       */
-#define ACT_TAP_STATUS_ACT_Y_Mask               0x20        /*!<  Bit mask of ACT_Y field.                                       */
-#define ACT_TAP_STATUS_ACT_Y_Enabled            0x01        /*!<  ACT_Y Enabled.                                                 */
-#define ACT_TAP_STATUS_ACT_Y_Disabled           0x00        /*!<  ACT_Y Disabled.                                                */
-
-/* Bit 4 : ACT_Z source ( D4 ). */
-#define ACT_TAP_STATUS_ACT_Z_Pos                0x04        /*!<  Position of ACT_Z field.                                       */
-#define ACT_TAP_STATUS_ACT_Z_Mask               0x10        /*!<  Bit mask of ACT_Z field.                                       */
-#define ACT_TAP_STATUS_ACT_Z_Enabled            0x01        /*!<  ACT_Z Enabled.                                                 */
-#define ACT_TAP_STATUS_ACT_Z_Disabled           0x00        /*!<  ACT_Z Disabled.                                                */
-
-/* Bit 3 : Asleep ( D3 ). */
-#define ACT_TAP_STATUS_ASLEEP_Pos               0x03        /*!<  Position of ASLEEP field.                                      */
-#define ACT_TAP_STATUS_ASLEEP_Mask              0x08        /*!<  Bit mask of ASLEEP field.                                      */
-#define ACT_TAP_STATUS_ASLEEP_Enabled           0x01        /*!<  ASLEEP Enabled.                                                */
-#define ACT_TAP_STATUS_ASLEEP_Disabled          0x00        /*!<  ASLEEP Disabled.                                               */
-
-/* Bit 2 : TAP_X source  ( D2 ). */
-#define ACT_TAP_STATUS_TAP_X_Pos                0x02        /*!<  Position of TAP_X field.                                       */
-#define ACT_TAP_STATUS_TAP_X_Mask               0x04        /*!<  Bit mask of TAP_X field.                                       */
-#define ACT_TAP_STATUS_TAP_X_Enabled            0x01        /*!<  TAP_X Enabled.                                                 */
-#define ACT_TAP_STATUS_TAP_X_Disabled           0x00        /*!<  TAP_X Disabled.                                                */
-
-/* Bit 1 : TAP_Y source  ( D1 ). */
-#define ACT_TAP_STATUS_TAP_Y_Pos                0x01        /*!<  Position of TAP_Y field.                                       */
-#define ACT_TAP_STATUS_TAP_Y_Mask               0x02        /*!<  Bit mask of TAP_Y field.                                       */
-#define ACT_TAP_STATUS_TAP_Y_Enabled            0x01        /*!<  TAP_Y Enabled.                                                 */
-#define ACT_TAP_STATUS_TAP_Y_Disabled           0x00        /*!<  TAP_Y Disabled.                                                */
-
-/* Bit 0 : TAP_Z source  ( D0 ). */
-#define ACT_TAP_STATUS_TAP_Z_Pos                0x00        /*!<  Position of TAP_Z field.                                       */
-#define ACT_TAP_STATUS_TAP_Z_Mask               0x02        /*!<  Bit mask of TAP_Z field.                                       */
-#define ACT_TAP_STATUS_TAP_Z_Enabled            0x01        /*!<  TAP_Z Enabled.                                                 */
-#define ACT_TAP_STATUS_TAP_Z_Disabled           0x00        /*!<  TAP_Z Disabled.                                                */
 
 
 /**
   * @brief   BW_RATE
   */
 /* Bit 4 : LOW_POWER ( D4 ). */
-//#define BW_RATE_LOW_POWER_Pos                   0x04        /*!<  Position of LOW_POWER field.                                    */
-//#define BW_RATE_LOW_POWER_Mask                  0x10        /*!<  Bit mask of LOW_POWER field.                                    */
-//#define BW_RATE_LOW_POWER_Enabled               0x01        /*!<  LOW_POWER Enabled.                                              */
-//#define BW_RATE_LOW_POWER_Disabled              0x00        /*!<  LOW_POWER Disabled.                                             */
-
 typedef enum{
     BW_RATE_LOW_POWER_Enabled       =       true,        /*!<  LOW_POWER Enabled.                                              */
     BW_RATE_LOW_POWER_Disabled      =       false        /*!<  LOW_POWER Disabled.                                             */
 } AXDL345_bw_rate_low_power_t;
 
 
-
 /* Bit 3 - 0 : RATE ( D3 - D0 ). */
 /* Normal operation */
-//#define BW_RATE_RATE_Pos                        0x00        /*!<  Position of RATE field.                                         */
-//#define BW_RATE_RATE_Mask                       0x0F        /*!<  Bit mask of RATE field.                                         */
-//#define BW_RATE_RATE_3200HZ                     0x0F        /*!<  RATE 3200 Hz.                                                   */
-//#define BW_RATE_RATE_1600HZ                     0x0E        /*!<  RATE 1600 Hz.                                                   */
-//#define BW_RATE_RATE_800HZ                      0x0D        /*!<  RATE 800 Hz.                                                    */
-//#define BW_RATE_RATE_400HZ                      0x0C        /*!<  RATE 400 Hz.                                                    */
-//#define BW_RATE_RATE_200HZ                      0x0B        /*!<  RATE 200 Hz.                                                    */
-//#define BW_RATE_RATE_100HZ                      0x0A        /*!<  RATE 100 Hz. ( DEFAULT )                                        */
-//#define BW_RATE_RATE_50HZ                       0x09        /*!<  RATE 50 Hz.                                                     */
-//#define BW_RATE_RATE_25HZ                       0x08        /*!<  RATE 25 Hz.                                                     */
-//#define BW_RATE_RATE_12_5HZ                     0x07        /*!<  RATE 12.5 Hz.                                                   */
-//#define BW_RATE_RATE_6_25HZ                     0x06        /*!<  RATE 6.25 Hz.                                                   */
-//#define BW_RATE_RATE_3_13HZ                     0x05        /*!<  RATE 3.13 Hz.                                                   */
-//#define BW_RATE_RATE_1_56HZ                     0x04        /*!<  RATE 1.56 Hz.                                                   */
-//#define BW_RATE_RATE_0_78HZ                     0x03        /*!<  RATE 0.78 Hz.                                                   */
-//#define BW_RATE_RATE_0_39HZ                     0x02        /*!<  RATE 0.39 Hz.                                                   */
-//#define BW_RATE_RATE_0_20HZ                     0x01        /*!<  RATE 0.20 Hz.                                                   */
-//#define BW_RATE_RATE_0_10HZ                     0x00        /*!<  RATE 0.10 Hz.                                                   */
-
-
 typedef enum{
     BW_RATE_RATE_3200HZ         =       0x0F,        /*!<  RATE 3200 Hz.                                                   */
     BW_RATE_RATE_1600HZ         =       0x0E,        /*!<  RATE 1600 Hz.                                                   */
@@ -285,11 +189,6 @@ typedef enum{
 #define POWER_CTL_AUTO_SLEEP_Disabled           0x00        /*!<  AUTO_SLEEP Disabled.                                             */
 
 /* Bit 3 : MEASURE ( D3 ). */
-//#define POWER_CTL_MEASURE_Pos                   0x03        /*!<  Position of MEASURE field.                                        */
-//#define POWER_CTL_MEASURE_Mask                  0x08        /*!<  Bit mask of MEASURE field.                                        */
-//#define POWER_CTL_MEASURE_Enabled               0x01        /*!<  MEASURE Enabled.                                                  */
-//#define POWER_CTL_MEASURE_Disabled              0x00        /*!<  MEASURE Disabled.                                                 */
-
 typedef enum{
     MEASURE_MODE        =       true,        /*!<  MEASURE Enabled.                                                  */
     STANDBY_MODE        =       false        /*!<  MEASURE Disabled, Standby mode.                                   */
@@ -314,118 +213,30 @@ typedef enum{
 
 
 /**
-  * @brief   INT_ENABLE
+  * @brief   INT_MAP
   */
-/* Bit 7 : DATA_READY ( D7 ). */
-#define INT_ENABLE_DATA_READY_Pos                0x07        /*!<  Position of DATA_READY field.                                     */
-#define INT_ENABLE_DATA_READY_Mask               0x80        /*!<  Bit mask of DATA_READY field.                                     */
-#define INT_ENABLE_DATA_READY_Enabled            0x01        /*!<  DATA_READY Enabled.                                               */
-#define INT_ENABLE_DATA_READY_Disabled           0x00        /*!<  DATA_READY Disabled.                                              */
+/* Bit 7 - 0 : */
+typedef enum{
+    INT_DATA_READY          =       0x80,                   /*!<  Data ready.                                                       */
+    INT_SINGLE_TAP          =       0x40,                   /*!<  single tap.                                                       */
+    INT_DOUBLE_TAP          =       0x20,                   /*!<  double tap.                                                       */
+    INT_ACTIVITY            =       0x10,                   /*!<  activity.                                                         */
+    INT_INACTIVITY          =       0x08,                   /*!<  inactivity.                                                       */
+    INT_FREE_FALL           =       0x04,                   /*!<  Free fall.                                                        */
+    INT_WATERMARK           =       0x02,                   /*!<  Watermark.                                                        */
+    INT_OVERRUN             =       0x01                    /*!<  Overrun.                                                          */
+} AXDL345_int_map_t;
 
-/* Bit 6 : SINGLE_TAP ( D6 ). */
-#define INT_ENABLE_SINGLE_TAP_Pos                0x06        /*!<  Position of SINGLE_TAP field.                                     */
-#define INT_ENABLE_SINGLE_TAP_Mask               0x40        /*!<  Bit mask of SINGLE_TAP field.                                     */
-#define INT_ENABLE_SINGLE_TAP_Enabled            0x01        /*!<  SINGLE_TAP Enabled.                                               */
-#define INT_ENABLE_SINGLE_TAP_Disabled           0x00        /*!<  SINGLE_TAP Disabled.                                              */
-
-/* Bit 5 : DOUBLE_TAP ( D5 ). */
-#define INT_ENABLE_DOUBLE_TAP_Pos                0x06        /*!<  Position of DOUBLE_TAP field.                                     */
-#define INT_ENABLE_DOUBLE_TAP_Mask               0x20        /*!<  Bit mask of DOUBLE_TAP field.                                     */
-#define INT_ENABLE_DOUBLE_TAP_Enabled            0x01        /*!<  DOUBLE_TAP Enabled.                                               */
-#define INT_ENABLE_DOUBLE_TAP_Disabled           0x00        /*!<  DOUBLE_TAP Disabled.                                              */
-
-/* Bit 4 : ACTIVITY ( D4 ). */
-#define INT_ENABLE_ACTIVITY_Pos                  0x04        /*!<  Position of ACTIVITY field.                                       */
-#define INT_ENABLE_ACTIVITY_Mask                 0x10        /*!<  Bit mask of ACTIVITY field.                                       */
-#define INT_ENABLE_ACTIVITY_Enabled              0x01        /*!<  ACTIVITY Enabled.                                                 */
-#define INT_ENABLE_ACTIVITY_Disabled             0x00        /*!<  ACTIVITY Disabled.                                                */
-
-/* Bit 3 : ACTIVITY ( D3 ). */
-#define INT_ENABLE_INACTIVITY_Pos                0x03        /*!<  Position of INACTIVITY field.                                     */
-#define INT_ENABLE_INACTIVITY_Mask               0x08        /*!<  Bit mask of INACTIVITY field.                                     */
-#define INT_ENABLE_INACTIVITY_Enabled            0x01        /*!<  INACTIVITY Enabled.                                               */
-#define INT_ENABLE_INACTIVITY_Disabled           0x00        /*!<  INACTIVITY Disabled.                                              */
-
-/* Bit 2 : FREE_FALL ( D2 ). */
-#define INT_ENABLE_FREE_FALL_Pos                 0x02        /*!<  Position of FREE_FALL field.                                      */
-#define INT_ENABLE_FREE_FALL_Mask                0x04        /*!<  Bit mask of FREE_FALL field.                                      */
-#define INT_ENABLE_FREE_FALL_Enabled             0x01        /*!<  FREE_FALL Enabled.                                                */
-#define INT_ENABLE_FREE_FALL_Disabled            0x00        /*!<  FREE_FALL Disabled.                                               */
-
-/* Bit 1 : WATERMARK ( D1 ). */
-#define INT_ENABLE_WATERMARK_Pos                 0x01        /*!<  Position of WATERMARK field.                                      */
-#define INT_ENABLE_WATERMARK_Mask                0x02        /*!<  Bit mask of WATERMARK field.                                      */
-#define INT_ENABLE_WATERMARK_Enabled             0x01        /*!<  WATERMARK Enabled.                                                */
-#define INT_ENABLE_WATERMARK_Disabled            0x00        /*!<  WATERMARK Disabled.                                               */
-
-/* Bit 0 : OVERRUN ( D0 ). */
-#define INT_ENABLE_OVERRUN_Pos                   0x00        /*!<  Position of OVERRUN field.                                        */
-#define INT_ENABLE_OVERRUN_Mask                  0x01        /*!<  Bit mask of OVERRUN field.                                        */
-#define INT_ENABLE_OVERRUN_Enabled               0x01        /*!<  OVERRUN Enabled.                                                  */
-#define INT_ENABLE_OVERRUN_Disabled              0x00        /*!<  OVERRUN Disabled.                                                 */
-
-
-/**
-  * @brief   INT_SOURCE
-  */
-/* Bit 7 : DATA_READY ( D7 ). */
-#define INT_SOURCE_DATA_READY_Pos                0x07        /*!<  Position of DATA_READY field.                                     */
-#define INT_SOURCE_DATA_READY_Mask               0x80        /*!<  Bit mask of DATA_READY field.                                     */
-#define INT_SOURCE_DATA_READY_Enabled            0x01        /*!<  DATA_READY Enabled.                                               */
-#define INT_SOURCE_DATA_READY_Disabled           0x00        /*!<  DATA_READY Disabled.                                              */
-
-/* Bit 6 : SINGLE_TAP ( D6 ). */
-#define INT_SOURCE_SINGLE_TAP_Pos                0x06        /*!<  Position of SINGLE_TAP field.                                     */
-#define INT_SOURCE_SINGLE_TAP_Mask               0x40        /*!<  Bit mask of SINGLE_TAP field.                                     */
-#define INT_SOURCE_SINGLE_TAP_Enabled            0x01        /*!<  SINGLE_TAP Enabled.                                               */
-#define INT_SOURCE_SINGLE_TAP_Disabled           0x00        /*!<  SINGLE_TAP Disabled.                                              */
-
-/* Bit 5 : DOUBLE_TAP ( D5 ). */
-#define INT_SOURCE_DOUBLE_TAP_Pos                0x06        /*!<  Position of DOUBLE_TAP field.                                     */
-#define INT_SOURCE_DOUBLE_TAP_Mask               0x20        /*!<  Bit mask of DOUBLE_TAP field.                                     */
-#define INT_SOURCE_DOUBLE_TAP_Enabled            0x01        /*!<  DOUBLE_TAP Enabled.                                               */
-#define INT_SOURCE_DOUBLE_TAP_Disabled           0x00        /*!<  DOUBLE_TAP Disabled.                                              */
-
-/* Bit 4 : ACTIVITY ( D4 ). */
-#define INT_SOURCE_ACTIVITY_Pos                  0x04        /*!<  Position of ACTIVITY field.                                       */
-#define INT_SOURCE_ACTIVITY_Mask                 0x10        /*!<  Bit mask of ACTIVITY field.                                       */
-#define INT_SOURCE_ACTIVITY_Enabled              0x01        /*!<  ACTIVITY Enabled.                                                 */
-#define INT_SOURCE_ACTIVITY_Disabled             0x00        /*!<  ACTIVITY Disabled.                                                */
-
-/* Bit 3 : ACTIVITY ( D3 ). */
-#define INT_SOURCE_INACTIVITY_Pos                0x03        /*!<  Position of INACTIVITY field.                                     */
-#define INT_SOURCE_INACTIVITY_Mask               0x08        /*!<  Bit mask of INACTIVITY field.                                     */
-#define INT_SOURCE_INACTIVITY_Enabled            0x01        /*!<  INACTIVITY Enabled.                                               */
-#define INT_SOURCE_INACTIVITY_Disabled           0x00        /*!<  INACTIVITY Disabled.                                              */
-
-/* Bit 2 : FREE_FALL ( D2 ). */
-#define INT_SOURCE_FREE_FALL_Pos                 0x02        /*!<  Position of FREE_FALL field.                                      */
-#define INT_SOURCE_FREE_FALL_Mask                0x04        /*!<  Bit mask of FREE_FALL field.                                      */
-#define INT_SOURCE_FREE_FALL_Enabled             0x01        /*!<  FREE_FALL Enabled.                                                */
-#define INT_SOURCE_FREE_FALL_Disabled            0x00        /*!<  FREE_FALL Disabled.                                               */
-
-/* Bit 1 : WATERMARK ( D1 ). */
-#define INT_SOURCE_WATERMARK_Pos                 0x01        /*!<  Position of WATERMARK field.                                      */
-#define INT_SOURCE_WATERMARK_Mask                0x02        /*!<  Bit mask of WATERMARK field.                                      */
-#define INT_SOURCE_WATERMARK_Enabled             0x01        /*!<  WATERMARK Enabled.                                                */
-#define INT_SOURCE_WATERMARK_Disabled            0x00        /*!<  WATERMARK Disabled.                                               */
-
-/* Bit 0 : OVERRUN ( D0 ). */
-#define INT_SOURCE_OVERRUN_Pos                   0x00        /*!<  Position of OVERRUN field.                                        */
-#define INT_SOURCE_OVERRUN_Mask                  0x01        /*!<  Bit mask of OVERRUN field.                                        */
-#define INT_SOURCE_OVERRUN_Enabled               0x01        /*!<  OVERRUN Enabled.                                                  */
-#define INT_SOURCE_OVERRUN_Disabled              0x00        /*!<  OVERRUN Disabled.                                                 */
+typedef enum{
+    INT1_PIN                =       0x01,                   /*!<  PIN 1                                                             */
+    INT2_PIN                =       0x02                    /*!<  PIN 2                                                             */
+} AXDL345_int_pin_t;
 
 
 /**
   * @brief   DATA_FORMAT
   */
 /* Bit 7 : SELF_TEST ( D7 ). */
-//#define DATA_FORMAT_SELF_TEST_Pos                0x07        /*!<  Position of SELF_TEST field.                                      */
-//#define DATA_FORMAT_SELF_TEST_Mask               0x80        /*!<  Bit mask of SELF_TEST field.                                      */
-//#define DATA_FORMAT_SELF_TEST_Enabled            0x01        /*!<  SELF_TEST Enabled.                                                */
-//#define DATA_FORMAT_SELF_TEST_Disabled           0x00        /*!<  SELF_TEST Disabled.                                               */
-
 typedef enum{
     DATA_FORMAT_SELF_TEST_Enabled       =       true,        /*!<  SELF_TEST Enabled.                                                */
     DATA_FORMAT_SELF_TEST_Disabled      =       false        /*!<  SELF_TEST Disabled.                                               */
@@ -433,11 +244,6 @@ typedef enum{
 
 
 /* Bit 6 : SPI ( D6 ). */
-//#define DATA_FORMAT_SPI_Pos                      0x06        /*!<  Position of SPI field.                                            */
-//#define DATA_FORMAT_SPI_Mask                     0x40        /*!<  Bit mask of SPI field.                                            */
-//#define DATA_FORMAT_SPI_Enabled                  0x01        /*!<  SPI Enabled.                                                      */
-//#define DATA_FORMAT_SPI_Disabled                 0x00        /*!<  SPI Disabled.                                                     */
-
 typedef enum{
     DATA_FORMAT_SPI_Enabled             =       true,        /*!<  3-wire SPI Enabled.                                               */
     DATA_FORMAT_SPI_Disabled            =       false        /*!<  4-wire SPI Enabled.                                               */
@@ -445,25 +251,13 @@ typedef enum{
 
 
 /* Bit 5 : INT_INVERT ( D5 ). */
-//#define DATA_FORMAT_INT_INVERT_Pos               0x05        /*!<  Position of INT_INVERT field.                                      */
-//#define DATA_FORMAT_INT_INVERT_Mask              0x20        /*!<  Bit mask of INT_INVERT field.                                      */
-//#define DATA_FORMAT_INT_INVERT_Enabled           0x01        /*!<  INT_INVERT Enabled.                                                */
-//#define DATA_FORMAT_INT_INVERT_Disabled          0x00        /*!<  INT_INVERT Disabled.                                               */
-
 typedef enum{
     DATA_FORMAT_INT_INVERT_Enabled             =       true,        /*!<  INT_INVERT Enabled.                                                */
     DATA_FORMAT_INT_INVERT_Disabled            =       false        /*!<  INT_INVERT Disabled.                                               */
 } ADXL345_data_format_int_invert_t;
 
 
-
 /* Bit 3 : FULL_RES ( D3 ). */
-//#define DATA_FORMAT_FULL_RES_Pos                 0x03        /*!<  Position of FULL_RES field.                                        */
-//#define DATA_FORMAT_FULL_RES_Mask                0x08        /*!<  Bit mask of FULL_RES field.                                        */
-//#define DATA_FORMAT_FULL_RES_Enabled             0x01        /*!<  FULL_RES Enabled.                                                  */
-//#define DATA_FORMAT_FULL_RES_Disabled            0x00        /*!<  FULL_RES Disabled.                                                 */
-
-
 typedef enum{
     DATA_FORMAT_FULL_RES_Enabled             =       true,        /*!<  FULL_RES Enabled.                                                */
     DATA_FORMAT_FULL_RES_Disabled            =       false        /*!<  FULL_RES Disabled.                                               */
@@ -471,26 +265,13 @@ typedef enum{
 
 
 /* Bit 2 : JUSTIFY ( D2 ). */
-//#define DATA_FORMAT_JUSTIFY_Pos                  0x02        /*!<  Position of JUSTIFY field.                                         */
-//#define DATA_FORMAT_JUSTIFY_Mask                 0x04        /*!<  Bit mask of JUSTIFY field.                                         */
-//#define DATA_FORMAT_JUSTIFY_Enabled              0x01        /*!<  JUSTIFY Enabled.                                                   */
-//#define DATA_FORMAT_JUSTIFY_Disabled             0x00        /*!<  JUSTIFY Disabled.                                                  */
-
 typedef enum{
     DATA_FORMAT_JUSTIFY_Enabled             =       true,        /*!<  JUSTIFY Enabled.                                                */
     DATA_FORMAT_JUSTIFY_Disabled            =       false        /*!<  JUSTIFY Disabled.                                               */
 } ADXL345_data_format_justify_t;
 
 
-
 /* Bit 1 - 0 : RANGE ( D1 - D0 ). */
-//#define DATA_FORMAT_RANGE_Pos                    0x00        /*!<  Position of RANGE field.                                           */
-//#define DATA_FORMAT_RANGE_Mask                   0x03        /*!<  Bit mask of RANGE field.                                           */
-//#define DATA_FORMAT_RANGE_2_G                    0x00        /*!<  RANGE ±2g.                                                         */
-//#define DATA_FORMAT_RANGE_4_G                    0x01        /*!<  RANGE ±4g.                                                         */
-//#define DATA_FORMAT_RANGE_8_G                    0x02        /*!<  RANGE ±8g.                                                         */
-//#define DATA_FORMAT_RANGE_16_G                   0x03        /*!<  RANGE ±16g.                                                        */
-
 typedef enum{
     DATA_FORMAT_RANGE_2_G       =       0x00,        /*!<  RANGE ±2g.                                                         */
     DATA_FORMAT_RANGE_4_G       =       0x01,        /*!<  RANGE ±4g.                                                         */
@@ -554,36 +335,51 @@ typedef enum{
     ADXL345_SUCCESS     =       0,
     ADXL345_FAILURE     =       1
 } ADXL345_status_t;
-/*
-#define ADXL345_SUCCESS                                              0x00
-#define ADXL345_FAILURE                                              0x01
-*/
 
-
-/**
-  * @brief   INTERNAL VARIABLES
-  */
-uint32_t    ADXL345_Mode;
 
 
 
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-ADXL345_status_t  ADXL345_Init           ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_low_power_t LOWPOWER, AXDL345_bw_rate_rate_t RATE,
-                                           ADXL345_data_format_int_invert_t INT_INVERT, ADXL345_data_format_full_res_t FULLRESOLUTION, ADXL345_data_format_justify_t JUSTIFY,
-                                           ADXL345_data_format_range_t RANGE );
+ADXL345_status_t  ADXL345_Init                          ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_low_power_t LOWPOWER, AXDL345_bw_rate_rate_t RATE,
+                                                          ADXL345_data_format_int_invert_t INT_INVERT, ADXL345_data_format_full_res_t FULLRESOLUTION, ADXL345_data_format_justify_t JUSTIFY,
+                                                          ADXL345_data_format_range_t RANGE );
 
-ADXL345_status_t  ADXL345_PowerMode      ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_power_ctl_measure_t MEASUREMODE );
+ADXL345_status_t  ADXL345_PowerMode                     ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_power_ctl_measure_t MEASUREMODE );
 
-ADXL345_status_t  ADXL345_GetID          ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myID );
+ADXL345_status_t  ADXL345_GetID                         ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myID );
 
-ADXL345_status_t  ADXL345_GetRange       ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_data_format_range_t* myRANGE );
-ADXL345_status_t  ADXL345_SetRange       ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_data_format_range_t  myRANGE );
+ADXL345_status_t  ADXL345_GetRange                      ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_data_format_range_t* myRANGE );
+ADXL345_status_t  ADXL345_SetRange                      ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_data_format_range_t  myRANGE );
 
-ADXL345_status_t  ADXL345_GetRate        ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_rate_t* myRATE );
-ADXL345_status_t  ADXL345_SetRate        ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_rate_t  myRATE );
+ADXL345_status_t  ADXL345_GetRate                       ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_rate_t* myRATE );
+ADXL345_status_t  ADXL345_SetRate                       ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_rate_t  myRATE );
 
-ADXL345_status_t  ADXL345_ReadRawData    ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, Vector_t* myXYZVector );
-ADXL345_status_t  ADXL345_ReadScaledData ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, Vector_f* myScaled_XYZVector );
+ADXL345_status_t  ADXL345_ReadRawData                   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, Vector_t* myXYZVector );
+ADXL345_status_t  ADXL345_ReadScaledData                ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, Vector_f* myScaled_XYZVector );
 
+ADXL345_status_t  ADXL345_SetFreeFallThreshold          ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myThreshold );
+ADXL345_status_t  ADXL345_SetFreeFallDuration           ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myDuration );
+
+ADXL345_status_t  ADXL345_SetTapThreshold               ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myThreshold );
+ADXL345_status_t  ADXL345_SetTapDuration                ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myDuration );
+ADXL345_status_t  ADXL345_SetDoubleTapLatency           ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myLatency );
+ADXL345_status_t  ADXL345_SetDoubleTapWindow            ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myWindow );
+ADXL345_status_t  ADXL345_SetTap_Axis                   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_tap_axes_axis_t myAxisEnabled );
+ADXL345_status_t  ADXL345_SetDouble_Suppress            ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_tap_axes_suppress_t mySuppressEnabled );
+
+ADXL345_status_t  ADXL345_SetActivityThreshold          ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myActivityThreshold );
+ADXL345_status_t  ADXL345_SetActivity_AC_DC_Coupled     ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_activity_dc_coupled_t myDC_Coupled );
+ADXL345_status_t  ADXL345_SetActivity_Axis              ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_activity_axis_t myAxisEnabled );
+
+ADXL345_status_t  ADXL345_Read_ACT_TAP_STATUS           ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myACT_TAP_STATUS );
+
+ADXL345_status_t  ADXL345_SetInactivityThreshold        ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myInactivityThreshold );
+ADXL345_status_t  ADXL345_SetTimeInactivity             ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myTimeInactivity );
+ADXL345_status_t  ADXL345_SetInactivity_AC_DC_Coupled   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_inactivity_dc_coupled_t myDC_Coupled );
+ADXL345_status_t  ADXL345_SetInactivity_Axis            ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_inactivity_axis_t myAxisEnabled );
+
+ADXL345_status_t  ADXL345_SetInterruptsMap              ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_int_map_t myInterruptsMap, AXDL345_int_pin_t myInterruptPin );
+ADXL345_status_t  ADXL345_EnableInterrupts              ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_int_map_t myInterruptsEnabled );
+ADXL345_status_t  ADXL345_ReadInterruptSource           ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myIntSource );
