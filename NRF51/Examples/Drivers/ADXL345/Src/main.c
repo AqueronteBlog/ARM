@@ -1,14 +1,17 @@
 /**
  * @brief       main.c
- * @details     [todo]xxx.
+ * @details     This example works with the external external device: ADXL345,
+ *              3-Axis, ±2 g/±4 g/±8 g/±16 g Digital Accelerometer.
  *
- *              This firmware is just an example about how to use the I2C on the nrf51422.
+ *              It gets a new measurement every 1s and transmits the data thought the UART.
+ *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
  * @date        11/August/2017
- * @version     11/August/2017    The ORIGIN
+ * @version     18/August/2017    All functions tested and final example ready.
+ *              11/August/2017    The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     Softdevice S310 was used although the file's name is S130. The softdevice
@@ -26,11 +29,10 @@
 int main( void )
 {
     uint32_t aux           =       0;
-    uint8_t  myID[]        =       { 0 };
+    uint8_t  myTX_buff[]   =      { 0, 0, 0, 0, 0, 0 };
 
     Vector_t                    myXYZVector, *myXYZptr = &myXYZVector;
-    Vector_f                    myScaled_XYZVector, *myScaled_XYZptr = &myScaled_XYZVector;
-    AXDL345_bw_rate_rate_t      myRate, *myRateptr = &myRate;
+
 
     conf_GPIO   ();
     conf_UART   ();
@@ -39,12 +41,8 @@ int main( void )
 
 
     ADXL345_Init   ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, BW_RATE_LOW_POWER_Disabled, BW_RATE_RATE_100HZ,
-                     DATA_FORMAT_INT_INVERT_Disabled, DATA_FORMAT_FULL_RES_Disabled, DATA_FORMAT_JUSTIFY_Disabled,
-                     DATA_FORMAT_RANGE_2_G );
-
-
-    ADXL345_SetRate  ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, BW_RATE_RATE_400HZ );
-    ADXL345_GetRate  ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, &myRateptr[0] );
+                     DATA_FORMAT_INT_INVERT_Disabled, DATA_FORMAT_FULL_RES_Enabled, DATA_FORMAT_JUSTIFY_Disabled,
+                     DATA_FORMAT_RANGE_4_G );
 
 
     ADXL345_PowerMode ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, MEASURE_MODE );
@@ -69,22 +67,24 @@ int main( void )
 		switch ( mySTATE ){
         default:
         case 1:
-            aux = ADXL345_GetID             ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, &myID[0] );
             aux = ADXL345_ReadRawData       ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, &myXYZptr[0] );
-            aux = ADXL345_ReadScaledData    ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, &myScaled_XYZptr[0] );
-            mySTATE =   0;
-            __NOP();
             break;
 
         case 2:
-            break;
-
-            /*
-        case 3:
             // Start transmitting through the UART
             NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
 
-            myPtr                        =   &myRawLux[0];
+            // X-axis
+            myTX_buff[0]                 =   ( myXYZVector.XAxis & 0xFF );
+            myTX_buff[1]                 =   ( ( myXYZVector.XAxis >> 8 ) & 0xFF );
+            // Y-axis
+            myTX_buff[2]                 =   ( myXYZVector.YAxis & 0xFF );
+            myTX_buff[3]                 =   ( ( myXYZVector.YAxis >> 8 ) & 0xFF );
+            // Z-axis
+            myTX_buff[4]                 =   ( myXYZVector.ZAxis & 0xFF );
+            myTX_buff[5]                 =   ( ( myXYZVector.ZAxis >> 8 ) & 0xFF );
+
+            myPtr                        =   &myTX_buff[0];
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   *myPtr++;              // MSB to be transmitted
@@ -99,7 +99,6 @@ int main( void )
 
             mySTATE =   0;
             break;
-            */
 		}
 
         //__NOP();
