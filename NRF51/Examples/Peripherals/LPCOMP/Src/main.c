@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo] xxx
+ * @details     Every time that AN2 is higher than VDD*4/8, an UP-interrupt is triggered.
  *
  *              This firmware is just an example about how to use the LPCOMP on the nrf51422. The system
  *              will handle everything on the Interruptions ( Low power mode selected ).
