@@ -29,7 +29,7 @@ int main( void )
     uint32_t aux           =       0;
     uint8_t  myTX_buff[]   =      { 0, 0, 0, 0, 0, 0 };
 
-    Vector_cal_coeff_t myCalCoeff, *myCalCoeff_ptr = &myCalCoeff;
+    Vector_cal_coeff_t myCalCoeff;
 
 
     conf_GPIO   ();
