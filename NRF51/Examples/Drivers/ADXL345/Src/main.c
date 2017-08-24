@@ -75,14 +75,14 @@ int main( void )
             NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
 
             // X-axis
-            myTX_buff[0]                 =   ( myXYZVector.XAxis & 0xFF );
-            myTX_buff[1]                 =   ( ( myXYZVector.XAxis >> 8 ) & 0xFF );
+            myTX_buff[0]                 =   ( myXYZVector.XAxis & 0xFF );              // X-axis LSB byte
+            myTX_buff[1]                 =   ( ( myXYZVector.XAxis >> 8 ) & 0xFF );     // X-axis MSB byte
             // Y-axis
-            myTX_buff[2]                 =   ( myXYZVector.YAxis & 0xFF );
-            myTX_buff[3]                 =   ( ( myXYZVector.YAxis >> 8 ) & 0xFF );
+            myTX_buff[2]                 =   ( myXYZVector.YAxis & 0xFF );              // Y-axis LSB Y-axis byte
+            myTX_buff[3]                 =   ( ( myXYZVector.YAxis >> 8 ) & 0xFF );     // Y-axis MSB byte
             // Z-axis
-            myTX_buff[4]                 =   ( myXYZVector.ZAxis & 0xFF );
-            myTX_buff[5]                 =   ( ( myXYZVector.ZAxis >> 8 ) & 0xFF );
+            myTX_buff[4]                 =   ( myXYZVector.ZAxis & 0xFF );              // Z-axis LSB byte
+            myTX_buff[5]                 =   ( ( myXYZVector.ZAxis >> 8 ) & 0xFF );     // Z-axis MSB byte
 
             myPtr                        =   &myTX_buff[0];
             TX_inProgress                =   YES;
