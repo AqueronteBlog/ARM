@@ -22,4 +22,4 @@ void LPCOMP_IRQHandler    ( void );
 
 
 /* VARIABLES */
-extern uint8_t myADCvalue;
+extern uint8_t myLEDstate;

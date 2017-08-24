@@ -17,7 +17,7 @@
 
 /**
  * @brief       void LPCOMP_IRQHandler ()
- * @details     [TODO] XXX.
+ * @details     It changes the state of the LED1 when an UP event occurs.
  *
  *
  * @return      NA
@@ -32,7 +32,14 @@ void LPCOMP_IRQHandler()
 {
     if ( ( NRF_LPCOMP->EVENTS_UP != 0 ) && ( NRF_LPCOMP->INTENSET & LPCOMP_INTENSET_UP_Msk ) )
     {
-        NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );                   // Turn the LED1 on
+        if ( myLEDstate == ON ){
+            NRF_GPIO->OUTSET        =   ( 1UL << LED1 );                   // Turn the LED1 off
+            myLEDstate              =    OFF;
+        }
+        else{
+            NRF_GPIO->OUTCLR        =   ( 1UL << LED1 );                   // Turn the LED1 on
+            myLEDstate              =    ON;
+        }
 
         NRF_LPCOMP->EVENTS_UP        =   0;                                 // Clear ( flag )
     }
