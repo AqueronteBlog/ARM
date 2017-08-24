@@ -66,14 +66,15 @@ typedef enum{
 /**
   * @brief   TEMPERATURE
   */
-#define BMP085_TEMPERATURE              0x2E        /*!<   Read Temperature                                              */
-
+#define BMP085_TRIGGER_TEMPERATURE      0x2E        /*!<   Trigger a new Temperature measurement                        */
+#define BMP085_READ_TEMPERATURE         0xF6        /*!<   Read Temperature                                             */
 
 /* Commands Registers */
 /**
   * @brief   PRESSURE
   */
-#define BMP085_PRESSURE                 0x34        /*!<   Read Pressure                                                */
+#define BMP085_TRIGGER_PRESSURE         0x34        /*!<   Trigger a new Pressure measurement                           */
+#define BMP085_READ_PRESSURE            0xF6        /*!<   Read Pressure                                                */
 
 typedef enum{
     PRESSURE_ULTRA_LOW_POWER_MODE     =   0,        /*!<  Pressure: Ultra low power mode.                                */
@@ -127,7 +128,9 @@ typedef enum{
   * @brief   FUNCTION PROTOTYPES
   */
 BMP085_status_t  BMP085_GetCalibrationCoefficients    ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_cal_coeff_t* myCalCoeff );
+BMP085_status_t  BMP085_TriggerTemperature            ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR );
 BMP085_status_t  BMP085_ReadRawTemperature            ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_temp_f* myRawTemperature );
-BMP085_status_t  BMP085_ReadRawPressure               ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, BMP085_pressure_osrs_t myResolution, Vector_pressure_f* myRawPressure );
-BMP085_status_t  BMP085_ReadCompensatedTemperature    ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_temp_f* myCalCoeff );
-BMP085_status_t  BMP085_ReadCompensatedPressure       ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, BMP085_pressure_osrs_t myResolution, Vector_pressure_f* myCalCoeff );
+BMP085_status_t  BMP085_ReadCompensatedTemperature    ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_temp_f* myTrueTemperature );
+BMP085_status_t  BMP085_TriggerPressure               ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, BMP085_pressure_osrs_t myResolution );
+BMP085_status_t  BMP085_ReadRawPressure               ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_pressure_f* myRawPressure );
+BMP085_status_t  BMP085_ReadCompensatedPressure       ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_pressure_f* myTruePressure );
