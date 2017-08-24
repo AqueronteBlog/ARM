@@ -29,11 +29,16 @@ int main( void )
     uint32_t aux           =       0;
     uint8_t  myTX_buff[]   =      { 0, 0, 0, 0, 0, 0 };
 
+    Vector_cal_coeff_t myCalCoeff, *myCalCoeff_ptr = &myCalCoeff;
+
+
     conf_GPIO   ();
     conf_UART   ();
     conf_TWI0   ();
     conf_TIMER0 ();
 
+
+    aux = BMP085_GetCalibrationCoefficients  ( NRF_TWI0, BMP085_ADDRESS, &myCalCoeff );
 
 
     mySTATE                  =   0;                 // Reset counter
