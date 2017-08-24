@@ -25,4 +25,4 @@
 
 
 /* VARIABLES */
-uint8_t myADCvalue;                      /*!<   It will store the data from the ADC     */
+uint8_t myLEDstate;                      /*!<   It indicates the LED state: ON/OFF     */
