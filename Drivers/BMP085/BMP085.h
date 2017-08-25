@@ -104,12 +104,17 @@ typedef struct{
 
 
 typedef struct{
-    int16_t Temperature;
+    int16_t UT_Temperature;
 } Vector_temp_f;
 
 typedef struct{
-    int32_t Pressure;
+    int32_t UP_Pressure;
 } Vector_pressure_f;
+
+typedef struct{
+    int16_t Temperature;
+    int32_t Pressure;
+} Vector_compensated_data_f;
 #endif
 
 
@@ -130,7 +135,9 @@ typedef enum{
 BMP085_status_t  BMP085_GetCalibrationCoefficients    ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_cal_coeff_t* myCalCoeff );
 BMP085_status_t  BMP085_TriggerTemperature            ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR );
 BMP085_status_t  BMP085_ReadRawTemperature            ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_temp_f* myRawTemperature );
-BMP085_status_t  BMP085_ReadCompensatedTemperature    ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_temp_f* myTrueTemperature );
+BMP085_status_t  BMP085_ReadCompensatedTemperature    ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_temp_f* myTrueTemperature, Vector_cal_coeff_t myCalCoeff );
 BMP085_status_t  BMP085_TriggerPressure               ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, BMP085_pressure_osrs_t myResolution );
 BMP085_status_t  BMP085_ReadRawPressure               ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_pressure_f* myRawPressure );
-BMP085_status_t  BMP085_ReadCompensatedPressure       ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_pressure_f* myTruePressure );
+
+Vector_compensated_data_f  BMP085_CalculateCompensated_Temperature_Pressure ( Vector_cal_coeff_t myCalCoeff, Vector_temp_f myRawTemperature, Vector_pressure_f myRawPressure,
+                                                                              BMP085_pressure_osrs_t myResolution );
