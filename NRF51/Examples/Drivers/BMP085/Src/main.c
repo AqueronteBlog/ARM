@@ -1,8 +1,9 @@
 /**
  * @brief       main.c
- * @details     [TODO] XXX.
+ * @details     This example shows how to work with the external device BPM085 a Digital
+ *              Pressure Sensor.
  *
- *              It gets a new measurement every 1s and transmits the data thought the UART.
+ *              It transmits the compensated temperature and pressure every 1s thought the UART.
  *
  *
  * @return      NA
@@ -29,8 +30,10 @@ int main( void )
     uint32_t aux           =       0;
     uint8_t  myTX_buff[]   =      { 0, 0, 0, 0, 0, 0 };
 
-    Vector_cal_coeff_t myCalCoeff;
-
+    Vector_cal_coeff_t          myCalCoeff;
+    Vector_temp_f               myUT;
+    Vector_pressure_f           myUP;
+    Vector_compensated_data_f   myTrueData;
 
     conf_GPIO   ();
     conf_UART   ();
@@ -41,7 +44,7 @@ int main( void )
     aux = BMP085_GetCalibrationCoefficients  ( NRF_TWI0, BMP085_ADDRESS, &myCalCoeff );
 
 
-    mySTATE                  =   0;                 // Reset counter
+    mySTATE                  =   1;                 // Reset counter
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
@@ -58,24 +61,31 @@ int main( void )
 		__WFE();
 
 		switch ( mySTATE ){
-        default:
+        //default:
         case 1:
-
+            aux = BMP085_TriggerTemperature ( NRF_TWI0, BMP085_ADDRESS );
             break;
 
         case 2:
+            aux = BMP085_ReadRawTemperature ( NRF_TWI0, BMP085_ADDRESS, &myUT );
+            aux = BMP085_TriggerPressure ( NRF_TWI0, BMP085_ADDRESS, PRESSURE_STANDARD_MODE );
+            break;
+        case 3:
+            aux = BMP085_ReadRawPressure ( NRF_TWI0, BMP085_ADDRESS, &myUP );
+
+            myTrueData = BMP085_CalculateCompensated_Temperature_Pressure ( myCalCoeff, myUT, myUP, PRESSURE_STANDARD_MODE );
             // Start transmitting through the UART
             NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
-/*
+
             // X-axis
-            myTX_buff[0]                 =   ( myXYZVector.XAxis & 0xFF );
-            myTX_buff[1]                 =   ( ( myXYZVector.XAxis >> 8 ) & 0xFF );
+            myTX_buff[0]                 =   ( myTrueData.Temperature & 0xFF );             // LSB Temperature
+            myTX_buff[1]                 =   ( ( myTrueData.Temperature >> 8 ) & 0xFF );    // MSB Temperature
             // Y-axis
-            myTX_buff[2]                 =   ( myXYZVector.YAxis & 0xFF );
-            myTX_buff[3]                 =   ( ( myXYZVector.YAxis >> 8 ) & 0xFF );
+            myTX_buff[2]                 =   ( myTrueData.Pressure & 0xFF );                // LSB Pressure
+            myTX_buff[3]                 =   ( ( myTrueData.Pressure >> 8 ) & 0xFF );
             // Z-axis
-            myTX_buff[4]                 =   ( myXYZVector.ZAxis & 0xFF );
-            myTX_buff[5]                 =   ( ( myXYZVector.ZAxis >> 8 ) & 0xFF );
+            myTX_buff[4]                 =   ( ( myTrueData.Pressure >> 16 ) & 0xFF );
+            myTX_buff[5]                 =   ( ( myTrueData.Pressure >> 24 ) & 0xFF );      // MSB Pressure
 
             myPtr                        =   &myTX_buff[0];
             TX_inProgress                =   YES;
@@ -89,7 +99,7 @@ int main( void )
                 __SEV();
                 __WFE();
             }
-*/
+
             mySTATE =   0;
             break;
 		}
