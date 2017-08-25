@@ -19,7 +19,7 @@
  * @brief       void UART0_IRQHandler ()
  * @details     It sends the collected data from the external sensor through the UART.
  *
- *              One byte was just sent, so there are 1-Byte left
+ *              One byte was just sent, so there are 5-Bytes left
  *              waiting to be transmitted.
  *
  *              The LED1 will be turned off to indicate that the UART
