@@ -27,7 +27,7 @@
 
 int main( void )
 {
-    uint32_t aux           =       0;
+    MCP4725_status_t aux;
 
     //Vector_cal_coeff_t          myCalCoeff;
     //Vector_temp_f               myUT;
@@ -39,7 +39,8 @@ int main( void )
     conf_TIMER0 ();
 
 
-    //aux = BMP085_GetCalibrationCoefficients  ( NRF_TWI0, BMP085_ADDRESS, &myCalCoeff );
+    aux = MCP4725_Reset  ( NRF_TWI0 );
+    aux = MCP4725_WakeUp ( NRF_TWI0 );
 
 
     mySTATE                  =   1;                 // Reset counter
@@ -58,30 +59,27 @@ int main( void )
 		__SEV();
 		__WFE();
 
-/* [TODO]
+
 		switch ( mySTATE ){
-        //default:
+        default:
         case 1:
-            aux = BMP085_TriggerTemperature ( NRF_TWI0, BMP085_ADDRESS );
+            NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
+            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, FAST_MODE, 0 );
             break;
 
         case 2:
-            aux = BMP085_ReadRawTemperature ( NRF_TWI0, BMP085_ADDRESS, &myUT );
-            aux = BMP085_TriggerPressure ( NRF_TWI0, BMP085_ADDRESS, PRESSURE_STANDARD_MODE );
+            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_AND_EEPROM_REGISTER_MODE, 2048 );
             break;
-        case 3:
-            aux = BMP085_ReadRawPressure ( NRF_TWI0, BMP085_ADDRESS, &myUP );
 
-            myTrueData = BMP085_CalculateCompensated_Temperature_Pressure ( myCalCoeff, myUT, myUP, PRESSURE_STANDARD_MODE );
-            // Start transmitting through the UART
-            NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
+        case 3:
+            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_REGISTER_MODE, 4095 );
 
             mySTATE =   0;
+            NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
             break;
 		}
 
         //__NOP();
-*/
 
     }
 }
