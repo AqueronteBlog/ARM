@@ -40,7 +40,8 @@
 uint32_t    i2c_write   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_buff, uint32_t i2c_data_length, uint32_t i2c_generate_stop )
 {
     uint32_t    i                   =   0;
-    uint32_t    i2c_timeout         =   0;
+    uint32_t    i2c_timeout1        =   0;
+    uint32_t    i2c_timeout2        =   0;
     uint32_t    i2c_default_addr    =   0;
 
 
@@ -60,8 +61,8 @@ uint32_t    i2c_write   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_
     {
         myinstance->TXD              =   *i2c_buff;
 
-        i2c_timeout                =   232323;
-        while( ( myinstance->EVENTS_TXDSENT == 0 ) && ( --i2c_timeout ) );        // Wait until the data is transmitted or timeout
+        i2c_timeout1               =   232323;
+        while( ( myinstance->EVENTS_TXDSENT == 0 ) && ( --i2c_timeout1 ) );       // Wait until the data is transmitted or timeout1
         myinstance->EVENTS_TXDSENT   =   0;                                       // reset flag
 
         i2c_buff++;
@@ -72,8 +73,8 @@ uint32_t    i2c_write   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_
     {
         myinstance->EVENTS_STOPPED   =   0;
         myinstance->TASKS_STOP       =   1;
-        i2c_timeout                =   232323;
-        while( ( myinstance->EVENTS_STOPPED == 0 ) && ( --i2c_timeout ) );
+        i2c_timeout2               =   232323;
+        while( ( myinstance->EVENTS_STOPPED == 0 ) && ( --i2c_timeout2 ) );
         myinstance->EVENTS_STOPPED   =   0;
     }
 
@@ -83,7 +84,7 @@ uint32_t    i2c_write   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_
 
 
     // Check if everything went fine
-    if ( i2c_timeout < 1 )
+    if ( ( i2c_timeout1 < 1 ) || ( i2c_timeout2 < 1 ) )
         return I2C_FAILURE;
     else
         return I2C_SUCCESS;
@@ -112,7 +113,8 @@ uint32_t    i2c_write   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_
 uint32_t    i2c_read   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_buff, uint32_t i2c_data_length )
 {
     uint32_t    i                   =   0;
-    uint32_t    i2c_timeout         =   0;
+    uint32_t    i2c_timeout1        =   0;
+    uint32_t    i2c_timeout2        =   0;
     uint32_t    i2c_default_addr    =   0;
 
 
@@ -146,8 +148,8 @@ uint32_t    i2c_read   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_b
                                                                                 //       will be clocked one byte later.
 
     // Wait until the data arrives or timeout
-        i2c_timeout                =   232323;
-        while( ( myinstance->EVENTS_RXDREADY == 0 ) && ( --i2c_timeout ) );     // Wait until the data is read or timeout
+        i2c_timeout1                 =   232323;
+        while( ( myinstance->EVENTS_RXDREADY == 0 ) && ( --i2c_timeout1 ) );    // Wait until the data is read or timeout1
         myinstance->EVENTS_RXDREADY  =   0;                                     // reset flag
 
     // Read data and prepare the next one
@@ -156,9 +158,9 @@ uint32_t    i2c_read   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_b
     }
 
 
-    // Wait until the STOP event is produced or timeout
-    i2c_timeout                =   232323;
-    while( ( myinstance->EVENTS_STOPPED == 0 ) && ( --i2c_timeout ) );
+    // Wait until the STOP event is produced or timeout2
+    i2c_timeout2                 =   232323;
+    while( ( myinstance->EVENTS_STOPPED == 0 ) && ( --i2c_timeout2 ) );
     myinstance->EVENTS_STOPPED   =   0;
 
 
@@ -172,7 +174,7 @@ uint32_t    i2c_read   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_b
 
 
     // Check if everything went fine
-    if ( i2c_timeout < 1 )
+    if ( ( i2c_timeout1 < 1 ) || ( i2c_timeout2 < 1 ) )
         return I2C_FAILURE;
     else
         return I2C_SUCCESS;
