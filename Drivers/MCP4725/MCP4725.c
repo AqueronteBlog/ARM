@@ -1,356 +1,295 @@
 /**
- * @brief       BMP085.c
- * @details     Digital pressure sensor.
+ * @brief       MCP4725.c
+ * @details     12-Bit Digital-to-Analog Converter with EEPROM Memory.
  *              Functions file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        24/August/2017
- * @version     24/August/2017    The ORIGIN
+ * @date        7/September/2017
+ * @version     7/September/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
- #include "BMP085.h"
+ #include "MCP4725.h"
 
 
 /**
- * @brief       BMP085_GetCalibrationCoefficients   ( NRF_TWI_Type* , BMP085_address_t , Vector_cal_coeff_t* )
+ * @brief       MCP4725_Reset   ( NRF_TWI_Type* )
  *
- * @details     It gets the calibration coefficients.
+ * @details     It performs an internal reset similar to a
+ *              power-on-reset ( POR ).
  *
  * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
  *
- * @param[out]   Vector_cal_coeff_t:    Calibration coefficients.
+ * @param[out]   NaN.
  *
  *
- * @return       Status of BMP085_GetCalibrationCoefficients.
+ * @return       Status of MCP4725_Reset.
  *
  *
  * @author      Manuel Caballero
- * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
+ * @date        7/September/2017
+ * @version     7/September/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     The user MUST respect the time it takes this instruction to be
+ *              performed ( max. 50ms ).
+ */
+MCP4725_status_t  MCP4725_Reset   ( NRF_TWI_Type* myinstance )
+{
+    uint8_t     cmd                 =    MCP4725_GENERAL_CALL_RESET;
+    uint32_t    aux                 =    0;
+
+
+    aux = i2c_write ( myinstance, MCP4725_GENERAL_CALL, &cmd, 1, I2C_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MCP4725_SUCCESS;
+    else
+       return   MCP4725_FAILURE;
+}
+
+
+
+/**
+ * @brief       MCP4725_WakeUp   ( NRF_TWI_Type* )
+ *
+ * @details     The power-down bits of the DAC register are set to a normal operation.
+ *
+ * @param[in]    myinstance:            Peripheral's Instance.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of MCP4725_WakeUp.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        7/September/2017
+ * @version     7/September/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-BMP085_status_t  BMP085_GetCalibrationCoefficients  ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_cal_coeff_t* myCalCoeff )
+MCP4725_status_t  MCP4725_WakeUp   ( NRF_TWI_Type* myinstance )
 {
-    uint8_t     cmd[22]             =   { 0 };
+    uint8_t     cmd                 =    MCP4725_GENERAL_CALL_WAKE_UP;
     uint32_t    aux                 =    0;
 
-    cmd[0]   =   BMP085_AC1_MSB;
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[0], 22 );
-
-    // Parse the data
-    myCalCoeff->AC1  =   ( cmd[0]  << 8 ) | cmd[1];
-    myCalCoeff->AC2  =   ( cmd[2]  << 8 ) | cmd[3];
-    myCalCoeff->AC3  =   ( cmd[4]  << 8 ) | cmd[5];
-    myCalCoeff->AC4  =   ( cmd[6]  << 8 ) | cmd[7];
-    myCalCoeff->AC5  =   ( cmd[8]  << 8 ) | cmd[9];
-    myCalCoeff->AC6  =   ( cmd[10] << 8 ) | cmd[11];
-    myCalCoeff->B1   =   ( cmd[12] << 8 ) | cmd[13];
-    myCalCoeff->B2   =   ( cmd[14] << 8 ) | cmd[15];
-    myCalCoeff->MB   =   ( cmd[16] << 8 ) | cmd[17];
-    myCalCoeff->MC   =   ( cmd[18] << 8 ) | cmd[19];
-    myCalCoeff->MD   =   ( cmd[20] << 8 ) | cmd[21];
+    aux = i2c_write ( myinstance, MCP4725_GENERAL_CALL, &cmd, 1, I2C_STOP_BIT );
 
 
 
     if ( aux == I2C_SUCCESS )
-       return   BMP085_SUCCESS;
+       return   MCP4725_SUCCESS;
     else
-       return   BMP085_FAILURE;
+       return   MCP4725_FAILURE;
 }
 
 
 /**
- * @brief       BMP085_TriggerTemperature   ( NRF_TWI_Type* , BMP085_address_t )
+ * @brief       MCP4725_PowerMode ( NRF_TWI_Type* , MCP4725_address_t , MCP4725_write_command_type_t , MCP4725_operation_mode_t )
  *
- * @details     It triggers a new temperature measurement.
+ * @details     It configures the power mode of the device.
  *
  * @param[in]    myinstance:            Peripheral's Instance.
  * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myWriteCMD:            It writes the command into the DAC or EEPROM/DAC.
+ * @param[in]    myPowerMode:           Normal Mode or one of the Power-Down available modes.
  *
  * @param[out]   NaN.
  *
  *
- * @return       Status of BMP085_TriggerTemperature.
+ * @return       Status of MCP4725_PowerMode.
  *
  *
  * @author      Manuel Caballero
- * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
+ * @date        7/September/2017
+ * @version     7/September/2017   The ORIGIN
  * @pre         NaN
- * @warning     The user MUST respect the maximum temperature conversion time, in this
- *              case, that value is 4.5ms.
+ * @warning     NaN.
  */
-BMP085_status_t  BMP085_TriggerTemperature  ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR )
+MCP4725_status_t  MCP4725_PowerMode ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_write_command_type_t myWriteCMD, MCP4725_operation_mode_t myPowerMode )
 {
-    uint8_t     cmd[]             =   { BMP085_CONTROL, BMP085_TRIGGER_TEMPERATURE };
+    uint8_t     cmd[]             =    { 0, 0, 0, 0, 0, 0 };
     uint32_t    aux               =    0;
+    uint32_t    dataTX            =    3;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    // Read the device to mask the default value
+    aux = i2c_read ( myinstance, ADDR, &cmd[0], 5 );
+
+
+
+    // Choose the power mode
+    switch ( myPowerMode ){
+        default:
+        case NORMAL_MODE:
+                cmd[0]   =  0;
+                break;
+
+        case POWER_DOWN_1KOHM_RESISTIVE_LOAD_MODE:
+                cmd[0]   =  0x01;
+                break;
+
+        case POWER_DOWN_100KOHM_RESISTIVE_LOAD_MODE:
+                cmd[0]   =  0x02;
+                break;
+
+        case POWER_DOWN_500KOHM_RESISTIVE_LOAD_MODE:
+                cmd[0]   =  0x03;
+                break;
+    }
+
+
+    // Prepare the data according to the write mode
+    switch ( myWriteCMD ){
+        default:
+        case FAST_MODE:
+                cmd[0] <<=  4;
+                cmd[0]  |=  ( ( cmd[1] & 0xF0 ) >> 4 );
+                cmd[1]   =  ( ( cmd[1] & 0x0F ) << 4 );
+                cmd[1]  |=  ( ( cmd[2] & 0xF0 ) >> 4 );
+
+                dataTX   =   2;
+                break;
+
+        case WRITE_DAC_REGISTER_MODE:
+                cmd[0] <<=  1;
+                cmd[0]  |=  0x40;
+                break;
+
+        case WRITE_DAC_AND_EEPROM_REGISTER_MODE:
+                cmd[0] <<=  1;
+                cmd[0]  |=  0x60;
+                break;
+    }
+
+
+
+    aux = i2c_write ( myinstance, ADDR, &cmd[0], dataTX, I2C_STOP_BIT );
 
 
 
     if ( aux == I2C_SUCCESS )
-       return   BMP085_SUCCESS;
+       return   MCP4725_SUCCESS;
     else
-       return   BMP085_FAILURE;
-}
-
-
-/**
- * @brief       BMP085_ReadRawTemperature   ( NRF_TWI_Type* , BMP085_address_t , Vector_temp_f* )
- *
- * @details     It reads an uncompensated temperature.
- *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
- *
- * @param[out]   myRawTemperature:      Uncompensated temperature.
- *
- *
- * @return       Status of BMP085_ReadRawTemperature.
- *
- *
- * @author      Manuel Caballero
- * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
- * @pre         BMP085_TriggerTemperature function MUST be called before calling this one.
- * @warning     The user MUST respect the maximum temperature conversion time, in this
- *              case, that value is 4.5ms.
- */
-BMP085_status_t  BMP085_ReadRawTemperature  ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_temp_f* myRawTemperature )
-{
-    uint8_t     cmd[]             =   { BMP085_READ_TEMPERATURE, 0 };
-    uint32_t    aux               =    0;
-
-
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[0], 2 );
-
-
-    // Parse the data
-    myRawTemperature->UT_Temperature    =   ( cmd[0] << 8 ) | cmd[1];
-
-
-
-    if ( aux == I2C_SUCCESS )
-       return   BMP085_SUCCESS;
-    else
-       return   BMP085_FAILURE;
-}
-
-
-/**
- * @brief       BMP085_ReadCompensatedTemperature   ( NRF_TWI_Type* , BMP085_address_t , Vector_temp_f*, Vector_cal_coeff_t )
- *
- * @details     It reads an compensated/true temperature.
- *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
- * @param[in]    myCalCoeff:            Calibration coefficients.
- *
- * @param[out]   myTrueTemperature:      Compensated/True temperature.
- *
- *
- * @return       Status of BMP085_ReadCompensatedTemperature.
- *
- *
- * @author      Manuel Caballero
- * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
- * @pre         Both BMP085_TriggerTemperature and BMP085_GetCalibrationCoefficients functions MUST be called before calling this one.
- * @warning     The user MUST respect the maximum temperature conversion time, in this
- *              case, that value is 4.5ms.
- */
-BMP085_status_t  BMP085_ReadCompensatedTemperature ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_temp_f* myTrueTemperature, Vector_cal_coeff_t myCalCoeff )
-{
-    uint32_t    aux               =    0;
-    int32_t     X1, X2, B5;
-
-    Vector_temp_f myRawTemperature;
-
-
-    aux = BMP085_ReadRawTemperature ( myinstance, ADDR, &myRawTemperature );
-
-
-    // Parse the data
-    X1   =   ( ( myRawTemperature.UT_Temperature - myCalCoeff.AC6 ) * myCalCoeff.AC5 ) / 32768;
-    X2   =   ( myCalCoeff.MC * 2048 ) / ( X1 + myCalCoeff.MD );
-    B5   =   X1 + X2;
-
-    myTrueTemperature->UT_Temperature   =   ( B5 + 8 ) / 16;
-
-
-    if ( aux == I2C_SUCCESS )
-       return   BMP085_SUCCESS;
-    else
-       return   BMP085_FAILURE;
+       return   MCP4725_FAILURE;
 }
 
 
 
 /**
- * @brief       BMP085_TriggerPressure   ( NRF_TWI_Type* , BMP085_address_t, BMP085_pressure_osrs_t )
+ * @brief       MCP4725_SetNewValue ( NRF_TWI_Type* , MCP4725_address_t , MCP4725_write_command_type_t , uint32_t )
  *
- * @details     It triggers a new pressure measurement.
+ * @details     It sends a new output value.
  *
  * @param[in]    myinstance:            Peripheral's Instance.
  * @param[in]    ADDR:                  I2C Device's address.
- * @param[in]    myResolution:          Pressure resolution.
+ * @param[in]    myWriteCMD:            It writes the command into the DAC or EEPROM/DAC.
+ * @param[in]    myDACNewValue:         New output value.
  *
  * @param[out]   NaN.
  *
  *
- * @return       Status of BMP085_TriggerPressure.
+ * @return       Status of MCP4725_SetNewValue.
  *
  *
  * @author      Manuel Caballero
- * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
+ * @date        7/September/2017
+ * @version     7/September/2017   The ORIGIN
  * @pre         NaN
- * @warning     The user MUST respect the maximum pressure conversion time:
- *                  Ultra Low Power Mode:   4.5ms.
- *                  Standard Mode:          7.5ms.
- *                  High Resolution Mode:   13.5ms.
- *                  Ultra High Res. Mode:   25.5ms.
+ * @warning     NaN.
  */
-BMP085_status_t  BMP085_TriggerPressure  ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, BMP085_pressure_osrs_t myResolution )
+MCP4725_status_t  MCP4725_SetNewValue   ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_write_command_type_t myWriteCMD, uint32_t myDACNewValue )
 {
-    uint8_t     cmd[]             =   { BMP085_CONTROL, BMP085_TRIGGER_PRESSURE };
+    uint8_t     cmd[]             =    { 0, 0, 0 };
     uint32_t    aux               =    0;
-
-    // adjust the pressure resolution
-    cmd[1]   |=   ( myResolution << 6 );
+    uint32_t    dataTX            =    3;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    // 12-Bit of resolution ONLY!
+    if ( myDACNewValue > 4095 )
+        return  MCP4725_FAILURE;
+
+
+    // Prepare the data according to the write mode
+    cmd[1]  |=  ( ( myDACNewValue & 0xFF0 ) >> 4 );
+    cmd[2]  |=  ( ( myDACNewValue & 0x00F ) << 4 );
+
+    switch ( myWriteCMD ){
+        default:
+        case FAST_MODE:
+                cmd[0]  |=  ( ( myDACNewValue & 0xF00 ) >> 8 );
+                cmd[1]   =  ( myDACNewValue & 0x0FF );
+
+                dataTX   =   2;
+                break;
+
+        case WRITE_DAC_REGISTER_MODE:
+                cmd[0]  |=  0x40;
+                break;
+
+        case WRITE_DAC_AND_EEPROM_REGISTER_MODE:
+                cmd[0]  |=  0x60;
+                break;
+    }
+
+
+
+    aux = i2c_write ( myinstance, ADDR, &cmd[0], dataTX, I2C_STOP_BIT );
 
 
 
     if ( aux == I2C_SUCCESS )
-       return   BMP085_SUCCESS;
+       return   MCP4725_SUCCESS;
     else
-       return   BMP085_FAILURE;
+       return   MCP4725_FAILURE;
 }
 
 
+
 /**
- * @brief       BMP085_ReadRawPressure   ( NRF_TWI_Type* , BMP085_address_t , Vector_pressure_f* )
+ * @brief       MCP4725_EEPROM_Status ( NRF_TWI_Type* , MCP4725_address_t , MCP4725_eeprom_status_t )
  *
- * @details     It reads an uncompensated temperature.
+ * @details     It gets the eeprom status.
  *
  * @param[in]    myinstance:            Peripheral's Instance.
  * @param[in]    ADDR:                  I2C Device's address.
- *
- * @param[out]   myRawPressure:         Uncompensated temperature.
- *
- *
- * @return       Status of BMP085_ReadRawPressure.
- *
- *
- * @author      Manuel Caballero
- * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
- * @pre         BMP085_TriggerPressure function MUST be called before calling this one.
- * @warning     The user MUST respect the maximum pressure conversion time:
- *                  Ultra Low Power Mode:   4.5ms.
- *                  Standard Mode:          7.5ms.
- *                  High Resolution Mode:   13.5ms.
- *                  Ultra High Res. Mode:   25.5ms.
- */
-BMP085_status_t  BMP085_ReadRawPressure ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_pressure_f* myRawPressure )
-{
-    uint8_t     cmd[]             =   { BMP085_READ_PRESSURE, 0, 0 };
-    uint32_t    aux               =    0;
-
-
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[0], 3 );
-
-
-    // Parse the data
-    myRawPressure->UP_Pressure    =   ( cmd[0] << 16 ) | ( cmd[1] << 8 ) | cmd[2];
-
-
-
-    if ( aux == I2C_SUCCESS )
-       return   BMP085_SUCCESS;
-    else
-       return   BMP085_FAILURE;
-}
-
-
-/**
- * @brief       BMP085_CalculateCompensated_Temperature_Pressure   ( Vector_cal_coeff_t , Vector_temp_f , Vector_pressure_f , BMP085_pressure_osrs_t )
- *
- * @details     It reads an compensated pressure.
- *
- * @param[in]    myCalCoeff:            Calibration coefficients.
- * @param[in]    myRawTemperature:      Uncompensated temperature data.
- * @param[in]    myRawPressure:         Uncompensated pressure data.
- * @param[in]    myResolution:          Pressure resolution.
+ * @param[in]    myEEPROM_Status:       EEPROM status.
  *
  * @param[out]   NaN.
  *
  *
- * @return       Compensated Temperature and Pressure.
+ * @return       Status of MCP4725_EEPROM_Status.
  *
  *
  * @author      Manuel Caballero
- * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
- * @pre         BMP085_GetCalibrationCoefficients, BMP085_ReadRawPressure and BMP085_ReadRawTemperature MUST be called before using this function.
- * @warning     NaN
+ * @date        7/September/2017
+ * @version     7/September/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
  */
-Vector_compensated_data_f  BMP085_CalculateCompensated_Temperature_Pressure ( Vector_cal_coeff_t myCalCoeff, Vector_temp_f myRawTemperature, Vector_pressure_f myRawPressure,
-                                                                              BMP085_pressure_osrs_t myResolution )
+MCP4725_status_t  MCP4725_EEPROM_Status ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_eeprom_status_t* myEEPROM_Status )
 {
-    int32_t     B6, X1, B5, X2, X3, B3;
-    uint32_t    B4, B7;
+    uint8_t     cmd[]             =    { 0, 0, 0, 0, 0 };
+    uint32_t    aux               =    0;
 
-    Vector_compensated_data_f myTrueData;
+    // Read command
+    aux = i2c_read ( myinstance, ADDR, &cmd[0], 5 );
 
-    // Calculate true temperature
-    X1   =   ( ( myRawTemperature.UT_Temperature - myCalCoeff.AC6 ) * myCalCoeff.AC5 ) / 32768;
-    X2   =   ( myCalCoeff.MC * 2048 ) / ( X1 + myCalCoeff.MD );
-    B5   =   X1 + X2;
-
-    myTrueData.Temperature   =   ( B5 + 8 ) / 16;
+    // Update EEPROM status
+    *myEEPROM_Status =   ( ( cmd[0] & 0x80 ) >> 7 );
 
 
-    // Calculate true pressure
-    B6   =   B5 - 4000;
-    X1   =   ( myCalCoeff.B2 * ( B6 * B6 / 4096 ) ) /2048;
-    X2   =   myCalCoeff.AC2 * B6 / 2048;
-    X3   =   X1 + X2;
-    B3   =   ( ( ( myCalCoeff.AC1 * 4 + X3 ) << myResolution ) + 2 ) / 4;
-    X1   =   myCalCoeff.AC3 * B6 / 8192;
-    X2   =   ( myCalCoeff.B1 * ( B6 * B6 / 4096 ) ) / 65536;
-    X3   =   ( ( X1 + X2 ) + 2 ) / 4;
-    B4   =   myCalCoeff.AC4 * ( uint32_t )( X3 + 32768 ) / 32768;
-    B7   =   ( ( uint32_t )myRawPressure.UP_Pressure - B3 ) * ( 50000 >> myResolution );
 
-    if ( B7 < 0x80000000 )
-        myTrueData.Pressure    =   ( B7 * 2 ) / B4;
+    if ( aux == I2C_SUCCESS )
+       return   MCP4725_SUCCESS;
     else
-        myTrueData.Pressure    =   ( B7 / B4 ) * 2;
-
-    X1   =   ( myTrueData.Pressure / 256 ) * ( myTrueData.Pressure / 256 );
-    X1   =   ( X1 * 3038 ) / 65536;
-    X2   =   ( -7357 * myTrueData.Pressure ) / 65536;
-
-    myTrueData.Pressure   =   myTrueData.Pressure + ( X1 + X2 + 3791 ) / 16;
-
-
-    return   myTrueData;
+       return   MCP4725_FAILURE;
 }
