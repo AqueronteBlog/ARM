@@ -21,11 +21,12 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESSES ( NOTE: The A2 and A1 are programmed to '00' (default), if not requested by customer)
+  * @brief   DEFAULT ADDRESSES ( NOTE1: The A2 and A1 are programmed to '00' (default), if not requested by customer.
+  *                              NOTE2: On my board, the A2 and A1 are programmed to '01'. )
   */
 typedef enum{
-    MCP4725_ADDRESS_LOW     =   0x60,                   /*!<   A0 pin ties to GND                                            */
-    MCP4725_ADDRESS_HIGH    =   0x61                    /*!<   A0 pin ties to VDD                                            */
+    MCP4725_ADDRESS_LOW     =   0x62,                   /*!<   A0 pin ties to GND                                            */
+    MCP4725_ADDRESS_HIGH    =   0x63                    /*!<   A0 pin ties to VDD                                            */
 } MCP4725_address_t;
 
 
@@ -62,9 +63,9 @@ typedef enum{
   */
 typedef enum{
     NORMAL_MODE                                 =   0,      /*!<  Normal Mode.                                                                          */
-    POWER_DOWN_1KOHM_RESISTIVE_LOAD_MODE        =   1,      /*!<  Power-Down Mode. 1 kΩ resistor to ground.                                             */
-    POWER_DOWN_100KOHM_RESISTIVE_LOAD_MODE      =   2,      /*!<  Power-Down Mode. 100 kΩ resistor to ground.                                           */
-    POWER_DOWN_500KOHM_RESISTIVE_LOAD_MODE      =   3       /*!<  Power-Down Mode. 500 kΩ resistor to ground.                                           */
+    POWER_DOWN_1KOHM_RESISTIVE_LOAD_MODE        =   1,      /*!<  Power-Down Mode. 1 k‎Ω resistor to ground.                                             */
+    POWER_DOWN_100KOHM_RESISTIVE_LOAD_MODE      =   2,      /*!<  Power-Down Mode. 100 k‎Ω resistor to ground.                                           */
+    POWER_DOWN_500KOHM_RESISTIVE_LOAD_MODE      =   3       /*!<  Power-Down Mode. 500 k‎Ω resistor to ground.                                           */
 } MCP4725_operation_mode_t;
 
 
