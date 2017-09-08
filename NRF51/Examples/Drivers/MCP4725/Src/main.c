@@ -3,8 +3,14 @@
  * @details     This example shows how to work with the external device MCP4725 a 12-Bit
  *              Digital-to-Analog Converter with EEPROM Memory.
  *
- *              [TODO]
+ *              There will be three different output voltages:
  *
+ *                  1. Vout ~ 0V
+ *                  2. Vout ~ ( Vref * 0.5 )
+ *                  3. Vout ~ Vref
+ *
+ *              The voltage will change every 0.5 seconds by the timer, the rest of the time, the
+ *              microcontroller is in low power.
  *
  * @return      NA
  *
@@ -27,20 +33,21 @@
 
 int main( void )
 {
-    MCP4725_status_t aux;
-
-    //Vector_cal_coeff_t          myCalCoeff;
-    //Vector_temp_f               myUT;
-    //Vector_pressure_f           myUP;
-    //Vector_compensated_data_f   myTrueData;
+    MCP4725_status_t        aux;
+    Vector_new_dac_value_t  myNewDACData;
+    Vector_data_t           myDefaultData;
 
     conf_GPIO   ();
     conf_TWI0   ();
     conf_TIMER0 ();
 
-
+    // Reset and wake the device up
     aux = MCP4725_Reset  ( NRF_TWI0 );
     aux = MCP4725_WakeUp ( NRF_TWI0 );
+
+    // Read the default data in both EEPROM and DAC
+    aux = MCP4725_GetDAC_Data    ( NRF_TWI0, MCP4725_ADDRESS_LOW, &myDefaultData );
+    aux = MCP4725_GetEEPROM_Data ( NRF_TWI0, MCP4725_ADDRESS_LOW, &myDefaultData );
 
 
     mySTATE                  =   1;                 // Reset counter
@@ -63,16 +70,22 @@ int main( void )
 		switch ( mySTATE ){
         default:
         case 1:
+        // Vout ~ 0V
             NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, FAST_MODE, 0 );
+            myNewDACData.DAC_New_Value   =   0;
+            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, FAST_MODE, myNewDACData );
             break;
 
         case 2:
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_AND_EEPROM_REGISTER_MODE, 2048 );
+        // Vout = ~ ( Vref * 0.5 )
+            myNewDACData.DAC_New_Value   =   2048;
+            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_AND_EEPROM_REGISTER_MODE, myNewDACData );
             break;
 
         case 3:
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_REGISTER_MODE, 4095 );
+        // Vout ~ Vref
+            myNewDACData.DAC_New_Value   =   4095;
+            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_REGISTER_MODE, myNewDACData );
 
             mySTATE =   0;
             NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
