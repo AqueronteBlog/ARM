@@ -185,7 +185,7 @@ MCP4725_status_t  MCP4725_PowerMode ( NRF_TWI_Type* myinstance, MCP4725_address_
 
 
 /**
- * @brief       MCP4725_SetNewValue ( NRF_TWI_Type* , MCP4725_address_t , MCP4725_write_command_type_t , uint32_t )
+ * @brief       MCP4725_SetNewValue ( NRF_TWI_Type* , MCP4725_address_t , MCP4725_write_command_type_t , Vector_new_dac_value_t )
  *
  * @details     It sends a new output value.
  *
@@ -206,7 +206,7 @@ MCP4725_status_t  MCP4725_PowerMode ( NRF_TWI_Type* myinstance, MCP4725_address_
  * @pre         NaN
  * @warning     NaN.
  */
-MCP4725_status_t  MCP4725_SetNewValue   ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_write_command_type_t myWriteCMD, uint32_t myDACNewValue )
+MCP4725_status_t  MCP4725_SetNewValue   ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_write_command_type_t myWriteCMD, Vector_new_dac_value_t myDACNewValue )
 {
     uint8_t     cmd[]             =    { 0, 0, 0 };
     uint32_t    aux               =    0;
@@ -214,19 +214,19 @@ MCP4725_status_t  MCP4725_SetNewValue   ( NRF_TWI_Type* myinstance, MCP4725_addr
 
 
     // 12-Bit of resolution ONLY!
-    if ( myDACNewValue > 4095 )
+    if ( myDACNewValue.DAC_New_Value > 4095 )
         return  MCP4725_FAILURE;
 
 
     // Prepare the data according to the write mode
-    cmd[1]  |=  ( ( myDACNewValue & 0xFF0 ) >> 4 );
-    cmd[2]  |=  ( ( myDACNewValue & 0x00F ) << 4 );
+    cmd[1]  |=  ( ( myDACNewValue.DAC_New_Value & 0xFF0 ) >> 4 );
+    cmd[2]  |=  ( ( myDACNewValue.DAC_New_Value & 0x00F ) << 4 );
 
     switch ( myWriteCMD ){
         default:
         case FAST_MODE:
-                cmd[0]  |=  ( ( myDACNewValue & 0xF00 ) >> 8 );
-                cmd[1]   =  ( myDACNewValue & 0x0FF );
+                cmd[0]  |=  ( ( myDACNewValue.DAC_New_Value & 0xF00 ) >> 8 );
+                cmd[1]   =  ( myDACNewValue.DAC_New_Value & 0x0FF );
 
                 dataTX   =   2;
                 break;
@@ -285,6 +285,90 @@ MCP4725_status_t  MCP4725_EEPROM_Status ( NRF_TWI_Type* myinstance, MCP4725_addr
 
     // Update EEPROM status
     *myEEPROM_Status =   ( ( cmd[0] & 0x80 ) >> 7 );
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MCP4725_SUCCESS;
+    else
+       return   MCP4725_FAILURE;
+}
+
+
+
+/**
+ * @brief       MCP4725_GetEEPROM_Data ( NRF_TWI_Type* , MCP4725_address_t , Vector_data_t* )
+ *
+ * @details     It gets the eeprom value.
+ *
+ * @param[in]    myinstance:            Peripheral's Instance.
+ * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myEEPROMData:          EEPROM value.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of MCP4725_GetEEPROM_Data.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        8/September/2017
+ * @version     8/September/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+MCP4725_status_t  MCP4725_GetEEPROM_Data    ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, Vector_data_t* myEEPROMData )
+{
+    uint8_t     cmd[]             =    { 0, 0, 0, 0, 0 };
+    uint32_t    aux               =    0;
+
+    // Read command
+    aux = i2c_read ( myinstance, ADDR, &cmd[0], 5 );
+
+    // Read EEPROM value
+    myEEPROMData->EEPROM_Data =   ( ( cmd[3] & 0x0F ) << 8 ) | ( cmd[4] );
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MCP4725_SUCCESS;
+    else
+       return   MCP4725_FAILURE;
+}
+
+
+
+/**
+ * @brief       MCP4725_GetDAC_Data ( NRF_TWI_Type* , MCP4725_address_t , Vector_data_t* )
+ *
+ * @details     It gets the DAC value.
+ *
+ * @param[in]    myinstance:            Peripheral's Instance.
+ * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myDACData:             DAC value.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of MCP4725_GetDAC_Data.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        8/September/2017
+ * @version     8/September/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+MCP4725_status_t  MCP4725_GetDAC_Data    ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, Vector_data_t* myDACData )
+{
+    uint8_t     cmd[]             =    { 0, 0, 0, 0, 0 };
+    uint32_t    aux               =    0;
+
+    // Read command
+    aux = i2c_read ( myinstance, ADDR, &cmd[0], 5 );
+
+    // Read DAC value
+    myDACData->DAC_Data =   ( ( cmd[1] & 0xF0 ) << 4 ) | ( ( ( ( cmd[1] & 0x0F ) >> 4 ) | ( cmd[2] & 0xF0 ) >> 4 ) );
 
 
 
