@@ -14,7 +14,54 @@
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
- #include "HX711.h"
+#include "HX711.h"
+
+/**
+ * @brief       HX711_Init ( uint32_t , uint32_t )
+ *
+ * @details     It performs an internal reset.
+ *
+ * @param[in]    myDOUT:        Pin to be DOUT.
+ * @param[in]    myPD_SCK:      Pin to be PD_SCK.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       The configured pins.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/September/2017
+ * @version     14/September/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+HX711_pins_t HX711_Init ( uint32_t myDOUT, uint32_t myPD_SCK )
+{
+    HX711_pins_t myPins;
+
+
+    // INPUT. DOUT PIN
+    NRF_GPIO->PIN_CNF[ myDOUT ]   =    ( GPIO_PIN_CNF_SENSE_Disabled  << GPIO_PIN_CNF_SENSE_Pos   ) |
+                                       ( GPIO_PIN_CNF_DIR_Input       << GPIO_PIN_CNF_DIR_Pos     );
+
+    // OUTPUT. PD_SCK PIN
+    NRF_GPIO->PIN_CNF[ myPD_SCK ] =    ( GPIO_PIN_CNF_SENSE_Disabled  << GPIO_PIN_CNF_SENSE_Pos   ) |
+                                       ( GPIO_PIN_CNF_DRIVE_S0S1      << GPIO_PIN_CNF_DRIVE_Pos   ) |
+                                       ( GPIO_PIN_CNF_PULL_Disabled   << GPIO_PIN_CNF_PULL_Pos    ) |
+                                       ( GPIO_PIN_CNF_INPUT_Connect   << GPIO_PIN_CNF_INPUT_Pos   ) |
+                                       ( GPIO_PIN_CNF_DIR_Output      << GPIO_PIN_CNF_DIR_Pos     );
+
+
+    // Associate the pins
+    myPins.DOUT     =   myDOUT;
+    myPins.PD_SCK   =   myPD_SCK;
+
+
+    return   myPins;
+}
+
+
 
 /**
  * @brief       HX711_Reset   ( void )
@@ -39,15 +86,15 @@
  *              operation mode.
  * @warning     NaN.
  */
-HX711_status_t  HX711_Reset   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK )
+HX711_status_t  HX711_Reset   ( HX711_pins_t myPins )
 {
-    _PD_SCK  =  HX711_PIN_HIGH;
-    wait_us ( 120 );                                                            // Datasheet p5. At least 60us ( Security Factor: 2*60us = 120us )
-    _PD_SCK  =  HX711_PIN_LOW;
+    NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );                                // PD_SCK HIGH
+    nrf_delay_us ( 120 );                                                            // Datasheet p5. At least 60us ( Security Factor: 2*60us = 120us )
+    NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );                                // PD_SCK LOW
 
 
 
-    if ( _DOUT == HX711_PIN_HIGH )
+    if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH )
         return   HX711_SUCCESS;
     else
         return   HX711_FAILURE;
@@ -75,14 +122,15 @@ HX711_status_t  HX711_Reset   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK )
  *              longer than 60μs, HX711 enters power down mode.
  * @warning     NaN.
  */
-HX711_status_t  HX711_PowerDown   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK )
+HX711_status_t  HX711_PowerDown   ( HX711_pins_t myPins )
 {
-    _PD_SCK  =  HX711_PIN_HIGH;
-    wait_us ( 120 );                                                            // Datasheet p5. At least 60us ( Security Factor: 2*60us = 120us )
+    // _PD_SCK  =  HX711_PIN_HIGH;
+    NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );
+    nrf_delay_us ( 120 );                                                           // Datasheet p5. At least 60us ( Security Factor: 2*60us = 120us )
 
 
 
-    if ( _DOUT == HX711_PIN_HIGH )
+    if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH )
         return   HX711_SUCCESS;
     else
         return   HX711_FAILURE;
@@ -109,54 +157,60 @@ HX711_status_t  HX711_PowerDown   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_S
  * @pre         NaN.
  * @warning     NaN.
  */
-HX711_status_t  HX711_SetChannelAndGain    ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain )
+HX711_status_t  HX711_SetChannelAndGain    ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain )
 {
     uint32_t myPulses   =    0;
     uint32_t i          =    0;                                                 // Counter and timeout variable
 
     // Select the gain/channel
-    switch ( myChannel_Gain ) {
-        default:
-        case CHANNEL_A_GAIN_128:
-            _HX711_CHANNEL_GAIN  =   CHANNEL_A_GAIN_128;                        // Update the gain parameter
-            myPulses             =   25;
-            break;
+    switch ( myChannel_Gain )
+    {
+    default:
+    case CHANNEL_A_GAIN_128:
+        _HX711_CHANNEL_GAIN  =   CHANNEL_A_GAIN_128;                        // Update the gain parameter
+        myPulses             =   25;
+        break;
 
-        case CHANNEL_B_GAIN_32:
-            _HX711_CHANNEL_GAIN  =   CHANNEL_B_GAIN_32;                         // Update the gain parameter
-            myPulses             =   26;
-            break;
+    case CHANNEL_B_GAIN_32:
+        _HX711_CHANNEL_GAIN  =   CHANNEL_B_GAIN_32;                         // Update the gain parameter
+        myPulses             =   26;
+        break;
 
-        case CHANNEL_A_GAIN_64:
-            _HX711_CHANNEL_GAIN  =   CHANNEL_A_GAIN_64;                         // Update the gain parameter
-            myPulses             =   27;
-            break;
+    case CHANNEL_A_GAIN_64:
+        _HX711_CHANNEL_GAIN  =   CHANNEL_A_GAIN_64;                         // Update the gain parameter
+        myPulses             =   27;
+        break;
     }
 
 
     // Wait until the device is ready or timeout
     i        =   23232323;
-    _PD_SCK  =  HX711_PIN_LOW;
-    while ( ( _DOUT == HX711_PIN_HIGH ) && ( --i ) );
+    //_PD_SCK  =  HX711_PIN_LOW;
+    NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
+    while ( ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH ) && ( --i ) );
 
     // Check if something is wrong with the device because of the timeout
     if ( i < 1 )
         return   HX711_FAILURE;
 
     // Change the gain for the NEXT mesurement ( previous data will be ignored )
-    do {
-        wait_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-        _PD_SCK  =  HX711_PIN_HIGH;
-        wait_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-        _PD_SCK  =  HX711_PIN_LOW;
+    do
+    {
+        nrf_delay_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+        // _PD_SCK  =  HX711_PIN_HIGH;
+        NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );
+        nrf_delay_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+        //_PD_SCK  =  HX711_PIN_LOW;
+        NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
 
         myPulses--;
-    } while ( myPulses > 0 );
+    }
+    while ( myPulses > 0 );
 
 
 
 
-    if ( _DOUT == HX711_PIN_HIGH )
+    if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH )
         return   HX711_SUCCESS;
     else
         return   HX711_FAILURE;
@@ -214,7 +268,7 @@ HX711_channel_gain_t  HX711_GetChannelAndGain ( void )
  * @pre         NaN.
  * @warning     NaN.
  */
-HX711_status_t  HX711_ReadRawData    ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+HX711_status_t  HX711_ReadRawData    ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
 {
     uint32_t i           =   0;                                                 // Counter and timeout variable
     uint32_t ii          =   0;                                                 // Counter variable
@@ -227,18 +281,20 @@ HX711_status_t  HX711_ReadRawData    ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myP
 
     // Check the gain if it is different, update it ( previous data will be ignored! )
     if ( myChannel_Gain != _HX711_CHANNEL_GAIN )
-        HX711_SetChannelAndGain ( myChannel_Gain );
+        HX711_SetChannelAndGain ( myPins, myChannel_Gain );
 
 
     // Start collecting the new measurement as many as myAverage
-    for ( ii = 0; ii < myAverage; ii++ ) {
+    for ( ii = 0; ii < myAverage; ii++ )
+    {
         // Reset the value
         myAuxData    =   0;
 
         // Wait until the device is ready or timeout
         i        =   23232323;
-        _PD_SCK  =  HX711_PIN_LOW;
-        while ( ( _DOUT == HX711_PIN_HIGH ) && ( --i ) );
+        //_PD_SCK  =  HX711_PIN_LOW;
+        NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
+        while ( ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH ) && ( --i ) );
 
         // Check if something is wrong with the device because of the timeout
         if ( i < 1 )
@@ -246,47 +302,56 @@ HX711_status_t  HX711_ReadRawData    ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myP
 
 
         // Read the data
-        for ( i = 0; i < 24; i++ ) {
-            wait_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-            _PD_SCK  =  HX711_PIN_HIGH;
-            wait_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+        for ( i = 0; i < 24; i++ )
+        {
+            nrf_delay_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+            //_PD_SCK  =  HX711_PIN_HIGH;
+            NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );
+            nrf_delay_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
             myAuxData    <<=     1;
-            _PD_SCK  =  HX711_PIN_LOW;
+            //_PD_SCK  =  HX711_PIN_LOW;
+            NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
 
             // High or Low bit
-            if ( _DOUT == HX711_PIN_HIGH )
+            if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH )
                 myAuxData++;
         }
 
         // Last bit to release the bus
-        wait_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-        _PD_SCK  =  HX711_PIN_HIGH;
-        wait_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-        _PD_SCK  =  HX711_PIN_LOW;
+        nrf_delay_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+        //_PD_SCK  =  HX711_PIN_HIGH;
+        NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );
+        nrf_delay_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+        //_PD_SCK  =  HX711_PIN_LOW;
+        NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
 
 
         // Depending on the Gain we have to generate more CLK pulses
-        switch ( _HX711_CHANNEL_GAIN ) {
-            default:
-            case CHANNEL_A_GAIN_128:
-                myPulses             =   25;
-                break;
+        switch ( _HX711_CHANNEL_GAIN )
+        {
+        default:
+        case CHANNEL_A_GAIN_128:
+            myPulses             =   25;
+            break;
 
-            case CHANNEL_B_GAIN_32:
-                myPulses             =   26;
-                break;
+        case CHANNEL_B_GAIN_32:
+            myPulses             =   26;
+            break;
 
-            case CHANNEL_A_GAIN_64:
-                myPulses             =   27;
-                break;
+        case CHANNEL_A_GAIN_64:
+            myPulses             =   27;
+            break;
         }
 
         // Generate those extra pulses for the next measurement
-        for ( i = 25; i < myPulses; i++ ) {
-            wait_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-            _PD_SCK  =  HX711_PIN_HIGH;
-            wait_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-            _PD_SCK  =  HX711_PIN_LOW;
+        for ( i = 25; i < myPulses; i++ )
+        {
+            nrf_delay_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+            //_PD_SCK  =  HX711_PIN_HIGH;
+            NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );
+            nrf_delay_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+            //_PD_SCK  =  HX711_PIN_LOW;
+            NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
         }
 
         // Update data to get the average
@@ -298,7 +363,7 @@ HX711_status_t  HX711_ReadRawData    ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myP
 
 
 
-    if ( _DOUT == HX711_PIN_HIGH )
+    if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH )
         return   HX711_SUCCESS;
     else
         return   HX711_FAILURE;
@@ -326,12 +391,12 @@ HX711_status_t  HX711_ReadRawData    ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myP
  * @pre         NaN.
  * @warning     NaN.
  */
-HX711_status_t  HX711_ReadData_WithCalibratedMass   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+HX711_status_t  HX711_ReadData_WithCalibratedMass   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
 {
     HX711_status_t        aux;
 
     // Perform a new bunch of readings
-    aux  =   HX711_ReadRawData ( myChannel_Gain, myNewRawData, myAverage );
+    aux  =   HX711_ReadRawData ( myPins, myChannel_Gain, myNewRawData, myAverage );
 
 
     // Update the value with a calibrated mass
@@ -367,12 +432,12 @@ HX711_status_t  HX711_ReadData_WithCalibratedMass   ( NRF_GPIO_Type* myDOUT, NRF
  * @pre         NaN.
  * @warning     NaN.
  */
-HX711_status_t  HX711_ReadData_WithoutMass   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+HX711_status_t  HX711_ReadData_WithoutMass   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
 {
     HX711_status_t        aux;
 
     // Perform a new bunch of readings
-    aux  =   HX711_ReadRawData ( myChannel_Gain, myNewRawData, myAverage );
+    aux  =   HX711_ReadRawData ( myPins, myChannel_Gain, myNewRawData, myAverage );
 
 
     // Update the value without any mass
@@ -424,23 +489,24 @@ Vector_mass_t  HX711_CalculateMass ( Vector_count_t* myNewRawData, float myCalib
 
 
     // Adapt the scale ( kg as reference )
-    switch ( myScaleCalibratedMass ) {
-        default:
-        case HX711_SCALE_kg:
-            // myFactor     =   1.0;
-            break;
+    switch ( myScaleCalibratedMass )
+    {
+    default:
+    case HX711_SCALE_kg:
+        // myFactor     =   1.0;
+        break;
 
-        case HX711_SCALE_g:
-            myFactor     /=   1000.0;
-            break;
+    case HX711_SCALE_g:
+        myFactor     /=   1000.0;
+        break;
 
-        case HX711_SCALE_mg:
-            myFactor     /=   1000000.0;
-            break;
+    case HX711_SCALE_mg:
+        myFactor     /=   1000000.0;
+        break;
 
-        case HX711_SCALE_ug:
-            myFactor     /=   1000000000.0;
-            break;
+    case HX711_SCALE_ug:
+        myFactor     /=   1000000000.0;
+        break;
 
     }
 
@@ -498,7 +564,7 @@ Vector_mass_t  HX711_CalculateMass ( Vector_count_t* myNewRawData, float myCalib
  * @pre         NaN.
  * @warning     NaN.
  */
-HX711_status_t  HX711_SetAutoTare   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass, Vector_count_t* myNewRawData, float myTime )
+HX711_status_t  HX711_SetAutoTare   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass, Vector_count_t* myNewRawData, float myTime )
 {
     HX711_status_t        aux;
     Vector_mass_t         myCalculatedMass;
@@ -507,10 +573,11 @@ HX711_status_t  HX711_SetAutoTare   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD
 
 
     // Perform a new bunch of readings every 1 second
-    for ( i = 0; i < myTime; i++ ) {
-        aux          =   HX711_ReadRawData ( myChannel_Gain, myNewRawData, 10 );
+    for ( i = 0; i < myTime; i++ )
+    {
+        aux          =   HX711_ReadRawData ( myPins, myChannel_Gain, myNewRawData, 10 );
         myAuxData   +=   myNewRawData->myRawValue;
-        wait(1);
+        nrf_delay_ms ( 1000 );
     }
 
     myNewRawData->myRawValue    =    ( float )( myAuxData / myTime );
@@ -602,19 +669,20 @@ Vector_voltage_t  HX711_CalculateVoltage ( Vector_count_t* myNewRawData, float m
     B   =    ( 16777216.0 - 1.0 );
 
     // Adatp the gain
-    switch ( _HX711_CHANNEL_GAIN ) {
-        default:
-        case CHANNEL_A_GAIN_128:
-            A             =   128.0;
-            break;
+    switch ( _HX711_CHANNEL_GAIN )
+    {
+    default:
+    case CHANNEL_A_GAIN_128:
+        A             =   128.0;
+        break;
 
-        case CHANNEL_B_GAIN_32:
-            A             =   32.0;
-            break;
+    case CHANNEL_B_GAIN_32:
+        A             =   32.0;
+        break;
 
-        case CHANNEL_A_GAIN_64:
-            A             =   64.0;
-            break;
+    case CHANNEL_A_GAIN_64:
+        A             =   64.0;
+        break;
     }
 
 
