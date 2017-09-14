@@ -18,6 +18,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "nrf.h"
+#include "nrf_delay.h"
 
 
 /**
@@ -78,6 +79,15 @@ typedef struct
 #endif
 
 
+/**
+  * @brief   AVAILABLE PINS
+  */
+typedef struct
+{
+    uint32_t DOUT;
+    uint32_t PD_SCK;
+} HX711_pins_t;
+
 
 /**
   * @brief   INTERNAL CONSTANTS
@@ -92,21 +102,30 @@ typedef enum
 } HX711_status_t;
 
 
+HX711_channel_gain_t    _HX711_CHANNEL_GAIN;
+HX711_scale_t           _HX711_SCALE;
+float                   _HX711_USER_CALIBATED_MASS;
+
+
 /**
   * @brief   FUNCTION PROTOTYPES
   */
 
+/** It configures the pins to use.
+     */
+HX711_pins_t    HX711_Init                          ( uint32_t myDOUT, uint32_t myPD_SCK );
+
 /** It performs an internal reset.
      */
-HX711_status_t  HX711_Reset                         ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK );
+HX711_status_t  HX711_Reset                         ( HX711_pins_t myPins );
 
 /** It puts the device into power-down mode.
  */
-HX711_status_t  HX711_PowerDown                     ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK );
+HX711_status_t  HX711_PowerDown                     ( HX711_pins_t myPins );
 
 /** It sets both the channel and the gain for the next measurement.
  */
-HX711_status_t  HX711_SetChannelAndGain             ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain );
+HX711_status_t  HX711_SetChannelAndGain             ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain );
 
 /** It gets both the channel and the gain for the current measurement.
  */
@@ -114,19 +133,19 @@ HX711_channel_gain_t  HX711_GetChannelAndGain       ( void );
 
 /** It reads raw data from the device.
  */
-HX711_status_t  HX711_ReadRawData                   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
+HX711_status_t  HX711_ReadRawData                   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
 
 /** It reads raw data with an user-specified calibrated mass.
  */
-HX711_status_t  HX711_ReadData_WithCalibratedMass   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
+HX711_status_t  HX711_ReadData_WithCalibratedMass   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
 
 /** It reads raw data without any mass.
  */
-HX711_status_t  HX711_ReadData_WithoutMass          ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
+HX711_status_t  HX711_ReadData_WithoutMass          ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
 
 /** It reads raw data without any mass after the system is calibrated.
  */
-HX711_status_t  HX711_SetAutoTare                   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass, Vector_count_t* myNewRawData, float myTime );
+HX711_status_t  HX711_SetAutoTare                   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass, Vector_count_t* myNewRawData, float myTime );
 
 /** It sets a tare weight manually.
  */
