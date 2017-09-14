@@ -1,379 +1,628 @@
 /**
- * @brief       MCP4725.c
- * @details     12-Bit Digital-to-Analog Converter with EEPROM Memory.
+ * @brief       HX711.c
+ * @details     24-Bit Analog-to-Digital Converter (ADC) for Weigh Scales.
  *              Functions file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        7/September/2017
- * @version     7/September/2017    The ORIGIN
+ * @date        14/September/2017
+ * @version     14/September/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
- #include "MCP4725.h"
-
+ #include "HX711.h"
 
 /**
- * @brief       MCP4725_Reset   ( NRF_TWI_Type* )
+ * @brief       HX711_Reset   ( void )
  *
- * @details     It performs an internal reset similar to a
- *              power-on-reset ( POR ).
+ * @details     It performs an internal reset.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
+ * @param[in]    NaN.
  *
  * @param[out]   NaN.
  *
  *
- * @return       Status of MCP4725_Reset.
+ * @return       Status of HX711_Reset.
  *
  *
  * @author      Manuel Caballero
- * @date        7/September/2017
- * @version     7/September/2017   The ORIGIN
- * @pre         NaN
- * @warning     The user MUST respect the time it takes this instruction to be
- *              performed ( max. 50ms ).
+ * @date        14/September/2017
+ * @version     14/September/2017   The ORIGIN
+ * @pre         When PD_SCK pin changes from low to high and stays at high for
+ *              longer than 60μs, HX711 enters power down mode.
+ *
+ *              When PD_SCK returns to low, chip will reset and enter normal
+ *              operation mode.
+ * @warning     NaN.
  */
-MCP4725_status_t  MCP4725_Reset   ( NRF_TWI_Type* myinstance )
+HX711_status_t  HX711_Reset   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK )
 {
-    uint8_t     cmd                 =    MCP4725_GENERAL_CALL_RESET;
-    uint32_t    aux                 =    0;
-
-
-    aux = i2c_write ( myinstance, MCP4725_GENERAL_CALL, &cmd, 1, I2C_STOP_BIT );
+    _PD_SCK  =  HX711_PIN_HIGH;
+    wait_us ( 120 );                                                            // Datasheet p5. At least 60us ( Security Factor: 2*60us = 120us )
+    _PD_SCK  =  HX711_PIN_LOW;
 
 
 
-    if ( aux == I2C_SUCCESS )
-       return   MCP4725_SUCCESS;
+    if ( _DOUT == HX711_PIN_HIGH )
+        return   HX711_SUCCESS;
     else
-       return   MCP4725_FAILURE;
+        return   HX711_FAILURE;
 }
 
 
 
 /**
- * @brief       MCP4725_WakeUp   ( NRF_TWI_Type* )
+ * @brief       HX711_PowerDown   ( void )
  *
- * @details     The power-down bits of the DAC register are set to a normal operation.
+ * @details     It puts the device in power-down mode.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
+ * @param[in]    NaN.
  *
  * @param[out]   NaN.
  *
  *
- * @return       Status of MCP4725_WakeUp.
+ * @return       Status of HX711_PowerDown.
  *
  *
  * @author      Manuel Caballero
- * @date        7/September/2017
- * @version     7/September/2017   The ORIGIN
- * @pre         NaN
+ * @date        14/September/2017
+ * @version     14/September/2017   The ORIGIN
+ * @pre         When PD_SCK pin changes from low to high and stays at high for
+ *              longer than 60μs, HX711 enters power down mode.
  * @warning     NaN.
  */
-MCP4725_status_t  MCP4725_WakeUp   ( NRF_TWI_Type* myinstance )
+HX711_status_t  HX711_PowerDown   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK )
 {
-    uint8_t     cmd                 =    MCP4725_GENERAL_CALL_WAKE_UP;
-    uint32_t    aux                 =    0;
-
-
-    aux = i2c_write ( myinstance, MCP4725_GENERAL_CALL, &cmd, 1, I2C_STOP_BIT );
+    _PD_SCK  =  HX711_PIN_HIGH;
+    wait_us ( 120 );                                                            // Datasheet p5. At least 60us ( Security Factor: 2*60us = 120us )
 
 
 
-    if ( aux == I2C_SUCCESS )
-       return   MCP4725_SUCCESS;
+    if ( _DOUT == HX711_PIN_HIGH )
+        return   HX711_SUCCESS;
     else
-       return   MCP4725_FAILURE;
+        return   HX711_FAILURE;
 }
 
 
+
 /**
- * @brief       MCP4725_PowerMode ( NRF_TWI_Type* , MCP4725_address_t , MCP4725_write_command_type_t , MCP4725_operation_mode_t )
+ * @brief       HX711_SetChannelAndGain   ( HX711_channel_gain_t myChannel_Gain )
  *
- * @details     It configures the power mode of the device.
+ * @details     It sets both the channel and the gain for the next measurement.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
- * @param[in]    myWriteCMD:            It writes the command into the DAC or EEPROM/DAC.
- * @param[in]    myPowerMode:           Normal Mode or one of the Power-Down available modes.
+ * @param[in]    myChannel_Gain:    Channel and Gain to perform the new measurement.
  *
  * @param[out]   NaN.
  *
  *
- * @return       Status of MCP4725_PowerMode.
+ * @return       Status of HX711_SetChannelAndGain.
  *
  *
  * @author      Manuel Caballero
- * @date        7/September/2017
- * @version     7/September/2017   The ORIGIN
- * @pre         NaN
+ * @date        14/September/2017
+ * @version     14/September/2017   The ORIGIN
+ * @pre         NaN.
  * @warning     NaN.
  */
-MCP4725_status_t  MCP4725_PowerMode ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_write_command_type_t myWriteCMD, MCP4725_operation_mode_t myPowerMode )
+HX711_status_t  HX711_SetChannelAndGain    ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain )
 {
-    uint8_t     cmd[]             =    { 0, 0, 0, 0, 0, 0 };
-    uint32_t    aux               =    0;
-    uint32_t    dataTX            =    3;
+    uint32_t myPulses   =    0;
+    uint32_t i          =    0;                                                 // Counter and timeout variable
 
-
-    // Read the device to mask the default value
-    aux = i2c_read ( myinstance, ADDR, &cmd[0], 5 );
-
-
-
-    // Choose the power mode
-    switch ( myPowerMode ){
+    // Select the gain/channel
+    switch ( myChannel_Gain ) {
         default:
-        case NORMAL_MODE:
-                cmd[0]   =  0;
-                break;
+        case CHANNEL_A_GAIN_128:
+            _HX711_CHANNEL_GAIN  =   CHANNEL_A_GAIN_128;                        // Update the gain parameter
+            myPulses             =   25;
+            break;
 
-        case POWER_DOWN_1KOHM_RESISTIVE_LOAD_MODE:
-                cmd[0]   =  0x01;
-                break;
+        case CHANNEL_B_GAIN_32:
+            _HX711_CHANNEL_GAIN  =   CHANNEL_B_GAIN_32;                         // Update the gain parameter
+            myPulses             =   26;
+            break;
 
-        case POWER_DOWN_100KOHM_RESISTIVE_LOAD_MODE:
-                cmd[0]   =  0x02;
-                break;
-
-        case POWER_DOWN_500KOHM_RESISTIVE_LOAD_MODE:
-                cmd[0]   =  0x03;
-                break;
+        case CHANNEL_A_GAIN_64:
+            _HX711_CHANNEL_GAIN  =   CHANNEL_A_GAIN_64;                         // Update the gain parameter
+            myPulses             =   27;
+            break;
     }
 
 
-    // Prepare the data according to the write mode
-    switch ( myWriteCMD ){
+    // Wait until the device is ready or timeout
+    i        =   23232323;
+    _PD_SCK  =  HX711_PIN_LOW;
+    while ( ( _DOUT == HX711_PIN_HIGH ) && ( --i ) );
+
+    // Check if something is wrong with the device because of the timeout
+    if ( i < 1 )
+        return   HX711_FAILURE;
+
+    // Change the gain for the NEXT mesurement ( previous data will be ignored )
+    do {
+        wait_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+        _PD_SCK  =  HX711_PIN_HIGH;
+        wait_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+        _PD_SCK  =  HX711_PIN_LOW;
+
+        myPulses--;
+    } while ( myPulses > 0 );
+
+
+
+
+    if ( _DOUT == HX711_PIN_HIGH )
+        return   HX711_SUCCESS;
+    else
+        return   HX711_FAILURE;
+}
+
+
+
+/**
+ * @brief       HX711_GetChannelAndGain   ( void )
+ *
+ * @details     It gets both the channel and the gain for the current measurement.
+ *
+ * @param[in]    NaN.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Channel and Gain.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/September/2017
+ * @version     14/September/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+HX711_channel_gain_t  HX711_GetChannelAndGain ( void )
+{
+    return   _HX711_CHANNEL_GAIN;
+}
+
+
+
+/**
+ * @brief       HX711_ReadRawData   ( HX711_channel_gain_t myChannel_Gain, Vector_count_t*, uint32_t )
+ *
+ * @details     It reads the raw data from the device according to the channel
+ *              and its gain.
+ *
+ * @param[in]    myChannel_Gain:    Channel and Gain to perform the new read.
+ * @param[in]    myAverage:         How many measurement we have to get and deliver the average.
+ *
+ * @param[out]   myNewRawData:      The new value from the device.
+ *
+ *
+ * @return       Status of HX711_ReadRawData.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/September/2017
+ * @version     14/September/2017   Gain mode was fixed, now it gets the value
+ *                                  a given gain/channel. A timeout was added to
+ *                                  avoid the microcontroller gets stuck.
+ *              11/September/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+HX711_status_t  HX711_ReadRawData    ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+{
+    uint32_t i           =   0;                                                 // Counter and timeout variable
+    uint32_t ii          =   0;                                                 // Counter variable
+    uint32_t myAuxData   =   0;
+    uint32_t myPulses    =   0;
+
+
+
+    myNewRawData->myRawValue    =   0;                                          // Reset variable at the beginning
+
+    // Check the gain if it is different, update it ( previous data will be ignored! )
+    if ( myChannel_Gain != _HX711_CHANNEL_GAIN )
+        HX711_SetChannelAndGain ( myChannel_Gain );
+
+
+    // Start collecting the new measurement as many as myAverage
+    for ( ii = 0; ii < myAverage; ii++ ) {
+        // Reset the value
+        myAuxData    =   0;
+
+        // Wait until the device is ready or timeout
+        i        =   23232323;
+        _PD_SCK  =  HX711_PIN_LOW;
+        while ( ( _DOUT == HX711_PIN_HIGH ) && ( --i ) );
+
+        // Check if something is wrong with the device because of the timeout
+        if ( i < 1 )
+            return   HX711_FAILURE;
+
+
+        // Read the data
+        for ( i = 0; i < 24; i++ ) {
+            wait_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+            _PD_SCK  =  HX711_PIN_HIGH;
+            wait_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+            myAuxData    <<=     1;
+            _PD_SCK  =  HX711_PIN_LOW;
+
+            // High or Low bit
+            if ( _DOUT == HX711_PIN_HIGH )
+                myAuxData++;
+        }
+
+        // Last bit to release the bus
+        wait_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+        _PD_SCK  =  HX711_PIN_HIGH;
+        wait_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+        _PD_SCK  =  HX711_PIN_LOW;
+
+
+        // Depending on the Gain we have to generate more CLK pulses
+        switch ( _HX711_CHANNEL_GAIN ) {
+            default:
+            case CHANNEL_A_GAIN_128:
+                myPulses             =   25;
+                break;
+
+            case CHANNEL_B_GAIN_32:
+                myPulses             =   26;
+                break;
+
+            case CHANNEL_A_GAIN_64:
+                myPulses             =   27;
+                break;
+        }
+
+        // Generate those extra pulses for the next measurement
+        for ( i = 25; i < myPulses; i++ ) {
+            wait_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+            _PD_SCK  =  HX711_PIN_HIGH;
+            wait_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+            _PD_SCK  =  HX711_PIN_LOW;
+        }
+
+        // Update data to get the average
+        myAuxData                  ^=    0x800000;
+        myNewRawData->myRawValue   +=    myAuxData;
+    }
+
+    myNewRawData->myRawValue    /=    ( float )myAverage;
+
+
+
+    if ( _DOUT == HX711_PIN_HIGH )
+        return   HX711_SUCCESS;
+    else
+        return   HX711_FAILURE;
+}
+
+
+
+/**
+ * @brief       HX711_ReadData_WithCalibratedMass ( HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+ *
+ * @details     It reads data with a calibrated mass on the load cell.
+ *
+ * @param[in]    myChannel_Gain:        Gain/Channel to perform the new measurement.
+ * @param[in]    myAverage:             How many data to read.
+ *
+ * @param[out]   myNewRawData:          myRawValue_WithCalibratedMass ( ADC code taken with calibrated mass ).
+ *
+ *
+ * @return       Status of HX711_ReadData_WithCalibratedMass.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/September/2017
+ * @version     14/September/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+HX711_status_t  HX711_ReadData_WithCalibratedMass   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+{
+    HX711_status_t        aux;
+
+    // Perform a new bunch of readings
+    aux  =   HX711_ReadRawData ( myChannel_Gain, myNewRawData, myAverage );
+
+
+    // Update the value with a calibrated mass
+    myNewRawData->myRawValue_WithCalibratedMass  =   myNewRawData->myRawValue;
+
+
+
+    if ( aux == HX711_SUCCESS )
+        return   HX711_SUCCESS;
+    else
+        return   HX711_FAILURE;
+}
+
+
+
+/**
+ * @brief       HX711_ReadData_WithoutMass ( HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+ *
+ * @details     It reads data without any mass on the load cell.
+ *
+ * @param[in]    myChannel_Gain:        Gain/Channel to perform the new measurement.
+ * @param[in]    myAverage:             How many data to read.
+ *
+ * @param[out]   myNewRawData:          myRawValue_WithoutCalibratedMass ( ADC code taken without any mass ).
+ *
+ *
+ * @return       Status of HX711_ReadData_WithoutMass.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/September/2017
+ * @version     14/September/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+HX711_status_t  HX711_ReadData_WithoutMass   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+{
+    HX711_status_t        aux;
+
+    // Perform a new bunch of readings
+    aux  =   HX711_ReadRawData ( myChannel_Gain, myNewRawData, myAverage );
+
+
+    // Update the value without any mass
+    myNewRawData->myRawValue_WithoutCalibratedMass  =   myNewRawData->myRawValue;
+
+
+
+    if ( aux == HX711_SUCCESS )
+        return   HX711_SUCCESS;
+    else
+        return   HX711_FAILURE;
+}
+
+
+
+/**
+ * @brief       HX711_CalculateMass ( Vector_count_t* myNewRawData, uint32_t myCalibratedMass, HX711_scale_t myScaleCalibratedMass )
+ *
+ * @details     It calculates the mass.
+ *
+ * @param[in]    myNewRawData:              It has myRawValue_WithCalibratedMass ( ADC code taken with calibrated mass ),
+ *                                          myRawValue_WithoutCalibratedMass ( ADC code taken without any mass ) and
+ *                                          myRawValue ( the current data taken by the system ).
+ * @param[in]    myCalibratedMass:          A known value for the calibrated mass when myRawValue_WithCalibratedMass was
+ *                                          calculated.
+ * @param[in]    myScaleCalibratedMass:     The range of the calibrated mass ( kg, g, mg or ug ).
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       The calculated mass.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/September/2017
+ * @version     14/September/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+Vector_mass_t  HX711_CalculateMass ( Vector_count_t* myNewRawData, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass )
+{
+    // Terminology by Texas Instruments: sbau175a.pdf, p8 2.1.1 Calculation of Mass
+    float m, w_zs;
+    float c_zs, w_fs, c_fs, w_t;
+    float c = 0;
+    float myFactor   =   1.0;
+
+    Vector_mass_t w;
+
+
+    // Adapt the scale ( kg as reference )
+    switch ( myScaleCalibratedMass ) {
         default:
-        case FAST_MODE:
-                cmd[0] <<=  4;
-                cmd[0]  |=  ( ( cmd[1] & 0xF0 ) >> 4 );
-                cmd[1]   =  ( ( cmd[1] & 0x0F ) << 4 );
-                cmd[1]  |=  ( ( cmd[2] & 0xF0 ) >> 4 );
+        case HX711_SCALE_kg:
+            // myFactor     =   1.0;
+            break;
 
-                dataTX   =   2;
-                break;
+        case HX711_SCALE_g:
+            myFactor     /=   1000.0;
+            break;
 
-        case WRITE_DAC_REGISTER_MODE:
-                cmd[0] <<=  1;
-                cmd[0]  |=  0x40;
-                break;
+        case HX711_SCALE_mg:
+            myFactor     /=   1000000.0;
+            break;
 
-        case WRITE_DAC_AND_EEPROM_REGISTER_MODE:
-                cmd[0] <<=  1;
-                cmd[0]  |=  0x60;
-                break;
+        case HX711_SCALE_ug:
+            myFactor     /=   1000000000.0;
+            break;
+
     }
 
 
+    // Calculate the Calibration Constant ( m )
+    w_fs    =    ( myCalibratedMass / myFactor );                               // User-specified calibration mass
+    c_zs    =    myNewRawData->myRawValue_WithoutCalibratedMass;                // ADC measurement taken with no load
+    c_fs    =    myNewRawData->myRawValue_WithCalibratedMass;                   // ADC code taken with the calibration mass applied
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], dataTX, I2C_STOP_BIT );
+    m       =    ( float )( w_fs / ( ( c_fs ) - c_zs  ) );                      // The Calibration Constant
+
+
+    // Calculate the zero-scale mass ( w_zs )
+    w_zs    =    - ( m * c_zs );
+
+
+    // Calculate the mass ( w )
+    w_t     =    myNewRawData->myRawValue_TareWeight;                           // ADC code taken without any mass after the system is calibrated;
+    c       =    myNewRawData->myRawValue;                                      // The ADC code
+
+    w.myMass   =    ( m * c ) + w_zs - w_t;                                     // The mass according to myScaleCalibratedMass
+
+
+    // Update Internal Parameters
+    _HX711_USER_CALIBATED_MASS   =   myCalibratedMass;
+    _HX711_SCALE                 =   myScaleCalibratedMass;
 
 
 
-    if ( aux == I2C_SUCCESS )
-       return   MCP4725_SUCCESS;
-    else
-       return   MCP4725_FAILURE;
+    return   w;
 }
 
 
 
 /**
- * @brief       MCP4725_SetNewValue ( NRF_TWI_Type* , MCP4725_address_t , MCP4725_write_command_type_t , Vector_new_dac_value_t )
+ * @brief       HX711_SetAutoTare ( HX711_channel_gain_t ,float ,HX711_scale_t ,Vector_count_t* ,float )
  *
- * @details     It sends a new output value.
+ * @details     It reads data without any mass on the load cell after the system is calibrated to calculate the tare weight.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
- * @param[in]    myWriteCMD:            It writes the command into the DAC or EEPROM/DAC.
- * @param[in]    myDACNewValue:         New output value.
+ * @param[in]    myChannel_Gain:            Gain/Channel to perform the new measurement.
+ * @param[in]    myCalibratedMass:          A known value for the calibrated mass when myRawValue_WithCalibratedMass was
+ *                                          calculated.
+ * @param[in]    myScaleCalibratedMass:     The range of the calibrated mass ( kg, g, mg or ug ).
+ * @param[in]    myTime:                    How long the auto-set lasts.
+ *
+ * @param[out]   myNewRawData:              myRawValue_TareWeight ( ADC code taken without any mass ).
+ *
+ *
+ * @return       Status of HX711_SetAutoTare.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/September/2017
+ * @version     14/September/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+HX711_status_t  HX711_SetAutoTare   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass, Vector_count_t* myNewRawData, float myTime )
+{
+    HX711_status_t        aux;
+    Vector_mass_t         myCalculatedMass;
+    float                 myAuxData = 0;
+    uint32_t              i = 0;
+
+
+    // Perform a new bunch of readings every 1 second
+    for ( i = 0; i < myTime; i++ ) {
+        aux          =   HX711_ReadRawData ( myChannel_Gain, myNewRawData, 10 );
+        myAuxData   +=   myNewRawData->myRawValue;
+        wait(1);
+    }
+
+    myNewRawData->myRawValue    =    ( float )( myAuxData / myTime );
+
+    // Turn it into mass
+    myCalculatedMass     =   HX711_CalculateMass ( myNewRawData, myCalibratedMass, myScaleCalibratedMass );
+
+    // Update the value without any mass
+    myNewRawData->myRawValue_TareWeight  =   myCalculatedMass.myMass;
+
+
+    // Update Internal Parameters
+    _HX711_USER_CALIBATED_MASS   =   myCalibratedMass;
+    _HX711_SCALE                 =   myScaleCalibratedMass;
+
+
+
+    if ( aux == HX711_SUCCESS )
+        return   HX711_SUCCESS;
+    else
+        return   HX711_FAILURE;
+}
+
+
+
+/**
+ * @brief       HX711_SetManualTare ( float myTareWeight )
+ *
+ * @details     It sets a tare weight manually.
+ *
+ * @param[in]    myTareWeight:          Tare weight.
  *
  * @param[out]   NaN.
  *
  *
- * @return       Status of MCP4725_SetNewValue.
+ * @return       myRawValue_TareWeight.
  *
  *
  * @author      Manuel Caballero
- * @date        7/September/2017
- * @version     7/September/2017   The ORIGIN
- * @pre         NaN
+ * @date        14/September/2017
+ * @version     14/September/2017   The ORIGIN
+ * @pre         NaN.
  * @warning     NaN.
  */
-MCP4725_status_t  MCP4725_SetNewValue   ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_write_command_type_t myWriteCMD, Vector_new_dac_value_t myDACNewValue )
+Vector_count_t  HX711_SetManualTare   ( float myTareWeight )
 {
-    uint8_t     cmd[]             =    { 0, 0, 0 };
-    uint32_t    aux               =    0;
-    uint32_t    dataTX            =    3;
+    Vector_count_t myNewTareWeight;
+
+    // Update the value defined by the user
+    myNewTareWeight.myRawValue_TareWeight  =   myTareWeight;
 
 
-    // 12-Bit of resolution ONLY!
-    if ( myDACNewValue.DAC_New_Value > 4095 )
-        return  MCP4725_FAILURE;
+
+    return   myNewTareWeight;
+}
 
 
-    // Prepare the data according to the write mode
-    cmd[1]  |=  ( ( myDACNewValue.DAC_New_Value & 0xFF0 ) >> 4 );
-    cmd[2]  |=  ( ( myDACNewValue.DAC_New_Value & 0x00F ) << 4 );
 
-    switch ( myWriteCMD ){
+/**
+ * @brief       HX711_CalculateVoltage ( Vector_count_t* ,float )
+ *
+ * @details     It calculates the mass.
+ *
+ * @param[in]    myChannel_Gain:            Gain/Channel of the measurement.
+ * @param[in]    myNewRawData:              myRawValue ( the current data taken by the system ).
+ * @param[in]    myVoltageReference:        The voltage at the converter reference input.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       The calculated voltage.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/September/2017
+ * @version     14/September/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+Vector_voltage_t  HX711_CalculateVoltage ( Vector_count_t* myNewRawData, float myVoltageReference )
+{
+    // Terminology by Texas Instruments: sbau175a.pdf, p12 3.2 Measurement Modes Raw
+    float x, B, A;
+
+    Vector_voltage_t v;
+
+
+    x   =    myNewRawData->myRawValue;
+    B   =    ( 16777216.0 - 1.0 );
+
+    // Adatp the gain
+    switch ( _HX711_CHANNEL_GAIN ) {
         default:
-        case FAST_MODE:
-                cmd[0]  |=  ( ( myDACNewValue.DAC_New_Value & 0xF00 ) >> 8 );
-                cmd[1]   =  ( myDACNewValue.DAC_New_Value & 0x0FF );
+        case CHANNEL_A_GAIN_128:
+            A             =   128.0;
+            break;
 
-                dataTX   =   2;
-                break;
+        case CHANNEL_B_GAIN_32:
+            A             =   32.0;
+            break;
 
-        case WRITE_DAC_REGISTER_MODE:
-                cmd[0]  |=  0x40;
-                break;
-
-        case WRITE_DAC_AND_EEPROM_REGISTER_MODE:
-                cmd[0]  |=  0x60;
-                break;
+        case CHANNEL_A_GAIN_64:
+            A             =   64.0;
+            break;
     }
 
 
-
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], dataTX, I2C_STOP_BIT );
-
-
-
-    if ( aux == I2C_SUCCESS )
-       return   MCP4725_SUCCESS;
-    else
-       return   MCP4725_FAILURE;
-}
+    // Calculate the voltage ( v )
+    v.myVoltage = ( float )( ( x / B ) * ( myVoltageReference / A ) );          // The voltage
 
 
 
-/**
- * @brief       MCP4725_EEPROM_Status ( NRF_TWI_Type* , MCP4725_address_t , MCP4725_eeprom_status_t )
- *
- * @details     It gets the eeprom status.
- *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
- * @param[in]    myEEPROM_Status:       EEPROM status.
- *
- * @param[out]   NaN.
- *
- *
- * @return       Status of MCP4725_EEPROM_Status.
- *
- *
- * @author      Manuel Caballero
- * @date        7/September/2017
- * @version     7/September/2017   The ORIGIN
- * @pre         NaN
- * @warning     NaN.
- */
-MCP4725_status_t  MCP4725_EEPROM_Status ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_eeprom_status_t* myEEPROM_Status )
-{
-    uint8_t     cmd[]             =    { 0, 0, 0, 0, 0 };
-    uint32_t    aux               =    0;
 
-    // Read command
-    aux = i2c_read ( myinstance, ADDR, &cmd[0], 5 );
-
-    // Update EEPROM status
-    *myEEPROM_Status =   ( ( cmd[0] & 0x80 ) >> 7 );
-
-
-
-    if ( aux == I2C_SUCCESS )
-       return   MCP4725_SUCCESS;
-    else
-       return   MCP4725_FAILURE;
-}
-
-
-
-/**
- * @brief       MCP4725_GetEEPROM_Data ( NRF_TWI_Type* , MCP4725_address_t , Vector_data_t* )
- *
- * @details     It gets the eeprom value.
- *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
- * @param[in]    myEEPROMData:          EEPROM value.
- *
- * @param[out]   NaN.
- *
- *
- * @return       Status of MCP4725_GetEEPROM_Data.
- *
- *
- * @author      Manuel Caballero
- * @date        8/September/2017
- * @version     8/September/2017   The ORIGIN
- * @pre         NaN
- * @warning     NaN.
- */
-MCP4725_status_t  MCP4725_GetEEPROM_Data    ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, Vector_data_t* myEEPROMData )
-{
-    uint8_t     cmd[]             =    { 0, 0, 0, 0, 0 };
-    uint32_t    aux               =    0;
-
-    // Read command
-    aux = i2c_read ( myinstance, ADDR, &cmd[0], 5 );
-
-    // Read EEPROM value
-    myEEPROMData->EEPROM_Data =   ( ( cmd[3] & 0x0F ) << 8 ) | ( cmd[4] );
-
-
-
-    if ( aux == I2C_SUCCESS )
-       return   MCP4725_SUCCESS;
-    else
-       return   MCP4725_FAILURE;
-}
-
-
-
-/**
- * @brief       MCP4725_GetDAC_Data ( NRF_TWI_Type* , MCP4725_address_t , Vector_data_t* )
- *
- * @details     It gets the DAC value.
- *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
- * @param[in]    myDACData:             DAC value.
- *
- * @param[out]   NaN.
- *
- *
- * @return       Status of MCP4725_GetDAC_Data.
- *
- *
- * @author      Manuel Caballero
- * @date        8/September/2017
- * @version     8/September/2017   The ORIGIN
- * @pre         NaN
- * @warning     NaN.
- */
-MCP4725_status_t  MCP4725_GetDAC_Data    ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, Vector_data_t* myDACData )
-{
-    uint8_t     cmd[]             =    { 0, 0, 0, 0, 0 };
-    uint32_t    aux               =    0;
-
-    // Read command
-    aux = i2c_read ( myinstance, ADDR, &cmd[0], 5 );
-
-    // Read DAC value
-    myDACData->DAC_Data =   ( ( cmd[1] & 0xF0 ) << 4 ) | ( ( ( ( cmd[1] & 0x0F ) >> 4 ) | ( cmd[2] & 0xF0 ) >> 4 ) );
-
-
-
-    if ( aux == I2C_SUCCESS )
-       return   MCP4725_SUCCESS;
-    else
-       return   MCP4725_FAILURE;
+    return   v;
 }
