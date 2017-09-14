@@ -1,14 +1,14 @@
 /**
- * @brief       MCP4725.h
- * @details     12-Bit Digital-to-Analog Converter with EEPROM Memory.
+ * @brief       HX711.h
+ * @details     24-Bit Analog-to-Digital Converter (ADC) for Weigh Scales.
  *              Header file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        7/September/2017
- * @version     7/September/2017    The ORIGIN
+ * @date        14/September/2017
+ * @version     14/September/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -17,80 +17,64 @@
 
 #include "stdint.h"
 #include "stdbool.h"
-#include "i2c.h"
+#include "nrf.h"
 
 
 /**
-  * @brief   DEFAULT ADDRESSES ( NOTE1: The A2 and A1 are programmed to '00' (default), if not requested by customer.
-  *                              NOTE2: On my board, the A2 and A1 are programmed to '01'. )
+  * @brief   CHANNELS & GAIN
   */
-typedef enum{
-    MCP4725_ADDRESS_LOW     =   0x62,                   /*!<   A0 pin ties to GND                                            */
-    MCP4725_ADDRESS_HIGH    =   0x63                    /*!<   A0 pin ties to VDD                                            */
-} MCP4725_address_t;
+typedef enum
+{
+    CHANNEL_A_GAIN_128      =   0,              /*!<  Channel A 128 Gain.                                               */
+    CHANNEL_B_GAIN_32       =   1,              /*!<  Channel B 32 Gain.                                                */
+    CHANNEL_A_GAIN_64       =   2               /*!<  Channel A 64 Gain.                                                */
+} HX711_channel_gain_t;
 
 
 /**
-  * @brief   COMMANDS
-  */
-#define MCP4725_GENERAL_CALL             0x00              /*!<   The MCP4725 device acknowledges the general call address                             */
-
-/* General Call Commands */
-/**
-  * @brief   GENERAL CALL COMMANDS
-  */
-#define MCP4725_GENERAL_CALL_RESET       0x06              /*!<  Perform an internal reset similar to a power-on-reset (POR).                          */
-#define MCP4725_GENERAL_CALL_WAKE_UP     0x09              /*!<  The power-down bits of the DAC register are set to a normal operation.                */
-
-
-
-
-
-/* Commands Registers */
-/**
-  * @brief   WRITE COMMAND TYPE
-  */
-typedef enum{
-    FAST_MODE                              =   0,           /*!<  This command is used to change the DAC register. EEPROM is not affected.              */
-    WRITE_DAC_REGISTER_MODE                =   1,           /*!<  Load configuration bits and data code to the DAC Register.                            */
-    WRITE_DAC_AND_EEPROM_REGISTER_MODE     =   2            /*!<  Load configuration bits and data code to the DAC Register and also write the EEPROM.  */
-} MCP4725_write_command_type_t;
+      * @brief   READY/BUSY DATA
+      */
+typedef enum
+{
+    HX711_DATA_BUSY         =   0,              /*!<  HX711 data is NOT ready to be read.                                */
+    HX711_DATA_READY        =   1               /*!<  HX711 data is ready to be read.                                    */
+} HX711_data_output_status_t;
 
 
 
 /**
-  * @brief   POWER-DOWN MODE
+  * @brief   SCALE
   */
-typedef enum{
-    NORMAL_MODE                                 =   0,      /*!<  Normal Mode.                                                                          */
-    POWER_DOWN_1KOHM_RESISTIVE_LOAD_MODE        =   1,      /*!<  Power-Down Mode. 1 k‎Ω resistor to ground.                                             */
-    POWER_DOWN_100KOHM_RESISTIVE_LOAD_MODE      =   2,      /*!<  Power-Down Mode. 100 k‎Ω resistor to ground.                                           */
-    POWER_DOWN_500KOHM_RESISTIVE_LOAD_MODE      =   3       /*!<  Power-Down Mode. 500 k‎Ω resistor to ground.                                           */
-} MCP4725_operation_mode_t;
-
-
-
-/**
-  * @brief   READY/#BUSY BIT
-  */
-typedef enum{
-    EEPROM_BUSY                                 =   0,      /*!<  EEPROM write is not completed.                                                        */
-    EEPROM_READY                                =   1       /*!<  EEPROM write is complete.                                                             */
-} MCP4725_eeprom_status_t;
+typedef enum
+{
+    HX711_SCALE_kg          =   0,              /*!<  HX711 Scale in kg.                                                 */
+    HX711_SCALE_g           =   1,              /*!<  HX711 Scale in  g.                                                 */
+    HX711_SCALE_mg          =   2,              /*!<  HX711 Scale in mg.                                                 */
+    HX711_SCALE_ug          =   3               /*!<  HX711 Scale in ug.                                                 */
+} HX711_scale_t;
 
 
 
 
 #ifndef VECTOR_STRUCT_H
 #define VECTOR_STRUCT_H
-typedef struct{
-    uint16_t EEPROM_Data;
-    uint16_t DAC_Data;
-} Vector_data_t;
+typedef struct
+{
+    float myRawValue_WithCalibratedMass;
+    float myRawValue_WithoutCalibratedMass;
+    float myRawValue_TareWeight;
+    uint32_t myRawValue;
+} Vector_count_t;
 
-typedef struct{
-    uint32_t DAC_New_Value;
-} Vector_new_dac_value_t;
+typedef struct
+{
+    float myMass;
+} Vector_mass_t;
+
+typedef struct
+{
+    float myVoltage;
+} Vector_voltage_t;
 #endif
 
 
@@ -98,21 +82,60 @@ typedef struct{
 /**
   * @brief   INTERNAL CONSTANTS
   */
-typedef enum{
-    MCP4725_SUCCESS     =       0,
-    MCP4725_FAILURE     =       1
-} MCP4725_status_t;
+#define HX711_PIN_HIGH           0x01               /*!<   Pin 'HIGH'                                                       */
+#define HX711_PIN_LOW            0x00               /*!<   Pin 'LOW'                                                        */
 
-
+typedef enum
+{
+    HX711_SUCCESS     =       0,
+    HX711_FAILURE     =       1,
+} HX711_status_t;
 
 
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-MCP4725_status_t  MCP4725_Reset                 ( NRF_TWI_Type* myinstance );
-MCP4725_status_t  MCP4725_WakeUp                ( NRF_TWI_Type* myinstance );
-MCP4725_status_t  MCP4725_PowerMode             ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_write_command_type_t myWriteCMD, MCP4725_operation_mode_t myPowerMode );
-MCP4725_status_t  MCP4725_SetNewValue           ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_write_command_type_t myWriteCMD, Vector_new_dac_value_t myDACNewValue );
-MCP4725_status_t  MCP4725_EEPROM_Status         ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_eeprom_status_t* myEEPROM_Status );
-MCP4725_status_t  MCP4725_GetEEPROM_Data        ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, Vector_data_t* myEEPROMData );
-MCP4725_status_t  MCP4725_GetDAC_Data           ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, Vector_data_t* myDACData );
+
+/** It performs an internal reset.
+     */
+HX711_status_t  HX711_Reset                         ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK );
+
+/** It puts the device into power-down mode.
+ */
+HX711_status_t  HX711_PowerDown                     ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK );
+
+/** It sets both the channel and the gain for the next measurement.
+ */
+HX711_status_t  HX711_SetChannelAndGain             ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain );
+
+/** It gets both the channel and the gain for the current measurement.
+ */
+HX711_channel_gain_t  HX711_GetChannelAndGain       ( void );
+
+/** It reads raw data from the device.
+ */
+HX711_status_t  HX711_ReadRawData                   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
+
+/** It reads raw data with an user-specified calibrated mass.
+ */
+HX711_status_t  HX711_ReadData_WithCalibratedMass   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
+
+/** It reads raw data without any mass.
+ */
+HX711_status_t  HX711_ReadData_WithoutMass          ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
+
+/** It reads raw data without any mass after the system is calibrated.
+ */
+HX711_status_t  HX711_SetAutoTare                   ( NRF_GPIO_Type* myDOUT, NRF_GPIO_Type* myPD_SCK, HX711_channel_gain_t myChannel_Gain, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass, Vector_count_t* myNewRawData, float myTime );
+
+/** It sets a tare weight manually.
+ */
+Vector_count_t  HX711_SetManualTare                 ( float myTareWeight );
+
+/** It calculates scaled data.
+ */
+Vector_mass_t  HX711_CalculateMass                  ( Vector_count_t* myNewRawData, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass );
+
+/** It calculates voltage data.
+ */
+Vector_voltage_t  HX711_CalculateVoltage            ( Vector_count_t* myNewRawData, float myVoltageReference );
