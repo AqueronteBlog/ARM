@@ -92,6 +92,7 @@
 		<Unit filename="softdevice\Include\ble_l2cap.h" />
 		<Unit filename="softdevice\Include\ble_ranges.h" />
 		<Unit filename="softdevice\Include\ble_types.h" />
+		<Unit filename="softdevice\Include\nrf_delay.h" />
 		<Unit filename="softdevice\Include\nrf_error.h" />
 		<Unit filename="softdevice\Include\nrf_error_sdm.h" />
 		<Unit filename="softdevice\Include\nrf_error_soc.h" />

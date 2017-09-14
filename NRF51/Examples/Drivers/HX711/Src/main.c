@@ -27,19 +27,16 @@
 
 int main( void )
 {
-    /*
-    MCP4725_status_t        aux;
-    Vector_new_dac_value_t  myNewDACData;
-    Vector_data_t           myDefaultData;
+    HX711_pins_t            myHX711pins;
 
     conf_GPIO   ();
     conf_TWI0   ();
     conf_TIMER0 ();
 
-    // Reset and wake the device up
-    aux = MCP4725_Reset  ( NRF_TWI0 );
-    aux = MCP4725_WakeUp ( NRF_TWI0 );
+    // Configure the pins to handle the HX711 device ( P0.12: DOUT, P0.13: PD_SCK )
+    myHX711pins = HX711_Init ( 12, 13 );
 
+/*
     // Read the default data in both EEPROM and DAC
     aux = MCP4725_GetDAC_Data    ( NRF_TWI0, MCP4725_ADDRESS_LOW, &myDefaultData );
     aux = MCP4725_GetEEPROM_Data ( NRF_TWI0, MCP4725_ADDRESS_LOW, &myDefaultData );

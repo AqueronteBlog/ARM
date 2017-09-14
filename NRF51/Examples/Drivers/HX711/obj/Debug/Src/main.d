@@ -10,4 +10,4 @@ obj\debug\src\main.o: Src\main.c Inc/nrf.h Inc/nrf51.h \
  softdevice\Include/nrf_error.h softdevice\Include/ble_gatt.h \
  softdevice\Include/ble_gattc.h softdevice\Include/ble_gatts.h \
  Src\variables.h Inc/nrf51_bitfields.h Src\board.h Src\functions.h \
- ..\..\..\..\Drivers\HX711/HX711.h
+ ..\..\..\..\Drivers\HX711/HX711.h softdevice\Include/nrf_delay.h
