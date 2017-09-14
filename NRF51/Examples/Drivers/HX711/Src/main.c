@@ -22,11 +22,12 @@
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
-#include "MCP4725.h"
+#include "HX711.h"
 
 
 int main( void )
 {
+    /*
     MCP4725_status_t        aux;
     Vector_new_dac_value_t  myNewDACData;
     Vector_data_t           myDefaultData;
@@ -89,4 +90,5 @@ int main( void )
         //__NOP();
 
     }
+    */
 }
