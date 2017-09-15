@@ -1,0 +1,122 @@
+# depslib dependency file v1.0
+1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\hx711\s130.c
+
+1505404943 source:e:\vsprojects\arm\nrf51\examples\drivers\hx711\src\functions.c
+	"functions.h"
+
+1505404943 e:\vsprojects\arm\nrf51\examples\drivers\hx711\src\functions.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"variables.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\inc\nrf.h
+	"nrf51.h"
+	"nrf51_bitfields.h"
+	"nrf51_deprecated.h"
+	"compiler_abstraction.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\inc\nrf51.h
+	<core_cm0.h>
+	"system_nrf51.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\inc\system_nrf51.h
+	<stdint.h>
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\inc\nrf51_bitfields.h
+	<core_cm0.h>
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\inc\nrf51_deprecated.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\inc\compiler_abstraction.h
+
+1505394143 e:\vsprojects\arm\nrf51\examples\drivers\hx711\src\variables.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"board.h"
+
+1505404924 e:\vsprojects\arm\nrf51\examples\drivers\hx711\src\board.h
+
+1505394142 source:e:\vsprojects\arm\nrf51\examples\drivers\hx711\src\interrupts.c
+	"interrupts.h"
+
+1505394142 e:\vsprojects\arm\nrf51\examples\drivers\hx711\src\interrupts.h
+	"variables.h"
+
+1505404924 source:e:\vsprojects\arm\nrf51\examples\drivers\hx711\src\main.c
+	"nrf.h"
+	"nrf_delay.h"
+	"ble.h"
+	"variables.h"
+	"functions.h"
+	"HX711.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\ble.h
+	"ble_ranges.h"
+	"ble_types.h"
+	"ble_gap.h"
+	"ble_l2cap.h"
+	"ble_gatt.h"
+	"ble_gattc.h"
+	"ble_gatts.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\ble_ranges.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\ble_types.h
+	<stdint.h>
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\ble_gap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\nrf_svc.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\ble_l2cap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_err.h"
+	"nrf_svc.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\ble_err.h
+	"nrf_error.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\nrf_error.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\ble_gatt.h
+	"ble_types.h"
+	"ble_ranges.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\ble_gattc.h
+	"ble_gatt.h"
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\ble_gatts.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_l2cap.h"
+	"ble_gap.h"
+	"ble_gatt.h"
+	"nrf_svc.h"
+
+1505402399 e:\vsprojects\arm\drivers\hx711\hx711.h
+	"stdint.h"
+	"stdbool.h"
+	"nrf.h"
+	"nrf_delay.h"
+
+1489150926 e:\vsprojects\arm\nrf51\examples\drivers\hx711\softdevice\include\nrf_delay.h
+	"nrf.h"
+
+1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\hx711\src\system_nrf51.c
+	<stdint.h>
+	<stdbool.h>
+	"nrf.h"
+	"system_nrf51.h"
+
+1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\hx711\startup_nrf51.s
+
+1505406790 source:e:\vsprojects\arm\drivers\hx711\hx711.c
+	"HX711.h"
+

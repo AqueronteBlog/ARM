@@ -20,8 +20,3 @@
 #define LED2        22     /*!<   LED2: P0.22   */
 #define LED3        23     /*!<   LED3: P0.23   */
 #define LED4        24     /*!<   LED4: P0.24   */
-
-
-/* TWI0 */
-#define TWI0_SCL    7      /*!<   TWI0 SCL: P0.7    */
-#define TWI0_SDA    30     /*!<   TWI0 SDA: P0.30   */

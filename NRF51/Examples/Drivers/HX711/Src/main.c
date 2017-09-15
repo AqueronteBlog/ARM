@@ -19,6 +19,7 @@
  */
 
 #include "nrf.h"
+#include "nrf_delay.h"
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
@@ -27,14 +28,25 @@
 
 int main( void )
 {
+    HX711_status_t          aux;
     HX711_pins_t            myHX711pins;
+    Vector_count_t          myData;
+
 
     conf_GPIO   ();
-    conf_TWI0   ();
-    conf_TIMER0 ();
+    //conf_TIMER0 ();
 
     // Configure the pins to handle the HX711 device ( P0.12: DOUT, P0.13: PD_SCK )
     myHX711pins = HX711_Init ( 12, 13 );
+
+    aux = HX711_PowerDown   ( myHX711pins );
+    aux = HX711_Reset       ( myHX711pins );
+    nrf_delay_ms ( 1000 );
+
+    aux = HX711_ReadData_WithoutMass ( myHX711pins, CHANNEL_A_GAIN_128, &myData, 4 );
+
+
+    while(1);
 
 /*
     // Read the default data in both EEPROM and DAC
