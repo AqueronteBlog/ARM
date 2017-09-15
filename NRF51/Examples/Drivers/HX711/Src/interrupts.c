@@ -32,7 +32,7 @@ void TIMER0_IRQHandler()
 {
     if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0 ) )
     {
-        mySTATE++;
+        myNewMeasurement     =   YES;
 
         NRF_TIMER0->EVENTS_COMPARE[0] = 0;                  // Clear ( flag ) compare register 0 event
     }

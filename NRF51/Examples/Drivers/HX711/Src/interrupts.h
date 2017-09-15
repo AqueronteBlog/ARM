@@ -23,7 +23,7 @@ void TIMER0_IRQHandler ( void );
 
 /* VARIABLES */
 extern uint8_t   dataToBeTX;
-extern uint32_t  mySTATE;
+extern uint32_t  myNewMeasurement;
 extern uint32_t  TX_inProgress;
 extern uint8_t   TX_buff[];
 extern uint8_t   *myPtr;
