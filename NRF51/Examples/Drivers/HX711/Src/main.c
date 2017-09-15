@@ -31,10 +31,12 @@ int main( void )
     HX711_status_t          aux;
     HX711_pins_t            myHX711pins;
     Vector_count_t          myData;
+    Vector_mass_t           myCalculatedMass;
+    Vector_voltage_t        myCalculatedVoltage;
 
 
     conf_GPIO   ();
-    //conf_TIMER0 ();
+    conf_TIMER0 ();
 
     // Configure the pins to handle the HX711 device ( P0.12: DOUT, P0.13: PD_SCK )
     myHX711pins = HX711_Init ( 12, 13 );
@@ -43,21 +45,34 @@ int main( void )
     aux = HX711_Reset       ( myHX711pins );
     nrf_delay_ms ( 1000 );
 
+
+    // CALIBRATION time start!
+    // 1. REMOVE THE MASS ON THE LOAD CELL ( ALL LEDs OFF ). Read data without any mass on the load cell
     aux = HX711_ReadData_WithoutMass ( myHX711pins, CHANNEL_A_GAIN_128, &myData, 4 );
 
+    NRF_GPIO->OUTCLR    =   ( 1UL << LED1 );
+    nrf_delay_ms ( 3000 );
 
-    while(1);
-
-/*
-    // Read the default data in both EEPROM and DAC
-    aux = MCP4725_GetDAC_Data    ( NRF_TWI0, MCP4725_ADDRESS_LOW, &myDefaultData );
-    aux = MCP4725_GetEEPROM_Data ( NRF_TWI0, MCP4725_ADDRESS_LOW, &myDefaultData );
+    // 2. PUT A KNOWN MASS ON THE LOAD CELL ( JUST LED1 ON ). Read data with an user-specified calibration mass
+    aux = HX711_ReadData_WithCalibratedMass ( myHX711pins, CHANNEL_A_GAIN_128, &myData, 4 );
+    // CALIBRATION time end!
 
 
-    mySTATE                  =   1;                 // Reset counter
+    // [ OPTIONAL ] REMOVE THE MASS ON THE LOAD CELL ( JUST LED2 ON ). Read the device without any mass to calculate the tare weight for 5 seconds
+    NRF_GPIO->OUTSET    =   ( 1UL << LED1 );
+    NRF_GPIO->OUTCLR    =   ( 1UL << LED2 );
+    nrf_delay_ms ( 3000 );
+    NRF_GPIO->OUTSET    =   ( 1UL << LED2 );
+
+    // Calculating the tare weight ( JUST LED3 ON )
+    NRF_GPIO->OUTCLR    =   ( 1UL << LED3 );
+    aux = HX711_SetAutoTare ( myHX711pins, CHANNEL_A_GAIN_128, 1.0, HX711_SCALE_kg, &myData, 5 );
+    NRF_GPIO->OUTSET    =   ( 1UL << LED3 );
+
+
+
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
-
 
     while( 1 )
     {
@@ -71,33 +86,19 @@ int main( void )
 		__WFE();
 
 
-		switch ( mySTATE ){
-        default:
-        case 1:
-        // Vout ~ 0V
-            NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
-            myNewDACData.DAC_New_Value   =   0;
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, FAST_MODE, myNewDACData );
-            break;
+		if ( myNewMeasurement == YES ){
+            NRF_GPIO->OUTCLR    =   ( 1UL << LED4 );
 
-        case 2:
-        // Vout = ~ ( Vref * 0.5 )
-            myNewDACData.DAC_New_Value   =   2048;
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_AND_EEPROM_REGISTER_MODE, myNewDACData );
-            break;
+            aux                 =    HX711_ReadRawData       ( myHX711pins, CHANNEL_A_GAIN_128, &myData, 4 );
+            myCalculatedMass    =    HX711_CalculateMass     ( &myData, 1.0, HX711_SCALE_kg );
+            myCalculatedVoltage =    HX711_CalculateVoltage  ( &myData, 5.0 );
 
-        case 3:
-        // Vout ~ Vref
-            myNewDACData.DAC_New_Value   =   4095;
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_REGISTER_MODE, myNewDACData );
+            myNewMeasurement    =   NO;
 
-            mySTATE =   0;
-            NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
-            break;
+            NRF_GPIO->OUTSET    =   ( 1UL << LED4 );
 		}
 
         //__NOP();
 
     }
-    */
 }
