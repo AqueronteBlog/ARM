@@ -1,10 +1,13 @@
 /**
  * @brief       main.c
- * @details     [TODO] XXX.
+ * @details     This example shows how to work with the external sensor HX711 a
+ *              24-Bit Analog-to-Digital Converter (ADC) for Weigh Scales.
  *
- *
- *              The voltage will change every 0.5 seconds by the timer, the rest of the time, the
+ *              A new measurement will be performed every 0.5 seconds by the timer, the rest of the time, the
  *              microcontroller is in low power.
+ *
+ *              It is recommended to use breakpoints to see how this example works, put a breakpoint on
+ *              line 99 ( myNewMeasurement    =   NO; ) and monitor the variables to see the result.
  *
  * @return      NA
  *
