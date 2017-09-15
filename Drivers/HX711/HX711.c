@@ -42,15 +42,18 @@ HX711_pins_t HX711_Init ( uint32_t myDOUT, uint32_t myPD_SCK )
 
 
     // INPUT. DOUT PIN
-    NRF_GPIO->PIN_CNF[ myDOUT ]   =    ( GPIO_PIN_CNF_SENSE_Disabled  << GPIO_PIN_CNF_SENSE_Pos   ) |
-                                       ( GPIO_PIN_CNF_DIR_Input       << GPIO_PIN_CNF_DIR_Pos     );
+    NRF_GPIO->PIN_CNF[ myDOUT ]   =    ( GPIO_PIN_CNF_DIR_Input       <<  GPIO_PIN_CNF_DIR_Pos    ) |
+                                       ( GPIO_PIN_CNF_INPUT_Connect   <<  GPIO_PIN_CNF_INPUT_Pos  ) |
+                                       ( GPIO_PIN_CNF_PULL_Disabled   <<  GPIO_PIN_CNF_PULL_Pos   ) |
+                                       ( GPIO_PIN_CNF_DRIVE_S0S1      <<  GPIO_PIN_CNF_DRIVE_Pos  ) |
+                                       ( GPIO_PIN_CNF_SENSE_Disabled  <<  GPIO_PIN_CNF_SENSE_Pos  );
 
     // OUTPUT. PD_SCK PIN
-    NRF_GPIO->PIN_CNF[ myPD_SCK ] =    ( GPIO_PIN_CNF_SENSE_Disabled  << GPIO_PIN_CNF_SENSE_Pos   ) |
-                                       ( GPIO_PIN_CNF_DRIVE_S0S1      << GPIO_PIN_CNF_DRIVE_Pos   ) |
-                                       ( GPIO_PIN_CNF_PULL_Disabled   << GPIO_PIN_CNF_PULL_Pos    ) |
-                                       ( GPIO_PIN_CNF_INPUT_Connect   << GPIO_PIN_CNF_INPUT_Pos   ) |
-                                       ( GPIO_PIN_CNF_DIR_Output      << GPIO_PIN_CNF_DIR_Pos     );
+    NRF_GPIO->PIN_CNF[ myPD_SCK ] =    ( GPIO_PIN_CNF_SENSE_Disabled  <<  GPIO_PIN_CNF_SENSE_Pos  ) |
+                                       ( GPIO_PIN_CNF_DRIVE_S0S1      <<  GPIO_PIN_CNF_DRIVE_Pos  ) |
+                                       ( GPIO_PIN_CNF_PULL_Disabled   <<  GPIO_PIN_CNF_PULL_Pos   ) |
+                                       ( GPIO_PIN_CNF_INPUT_Connect   <<  GPIO_PIN_CNF_INPUT_Pos  ) |
+                                       ( GPIO_PIN_CNF_DIR_Output      <<  GPIO_PIN_CNF_DIR_Pos    );
 
 
     // Associate the pins
