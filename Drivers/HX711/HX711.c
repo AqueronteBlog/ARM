@@ -158,7 +158,8 @@ HX711_status_t  HX711_PowerDown   ( HX711_pins_t myPins )
  * @date        14/September/2017
  * @version     14/September/2017   The ORIGIN
  * @pre         NaN.
- * @warning     NaN.
+ * @warning     nrf_delay_us ( 1 ) does not seem to work well, the delay is about
+ *              5us instead of 1us.
  */
 HX711_status_t  HX711_SetChannelAndGain    ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain )
 {
@@ -269,7 +270,8 @@ HX711_channel_gain_t  HX711_GetChannelAndGain ( void )
  *                                  avoid the microcontroller gets stuck.
  *              11/September/2017   The ORIGIN
  * @pre         NaN.
- * @warning     NaN.
+ * @warning     nrf_delay_us ( 1 ) does not seem to work well, the delay is about
+ *              5us instead of 1us.
  */
 HX711_status_t  HX711_ReadRawData    ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
 {
@@ -669,7 +671,7 @@ Vector_voltage_t  HX711_CalculateVoltage ( Vector_count_t* myNewRawData, float m
 
 
     x   =    myNewRawData->myRawValue;
-    B   =    ( 16777216.0 - 1.0 );
+    B   =    ( 16777216.0 - 1.0 );              // 2^24 - 1
 
     // Adatp the gain
     switch ( _HX711_CHANNEL_GAIN )
