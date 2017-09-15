@@ -27,5 +27,5 @@
 
 
 /* VARIABLES */
-uint32_t mySTATE;                       /*!<   It indicates the next action to be performed                                       */
+uint32_t myNewMeasurement;          /*!<   It indicates a new measurement to be performed */
 
