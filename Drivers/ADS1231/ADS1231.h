@@ -1,14 +1,14 @@
 /**
- * @brief       HX711.h
- * @details     24-Bit Analog-to-Digital Converter (ADC) for Weigh Scales.
+ * @brief       ADS1231.h
+ * @details     24-Bit Analog-to-Digital Converter for Bridge Sensors.
  *              Header file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017    The ORIGIN
+ * @date        18/September/2017
+ * @version     18/September/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -29,7 +29,7 @@ typedef enum
     CHANNEL_A_GAIN_128      =   0,              /*!<  Channel A 128 Gain.                                               */
     CHANNEL_B_GAIN_32       =   1,              /*!<  Channel B 32 Gain.                                                */
     CHANNEL_A_GAIN_64       =   2               /*!<  Channel A 64 Gain.                                                */
-} HX711_channel_gain_t;
+} ADS1231_channel_gain_t;
 
 
 /**
@@ -37,9 +37,9 @@ typedef enum
       */
 typedef enum
 {
-    HX711_DATA_BUSY         =   0,              /*!<  HX711 data is NOT ready to be read.                                */
-    HX711_DATA_READY        =   1               /*!<  HX711 data is ready to be read.                                    */
-} HX711_data_output_status_t;
+    ADS1231_DATA_BUSY         =   0,              /*!<  ADS1231 data is NOT ready to be read.                                */
+    ADS1231_DATA_READY        =   1               /*!<  ADS1231 data is ready to be read.                                    */
+} ADS1231_data_output_status_t;
 
 
 
@@ -48,11 +48,11 @@ typedef enum
   */
 typedef enum
 {
-    HX711_SCALE_kg          =   0,              /*!<  HX711 Scale in kg.                                                 */
-    HX711_SCALE_g           =   1,              /*!<  HX711 Scale in  g.                                                 */
-    HX711_SCALE_mg          =   2,              /*!<  HX711 Scale in mg.                                                 */
-    HX711_SCALE_ug          =   3               /*!<  HX711 Scale in ug.                                                 */
-} HX711_scale_t;
+    ADS1231_SCALE_kg          =   0,              /*!<  ADS1231 Scale in kg.                                                 */
+    ADS1231_SCALE_g           =   1,              /*!<  ADS1231 Scale in  g.                                                 */
+    ADS1231_SCALE_mg          =   2,              /*!<  ADS1231 Scale in mg.                                                 */
+    ADS1231_SCALE_ug          =   3               /*!<  ADS1231 Scale in ug.                                                 */
+} ADS1231_scale_t;
 
 
 
@@ -85,26 +85,26 @@ typedef struct
 typedef struct
 {
     uint32_t DOUT;
-    uint32_t PD_SCK;
-} HX711_pins_t;
+    uint32_t SCLK;
+} ADS1231_pins_t;
 
 
 /**
   * @brief   INTERNAL CONSTANTS
   */
-#define HX711_PIN_HIGH           0x01               /*!<   Pin 'HIGH'                                                       */
-#define HX711_PIN_LOW            0x00               /*!<   Pin 'LOW'                                                        */
+#define ADS1231_PIN_HIGH           0x01               /*!<   Pin 'HIGH'                                                       */
+#define ADS1231_PIN_LOW            0x00               /*!<   Pin 'LOW'                                                        */
 
 typedef enum
 {
-    HX711_SUCCESS     =       0,
-    HX711_FAILURE     =       1,
-} HX711_status_t;
+    ADS1231_SUCCESS     =       0,
+    ADS1231_FAILURE     =       1,
+} ADS1231_status_t;
 
 
-HX711_channel_gain_t    _HX711_CHANNEL_GAIN;
-HX711_scale_t           _HX711_SCALE;
-float                   _HX711_USER_CALIBATED_MASS;
+ADS1231_channel_gain_t    _ADS1231_CHANNEL_GAIN;
+ADS1231_scale_t           _ADS1231_SCALE;
+float                   _ADS1231_USER_CALIBATED_MASS;
 
 
 /**
@@ -113,48 +113,40 @@ float                   _HX711_USER_CALIBATED_MASS;
 
 /** It configures the pins to use.
      */
-HX711_pins_t    HX711_Init                          ( uint32_t myDOUT, uint32_t myPD_SCK );
+ADS1231_pins_t    ADS1231_Init                          ( uint32_t myDOUT, uint32_t mySCLK );
 
 /** It performs an internal reset.
      */
-HX711_status_t  HX711_Reset                         ( HX711_pins_t myPins );
+ADS1231_status_t  ADS1231_Reset                         ( ADS1231_pins_t myPins );
 
 /** It puts the device into power-down mode.
  */
-HX711_status_t  HX711_PowerDown                     ( HX711_pins_t myPins );
-
-/** It sets both the channel and the gain for the next measurement.
- */
-HX711_status_t  HX711_SetChannelAndGain             ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain );
-
-/** It gets both the channel and the gain for the current measurement.
- */
-HX711_channel_gain_t  HX711_GetChannelAndGain       ( void );
+ADS1231_status_t  ADS1231_PowerDown                     ( ADS1231_pins_t myPins );
 
 /** It reads raw data from the device.
  */
-HX711_status_t  HX711_ReadRawData                   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
+ADS1231_status_t  ADS1231_ReadRawData                   ( ADS1231_pins_t myPins, Vector_count_t* myNewRawData, uint32_t myAverage );
 
 /** It reads raw data with an user-specified calibrated mass.
  */
-HX711_status_t  HX711_ReadData_WithCalibratedMass   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
+ADS1231_status_t  ADS1231_ReadData_WithCalibratedMass   ( ADS1231_pins_t myPins, Vector_count_t* myNewRawData, uint32_t myAverage );
 
 /** It reads raw data without any mass.
  */
-HX711_status_t  HX711_ReadData_WithoutMass          ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage );
+ADS1231_status_t  ADS1231_ReadData_WithoutMass          ( ADS1231_pins_t myPins, Vector_count_t* myNewRawData, uint32_t myAverage );
 
 /** It reads raw data without any mass after the system is calibrated.
  */
-HX711_status_t  HX711_SetAutoTare                   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass, Vector_count_t* myNewRawData, float myTime );
+ADS1231_status_t  ADS1231_SetAutoTare                   ( ADS1231_pins_t myPins, float myCalibratedMass, ADS1231_scale_t myScaleCalibratedMass, Vector_count_t* myNewRawData, float myTime );
 
 /** It sets a tare weight manually.
  */
-Vector_count_t  HX711_SetManualTare                 ( float myTareWeight );
+Vector_count_t  ADS1231_SetManualTare                   ( float myTareWeight );
 
 /** It calculates scaled data.
  */
-Vector_mass_t  HX711_CalculateMass                  ( Vector_count_t* myNewRawData, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass );
+Vector_mass_t  ADS1231_CalculateMass                    ( Vector_count_t* myNewRawData, float myCalibratedMass, ADS1231_scale_t myScaleCalibratedMass );
 
 /** It calculates voltage data.
  */
-Vector_voltage_t  HX711_CalculateVoltage            ( Vector_count_t* myNewRawData, float myVoltageReference );
+Vector_voltage_t  ADS1231_CalculateVoltage              ( Vector_count_t* myNewRawData, float myVoltageReference );

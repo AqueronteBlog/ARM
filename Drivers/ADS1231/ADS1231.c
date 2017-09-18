@@ -1,28 +1,28 @@
 /**
- * @brief       HX711.c
- * @details     24-Bit Analog-to-Digital Converter (ADC) for Weigh Scales.
+ * @brief       ADS1231.c
+ * @details     24-Bit Analog-to-Digital Converter for Bridge Sensors.
  *              Functions file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017    The ORIGIN
+ * @date        18/September/2017
+ * @version     18/September/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "HX711.h"
+#include "ADS1231.h"
 
 /**
- * @brief       HX711_Init ( uint32_t , uint32_t )
+ * @brief       ADS1231_Init ( uint32_t , uint32_t )
  *
  * @details     It performs an internal reset.
  *
- * @param[in]    myDOUT:        Pin to be DOUT.
- * @param[in]    myPD_SCK:      Pin to be PD_SCK.
+ * @param[in]    myDOUT:        Pin to be #DRDY/DOUT.
+ * @param[in]    mySCLK:        Pin to be SCLK.
  *
  * @param[out]   NaN.
  *
@@ -31,25 +31,25 @@
  *
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   The ORIGIN
+ * @date        18/September/2017
+ * @version     18/September/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-HX711_pins_t HX711_Init ( uint32_t myDOUT, uint32_t myPD_SCK )
+ADS1231_pins_t ADS1231_Init ( uint32_t myDOUT, uint32_t mySCLK )
 {
-    HX711_pins_t myPins;
+    ADS1231_pins_t myPins;
 
 
-    // INPUT. DOUT PIN
+    // INPUT. #DRDY/DOUT PIN
     NRF_GPIO->PIN_CNF[ myDOUT ]   =    ( GPIO_PIN_CNF_DIR_Input       <<  GPIO_PIN_CNF_DIR_Pos    ) |
                                        ( GPIO_PIN_CNF_INPUT_Connect   <<  GPIO_PIN_CNF_INPUT_Pos  ) |
                                        ( GPIO_PIN_CNF_PULL_Disabled   <<  GPIO_PIN_CNF_PULL_Pos   ) |
                                        ( GPIO_PIN_CNF_DRIVE_S0S1      <<  GPIO_PIN_CNF_DRIVE_Pos  ) |
                                        ( GPIO_PIN_CNF_SENSE_Disabled  <<  GPIO_PIN_CNF_SENSE_Pos  );
 
-    // OUTPUT. PD_SCK PIN
-    NRF_GPIO->PIN_CNF[ myPD_SCK ] =    ( GPIO_PIN_CNF_SENSE_Disabled  <<  GPIO_PIN_CNF_SENSE_Pos  ) |
+    // OUTPUT. SCLK PIN
+    NRF_GPIO->PIN_CNF[ mySCLK ]   =    ( GPIO_PIN_CNF_SENSE_Disabled  <<  GPIO_PIN_CNF_SENSE_Pos  ) |
                                        ( GPIO_PIN_CNF_DRIVE_S0S1      <<  GPIO_PIN_CNF_DRIVE_Pos  ) |
                                        ( GPIO_PIN_CNF_PULL_Disabled   <<  GPIO_PIN_CNF_PULL_Pos   ) |
                                        ( GPIO_PIN_CNF_INPUT_Connect   <<  GPIO_PIN_CNF_INPUT_Pos  ) |
@@ -58,7 +58,7 @@ HX711_pins_t HX711_Init ( uint32_t myDOUT, uint32_t myPD_SCK )
 
     // Associate the pins
     myPins.DOUT     =   myDOUT;
-    myPins.PD_SCK   =   myPD_SCK;
+    myPins.SCLK     =   mySCLK;
 
 
     return   myPins;
@@ -67,7 +67,7 @@ HX711_pins_t HX711_Init ( uint32_t myDOUT, uint32_t myPD_SCK )
 
 
 /**
- * @brief       HX711_Reset   ( void )
+ * @brief       ADS1231_Reset   ( void )
  *
  * @details     It performs an internal reset.
  *
@@ -76,37 +76,37 @@ HX711_pins_t HX711_Init ( uint32_t myDOUT, uint32_t myPD_SCK )
  * @param[out]   NaN.
  *
  *
- * @return       Status of HX711_Reset.
+ * @return       Status of ADS1231_Reset.
  *
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   The ORIGIN
- * @pre         When PD_SCK pin changes from low to high and stays at high for
- *              longer than 60μs, HX711 enters power down mode.
+ * @date        18/September/2017
+ * @version     18/September/2017   The ORIGIN
+ * @pre         When SCLK pin changes from low to high and stays at high for
+ *              longer than 26μs, ADS1231 enters power down mode.
  *
- *              When PD_SCK returns to low, chip will reset and enter normal
+ *              When SCLK returns to low, chip will reset and enter normal
  *              operation mode.
  * @warning     NaN.
  */
-HX711_status_t  HX711_Reset   ( HX711_pins_t myPins )
+ADS1231_status_t  ADS1231_Reset   ( ADS1231_pins_t myPins )
 {
-    NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );                                // PD_SCK HIGH
-    nrf_delay_us ( 120 );                                                            // Datasheet p5. At least 60us ( Security Factor: 2*60us = 120us )
-    NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );                                // PD_SCK LOW
+    NRF_GPIO->OUTSET    =   ( 1UL << myPins.SCLK );                                // SCLK HIGH
+    nrf_delay_us ( 52 );                                                          // Datasheet p15. At least 26us ( Security Factor: 2*26us = 52us )
+    NRF_GPIO->OUTCLR    =   ( 1UL << myPins.SCLK );                                // SCLK LOW
 
 
 
-    if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH )
-        return   HX711_SUCCESS;
+    if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == ADS1231_PIN_HIGH )
+        return   ADS1231_SUCCESS;
     else
-        return   HX711_FAILURE;
+        return   ADS1231_FAILURE;
 }
 
 
 
 /**
- * @brief       HX711_PowerDown   ( void )
+ * @brief       ADS1231_PowerDown   ( void )
  *
  * @details     It puts the device in power-down mode.
  *
@@ -115,179 +115,62 @@ HX711_status_t  HX711_Reset   ( HX711_pins_t myPins )
  * @param[out]   NaN.
  *
  *
- * @return       Status of HX711_PowerDown.
+ * @return       Status of ADS1231_PowerDown.
  *
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   The ORIGIN
- * @pre         When PD_SCK pin changes from low to high and stays at high for
- *              longer than 60μs, HX711 enters power down mode.
+ * @date        18/September/2017
+ * @version     18/September/2017   The ORIGIN
+ * @pre         When SCLK pin changes from low to high and stays at high for
+ *              longer than 26μs, ADS1231 enters power down mode.
  * @warning     NaN.
  */
-HX711_status_t  HX711_PowerDown   ( HX711_pins_t myPins )
+ADS1231_status_t  ADS1231_PowerDown   ( ADS1231_pins_t myPins )
 {
-    // _PD_SCK  =  HX711_PIN_HIGH;
-    NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );
-    nrf_delay_us ( 120 );                                                           // Datasheet p5. At least 60us ( Security Factor: 2*60us = 120us )
+    // _SCLK  =  ADS1231_PIN_HIGH;
+    NRF_GPIO->OUTSET    =   ( 1UL << myPins.SCLK );
+    nrf_delay_us ( 52 );                                                           // Datasheet p15. At least 26us ( Security Factor: 2*26us = 52us )
 
 
 
-    if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH )
-        return   HX711_SUCCESS;
+    if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == ADS1231_PIN_HIGH )
+        return   ADS1231_SUCCESS;
     else
-        return   HX711_FAILURE;
+        return   ADS1231_FAILURE;
 }
 
 
 
 /**
- * @brief       HX711_SetChannelAndGain   ( HX711_channel_gain_t myChannel_Gain )
+ * @brief       ADS1231_ReadRawData   ( ADS1231_pins_t, Vector_count_t*, uint32_t )
  *
- * @details     It sets both the channel and the gain for the next measurement.
+ * @details     It reads the raw data from the device.
  *
- * @param[in]    myChannel_Gain:    Channel and Gain to perform the new measurement.
- *
- * @param[out]   NaN.
- *
- *
- * @return       Status of HX711_SetChannelAndGain.
- *
- *
- * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   The ORIGIN
- * @pre         NaN.
- * @warning     nrf_delay_us ( 1 ) does not seem to work well, the delay is about
- *              5us instead of 1us.
- */
-HX711_status_t  HX711_SetChannelAndGain    ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain )
-{
-    uint32_t myPulses   =    0;
-    uint32_t i          =    0;                                                 // Counter and timeout variable
-
-    // Select the gain/channel
-    switch ( myChannel_Gain )
-    {
-    default:
-    case CHANNEL_A_GAIN_128:
-        _HX711_CHANNEL_GAIN  =   CHANNEL_A_GAIN_128;                        // Update the gain parameter
-        myPulses             =   25;
-        break;
-
-    case CHANNEL_B_GAIN_32:
-        _HX711_CHANNEL_GAIN  =   CHANNEL_B_GAIN_32;                         // Update the gain parameter
-        myPulses             =   26;
-        break;
-
-    case CHANNEL_A_GAIN_64:
-        _HX711_CHANNEL_GAIN  =   CHANNEL_A_GAIN_64;                         // Update the gain parameter
-        myPulses             =   27;
-        break;
-    }
-
-
-    // Wait until the device is ready or timeout
-    i        =   23232323;
-    //_PD_SCK  =  HX711_PIN_LOW;
-    NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
-    while ( ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH ) && ( --i ) );
-
-    // Check if something is wrong with the device because of the timeout
-    if ( i < 1 )
-        return   HX711_FAILURE;
-
-    // Change the gain for the NEXT mesurement ( previous data will be ignored )
-    do
-    {
-        nrf_delay_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-        // _PD_SCK  =  HX711_PIN_HIGH;
-        NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );
-        nrf_delay_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-        //_PD_SCK  =  HX711_PIN_LOW;
-        NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
-
-        myPulses--;
-    }
-    while ( myPulses > 0 );
-
-
-
-
-    if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH )
-        return   HX711_SUCCESS;
-    else
-        return   HX711_FAILURE;
-}
-
-
-
-/**
- * @brief       HX711_GetChannelAndGain   ( void )
- *
- * @details     It gets both the channel and the gain for the current measurement.
- *
- * @param[in]    NaN.
- *
- * @param[out]   NaN.
- *
- *
- * @return       Channel and Gain.
- *
- *
- * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   The ORIGIN
- * @pre         NaN.
- * @warning     NaN.
- */
-HX711_channel_gain_t  HX711_GetChannelAndGain ( void )
-{
-    return   _HX711_CHANNEL_GAIN;
-}
-
-
-
-/**
- * @brief       HX711_ReadRawData   ( HX711_channel_gain_t myChannel_Gain, Vector_count_t*, uint32_t )
- *
- * @details     It reads the raw data from the device according to the channel
- *              and its gain.
- *
- * @param[in]    myChannel_Gain:    Channel and Gain to perform the new read.
+ * @param[in]    myPins:            The pins to communicate with the device.
  * @param[in]    myAverage:         How many measurement we have to get and deliver the average.
  *
  * @param[out]   myNewRawData:      The new value from the device.
  *
  *
- * @return       Status of HX711_ReadRawData.
+ * @return       Status of ADS1231_ReadRawData.
  *
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   Gain mode was fixed, now it gets the value
- *                                  a given gain/channel. A timeout was added to
- *                                  avoid the microcontroller gets stuck.
- *              11/September/2017   The ORIGIN
+ * @date        18/September/2017
+ * @version     18/September/2017   The ORIGIN
  * @pre         NaN.
  * @warning     nrf_delay_us ( 1 ) does not seem to work well, the delay is about
  *              5us instead of 1us.
  */
-HX711_status_t  HX711_ReadRawData    ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+ADS1231_status_t  ADS1231_ReadRawData    ( ADS1231_pins_t myPins, Vector_count_t* myNewRawData, uint32_t myAverage )
 {
     uint32_t i           =   0;                                                 // Counter and timeout variable
-    uint32_t ii          =   0;                                                 // Counter variable
+    uint32_t ii          =   0;                                                 // Counter for average
     uint32_t myAuxData   =   0;
-    uint32_t myPulses    =   0;
 
 
 
     myNewRawData->myRawValue    =   0;                                          // Reset variable at the beginning
-
-    // Check the gain if it is different, update it ( previous data will be ignored! )
-    if ( myChannel_Gain != _HX711_CHANNEL_GAIN )
-        HX711_SetChannelAndGain ( myPins, myChannel_Gain );
-
 
     // Start collecting the new measurement as many as myAverage
     for ( ii = 0; ii < myAverage; ii++ )
@@ -297,67 +180,36 @@ HX711_status_t  HX711_ReadRawData    ( HX711_pins_t myPins, HX711_channel_gain_t
 
         // Wait until the device is ready or timeout
         i        =   23232323;
-        //_PD_SCK  =  HX711_PIN_LOW;
-        NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
-        while ( ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH ) && ( --i ) );
+        //_SCLK  =  ADS1231_PIN_LOW;
+        NRF_GPIO->OUTCLR    =   ( 1UL << myPins.SCLK );
+        while ( ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == ADS1231_PIN_HIGH ) && ( --i ) );
 
         // Check if something is wrong with the device because of the timeout
         if ( i < 1 )
-            return   HX711_FAILURE;
+            return   ADS1231_FAILURE;
 
 
         // Read the data
         for ( i = 0; i < 24; i++ )
         {
-            nrf_delay_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-            //_PD_SCK  =  HX711_PIN_HIGH;
-            NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );
-            nrf_delay_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
+            // nrf_delay_us ( 1 );                                                  // Datasheet p13.  t_SCLK ( Min. 100ns )
+            NRF_GPIO->OUTSET    =   ( 1UL << myPins.SCLK );
+            // nrf_delay_us ( 1 );                                                  // Datasheet p13.  t_SCLK ( Min. 100ns )
             myAuxData    <<=     1;
-            //_PD_SCK  =  HX711_PIN_LOW;
-            NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
+            NRF_GPIO->OUTCLR    =   ( 1UL << myPins.SCLK );
 
             // High or Low bit
-            if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH )
+            if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == ADS1231_PIN_HIGH )
                 myAuxData++;
         }
 
         // Last bit to release the bus
-        nrf_delay_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-        //_PD_SCK  =  HX711_PIN_HIGH;
-        NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );
-        nrf_delay_us ( 1 );                                                          // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-        //_PD_SCK  =  HX711_PIN_LOW;
-        NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
+        // nrf_delay_us ( 1 );                                                      // Datasheet p13.  t_SCLK ( Min. 100ns )
+        NRF_GPIO->OUTSET    =   ( 1UL << myPins.SCLK );
+        // nrf_delay_us ( 1 );                                                      // Datasheet p13.  t_SCLK ( Min. 100ns )
+        NRF_GPIO->OUTCLR    =   ( 1UL << myPins.SCLK );
 
 
-        // Depending on the Gain we have to generate more CLK pulses
-        switch ( _HX711_CHANNEL_GAIN )
-        {
-        default:
-        case CHANNEL_A_GAIN_128:
-            myPulses             =   25;
-            break;
-
-        case CHANNEL_B_GAIN_32:
-            myPulses             =   26;
-            break;
-
-        case CHANNEL_A_GAIN_64:
-            myPulses             =   27;
-            break;
-        }
-
-        // Generate those extra pulses for the next measurement
-        for ( i = 25; i < myPulses; i++ )
-        {
-            nrf_delay_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-            //_PD_SCK  =  HX711_PIN_HIGH;
-            NRF_GPIO->OUTSET    =   ( 1UL << myPins.PD_SCK );
-            nrf_delay_us ( 1 );                                                      // Datasheet p5. T3 and T4 ( Min. 0.2us | Typ. 1us )
-            //_PD_SCK  =  HX711_PIN_LOW;
-            NRF_GPIO->OUTCLR    =   ( 1UL << myPins.PD_SCK );
-        }
 
         // Update data to get the average
         myAuxData                  ^=    0x800000;
@@ -368,40 +220,40 @@ HX711_status_t  HX711_ReadRawData    ( HX711_pins_t myPins, HX711_channel_gain_t
 
 
 
-    if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == HX711_PIN_HIGH )
-        return   HX711_SUCCESS;
+    if ( ( ( NRF_GPIO->IN >> myPins.DOUT ) & 1UL ) == ADS1231_PIN_HIGH )
+        return   ADS1231_SUCCESS;
     else
-        return   HX711_FAILURE;
+        return   ADS1231_FAILURE;
 }
 
 
 
 /**
- * @brief       HX711_ReadData_WithCalibratedMass ( HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+ * @brief       ADS1231_ReadData_WithCalibratedMass ( ADS1231_pins_t , Vector_count_t* , uint32_t )
  *
  * @details     It reads data with a calibrated mass on the load cell.
  *
- * @param[in]    myChannel_Gain:        Gain/Channel to perform the new measurement.
+ * @param[in]    myPins:                The pins to communicate with the device.
  * @param[in]    myAverage:             How many data to read.
  *
  * @param[out]   myNewRawData:          myRawValue_WithCalibratedMass ( ADC code taken with calibrated mass ).
  *
  *
- * @return       Status of HX711_ReadData_WithCalibratedMass.
+ * @return       Status of ADS1231_ReadData_WithCalibratedMass.
  *
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   The ORIGIN
+ * @date        18/September/2017
+ * @version     18/September/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-HX711_status_t  HX711_ReadData_WithCalibratedMass   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+ADS1231_status_t  ADS1231_ReadData_WithCalibratedMass   ( ADS1231_pins_t myPins, Vector_count_t* myNewRawData, uint32_t myAverage )
 {
-    HX711_status_t        aux;
+    ADS1231_status_t        aux;
 
     // Perform a new bunch of readings
-    aux  =   HX711_ReadRawData ( myPins, myChannel_Gain, myNewRawData, myAverage );
+    aux  =   ADS1231_ReadRawData ( myPins, myNewRawData, myAverage );
 
 
     // Update the value with a calibrated mass
@@ -409,40 +261,40 @@ HX711_status_t  HX711_ReadData_WithCalibratedMass   ( HX711_pins_t myPins, HX711
 
 
 
-    if ( aux == HX711_SUCCESS )
-        return   HX711_SUCCESS;
+    if ( aux == ADS1231_SUCCESS )
+        return   ADS1231_SUCCESS;
     else
-        return   HX711_FAILURE;
+        return   ADS1231_FAILURE;
 }
 
 
 
 /**
- * @brief       HX711_ReadData_WithoutMass ( HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+ * @brief       ADS1231_ReadData_WithoutMass ( ADS1231_pins_t , Vector_count_t* , uint32_t )
  *
  * @details     It reads data without any mass on the load cell.
  *
- * @param[in]    myChannel_Gain:        Gain/Channel to perform the new measurement.
+ * @param[in]    myPins:                The pins to communicate with the device.
  * @param[in]    myAverage:             How many data to read.
  *
  * @param[out]   myNewRawData:          myRawValue_WithoutCalibratedMass ( ADC code taken without any mass ).
  *
  *
- * @return       Status of HX711_ReadData_WithoutMass.
+ * @return       Status of ADS1231_ReadData_WithoutMass.
  *
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   The ORIGIN
+ * @date        18/September/2017
+ * @version     18/September/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-HX711_status_t  HX711_ReadData_WithoutMass   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, Vector_count_t* myNewRawData, uint32_t myAverage )
+ADS1231_status_t  ADS1231_ReadData_WithoutMass   ( ADS1231_pins_t myPins, Vector_count_t* myNewRawData, uint32_t myAverage )
 {
-    HX711_status_t        aux;
+    ADS1231_status_t        aux;
 
     // Perform a new bunch of readings
-    aux  =   HX711_ReadRawData ( myPins, myChannel_Gain, myNewRawData, myAverage );
+    aux  =   ADS1231_ReadRawData ( myPins, myNewRawData, myAverage );
 
 
     // Update the value without any mass
@@ -450,16 +302,16 @@ HX711_status_t  HX711_ReadData_WithoutMass   ( HX711_pins_t myPins, HX711_channe
 
 
 
-    if ( aux == HX711_SUCCESS )
-        return   HX711_SUCCESS;
+    if ( aux == ADS1231_SUCCESS )
+        return   ADS1231_SUCCESS;
     else
-        return   HX711_FAILURE;
+        return   ADS1231_FAILURE;
 }
 
 
 
 /**
- * @brief       HX711_CalculateMass ( Vector_count_t* myNewRawData, uint32_t myCalibratedMass, HX711_scale_t myScaleCalibratedMass )
+ * @brief       ADS1231_CalculateMass ( Vector_count_t* , uint32_t , ADS1231_scale_t )
  *
  * @details     It calculates the mass.
  *
@@ -477,12 +329,12 @@ HX711_status_t  HX711_ReadData_WithoutMass   ( HX711_pins_t myPins, HX711_channe
  *
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   The ORIGIN
+ * @date        18/September/2017
+ * @version     18/September/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-Vector_mass_t  HX711_CalculateMass ( Vector_count_t* myNewRawData, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass )
+Vector_mass_t  ADS1231_CalculateMass ( Vector_count_t* myNewRawData, float myCalibratedMass, ADS1231_scale_t myScaleCalibratedMass )
 {
     // Terminology by Texas Instruments: sbau175a.pdf, p8 2.1.1 Calculation of Mass
     float m, w_zs;
@@ -497,19 +349,19 @@ Vector_mass_t  HX711_CalculateMass ( Vector_count_t* myNewRawData, float myCalib
     switch ( myScaleCalibratedMass )
     {
     default:
-    case HX711_SCALE_kg:
+    case ADS1231_SCALE_kg:
         // myFactor     =   1.0;
         break;
 
-    case HX711_SCALE_g:
+    case ADS1231_SCALE_g:
         myFactor     /=   1000.0;
         break;
 
-    case HX711_SCALE_mg:
+    case ADS1231_SCALE_mg:
         myFactor     /=   1000000.0;
         break;
 
-    case HX711_SCALE_ug:
+    case ADS1231_SCALE_ug:
         myFactor     /=   1000000000.0;
         break;
 
@@ -536,8 +388,8 @@ Vector_mass_t  HX711_CalculateMass ( Vector_count_t* myNewRawData, float myCalib
 
 
     // Update Internal Parameters
-    _HX711_USER_CALIBATED_MASS   =   myCalibratedMass;
-    _HX711_SCALE                 =   myScaleCalibratedMass;
+    _ADS1231_USER_CALIBATED_MASS   =   myCalibratedMass;
+    _ADS1231_SCALE                 =   myScaleCalibratedMass;
 
 
 
@@ -547,11 +399,11 @@ Vector_mass_t  HX711_CalculateMass ( Vector_count_t* myNewRawData, float myCalib
 
 
 /**
- * @brief       HX711_SetAutoTare ( HX711_channel_gain_t ,float ,HX711_scale_t ,Vector_count_t* ,float )
+ * @brief       ADS1231_SetAutoTare ( ADS1231_pins_t, float , ADS1231_scale_t , Vector_count_t* , float )
  *
  * @details     It reads data without any mass on the load cell after the system is calibrated to calculate the tare weight.
  *
- * @param[in]    myChannel_Gain:            Gain/Channel to perform the new measurement.
+ * @param[in]    myPins:                    The pins to communicate with the device.
  * @param[in]    myCalibratedMass:          A known value for the calibrated mass when myRawValue_WithCalibratedMass was
  *                                          calculated.
  * @param[in]    myScaleCalibratedMass:     The range of the calibrated mass ( kg, g, mg or ug ).
@@ -560,18 +412,18 @@ Vector_mass_t  HX711_CalculateMass ( Vector_count_t* myNewRawData, float myCalib
  * @param[out]   myNewRawData:              myRawValue_TareWeight ( ADC code taken without any mass ).
  *
  *
- * @return       Status of HX711_SetAutoTare.
+ * @return       Status of ADS1231_SetAutoTare.
  *
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   The ORIGIN
+ * @date        18/September/2017
+ * @version     18/September/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-HX711_status_t  HX711_SetAutoTare   ( HX711_pins_t myPins, HX711_channel_gain_t myChannel_Gain, float myCalibratedMass, HX711_scale_t myScaleCalibratedMass, Vector_count_t* myNewRawData, float myTime )
+ADS1231_status_t  ADS1231_SetAutoTare   ( ADS1231_pins_t myPins, float myCalibratedMass, ADS1231_scale_t myScaleCalibratedMass, Vector_count_t* myNewRawData, float myTime )
 {
-    HX711_status_t        aux;
+    ADS1231_status_t      aux;
     Vector_mass_t         myCalculatedMass;
     float                 myAuxData = 0;
     uint32_t              i = 0;
@@ -580,7 +432,7 @@ HX711_status_t  HX711_SetAutoTare   ( HX711_pins_t myPins, HX711_channel_gain_t 
     // Perform a new bunch of readings every 1 second
     for ( i = 0; i < myTime; i++ )
     {
-        aux          =   HX711_ReadRawData ( myPins, myChannel_Gain, myNewRawData, 10 );
+        aux          =   ADS1231_ReadRawData ( myPins, myNewRawData, 10 );
         myAuxData   +=   myNewRawData->myRawValue;
         nrf_delay_ms ( 1000 );
     }
@@ -588,28 +440,28 @@ HX711_status_t  HX711_SetAutoTare   ( HX711_pins_t myPins, HX711_channel_gain_t 
     myNewRawData->myRawValue    =    ( float )( myAuxData / myTime );
 
     // Turn it into mass
-    myCalculatedMass     =   HX711_CalculateMass ( myNewRawData, myCalibratedMass, myScaleCalibratedMass );
+    myCalculatedMass     =   ADS1231_CalculateMass ( myNewRawData, myCalibratedMass, myScaleCalibratedMass );
 
     // Update the value without any mass
     myNewRawData->myRawValue_TareWeight  =   myCalculatedMass.myMass;
 
 
     // Update Internal Parameters
-    _HX711_USER_CALIBATED_MASS   =   myCalibratedMass;
-    _HX711_SCALE                 =   myScaleCalibratedMass;
+    _ADS1231_USER_CALIBATED_MASS   =   myCalibratedMass;
+    _ADS1231_SCALE                 =   myScaleCalibratedMass;
 
 
 
-    if ( aux == HX711_SUCCESS )
-        return   HX711_SUCCESS;
+    if ( aux == ADS1231_SUCCESS )
+        return   ADS1231_SUCCESS;
     else
-        return   HX711_FAILURE;
+        return   ADS1231_FAILURE;
 }
 
 
 
 /**
- * @brief       HX711_SetManualTare ( float myTareWeight )
+ * @brief       ADS1231_SetManualTare ( float myTareWeight )
  *
  * @details     It sets a tare weight manually.
  *
@@ -622,12 +474,12 @@ HX711_status_t  HX711_SetAutoTare   ( HX711_pins_t myPins, HX711_channel_gain_t 
  *
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   The ORIGIN
+ * @date        18/September/2017
+ * @version     18/September/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-Vector_count_t  HX711_SetManualTare   ( float myTareWeight )
+Vector_count_t  ADS1231_SetManualTare   ( float myTareWeight )
 {
     Vector_count_t myNewTareWeight;
 
@@ -642,11 +494,10 @@ Vector_count_t  HX711_SetManualTare   ( float myTareWeight )
 
 
 /**
- * @brief       HX711_CalculateVoltage ( Vector_count_t* ,float )
+ * @brief       ADS1231_CalculateVoltage ( Vector_count_t* ,float )
  *
  * @details     It calculates the mass.
  *
- * @param[in]    myChannel_Gain:            Gain/Channel of the measurement.
  * @param[in]    myNewRawData:              myRawValue ( the current data taken by the system ).
  * @param[in]    myVoltageReference:        The voltage at the converter reference input.
  *
@@ -657,12 +508,12 @@ Vector_count_t  HX711_SetManualTare   ( float myTareWeight )
  *
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017   The ORIGIN
+ * @date        18/September/2017
+ * @version     18/September/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-Vector_voltage_t  HX711_CalculateVoltage ( Vector_count_t* myNewRawData, float myVoltageReference )
+Vector_voltage_t  ADS1231_CalculateVoltage ( Vector_count_t* myNewRawData, float myVoltageReference )
 {
     // Terminology by Texas Instruments: sbau175a.pdf, p12 3.2 Measurement Modes Raw
     float x, B, A;
@@ -672,23 +523,8 @@ Vector_voltage_t  HX711_CalculateVoltage ( Vector_count_t* myNewRawData, float m
 
     x   =    myNewRawData->myRawValue;
     B   =    ( 16777216.0 - 1.0 );              // 2^24 - 1
+    A   =    128.0;                             // Gain
 
-    // Adatp the gain
-    switch ( _HX711_CHANNEL_GAIN )
-    {
-    default:
-    case CHANNEL_A_GAIN_128:
-        A             =   128.0;
-        break;
-
-    case CHANNEL_B_GAIN_32:
-        A             =   32.0;
-        break;
-
-    case CHANNEL_A_GAIN_64:
-        A             =   64.0;
-        break;
-    }
 
 
     // Calculate the voltage ( v )
