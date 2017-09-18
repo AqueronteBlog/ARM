@@ -38,8 +38,6 @@ c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/
 Allocating common symbols
 Common symbol       size              file
 
-_ADS1231_CHANNEL_GAIN
-                    0x1               obj\debug\src\main.o
 myNewMeasurement    0x4               obj\debug\src\functions.o
 _ADS1231_SCALE      0x1               obj\debug\src\main.o
 _ADS1231_USER_CALIBATED_MASS
@@ -677,8 +675,7 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
  COMMON         0x20002264        0x4 obj\debug\src\functions.o
                 0x20002264                myNewMeasurement
  COMMON         0x20002268        0x8 obj\debug\src\main.o
-                0x20002268                _ADS1231_CHANNEL_GAIN
-                0x20002269                _ADS1231_SCALE
+                0x20002268                _ADS1231_SCALE
                 0x2000226c                _ADS1231_USER_CALIBATED_MASS
                 0x20002270                . = ALIGN (0x4)
                 0x20002270                __bss_end__ = .
@@ -785,14 +782,14 @@ OUTPUT(bin\Debug\ADS1231.elf elf32-littlearm)
  .comment       0x0000006e       0x6f obj\debug\src\system_nrf51.o
  .comment       0x0000006e       0x6f obj\debug\~#\~#\~#\~#\drivers\ads1231\ads1231.o
 
-.debug_info     0x00000000     0x384a
+.debug_info     0x00000000     0x37d4
  .debug_info    0x00000000       0x5e obj\debug\s130.o
  .debug_info    0x0000005e      0x5d1 obj\debug\src\functions.o
  .debug_info    0x0000062f      0x2cf obj\debug\src\interrupts.o
- .debug_info    0x000008fe     0x25e8 obj\debug\src\main.o
- .debug_info    0x00002ee6      0x1ec obj\debug\src\system_nrf51.o
- .debug_info    0x000030d2       0x69 obj\debug\startup_nrf51.o
- .debug_info    0x0000313b      0x70f obj\debug\~#\~#\~#\~#\drivers\ads1231\ads1231.o
+ .debug_info    0x000008fe     0x25ad obj\debug\src\main.o
+ .debug_info    0x00002eab      0x1ec obj\debug\src\system_nrf51.o
+ .debug_info    0x00003097       0x69 obj\debug\startup_nrf51.o
+ .debug_info    0x00003100      0x6d4 obj\debug\~#\~#\~#\~#\drivers\ads1231\ads1231.o
 
 .debug_abbrev   0x00000000      0x84e
  .debug_abbrev  0x00000000       0x48 obj\debug\s130.o
@@ -866,19 +863,19 @@ OUTPUT(bin\Debug\ADS1231.elf elf32-littlearm)
  .debug_line    0x0000126c       0x6e obj\debug\startup_nrf51.o
  .debug_line    0x000012da      0x4b0 obj\debug\~#\~#\~#\~#\drivers\ads1231\ads1231.o
 
-.debug_str      0x00000000    0x34b75
+.debug_str      0x00000000    0x34b11
  .debug_str     0x00000000     0x23cd obj\debug\s130.o
                                0x23db (size before relaxing)
  .debug_str     0x000023cd    0x2cd0a obj\debug\src\functions.o
                               0x2f1d9 (size before relaxing)
  .debug_str     0x0002f0d7       0x23 obj\debug\src\interrupts.o
                               0x2efe4 (size before relaxing)
- .debug_str     0x0002f0fa     0x57e5 obj\debug\src\main.o
-                              0x348c2 (size before relaxing)
- .debug_str     0x000348df       0xe4 obj\debug\src\system_nrf51.o
+ .debug_str     0x0002f0fa     0x5781 obj\debug\src\main.o
+                              0x3485e (size before relaxing)
+ .debug_str     0x0003487b       0xe4 obj\debug\src\system_nrf51.o
                               0x2efe8 (size before relaxing)
- .debug_str     0x000349c3      0x1b2 obj\debug\~#\~#\~#\~#\drivers\ads1231\ads1231.o
-                              0x2f362 (size before relaxing)
+ .debug_str     0x0003495f      0x1b2 obj\debug\~#\~#\~#\~#\drivers\ads1231\ads1231.o
+                              0x2f2fe (size before relaxing)
 
 .debug_ranges   0x00000000      0x2c0
  .debug_ranges  0x00000000       0x20 obj\debug\src\functions.o
