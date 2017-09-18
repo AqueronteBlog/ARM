@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     This example shows how to work with the external sensor HX711 a
- *              24-Bit Analog-to-Digital Converter (ADC) for Weigh Scales.
+ * @details     This example shows how to work with the external sensor DS1231 a
+ *              24-Bit Analog-to-Digital Converter for Bridge Sensors.
  *
  *              A new measurement will be performed every 0.5 seconds by the timer, the rest of the time, the
  *              microcontroller is in low power.
@@ -12,8 +12,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        14/September/2017
- * @version     14/September/2017    The ORIGIN
+ * @date        18/September/2017
+ * @version     18/September/2017    The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     Softdevice S310 was used although the file's name is S130. The softdevice
@@ -26,13 +26,13 @@
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
-#include "HX711.h"
+#include "ADS1231.h"
 
 
 int main( void )
 {
-    HX711_status_t          aux;
-    HX711_pins_t            myHX711pins;
+    ADS1231_status_t        aux;
+    ADS1231_pins_t          myADS1231pins;
     Vector_count_t          myData;
     Vector_mass_t           myCalculatedMass;
     Vector_voltage_t        myCalculatedVoltage;
@@ -41,23 +41,23 @@ int main( void )
     conf_GPIO   ();
     conf_TIMER0 ();
 
-    // Configure the pins to handle the HX711 device ( P0.12: DOUT, P0.13: PD_SCK )
-    myHX711pins = HX711_Init ( 12, 13 );
+    // Configure the pins to handle the ADS1231 device ( P0.12: #DRDY/DOUT, P0.13: SCLK )
+    myADS1231pins = ADS1231_Init ( 12, 13 );
 
-    aux = HX711_PowerDown   ( myHX711pins );
-    aux = HX711_Reset       ( myHX711pins );
+    aux = ADS1231_PowerDown   ( myADS1231pins );
+    aux = ADS1231_Reset       ( myADS1231pins );
     nrf_delay_ms ( 1000 );
 
 
     // CALIBRATION time start!
     // 1. REMOVE THE MASS ON THE LOAD CELL ( ALL LEDs OFF ). Read data without any mass on the load cell
-    aux = HX711_ReadData_WithoutMass ( myHX711pins, CHANNEL_A_GAIN_128, &myData, 4 );
+    aux = ADS1231_ReadData_WithoutMass ( myADS1231pins, &myData, 4 );
 
     NRF_GPIO->OUTCLR    =   ( 1UL << LED1 );
     nrf_delay_ms ( 3000 );
 
     // 2. PUT A KNOWN MASS ON THE LOAD CELL ( JUST LED1 ON ). Read data with an user-specified calibration mass
-    aux = HX711_ReadData_WithCalibratedMass ( myHX711pins, CHANNEL_A_GAIN_128, &myData, 4 );
+    aux = ADS1231_ReadData_WithCalibratedMass ( myADS1231pins, &myData, 4 );
     // CALIBRATION time end!
 
 
@@ -69,7 +69,7 @@ int main( void )
 
     // Calculating the tare weight ( JUST LED3 ON )
     NRF_GPIO->OUTCLR    =   ( 1UL << LED3 );
-    aux = HX711_SetAutoTare ( myHX711pins, CHANNEL_A_GAIN_128, 1.0, HX711_SCALE_kg, &myData, 5 );
+    aux = ADS1231_SetAutoTare ( myADS1231pins, 1.0, ADS1231_SCALE_kg, &myData, 5 );
     NRF_GPIO->OUTSET    =   ( 1UL << LED3 );
 
 
@@ -92,9 +92,9 @@ int main( void )
 		if ( myNewMeasurement == YES ){
             NRF_GPIO->OUTCLR    =   ( 1UL << LED4 );
 
-            aux                 =    HX711_ReadRawData       ( myHX711pins, CHANNEL_A_GAIN_128, &myData, 4 );
-            myCalculatedMass    =    HX711_CalculateMass     ( &myData, 1.0, HX711_SCALE_kg );
-            myCalculatedVoltage =    HX711_CalculateVoltage  ( &myData, 5.0 );
+            aux                 =    ADS1231_ReadRawData       ( myADS1231pins, &myData, 4 );
+            myCalculatedMass    =    ADS1231_CalculateMass     ( &myData, 1.0, ADS1231_SCALE_kg );
+            myCalculatedVoltage =    ADS1231_CalculateVoltage  ( &myData, 5.0 );
 
             myNewMeasurement    =   NO;
 
