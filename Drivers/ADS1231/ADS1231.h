@@ -22,17 +22,6 @@
 
 
 /**
-  * @brief   CHANNELS & GAIN
-  */
-typedef enum
-{
-    CHANNEL_A_GAIN_128      =   0,              /*!<  Channel A 128 Gain.                                               */
-    CHANNEL_B_GAIN_32       =   1,              /*!<  Channel B 32 Gain.                                                */
-    CHANNEL_A_GAIN_64       =   2               /*!<  Channel A 64 Gain.                                                */
-} ADS1231_channel_gain_t;
-
-
-/**
       * @brief   READY/BUSY DATA
       */
 typedef enum
@@ -102,9 +91,8 @@ typedef enum
 } ADS1231_status_t;
 
 
-ADS1231_channel_gain_t    _ADS1231_CHANNEL_GAIN;
 ADS1231_scale_t           _ADS1231_SCALE;
-float                   _ADS1231_USER_CALIBATED_MASS;
+float                     _ADS1231_USER_CALIBATED_MASS;
 
 
 /**
