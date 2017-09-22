@@ -26,6 +26,7 @@
 
 int main( void )
 {
+    /*
     MCP4725_status_t        aux;
     Vector_new_dac_value_t  myNewDACData;
     Vector_data_t           myDefaultData;
@@ -88,4 +89,5 @@ int main( void )
         //__NOP();
 
     }
+    */
 }
