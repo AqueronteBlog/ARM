@@ -71,7 +71,7 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
     // AUTO-INCREMENT FLAG
-    if ( myAutoIncrement == 1 )
+    if ( myAutoIncrement == PCF8591_AUTO_INCREMENT_ENABLED )
         cmd  |=  0x04;
 
 
@@ -119,12 +119,15 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
 /**
- * @brief       PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_vector_data_t* myADC_Data )
+ * @brief       PCF8591_ReadADC ( NRF_TWI_Type* , PCF8591_address_t , PCF8591_analog_input_programming_t , PCF8591_auto_increment_status_t , PCF8591_channel_number_t , PCF8591_vector_data_t*  )
  *
  * @details     It gets the ADC result from the device.
  *
  * @param[in]    myinstance:        Peripheral's Instance.
  * @param[in]    myPCF8591Addr:     I2C Device address.
+ * @param[in]    myAnalogInputs:    The analog input programming.
+ * @param[in]    myAutoIncrement:   Auto-increment flag enabled/disabled.
+ * @param[in]    myADCchannel:      ADC Channel number.
  *
  * @param[out]   myADC_Data:        ADC result into the chosen channel.
  *
@@ -138,58 +141,142 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_vector_data_t* myADC_Data )
+PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_analog_input_programming_t myAnalogInputs,
+                                    PCF8591_auto_increment_status_t myAutoIncrement, PCF8591_channel_number_t myADCchannel, PCF8591_vector_data_t* myADC_Data )
 {
-    uint8_t     cmd[]               =    { 0, 0, 0, 0 };
+    uint8_t     cmd[]               =    { 0, 0, 0, 0, 0, 0, 0, 0 };
     uint32_t    aux                 =    0;
     uint32_t    myNumberReadings    =    0;
+    uint32_t    i                   =    0;
 
 
-    // Previously converted byte
-    aux = i2c_read ( myinstance, myPCF8591Addr, &cmd[0], 1 );
+
+    // ANALOG INPUT PROGRAMMING
+    switch ( myAnalogInputs )
+    {
+    default:
+    case PCF8591_FOUR_SINGLE_ENDED_INPUTS:
+        cmd[0]  &=  0xCF;
+        break;
+
+    case PCF8591_THREE_DIFFERENTIAL_INPUTS:
+        cmd[0]  |=  0x10;
+        break;
+
+    case PCF8591_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED:
+        cmd[0]  |=  0x20;
+        break;
+
+    case PCF8591_TWO_DIFFERENTIAL_INPUTS:
+        cmd[0]  |=  0x30;
+        break;
+    }
+
+    _ANALOG_INPUT_PROGRAMMING    =   myAnalogInputs;
 
 
-    if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+    // AUTO-INCREMENT FLAG
+    if ( myAutoIncrement == PCF8591_AUTO_INCREMENT_ENABLED )
+    {
+        cmd[0]  |=  0x04;
         myNumberReadings    =   4;
+    }
     else
         myNumberReadings    =   1;
 
 
-    aux = i2c_read ( myinstance, myPCF8591Addr, &cmd[0], myNumberReadings );
+    _AUTO_INCREMENT_STATUS   =   myAutoIncrement;
 
 
 
+    // A/D CHANNEL NUMBER
+    switch ( myADCchannel )
+    {
+    default:
+    case PCF8591_CHANNEL_0:
+        cmd[0]  &=  0xFC;
+        break;
+
+    case PCF8591_CHANNEL_1:
+        cmd[0]  |=  0x01;
+        break;
+
+    case PCF8591_CHANNEL_2:
+        cmd[0]  |=  0x02;
+        break;
+
+    case PCF8591_CHANNEL_3:
+        cmd[0]  |=  0x03;
+        break;
+    }
+
+
+    _CHANNEL_NUMBER   =   myADCchannel;
+
+
+
+    // Update Control Byte
+    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd[0], 1, I2C_STOP_BIT );
+
+
+
+
+
+    for ( i = 0; i < myNumberReadings; i++ )
+    {
+        aux = i2c_read ( myinstance, myPCF8591Addr, &cmd[i], 2 );
+    }
+
+
+    // Store the data in the right position
     switch ( _CHANNEL_NUMBER )
     {
     default:
     case PCF8591_CHANNEL_0:
-        myADC_Data->ADC_Channel_0    =   cmd[ 0 ];
-        myADC_Data->ADC_Channel_1    =   cmd[ 1 ];
-        myADC_Data->ADC_Channel_2    =   cmd[ 2 ];
-        myADC_Data->ADC_Channel_3    =   cmd[ 3 ];
+        myADC_Data->ADC_Channel_0    =   cmd[ 1 ];
+
+        if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        {
+            myADC_Data->ADC_Channel_1    =   cmd[ 3 ];
+            myADC_Data->ADC_Channel_2    =   cmd[ 5 ];
+            myADC_Data->ADC_Channel_3    =   cmd[ 7 ];
+        }
         break;
 
     case PCF8591_CHANNEL_1:
-        myADC_Data->ADC_Channel_1    =   cmd[ 0 ];
-        myADC_Data->ADC_Channel_2    =   cmd[ 1 ];
-        myADC_Data->ADC_Channel_3    =   cmd[ 2 ];
-        myADC_Data->ADC_Channel_0    =   cmd[ 3 ];
+        myADC_Data->ADC_Channel_1    =   cmd[ 1 ];
+
+        if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        {
+            myADC_Data->ADC_Channel_2    =   cmd[ 3 ];
+            myADC_Data->ADC_Channel_3    =   cmd[ 5 ];
+            myADC_Data->ADC_Channel_0    =   cmd[ 7 ];
+        }
         break;
 
     case PCF8591_CHANNEL_2:
-        myADC_Data->ADC_Channel_2    =   cmd[ 0 ];
-        myADC_Data->ADC_Channel_3    =   cmd[ 1 ];
-        myADC_Data->ADC_Channel_0    =   cmd[ 2 ];
-        myADC_Data->ADC_Channel_1    =   cmd[ 3 ];
+        myADC_Data->ADC_Channel_2    =   cmd[ 1 ];
+
+        if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        {
+            myADC_Data->ADC_Channel_3    =   cmd[ 3 ];
+            myADC_Data->ADC_Channel_0    =   cmd[ 5 ];
+            myADC_Data->ADC_Channel_1    =   cmd[ 7 ];
+        }
         break;
 
     case PCF8591_CHANNEL_3:
-        myADC_Data->ADC_Channel_3    =   cmd[ 0 ];
-        myADC_Data->ADC_Channel_0    =   cmd[ 1 ];
-        myADC_Data->ADC_Channel_1    =   cmd[ 2 ];
-        myADC_Data->ADC_Channel_2    =   cmd[ 3 ];
+        myADC_Data->ADC_Channel_3    =   cmd[ 1 ];
+
+        if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        {
+            myADC_Data->ADC_Channel_0    =   cmd[ 3 ];
+            myADC_Data->ADC_Channel_1    =   cmd[ 5 ];
+            myADC_Data->ADC_Channel_2    =   cmd[ 7 ];
+        }
         break;
     }
+
 
 
 

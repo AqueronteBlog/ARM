@@ -125,5 +125,5 @@ typedef enum
   * @brief   FUNCTION PROTOTYPES
   */
 PCF8591_status_t  PCF8591_SetADC                ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_analog_input_programming_t myAnalogInputs, PCF8591_auto_increment_status_t myAutoIncrement, PCF8591_channel_number_t myADCchannel );
-PCF8591_status_t  PCF8591_ReadADC               ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_vector_data_t* myADC_Data );
+PCF8591_status_t  PCF8591_ReadADC               ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_analog_input_programming_t myAnalogInputs, PCF8591_auto_increment_status_t myAutoIncrement, PCF8591_channel_number_t myADCchannel, PCF8591_vector_data_t* myADC_Data );
 
