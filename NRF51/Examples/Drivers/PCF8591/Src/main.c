@@ -26,25 +26,22 @@
 
 int main( void )
 {
-    /*
-    MCP4725_status_t        aux;
-    Vector_new_dac_value_t  myNewDACData;
-    Vector_data_t           myDefaultData;
+
+    PCF8591_status_t        aux;
+    PCF8591_vector_data_t   myADC_Data;
 
     conf_GPIO   ();
     conf_TWI0   ();
-    conf_TIMER0 ();
+    //conf_TIMER0 ();
 
-    // Reset and wake the device up
-    aux = MCP4725_Reset  ( NRF_TWI0 );
-    aux = MCP4725_WakeUp ( NRF_TWI0 );
-
-    // Read the default data in both EEPROM and DAC
-    aux = MCP4725_GetDAC_Data    ( NRF_TWI0, MCP4725_ADDRESS_LOW, &myDefaultData );
-    aux = MCP4725_GetEEPROM_Data ( NRF_TWI0, MCP4725_ADDRESS_LOW, &myDefaultData );
+    //aux = PCF8591_SetADC  ( NRF_TWI0, PCF8591_ADDRESS_0, PCF8591_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_DISABLED, PCF8591_CHANNEL_0 );
+    while(1)
+    {
+        aux = PCF8591_ReadADC ( NRF_TWI0, PCF8591_ADDRESS_0, PCF8591_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_DISABLED, PCF8591_CHANNEL_1, &myADC_Data );
+    }
 
 
-    mySTATE                  =   1;                 // Reset counter
+    /*
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
@@ -55,13 +52,13 @@ int main( void )
         NRF_POWER->TASKS_LOWPWR = 1;                // Sub power mode: Low power.
 
         // Enter System ON sleep mode
-		__WFE();
-		// Make sure any pending events are cleared
-		__SEV();
-		__WFE();
+    	__WFE();
+    	// Make sure any pending events are cleared
+    	__SEV();
+    	__WFE();
 
 
-		switch ( mySTATE ){
+    	switch ( mySTATE ){
         default:
         case 1:
         // Vout ~ 0V
@@ -84,7 +81,7 @@ int main( void )
             mySTATE =   0;
             NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
             break;
-		}
+    	}
 
         //__NOP();
 
