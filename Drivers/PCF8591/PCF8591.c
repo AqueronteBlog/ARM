@@ -119,15 +119,12 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
 /**
- * @brief       PCF8591_ReadADC ( NRF_TWI_Type* , PCF8591_address_t , PCF8591_analog_input_programming_t , PCF8591_auto_increment_status_t , PCF8591_channel_number_t , PCF8591_vector_data_t*  )
+ * @brief       PCF8591_ReadADC ( NRF_TWI_Type* , PCF8591_address_t , PCF8591_vector_data_t*  )
  *
  * @details     It gets the ADC result from the device.
  *
  * @param[in]    myinstance:        Peripheral's Instance.
  * @param[in]    myPCF8591Addr:     I2C Device address.
- * @param[in]    myAnalogInputs:    The analog input programming.
- * @param[in]    myAutoIncrement:   Auto-increment flag enabled/disabled.
- * @param[in]    myADCchannel:      ADC Channel number.
  *
  * @param[out]   myADC_Data:        ADC result into the chosen channel.
  *
@@ -141,94 +138,29 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_analog_input_programming_t myAnalogInputs,
-                                    PCF8591_auto_increment_status_t myAutoIncrement, PCF8591_channel_number_t myADCchannel, PCF8591_vector_data_t* myADC_Data )
+PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_vector_data_t* myADC_Data )
 {
-    uint8_t     cmd[]               =    { 0, 0, 0, 0, 0, 0, 0, 0 };
+    uint8_t     cmd[]               =    { 0, 0, 0, 0 };
     uint32_t    aux                 =    0;
     uint32_t    myNumberReadings    =    0;
     uint32_t    i                   =    0;
 
 
 
-    // ANALOG INPUT PROGRAMMING
-    switch ( myAnalogInputs )
+
+    aux = i2c_read ( myinstance, myPCF8591Addr, &cmd[0], 2 );
+
+    if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
     {
-    default:
-    case PCF8591_FOUR_SINGLE_ENDED_INPUTS:
-        cmd[0]  &=  0xCF;
-        break;
+        for ( i = 2; i < 3; i++ )
+        {
+            aux = i2c_read ( myinstance, myPCF8591Addr, &cmd[ i ], 1 );
+        }
 
-    case PCF8591_THREE_DIFFERENTIAL_INPUTS:
-        cmd[0]  |=  0x10;
-        break;
-
-    case PCF8591_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED:
-        cmd[0]  |=  0x20;
-        break;
-
-    case PCF8591_TWO_DIFFERENTIAL_INPUTS:
-        cmd[0]  |=  0x30;
-        break;
-    }
-
-    _ANALOG_INPUT_PROGRAMMING    =   myAnalogInputs;
-
-
-    // AUTO-INCREMENT FLAG
-    if ( myAutoIncrement == PCF8591_AUTO_INCREMENT_ENABLED )
-    {
-        cmd[0]  |=  0x04;
-        myNumberReadings    =   4;
-    }
-    else
-        myNumberReadings    =   1;
-
-
-    _AUTO_INCREMENT_STATUS   =   myAutoIncrement;
-
-
-
-    // A/D CHANNEL NUMBER
-    switch ( myADCchannel )
-    {
-    default:
-    case PCF8591_CHANNEL_0:
-        cmd[0]  &=  0xFC;
-        break;
-
-    case PCF8591_CHANNEL_1:
-        cmd[0]  |=  0x01;
-        break;
-
-    case PCF8591_CHANNEL_2:
-        cmd[0]  |=  0x02;
-        break;
-
-    case PCF8591_CHANNEL_3:
-        cmd[0]  |=  0x03;
-        break;
     }
 
 
-    _CHANNEL_NUMBER   =   myADCchannel;
-
-
-
-    // Update Control Byte
-    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd[0], 1, I2C_STOP_BIT );
-
-
-
-
-
-    for ( i = 0; i < myNumberReadings; i++ )
-    {
-        aux = i2c_read ( myinstance, myPCF8591Addr, &cmd[i], 2 );
-    }
-
-
-    // Store the data in the right position
+    // Store the data in the right position  CHANGE!!!
     switch ( _CHANNEL_NUMBER )
     {
     default:
