@@ -140,7 +140,7 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
  */
 PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_vector_data_t* myADC_Data )
 {
-    uint8_t     cmd[]               =    { 0, 0, 0, 0 };
+    uint8_t     cmd[]               =    { 0, 0, 0, 0, 0 };
     uint32_t    aux                 =    0;
     uint32_t    myNumberReadings    =    0;
     uint32_t    i                   =    0;
@@ -148,19 +148,18 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
 
 
 
-    aux = i2c_read ( myinstance, myPCF8591Addr, &cmd[0], 2 );
-
     if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
-    {
-        for ( i = 2; i < 3; i++ )
-        {
-            aux = i2c_read ( myinstance, myPCF8591Addr, &cmd[ i ], 1 );
-        }
-
-    }
+        i    =   5;
+    else
+        i    =   2;
 
 
-    // Store the data in the right position  CHANGE!!!
+
+    aux = i2c_read ( myinstance, myPCF8591Addr, &cmd[0], i );
+
+
+
+    // Store the data in the right position
     switch ( _CHANNEL_NUMBER )
     {
     default:
@@ -169,9 +168,9 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
 
         if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
         {
-            myADC_Data->ADC_Channel_1    =   cmd[ 3 ];
-            myADC_Data->ADC_Channel_2    =   cmd[ 5 ];
-            myADC_Data->ADC_Channel_3    =   cmd[ 7 ];
+            myADC_Data->ADC_Channel_1    =   cmd[ 2 ];
+            myADC_Data->ADC_Channel_2    =   cmd[ 3 ];
+            myADC_Data->ADC_Channel_3    =   cmd[ 4 ];
         }
         break;
 
@@ -180,9 +179,9 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
 
         if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
         {
-            myADC_Data->ADC_Channel_2    =   cmd[ 3 ];
-            myADC_Data->ADC_Channel_3    =   cmd[ 5 ];
-            myADC_Data->ADC_Channel_0    =   cmd[ 7 ];
+            myADC_Data->ADC_Channel_2    =   cmd[ 2 ];
+            myADC_Data->ADC_Channel_3    =   cmd[ 3 ];
+            myADC_Data->ADC_Channel_0    =   cmd[ 4 ];
         }
         break;
 
@@ -191,9 +190,9 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
 
         if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
         {
-            myADC_Data->ADC_Channel_3    =   cmd[ 3 ];
-            myADC_Data->ADC_Channel_0    =   cmd[ 5 ];
-            myADC_Data->ADC_Channel_1    =   cmd[ 7 ];
+            myADC_Data->ADC_Channel_3    =   cmd[ 2 ];
+            myADC_Data->ADC_Channel_0    =   cmd[ 3 ];
+            myADC_Data->ADC_Channel_1    =   cmd[ 4 ];
         }
         break;
 
@@ -202,9 +201,9 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
 
         if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
         {
-            myADC_Data->ADC_Channel_0    =   cmd[ 3 ];
-            myADC_Data->ADC_Channel_1    =   cmd[ 5 ];
-            myADC_Data->ADC_Channel_2    =   cmd[ 7 ];
+            myADC_Data->ADC_Channel_0    =   cmd[ 2 ];
+            myADC_Data->ADC_Channel_1    =   cmd[ 3 ];
+            myADC_Data->ADC_Channel_2    =   cmd[ 4 ];
         }
         break;
     }
