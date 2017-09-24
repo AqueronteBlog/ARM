@@ -107,6 +107,7 @@ typedef struct
 uint8_t _ANALOG_INPUT_PROGRAMMING;
 uint8_t _AUTO_INCREMENT_STATUS;
 uint8_t _CHANNEL_NUMBER;
+uint8_t _DAC_STATUS;
 
 
 /**
@@ -127,3 +128,5 @@ typedef enum
 PCF8591_status_t  PCF8591_SetADC                ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_analog_input_programming_t myAnalogInputs, PCF8591_auto_increment_status_t myAutoIncrement, PCF8591_channel_number_t myADCchannel );
 PCF8591_status_t  PCF8591_ReadADC               ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_vector_data_t* myADC_Data );
 
+PCF8591_status_t  PCF8591_SetDAC                ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_dac_status_t myDAC_Status );
+PCF8591_status_t  PCF8591_NewDACValue           ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, uint8_t myNewDACValue );
