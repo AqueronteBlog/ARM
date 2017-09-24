@@ -105,6 +105,13 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
 
+    // Mask DAC
+    if ( _DAC_STATUS == PCF8591_DAC_ENABLED )
+        cmd  |=  0x40;
+
+
+
+
     // Update Control Byte
     aux = i2c_write ( myinstance, myPCF8591Addr, &cmd, 1, I2C_STOP_BIT );
 
@@ -208,6 +215,208 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
         break;
     }
 
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCF8591_SUCCESS;
+    else
+        return   PCF8591_FAILURE;
+}
+
+
+
+/**
+ * @brief       PCF8591_SetDAC ( NRF_TWI_Type* , PCF8591_address_t , PCF8591_dac_status_t )
+ *
+ * @details     It enables/disables the DAC.
+ *
+ * @param[in]    myinstance:        Peripheral's Instance.
+ * @param[in]    myPCF8591Addr:     I2C Device address.
+ * @param[in]    myDAC_Status:      Enable/Disable DAC.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCF8591_SetDAC.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/September/2017
+ * @version     24/September/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+PCF8591_status_t  PCF8591_SetDAC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_dac_status_t myDAC_Status )
+{
+    uint8_t     cmd                 =    0;
+    uint32_t    aux                 =    0;
+
+
+    // Mask ANALOG INPUT PROGRAMMING
+    switch ( _ANALOG_INPUT_PROGRAMMING )
+    {
+    default:
+    case PCF8591_FOUR_SINGLE_ENDED_INPUTS:
+        // cmd  &=  0xCF;
+        break;
+
+    case PCF8591_THREE_DIFFERENTIAL_INPUTS:
+        cmd  |=  0x10;
+        break;
+
+    case PCF8591_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED:
+        cmd  |=  0x20;
+        break;
+
+    case PCF8591_TWO_DIFFERENTIAL_INPUTS:
+        cmd  |=  0x30;
+        break;
+    }
+
+
+    // Mask AUTO-INCREMENT FLAG
+    if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        cmd  |=  0x04;
+
+
+
+    // Mask A/D CHANNEL NUMBER
+    switch ( _CHANNEL_NUMBER )
+    {
+    default:
+    case PCF8591_CHANNEL_0:
+        // cmd  &=  0xFC;
+        break;
+
+    case PCF8591_CHANNEL_1:
+        cmd  |=  0x01;
+        break;
+
+    case PCF8591_CHANNEL_2:
+        cmd  |=  0x02;
+        break;
+
+    case PCF8591_CHANNEL_3:
+        cmd  |=  0x03;
+        break;
+    }
+
+
+
+    // DAC
+    if ( myDAC_Status == PCF8591_DAC_ENABLED )
+        cmd  |=  0x40;
+
+
+    _DAC_STATUS  =   myDAC_Status;
+
+
+
+    // Update Control Byte
+    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd, 1, I2C_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCF8591_SUCCESS;
+    else
+        return   PCF8591_FAILURE;
+}
+
+
+
+/**
+ * @brief       PCF8591_NewDACValue ( NRF_TWI_Type* , PCF8591_address_t , uint8_t )
+ *
+ * @details     It enables/disables the DAC.
+ *
+ * @param[in]    myinstance:        Peripheral's Instance.
+ * @param[in]    myPCF8591Addr:     I2C Device address.
+ * @param[in]    myNewDACValue:     New DAC value.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCF8591_NewDACValue.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/September/2017
+ * @version     24/September/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+PCF8591_status_t  PCF8591_NewDACValue ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, uint8_t myNewDACValue )
+{
+    uint8_t     cmd[]               =    { 0, 0 };
+    uint32_t    aux                 =    0;
+
+
+    // Mask ANALOG INPUT PROGRAMMING
+    switch ( _ANALOG_INPUT_PROGRAMMING )
+    {
+    default:
+    case PCF8591_FOUR_SINGLE_ENDED_INPUTS:
+        // cmd[ 0 ]  &=  0xCF;
+        break;
+
+    case PCF8591_THREE_DIFFERENTIAL_INPUTS:
+        cmd[ 0 ]  |=  0x10;
+        break;
+
+    case PCF8591_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED:
+        cmd[ 0 ]  |=  0x20;
+        break;
+
+    case PCF8591_TWO_DIFFERENTIAL_INPUTS:
+        cmd[ 0 ]  |=  0x30;
+        break;
+    }
+
+
+    // Mask AUTO-INCREMENT FLAG
+    if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        cmd[ 0 ]  |=  0x04;
+
+
+
+    // Mask A/D CHANNEL NUMBER
+    switch ( _CHANNEL_NUMBER )
+    {
+    default:
+    case PCF8591_CHANNEL_0:
+        // cmd[ 0 ]  &=  0xFC;
+        break;
+
+    case PCF8591_CHANNEL_1:
+        cmd[ 0 ]  |=  0x01;
+        break;
+
+    case PCF8591_CHANNEL_2:
+        cmd[ 0 ]  |=  0x02;
+        break;
+
+    case PCF8591_CHANNEL_3:
+        cmd[ 0 ]  |=  0x03;
+        break;
+    }
+
+
+
+    // Mask DAC
+    if ( _DAC_STATUS == PCF8591_DAC_ENABLED )
+        cmd[ 0 ]  |=  0x40;
+
+
+
+
+    // Update Control Byte
+    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd[0], 1, I2C_STOP_BIT );
+
+    // Update DAC output
+    cmd[ 1 ]     =   myNewDACValue;
+    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd[1], 1, I2C_STOP_BIT );
 
 
 
