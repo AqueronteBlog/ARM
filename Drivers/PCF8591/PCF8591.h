@@ -94,11 +94,6 @@ typedef struct
     uint8_t ADC_Channel_2;
     uint8_t ADC_Channel_3;
 } PCF8591_vector_data_t;
-
-typedef struct
-{
-    uint32_t DAC_New_Value;
-} PCF8591_vector_new_dac_value_t;
 #endif
 
 
@@ -127,6 +122,5 @@ typedef enum
   */
 PCF8591_status_t  PCF8591_SetADC                ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_analog_input_programming_t myAnalogInputs, PCF8591_auto_increment_status_t myAutoIncrement, PCF8591_channel_number_t myADCchannel );
 PCF8591_status_t  PCF8591_ReadADC               ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_vector_data_t* myADC_Data );
-
 PCF8591_status_t  PCF8591_SetDAC                ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_dac_status_t myDAC_Status );
 PCF8591_status_t  PCF8591_NewDACValue           ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, uint8_t myNewDACValue );
