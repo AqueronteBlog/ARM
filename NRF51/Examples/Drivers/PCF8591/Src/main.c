@@ -26,6 +26,7 @@
 
 int main( void )
 {
+    uint8_t                 myNewDAC_value   =   128;
 
     PCF8591_status_t        aux;
     PCF8591_vector_data_t   myADC_Data;
@@ -35,10 +36,18 @@ int main( void )
     //conf_TIMER0 ();
 
     aux = PCF8591_SetADC  ( NRF_TWI0, PCF8591_ADDRESS_0, PCF8591_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_ENABLED, PCF8591_CHANNEL_0 );
+    aux = PCF8591_SetDAC  ( NRF_TWI0, PCF8591_ADDRESS_0, PCF8591_DAC_ENABLED );
     while(1)
     {
-        aux = PCF8591_SetADC  ( NRF_TWI0, PCF8591_ADDRESS_0, PCF8591_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_ENABLED, PCF8591_CHANNEL_0 );
+        // aux = PCF8591_SetADC  ( NRF_TWI0, PCF8591_ADDRESS_0, PCF8591_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_ENABLED, PCF8591_CHANNEL_0 );
         aux = PCF8591_ReadADC ( NRF_TWI0, PCF8591_ADDRESS_0, &myADC_Data );
+
+        aux = PCF8591_NewDACValue ( NRF_TWI0, PCF8591_ADDRESS_0, myNewDAC_value );
+
+        if ( myNewDAC_value < 246 )
+            myNewDAC_value  +=  10;
+        else
+            myNewDAC_value   =   0;
     }
 
 
