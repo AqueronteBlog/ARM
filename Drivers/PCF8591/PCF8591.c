@@ -410,13 +410,10 @@ PCF8591_status_t  PCF8591_NewDACValue ( NRF_TWI_Type* myinstance, PCF8591_addres
 
 
 
-
-    // Update Control Byte
-    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd[0], 1, I2C_STOP_BIT );
-
-    // Update DAC output
+    // Update Control Byte + DAC output
     cmd[ 1 ]     =   myNewDACValue;
-    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd[1], 1, I2C_STOP_BIT );
+    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd[0], 2, I2C_STOP_BIT );
+
 
 
 
