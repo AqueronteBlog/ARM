@@ -38,10 +38,56 @@ Discarded input sections
  .data          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
  .bss           0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
  .ARM.extab     0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
+ .text          0x00000000        0x0 obj\debug\~#\~#\basics\spi\spi.o
+ .data          0x00000000        0x0 obj\debug\~#\~#\basics\spi\spi.o
+ .bss           0x00000000        0x0 obj\debug\~#\~#\basics\spi\spi.o
+ .text.spi_transfer
+                0x00000000       0xec obj\debug\~#\~#\basics\spi\spi.o
+ .debug_info    0x00000000      0x321 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_abbrev  0x00000000      0x121 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_aranges
+                0x00000000       0x20 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_ranges  0x00000000       0x10 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000       0xd4 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000      0x82c obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000       0x22 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000       0x3a obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000       0x22 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000       0x87 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000       0x44 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000       0xfd obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000       0x5e obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000      0x1df obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000      0x241 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000      0x1d2 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000     0x74a3 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000      0x976 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000000       0x10 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_line    0x00000000      0x33f obj\debug\~#\~#\basics\spi\spi.o
+ .debug_str     0x00000000    0x2ef3a obj\debug\~#\~#\basics\spi\spi.o
+ .comment       0x00000000       0x6f obj\debug\~#\~#\basics\spi\spi.o
+ .debug_frame   0x00000000       0x30 obj\debug\~#\~#\basics\spi\spi.o
+ .ARM.attributes
+                0x00000000       0x31 obj\debug\~#\~#\basics\spi\spi.o
  .group         0x00000000        0x8 obj\debug\s130.o
  .text          0x00000000        0x0 obj\debug\s130.o
  .data          0x00000000        0x0 obj\debug\s130.o
  .bss           0x00000000        0x0 obj\debug\s130.o
+ .debug_macro   0x00000000      0x82c obj\debug\s130.o
  .group         0x00000000        0x8 obj\debug\src\functions.o
  .group         0x00000000        0x8 obj\debug\src\functions.o
  .group         0x00000000        0x8 obj\debug\src\functions.o
@@ -72,6 +118,19 @@ Discarded input sections
  .text.conf_TIMER0
                 0x00000000       0x64 obj\debug\src\functions.o
  .debug_macro   0x00000000      0x82c obj\debug\src\functions.o
+ .debug_macro   0x00000000       0x22 obj\debug\src\functions.o
+ .debug_macro   0x00000000       0x3a obj\debug\src\functions.o
+ .debug_macro   0x00000000       0x22 obj\debug\src\functions.o
+ .debug_macro   0x00000000       0x87 obj\debug\src\functions.o
+ .debug_macro   0x00000000       0x44 obj\debug\src\functions.o
+ .debug_macro   0x00000000       0xfd obj\debug\src\functions.o
+ .debug_macro   0x00000000       0x5e obj\debug\src\functions.o
+ .debug_macro   0x00000000      0x1df obj\debug\src\functions.o
+ .debug_macro   0x00000000      0x241 obj\debug\src\functions.o
+ .debug_macro   0x00000000      0x1d2 obj\debug\src\functions.o
+ .debug_macro   0x00000000     0x74a3 obj\debug\src\functions.o
+ .debug_macro   0x00000000      0x976 obj\debug\src\functions.o
+ .debug_macro   0x00000000       0x10 obj\debug\src\functions.o
  .group         0x00000000        0x8 obj\debug\src\interrupts.o
  .group         0x00000000        0x8 obj\debug\src\interrupts.o
  .group         0x00000000        0x8 obj\debug\src\interrupts.o
@@ -312,51 +371,55 @@ Discarded input sections
  .data          0x00000000        0x0 obj\debug\startup_nrf51.o
  .bss           0x00000000        0x0 obj\debug\startup_nrf51.o
  .ARM.extab     0x00000000        0x0 obj\debug\startup_nrf51.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .group         0x00000000        0x8 obj\debug\~#\~#\basics\spi\spi.o
- .text          0x00000000        0x0 obj\debug\~#\~#\basics\spi\spi.o
- .data          0x00000000        0x0 obj\debug\~#\~#\basics\spi\spi.o
- .bss           0x00000000        0x0 obj\debug\~#\~#\basics\spi\spi.o
- .text.spi_transfer
-                0x00000000       0xec obj\debug\~#\~#\basics\spi\spi.o
- .debug_info    0x00000000      0x321 obj\debug\~#\~#\basics\spi\spi.o
- .debug_abbrev  0x00000000      0x121 obj\debug\~#\~#\basics\spi\spi.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .text          0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .data          0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .bss           0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .text.MAX7219_Init
+                0x00000000       0xdc obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_info    0x00000000      0x416 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_abbrev  0x00000000      0x105 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .debug_aranges
-                0x00000000       0x20 obj\debug\~#\~#\basics\spi\spi.o
- .debug_ranges  0x00000000       0x10 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000       0xd4 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000      0x82c obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000       0x22 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000       0x3a obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000       0x22 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000       0x87 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000       0x44 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000       0xfd obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000       0x5e obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000      0x1df obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000      0x241 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000      0x1d2 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000     0x74a3 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000      0x976 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000000       0x10 obj\debug\~#\~#\basics\spi\spi.o
- .debug_line    0x00000000      0x33f obj\debug\~#\~#\basics\spi\spi.o
- .debug_str     0x00000000    0x2ef3a obj\debug\~#\~#\basics\spi\spi.o
- .comment       0x00000000       0x6f obj\debug\~#\~#\basics\spi\spi.o
- .debug_frame   0x00000000       0x30 obj\debug\~#\~#\basics\spi\spi.o
+                0x00000000       0x20 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_ranges  0x00000000       0x10 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000       0xe6 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000      0x82c obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000       0x22 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000       0x87 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000       0x44 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000       0xfd obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000       0x5e obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000      0x1df obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000       0x22 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000       0x22 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000       0x3a obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000      0x241 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000      0x1d2 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000     0x74a3 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000      0x976 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000       0x10 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x00000000       0x16 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_line    0x00000000      0x32c obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_str     0x00000000    0x2f00e obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .comment       0x00000000       0x6f obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_frame   0x00000000       0x30 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .ARM.attributes
-                0x00000000       0x31 obj\debug\~#\~#\basics\spi\spi.o
+                0x00000000       0x31 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .text          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
@@ -585,13 +648,14 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
                 0x20007000                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
                 0x20007800                PROVIDE (__stack, __StackTop)
                 0x00000001                ASSERT ((__StackLimit >= __HeapLimit), region RAM overflowed with stack)
+LOAD obj\debug\~#\~#\basics\spi\spi.o
 LOAD obj\debug\s130.o
 LOAD obj\debug\src\functions.o
 LOAD obj\debug\src\interrupts.o
 LOAD obj\debug\src\main.o
 LOAD obj\debug\src\system_nrf51.o
 LOAD obj\debug\startup_nrf51.o
-LOAD obj\debug\~#\~#\basics\spi\spi.o
+LOAD obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
 START GROUP
 LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a
 LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a
@@ -675,40 +739,26 @@ OUTPUT(bin\Debug\MAX7219.elf elf32-littlearm)
  .debug_aranges
                 0x000002c0       0x20 obj\debug\startup_nrf51.o
 
-.debug_macro    0x00000000     0x9df0
+.debug_macro    0x00000000      0xf05
  .debug_macro   0x00000000       0x26 obj\debug\s130.o
- .debug_macro   0x00000026      0x82c obj\debug\s130.o
- .debug_macro   0x00000852       0xe6 obj\debug\src\functions.o
- .debug_macro   0x00000938       0x22 obj\debug\src\functions.o
- .debug_macro   0x0000095a       0x3a obj\debug\src\functions.o
- .debug_macro   0x00000994       0x22 obj\debug\src\functions.o
- .debug_macro   0x000009b6       0x87 obj\debug\src\functions.o
- .debug_macro   0x00000a3d       0x44 obj\debug\src\functions.o
- .debug_macro   0x00000a81       0xfd obj\debug\src\functions.o
- .debug_macro   0x00000b7e       0x5e obj\debug\src\functions.o
- .debug_macro   0x00000bdc      0x1df obj\debug\src\functions.o
- .debug_macro   0x00000dbb      0x241 obj\debug\src\functions.o
- .debug_macro   0x00000ffc      0x1d2 obj\debug\src\functions.o
- .debug_macro   0x000011ce     0x74a3 obj\debug\src\functions.o
- .debug_macro   0x00008671      0x976 obj\debug\src\functions.o
- .debug_macro   0x00008fe7       0x10 obj\debug\src\functions.o
- .debug_macro   0x00008ff7       0x58 obj\debug\src\functions.o
- .debug_macro   0x0000904f       0x10 obj\debug\src\functions.o
- .debug_macro   0x0000905f       0xe6 obj\debug\src\interrupts.o
- .debug_macro   0x00009145      0x173 obj\debug\src\main.o
- .debug_macro   0x000092b8       0xd6 obj\debug\src\main.o
- .debug_macro   0x0000938e      0x1f7 obj\debug\src\main.o
- .debug_macro   0x00009585       0x10 obj\debug\src\main.o
- .debug_macro   0x00009595      0x375 obj\debug\src\main.o
- .debug_macro   0x0000990a       0x8e obj\debug\src\main.o
- .debug_macro   0x00009998       0x3a obj\debug\src\main.o
- .debug_macro   0x000099d2       0x22 obj\debug\src\main.o
- .debug_macro   0x000099f4      0x1f0 obj\debug\src\main.o
- .debug_macro   0x00009be4       0x16 obj\debug\src\main.o
- .debug_macro   0x00009bfa       0xd9 obj\debug\src\main.o
- .debug_macro   0x00009cd3       0x1c obj\debug\src\main.o
- .debug_macro   0x00009cef       0xdf obj\debug\src\system_nrf51.o
- .debug_macro   0x00009dce       0x22 obj\debug\src\system_nrf51.o
+ .debug_macro   0x00000026       0xe6 obj\debug\src\functions.o
+ .debug_macro   0x0000010c       0x58 obj\debug\src\functions.o
+ .debug_macro   0x00000164       0x10 obj\debug\src\functions.o
+ .debug_macro   0x00000174       0xe6 obj\debug\src\interrupts.o
+ .debug_macro   0x0000025a      0x173 obj\debug\src\main.o
+ .debug_macro   0x000003cd       0xd6 obj\debug\src\main.o
+ .debug_macro   0x000004a3      0x1f7 obj\debug\src\main.o
+ .debug_macro   0x0000069a       0x10 obj\debug\src\main.o
+ .debug_macro   0x000006aa      0x375 obj\debug\src\main.o
+ .debug_macro   0x00000a1f       0x8e obj\debug\src\main.o
+ .debug_macro   0x00000aad       0x3a obj\debug\src\main.o
+ .debug_macro   0x00000ae7       0x22 obj\debug\src\main.o
+ .debug_macro   0x00000b09      0x1f0 obj\debug\src\main.o
+ .debug_macro   0x00000cf9       0x16 obj\debug\src\main.o
+ .debug_macro   0x00000d0f       0xd9 obj\debug\src\main.o
+ .debug_macro   0x00000de8       0x1c obj\debug\src\main.o
+ .debug_macro   0x00000e04       0xdf obj\debug\src\system_nrf51.o
+ .debug_macro   0x00000ee3       0x22 obj\debug\src\system_nrf51.o
 
 .debug_line     0x00000000     0x12cc
  .debug_line    0x00000000       0x27 obj\debug\s130.o

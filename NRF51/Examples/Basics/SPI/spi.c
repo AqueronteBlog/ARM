@@ -45,9 +45,6 @@ spi_status_t    spi_transfer ( NRF_SPI_Type* myinstance, uint8_t* spi_tx_buff, u
     uint32_t     spi_timeout1        =   0;
     uint32_t     spi_timeout2        =   0;
 
-    spi_status_t mySPI_status;
-
-
 
 // SPI TX
     for ( i = 0; i < spi_tx_length; i++ ){

@@ -64,6 +64,10 @@
 			<Add option="-eb_start_files" />
 			<Add option="-eb_lib=n" />
 		</Linker>
+		<Unit filename="..\..\..\..\Drivers\MAX7219\MAX7219.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\..\..\Drivers\MAX7219\MAX7219.h" />
 		<Unit filename="..\..\Basics\SPI\spi.c">
 			<Option compilerVar="CC" />
 		</Unit>
