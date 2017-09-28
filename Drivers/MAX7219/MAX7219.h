@@ -50,7 +50,7 @@ typedef enum{
 typedef struct{
     uint16_t EEPROM_Data;
     uint16_t DAC_Data;
-} Vector_data_t;
+} MAX7219_Vector_data_t;
 #endif
 
 
@@ -69,4 +69,4 @@ typedef enum{
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-MAX7219_status_t  MAX7219_Reset                 ( NRF_TWI_Type* myinstance );
+MAX7219_status_t  MAX7219_Init                  ( NRF_SPI_Type* myinstance, uint32_t myMOSIpin, uint32_t myMISOpin, uint32_t mySCLKpin, uint32_t myCSpin, uint32_t mySPI_Freq );

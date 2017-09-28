@@ -18,16 +18,21 @@
 
 
 /**
- * @brief       MAX7219_Reset   ( NRF_TWI_Type* )
+ * @brief       MAX7219_Init   ( NRF_SPI_Type* , uint32_t , uint32_t , uint32_t , uint32_t )
  *
- * @details     [TODO].
+ * @details     It configures the SPI pins and put the device in shutdown mode.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
+ * @param[in]    myinstance:    Peripheral's Instance.
+ * @param[in]    myMOSIpin:     SPI MOSI pin.
+ * @param[in]    myMISOpin:     SPI MISO pin.
+ * @param[in]    mySCLKpin:     SPI SCLK ( clock ) pin.
+ * @param[in]    myCSpin:       SPI Chip Select pin.
+ * @param[in]    mySPI_Freq:    SPI frequency.
  *
  * @param[out]   NaN.
  *
  *
- * @return       Status of MAX7219_Reset.
+ * @return       Status of MAX7219_Init.
  *
  *
  * @author      Manuel Caballero
@@ -36,13 +41,57 @@
  * @pre         NaN
  * @warning     NaN.
  */
-MAX7219_status_t  MAX7219_Reset   ( NRF_TWI_Type* myinstance )
+MAX7219_status_t  MAX7219_Init ( NRF_SPI_Type* myinstance, uint32_t myMOSIpin, uint32_t myMISOpin, uint32_t mySCLKpin, uint32_t myCSpin, uint32_t mySPI_Freq )
 {
-    uint8_t     cmd                 =    MAX7219_GENERAL_CALL_RESET;
+    uint8_t     cmd                 =    0;
     uint32_t    aux                 =    0;
 
+// CONFIGURE THE PINOUT AND ENABLE THE SPI
+    /* Configure the Chip Select ( CS ) */
+    NRF_GPIO->OUTSET               =   ( 1 << myCSpin );                                                  // Release the SPI's bus
+    NRF_GPIO->PIN_CNF[ myCSpin ]   =   ( GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos    ) |
+                                       ( GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos  ) |
+                                       ( GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   ) |
+                                       ( GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  ) |
+                                       ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos  );
 
-    //aux = i2c_write ( myinstance, MAX7219_GENERAL_CALL, &cmd, 1, I2C_STOP_BIT );
+
+
+    /* GPIO according to Table 221: GPIO configuration ( Reference Manual p.133 ) */
+    NRF_GPIO->OUTSET             =   ( 0 << myMOSIpin );
+    NRF_GPIO->OUTSET             =   ( 0 << mySCLKpin );
+    NRF_GPIO->DIRCLR             =   ( 1 << myMISOpin );
+    NRF_GPIO->DIRSET             =   ( 1 << myMOSIpin );
+    NRF_GPIO->DIRSET             =   ( 1 << mySCLKpin );
+
+    /* Disable the SPI */
+    myinstance->ENABLE        =   ( SPI_ENABLE_ENABLE_Disabled << SPI_ENABLE_ENABLE_Pos );
+
+    /* Configure the SPI behavior */
+    myinstance->CONFIG        =   ( SPI_CONFIG_ORDER_MsbFirst     << SPI_CONFIG_ORDER_Pos ) |
+                                  ( SPI_CONFIG_CPHA_Leading       << SPI_CONFIG_CPHA_Pos  ) |
+                                  ( SPI_CONFIG_CPOL_ActiveHigh    << SPI_CONFIG_CPOL_Pos  );
+
+    /* Configure the frequency */
+    myinstance->FREQUENCY     =   ( mySPI_Freq << SPI_FREQUENCY_FREQUENCY_Pos );
+
+    /* Configure the pins */
+    myinstance->PSELSCK       =   mySCLKpin;
+    myinstance->PSELMOSI      =   myMOSIpin;
+    myinstance->PSELMISO      =   myMISOpin;
+
+    /* Disable interrupt */
+    myinstance->INTENSET      =   ( SPI_INTENCLR_READY_Clear << SPI_INTENCLR_READY_Pos );
+
+    /* Enable the SPI */
+    myinstance->ENABLE        =   ( SPI_ENABLE_ENABLE_Enabled << SPI_ENABLE_ENABLE_Pos );
+
+
+// PUT THE DEVICE IN SHUTDOWN MODE
+//[TODO]
+
+
+
 
 
 
