@@ -18,10 +18,12 @@
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
+#include "MAX7219.h"
 
 
 int main( void )
 {
+    MAX7219_status_t    mySPI_status;
     /*
     conf_GPIO   ();
     conf_SPI0   ();
@@ -31,6 +33,11 @@ int main( void )
     NRF_TIMER0->TASKS_START = 1;            // Start Timer0
 
 */
+    while ( 1 ){
+        mySPI_status    =    MAX7219_Init ( NRF_SPI0, SPI0_MOSI, SPI0_MISO, SPI0_SCK, SPI0_CS, SPI_FREQUENCY_FREQUENCY_M1 );
+    }
+
+
     while( 1 )
     {
         //NRF_POWER->SYSTEMOFF = 1;
