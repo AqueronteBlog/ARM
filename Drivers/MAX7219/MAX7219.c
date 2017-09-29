@@ -80,6 +80,7 @@ MAX7219_status_t  MAX7219_Init ( NRF_SPI_Type* myinstance, uint32_t myMOSIpin, u
     myinstance->PSELMOSI      =   myMOSIpin;
     myinstance->PSELMISO      =   myMISOpin;
 
+    mySPI_CS                  =  myCSpin;
     /* Disable interrupt */
     myinstance->INTENSET      =   ( SPI_INTENCLR_READY_Clear << SPI_INTENCLR_READY_Pos );
 
@@ -128,9 +129,9 @@ MAX7219_status_t  MAX7219_Shutdown ( NRF_SPI_Type* myinstance )
 
     spi_status_t    mySPI_status;
 
-
-    mySPI_status    =   spi_transfer ( myinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
-
+    NRF_GPIO->OUTCLR =   ( 1UL << mySPI_CS );
+    mySPI_status     =   spi_transfer ( myinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
+    NRF_GPIO->OUTSET =   ( 1UL << mySPI_CS );        // End communication
 
 
     if ( mySPI_status == SPI_SUCCESS )

@@ -62,7 +62,7 @@ typedef enum{
 } MAX7219_status_t;
 
 
-
+uint32_t mySPI_CS;
 
 /**
   * @brief   FUNCTION PROTOTYPES
