@@ -43,8 +43,8 @@
  */
 MAX7219_status_t  MAX7219_Init ( NRF_SPI_Type* myinstance, uint32_t myMOSIpin, uint32_t myMISOpin, uint32_t mySCLKpin, uint32_t myCSpin, uint32_t mySPI_Freq )
 {
-    uint8_t     cmd                 =    0;
-    uint32_t    aux                 =    0;
+   spi_status_t    mySPI_status;
+
 
 // CONFIGURE THE PINOUT AND ENABLE THE SPI
     /* Configure the Chip Select ( CS ) */
@@ -88,16 +88,53 @@ MAX7219_status_t  MAX7219_Init ( NRF_SPI_Type* myinstance, uint32_t myMOSIpin, u
 
 
 // PUT THE DEVICE IN SHUTDOWN MODE
-//[TODO]
+    mySPI_status     =   MAX7219_Shutdown ( myinstance );
 
 
 
 
 
 
-    if ( aux == SPI_SUCCESS )
+    if ( mySPI_status == SPI_SUCCESS )
        return   MAX7219_SUCCESS;
     else
        return   MAX7219_FAILURE;
 }
 
+
+
+/**
+ * @brief       MAX7219_Shutdown   ( NRF_SPI_Type* )
+ *
+ * @details     It puts the device in shutdown mode.
+ *
+ * @param[in]    myinstance:    Peripheral's Instance.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of MAX7219_Shutdown.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/September/2017
+ * @version     29/September/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+MAX7219_status_t  MAX7219_Shutdown ( NRF_SPI_Type* myinstance )
+{
+    uint8_t  cmd[]              =    { MAX7219_SHUTDOWN, 0 };
+
+    spi_status_t    mySPI_status;
+
+
+    mySPI_status    =   spi_transfer ( myinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+       return   MAX7219_SUCCESS;
+    else
+       return   MAX7219_FAILURE;
+}

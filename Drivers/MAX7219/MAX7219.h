@@ -24,9 +24,7 @@
 /**
   * @brief   GENERAL CALL COMMANDS
   */
-#define MAX7219_GENERAL_CALL_RESET       0x06              /*!<  Perform an internal reset similar to a power-on-reset (POR).                          */
-#define MAX7219_GENERAL_CALL_WAKE_UP     0x09              /*!<  The power-down bits of the DAC register are set to a normal operation.                */
-
+#define MAX7219_SHUTDOWN                 0x0C              /*!<  [TODO].                          */
 
 
 
@@ -69,4 +67,5 @@ typedef enum{
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-MAX7219_status_t  MAX7219_Init                  ( NRF_SPI_Type* myinstance, uint32_t myMOSIpin, uint32_t myMISOpin, uint32_t mySCLKpin, uint32_t myCSpin, uint32_t mySPI_Freq );
+MAX7219_status_t  MAX7219_Init       ( NRF_SPI_Type* myinstance, uint32_t myMOSIpin, uint32_t myMISOpin, uint32_t mySCLKpin, uint32_t myCSpin, uint32_t mySPI_Freq );
+MAX7219_status_t  MAX7219_Shutdown   ( NRF_SPI_Type* myinstance );
