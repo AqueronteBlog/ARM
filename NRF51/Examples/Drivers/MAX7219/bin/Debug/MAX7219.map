@@ -6,6 +6,8 @@ c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/
                               c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o) (_global_impure_ptr)
 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
                               c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o (__libc_init_array)
+c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memcpy-stub.o)
+                              obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o (memcpy)
 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
                               c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o (memset)
 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
@@ -18,7 +20,6 @@ mySPIS_TX           0x4               obj\debug\src\functions.o
 changeDataSPIToBeTX
                     0x4               obj\debug\src\functions.o
 mySPI_RX            0x1               obj\debug\src\functions.o
-mySPI_CS            0x4               obj\debug\src\main.o
 mySPI_TX            0x1               obj\debug\src\functions.o
 mySPIS_RX           0x4               obj\debug\src\functions.o
 
@@ -86,8 +87,6 @@ Discarded input sections
                 0x00000000       0x64 obj\debug\src\functions.o
  .text.conf_SPI0
                 0x00000000       0xb0 obj\debug\src\functions.o
- .text.conf_SPIS1
-                0x00000000      0x120 obj\debug\src\functions.o
  .text.conf_TIMER0
                 0x00000000       0x64 obj\debug\src\functions.o
  .debug_macro   0x00000000      0x82c obj\debug\src\functions.o
@@ -137,9 +136,8 @@ Discarded input sections
  .debug_macro   0x00000000     0x74a3 obj\debug\src\interrupts.o
  .debug_macro   0x00000000      0x976 obj\debug\src\interrupts.o
  .debug_macro   0x00000000       0x10 obj\debug\src\interrupts.o
- .debug_macro   0x00000000       0x58 obj\debug\src\interrupts.o
+ .debug_macro   0x00000000       0x40 obj\debug\src\interrupts.o
  .debug_macro   0x00000000       0x10 obj\debug\src\interrupts.o
- .group         0x00000000        0x8 obj\debug\src\main.o
  .group         0x00000000        0x8 obj\debug\src\main.o
  .group         0x00000000        0x8 obj\debug\src\main.o
  .group         0x00000000        0x8 obj\debug\src\main.o
@@ -305,7 +303,7 @@ Discarded input sections
  .debug_macro   0x00000000     0x74a3 obj\debug\src\main.o
  .debug_macro   0x00000000      0x976 obj\debug\src\main.o
  .debug_macro   0x00000000       0x10 obj\debug\src\main.o
- .debug_macro   0x00000000       0x58 obj\debug\src\main.o
+ .debug_macro   0x00000000       0x40 obj\debug\src\main.o
  .debug_macro   0x00000000       0x10 obj\debug\src\main.o
  .group         0x00000000        0x8 obj\debug\src\system_nrf51.o
  .group         0x00000000        0x8 obj\debug\src\system_nrf51.o
@@ -362,7 +360,6 @@ Discarded input sections
  .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
- .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .text          0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .data          0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .bss           0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
@@ -381,7 +378,6 @@ Discarded input sections
  .debug_macro   0x00000000     0x74a3 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .debug_macro   0x00000000      0x976 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .debug_macro   0x00000000       0x10 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
- .debug_macro   0x00000000       0x10 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .text          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
@@ -393,6 +389,9 @@ Discarded input sections
  .text          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
  .data          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
  .bss           0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
+ .text          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memcpy-stub.o)
+ .data          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memcpy-stub.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memcpy-stub.o)
  .text          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
  .data          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
  .bss           0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
@@ -431,7 +430,7 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
  .softdevice    0x00000000    0x1d000 obj\debug\s130.o
                 0x00000000                Nordic_S130_SD
 
-.text           0x0001d000      0x760
+.text           0x0001d000      0x818
  *(.Vectors)
  .Vectors       0x0001d000       0xc0 obj\debug\startup_nrf51.o
                 0x0001d000                __Vectors
@@ -440,80 +439,81 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
                 0x0001d0c0                _start
                 0x0001d0c0                _mainCRTStartup
  .text.spi_transfer
-                0x0001d138       0xec obj\debug\~#\~#\basics\spi\spi.o
+                0x0001d138      0x124 obj\debug\~#\~#\basics\spi\spi.o
                 0x0001d138                spi_transfer
  .text.TIMER0_IRQHandler
-                0x0001d224       0x80 obj\debug\src\interrupts.o
-                0x0001d224                TIMER0_IRQHandler
+                0x0001d25c       0x80 obj\debug\src\interrupts.o
+                0x0001d25c                TIMER0_IRQHandler
  .text.SPI0_TWI0_IRQHandler
-                0x0001d2a4       0x60 obj\debug\src\interrupts.o
-                0x0001d2a4                SPI0_TWI0_IRQHandler
+                0x0001d2dc       0x60 obj\debug\src\interrupts.o
+                0x0001d2dc                SPI0_TWI0_IRQHandler
  .text.SPI1_TWI1_IRQHandler
-                0x0001d304       0x9c obj\debug\src\interrupts.o
-                0x0001d304                SPI1_TWI1_IRQHandler
- .text.main     0x0001d3a0       0x28 obj\debug\src\main.o
-                0x0001d3a0                main
+                0x0001d33c       0x9c obj\debug\src\interrupts.o
+                0x0001d33c                SPI1_TWI1_IRQHandler
+ .text.main     0x0001d3d8       0x54 obj\debug\src\main.o
+                0x0001d3d8                main
  .text.SystemInit
-                0x0001d3c8       0x40 obj\debug\src\system_nrf51.o
-                0x0001d3c8                SystemInit
+                0x0001d42c       0x40 obj\debug\src\system_nrf51.o
+                0x0001d42c                SystemInit
  .text.is_manual_peripheral_setup_needed
-                0x0001d408       0x80 obj\debug\src\system_nrf51.o
+                0x0001d46c       0x80 obj\debug\src\system_nrf51.o
  .text.is_disabled_in_debug_needed
-                0x0001d488       0x4c obj\debug\src\system_nrf51.o
- .text          0x0001d4d4       0x54 obj\debug\startup_nrf51.o
-                0x0001d4d4                Reset_Handler
-                0x0001d51c                NMI_Handler
-                0x0001d51e                HardFault_Handler
-                0x0001d520                SVC_Handler
-                0x0001d522                PendSV_Handler
-                0x0001d524                SysTick_Handler
-                0x0001d526                GPIOTE_IRQHandler
-                0x0001d526                POWER_CLOCK_IRQHandler
-                0x0001d526                RTC0_IRQHandler
-                0x0001d526                LPCOMP_IRQHandler
-                0x0001d526                SWI4_IRQHandler
-                0x0001d526                TEMP_IRQHandler
-                0x0001d526                QDEC_IRQHandler
-                0x0001d526                UART0_IRQHandler
-                0x0001d526                SWI5_IRQHandler
-                0x0001d526                RADIO_IRQHandler
-                0x0001d526                SWI0_IRQHandler
-                0x0001d526                TIMER1_IRQHandler
-                0x0001d526                ECB_IRQHandler
-                0x0001d526                Default_Handler
-                0x0001d526                ADC_IRQHandler
-                0x0001d526                SWI3_IRQHandler
-                0x0001d526                CCM_AAR_IRQHandler
-                0x0001d526                WDT_IRQHandler
-                0x0001d526                TIMER2_IRQHandler
-                0x0001d526                SWI2_IRQHandler
-                0x0001d526                RNG_IRQHandler
-                0x0001d526                RTC1_IRQHandler
-                0x0001d526                SWI1_IRQHandler
+                0x0001d4ec       0x4c obj\debug\src\system_nrf51.o
+ .text          0x0001d538       0x54 obj\debug\startup_nrf51.o
+                0x0001d538                Reset_Handler
+                0x0001d580                NMI_Handler
+                0x0001d582                HardFault_Handler
+                0x0001d584                SVC_Handler
+                0x0001d586                PendSV_Handler
+                0x0001d588                SysTick_Handler
+                0x0001d58a                GPIOTE_IRQHandler
+                0x0001d58a                POWER_CLOCK_IRQHandler
+                0x0001d58a                RTC0_IRQHandler
+                0x0001d58a                LPCOMP_IRQHandler
+                0x0001d58a                SWI4_IRQHandler
+                0x0001d58a                TEMP_IRQHandler
+                0x0001d58a                QDEC_IRQHandler
+                0x0001d58a                UART0_IRQHandler
+                0x0001d58a                SWI5_IRQHandler
+                0x0001d58a                RADIO_IRQHandler
+                0x0001d58a                SWI0_IRQHandler
+                0x0001d58a                TIMER1_IRQHandler
+                0x0001d58a                ECB_IRQHandler
+                0x0001d58a                Default_Handler
+                0x0001d58a                ADC_IRQHandler
+                0x0001d58a                SWI3_IRQHandler
+                0x0001d58a                CCM_AAR_IRQHandler
+                0x0001d58a                WDT_IRQHandler
+                0x0001d58a                TIMER2_IRQHandler
+                0x0001d58a                SWI2_IRQHandler
+                0x0001d58a                RNG_IRQHandler
+                0x0001d58a                RTC1_IRQHandler
+                0x0001d58a                SWI1_IRQHandler
  .text.MAX7219_Init
-                0x0001d528      0x110 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
-                0x0001d528                MAX7219_Init
+                0x0001d58c      0x168 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+                0x0001d58c                MAX7219_Init
  .text.MAX7219_Shutdown
-                0x0001d638       0x7c obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
-                0x0001d638                MAX7219_Shutdown
- .text.exit     0x0001d6b4       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
-                0x0001d6b4                exit
+                0x0001d6f4       0x68 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+                0x0001d6f4                MAX7219_Shutdown
+ .text.exit     0x0001d75c       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
+                0x0001d75c                exit
  .text.__libc_init_array
-                0x0001d6e0       0x4c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
-                0x0001d6e0                __libc_init_array
- .text.memset   0x0001d72c       0x10 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
-                0x0001d72c                memset
- .text._exit    0x0001d73c        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
-                0x0001d73c                _exit
+                0x0001d788       0x4c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
+                0x0001d788                __libc_init_array
+ .text.memcpy   0x0001d7d4       0x12 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memcpy-stub.o)
+                0x0001d7d4                memcpy
+ .text.memset   0x0001d7e6       0x10 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
+                0x0001d7e6                memset
+ .text._exit    0x0001d7f6        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
+                0x0001d7f6                _exit
  *(.init)
- *fill*         0x0001d73e        0x2 
- .init          0x0001d740        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x0001d740                _init
- .init          0x0001d744        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ .init          0x0001d7f8        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x0001d7f8                _init
+ .init          0x0001d7fc        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
  *(.fini)
- .fini          0x0001d74c        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x0001d74c                _fini
- .fini          0x0001d750        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ .fini          0x0001d804        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x0001d804                _fini
+ .fini          0x0001d808        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
@@ -525,45 +525,45 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
  *(SORT(.dtors.*))
  *(.dtors)
  *(.rodata*)
+ .rodata        0x0001d810        0x2 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
  .rodata.str1.1
-                0x0001d758        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
- *fill*         0x0001d75a        0x2 
+                0x0001d812        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
  .rodata._global_impure_ptr
-                0x0001d75c        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
-                0x0001d75c                _global_impure_ptr
+                0x0001d814        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
+                0x0001d814                _global_impure_ptr
  *(.eh_frame*)
 
-.glue_7         0x0001d760        0x0
- .glue_7        0x0001d760        0x0 linker stubs
+.glue_7         0x0001d818        0x0
+ .glue_7        0x0001d818        0x0 linker stubs
 
-.glue_7t        0x0001d760        0x0
- .glue_7t       0x0001d760        0x0 linker stubs
+.glue_7t        0x0001d818        0x0
+ .glue_7t       0x0001d818        0x0 linker stubs
 
-.vfp11_veneer   0x0001d760        0x0
- .vfp11_veneer  0x0001d760        0x0 linker stubs
+.vfp11_veneer   0x0001d818        0x0
+ .vfp11_veneer  0x0001d818        0x0 linker stubs
 
-.v4_bx          0x0001d760        0x0
- .v4_bx         0x0001d760        0x0 linker stubs
+.v4_bx          0x0001d818        0x0
+ .v4_bx         0x0001d818        0x0 linker stubs
 
-.iplt           0x0001d760        0x0
- .iplt          0x0001d760        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.iplt           0x0001d818        0x0
+ .iplt          0x0001d818        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0001d760                __exidx_start = .
+                0x0001d818                __exidx_start = .
 
-.ARM.exidx      0x0001d760        0x8
+.ARM.exidx      0x0001d818        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x0001d760        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
- .ARM.exidx     0x0001d768        0x0 obj\debug\startup_nrf51.o
+ .ARM.exidx     0x0001d818        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .ARM.exidx     0x0001d820        0x0 obj\debug\startup_nrf51.o
                                   0x8 (size before relaxing)
-                0x0001d768                __exidx_end = .
-                0x0001d768                __etext = .
+                0x0001d820                __exidx_end = .
+                0x0001d820                __etext = .
 
-.rel.dyn        0x0001d768        0x0
- .rel.iplt      0x0001d768        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.rel.dyn        0x0001d820        0x0
+ .rel.iplt      0x0001d820        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.data           0x20002200       0x60 load address 0x0001d768
+.data           0x20002200       0x60 load address 0x0001d820
                 0x20002200                __data_start__ = .
  *(vtable)
  *(.data*)
@@ -587,10 +587,10 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
                 0x20002260                . = ALIGN (0x4)
                 0x20002260                __data_end__ = .
 
-.igot.plt       0x20002260        0x0 load address 0x0001d7c8
+.igot.plt       0x20002260        0x0 load address 0x0001d880
  .igot.plt      0x20002260        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.bss            0x20002260       0x14 load address 0x0001d7c8
+.bss            0x20002260       0x10 load address 0x0001d880
                 0x20002260                . = ALIGN (0x4)
                 0x20002260                __bss_start__ = .
  *(.bss*)
@@ -601,22 +601,20 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
                 0x20002268                mySPI_RX
                 0x20002269                mySPI_TX
                 0x2000226c                mySPIS_RX
- COMMON         0x20002270        0x4 obj\debug\src\main.o
-                0x20002270                mySPI_CS
-                0x20002274                . = ALIGN (0x4)
-                0x20002274                __bss_end__ = .
+                0x20002270                . = ALIGN (0x4)
+                0x20002270                __bss_end__ = .
 
-.heap           0x20002278      0x800
-                0x20002278                __end__ = .
-                0x20002278                end = __end__
+.heap           0x20002270      0x800
+                0x20002270                __end__ = .
+                0x20002270                end = __end__
  *(.heap*)
- .heap          0x20002278      0x800 obj\debug\startup_nrf51.o
-                0x20002278                __HeapBase
-                0x20002a78                __HeapLimit = .
+ .heap          0x20002270      0x800 obj\debug\startup_nrf51.o
+                0x20002270                __HeapBase
+                0x20002a70                __HeapLimit = .
 
-.stack_dummy    0x20002278      0x800
+.stack_dummy    0x20002270      0x800
  *(.stack*)
- .stack         0x20002278      0x800 obj\debug\startup_nrf51.o
+ .stack         0x20002270      0x800 obj\debug\startup_nrf51.o
                 0x20007800                __StackTop = (ORIGIN (RAM) + LENGTH (RAM))
                 0x20007000                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
                 0x20007800                PROVIDE (__stack, __StackTop)
@@ -672,11 +670,13 @@ OUTPUT(bin\Debug\MAX7219.elf elf32-littlearm)
  .ARM.attributes
                 0x00000203       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
  .ARM.attributes
-                0x0000022f       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
+                0x0000022f       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memcpy-stub.o)
  .ARM.attributes
-                0x0000025b       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
+                0x0000025b       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
  .ARM.attributes
-                0x00000287       0x1e c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+                0x00000287       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
+ .ARM.attributes
+                0x000002b3       0x1e c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
 
 .comment        0x00000000       0x6e
  .comment       0x00000000       0x6e obj\debug\~#\~#\basics\spi\spi.o
@@ -688,17 +688,17 @@ OUTPUT(bin\Debug\MAX7219.elf elf32-littlearm)
  .comment       0x0000006e       0x6f obj\debug\src\system_nrf51.o
  .comment       0x0000006e       0x6f obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
 
-.debug_info     0x00000000     0x4138
- .debug_info    0x00000000      0x316 obj\debug\~#\~#\basics\spi\spi.o
- .debug_info    0x00000316       0x5e obj\debug\s130.o
- .debug_info    0x00000374      0xb22 obj\debug\src\functions.o
- .debug_info    0x00000e96      0x90b obj\debug\src\interrupts.o
- .debug_info    0x000017a1     0x22ca obj\debug\src\main.o
- .debug_info    0x00003a6b      0x1ec obj\debug\src\system_nrf51.o
- .debug_info    0x00003c57       0x69 obj\debug\startup_nrf51.o
- .debug_info    0x00003cc0      0x478 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+.debug_info     0x00000000     0x3f39
+ .debug_info    0x00000000      0x40f obj\debug\~#\~#\basics\spi\spi.o
+ .debug_info    0x0000040f       0x5e obj\debug\s130.o
+ .debug_info    0x0000046d      0x7cd obj\debug\src\functions.o
+ .debug_info    0x00000c3a      0x90b obj\debug\src\interrupts.o
+ .debug_info    0x00001545     0x2328 obj\debug\src\main.o
+ .debug_info    0x0000386d      0x1ec obj\debug\src\system_nrf51.o
+ .debug_info    0x00003a59       0x68 obj\debug\startup_nrf51.o
+ .debug_info    0x00003ac1      0x478 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
 
-.debug_abbrev   0x00000000      0x82c
+.debug_abbrev   0x00000000      0x84d
  .debug_abbrev  0x00000000      0x114 obj\debug\~#\~#\basics\spi\spi.o
  .debug_abbrev  0x00000114       0x48 obj\debug\s130.o
  .debug_abbrev  0x0000015c      0x144 obj\debug\src\functions.o
@@ -706,35 +706,35 @@ OUTPUT(bin\Debug\MAX7219.elf elf32-littlearm)
  .debug_abbrev  0x00000389      0x276 obj\debug\src\main.o
  .debug_abbrev  0x000005ff       0xf4 obj\debug\src\system_nrf51.o
  .debug_abbrev  0x000006f3       0x14 obj\debug\startup_nrf51.o
- .debug_abbrev  0x00000707      0x125 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_abbrev  0x00000707      0x146 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
 
-.debug_aranges  0x00000000      0x328
+.debug_aranges  0x00000000      0x320
  .debug_aranges
                 0x00000000       0x20 obj\debug\~#\~#\basics\spi\spi.o
  .debug_aranges
                 0x00000020       0x18 obj\debug\s130.o
  .debug_aranges
-                0x00000038       0x40 obj\debug\src\functions.o
+                0x00000038       0x38 obj\debug\src\functions.o
  .debug_aranges
-                0x00000078       0x30 obj\debug\src\interrupts.o
+                0x00000070       0x30 obj\debug\src\interrupts.o
  .debug_aranges
-                0x000000a8      0x200 obj\debug\src\main.o
+                0x000000a0      0x200 obj\debug\src\main.o
  .debug_aranges
-                0x000002a8       0x38 obj\debug\src\system_nrf51.o
+                0x000002a0       0x38 obj\debug\src\system_nrf51.o
  .debug_aranges
-                0x000002e0       0x20 obj\debug\startup_nrf51.o
+                0x000002d8       0x20 obj\debug\startup_nrf51.o
  .debug_aranges
-                0x00000300       0x28 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+                0x000002f8       0x28 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
 
-.debug_ranges   0x00000000      0x290
+.debug_ranges   0x00000000      0x288
  .debug_ranges  0x00000000       0x10 obj\debug\~#\~#\basics\spi\spi.o
- .debug_ranges  0x00000010       0x30 obj\debug\src\functions.o
- .debug_ranges  0x00000040       0x20 obj\debug\src\interrupts.o
- .debug_ranges  0x00000060      0x1f0 obj\debug\src\main.o
- .debug_ranges  0x00000250       0x28 obj\debug\src\system_nrf51.o
- .debug_ranges  0x00000278       0x18 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_ranges  0x00000010       0x28 obj\debug\src\functions.o
+ .debug_ranges  0x00000038       0x20 obj\debug\src\interrupts.o
+ .debug_ranges  0x00000058      0x1f0 obj\debug\src\main.o
+ .debug_ranges  0x00000248       0x28 obj\debug\src\system_nrf51.o
+ .debug_ranges  0x00000270       0x18 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
 
-.debug_macro    0x00000000     0x9fd0
+.debug_macro    0x00000000     0x9faa
  .debug_macro   0x00000000       0xd4 obj\debug\~#\~#\basics\spi\spi.o
  .debug_macro   0x000000d4      0x82c obj\debug\~#\~#\basics\spi\spi.o
  .debug_macro   0x00000900       0x22 obj\debug\~#\~#\basics\spi\spi.o
@@ -752,60 +752,60 @@ OUTPUT(bin\Debug\MAX7219.elf elf32-littlearm)
  .debug_macro   0x00008faf       0x10 obj\debug\~#\~#\basics\spi\spi.o
  .debug_macro   0x00008fbf       0x26 obj\debug\s130.o
  .debug_macro   0x00008fe5       0xe6 obj\debug\src\functions.o
- .debug_macro   0x000090cb       0x58 obj\debug\src\functions.o
- .debug_macro   0x00009123       0x10 obj\debug\src\functions.o
- .debug_macro   0x00009133       0xe6 obj\debug\src\interrupts.o
- .debug_macro   0x00009219      0x189 obj\debug\src\main.o
- .debug_macro   0x000093a2       0xd6 obj\debug\src\main.o
- .debug_macro   0x00009478      0x1f7 obj\debug\src\main.o
- .debug_macro   0x0000966f       0x10 obj\debug\src\main.o
- .debug_macro   0x0000967f      0x375 obj\debug\src\main.o
- .debug_macro   0x000099f4       0x8e obj\debug\src\main.o
- .debug_macro   0x00009a82       0x3a obj\debug\src\main.o
- .debug_macro   0x00009abc       0x22 obj\debug\src\main.o
- .debug_macro   0x00009ade      0x1f0 obj\debug\src\main.o
- .debug_macro   0x00009cce       0x16 obj\debug\src\main.o
- .debug_macro   0x00009ce4       0xd9 obj\debug\src\main.o
- .debug_macro   0x00009dbd       0x1c obj\debug\src\main.o
- .debug_macro   0x00009dd9       0x22 obj\debug\src\main.o
- .debug_macro   0x00009dfb       0x10 obj\debug\src\main.o
- .debug_macro   0x00009e0b       0xdf obj\debug\src\system_nrf51.o
- .debug_macro   0x00009eea       0xe6 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_macro   0x000090cb       0x40 obj\debug\src\functions.o
+ .debug_macro   0x0000910b       0x10 obj\debug\src\functions.o
+ .debug_macro   0x0000911b       0xe6 obj\debug\src\interrupts.o
+ .debug_macro   0x00009201      0x18a obj\debug\src\main.o
+ .debug_macro   0x0000938b       0xd6 obj\debug\src\main.o
+ .debug_macro   0x00009461      0x1f7 obj\debug\src\main.o
+ .debug_macro   0x00009658       0x10 obj\debug\src\main.o
+ .debug_macro   0x00009668      0x375 obj\debug\src\main.o
+ .debug_macro   0x000099dd       0x8e obj\debug\src\main.o
+ .debug_macro   0x00009a6b       0x3a obj\debug\src\main.o
+ .debug_macro   0x00009aa5       0x22 obj\debug\src\main.o
+ .debug_macro   0x00009ac7      0x1f0 obj\debug\src\main.o
+ .debug_macro   0x00009cb7       0x16 obj\debug\src\main.o
+ .debug_macro   0x00009ccd       0xd9 obj\debug\src\main.o
+ .debug_macro   0x00009da6       0x1c obj\debug\src\main.o
+ .debug_macro   0x00009dc2       0x22 obj\debug\src\main.o
+ .debug_macro   0x00009de4       0xdf obj\debug\src\system_nrf51.o
+ .debug_macro   0x00009ec3       0xe7 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
 
-.debug_line     0x00000000     0x198e
- .debug_line    0x00000000      0x33f obj\debug\~#\~#\basics\spi\spi.o
- .debug_line    0x0000033f       0x27 obj\debug\s130.o
- .debug_line    0x00000366      0x391 obj\debug\src\functions.o
- .debug_line    0x000006f7      0x350 obj\debug\src\interrupts.o
- .debug_line    0x00000a47      0x83f obj\debug\src\main.o
- .debug_line    0x00001286      0x34e obj\debug\src\system_nrf51.o
- .debug_line    0x000015d4       0x6e obj\debug\startup_nrf51.o
- .debug_line    0x00001642      0x34c obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+.debug_line     0x00000000     0x196b
+ .debug_line    0x00000000      0x343 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_line    0x00000343       0x27 obj\debug\s130.o
+ .debug_line    0x0000036a      0x364 obj\debug\src\functions.o
+ .debug_line    0x000006ce      0x350 obj\debug\src\interrupts.o
+ .debug_line    0x00000a1e      0x846 obj\debug\src\main.o
+ .debug_line    0x00001264      0x34e obj\debug\src\system_nrf51.o
+ .debug_line    0x000015b2       0x6e obj\debug\startup_nrf51.o
+ .debug_line    0x00001620      0x34b obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
 
-.debug_str      0x00000000    0x34980
- .debug_str     0x00000000    0x2edb2 obj\debug\~#\~#\basics\spi\spi.o
-                              0x2ef2e (size before relaxing)
- .debug_str     0x0002edb2       0x75 obj\debug\s130.o
-                               0x23db (size before relaxing)
- .debug_str     0x0002ee27      0x454 obj\debug\src\functions.o
-                              0x2f2f1 (size before relaxing)
- .debug_str     0x0002f27b       0x4d obj\debug\src\interrupts.o
-                              0x2f143 (size before relaxing)
- .debug_str     0x0002f2c8     0x554f obj\debug\src\main.o
-                              0x345c5 (size before relaxing)
- .debug_str     0x00034817       0xf4 obj\debug\src\system_nrf51.o
-                              0x2ef24 (size before relaxing)
- .debug_str     0x0003490b       0x75 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
-                              0x2f017 (size before relaxing)
+.debug_str      0x00000000    0x3493e
+ .debug_str     0x00000000    0x2edee obj\debug\~#\~#\basics\spi\spi.o
+                              0x2ef6a (size before relaxing)
+ .debug_str     0x0002edee       0x75 obj\debug\s130.o
+                               0x23da (size before relaxing)
+ .debug_str     0x0002ee63      0x31a obj\debug\src\functions.o
+                              0x2f1e1 (size before relaxing)
+ .debug_str     0x0002f17d      0x119 obj\debug\src\interrupts.o
+                              0x2f111 (size before relaxing)
+ .debug_str     0x0002f296     0x5570 obj\debug\src\main.o
+                              0x345be (size before relaxing)
+ .debug_str     0x00034806       0xf4 obj\debug\src\system_nrf51.o
+                              0x2ef23 (size before relaxing)
+ .debug_str     0x000348fa       0x44 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+                              0x2f005 (size before relaxing)
 
-.debug_frame    0x00000000      0x68c
+.debug_frame    0x00000000      0x6a8
  .debug_frame   0x00000000       0x30 obj\debug\~#\~#\basics\spi\spi.o
- .debug_frame   0x00000030       0xa4 obj\debug\src\functions.o
- .debug_frame   0x000000d4       0x64 obj\debug\src\interrupts.o
- .debug_frame   0x00000138      0x3f0 obj\debug\src\main.o
- .debug_frame   0x00000528       0x80 obj\debug\src\system_nrf51.o
- .debug_frame   0x000005a8       0x50 obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
- .debug_frame   0x000005f8       0x28 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
- .debug_frame   0x00000620       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
- .debug_frame   0x0000064c       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
- .debug_frame   0x0000066c       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
+ .debug_frame   0x00000030       0x88 obj\debug\src\functions.o
+ .debug_frame   0x000000b8       0x64 obj\debug\src\interrupts.o
+ .debug_frame   0x0000011c      0x3f4 obj\debug\src\main.o
+ .debug_frame   0x00000510       0x80 obj\debug\src\system_nrf51.o
+ .debug_frame   0x00000590       0x5c obj\debug\~#\~#\~#\~#\drivers\max7219\max7219.o
+ .debug_frame   0x000005ec       0x28 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
+ .debug_frame   0x00000614       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
+ .debug_frame   0x00000640       0x28 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x00000668       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
+ .debug_frame   0x00000688       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
