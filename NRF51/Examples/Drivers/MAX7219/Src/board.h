@@ -31,9 +31,3 @@
 #define SPI0_MISO   28     /*!<   SPI0 MISO: P0.28   */
 #define SPI0_CS     5      /*!<   SPI0 CS:   P0.5    */
 
-
-/* SPIS1 */
-#define SPIS1_SCK   3      /*!<   SPIS1 SCLK: P0.3   */
-#define SPIS1_MOSI  2      /*!<   SPIS1 MOSI: P0.2   */
-#define SPIS1_MISO  1      /*!<   SPIS1 MISO: P0.1   */
-#define SPIS1_CS    4      /*!<   SPIS1 CS:   P0.4    */
