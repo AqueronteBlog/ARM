@@ -22,12 +22,7 @@
  *
  * @details     It configures the SPI pins and put the device in shutdown mode.
  *
- * @param[in]    myinstance:    Peripheral's Instance.
- * @param[in]    myMOSIpin:     SPI MOSI pin.
- * @param[in]    myMISOpin:     SPI MISO pin.
- * @param[in]    mySCLKpin:     SPI SCLK ( clock ) pin.
- * @param[in]    myCSpin:       SPI Chip Select pin.
- * @param[in]    mySPI_Freq:    SPI frequency.
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin and SPI frequency.
  *
  * @param[out]   NaN.
  *
@@ -41,55 +36,55 @@
  * @pre         NaN
  * @warning     NaN.
  */
-MAX7219_status_t  MAX7219_Init ( NRF_SPI_Type* myinstance, uint32_t myMOSIpin, uint32_t myMISOpin, uint32_t mySCLKpin, uint32_t myCSpin, uint32_t mySPI_Freq )
+MAX7219_status_t  MAX7219_Init ( MAX7219_spi_parameters_t mySPI_parameters )
 {
    spi_status_t    mySPI_status;
 
 
 // CONFIGURE THE PINOUT AND ENABLE THE SPI
     /* Configure the Chip Select ( CS ) */
-    NRF_GPIO->OUTSET               =   ( 1 << myCSpin );                                                  // Release the SPI's bus
-    NRF_GPIO->PIN_CNF[ myCSpin ]   =   ( GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos    ) |
-                                       ( GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos  ) |
-                                       ( GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   ) |
-                                       ( GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  ) |
-                                       ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos  );
+    NRF_GPIO->OUTSET                           =   ( 1 << mySPI_parameters.CS );                                                  // Release the SPI's bus
+    NRF_GPIO->PIN_CNF[ mySPI_parameters.CS ]   =   ( GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos    ) |
+                                                   ( GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos  ) |
+                                                   ( GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   ) |
+                                                   ( GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  ) |
+                                                   ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos  );
 
 
 
     /* GPIO according to Table 221: GPIO configuration ( Reference Manual p.133 ) */
-    NRF_GPIO->OUTSET             =   ( 0 << myMOSIpin );
-    NRF_GPIO->OUTSET             =   ( 0 << mySCLKpin );
-    NRF_GPIO->DIRCLR             =   ( 1 << myMISOpin );
-    NRF_GPIO->DIRSET             =   ( 1 << myMOSIpin );
-    NRF_GPIO->DIRSET             =   ( 1 << mySCLKpin );
+    NRF_GPIO->OUTSET             =   ( 0 << mySPI_parameters.MOSI );
+    NRF_GPIO->OUTSET             =   ( 0 << mySPI_parameters.SCLK );
+    NRF_GPIO->DIRCLR             =   ( 1 << mySPI_parameters.MISO );
+    NRF_GPIO->DIRSET             =   ( 1 << mySPI_parameters.MOSI );
+    NRF_GPIO->DIRSET             =   ( 1 << mySPI_parameters.SCLK );
 
     /* Disable the SPI */
-    myinstance->ENABLE        =   ( SPI_ENABLE_ENABLE_Disabled << SPI_ENABLE_ENABLE_Pos );
+    mySPI_parameters.SPIinstance->ENABLE        =   ( SPI_ENABLE_ENABLE_Disabled << SPI_ENABLE_ENABLE_Pos );
 
     /* Configure the SPI behavior */
-    myinstance->CONFIG        =   ( SPI_CONFIG_ORDER_MsbFirst     << SPI_CONFIG_ORDER_Pos ) |
-                                  ( SPI_CONFIG_CPHA_Leading       << SPI_CONFIG_CPHA_Pos  ) |
-                                  ( SPI_CONFIG_CPOL_ActiveHigh    << SPI_CONFIG_CPOL_Pos  );
+    mySPI_parameters.SPIinstance->CONFIG        =   ( SPI_CONFIG_ORDER_MsbFirst     << SPI_CONFIG_ORDER_Pos ) |
+                                                    ( SPI_CONFIG_CPHA_Leading       << SPI_CONFIG_CPHA_Pos  ) |
+                                                    ( SPI_CONFIG_CPOL_ActiveHigh    << SPI_CONFIG_CPOL_Pos  );
 
     /* Configure the frequency */
-    myinstance->FREQUENCY     =   ( mySPI_Freq << SPI_FREQUENCY_FREQUENCY_Pos );
+    mySPI_parameters.SPIinstance->FREQUENCY     =   ( mySPI_parameters.Freq << SPI_FREQUENCY_FREQUENCY_Pos );
 
     /* Configure the pins */
-    myinstance->PSELSCK       =   mySCLKpin;
-    myinstance->PSELMOSI      =   myMOSIpin;
-    myinstance->PSELMISO      =   myMISOpin;
+    mySPI_parameters.SPIinstance->PSELSCK       =   mySPI_parameters.SCLK;
+    mySPI_parameters.SPIinstance->PSELMOSI      =   mySPI_parameters.MOSI;
+    mySPI_parameters.SPIinstance->PSELMISO      =   mySPI_parameters.MISO;
 
-    mySPI_CS                  =  myCSpin;
+
     /* Disable interrupt */
-    myinstance->INTENSET      =   ( SPI_INTENCLR_READY_Clear << SPI_INTENCLR_READY_Pos );
+    mySPI_parameters.SPIinstance->INTENSET      =   ( SPI_INTENCLR_READY_Clear << SPI_INTENCLR_READY_Pos );
 
     /* Enable the SPI */
-    myinstance->ENABLE        =   ( SPI_ENABLE_ENABLE_Enabled << SPI_ENABLE_ENABLE_Pos );
+    mySPI_parameters.SPIinstance->ENABLE        =   ( SPI_ENABLE_ENABLE_Enabled << SPI_ENABLE_ENABLE_Pos );
 
 
 // PUT THE DEVICE IN SHUTDOWN MODE
-    mySPI_status     =   MAX7219_Shutdown ( myinstance );
+    //mySPI_status     =   MAX7219_Shutdown ( mySPI_parameters );
 
 
 
@@ -123,15 +118,15 @@ MAX7219_status_t  MAX7219_Init ( NRF_SPI_Type* myinstance, uint32_t myMOSIpin, u
  * @pre         NaN
  * @warning     NaN.
  */
-MAX7219_status_t  MAX7219_Shutdown ( NRF_SPI_Type* myinstance )
+MAX7219_status_t  MAX7219_Shutdown ( MAX7219_spi_parameters_t mySPI_parameters )
 {
-    uint8_t  cmd[]              =    { MAX7219_SHUTDOWN, 0 };
+    uint8_t  cmd[]              =    { 0x0F, 1 };
 
     spi_status_t    mySPI_status;
 
-    NRF_GPIO->OUTCLR =   ( 1UL << mySPI_CS );
-    mySPI_status     =   spi_transfer ( myinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
-    NRF_GPIO->OUTSET =   ( 1UL << mySPI_CS );        // End communication
+
+    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS );
+
 
 
     if ( mySPI_status == SPI_SUCCESS )

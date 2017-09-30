@@ -62,10 +62,21 @@ typedef enum{
 } MAX7219_status_t;
 
 
-uint32_t mySPI_CS;
+
+typedef struct{
+    uint32_t MOSI;
+    uint32_t MISO;
+    uint32_t SCLK;
+    uint32_t CS;
+
+    uint32_t Freq;
+
+    NRF_SPI_Type* SPIinstance;
+} MAX7219_spi_parameters_t;
+
 
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-MAX7219_status_t  MAX7219_Init       ( NRF_SPI_Type* myinstance, uint32_t myMOSIpin, uint32_t myMISOpin, uint32_t mySCLKpin, uint32_t myCSpin, uint32_t mySPI_Freq );
-MAX7219_status_t  MAX7219_Shutdown   ( NRF_SPI_Type* myinstance );
+MAX7219_status_t  MAX7219_Init       ( MAX7219_spi_parameters_t mySPI_parameters );
+MAX7219_status_t  MAX7219_Shutdown   ( MAX7219_spi_parameters_t mySPI_parameters );
