@@ -32,4 +32,4 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-spi_status_t    spi_transfer    ( NRF_SPI_Type* myinstance, uint8_t* spi_tx_buff, uint32_t spi_tx_length, uint8_t* spi_rx_buff, uint32_t spi_rx_length );
+spi_status_t    spi_transfer    ( NRF_SPI_Type* myinstance, uint8_t* spi_tx_buff, uint32_t spi_tx_length, uint8_t* spi_rx_buff, uint32_t spi_rx_length, uint32_t spi_cs_pin );
