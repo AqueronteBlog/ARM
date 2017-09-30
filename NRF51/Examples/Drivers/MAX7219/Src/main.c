@@ -23,7 +23,8 @@
 
 int main( void )
 {
-    MAX7219_status_t    mySPI_status;
+    MAX7219_status_t            mySPI_status;
+    MAX7219_spi_parameters_t    mySPI_parameters;
     /*
     conf_GPIO   ();
     conf_SPI0   ();
@@ -33,8 +34,15 @@ int main( void )
     NRF_TIMER0->TASKS_START = 1;            // Start Timer0
 
 */
+    mySPI_parameters.SPIinstance =    NRF_SPI0;
+    mySPI_parameters.MOSI        =    SPI0_MOSI;
+    mySPI_parameters.MISO        =    SPI0_MISO;
+    mySPI_parameters.SCLK        =    SPI0_SCK;
+    mySPI_parameters.CS          =    SPI0_CS;
+    mySPI_parameters.Freq        =    SPI_FREQUENCY_FREQUENCY_M1;
+
     while ( 1 ){
-        mySPI_status    =    MAX7219_Init ( NRF_SPI0, SPI0_MOSI, SPI0_MISO, SPI0_SCK, SPI0_CS, SPI_FREQUENCY_FREQUENCY_M1 );
+        mySPI_status    =    MAX7219_Init ( mySPI_parameters );
     }
 
 
