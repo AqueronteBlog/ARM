@@ -84,7 +84,7 @@ MAX7219_status_t  MAX7219_Init ( MAX7219_spi_parameters_t mySPI_parameters )
 
 
 // PUT THE DEVICE IN SHUTDOWN MODE
-    //mySPI_status     =   MAX7219_Shutdown ( mySPI_parameters );
+    mySPI_status     =   MAX7219_Shutdown ( mySPI_parameters );
 
 
 

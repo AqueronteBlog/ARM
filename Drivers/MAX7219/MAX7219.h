@@ -22,9 +22,25 @@
 
 /* General Call Commands */
 /**
-  * @brief   GENERAL CALL COMMANDS
+  * @brief   REGISTER ADDRESS MAP
   */
-#define MAX7219_SHUTDOWN                 0x0C              /*!<  [TODO].                          */
+typedef enum{
+    NO_OP           =   0x00,           /*!<  No operation.              */
+    DIGIT_0         =   0x01,           /*!<  Digit 0.                   */
+    DIGIT_1         =   0x02,           /*!<  Digit 1.                   */
+    DIGIT_2         =   0x03,           /*!<  Digit 2.                   */
+    DIGIT_3         =   0x04,           /*!<  Digit 3.                   */
+    DIGIT_4         =   0x05,           /*!<  Digit 4.                   */
+    DIGIT_5         =   0x06,           /*!<  Digit 5.                   */
+    DIGIT_6         =   0x07,           /*!<  Digit 6.                   */
+    DIGIT_7         =   0x08,           /*!<  Digit 7.                   */
+    DECODE_MODE     =   0x09,           /*!<  Decode Mode.               */
+    INTENSITY       =   0x0A,           /*!<  Intensity.                 */
+    SCAN_LIMIT      =   0x0B,           /*!<  Scan Limit.                */
+    SHUTDOWN        =   0x0C,           /*!<  Shutdown.                  */
+    DISPLAY_TEST    =   0x0F            /*!<  Display test.              */
+} MAX7219_register_address_map_t;
+
 
 
 
@@ -63,6 +79,9 @@ typedef enum{
 
 
 
+/**
+  * @brief   SPI PARAMETERS
+  */
 typedef struct{
     uint32_t MOSI;
     uint32_t MISO;
@@ -73,6 +92,8 @@ typedef struct{
 
     NRF_SPI_Type* SPIinstance;
 } MAX7219_spi_parameters_t;
+
+
 
 
 /**
