@@ -87,3 +87,70 @@ spi_status_t    spi_transfer ( NRF_SPI_Type* myinstance, uint8_t* spi_tx_buff, u
     else
         return SPI_SUCCESS;
 }
+
+
+
+/**
+ * @brief       spi_init     ( SPI_parameters_t )
+ *
+ * @details     It configures the SPI peripheral.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return      Status of spi_init
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        1/October/2017
+ * @version     1/October/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+spi_status_t    spi_init     ( SPI_parameters_t mySPIparameters )
+{
+// CONFIGURE THE PINOUT AND ENABLE THE SPI
+    /* Configure the Chip Select ( CS ) */
+    mySPIparameters.CSport->OUTSET                          =   ( 1 << mySPIparameters.CS );                                                  // Release the SPI's bus
+    mySPIparameters.CSport->PIN_CNF[ mySPIparameters.CS ]   =   ( GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos    ) |
+                                                                ( GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos  ) |
+                                                                ( GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   ) |
+                                                                ( GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  ) |
+                                                                ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos  );
+
+
+    /* GPIO according to Table 221: GPIO configuration ( Reference Manual p.133 ) */
+    mySPIparameters.MOSIport->OUTSET        =   ( 0 << mySPIparameters.MOSI );
+    mySPIparameters.SCLKport->OUTSET        =   ( 0 << mySPIparameters.SCLK );
+    mySPIparameters.MISOport->DIRCLR        =   ( 1 << mySPIparameters.MISO );
+    mySPIparameters.MOSIport->DIRSET        =   ( 1 << mySPIparameters.MOSI );
+    mySPIparameters.SCLKport->DIRSET        =   ( 1 << mySPIparameters.SCLK );
+
+    /* Disable the SPI */
+    mySPIparameters.SPIinstance->ENABLE     =   ( SPI_ENABLE_ENABLE_Disabled << SPI_ENABLE_ENABLE_Pos );
+
+    /* Configure the SPI behavior */
+    mySPIparameters.SPIinstance->CONFIG     =   ( SPI_CONFIG_ORDER_MsbFirst     << SPI_CONFIG_ORDER_Pos ) |
+                                                ( SPI_CONFIG_CPHA_Leading       << SPI_CONFIG_CPHA_Pos  ) |
+                                                ( SPI_CONFIG_CPOL_ActiveHigh    << SPI_CONFIG_CPOL_Pos  );
+
+    /* Configure the frequency */
+    mySPIparameters.SPIinstance->FREQUENCY  =   ( mySPIparameters.Freq << SPI_FREQUENCY_FREQUENCY_Pos );
+
+    /* Configure the pins */
+    mySPIparameters.SPIinstance->PSELSCK    =   mySPIparameters.SCLK;
+    mySPIparameters.SPIinstance->PSELMOSI   =   mySPIparameters.MOSI;
+    mySPIparameters.SPIinstance->PSELMISO   =   mySPIparameters.MISO;
+
+
+    /* Disable interrupt */
+    mySPIparameters.SPIinstance->INTENSET      =   ( SPI_INTENCLR_READY_Clear << SPI_INTENCLR_READY_Pos );
+
+    /* Enable the SPI */
+    mySPIparameters.SPIinstance->ENABLE        =   ( SPI_ENABLE_ENABLE_Enabled << SPI_ENABLE_ENABLE_Pos );
+
+
+    return SPI_SUCCESS;
+}

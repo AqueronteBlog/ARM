@@ -30,6 +30,33 @@ typedef enum
 
 
 /**
+  * @brief   SPI PARAMETERS
+  */
+typedef struct{
+    // Port for pins: MOSI, MISO, SCLK and CS
+    NRF_GPIO_Type* MOSIport;
+    NRF_GPIO_Type* MISOport;
+    NRF_GPIO_Type* SCLKport;
+    NRF_GPIO_Type* CSport;
+
+    // Pin number
+    uint32_t MOSI;
+    uint32_t MISO;
+    uint32_t SCLK;
+    uint32_t CS;
+
+    // SPI frequency
+    uint32_t Freq;
+
+    // SPI instance
+    NRF_SPI_Type* SPIinstance;
+} SPI_parameters_t;
+
+
+
+
+/**
   * @brief   FUNCTION PROTOTYPES
   */
 spi_status_t    spi_transfer    ( NRF_SPI_Type* myinstance, uint8_t* spi_tx_buff, uint32_t spi_tx_length, uint8_t* spi_rx_buff, uint32_t spi_rx_length, uint32_t spi_cs_pin );
+spi_status_t    spi_init        ( SPI_parameters_t mySPIparameters );
