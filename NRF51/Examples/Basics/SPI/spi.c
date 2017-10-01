@@ -36,31 +36,31 @@
  *
  * @author      Manuel Caballero
  * @date        26/September/2017
- * @version     30/September/2017   SPI transmission according to what the datasheet says.
+ * @version     1/October/2017      The abstraction was improved, Chip Select port is sent too.
+ *              30/September/2017   SPI transmission according to what the datasheet says.
  *                                  Chip select pin is added ( better for abstraction ).
  *              26/September/2017   The ORIGIN
  * @pre         SPI communication is by polling mode.
  * @warning     NaN.
  */
-spi_status_t    spi_transfer ( NRF_SPI_Type* myinstance, uint8_t* spi_tx_buff, uint32_t spi_tx_length, uint8_t* spi_rx_buff, uint32_t spi_rx_length, uint32_t spi_cs_pin )
+spi_status_t    spi_transfer ( NRF_SPI_Type* myinstance, uint8_t* spi_tx_buff, uint32_t spi_tx_length, uint8_t* spi_rx_buff, uint32_t spi_rx_length, uint32_t spi_cs_pin, NRF_GPIO_Type* myCSport )
 {
     uint32_t     i                   =   0;
     uint32_t     spi_timeout1        =   0;
     uint32_t     spi_timeout2        =   0;
 
 
-    NRF_GPIO->OUTCLR    =   ( 1UL << spi_cs_pin );                               // Start SPI communication. Chip Select LOW
+    myCSport->OUTCLR    =   ( 1UL << spi_cs_pin );                               // Start SPI communication. Chip Select LOW
 
 
     myinstance->TXD     =   *spi_tx_buff++;                                      // Send first byte
-    spi_tx_length--;
 
 
 // SPI TX
-    for ( i = 0; i < spi_tx_length; i++ ){
+    for ( i = 1; i < spi_tx_length; i++ ){
         myinstance->TXD        =   *spi_tx_buff++;                                // Send data
 
-        spi_timeout1                =   10;     //232323;
+        spi_timeout1                =   232323;
         while( ( myinstance->EVENTS_READY == 0 ) && ( --spi_timeout1 ) );         // Wait until the data is transmitted or timeout1
         *spi_rx_buff                =   myinstance->RXD;                          // Dummy value
         myinstance->EVENTS_READY    =   0;                                        // reset flag
@@ -70,14 +70,14 @@ spi_status_t    spi_transfer ( NRF_SPI_Type* myinstance, uint8_t* spi_tx_buff, u
     for ( i = 0; i < spi_rx_length; i++ ){
         myinstance->TXD        =   0x00;                                          // Dummy value
 
-        spi_timeout2                =   10; //232323;
+        spi_timeout2                =   232323;
         while( ( myinstance->EVENTS_READY == 0 ) && ( --spi_timeout2 ) );         // Wait until the data is transmitted or timeout2
         *spi_rx_buff++             =   myinstance->RXD;                           // Get data
         myinstance->EVENTS_READY    =   0;                                        // reset flag
     }
 
 
-    NRF_GPIO->OUTSET     =   ( 1UL << spi_cs_pin );                               // End SPI communication ( release the bus ).Chip Select HIGH
+    myCSport->OUTSET     =   ( 1UL << spi_cs_pin );                               // End SPI communication ( release the bus ).Chip Select HIGH
 
 
 
