@@ -56,6 +56,60 @@ typedef enum
 
 
 
+/* Decode-Mode Register Data */
+/**
+  * @brief   Decode-Mode Register
+  */
+typedef enum
+{
+    NO_DECODE           =   0x00,        /*!<  No decode for digits 7–0                                 */
+    DECODE_DIGIT_0      =   0x01,        /*!<  Code B decode for digit 0. No decode for digits 7–1      */
+    DECODE_DIGITS_3_0   =   0x0F,        /*!<  Code B decode for digits 3–0. No decode for digits 7–4   */
+    DECODE_DIGITS_7_0   =   0xFF         /*!<  Code B decode for digits 7–0                             */
+} MAX7219_decode_mode_reg_t;
+
+
+
+/* Code B Font Register Data */
+/**
+  * @brief   Code B Font
+  */
+typedef enum
+{
+    CHARACTER_0         =   0x00,        /*!<  0                                                        */
+    CHARACTER_1         =   0x01,        /*!<  1                                                        */
+    CHARACTER_2         =   0x02,        /*!<  2                                                        */
+    CHARACTER_3         =   0x03,        /*!<  3                                                        */
+    CHARACTER_4         =   0x04,        /*!<  4                                                        */
+    CHARACTER_5         =   0x05,        /*!<  5                                                        */
+    CHARACTER_6         =   0x06,        /*!<  6                                                        */
+    CHARACTER_7         =   0x07,        /*!<  7                                                        */
+    CHARACTER_8         =   0x08,        /*!<  8                                                        */
+    CHARACTER_9         =   0x09,        /*!<  9                                                        */
+    CHARACTER_HYPHEN    =   0x0A,        /*!<  -                                                        */
+    CHARACTER_E         =   0x0B,        /*!<  E                                                        */
+    CHARACTER_H         =   0x0C,        /*!<  H                                                        */
+    CHARACTER_L         =   0x0D,        /*!<  L                                                        */
+    CHARACTER_P         =   0x0E,        /*!<  P                                                        */
+    CHARACTER_BLANK     =   0x0F         /*!<  Blank                                                    */
+} MAX7219_code_b_font_reg_t;
+
+
+
+typedef enum
+{
+    DP_ENABLED          =   0x01,         /*!<  DP ON                                                    */
+    DP_DISABLED         =   0x00          /*!<  DP OFF                                                   */
+} MAX7219_code_b_dp_t;
+
+
+
+/* No-Decode Mode Data Bits */
+typedef struct
+{
+    uint8_t mySEG       =   0x00;         /*!<  D7: DP | D6: A | D5: B | D4: C | D3: D | D2: E | D1: F | D0: G   */
+} MAX7219_no_decode_b_t;
+
 
 
 
