@@ -17,7 +17,7 @@
 
 #include "stdint.h"
 #include "stdbool.h"
-#include "spi.h"
+#include "spi_mod.h"
 
 
 /* General Call Commands */
@@ -186,9 +186,9 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-MAX7219_status_t  MAX7219_Init              ( SPI_parameters_t mySPI_parameters                                                         );
-MAX7219_status_t  MAX7219_Mode              ( SPI_parameters_t mySPI_parameters, MAX7219_shutdown_reg_t myMAX7219mode                   );
-MAX7219_status_t  MAX7219_DisplayTest       ( SPI_parameters_t mySPI_parameters, MAX7219_display_test_reg_t myMAX7219DisplayTestMode    );
-MAX7219_status_t  MAX7219_DecodeMode        ( SPI_parameters_t mySPI_parameters, MAX7219_decode_mode_reg_t myMAX7219DecodeMode          );
-MAX7219_status_t  MAX7219_SetIntensity      ( SPI_parameters_t mySPI_parameters, MAX7219_intensity_reg_t myMAX7219Intensity             );
-MAX7219_status_t  MAX7219_SetScanLimit      ( SPI_parameters_t mySPI_parameters, MAX7219_scan_limit_reg_t myMAX7219ScanLimit            );
+MAX7219_status_t  MAX7219_Init              ( SPI_mod_parameters_t mySPI_parameters                                                         );
+MAX7219_status_t  MAX7219_Mode              ( SPI_mod_parameters_t mySPI_parameters, MAX7219_shutdown_reg_t myMAX7219mode                   );
+MAX7219_status_t  MAX7219_DisplayTest       ( SPI_mod_parameters_t mySPI_parameters, MAX7219_display_test_reg_t myMAX7219DisplayTestMode    );
+MAX7219_status_t  MAX7219_DecodeMode        ( SPI_mod_parameters_t mySPI_parameters, MAX7219_decode_mode_reg_t myMAX7219DecodeMode          );
+MAX7219_status_t  MAX7219_SetIntensity      ( SPI_mod_parameters_t mySPI_parameters, MAX7219_intensity_reg_t myMAX7219Intensity             );
+MAX7219_status_t  MAX7219_SetScanLimit      ( SPI_mod_parameters_t mySPI_parameters, MAX7219_scan_limit_reg_t myMAX7219ScanLimit            );
