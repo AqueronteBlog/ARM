@@ -46,18 +46,18 @@
 spi_status_t    spi_transfer ( NRF_SPI_Type* myinstance, uint8_t* spi_tx_buff, uint32_t spi_tx_length, uint8_t* spi_rx_buff, uint32_t spi_rx_length, uint32_t spi_cs_pin, NRF_GPIO_Type* myCSport )
 {
     uint32_t     i                   =   0;
-    uint32_t     spi_timeout1        =   0;
-    uint32_t     spi_timeout2        =   0;
+    uint32_t     spi_timeout1        =   232323;
+    uint32_t     spi_timeout2        =   232323;
 
 
     myCSport->OUTCLR    =   ( 1UL << spi_cs_pin );                               // Start SPI communication. Chip Select LOW
 
 
-    myinstance->TXD     =   *spi_tx_buff++;                                      // Send first byte
+    //myinstance->TXD     =   *spi_tx_buff++;                                      // Send first byte
 
 
 // SPI TX
-    for ( i = 1; i < spi_tx_length; i++ ){
+    for ( i = 0; i < spi_tx_length; i++ ){
         myinstance->TXD        =   *spi_tx_buff++;                                // Send data
 
         spi_timeout1                =   232323;
