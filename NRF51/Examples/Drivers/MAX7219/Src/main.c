@@ -23,8 +23,8 @@
 
 int main( void )
 {
-    MAX7219_status_t            mySPI_status;
-    SPI_parameters_t            myMAX7219_SPI_parameters;
+    MAX7219_status_t        mySPI_status;
+    SPI_parameters_t        myMAX7219_SPI_parameters;
     /*
     conf_GPIO   ();
     conf_SPI0   ();
@@ -46,7 +46,8 @@ int main( void )
     myMAX7219_SPI_parameters.CSport      =    NRF_GPIO;
 
     while ( 1 ){
-        mySPI_status    =    MAX7219_Init ( myMAX7219_SPI_parameters );
+        mySPI_status    =    MAX7219_Init        ( myMAX7219_SPI_parameters );
+        mySPI_status    =    MAX7219_DisplayTest ( myMAX7219_SPI_parameters, DISPLAY_TEST_MODE );
     }
 
 
