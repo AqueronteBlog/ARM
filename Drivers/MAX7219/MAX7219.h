@@ -62,10 +62,10 @@ typedef enum
   */
 typedef enum
 {
-    NO_DECODE           =   0x00,        /*!<  No decode for digits 7–0                                 */
-    DECODE_DIGIT_0      =   0x01,        /*!<  Code B decode for digit 0. No decode for digits 7–1      */
-    DECODE_DIGITS_3_0   =   0x0F,        /*!<  Code B decode for digits 3–0. No decode for digits 7–4   */
-    DECODE_DIGITS_7_0   =   0xFF         /*!<  Code B decode for digits 7–0                             */
+    NO_DECODE           =   0x00,        /*!<  No decode for digits 7-0                                 */
+    DECODE_DIGIT_0      =   0x01,        /*!<  Code B decode for digit 0. No decode for digits 7-1      */
+    DECODE_DIGITS_3_0   =   0x0F,        /*!<  Code B decode for digits 3-0. No decode for digits 7-4   */
+    DECODE_DIGITS_7_0   =   0xFF         /*!<  Code B decode for digits 7-0                             */
 } MAX7219_decode_mode_reg_t;
 
 
@@ -104,22 +104,57 @@ typedef enum
 
 
 
+/* Intensity Register Format Data */
+/**
+  * @brief   Intensity Register Format
+  */
+typedef enum
+{
+    DUTY_CICLE_1_32     =   0x00,        /*!<  Duty cycle 1/32 ( min )      */
+    DUTY_CICLE_3_32     =   0x01,        /*!<  Duty cycle 3/32              */
+    DUTY_CICLE_5_32     =   0x02,        /*!<  Duty cycle 5/32              */
+    DUTY_CICLE_7_32     =   0x03,        /*!<  Duty cycle 7/32              */
+    DUTY_CICLE_9_32     =   0x04,        /*!<  Duty cycle 9/32              */
+    DUTY_CICLE_11_32    =   0x05,        /*!<  Duty cycle 11/32             */
+    DUTY_CICLE_13_32    =   0x06,        /*!<  Duty cycle 13/32             */
+    DUTY_CICLE_15_32    =   0x07,        /*!<  Duty cycle 15/32             */
+    DUTY_CICLE_17_32    =   0x08,        /*!<  Duty cycle 17/32             */
+    DUTY_CICLE_19_32    =   0x09,        /*!<  Duty cycle 19/32             */
+    DUTY_CICLE_21_32    =   0x0A,        /*!<  Duty cycle 21/32             */
+    DUTY_CICLE_23_32    =   0x0B,        /*!<  Duty cycle 23/32             */
+    DUTY_CICLE_25_32    =   0x0C,        /*!<  Duty cycle 25/32             */
+    DUTY_CICLE_27_32    =   0x0D,        /*!<  Duty cycle 27/32             */
+    DUTY_CICLE_29_32    =   0x0E,        /*!<  Duty cycle 29/32             */
+    DUTY_CICLE_31_32    =   0x0F         /*!<  Duty cycle 31/32 ( max )     */
+} MAX7219_intensity_reg_t;
+
+
+/* Scan-Limit Register Format Data */
+/**
+  * @brief   Scan-Limit Register Format
+  */
+typedef enum
+{
+    DISPLAY_DIGIT_0                 =   0x00,        /*!<  Display digit 0 only             */
+    DISPLAY_DIGIT_0_1               =   0x01,        /*!<  Display digits 0 & 1             */
+    DISPLAY_DIGIT_0_1_2             =   0x02,        /*!<  Display digits 0 1 2             */
+    DISPLAY_DIGIT_0_1_2_3           =   0x03,        /*!<  Display digits 0 1 2 3           */
+    DISPLAY_DIGIT_0_1_2_3_4         =   0x04,        /*!<  Display digits 0 1 2 3 4         */
+    DISPLAY_DIGIT_0_1_2_3_4_5       =   0x05,        /*!<  Display digits 0 1 2 3 4 5       */
+    DISPLAY_DIGIT_0_1_2_3_4_5_6     =   0x06,        /*!<  Display digits 0 1 2 3 4 5 6     */
+    DISPLAY_DIGIT_0_1_2_3_4_5_6_7   =   0x07         /*!<  Display digits 0 1 2 3 4 5 6 7   */
+} MAX7219_scan_limit_reg_t;
+
+
+
+
+#ifndef MAX7219_VECTOR_STRUCT_H
+#define MAX7219_VECTOR_STRUCT_H
 /* No-Decode Mode Data Bits */
 typedef struct
 {
-    uint8_t mySEG       =   0x00;         /*!<  D7: DP | D6: A | D5: B | D4: C | D3: D | D2: E | D1: F | D0: G   */
+    uint8_t mySEG;                  /*!<  D7: DP | D6: A | D5: B | D4: C | D3: D | D2: E | D1: F | D0: G   */
 } MAX7219_no_decode_b_t;
-
-
-
-
-#ifndef VECTOR_STRUCT_H
-#define VECTOR_STRUCT_H
-typedef struct
-{
-    uint16_t EEPROM_Data;
-    uint16_t DAC_Data;
-} MAX7219_Vector_data_t;
 #endif
 
 
