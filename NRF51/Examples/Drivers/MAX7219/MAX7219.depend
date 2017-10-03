@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1506698428 source:e:\vsprojects\arm\nrf51\examples\basics\spi\spi.c
+1507046189 source:e:\vsprojects\arm\nrf51\examples\basics\spi\spi.c
 	"spi.h"
 
-1506698428 e:\vsprojects\arm\nrf51\examples\basics\spi\spi.h
+1506961536 e:\vsprojects\arm\nrf51\examples\basics\spi\spi.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 
@@ -28,7 +28,7 @@
 
 1506505658 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\s130.c
 
-1506505658 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\functions.c
+1506961536 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\functions.c
 	"functions.h"
 
 1506505658 e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\functions.h
@@ -41,7 +41,7 @@
 	"nrf51_bitfields.h"
 	"board.h"
 
-1506505658 e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\board.h
+1506961536 e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\board.h
 
 1506505658 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\interrupts.c
 	"interrupts.h"
@@ -49,7 +49,7 @@
 1506505658 e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\interrupts.h
 	"variables.h"
 
-1506700764 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\main.c
+1507046056 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\main.c
 	"nrf.h"
 	"ble.h"
 	"variables.h"
@@ -106,7 +106,7 @@
 	"ble_gatt.h"
 	"nrf_svc.h"
 
-1506701923 e:\vsprojects\arm\drivers\max7219\max7219.h
+1507045962 e:\vsprojects\arm\drivers\max7219\max7219.h
 	"stdint.h"
 	"stdbool.h"
 	"spi.h"
@@ -119,7 +119,7 @@
 
 1506505658 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\startup_nrf51.s
 
-1506702455 source:e:\vsprojects\arm\drivers\max7219\max7219.c
+1507046093 source:e:\vsprojects\arm\drivers\max7219\max7219.c
 	"MAX7219.h"
 
 1506716807 source:d:\workspace\arm\nrf51\examples\basics\spi\spi.c
@@ -244,4 +244,11 @@
 
 1506717438 source:d:\workspace\arm\drivers\max7219\max7219.c
 	"MAX7219.h"
+
+1507045792 source:e:\vsprojects\arm\nrf51\examples\basics\spi_mod\spi_mod.c
+	"spi_mod.h"
+
+1507043404 e:\vsprojects\arm\nrf51\examples\basics\spi_mod\spi_mod.h
+	"nrf.h"
+	"nrf51_bitfields.h"
 
