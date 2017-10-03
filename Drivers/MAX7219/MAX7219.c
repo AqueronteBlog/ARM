@@ -102,3 +102,171 @@ MAX7219_status_t  MAX7219_Mode  ( SPI_parameters_t mySPI_parameters, MAX7219_shu
     else
        return   MAX7219_FAILURE;
 }
+
+
+
+/**
+ * @brief       MAX7219_DisplayTest   ( SPI_parameters_t , MAX7219_display_test_reg_t )
+ *
+ * @details     It turns all the LEDs on ( Test mode enabled ) or normal operation.
+ *
+ * @param[in]    mySPI_parameters:          SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myMAX7219DisplayTestMode:  Mode: Test or Normal operation.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of MAX7219_DisplayTest.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        3/October/2017
+ * @version     3/October/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+MAX7219_status_t  MAX7219_DisplayTest ( SPI_parameters_t mySPI_parameters, MAX7219_display_test_reg_t myMAX7219DisplayTestMode )
+{
+    uint8_t  cmd[]   =    { DISPLAY_TEST, 0 };
+
+    spi_status_t           mySPI_status;
+
+
+    cmd[ 1 ]     =   myMAX7219DisplayTestMode;
+
+
+    mySPI_status =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+       return   MAX7219_SUCCESS;
+    else
+       return   MAX7219_FAILURE;
+}
+
+
+
+/**
+ * @brief       MAX7219_DecodeMode   ( SPI_parameters_t , MAX7219_decode_mode_reg_t )
+ *
+ * @details     It enables and configures the decode-mode or turns it off.
+ *
+ * @param[in]    mySPI_parameters:      SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myMAX7219DecodeMode:   Decode-mode option.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of MAX7219_DecodeMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        3/October/2017
+ * @version     3/October/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+MAX7219_status_t  MAX7219_DecodeMode ( SPI_parameters_t mySPI_parameters, MAX7219_decode_mode_reg_t myMAX7219DecodeMode )
+{
+    uint8_t  cmd[]   =    { DECODE_MODE, 0 };
+
+    spi_status_t           mySPI_status;
+
+
+    cmd[ 1 ]     =   myMAX7219DecodeMode;
+
+
+    mySPI_status =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+       return   MAX7219_SUCCESS;
+    else
+       return   MAX7219_FAILURE;
+}
+
+
+
+/**
+ * @brief       MAX7219_SetIntensity   ( SPI_parameters_t , MAX7219_intensity_reg_t )
+ *
+ * @details     It configures the intensity of the device.
+ *
+ * @param[in]    mySPI_parameters:      SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myMAX7219Intensity:    Intensity option.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of MAX7219_SetIntensity.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        3/October/2017
+ * @version     3/October/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+MAX7219_status_t  MAX7219_SetIntensity ( SPI_parameters_t mySPI_parameters, MAX7219_intensity_reg_t myMAX7219Intensity )
+{
+    uint8_t  cmd[]   =    { INTENSITY, 0 };
+
+    spi_status_t           mySPI_status;
+
+
+    cmd[ 1 ]     =   myMAX7219Intensity;
+
+
+    mySPI_status =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+       return   MAX7219_SUCCESS;
+    else
+       return   MAX7219_FAILURE;
+}
+
+
+
+/**
+ * @brief       MAX7219_SetScanLimit   ( SPI_parameters_t , MAX7219_scan_limit_reg_t )
+ *
+ * @details     It configures duty cycle of the device.
+ *
+ * @param[in]    mySPI_parameters:          SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    MAX7219_scan_limit_reg_t:  Duty cycle option.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of MAX7219_SetScanLimit.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        3/October/2017
+ * @version     3/October/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+MAX7219_status_t  MAX7219_SetScanLimit ( SPI_parameters_t mySPI_parameters, MAX7219_scan_limit_reg_t myMAX7219ScanLimit )
+{
+    uint8_t  cmd[]   =    { SCAN_LIMIT, 0 };
+
+    spi_status_t           mySPI_status;
+
+
+    cmd[ 1 ]     =   myMAX7219ScanLimit;
+
+
+    mySPI_status =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+       return   MAX7219_SUCCESS;
+    else
+       return   MAX7219_FAILURE;
+}
