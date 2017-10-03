@@ -18,7 +18,7 @@
 
 
 /**
- * @brief       MAX7219_Init   ( SPI_mod_parameters_t )
+ * @brief       MAX7219_Init   ( SPI_parameters_t )
  *
  * @details     It configures the SPI pins and put the device in shutdown mode.
  *
@@ -37,14 +37,14 @@
  * @pre         NaN
  * @warning     NaN.
  */
-MAX7219_status_t  MAX7219_Init ( SPI_mod_parameters_t mySPI_parameters )
+MAX7219_status_t  MAX7219_Init ( SPI_parameters_t mySPI_parameters )
 {
-    spi_mod_status_t    mySPI_status;
+    spi_status_t        mySPI_status;
     MAX7219_status_t    myMAX7219_status;
 
 
     // Configure the SPI peripheral
-    mySPI_status     =   spi_mod_init ( mySPI_parameters );
+    mySPI_status     =   spi_init ( mySPI_parameters );
 
 
     // Put the device in shutdown mode
@@ -53,7 +53,7 @@ MAX7219_status_t  MAX7219_Init ( SPI_mod_parameters_t mySPI_parameters )
 
 
 
-    if ( ( mySPI_status == SPI_MOD_SUCCESS ) && ( myMAX7219_status == MAX7219_SUCCESS ) )
+    if ( ( mySPI_status == SPI_SUCCESS ) && ( myMAX7219_status == MAX7219_SUCCESS ) )
        return   MAX7219_SUCCESS;
     else
        return   MAX7219_FAILURE;
@@ -62,7 +62,7 @@ MAX7219_status_t  MAX7219_Init ( SPI_mod_parameters_t mySPI_parameters )
 
 
 /**
- * @brief       MAX7219_Mode   ( SPI_mod_parameters_t , MAX7219_shutdown_reg_t )
+ * @brief       MAX7219_Mode   ( SPI_parameters_t , MAX7219_shutdown_reg_t )
  *
  * @details     It puts the device in shutdown mode.
  *
@@ -83,21 +83,21 @@ MAX7219_status_t  MAX7219_Init ( SPI_mod_parameters_t mySPI_parameters )
  * @pre         NaN
  * @warning     NaN.
  */
-MAX7219_status_t  MAX7219_Mode  ( SPI_mod_parameters_t mySPI_parameters, MAX7219_shutdown_reg_t myMAX7219mode )
+MAX7219_status_t  MAX7219_Mode  ( SPI_parameters_t mySPI_parameters, MAX7219_shutdown_reg_t myMAX7219mode )
 {
     uint8_t  cmd[]   =    { SHUTDOWN, 0 };
 
-    spi_mod_status_t           mySPI_status;
+    spi_status_t           mySPI_status;
 
 
     cmd[ 1 ]     =   myMAX7219mode;
 
 
-    mySPI_status =   spi_mod_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
 
 
 
-    if ( mySPI_status == SPI_MOD_SUCCESS )
+    if ( mySPI_status == SPI_SUCCESS )
        return   MAX7219_SUCCESS;
     else
        return   MAX7219_FAILURE;
@@ -106,7 +106,7 @@ MAX7219_status_t  MAX7219_Mode  ( SPI_mod_parameters_t mySPI_parameters, MAX7219
 
 
 /**
- * @brief       MAX7219_DisplayTest   ( SPI_mod_parameters_t , MAX7219_display_test_reg_t )
+ * @brief       MAX7219_DisplayTest   ( SPI_parameters_t , MAX7219_display_test_reg_t )
  *
  * @details     It turns all the LEDs on ( Test mode enabled ) or normal operation.
  *
@@ -125,11 +125,11 @@ MAX7219_status_t  MAX7219_Mode  ( SPI_mod_parameters_t mySPI_parameters, MAX7219
  * @pre         NaN
  * @warning     NaN.
  */
-MAX7219_status_t  MAX7219_DisplayTest ( SPI_mod_parameters_t mySPI_parameters, MAX7219_display_test_reg_t myMAX7219DisplayTestMode )
+MAX7219_status_t  MAX7219_DisplayTest ( SPI_parameters_t mySPI_parameters, MAX7219_display_test_reg_t myMAX7219DisplayTestMode )
 {
     uint8_t  cmd[]   =    { DISPLAY_TEST, 0 };
 
-    spi_mod_status_t           mySPI_status;
+    spi_status_t           mySPI_status;
 
 
     cmd[ 1 ]     =   myMAX7219DisplayTestMode;
@@ -139,7 +139,7 @@ MAX7219_status_t  MAX7219_DisplayTest ( SPI_mod_parameters_t mySPI_parameters, M
 
 
 
-    if ( mySPI_status == SPI_MOD_SUCCESS )
+    if ( mySPI_status == SPI_SUCCESS )
        return   MAX7219_SUCCESS;
     else
        return   MAX7219_FAILURE;
@@ -148,7 +148,7 @@ MAX7219_status_t  MAX7219_DisplayTest ( SPI_mod_parameters_t mySPI_parameters, M
 
 
 /**
- * @brief       MAX7219_DecodeMode   ( SPI_mod_parameters_t , MAX7219_decode_mode_reg_t )
+ * @brief       MAX7219_DecodeMode   ( SPI_parameters_t , MAX7219_decode_mode_reg_t )
  *
  * @details     It enables and configures the decode-mode or turns it off.
  *
@@ -167,11 +167,11 @@ MAX7219_status_t  MAX7219_DisplayTest ( SPI_mod_parameters_t mySPI_parameters, M
  * @pre         NaN
  * @warning     NaN.
  */
-MAX7219_status_t  MAX7219_DecodeMode ( SPI_mod_parameters_t mySPI_parameters, MAX7219_decode_mode_reg_t myMAX7219DecodeMode )
+MAX7219_status_t  MAX7219_DecodeMode ( SPI_parameters_t mySPI_parameters, MAX7219_decode_mode_reg_t myMAX7219DecodeMode )
 {
     uint8_t  cmd[]   =    { DECODE_MODE, 0 };
 
-    spi_mod_status_t           mySPI_status;
+    spi_status_t           mySPI_status;
 
 
     cmd[ 1 ]     =   myMAX7219DecodeMode;
@@ -181,7 +181,7 @@ MAX7219_status_t  MAX7219_DecodeMode ( SPI_mod_parameters_t mySPI_parameters, MA
 
 
 
-    if ( mySPI_status == SPI_MOD_SUCCESS )
+    if ( mySPI_status == SPI_SUCCESS )
        return   MAX7219_SUCCESS;
     else
        return   MAX7219_FAILURE;
@@ -190,7 +190,7 @@ MAX7219_status_t  MAX7219_DecodeMode ( SPI_mod_parameters_t mySPI_parameters, MA
 
 
 /**
- * @brief       MAX7219_SetIntensity   ( SPI_mod_parameters_t , MAX7219_intensity_reg_t )
+ * @brief       MAX7219_SetIntensity   ( SPI_parameters_t , MAX7219_intensity_reg_t )
  *
  * @details     It configures the intensity of the device.
  *
@@ -209,11 +209,11 @@ MAX7219_status_t  MAX7219_DecodeMode ( SPI_mod_parameters_t mySPI_parameters, MA
  * @pre         NaN
  * @warning     NaN.
  */
-MAX7219_status_t  MAX7219_SetIntensity ( SPI_mod_parameters_t mySPI_parameters, MAX7219_intensity_reg_t myMAX7219Intensity )
+MAX7219_status_t  MAX7219_SetIntensity ( SPI_parameters_t mySPI_parameters, MAX7219_intensity_reg_t myMAX7219Intensity )
 {
     uint8_t  cmd[]   =    { INTENSITY, 0 };
 
-    spi_mod_status_t           mySPI_status;
+    spi_status_t           mySPI_status;
 
 
     cmd[ 1 ]     =   myMAX7219Intensity;
@@ -223,7 +223,7 @@ MAX7219_status_t  MAX7219_SetIntensity ( SPI_mod_parameters_t mySPI_parameters, 
 
 
 
-    if ( mySPI_status == SPI_MOD_SUCCESS )
+    if ( mySPI_status == SPI_SUCCESS )
        return   MAX7219_SUCCESS;
     else
        return   MAX7219_FAILURE;
@@ -232,7 +232,7 @@ MAX7219_status_t  MAX7219_SetIntensity ( SPI_mod_parameters_t mySPI_parameters, 
 
 
 /**
- * @brief       MAX7219_SetScanLimit   ( SPI_mod_parameters_t , MAX7219_scan_limit_reg_t )
+ * @brief       MAX7219_SetScanLimit   ( SPI_parameters_t , MAX7219_scan_limit_reg_t )
  *
  * @details     It configures duty cycle of the device.
  *
@@ -251,11 +251,11 @@ MAX7219_status_t  MAX7219_SetIntensity ( SPI_mod_parameters_t mySPI_parameters, 
  * @pre         NaN
  * @warning     NaN.
  */
-MAX7219_status_t  MAX7219_SetScanLimit ( SPI_mod_parameters_t mySPI_parameters, MAX7219_scan_limit_reg_t myMAX7219ScanLimit )
+MAX7219_status_t  MAX7219_SetScanLimit ( SPI_parameters_t mySPI_parameters, MAX7219_scan_limit_reg_t myMAX7219ScanLimit )
 {
     uint8_t  cmd[]   =    { SCAN_LIMIT, 0 };
 
-    spi_mod_status_t           mySPI_status;
+    spi_status_t           mySPI_status;
 
 
     cmd[ 1 ]     =   myMAX7219ScanLimit;
@@ -265,7 +265,7 @@ MAX7219_status_t  MAX7219_SetScanLimit ( SPI_mod_parameters_t mySPI_parameters, 
 
 
 
-    if ( mySPI_status == SPI_MOD_SUCCESS )
+    if ( mySPI_status == SPI_SUCCESS )
        return   MAX7219_SUCCESS;
     else
        return   MAX7219_FAILURE;
