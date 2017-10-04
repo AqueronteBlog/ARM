@@ -274,13 +274,14 @@ MAX7219_status_t  MAX7219_SetScanLimit ( SPI_parameters_t mySPI_parameters, MAX7
 
 
 /**
- * @brief       MAX7219_SetDigit   ( SPI_parameters_t , MAX7219_digit_t , MAX7219_code_b_font_reg_t )
+ * @brief       MAX7219_SetDigit   ( SPI_parameters_t , MAX7219_digit_t , MAX7219_code_b_font_reg_t , MAX7219_code_b_dp_t )
  *
  * @details     It sets the digit to be written and its value.
  *
  * @param[in]    mySPI_parameters:      SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
  * @param[in]    myMAX7219Digit:        Digit to be written.
  * @param[in]    myCharacter:           The current value.
+ * @param[in]    myDP_status:           DP enabled/disabled.
  *
  * @param[out]   NaN.
  *
@@ -294,7 +295,7 @@ MAX7219_status_t  MAX7219_SetScanLimit ( SPI_parameters_t mySPI_parameters, MAX7
  * @pre         NaN
  * @warning     NaN.
  */
-MAX7219_status_t  MAX7219_SetDigit ( SPI_parameters_t mySPI_parameters, MAX7219_digit_t myMAX7219Digit, MAX7219_code_b_font_reg_t myCharacter )
+MAX7219_status_t  MAX7219_SetDigit ( SPI_parameters_t mySPI_parameters, MAX7219_digit_t myMAX7219Digit, MAX7219_code_b_font_reg_t myCharacter, MAX7219_code_b_dp_t myDP_status )
 {
     uint8_t  cmd[]   =    { 0, 0 };
 
@@ -339,7 +340,10 @@ MAX7219_status_t  MAX7219_SetDigit ( SPI_parameters_t mySPI_parameters, MAX7219_
     }
 
 
-    cmd[ 1 ]     =   myCharacter;
+    if ( myDP_status == DP_ENABLED )
+        cmd[ 1 ]     =   ( myCharacter | 0x80 );
+    else
+        cmd[ 1 ]     =   myCharacter;
 
 
     mySPI_status =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );

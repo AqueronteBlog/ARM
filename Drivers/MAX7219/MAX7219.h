@@ -208,4 +208,4 @@ MAX7219_status_t  MAX7219_DisplayTest       ( SPI_parameters_t mySPI_parameters,
 MAX7219_status_t  MAX7219_DecodeMode        ( SPI_parameters_t mySPI_parameters, MAX7219_decode_mode_reg_t myMAX7219DecodeMode          );
 MAX7219_status_t  MAX7219_SetIntensity      ( SPI_parameters_t mySPI_parameters, MAX7219_intensity_reg_t myMAX7219Intensity             );
 MAX7219_status_t  MAX7219_SetScanLimit      ( SPI_parameters_t mySPI_parameters, MAX7219_scan_limit_reg_t myMAX7219ScanLimit            );
-MAX7219_status_t  MAX7219_SetDigit          ( SPI_parameters_t mySPI_parameters, MAX7219_digit_t myMAX7219Digit, MAX7219_code_b_font_reg_t myCharacter );
+MAX7219_status_t  MAX7219_SetDigit          ( SPI_parameters_t mySPI_parameters, MAX7219_digit_t myMAX7219Digit, MAX7219_code_b_font_reg_t myCharacter, MAX7219_code_b_dp_t myDP_status );
