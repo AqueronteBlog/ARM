@@ -14,7 +14,7 @@
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
- #include "MAX7219.h"
+#include "MAX7219.h"
 
 
 /**
@@ -54,9 +54,9 @@ MAX7219_status_t  MAX7219_Init ( SPI_parameters_t mySPI_parameters )
 
 
     if ( ( mySPI_status == SPI_SUCCESS ) && ( myMAX7219_status == MAX7219_SUCCESS ) )
-       return   MAX7219_SUCCESS;
+        return   MAX7219_SUCCESS;
     else
-       return   MAX7219_FAILURE;
+        return   MAX7219_FAILURE;
 }
 
 
@@ -98,9 +98,9 @@ MAX7219_status_t  MAX7219_Mode  ( SPI_parameters_t mySPI_parameters, MAX7219_shu
 
 
     if ( mySPI_status == SPI_SUCCESS )
-       return   MAX7219_SUCCESS;
+        return   MAX7219_SUCCESS;
     else
-       return   MAX7219_FAILURE;
+        return   MAX7219_FAILURE;
 }
 
 
@@ -140,9 +140,9 @@ MAX7219_status_t  MAX7219_DisplayTest ( SPI_parameters_t mySPI_parameters, MAX72
 
 
     if ( mySPI_status == SPI_SUCCESS )
-       return   MAX7219_SUCCESS;
+        return   MAX7219_SUCCESS;
     else
-       return   MAX7219_FAILURE;
+        return   MAX7219_FAILURE;
 }
 
 
@@ -182,9 +182,9 @@ MAX7219_status_t  MAX7219_DecodeMode ( SPI_parameters_t mySPI_parameters, MAX721
 
 
     if ( mySPI_status == SPI_SUCCESS )
-       return   MAX7219_SUCCESS;
+        return   MAX7219_SUCCESS;
     else
-       return   MAX7219_FAILURE;
+        return   MAX7219_FAILURE;
 }
 
 
@@ -224,9 +224,9 @@ MAX7219_status_t  MAX7219_SetIntensity ( SPI_parameters_t mySPI_parameters, MAX7
 
 
     if ( mySPI_status == SPI_SUCCESS )
-       return   MAX7219_SUCCESS;
+        return   MAX7219_SUCCESS;
     else
-       return   MAX7219_FAILURE;
+        return   MAX7219_FAILURE;
 }
 
 
@@ -266,7 +266,88 @@ MAX7219_status_t  MAX7219_SetScanLimit ( SPI_parameters_t mySPI_parameters, MAX7
 
 
     if ( mySPI_status == SPI_SUCCESS )
-       return   MAX7219_SUCCESS;
+        return   MAX7219_SUCCESS;
     else
-       return   MAX7219_FAILURE;
+        return   MAX7219_FAILURE;
+}
+
+
+
+/**
+ * @brief       MAX7219_SetDigit   ( SPI_parameters_t , MAX7219_digit_t , MAX7219_code_b_font_reg_t )
+ *
+ * @details     It sets the digit to be written and its value.
+ *
+ * @param[in]    mySPI_parameters:      SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myMAX7219Digit:        Digit to be written.
+ * @param[in]    myCharacter:           The current value.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of MAX7219_SetDigit.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        4/October/2017
+ * @version     4/October/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+MAX7219_status_t  MAX7219_SetDigit ( SPI_parameters_t mySPI_parameters, MAX7219_digit_t myMAX7219Digit, MAX7219_code_b_font_reg_t myCharacter )
+{
+    uint8_t  cmd[]   =    { 0, 0 };
+
+    MAX7219_register_address_map_t  myDigit;
+    spi_status_t           mySPI_status;
+
+
+    switch ( myMAX7219Digit )
+    {
+    default:
+    case SET_DIGIT_0:
+        cmd[ 0 ]     =   DIGIT_0;
+        break;
+
+    case SET_DIGIT_1:
+        cmd[ 0 ]     =   DIGIT_1;
+        break;
+
+    case SET_DIGIT_2:
+        cmd[ 0 ]     =   DIGIT_2;
+        break;
+
+    case SET_DIGIT_3:
+        cmd[ 0 ]     =   DIGIT_3;
+        break;
+
+    case SET_DIGIT_4:
+        cmd[ 0 ]     =   DIGIT_4;
+        break;
+
+    case SET_DIGIT_5:
+        cmd[ 0 ]     =   DIGIT_5;
+        break;
+
+    case SET_DIGIT_6:
+        cmd[ 0 ]     =   DIGIT_6;
+        break;
+
+    case SET_DIGIT_7:
+        cmd[ 0 ]     =   DIGIT_7;
+        break;
+    }
+
+
+    cmd[ 1 ]     =   myCharacter;
+
+
+    mySPI_status =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+        return   MAX7219_SUCCESS;
+    else
+        return   MAX7219_FAILURE;
 }

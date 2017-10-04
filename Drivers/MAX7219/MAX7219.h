@@ -158,6 +158,22 @@ typedef enum
 
 
 
+/**
+  * @brief   Select digits
+  */
+typedef enum
+{
+    SET_DIGIT_0     =   0x00,        /*!<  Digit 0 selected   */
+    SET_DIGIT_1     =   0x01,        /*!<  Digit 1 selected   */
+    SET_DIGIT_2     =   0x02,        /*!<  Digit 2 selected   */
+    SET_DIGIT_3     =   0x03,        /*!<  Digit 3 selected   */
+    SET_DIGIT_4     =   0x04,        /*!<  Digit 4 selected   */
+    SET_DIGIT_5     =   0x05,        /*!<  Digit 5 selected   */
+    SET_DIGIT_6     =   0x06,        /*!<  Digit 6 selected   */
+    SET_DIGIT_7     =   0x07         /*!<  Digit 7 selected   */
+} MAX7219_digit_t;
+
+
 
 #ifndef MAX7219_VECTOR_STRUCT_H
 #define MAX7219_VECTOR_STRUCT_H
@@ -192,3 +208,4 @@ MAX7219_status_t  MAX7219_DisplayTest       ( SPI_parameters_t mySPI_parameters,
 MAX7219_status_t  MAX7219_DecodeMode        ( SPI_parameters_t mySPI_parameters, MAX7219_decode_mode_reg_t myMAX7219DecodeMode          );
 MAX7219_status_t  MAX7219_SetIntensity      ( SPI_parameters_t mySPI_parameters, MAX7219_intensity_reg_t myMAX7219Intensity             );
 MAX7219_status_t  MAX7219_SetScanLimit      ( SPI_parameters_t mySPI_parameters, MAX7219_scan_limit_reg_t myMAX7219ScanLimit            );
+MAX7219_status_t  MAX7219_SetDigit          ( SPI_parameters_t mySPI_parameters, MAX7219_digit_t myMAX7219Digit, MAX7219_code_b_font_reg_t myCharacter );
