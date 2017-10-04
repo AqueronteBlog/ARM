@@ -47,23 +47,23 @@ int main( void )
 
 
     mySPI_status    =    MAX7219_Init        ( myMAX7219_SPI_parameters );
-    mySPI_status    =    MAX7219_DecodeMode  ( myMAX7219_SPI_parameters, DECODE_DIGITS_7_0 );
+    //mySPI_status    =    MAX7219_DecodeMode  ( myMAX7219_SPI_parameters, DECODE_DIGITS_7_0 );
     mySPI_status    =    MAX7219_SetScanLimit( myMAX7219_SPI_parameters, DISPLAY_DIGIT_0_1_2_3_4_5_6_7 );
-    mySPI_status    =    MAX7219_SetIntensity( myMAX7219_SPI_parameters, DUTY_CICLE_31_32 );
-    mySPI_status    =    MAX7219_DisplayTest ( myMAX7219_SPI_parameters, DISPLAY_TEST_MODE );
+    //mySPI_status    =    MAX7219_SetIntensity( myMAX7219_SPI_parameters, DUTY_CICLE_9_32 );
+    //mySPI_status    =    MAX7219_DisplayTest ( myMAX7219_SPI_parameters, DISPLAY_TEST_MODE );
 
-    mySPI_status    =    MAX7219_DisplayTest ( myMAX7219_SPI_parameters, DISPLAY_NORMAL_OPERATION );
+    //mySPI_status    =    MAX7219_DisplayTest ( myMAX7219_SPI_parameters, DISPLAY_NORMAL_OPERATION );
     mySPI_status    =    MAX7219_Mode        ( myMAX7219_SPI_parameters, NORMAL_OPERATION );
 
     while ( 1 ){
-        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_0, CHARACTER_0 );
-        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_1, CHARACTER_1 );
-        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_2, CHARACTER_2 );
-        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_3, CHARACTER_3 );
-        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_4, CHARACTER_4 );
-        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_5, CHARACTER_5 );
-        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_6, CHARACTER_6 );
-        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_7, CHARACTER_7 );
+        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_0, CHARACTER_0, DP_ENABLED );
+        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_1, CHARACTER_1, DP_DISABLED );
+        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_2, CHARACTER_2, DP_ENABLED );
+        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_3, CHARACTER_3, DP_DISABLED );
+        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_4, CHARACTER_4, DP_ENABLED );
+        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_5, CHARACTER_5, DP_DISABLED );
+        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_6, CHARACTER_6, DP_ENABLED );
+        mySPI_status    =    MAX7219_SetDigit ( myMAX7219_SPI_parameters, SET_DIGIT_7, CHARACTER_7, DP_DISABLED );
     }
 
 
