@@ -47,12 +47,12 @@ int main( void )
 
 
     mySPI_status    =    MAX7219_Init        ( myMAX7219_SPI_parameters );
-    //mySPI_status    =    MAX7219_DecodeMode  ( myMAX7219_SPI_parameters, DECODE_DIGITS_7_0 );
+    mySPI_status    =    MAX7219_DecodeMode  ( myMAX7219_SPI_parameters, DECODE_DIGITS_7_0 );
     mySPI_status    =    MAX7219_SetScanLimit( myMAX7219_SPI_parameters, DISPLAY_DIGIT_0_1_2_3_4_5_6_7 );
-    //mySPI_status    =    MAX7219_SetIntensity( myMAX7219_SPI_parameters, DUTY_CICLE_9_32 );
-    //mySPI_status    =    MAX7219_DisplayTest ( myMAX7219_SPI_parameters, DISPLAY_TEST_MODE );
+    mySPI_status    =    MAX7219_SetIntensity( myMAX7219_SPI_parameters, DUTY_CICLE_9_32 );
+    mySPI_status    =    MAX7219_DisplayTest ( myMAX7219_SPI_parameters, DISPLAY_TEST_MODE );
 
-    //mySPI_status    =    MAX7219_DisplayTest ( myMAX7219_SPI_parameters, DISPLAY_NORMAL_OPERATION );
+    mySPI_status    =    MAX7219_DisplayTest ( myMAX7219_SPI_parameters, DISPLAY_NORMAL_OPERATION );
     mySPI_status    =    MAX7219_Mode        ( myMAX7219_SPI_parameters, NORMAL_OPERATION );
 
     while ( 1 ){
