@@ -299,7 +299,6 @@ MAX7219_status_t  MAX7219_SetDigit ( SPI_parameters_t mySPI_parameters, MAX7219_
 {
     uint8_t  cmd[]   =    { 0, 0 };
 
-    MAX7219_register_address_map_t  myDigit;
     spi_status_t           mySPI_status;
 
 
