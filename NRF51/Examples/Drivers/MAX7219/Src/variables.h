@@ -24,10 +24,6 @@
 
 
 /* VARIABLES */
-uint32_t changeDataSPIToBeTX;       /*!<   changeDataSPIToBeTX  = 1:     MOSI = 0x01
-                                           changeDataSPIToBeTX  = 0:     MOSI = 0x10    */
-uint8_t   mySPI_RX;                 /*!<   Receiver buffer for SPI                      */
-uint8_t   mySPI_TX;                 /*!<   Transmitter buffer for SPI                   */
+uint32_t changeDP_status;           /*!<   changeDP_status  = 1:     DP ON
+                                           changeDP_status  = 0:     DP OFF    */
 
-uint32_t mySPIS_RX;                 /*!<   Receiver buffer for SPIS                     */
-uint32_t mySPIS_TX;                 /*!<   Transmitter buffer for SPIS                  */
