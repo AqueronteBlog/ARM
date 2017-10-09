@@ -28,29 +28,30 @@
 
 1506505658 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\s130.c
 
-1506961536 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\functions.c
+1507206348 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\functions.c
 	"functions.h"
 
-1506505658 e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\functions.h
+1507206348 e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\functions.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"variables.h"
 
-1506505658 e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\variables.h
+1507561748 e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\variables.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"board.h"
 
 1506961536 e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\board.h
 
-1506505658 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\interrupts.c
+1507562984 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\interrupts.c
 	"interrupts.h"
 
-1506505658 e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\interrupts.h
+1507561748 e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\interrupts.h
 	"variables.h"
 
-1507046056 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\main.c
+1507562984 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\src\main.c
 	"nrf.h"
+	"nrf_delay.h"
 	"ble.h"
 	"variables.h"
 	"functions.h"
@@ -106,7 +107,7 @@
 	"ble_gatt.h"
 	"nrf_svc.h"
 
-1507045962 e:\vsprojects\arm\drivers\max7219\max7219.h
+1507205118 e:\vsprojects\arm\drivers\max7219\max7219.h
 	"stdint.h"
 	"stdbool.h"
 	"spi.h"
@@ -119,7 +120,7 @@
 
 1506505658 source:e:\vsprojects\arm\nrf51\examples\drivers\max7219\startup_nrf51.s
 
-1507046093 source:e:\vsprojects\arm\drivers\max7219\max7219.c
+1507206378 source:e:\vsprojects\arm\drivers\max7219\max7219.c
 	"MAX7219.h"
 
 1507144567 source:d:\workspace\arm\nrf51\examples\basics\spi\spi.c
@@ -251,4 +252,7 @@
 1507043404 e:\vsprojects\arm\nrf51\examples\basics\spi_mod\spi_mod.h
 	"nrf.h"
 	"nrf51_bitfields.h"
+
+1489150926 e:\vsprojects\arm\nrf51\examples\drivers\max7219\inc\nrf_delay.h
+	"nrf.h"
 
