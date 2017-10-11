@@ -1,9 +1,22 @@
 /**
  * @brief       main.c
- * @details     [TODO]
+ * @details     This example shows how to work with the external PCF8574 device. Every 0.5s,
+ *              the pins of the PCF8574 will change as following:
  *
- *              The voltage will change every 0.5 seconds by the timer, the rest of the time, the
- *              microcontroller is in low power.
+ *                  - mySTATE = 0:
+ *                      HIGH: P1, P3, P5
+ *                      LOW:  P0, P2, P4, P6
+ *
+ *                  - mySTATE = 1:
+ *                      LOW : P1, P3, P5
+ *                      HIGH: P0, P2, P4, P6
+ *
+ *              Besides, if there is a change on P7 ( INPUT pin ), an interrupt will be called
+ *              and check the state of P7, if it is high, it will turn the LED1 on if it is low
+ *              it will turn it off.
+ *
+ *              The rest of the time, the microcontroller is in low power.
+ *
  *
  * @return      NA
  *
@@ -32,6 +45,19 @@ int main( void )
     conf_GPIO   ();
     conf_TWI0   ();
     conf_TIMER0 ();
+    conf_GPIOTE ();
+
+
+
+    mySTATE       =   0;                            // Reset the variable
+    myPCF8574INT  =   0;                            // Reset the variable
+
+
+    // Configure PCF8574: P[0-6] OUTPUTs, P7 INPUT
+    myData.data   =   ( PCF8574_P0_OUTPUT_LOW | PCF8574_P1_OUTPUT_LOW | PCF8574_P2_OUTPUT_LOW | PCF8574_P3_OUTPUT_LOW |
+                        PCF8574_P4_OUTPUT_LOW | PCF8574_P5_OUTPUT_LOW | PCF8574_P6_OUTPUT_LOW | PCF8574_P7_INPUT      );
+
+    aux           =    PCF8574_SetPins ( NRF_TWI0, PCF8574_ADDRESS_0, myData );
 
 
 
@@ -49,22 +75,36 @@ int main( void )
     	__WFE();
 
 
-    	if ( mySTATE )
+        // Change the state of the PCF8574 pins: P[O-6]
+    	if ( mySTATE == 0 )
         {
             myData.data   =   ( PCF8574_P0_OUTPUT_LOW | PCF8574_P1_OUTPUT_HIGH | PCF8574_P2_OUTPUT_LOW | PCF8574_P3_OUTPUT_HIGH |
-                                PCF8574_P4_OUTPUT_LOW | PCF8574_P5_OUTPUT_HIGH | PCF8574_P6_OUTPUT_LOW | PCF8574_P7_OUTPUT_HIGH );
+                                PCF8574_P4_OUTPUT_LOW | PCF8574_P5_OUTPUT_HIGH | PCF8574_P6_OUTPUT_LOW );
 
-            aux           =   PCF8574_SetPins ( NRF_TWI0, PCF8574_ADDRESS_0, myData );
+            aux           =   PCF8574_SetPins  ( NRF_TWI0, PCF8574_ADDRESS_0, myData );
         }
     	else
         {
     	     myData.data  =   ( PCF8574_P0_OUTPUT_HIGH | PCF8574_P1_OUTPUT_LOW | PCF8574_P2_OUTPUT_HIGH | PCF8574_P3_OUTPUT_LOW |
-                                PCF8574_P4_OUTPUT_HIGH | PCF8574_P5_OUTPUT_LOW | PCF8574_P6_OUTPUT_HIGH | PCF8574_P7_OUTPUT_LOW );
+                                PCF8574_P4_OUTPUT_HIGH | PCF8574_P5_OUTPUT_LOW | PCF8574_P6_OUTPUT_HIGH );
 
-            aux           =   PCF8574_SetPins ( NRF_TWI0, PCF8574_ADDRESS_0, myData );
+            aux           =   PCF8574_SetPins  ( NRF_TWI0, PCF8574_ADDRESS_0, myData );
+        }
+
+        if ( myPCF8574INT == 1 )
+        {
+        // Status of P7 changed
+            aux           =   PCF8574_ReadPins ( NRF_TWI0, PCF8574_ADDRESS_0, &myData );
+
+            if ( ( myData.data & PCF8574_P7_MASK ) == PCF8574_P7_MASK )
+                NRF_GPIO->OUTCLR    =   ( 1UL << LED1 );                    // Turn the LED 1 on when P7 is HIGH
+            else
+                NRF_GPIO->OUTSET    =   ( 1UL << LED1 );                    // Turn the LED 1 off when P7 is LOW
+
+
+            myPCF8574INT  =   0;                                            // Reset the variable
         }
 
         //__NOP();
-
     }
 }
