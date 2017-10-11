@@ -23,8 +23,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        2/August/2017
- * @version     2/August/2017   The ORIGIN
+ * @date        11/October/2017
+ * @version     11/October/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */
@@ -32,7 +32,12 @@ void TIMER0_IRQHandler()
 {
     if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0 ) )
     {
-        mySTATE++;
+        // Change the state of myState
+        if ( mySTATE == 1 )
+            mySTATE  =   0;
+        else
+            mySTATE  =   1;
+
 
         NRF_TIMER0->EVENTS_COMPARE[0] = 0;                  // Clear ( flag ) compare register 0 event
     }
