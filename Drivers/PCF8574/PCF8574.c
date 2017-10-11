@@ -1,29 +1,29 @@
 /**
- * @brief       PCF8591.c
- * @details     8-bit A/D and D/A converter.
+ * @brief       PCF8574.h
+ * @details     Remote 8-bit I/O expander for I2C-bus with interrupt.
  *              Functions file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        22/September/2017
- * @version     22/September/2017    The ORIGIN
+ * @date        11/October/2017
+ * @version     11/October/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "PCF8591.h"
+#include "PCF8574.h"
 
 
 /**
- * @brief       PCF8591_SetADC ( NRF_TWI_Type* , PCF8591_address_t , PCF8591_analog_input_programming_t , PCF8591_auto_increment_status_t , PCF8591_channel_number_t )
+ * @brief       PCF8574_SetADC ( NRF_TWI_Type* , PCF8574_address_t , PCF8574_analog_input_programming_t , PCF8574_auto_increment_status_t , PCF8574_channel_number_t )
  *
  * @details     It configures the ADC.
  *
  * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myPCF8591Addr:     I2C Device address.
+ * @param[in]    myPCF8574Addr:     I2C Device address.
  * @param[in]    myAnalogInputs:    The analog input programming.
  * @param[in]    myAutoIncrement:   Auto-increment flag enabled/disabled.
  * @param[in]    myADCchannel:      ADC Channel number.
@@ -31,7 +31,7 @@
  * @param[out]   NaN.
  *
  *
- * @return       Status of PCF8591_SetADC.
+ * @return       Status of PCF8574_SetADC.
  *
  *
  * @author      Manuel Caballero
@@ -40,7 +40,7 @@
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_analog_input_programming_t myAnalogInputs, PCF8591_auto_increment_status_t myAutoIncrement, PCF8591_channel_number_t myADCchannel )
+PCF8574_status_t  PCF8574_SetADC ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_analog_input_programming_t myAnalogInputs, PCF8574_auto_increment_status_t myAutoIncrement, PCF8574_channel_number_t myADCchannel )
 {
     uint8_t     cmd                 =    0;
     uint32_t    aux                 =    0;
@@ -50,19 +50,19 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
     switch ( myAnalogInputs )
     {
     default:
-    case PCF8591_FOUR_SINGLE_ENDED_INPUTS:
+    case PCF8574_FOUR_SINGLE_ENDED_INPUTS:
         // cmd  &=  0xCF;
         break;
 
-    case PCF8591_THREE_DIFFERENTIAL_INPUTS:
+    case PCF8574_THREE_DIFFERENTIAL_INPUTS:
         cmd  |=  0x10;
         break;
 
-    case PCF8591_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED:
+    case PCF8574_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED:
         cmd  |=  0x20;
         break;
 
-    case PCF8591_TWO_DIFFERENTIAL_INPUTS:
+    case PCF8574_TWO_DIFFERENTIAL_INPUTS:
         cmd  |=  0x30;
         break;
     }
@@ -71,7 +71,7 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
     // AUTO-INCREMENT FLAG
-    if ( myAutoIncrement == PCF8591_AUTO_INCREMENT_ENABLED )
+    if ( myAutoIncrement == PCF8574_AUTO_INCREMENT_ENABLED )
         cmd  |=  0x04;
 
 
@@ -83,19 +83,19 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
     switch ( myADCchannel )
     {
     default:
-    case PCF8591_CHANNEL_0:
+    case PCF8574_CHANNEL_0:
         // cmd  &=  0xFC;
         break;
 
-    case PCF8591_CHANNEL_1:
+    case PCF8574_CHANNEL_1:
         cmd  |=  0x01;
         break;
 
-    case PCF8591_CHANNEL_2:
+    case PCF8574_CHANNEL_2:
         cmd  |=  0x02;
         break;
 
-    case PCF8591_CHANNEL_3:
+    case PCF8574_CHANNEL_3:
         cmd  |=  0x03;
         break;
     }
@@ -106,37 +106,37 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
     // Mask DAC
-    if ( _DAC_STATUS == PCF8591_DAC_ENABLED )
+    if ( _DAC_STATUS == PCF8574_DAC_ENABLED )
         cmd  |=  0x40;
 
 
 
 
     // Update Control Byte
-    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd, 1, I2C_STOP_BIT );
+    aux = i2c_write ( myinstance, myPCF8574Addr, &cmd, 1, I2C_STOP_BIT );
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8591_SUCCESS;
+        return   PCF8574_SUCCESS;
     else
-        return   PCF8591_FAILURE;
+        return   PCF8574_FAILURE;
 }
 
 
 
 /**
- * @brief       PCF8591_ReadADC ( NRF_TWI_Type* , PCF8591_address_t , PCF8591_vector_data_t*  )
+ * @brief       PCF8574_ReadADC ( NRF_TWI_Type* , PCF8574_address_t , PCF8574_vector_data_t*  )
  *
  * @details     It gets the ADC result from the device.
  *
  * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myPCF8591Addr:     I2C Device address.
+ * @param[in]    myPCF8574Addr:     I2C Device address.
  *
  * @param[out]   myADC_Data:        ADC result into the chosen channel.
  *
  *
- * @return       Status of PCF8591_ReadADC.
+ * @return       Status of PCF8574_ReadADC.
  *
  *
  * @author      Manuel Caballero
@@ -145,7 +145,7 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_vector_data_t* myADC_Data )
+PCF8574_status_t  PCF8574_ReadADC ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_vector_data_t* myADC_Data )
 {
     uint8_t     cmd[]               =    { 0, 0, 0, 0, 0 };
     uint32_t    aux                 =    0;
@@ -155,14 +155,14 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
 
 
 
-    if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+    if ( _AUTO_INCREMENT_STATUS == PCF8574_AUTO_INCREMENT_ENABLED )
         i    =   5;
     else
         i    =   2;
 
 
 
-    aux = i2c_read ( myinstance, myPCF8591Addr, &cmd[0], i );
+    aux = i2c_read ( myinstance, myPCF8574Addr, &cmd[0], i );
 
 
 
@@ -170,10 +170,10 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
     switch ( _CHANNEL_NUMBER )
     {
     default:
-    case PCF8591_CHANNEL_0:
+    case PCF8574_CHANNEL_0:
         myADC_Data->ADC_Channel_0    =   cmd[ 1 ];
 
-        if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        if ( _AUTO_INCREMENT_STATUS == PCF8574_AUTO_INCREMENT_ENABLED )
         {
             myADC_Data->ADC_Channel_1    =   cmd[ 2 ];
             myADC_Data->ADC_Channel_2    =   cmd[ 3 ];
@@ -181,10 +181,10 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
         }
         break;
 
-    case PCF8591_CHANNEL_1:
+    case PCF8574_CHANNEL_1:
         myADC_Data->ADC_Channel_1    =   cmd[ 1 ];
 
-        if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        if ( _AUTO_INCREMENT_STATUS == PCF8574_AUTO_INCREMENT_ENABLED )
         {
             myADC_Data->ADC_Channel_2    =   cmd[ 2 ];
             myADC_Data->ADC_Channel_3    =   cmd[ 3 ];
@@ -192,10 +192,10 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
         }
         break;
 
-    case PCF8591_CHANNEL_2:
+    case PCF8574_CHANNEL_2:
         myADC_Data->ADC_Channel_2    =   cmd[ 1 ];
 
-        if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        if ( _AUTO_INCREMENT_STATUS == PCF8574_AUTO_INCREMENT_ENABLED )
         {
             myADC_Data->ADC_Channel_3    =   cmd[ 2 ];
             myADC_Data->ADC_Channel_0    =   cmd[ 3 ];
@@ -203,10 +203,10 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
         }
         break;
 
-    case PCF8591_CHANNEL_3:
+    case PCF8574_CHANNEL_3:
         myADC_Data->ADC_Channel_3    =   cmd[ 1 ];
 
-        if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        if ( _AUTO_INCREMENT_STATUS == PCF8574_AUTO_INCREMENT_ENABLED )
         {
             myADC_Data->ADC_Channel_0    =   cmd[ 2 ];
             myADC_Data->ADC_Channel_1    =   cmd[ 3 ];
@@ -219,26 +219,26 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8591_SUCCESS;
+        return   PCF8574_SUCCESS;
     else
-        return   PCF8591_FAILURE;
+        return   PCF8574_FAILURE;
 }
 
 
 
 /**
- * @brief       PCF8591_SetDAC ( NRF_TWI_Type* , PCF8591_address_t , PCF8591_dac_status_t )
+ * @brief       PCF8574_SetDAC ( NRF_TWI_Type* , PCF8574_address_t , PCF8574_dac_status_t )
  *
  * @details     It enables/disables the DAC.
  *
  * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myPCF8591Addr:     I2C Device address.
+ * @param[in]    myPCF8574Addr:     I2C Device address.
  * @param[in]    myDAC_Status:      Enable/Disable DAC.
  *
  * @param[out]   NaN.
  *
  *
- * @return       Status of PCF8591_SetDAC.
+ * @return       Status of PCF8574_SetDAC.
  *
  *
  * @author      Manuel Caballero
@@ -247,7 +247,7 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_SetDAC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_dac_status_t myDAC_Status )
+PCF8574_status_t  PCF8574_SetDAC ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_dac_status_t myDAC_Status )
 {
     uint8_t     cmd                 =    0;
     uint32_t    aux                 =    0;
@@ -257,26 +257,26 @@ PCF8591_status_t  PCF8591_SetDAC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
     switch ( _ANALOG_INPUT_PROGRAMMING )
     {
     default:
-    case PCF8591_FOUR_SINGLE_ENDED_INPUTS:
+    case PCF8574_FOUR_SINGLE_ENDED_INPUTS:
         // cmd  &=  0xCF;
         break;
 
-    case PCF8591_THREE_DIFFERENTIAL_INPUTS:
+    case PCF8574_THREE_DIFFERENTIAL_INPUTS:
         cmd  |=  0x10;
         break;
 
-    case PCF8591_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED:
+    case PCF8574_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED:
         cmd  |=  0x20;
         break;
 
-    case PCF8591_TWO_DIFFERENTIAL_INPUTS:
+    case PCF8574_TWO_DIFFERENTIAL_INPUTS:
         cmd  |=  0x30;
         break;
     }
 
 
     // Mask AUTO-INCREMENT FLAG
-    if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+    if ( _AUTO_INCREMENT_STATUS == PCF8574_AUTO_INCREMENT_ENABLED )
         cmd  |=  0x04;
 
 
@@ -285,19 +285,19 @@ PCF8591_status_t  PCF8591_SetDAC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
     switch ( _CHANNEL_NUMBER )
     {
     default:
-    case PCF8591_CHANNEL_0:
+    case PCF8574_CHANNEL_0:
         // cmd  &=  0xFC;
         break;
 
-    case PCF8591_CHANNEL_1:
+    case PCF8574_CHANNEL_1:
         cmd  |=  0x01;
         break;
 
-    case PCF8591_CHANNEL_2:
+    case PCF8574_CHANNEL_2:
         cmd  |=  0x02;
         break;
 
-    case PCF8591_CHANNEL_3:
+    case PCF8574_CHANNEL_3:
         cmd  |=  0x03;
         break;
     }
@@ -305,7 +305,7 @@ PCF8591_status_t  PCF8591_SetDAC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
     // DAC
-    if ( myDAC_Status == PCF8591_DAC_ENABLED )
+    if ( myDAC_Status == PCF8574_DAC_ENABLED )
         cmd  |=  0x40;
 
 
@@ -314,31 +314,31 @@ PCF8591_status_t  PCF8591_SetDAC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
     // Update Control Byte
-    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd, 1, I2C_STOP_BIT );
+    aux = i2c_write ( myinstance, myPCF8574Addr, &cmd, 1, I2C_STOP_BIT );
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8591_SUCCESS;
+        return   PCF8574_SUCCESS;
     else
-        return   PCF8591_FAILURE;
+        return   PCF8574_FAILURE;
 }
 
 
 
 /**
- * @brief       PCF8591_NewDACValue ( NRF_TWI_Type* , PCF8591_address_t , uint8_t )
+ * @brief       PCF8574_NewDACValue ( NRF_TWI_Type* , PCF8574_address_t , uint8_t )
  *
  * @details     It enables/disables the DAC.
  *
  * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myPCF8591Addr:     I2C Device address.
+ * @param[in]    myPCF8574Addr:     I2C Device address.
  * @param[in]    myNewDACValue:     New DAC value.
  *
  * @param[out]   NaN.
  *
  *
- * @return       Status of PCF8591_NewDACValue.
+ * @return       Status of PCF8574_NewDACValue.
  *
  *
  * @author      Manuel Caballero
@@ -347,7 +347,7 @@ PCF8591_status_t  PCF8591_SetDAC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_NewDACValue ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, uint8_t myNewDACValue )
+PCF8574_status_t  PCF8574_NewDACValue ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, uint8_t myNewDACValue )
 {
     uint8_t     cmd[]               =    { 0, 0 };
     uint32_t    aux                 =    0;
@@ -357,26 +357,26 @@ PCF8591_status_t  PCF8591_NewDACValue ( NRF_TWI_Type* myinstance, PCF8591_addres
     switch ( _ANALOG_INPUT_PROGRAMMING )
     {
     default:
-    case PCF8591_FOUR_SINGLE_ENDED_INPUTS:
+    case PCF8574_FOUR_SINGLE_ENDED_INPUTS:
         // cmd[ 0 ]  &=  0xCF;
         break;
 
-    case PCF8591_THREE_DIFFERENTIAL_INPUTS:
+    case PCF8574_THREE_DIFFERENTIAL_INPUTS:
         cmd[ 0 ]  |=  0x10;
         break;
 
-    case PCF8591_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED:
+    case PCF8574_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED:
         cmd[ 0 ]  |=  0x20;
         break;
 
-    case PCF8591_TWO_DIFFERENTIAL_INPUTS:
+    case PCF8574_TWO_DIFFERENTIAL_INPUTS:
         cmd[ 0 ]  |=  0x30;
         break;
     }
 
 
     // Mask AUTO-INCREMENT FLAG
-    if ( _AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+    if ( _AUTO_INCREMENT_STATUS == PCF8574_AUTO_INCREMENT_ENABLED )
         cmd[ 0 ]  |=  0x04;
 
 
@@ -385,19 +385,19 @@ PCF8591_status_t  PCF8591_NewDACValue ( NRF_TWI_Type* myinstance, PCF8591_addres
     switch ( _CHANNEL_NUMBER )
     {
     default:
-    case PCF8591_CHANNEL_0:
+    case PCF8574_CHANNEL_0:
         // cmd[ 0 ]  &=  0xFC;
         break;
 
-    case PCF8591_CHANNEL_1:
+    case PCF8574_CHANNEL_1:
         cmd[ 0 ]  |=  0x01;
         break;
 
-    case PCF8591_CHANNEL_2:
+    case PCF8574_CHANNEL_2:
         cmd[ 0 ]  |=  0x02;
         break;
 
-    case PCF8591_CHANNEL_3:
+    case PCF8574_CHANNEL_3:
         cmd[ 0 ]  |=  0x03;
         break;
     }
@@ -405,20 +405,20 @@ PCF8591_status_t  PCF8591_NewDACValue ( NRF_TWI_Type* myinstance, PCF8591_addres
 
 
     // Mask DAC
-    if ( _DAC_STATUS == PCF8591_DAC_ENABLED )
+    if ( _DAC_STATUS == PCF8574_DAC_ENABLED )
         cmd[ 0 ]  |=  0x40;
 
 
 
     // Update Control Byte + DAC output
     cmd[ 1 ]     =   myNewDACValue;
-    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myinstance, myPCF8574Addr, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8591_SUCCESS;
+        return   PCF8574_SUCCESS;
     else
-        return   PCF8591_FAILURE;
+        return   PCF8574_FAILURE;
 }
