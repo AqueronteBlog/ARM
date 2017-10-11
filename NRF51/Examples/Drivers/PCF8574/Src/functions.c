@@ -27,9 +27,10 @@
  *
  * @author      Manuel Caballero
  * @date        5/May/2017
- * @version     30/June/2017    TWI0 pins added.
- *              23/May/2017     All the LEDs OFF at the beginning.
- *              5/May/2017      The ORIGIN
+ * @version     11/October/2017     P0.16 GPIOTE pin.
+ *              30/June/2017        TWI0 pins added.
+ *              23/May/2017         All the LEDs OFF at the beginning.
+ *              5/May/2017          The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */
@@ -59,6 +60,14 @@ void conf_GPIO  ( void )
                                         GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   |
                                         GPIO_PIN_CNF_DRIVE_S0D1         <<  GPIO_PIN_CNF_DRIVE_Pos  |
                                         GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos;
+
+
+    /* GPIOTE. Interrupt pin for PCF8574 INT pin */
+    NRF_GPIO->PIN_CNF[16]           =   GPIO_PIN_CNF_DIR_Input          <<  GPIO_PIN_CNF_DIR_Pos    |
+                                        GPIO_PIN_CNF_INPUT_Connect      <<  GPIO_PIN_CNF_INPUT_Pos  |
+                                        GPIO_PIN_CNF_PULL_Pullup        <<  GPIO_PIN_CNF_PULL_Pos   |
+                                        GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  |
+                                        GPIO_PIN_CNF_SENSE_Low          <<  GPIO_PIN_CNF_SENSE_Pos;
 
 }
 
@@ -161,3 +170,41 @@ void conf_TWI0  ( void )
     NRF_TWI0->ENABLE         =   ( TWI_ENABLE_ENABLE_Enabled  <<  TWI_ENABLE_ENABLE_Pos );
 }
 
+
+
+/**
+ * @brief       void conf_GPIOTE  ( void )
+ * @details     It configures GPIOTE channels.
+ *
+ *                  - PCF8574 INT pin --> P0.16. IN0.
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        11/October/2017
+ * @version     11/October/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN
+ */
+void conf_GPIOTE  ( void )
+{
+    // Channel 0
+    NRF_GPIOTE->CONFIG[0]    =    ( GPIOTE_CONFIG_POLARITY_LoToHi   << GPIOTE_CONFIG_POLARITY_Pos   ) |
+                                  ( 16                              << GPIOTE_CONFIG_PSEL_Pos       ) |
+                                  ( GPIOTE_CONFIG_MODE_Event        << GPIOTE_CONFIG_MODE_Pos       );
+
+    NRF_GPIOTE->INTENSET  = GPIOTE_INTENSET_IN0_Set << GPIOTE_INTENSET_IN0_Pos;
+
+
+
+    // Reset the events
+    NRF_GPIOTE->EVENTS_IN[16] = 0;
+
+    /*
+    NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_IN0_Enabled << GPIOTE_INTENSET_IN0_Pos;
+    */
+
+    // Enable Interrupt
+    NVIC_EnableIRQ ( GPIOTE_IRQn );
+}
