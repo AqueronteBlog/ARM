@@ -21,7 +21,8 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESSES. NOTE: There are two version: PCF8574 and PCF8574A with different address only.
+  * @brief   DEFAULT ADDRESSES. NOTE: There are two version: PCF8574 and PCF8574A with different address only,
+  *                             its functionality remains the same.
   */
 typedef enum
 {
@@ -47,30 +48,107 @@ typedef enum
 
 // DATA BYTE
 /**
-  * @brief   PIN STATUS
-  */
-typedef enum
-{
-    PCF8574_INPUT        =   1,                        /*!<  PCF8574 INPUT                                          */
-    PCF8574_OUTPUT_HIGH  =   1,                        /*!<  PCF8574 OUTPUT HIGH                                    */
-    PCF8574_OUTPUT_LOW   =   0                         /*!<  PCF8574 OUTPUT LOW                                     */
-} PCF8574_pin_status_t;
-
-
-/**
   * @brief   PIN NUMBER
   */
 typedef enum
 {
-    PCF8574_P0           =   0,                        /*!<  PCF8574 P0 pin                                         */
-    PCF8574_P1           =   1,                        /*!<  PCF8574 P1 pin                                         */
-    PCF8574_P2           =   2,                        /*!<  PCF8574 P2 pin                                         */
-    PCF8574_P3           =   3,                        /*!<  PCF8574 P3 pin                                         */
-    PCF8574_P4           =   4,                        /*!<  PCF8574 P4 pin                                         */
-    PCF8574_P5           =   5,                        /*!<  PCF8574 P5 pin                                         */
-    PCF8574_P6           =   6,                        /*!<  PCF8574 P6 pin                                         */
-    PCF8574_P7           =   7,                        /*!<  PCF8574 P7 pin                                         */
+    PCF8574_P0              =   0,                            /*!<  PCF8574 P0 INPUT                                       */
+    PCF8574_P1              =   1,                            /*!<  PCF8574 P1 INPUT                                       */
+    PCF8574_P2              =   2,                            /*!<  PCF8574 P2 INPUT                                       */
+    PCF8574_P3              =   3,                            /*!<  PCF8574 P3 INPUT                                       */
+    PCF8574_P4              =   4,                            /*!<  PCF8574 P4 INPUT                                       */
+    PCF8574_P5              =   5,                            /*!<  PCF8574 P5 INPUT                                       */
+    PCF8574_P6              =   6,                            /*!<  PCF8574 P6 INPUT                                       */
+    PCF8574_P7              =   7                             /*!<  PCF8574 P7 INPUT                                       */
 } PCF8574_pin_number_t;
+
+
+/**
+  * @brief   PIN MASK
+  */
+typedef enum
+{
+    PCF8574_P0_MASK          =   0b00000001,                  /*!<  PCF8574 P0 INPUT                                       */
+    PCF8574_P1_MASK          =   0b00000010,                  /*!<  PCF8574 P1 INPUT                                       */
+    PCF8574_P2_MASK          =   0b00000100,                  /*!<  PCF8574 P2 INPUT                                       */
+    PCF8574_P3_MASK          =   0b00001000,                  /*!<  PCF8574 P3 INPUT                                       */
+    PCF8574_P4_MASK          =   0b00010000,                  /*!<  PCF8574 P4 INPUT                                       */
+    PCF8574_P5_MASK          =   0b00100000,                  /*!<  PCF8574 P5 INPUT                                       */
+    PCF8574_P6_MASK          =   0b01000000,                  /*!<  PCF8574 P6 INPUT                                       */
+    PCF8574_P7_MASK          =   0b10000000                   /*!<  PCF8574 P7 INPUT                                       */
+} PCF8574_pin_mask_t;
+
+
+
+/**
+  * @brief   PIN CONFIGURATION
+  */
+typedef enum
+{
+    PCF8574_P0_INPUT        =   ( 1 << PCF8574_P0 ),           /*!<  PCF8574 P0 INPUT                                       */
+    PCF8574_P0_OUTPUT_HIGH  =   ( 1 << PCF8574_P0 ),           /*!<  PCF8574 P0 OUTPUT HIGH                                 */
+    PCF8574_P0_OUTPUT_LOW   =   ( 0 << PCF8574_P0 ),           /*!<  PCF8574 P0 OUTPUT LOW                                  */
+
+    PCF8574_P1_INPUT        =   ( 1 << PCF8574_P1 ),           /*!<  PCF8574 P1 INPUT                                       */
+    PCF8574_P1_OUTPUT_HIGH  =   ( 1 << PCF8574_P1 ),           /*!<  PCF8574 P1 OUTPUT HIGH                                 */
+    PCF8574_P1_OUTPUT_LOW   =   ( 0 << PCF8574_P1 ),           /*!<  PCF8574 P1 OUTPUT LOW                                  */
+
+    PCF8574_P2_INPUT        =   ( 1 << PCF8574_P2 ),           /*!<  PCF8574 P2 INPUT                                       */
+    PCF8574_P2_OUTPUT_HIGH  =   ( 1 << PCF8574_P2 ),           /*!<  PCF8574 P2 OUTPUT HIGH                                 */
+    PCF8574_P2_OUTPUT_LOW   =   ( 0 << PCF8574_P2 ),           /*!<  PCF8574 P2 OUTPUT LOW                                  */
+
+    PCF8574_P3_INPUT        =   ( 1 << PCF8574_P3 ),           /*!<  PCF8574 P3 INPUT                                       */
+    PCF8574_P3_OUTPUT_HIGH  =   ( 1 << PCF8574_P3 ),           /*!<  PCF8574 P3 OUTPUT HIGH                                 */
+    PCF8574_P3_OUTPUT_LOW   =   ( 0 << PCF8574_P3 ),           /*!<  PCF8574 P3 OUTPUT LOW                                  */
+
+    PCF8574_P4_INPUT        =   ( 1 << PCF8574_P4 ),           /*!<  PCF8574 P4 INPUT                                       */
+    PCF8574_P4_OUTPUT_HIGH  =   ( 1 << PCF8574_P4 ),           /*!<  PCF8574 P4 OUTPUT HIGH                                 */
+    PCF8574_P4_OUTPUT_LOW   =   ( 0 << PCF8574_P4 ),           /*!<  PCF8574 P4 OUTPUT LOW                                  */
+
+    PCF8574_P5_INPUT        =   ( 1 << PCF8574_P5 ),           /*!<  PCF8574 P5 INPUT                                       */
+    PCF8574_P5_OUTPUT_HIGH  =   ( 1 << PCF8574_P5 ),           /*!<  PCF8574 P5 OUTPUT HIGH                                 */
+    PCF8574_P5_OUTPUT_LOW   =   ( 0 << PCF8574_P5 ),           /*!<  PCF8574 P5 OUTPUT LOW                                  */
+
+    PCF8574_P6_INPUT        =   ( 1 << PCF8574_P6 ),           /*!<  PCF8574 P6 INPUT                                       */
+    PCF8574_P6_OUTPUT_HIGH  =   ( 1 << PCF8574_P6 ),           /*!<  PCF8574 P6 OUTPUT HIGH                                 */
+    PCF8574_P6_OUTPUT_LOW   =   ( 0 << PCF8574_P6 ),           /*!<  PCF8574 P6 OUTPUT LOW                                  */
+
+    PCF8574_P7_INPUT        =   ( 1 << PCF8574_P7 ),           /*!<  PCF8574 P7 INPUT                                       */
+    PCF8574_P7_OUTPUT_HIGH  =   ( 1 << PCF8574_P7 ),           /*!<  PCF8574 P7 OUTPUT HIGH                                 */
+    PCF8574_P7_OUTPUT_LOW   =   ( 0 << PCF8574_P7 )            /*!<  PCF8574 P7 OUTPUT LOW                                  */
+} PCF8574_pin_configuration_t;
+
+
+
+/**
+  * @brief   PIN STATUS
+  */
+typedef enum
+{
+    PCF8574_P0_HIGH  =   ( 1 << PCF8574_P0 ),                  /*!<  PCF8574 P0 STATUS HIGH                                 */
+    PCF8574_P0_LOW   =   ( 0 << PCF8574_P0 ),                  /*!<  PCF8574 P0 STATUS LOW                                  */
+
+    PCF8574_P1_HIGH  =   ( 1 << PCF8574_P1 ),                  /*!<  PCF8574 P1 STATUS HIGH                                 */
+    PCF8574_P1_LOW   =   ( 0 << PCF8574_P1 ),                  /*!<  PCF8574 P1 STATUS LOW                                  */
+
+    PCF8574_P2_HIGH  =   ( 1 << PCF8574_P2 ),                  /*!<  PCF8574 P2 STATUS HIGH                                 */
+    PCF8574_P2_LOW   =   ( 0 << PCF8574_P2 ),                  /*!<  PCF8574 P2 STATUS LOW                                  */
+
+    PCF8574_P3_HIGH  =   ( 1 << PCF8574_P3 ),                  /*!<  PCF8574 P3 STATUS HIGH                                 */
+    PCF8574_P3_LOW   =   ( 0 << PCF8574_P3 ),                  /*!<  PCF8574 P3 STATUS LOW                                  */
+
+    PCF8574_P4_HIGH  =   ( 1 << PCF8574_P4 ),                  /*!<  PCF8574 P4 STATUS HIGH                                 */
+    PCF8574_P4_LOW   =   ( 0 << PCF8574_P4 ),                  /*!<  PCF8574 P4 STATUS LOW                                  */
+
+    PCF8574_P5_HIGH  =   ( 1 << PCF8574_P5 ),                  /*!<  PCF8574 P5 STATUS HIGH                                 */
+    PCF8574_P5_LOW   =   ( 0 << PCF8574_P5 ),                  /*!<  PCF8574 P5 STATUS LOW                                  */
+
+    PCF8574_P6_HIGH  =   ( 1 << PCF8574_P6 ),                  /*!<  PCF8574 P6 STATUS HIGH                                 */
+    PCF8574_P6_LOW   =   ( 0 << PCF8574_P6 ),                  /*!<  PCF8574 P6 STATUS LOW                                  */
+
+    PCF8574_P7_HIGH  =   ( 1 << PCF8574_P7 ),                  /*!<  PCF8574 P7 STATUS HIGH                                 */
+    PCF8574_P7_LOW   =   ( 0 << PCF8574_P7 )                   /*!<  PCF8574 P7 STATUS LOW                                  */
+} PCF8574_pin_status_t;
 
 
 
@@ -102,7 +180,5 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-PCF8574_status_t  PCF8574_SetADC                ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_analog_input_programming_t myAnalogInputs, PCF8574_auto_increment_status_t myAutoIncrement, PCF8574_channel_number_t myADCchannel );
-PCF8574_status_t  PCF8574_ReadADC               ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_vector_data_t* myADC_Data );
-PCF8574_status_t  PCF8574_SetDAC                ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_dac_status_t myDAC_Status );
-PCF8574_status_t  PCF8574_NewDACValue           ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, uint8_t myNewDACValue );
+PCF8574_status_t  PCF8574_SetPins   ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_vector_data_t  myConfDATA );
+PCF8574_status_t  PCF8574_ReadPins  ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_vector_data_t* myReadDATA );
