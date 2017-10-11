@@ -1,0 +1,124 @@
+# depslib dependency file v1.0
+1504799590 source:e:\vsprojects\arm\nrf51\examples\basics\i2c\i2c.c
+	"i2c.h"
+
+1499765261 e:\vsprojects\arm\nrf51\examples\basics\i2c\i2c.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\inc\nrf.h
+	"nrf51.h"
+	"nrf51_bitfields.h"
+	"nrf51_deprecated.h"
+	"compiler_abstraction.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\inc\nrf51.h
+	<core_cm0.h>
+	"system_nrf51.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\inc\system_nrf51.h
+	<stdint.h>
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\inc\nrf51_bitfields.h
+	<core_cm0.h>
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\inc\nrf51_deprecated.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\inc\compiler_abstraction.h
+
+1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\s130.c
+
+1507730617 source:e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\src\functions.c
+	"functions.h"
+
+1507730617 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\src\functions.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"variables.h"
+
+1507731175 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\src\variables.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"board.h"
+
+1504776162 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\src\board.h
+
+1507731175 source:e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\src\interrupts.c
+	"interrupts.h"
+
+1507731175 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\src\interrupts.h
+	"variables.h"
+
+1507731175 source:e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\src\main.c
+	"nrf.h"
+	"ble.h"
+	"variables.h"
+	"functions.h"
+	"PCF8574.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\softdevice\include\ble.h
+	"ble_ranges.h"
+	"ble_types.h"
+	"ble_gap.h"
+	"ble_l2cap.h"
+	"ble_gatt.h"
+	"ble_gattc.h"
+	"ble_gatts.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\softdevice\include\ble_ranges.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\softdevice\include\ble_types.h
+	<stdint.h>
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\softdevice\include\ble_gap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\softdevice\include\nrf_svc.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\softdevice\include\ble_l2cap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_err.h"
+	"nrf_svc.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\softdevice\include\ble_err.h
+	"nrf_error.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\softdevice\include\nrf_error.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\softdevice\include\ble_gatt.h
+	"ble_types.h"
+	"ble_ranges.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\softdevice\include\ble_gattc.h
+	"ble_gatt.h"
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\softdevice\include\ble_gatts.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_l2cap.h"
+	"ble_gap.h"
+	"ble_gatt.h"
+	"nrf_svc.h"
+
+1507726671 e:\vsprojects\arm\drivers\pcf8574\pcf8574.h
+	"stdint.h"
+	"stdbool.h"
+	"i2c.h"
+
+1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\src\system_nrf51.c
+	<stdint.h>
+	<stdbool.h>
+	"nrf.h"
+	"system_nrf51.h"
+
+1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\pcf8574\startup_nrf51.s
+
+1507726017 source:e:\vsprojects\arm\drivers\pcf8574\pcf8574.c
+	"PCF8574.h"
+
