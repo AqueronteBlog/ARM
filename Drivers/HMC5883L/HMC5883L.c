@@ -175,7 +175,7 @@ HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance
 
 
 /**
- * @brief       HMC5883L_GetDataOutput ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_vector_data_t*  )
+ * @brief       HMC5883L_GetRawDataOutput ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_vector_data_t*  )
  *
  * @details     It gets X, Y and Z data output.
  *
@@ -185,7 +185,7 @@ HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance
  * @param[out]   myData:            X, Y and Z data output.
  *
  *
- * @return       Status of HMC5883L_GetDataOutput.
+ * @return       Status of HMC5883L_GetRawDataOutput.
  *
  *
  * @author      Manuel Caballero
@@ -194,7 +194,7 @@ HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance
  * @pre         NaN
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_GetDataOutput ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myData )
+HMC5883L_status_t  HMC5883L_GetRawDataOutput ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myData )
 {
     uint8_t     cmd[]  =   { HMC5883L_DATA_OUTPUT_X_MSB, 0, 0, 0, 0, 0 };
     uint32_t    aux    =   0;
