@@ -1,14 +1,14 @@
 /**
- * @brief       PCF8574.h
- * @details     Remote 8-bit I/O expander for I2C-bus with interrupt.
+ * @brief       HMC5883L.h
+ * @details     3-Axis Digital Compass IC.
  *              Header file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        11/October/2017
- * @version     11/October/2017    The ORIGIN
+ * @date        12/October/2017
+ * @version     12/October/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -21,145 +21,160 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESSES. NOTE: There are two version: PCF8574 and PCF8574A with different address only,
-  *                             its functionality remains the same.
+  * @brief   DEFAULT ADDRESSES.
   */
 typedef enum
 {
-    PCF8574_ADDRESS_0     =   0x20,                   /*!<   A2 A1 A0: 000                                            */
-    PCF8574_ADDRESS_1     =   0x21,                   /*!<   A2 A1 A0: 001                                            */
-    PCF8574_ADDRESS_2     =   0x22,                   /*!<   A2 A1 A0: 010                                            */
-    PCF8574_ADDRESS_3     =   0x23,                   /*!<   A2 A1 A0: 011                                            */
-    PCF8574_ADDRESS_4     =   0x24,                   /*!<   A2 A1 A0: 100                                            */
-    PCF8574_ADDRESS_5     =   0x25,                   /*!<   A2 A1 A0: 101                                            */
-    PCF8574_ADDRESS_6     =   0x26,                   /*!<   A2 A1 A0: 110                                            */
-    PCF8574_ADDRESS_7     =   0x27,                   /*!<   A2 A1 A0: 111                                            */
-
-    PCF8574A_ADDRESS_0    =   0x38,                   /*!<   A2 A1 A0: 000                                            */
-    PCF8574A_ADDRESS_1    =   0x39,                   /*!<   A2 A1 A0: 001                                            */
-    PCF8574A_ADDRESS_2    =   0x3A,                   /*!<   A2 A1 A0: 010                                            */
-    PCF8574A_ADDRESS_3    =   0x3B,                   /*!<   A2 A1 A0: 011                                            */
-    PCF8574A_ADDRESS_4    =   0x3C,                   /*!<   A2 A1 A0: 100                                            */
-    PCF8574A_ADDRESS_5    =   0x3D,                   /*!<   A2 A1 A0: 101                                            */
-    PCF8574A_ADDRESS_6    =   0x3E,                   /*!<   A2 A1 A0: 110                                            */
-    PCF8574A_ADDRESS_7    =   0x3F                    /*!<   A2 A1 A0: 111                                            */
-} PCF8574_address_t;
+    HMC5883L_ADDRESS    =   0x1E                              /*!<   HMC5883L address                                       */
+} HMC5883L_address_t;
 
 
-// DATA BYTE
+// REGISTER LIST
 /**
-  * @brief   PIN NUMBER
+  * @brief   REGISTERS
   */
 typedef enum
 {
-    PCF8574_P0              =   0,                            /*!<  PCF8574 P0 INPUT                                       */
-    PCF8574_P1              =   1,                            /*!<  PCF8574 P1 INPUT                                       */
-    PCF8574_P2              =   2,                            /*!<  PCF8574 P2 INPUT                                       */
-    PCF8574_P3              =   3,                            /*!<  PCF8574 P3 INPUT                                       */
-    PCF8574_P4              =   4,                            /*!<  PCF8574 P4 INPUT                                       */
-    PCF8574_P5              =   5,                            /*!<  PCF8574 P5 INPUT                                       */
-    PCF8574_P6              =   6,                            /*!<  PCF8574 P6 INPUT                                       */
-    PCF8574_P7              =   7                             /*!<  PCF8574 P7 INPUT                                       */
-} PCF8574_pin_number_t;
+    HMC5883L_CONFIGURATION_REGISTER_A   =   0x00,           /*!<  Configuration Register A      Read/Write              */
+    HMC5883L_CONFIGURATION_REGISTER_B   =   0x01,           /*!<  Configuration Register B      Read/Write              */
+    HMC5883L_MODE_REGISTER              =   0x02,           /*!<  Mode Register                 Read/Write              */
+    HMC5883L_DATA_OUTPUT_X_MSB          =   0x03,           /*!<  Data Output X MSB Register    Read                    */
+    HMC5883L_DATA_OUTPUT_X_LSB          =   0x04,           /*!<  Data Output X LSB Register    Read                    */
+    HMC5883L_DATA_OUTPUT_Z_MSB          =   0x05,           /*!<  Data Output Z MSB Register    Read                    */
+    HMC5883L_DATA_OUTPUT_Z_LSB          =   0x06,           /*!<  Data Output Z LSB Register    Read                    */
+    HMC5883L_DATA_OUTPUT_Y_MSB          =   0x07,           /*!<  Data Output Y MSB Register    Read                    */
+    HMC5883L_DATA_OUTPUT_Y_LSB          =   0x08,           /*!<  Data Output Y LSB Register    Read                    */
+    HMC5883L_STATUS_REGISTER            =   0x09,           /*!<  Status Register               Read                    */
+    HMC5883L_IDENTIFICATION_REGISTER_A  =   0x0A,           /*!<  Identification Register A     Read                    */
+    HMC5883L_IDENTIFICATION_REGISTER_B  =   0x0B,           /*!<  Identification Register B     Read                    */
+    HMC5883L_IDENTIFICATION_REGISTER_C  =   0x0C            /*!<  Identification Register C     Read                    */
+} HMC5883L_register_list_t;
 
 
+
+// REGISTER BYTES
 /**
-  * @brief   PIN MASK
+  * @brief   CONFIGURATION REGISTER A
   */
+// [ MA1 to MA0 ] Select number of samples averaged
 typedef enum
 {
-    PCF8574_P0_MASK          =   0b00000001,                  /*!<  PCF8574 P0 INPUT                                       */
-    PCF8574_P1_MASK          =   0b00000010,                  /*!<  PCF8574 P1 INPUT                                       */
-    PCF8574_P2_MASK          =   0b00000100,                  /*!<  PCF8574 P2 INPUT                                       */
-    PCF8574_P3_MASK          =   0b00001000,                  /*!<  PCF8574 P3 INPUT                                       */
-    PCF8574_P4_MASK          =   0b00010000,                  /*!<  PCF8574 P4 INPUT                                       */
-    PCF8574_P5_MASK          =   0b00100000,                  /*!<  PCF8574 P5 INPUT                                       */
-    PCF8574_P6_MASK          =   0b01000000,                  /*!<  PCF8574 P6 INPUT                                       */
-    PCF8574_P7_MASK          =   0b10000000                   /*!<  PCF8574 P7 INPUT                                       */
-} PCF8574_pin_mask_t;
+    CONF_REG_A_SAMPLE_1          =   0x00,                      /*!<  Number of samples averaged 1 ( default )               */
+    CONF_REG_A_SAMPLE_2          =   0x01,                      /*!<  Number of samples averaged 2                           */
+    CONF_REG_A_SAMPLE_4          =   0x02,                      /*!<  Number of samples averaged 4                           */
+    CONF_REG_A_SAMPLE_8          =   0x03                       /*!<  Number of samples averaged 8                           */
+} HMC5883L_conf_reg_a_samples_t;
 
 
-
-/**
-  * @brief   PIN CONFIGURATION
-  */
+// [ DO2 to DO0 ] Data Output Rate Bits.
 typedef enum
 {
-    PCF8574_P0_INPUT        =   ( 1 << PCF8574_P0 ),           /*!<  PCF8574 P0 INPUT                                       */
-    PCF8574_P0_OUTPUT_HIGH  =   ( 1 << PCF8574_P0 ),           /*!<  PCF8574 P0 OUTPUT HIGH                                 */
-    PCF8574_P0_OUTPUT_LOW   =   ( 0 << PCF8574_P0 ),           /*!<  PCF8574 P0 OUTPUT LOW                                  */
+    CONF_REG_A_DATARATE_0_75_HZ     =   0x00,                   /*!<  Typical Data Output Rate 0.75Hz                         */
+    CONF_REG_A_DATARATE_1_5_HZ      =   0x01,                   /*!<  Typical Data Output Rate 1.5Hz                          */
+    CONF_REG_A_DATARATE_3_HZ        =   0x02,                   /*!<  Typical Data Output Rate 3Hz                            */
+    CONF_REG_A_DATARATE_7_5_HZ      =   0x03,                   /*!<  Typical Data Output Rate 7.5Hz                          */
+    CONF_REG_A_DATARATE_15_HZ       =   0x04,                   /*!<  Typical Data Output Rate 15Hz ( default )               */
+    CONF_REG_A_DATARATE_30_HZ       =   0x05,                   /*!<  Typical Data Output Rate 30Hz                           */
+    CONF_REG_A_DATARATE_75_HZ       =   0x06                    /*!<  Typical Data Output Rate 75Hz                           */
+} HMC5883L_conf_reg_a_dor_t;
 
-    PCF8574_P1_INPUT        =   ( 1 << PCF8574_P1 ),           /*!<  PCF8574 P1 INPUT                                       */
-    PCF8574_P1_OUTPUT_HIGH  =   ( 1 << PCF8574_P1 ),           /*!<  PCF8574 P1 OUTPUT HIGH                                 */
-    PCF8574_P1_OUTPUT_LOW   =   ( 0 << PCF8574_P1 ),           /*!<  PCF8574 P1 OUTPUT LOW                                  */
 
-    PCF8574_P2_INPUT        =   ( 1 << PCF8574_P2 ),           /*!<  PCF8574 P2 INPUT                                       */
-    PCF8574_P2_OUTPUT_HIGH  =   ( 1 << PCF8574_P2 ),           /*!<  PCF8574 P2 OUTPUT HIGH                                 */
-    PCF8574_P2_OUTPUT_LOW   =   ( 0 << PCF8574_P2 ),           /*!<  PCF8574 P2 OUTPUT LOW                                  */
+// [ MS1 to MS0 ] Measurement Configuration Bits.
+typedef enum
+{
+    CONF_REG_A_MODE_NORMAL          =   0x00,                   /*!<  Normal measurement configuration ( default )             */
+    CONF_REG_A_MODE_POSITIVE_BIAS   =   0x01,                   /*!<  Positive bias configuration for X, Y, and Z axes         */
+    CONF_REG_A_MODE_NEGATIVE_BOAS   =   0x02                    /*!<  Negative bias configuration for X, Y and Z axes          */
+} HMC5883L_conf_reg_a_measurement_mode_t;
 
-    PCF8574_P3_INPUT        =   ( 1 << PCF8574_P3 ),           /*!<  PCF8574 P3 INPUT                                       */
-    PCF8574_P3_OUTPUT_HIGH  =   ( 1 << PCF8574_P3 ),           /*!<  PCF8574 P3 OUTPUT HIGH                                 */
-    PCF8574_P3_OUTPUT_LOW   =   ( 0 << PCF8574_P3 ),           /*!<  PCF8574 P3 OUTPUT LOW                                  */
-
-    PCF8574_P4_INPUT        =   ( 1 << PCF8574_P4 ),           /*!<  PCF8574 P4 INPUT                                       */
-    PCF8574_P4_OUTPUT_HIGH  =   ( 1 << PCF8574_P4 ),           /*!<  PCF8574 P4 OUTPUT HIGH                                 */
-    PCF8574_P4_OUTPUT_LOW   =   ( 0 << PCF8574_P4 ),           /*!<  PCF8574 P4 OUTPUT LOW                                  */
-
-    PCF8574_P5_INPUT        =   ( 1 << PCF8574_P5 ),           /*!<  PCF8574 P5 INPUT                                       */
-    PCF8574_P5_OUTPUT_HIGH  =   ( 1 << PCF8574_P5 ),           /*!<  PCF8574 P5 OUTPUT HIGH                                 */
-    PCF8574_P5_OUTPUT_LOW   =   ( 0 << PCF8574_P5 ),           /*!<  PCF8574 P5 OUTPUT LOW                                  */
-
-    PCF8574_P6_INPUT        =   ( 1 << PCF8574_P6 ),           /*!<  PCF8574 P6 INPUT                                       */
-    PCF8574_P6_OUTPUT_HIGH  =   ( 1 << PCF8574_P6 ),           /*!<  PCF8574 P6 OUTPUT HIGH                                 */
-    PCF8574_P6_OUTPUT_LOW   =   ( 0 << PCF8574_P6 ),           /*!<  PCF8574 P6 OUTPUT LOW                                  */
-
-    PCF8574_P7_INPUT        =   ( 1 << PCF8574_P7 ),           /*!<  PCF8574 P7 INPUT                                       */
-    PCF8574_P7_OUTPUT_HIGH  =   ( 1 << PCF8574_P7 ),           /*!<  PCF8574 P7 OUTPUT HIGH                                 */
-    PCF8574_P7_OUTPUT_LOW   =   ( 0 << PCF8574_P7 )            /*!<  PCF8574 P7 OUTPUT LOW                                  */
-} PCF8574_pin_configuration_t;
 
 
 
 /**
-  * @brief   PIN STATUS
+  * @brief   CONFIGURATION REGISTER B
+  */
+// [ GN2 to GN0 ] Gain Configuration Bits. NOTE: The new gain setting is effective from the second measurement and on.
+typedef enum
+{
+    CONF_REG_B_GAIN_0_88_GA         =   0x00,                   /*!<  ± 0.88 Ga Digital Resolution: 0.73                        */
+    CONF_REG_B_GAIN_1_3_GA          =   0x01,                   /*!<  ± 1.3 Ga  Digital Resolution: 0.92 ( default )            */
+    CONF_REG_B_GAIN_1_9_GA          =   0x02,                   /*!<  ± 1.9 Ga  Digital Resolution: 1.22                        */
+    CONF_REG_B_GAIN_2_5_GA          =   0x03,                   /*!<  ± 2.5 Ga  Digital Resolution: 1.52                        */
+    CONF_REG_B_GAIN_4_0_GA          =   0x04,                   /*!<  ± 4.0 Ga  Digital Resolution: 2.27                        */
+    CONF_REG_B_GAIN_4_7_GA          =   0x05,                   /*!<  ± 4.7 Ga  Digital Resolution: 2.56                        */
+    CONF_REG_B_GAIN_5_6_GA          =   0x06,                   /*!<  ± 5.6 Ga  Digital Resolution: 3.03                        */
+    CONF_REG_B_GAIN_8_1_GA          =   0x07                    /*!<  ± 8.1 Ga  Digital Resolution: 4.35                        */
+} HMC5883L_conf_reg_b_gain_t;
+
+
+
+
+/**
+  * @brief   MODE REGISTER
+  */
+// [ HS ] Enable High Speed I2C, 3400kHz
+typedef enum
+{
+    MODE_REG_HIGH_SPEED_I2C_ENABLED     =   0x01,               /*!<  High Speed I2C enabled                                    */
+    MODE_REG_HIGH_SPEED_I2C_DISABLED    =   0x00                /*!<  High Speed I2C disabled                                   */
+} HMC5883L_mode_register_high_speed_t;
+
+
+// [ MD1 to MD0 ] Mode Select Bits
+typedef enum
+{
+    MODE_REG_MODE_CONTINUOUS        =   0x00,                   /*!<  Continuous-Measurement Mode                               */
+    MODE_REG_MODE_SINGLE            =   0x01,                   /*!<  Single-Measurement Mode ( default )                       */
+    MODE_REG_MODE_IDLE              =   0x02                    /*!<  Idle Mode                                                 */
+} HMC5883L_mode_register_operation_mode_t;
+
+
+
+
+/**
+  * @brief   STATUS REGISTER
+  */
+// [ LOCK ] Data output register lock
+typedef enum
+{
+    STATUS_REG_LOCK_ENABLED     =   0x02,                       /*!<  This bit is set                                           */
+    STATUS_REG_LOCK_DISABLED    =   0xFD                        /*!<  This bit is not set                                       */
+} HMC5883L_status_lock_t;
+
+
+// [ RDY ] Ready Bit
+typedef enum
+{
+    STATUS_REG_RDY_ENABLED     =   0x01,                       /*!<  This bit is set                                           */
+    STATUS_REG_RDY_DISABLED    =   0xFE                        /*!<  This bit is not set                                       */
+} HMC5883L_status_ready_t;
+
+
+
+
+/**
+  * @brief   IDENTIFICATION REGISTERS
   */
 typedef enum
 {
-    PCF8574_P0_HIGH  =   ( 1 << PCF8574_P0 ),                  /*!<  PCF8574 P0 STATUS HIGH                                 */
-    PCF8574_P0_LOW   =   ( 0 << PCF8574_P0 ),                  /*!<  PCF8574 P0 STATUS LOW                                  */
-
-    PCF8574_P1_HIGH  =   ( 1 << PCF8574_P1 ),                  /*!<  PCF8574 P1 STATUS HIGH                                 */
-    PCF8574_P1_LOW   =   ( 0 << PCF8574_P1 ),                  /*!<  PCF8574 P1 STATUS LOW                                  */
-
-    PCF8574_P2_HIGH  =   ( 1 << PCF8574_P2 ),                  /*!<  PCF8574 P2 STATUS HIGH                                 */
-    PCF8574_P2_LOW   =   ( 0 << PCF8574_P2 ),                  /*!<  PCF8574 P2 STATUS LOW                                  */
-
-    PCF8574_P3_HIGH  =   ( 1 << PCF8574_P3 ),                  /*!<  PCF8574 P3 STATUS HIGH                                 */
-    PCF8574_P3_LOW   =   ( 0 << PCF8574_P3 ),                  /*!<  PCF8574 P3 STATUS LOW                                  */
-
-    PCF8574_P4_HIGH  =   ( 1 << PCF8574_P4 ),                  /*!<  PCF8574 P4 STATUS HIGH                                 */
-    PCF8574_P4_LOW   =   ( 0 << PCF8574_P4 ),                  /*!<  PCF8574 P4 STATUS LOW                                  */
-
-    PCF8574_P5_HIGH  =   ( 1 << PCF8574_P5 ),                  /*!<  PCF8574 P5 STATUS HIGH                                 */
-    PCF8574_P5_LOW   =   ( 0 << PCF8574_P5 ),                  /*!<  PCF8574 P5 STATUS LOW                                  */
-
-    PCF8574_P6_HIGH  =   ( 1 << PCF8574_P6 ),                  /*!<  PCF8574 P6 STATUS HIGH                                 */
-    PCF8574_P6_LOW   =   ( 0 << PCF8574_P6 ),                  /*!<  PCF8574 P6 STATUS LOW                                  */
-
-    PCF8574_P7_HIGH  =   ( 1 << PCF8574_P7 ),                  /*!<  PCF8574 P7 STATUS HIGH                                 */
-    PCF8574_P7_LOW   =   ( 0 << PCF8574_P7 )                   /*!<  PCF8574 P7 STATUS LOW                                  */
-} PCF8574_pin_status_t;
+    ID_REGISTER_A       =       0x48,                       /*!<  Identification Register A: 'H'                            */
+    ID_REGISTER_B       =       0x34,                       /*!<  Identification Register B: '4'                            */
+    ID_REGISTER_C       =       0x33                        /*!<  Identification Register C: '3'                            */
+} HMC5883L_identification_registers_t;
 
 
 
 
 
-#ifndef PCF8574_VECTOR_STRUCT_H
-#define PCF8574_VECTOR_STRUCT_H
+
+#ifndef HMC5883L_VECTOR_STRUCT_H
+#define HMC5883L_VECTOR_STRUCT_H
 typedef struct
 {
-    uint8_t data;
-} PCF8574_vector_data_t;
+    uint16_t DataOutput_X;
+    uint16_t DataOutput_Y;
+    uint16_t DataOutput_Z;
+} HMC5883L_vector_data_t;
 #endif
 
 
@@ -170,9 +185,9 @@ typedef struct
   */
 typedef enum
 {
-    PCF8574_SUCCESS     =       0,
-    PCF8574_FAILURE     =       1
-} PCF8574_status_t;
+    HMC5883L_SUCCESS     =       0,
+    HMC5883L_FAILURE     =       1
+} HMC5883L_status_t;
 
 
 
@@ -180,5 +195,7 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-PCF8574_status_t  PCF8574_SetPins   ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_vector_data_t  myConfDATA );
-PCF8574_status_t  PCF8574_ReadPins  ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_vector_data_t* myReadDATA );
+HMC5883L_status_t  HMC5883L_Conf      ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_samples_t  mySamples, HMC5883L_conf_reg_a_dor_t myDataRate,
+                                        HMC5883L_conf_reg_a_measurement_mode_t myMeasurementMode, HMC5883L_conf_reg_b_gain_t myGain, HMC5883L_mode_register_high_speed_t myI2CMode,
+                                        HMC5883L_mode_register_operation_mode_t myOperationMode );
+
