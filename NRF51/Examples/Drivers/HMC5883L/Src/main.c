@@ -41,7 +41,12 @@ int main( void )
 
 
     aux      =   HMC5883L_Conf ( NRF_TWI0, HMC5883L_ADDRESS, CONF_REG_A_SAMPLE_1, CONF_REG_A_DATARATE_15_HZ, CONF_REG_A_MODE_NORMAL,
-                                 CONF_REG_B_GAIN_1_3_GA, MODE_REG_HIGH_SPEED_I2C_DISABLED, MODE_REG_MODE_SINGLE );
+                                 CONF_REG_B_GAIN_1_3_GA, MODE_REG_HIGH_SPEED_I2C_DISABLED, MODE_REG_MODE_CONTINUOUS );
+
+
+    aux  =   HMC5883L_GetIdentificationRegister ( NRF_TWI0, HMC5883L_ADDRESS, HMC5883L_IDENTIFICATION_REGISTER_A, &myData );
+    aux  =   HMC5883L_GetIdentificationRegister ( NRF_TWI0, HMC5883L_ADDRESS, HMC5883L_IDENTIFICATION_REGISTER_B, &myData );
+    aux  =   HMC5883L_GetIdentificationRegister ( NRF_TWI0, HMC5883L_ADDRESS, HMC5883L_IDENTIFICATION_REGISTER_C, &myData );
 
 
 
@@ -53,24 +58,36 @@ int main( void )
         NRF_POWER->TASKS_LOWPWR = 1;                // Sub power mode: Low power.
 
         // Enter System ON sleep mode
-    	__WFE();
-    	// Make sure any pending events are cleared
-    	__SEV();
-    	__WFE();
+        __WFE();
+        // Make sure any pending events are cleared
+        __SEV();
+        __WFE();
 
 
 
-    	if ( mySTATE == 1 )
+        if ( mySTATE == 1 )
         {
-            aux  =   HMC5883L_GetStatus ( NRF_TWI0, HMC5883L_ADDRESS, &myData );
+            //aux  =   HMC5883L_SetMode ( NRF_TWI0, HMC5883L_ADDRESS, MODE_REG_MODE_SINGLE );
 
-            if ( myData.Status == STATUS_REG_RDY_ENABLED )
+            do
+            {
+                aux  =   HMC5883L_GetStatus ( NRF_TWI0, HMC5883L_ADDRESS, &myData );
+            }
+            while ( ( myData.Status & STATUS_REG_RDY_MASK )  != STATUS_REG_RDY_ENABLED );
+
+
+            aux  =   HMC5883L_GetRawDataOutput ( NRF_TWI0, HMC5883L_ADDRESS, &myData );
+            __NOP();
+
+            /*
+            if ( ( myData.Status & STATUS_REG_RDY_MASK )  == STATUS_REG_RDY_ENABLED )
             {
                 aux  =   HMC5883L_GetRawDataOutput ( NRF_TWI0, HMC5883L_ADDRESS, &myData );
+                __NOP();
             }
 
-
+            */
         }
-        //__NOP();
+        __NOP();
     }
 }

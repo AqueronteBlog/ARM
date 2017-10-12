@@ -28,5 +28,4 @@
 
 /* VARIABLES */
 uint32_t mySTATE;                       /*!<   It indicates the next action to be performed                                 */
-uint32_t myPCF8574INT;                  /*!<   It indicates when an interrupt happens                                       */
 

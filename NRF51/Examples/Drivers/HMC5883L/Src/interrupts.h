@@ -18,9 +18,7 @@
 
 /* INTERRUPT PRTOTYPES */
 void TIMER0_IRQHandler ( void );
-void GPIOTE_IRQHandler ( void );
 
 
 /* VARIABLES */
 extern uint32_t  mySTATE;
-extern uint32_t  myPCF8574INT;
