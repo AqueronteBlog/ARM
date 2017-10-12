@@ -152,11 +152,11 @@ HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance
         break;
 
     case HMC5883L_IDENTIFICATION_REGISTER_B:
-        myID->IdentificationRegisterA    =   cmd;
+        myID->IdentificationRegisterB    =   cmd;
         break;
 
     case HMC5883L_IDENTIFICATION_REGISTER_C:
-        myID->IdentificationRegisterA    =   cmd;
+        myID->IdentificationRegisterC    =   cmd;
         break;
 
     default:
@@ -196,12 +196,12 @@ HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance
  */
 HMC5883L_status_t  HMC5883L_GetRawDataOutput ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myData )
 {
-    uint8_t     cmd[]  =   { HMC5883L_DATA_OUTPUT_X_MSB, 0, 0, 0, 0, 0 };
+    uint8_t     cmd[]  =   { HMC5883L_DATA_OUTPUT_X_MSB, 0, 0, 0, 0, 0 };       // HMC5883L_DATA_OUTPUT_X_MSB
     uint32_t    aux    =   0;
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_STOP_BIT );
 
     // Read all data
     aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[0], 6 );

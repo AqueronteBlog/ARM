@@ -143,16 +143,18 @@ typedef enum
 // [ LOCK ] Data output register lock
 typedef enum
 {
+    STATUS_REG_LOCK_MASK        =   0x02,                       /*!<  Mask                                                      */
     STATUS_REG_LOCK_ENABLED     =   ( 0x01 << 1 ),              /*!<  This bit is set                                           */
-    STATUS_REG_LOCK_DISABLED    =   0xFD                        /*!<  This bit is not set                                       */
+    STATUS_REG_LOCK_DISABLED    =   ( 0x00 << 1 )               /*!<  This bit is not set                                       */
 } HMC5883L_status_lock_t;
 
 
 // [ RDY ] Ready Bit
 typedef enum
 {
+    STATUS_REG_RDY_MASK        =   0x01,                       /*!<  Mask                                                      */
     STATUS_REG_RDY_ENABLED     =   0x01,                       /*!<  This bit is set                                           */
-    STATUS_REG_RDY_DISABLED    =   0xFE                        /*!<  This bit is not set                                       */
+    STATUS_REG_RDY_DISABLED    =   0x00                        /*!<  This bit is not set                                       */
 } HMC5883L_status_ready_t;
 
 
