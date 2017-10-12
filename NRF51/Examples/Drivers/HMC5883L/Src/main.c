@@ -29,23 +29,19 @@ int main( void )
     HMC5883L_status_t        aux;
     HMC5883L_vector_data_t   myData;
 
-    /*
+
     conf_GPIO   ();
     conf_TWI0   ();
     conf_TIMER0 ();
-    conf_GPIOTE ();
 
 
 
-    mySTATE       =   0;                            // Reset the variable
-    myHMC5883LINT  =   0;                            // Reset the variable
+    mySTATE  =   0;                            // Reset the variable
 
 
-    // Configure HMC5883L: P[0-6] OUTPUTs, P7 INPUT
-    myData.data   =   ( HMC5883L_P0_OUTPUT_LOW | HMC5883L_P1_OUTPUT_LOW | HMC5883L_P2_OUTPUT_LOW | HMC5883L_P3_OUTPUT_LOW |
-                        HMC5883L_P4_OUTPUT_LOW | HMC5883L_P5_OUTPUT_LOW | HMC5883L_P6_OUTPUT_LOW | HMC5883L_P7_INPUT      );
 
-    aux           =    HMC5883L_SetPins ( NRF_TWI0, HMC5883L_ADDRESS_0, myData );
+    aux      =   HMC5883L_Conf ( NRF_TWI0, HMC5883L_ADDRESS, CONF_REG_A_SAMPLE_1, CONF_REG_A_DATARATE_15_HZ, CONF_REG_A_MODE_NORMAL,
+                                 CONF_REG_B_GAIN_1_3_GA, MODE_REG_HIGH_SPEED_I2C_DISABLED, MODE_REG_MODE_SINGLE );
 
 
 
@@ -63,37 +59,18 @@ int main( void )
     	__WFE();
 
 
-        // Change the state of the HMC5883L pins: P[O-6]
-    	if ( mySTATE == 0 )
+
+    	if ( mySTATE == 1 )
         {
-            myData.data   =   ( HMC5883L_P0_OUTPUT_LOW | HMC5883L_P1_OUTPUT_HIGH | HMC5883L_P2_OUTPUT_LOW | HMC5883L_P3_OUTPUT_HIGH |
-                                HMC5883L_P4_OUTPUT_LOW | HMC5883L_P5_OUTPUT_HIGH | HMC5883L_P6_OUTPUT_LOW );
+            aux  =   HMC5883L_GetStatus ( NRF_TWI0, HMC5883L_ADDRESS, &myData );
 
-            aux           =   HMC5883L_SetPins  ( NRF_TWI0, HMC5883L_ADDRESS_0, myData );
+            if ( myData.Status == STATUS_REG_RDY_ENABLED )
+            {
+                aux  =   HMC5883L_GetRawDataOutput ( NRF_TWI0, HMC5883L_ADDRESS, &myData );
+            }
+
+
         }
-    	else
-        {
-    	     myData.data  =   ( HMC5883L_P0_OUTPUT_HIGH | HMC5883L_P1_OUTPUT_LOW | HMC5883L_P2_OUTPUT_HIGH | HMC5883L_P3_OUTPUT_LOW |
-                                HMC5883L_P4_OUTPUT_HIGH | HMC5883L_P5_OUTPUT_LOW | HMC5883L_P6_OUTPUT_HIGH );
-
-            aux           =   HMC5883L_SetPins  ( NRF_TWI0, HMC5883L_ADDRESS_0, myData );
-        }
-
-        if ( myHMC5883LINT == 1 )
-        {
-        // Status of P7 changed
-            aux           =   HMC5883L_ReadPins ( NRF_TWI0, HMC5883L_ADDRESS_0, &myData );
-
-            if ( ( myData.data & HMC5883L_P7_MASK ) == HMC5883L_P7_MASK )
-                NRF_GPIO->OUTCLR    =   ( 1UL << LED1 );                    // Turn the LED 1 on when P7 is HIGH
-            else
-                NRF_GPIO->OUTSET    =   ( 1UL << LED1 );                    // Turn the LED 1 off when P7 is LOW
-
-
-            myHMC5883LINT  =   0;                                            // Reset the variable
-        }
-
         //__NOP();
     }
-    */
 }
