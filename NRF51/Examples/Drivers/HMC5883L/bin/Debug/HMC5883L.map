@@ -394,15 +394,31 @@ Discarded input sections
  .text          0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
  .data          0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
  .bss           0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
- .text.HMC5883L_SetPins
-                0x00000000       0x48 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
- .text.HMC5883L_ReadPins
-                0x00000000       0x40 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
- .debug_info    0x00000000      0x52e obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
- .debug_abbrev  0x00000000      0x121 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .text.HMC5883L_Conf
+                0x00000000      0x120 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .text.HMC5883L_GetIdentificationRegister
+                0x00000000       0xa8 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .text.HMC5883L_GetDataOutput
+                0x00000000       0xe0 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .text.HMC5883L_GetStatus
+                0x00000000       0x64 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .text.HMC5883L_ReadRegister
+                0x00000000       0x74 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .text.HMC5883L_SetNumSample
+                0x00000000       0xb8 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .text.HMC5883L_SetDataRate
+                0x00000000       0xb8 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .text.HMC5883L_SetMeasurementConf
+                0x00000000       0xb8 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .text.HMC5883L_SetGain
+                0x00000000       0xb8 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .text.HMC5883L_SetMode
+                0x00000000       0xb8 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .debug_info    0x00000000      0xae6 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .debug_abbrev  0x00000000      0x175 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
  .debug_aranges
-                0x00000000       0x28 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
- .debug_ranges  0x00000000       0x18 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+                0x00000000       0x68 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .debug_ranges  0x00000000       0x58 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
  .debug_macro   0x00000000       0xed obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
  .debug_macro   0x00000000      0x82c obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
  .debug_macro   0x00000000       0x22 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
@@ -420,10 +436,10 @@ Discarded input sections
  .debug_macro   0x00000000      0x976 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
  .debug_macro   0x00000000       0x10 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
  .debug_macro   0x00000000       0x1c obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
- .debug_line    0x00000000      0x338 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
- .debug_str     0x00000000    0x2f200 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .debug_line    0x00000000      0x44c obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .debug_str     0x00000000    0x2f901 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
  .comment       0x00000000       0x6f obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
- .debug_frame   0x00000000       0x50 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
+ .debug_frame   0x00000000      0x150 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
  .ARM.attributes
                 0x00000000       0x31 obj\debug\~#\~#\~#\~#\drivers\hmc5883l\hmc5883l.o
  .text          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
@@ -710,13 +726,13 @@ OUTPUT(bin\Debug\HMC5883L.elf elf32-littlearm)
  .comment       0x0000006e       0x6f obj\debug\src\main.o
  .comment       0x0000006e       0x6f obj\debug\src\system_nrf51.o
 
-.debug_info     0x00000000     0x2fe6
+.debug_info     0x00000000     0x3016
  .debug_info    0x00000000       0x5e obj\debug\s130.o
  .debug_info    0x0000005e      0xa8a obj\debug\src\functions.o
  .debug_info    0x00000ae8      0x430 obj\debug\src\interrupts.o
- .debug_info    0x00000f18     0x1e78 obj\debug\src\main.o
- .debug_info    0x00002d90      0x1ec obj\debug\src\system_nrf51.o
- .debug_info    0x00002f7c       0x6a obj\debug\startup_nrf51.o
+ .debug_info    0x00000f18     0x1ea8 obj\debug\src\main.o
+ .debug_info    0x00002dc0      0x1ec obj\debug\src\system_nrf51.o
+ .debug_info    0x00002fac       0x6a obj\debug\startup_nrf51.o
 
 .debug_abbrev   0x00000000      0x5ab
  .debug_abbrev  0x00000000       0x48 obj\debug\s130.o
@@ -769,16 +785,16 @@ OUTPUT(bin\Debug\HMC5883L.elf elf32-littlearm)
  .debug_line    0x00000efc      0x34e obj\debug\src\system_nrf51.o
  .debug_line    0x0000124a       0x6e obj\debug\startup_nrf51.o
 
-.debug_str      0x00000000    0x348ca
+.debug_str      0x00000000    0x34919
  .debug_str     0x00000000     0x23ce obj\debug\s130.o
                                0x23dc (size before relaxing)
  .debug_str     0x000023ce    0x2ce98 obj\debug\src\functions.o
                               0x2f36f (size before relaxing)
  .debug_str     0x0002f266       0x35 obj\debug\src\interrupts.o
                               0x2f049 (size before relaxing)
- .debug_str     0x0002f29b     0x553b obj\debug\src\main.o
-                              0x34508 (size before relaxing)
- .debug_str     0x000347d6       0xf4 obj\debug\src\system_nrf51.o
+ .debug_str     0x0002f29b     0x558a obj\debug\src\main.o
+                              0x34557 (size before relaxing)
+ .debug_str     0x00034825       0xf4 obj\debug\src\system_nrf51.o
                               0x2efe9 (size before relaxing)
 
 .debug_ranges   0x00000000      0x260
