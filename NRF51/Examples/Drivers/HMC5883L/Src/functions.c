@@ -63,23 +63,77 @@ void conf_GPIO  ( void )
 }
 
 
+
 /**
- * @brief       void conf_TIMER0  ( void )
- * @details     One channels will create an interrupt about every 0.5s.
+ * @brief       void conf_Uart  ( void )
+ * @details     Uart0 with the following features:
  *
- *              Timer0:
- *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
- *                  * 32-bits mode.
- *                  * Interrupt ENABLE.
- *
- *                 --- Channel 0:
- *                  * Overflow:             ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (1MHz)^(-1) ) ~ 0.5s.
+ *                  * Baud Rate:    115200
+ *                  * No Parity.
+ *                  * No Flow Control.
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        2/August/2017
- * @version     2/August/2017   The ORIGIN
+ * @date        20/June/2017
+ * @version     20/June/2017   The ORIGIN
+ * @pre         Only TX pin will be configured.
+ * @warning     NaN.
+ */
+void conf_UART  ( void )
+{
+    /* GPIO according to Table 273: GPIO configuration ( Reference Manual p.151 ) */
+    NRF_GPIO->OUTSET             =   ( 1 << UART0_TX );
+    // NRF_GPIO->DIRCLR             =   ( 1 << UART0_RX );
+    NRF_GPIO->DIRSET             =   ( 1 << UART0_TX );
+
+    /* Stop UART0 */
+    NRF_UART0->TASKS_STOPRX      =   1;
+    NRF_UART0->TASKS_STOPTX      =   1;
+
+    NRF_UART0->ENABLE            =   UART_ENABLE_ENABLE_Disabled << UART_ENABLE_ENABLE_Pos;
+
+    /* Configure the pins */
+    NRF_UART0->PSELRTS           =   0xFFFFFFFF;
+    NRF_UART0->PSELCTS           =   0xFFFFFFFF;
+    NRF_UART0->PSELTXD           =   UART0_TX;
+    NRF_UART0->PSELRXD           =   0xFFFFFFFF;
+
+    /* BaudRate & Configuration */
+    NRF_UART0->BAUDRATE          =   UART_BAUDRATE_BAUDRATE_Baud115200 << UART_BAUDRATE_BAUDRATE_Pos;
+    NRF_UART0->CONFIG            =   ( UART_CONFIG_HWFC_Disabled   << UART_CONFIG_HWFC_Pos   ) |
+                                     ( UART_CONFIG_PARITY_Excluded << UART_CONFIG_PARITY_Pos );
+    /* Configure Interrupts */
+    NRF_UART0->INTENSET          =   ( UART_INTENSET_TXDRDY_Enabled << UART_INTENSET_TXDRDY_Pos );
+
+    NVIC_ClearPendingIRQ    ( UART0_IRQn );
+    NVIC_SetPriority        ( UART0_IRQn, 0 );                                                              // Maximum priority
+    NVIC_EnableIRQ          ( UART0_IRQn );                                                                 // Enable Interrupt for the UART0 in the core.
+
+    /* Enable UART0 */
+    NRF_UART0->ENABLE            =   UART_ENABLE_ENABLE_Enabled << UART_ENABLE_ENABLE_Pos;                  // UART0 ENABLED
+    // NRF_UART0->TASKS_STARTTX     =   1;
+    // NRF_UART0->TASKS_STARTRX     =   1;                                                                  // Enable reception
+}
+
+
+/**
+ * @brief       void conf_TIMER0  ( void )
+ * @details     One channels will create an interrupt about every 1s.
+ *
+ *              Timer0:
+ *                  * Prescaler:            5   [ f_Timer0 = ( 16MHz / 2^5 ) = 500kHz ( PCLK1M ) ]
+ *                  * 32-bits mode.
+ *                  * Interrupt ENABLE.
+ *
+ *                 --- Channel 0:
+ *                  * Overflow:             ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500kHz)^(-1) ) ~ 1.
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        13/October/2017
+ * @version     13/October/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
@@ -91,7 +145,7 @@ void conf_TIMER0  ( void )
     NRF_TIMER0->BITMODE     =   TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos;                   // 32 bit mode.
     NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
-    NRF_TIMER0->CC[0]       =   500000;                                                                    // ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (1MHz)^(-1) ) ~ 0.5s
+    NRF_TIMER0->CC[0]       =   500000;                                                                     // ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500kHz)^(-1) ) ~ 1s
 
     NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos );
 
