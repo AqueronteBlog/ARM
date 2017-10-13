@@ -40,7 +40,8 @@
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     12/October/2017   The ORIGIN
+ * @version     13/October/2017   Unnecessary code was removed.
+ *              12/October/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
@@ -174,12 +175,12 @@ HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance
 /**
  * @brief       HMC5883L_GetRawDataOutput ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_vector_data_t*  )
  *
- * @details     It gets X, Y and Z data output.
+ * @details     It gets X, Y and Z raw data output.
  *
  * @param[in]    myinstance:        Peripheral's Instance.
  * @param[in]    myHMC5883LAddr:    I2C Device address.
  *
- * @param[out]   myData:            X, Y and Z data output.
+ * @param[out]   myData:            X, Y and Z raw data output.
  *
  *
  * @return       Status of HMC5883L_GetRawDataOutput.
@@ -187,13 +188,14 @@ HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     12/October/2017   The ORIGIN
+ * @version     13/October/2017   The output must be SIGNED integer/float.
+ *              12/October/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
 HMC5883L_status_t  HMC5883L_GetRawDataOutput ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myData )
 {
-    uint8_t      cmd[]  =   { HMC5883L_DATA_OUTPUT_X_MSB, 0, 0, 0, 0, 0 };       // HMC5883L_DATA_OUTPUT_X_MSB
+    uint8_t     cmd[]  =   { HMC5883L_DATA_OUTPUT_X_MSB, 0, 0, 0, 0, 0 };
     uint32_t    aux    =   0;
 
 
@@ -208,6 +210,114 @@ HMC5883L_status_t  HMC5883L_GetRawDataOutput ( NRF_TWI_Type* myinstance, HMC5883
     myData->DataOutput_X     =   ( ( int16_t )( cmd[0] << 8 ) | ( int16_t )cmd[1] );
     myData->DataOutput_Y     =   ( ( int16_t )( cmd[2] << 8 ) | ( int16_t )cmd[3] );
     myData->DataOutput_Z     =   ( ( int16_t )( cmd[4] << 8 ) | ( int16_t )cmd[5] );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   HMC5883L_SUCCESS;
+    else
+        return   HMC5883L_FAILURE;
+}
+
+
+
+/**
+ * @brief       HMC5883L_GetCompensatedDataOutput ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_vector_data_t* , float , float , float )
+ *
+ * @details     It gets X, Y and Z compensated data output.
+ *
+ * @param[in]    myinstance:        Peripheral's Instance.
+ * @param[in]    myHMC5883LAddr:    I2C Device address.
+ * @param[in]    myXOffset:         X-axis Offset.
+ * @param[in]    myYOffset:         Y-axis Offset.
+ * @param[in]    myZOffset:         Z-axis Offset.
+ *
+ * @param[out]   myData:            X, Y and Z compensated data output.
+ *
+ *
+ * @return       Status of HMC5883L_GetCompensatedDataOutput.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        13/October/2017
+ * @version     13/October/2017   The ORIGIN
+ * @pre         The offset MUST be calculated previously, this driver does NOT support that functionality yet.
+ * @warning     NaN.
+ */
+HMC5883L_status_t  HMC5883L_GetCompensatedDataOutput ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myData, float myXOffset, float myYOffset, float myZOffset )
+{
+    uint8_t     cmd[]    =   { 0, 0, 0, 0, 0, 0 };
+    uint32_t    aux      =   0;
+    float       myGain   =   0.0;
+
+
+
+    // GET THE CURRENT GAIN
+    cmd[0]   =   HMC5883L_CONFIGURATION_REGISTER_B;
+
+    // Write the command
+    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
+
+    // Read the register
+    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[0], 1 );
+
+
+    // Check which gain is in use
+    switch ( ( cmd[0] & CONF_REG_B_GAIN_MASK ) )
+    {
+    case CONF_REG_B_GAIN_0_88_GA:
+        myGain   =   0.73;
+        break;
+
+    case CONF_REG_B_GAIN_1_3_GA:
+        myGain   =   0.92;
+        break;
+
+    case CONF_REG_B_GAIN_1_9_GA:
+        myGain   =   1.22;
+        break;
+
+    case CONF_REG_B_GAIN_2_5_GA:
+        myGain   =   1.52;
+        break;
+
+    case CONF_REG_B_GAIN_4_0_GA:
+        myGain   =   2.27;
+        break;
+
+    case CONF_REG_B_GAIN_4_7_GA:
+        myGain   =   2.56;
+        break;
+
+    case CONF_REG_B_GAIN_5_6_GA:
+        myGain   =   3.03;
+        break;
+
+    case CONF_REG_B_GAIN_8_1_GA:
+        myGain   =   4.35;
+        break;
+
+    default:
+        return   HMC5883L_FAILURE;
+        break;
+    }
+
+
+    // READ THE ACTUAL DATA OUTPUT
+    cmd[0]   =   HMC5883L_DATA_OUTPUT_X_MSB;
+
+    // Write the command
+    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
+
+    // Read all data
+    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[0], 6 );
+
+
+    // Parse the data
+    myData->DataOutput_X     =   ( ( ( int16_t )( cmd[0] << 8 ) | ( int16_t )cmd[1] ) * myGain ) - myXOffset;
+    myData->DataOutput_Y     =   ( ( ( int16_t )( cmd[2] << 8 ) | ( int16_t )cmd[3] ) * myGain ) - myYOffset;
+    myData->DataOutput_Z     =   ( ( ( int16_t )( cmd[4] << 8 ) | ( int16_t )cmd[5] ) * myGain ) - myZOffset;
 
 
 
@@ -329,7 +439,9 @@ HMC5883L_status_t  HMC5883L_ReadRegister ( NRF_TWI_Type* myinstance, HMC5883L_ad
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     12/October/2017   The ORIGIN
+ * @version     13/October/2017   Error fixed, it now transmits two bytes when it checks if the
+ *                                operation mode is different.
+ *              12/October/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
@@ -390,7 +502,9 @@ HMC5883L_status_t  HMC5883L_SetNumSample ( NRF_TWI_Type* myinstance, HMC5883L_ad
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     12/October/2017   The ORIGIN
+ * @version     13/October/2017   Error fixed, it now transmits two bytes when it checks if the
+ *                                operation mode is different.
+ *              12/October/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
@@ -451,7 +565,9 @@ HMC5883L_status_t  HMC5883L_SetDataRate ( NRF_TWI_Type* myinstance, HMC5883L_add
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     12/October/2017   The ORIGIN
+ * @version     13/October/2017   Error fixed, it now transmits two bytes when it checks if the
+ *                                operation mode is different.
+ *              12/October/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
@@ -512,7 +628,9 @@ HMC5883L_status_t  HMC5883L_SetMeasurementConf ( NRF_TWI_Type* myinstance, HMC58
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     12/October/2017   The ORIGIN
+ * @version     13/October/2017   Error fixed, it now transmits two bytes when it checks if the
+ *                                operation mode is different.
+ *              12/October/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
@@ -573,7 +691,9 @@ HMC5883L_status_t  HMC5883L_SetGain ( NRF_TWI_Type* myinstance, HMC5883L_address
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     12/October/2017   The ORIGIN
+ * @version     13/October/2017   Error fixed, it now transmits two bytes when it checks if the
+ *                                operation mode is different.
+ *              12/October/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
