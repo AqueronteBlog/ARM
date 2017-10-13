@@ -172,7 +172,7 @@
 1507886719 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.h
 	"variables.h"
 
-1507898812 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\main.c
+1507900636 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\main.c
 	"nrf.h"
 	"ble.h"
 	"variables.h"
@@ -229,7 +229,7 @@
 	"ble_gatt.h"
 	"nrf_svc.h"
 
-1507895583 e:\vsprojects\arm\drivers\hmc5883l\hmc5883l.h
+1507900536 e:\vsprojects\arm\drivers\hmc5883l\hmc5883l.h
 	"stdint.h"
 	"stdbool.h"
 	"i2c.h"
@@ -242,6 +242,6 @@
 
 1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\startup_nrf51.s
 
-1507898669 source:e:\vsprojects\arm\drivers\hmc5883l\hmc5883l.c
+1507900536 source:e:\vsprojects\arm\drivers\hmc5883l\hmc5883l.c
 	"HMC5883L.h"
 
