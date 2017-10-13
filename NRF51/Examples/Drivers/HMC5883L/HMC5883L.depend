@@ -172,7 +172,7 @@
 1507902299 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.h
 	"variables.h"
 
-1507904314 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\main.c
+1507904355 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\main.c
 	"nrf.h"
 	"ble.h"
 	"variables.h"
