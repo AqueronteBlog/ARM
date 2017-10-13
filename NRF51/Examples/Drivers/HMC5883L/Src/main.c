@@ -24,6 +24,12 @@
 #include "HMC5883L.h"
 
 
+#define    X_Offset    0
+#define    Y_Offset    0
+#define    Z_Offset    0
+
+
+
 int main( void )
 {
     HMC5883L_status_t        aux;
@@ -67,17 +73,18 @@ int main( void )
 
         if ( mySTATE == 1 )
         {
+            // Wait until a new data arrives
+            // NOTE: Add a counter, if something goes wrong, the uC may get stuck here!
             do
             {
                 aux  =   HMC5883L_GetStatus ( NRF_TWI0, HMC5883L_ADDRESS, &myData );
             }
             while ( ( myData.Status & STATUS_REG_RDY_MASK )  != STATUS_REG_RDY_ENABLED );
 
-
-            aux  =   HMC5883L_GetRawDataOutput ( NRF_TWI0, HMC5883L_ADDRESS, &myData );
-
-            aux  =   HMC5883L_SetMode ( NRF_TWI0, HMC5883L_ADDRESS, MODE_REG_MODE_SINGLE );
+            // Get the new measurement
+            aux  =   HMC5883L_GetCompensatedDataOutput  ( NRF_TWI0, HMC5883L_ADDRESS, &myData, X_Offset, Y_Offset, Z_Offset );
+            aux  =   HMC5883L_SetMode                   ( NRF_TWI0, HMC5883L_ADDRESS, MODE_REG_MODE_SINGLE );
         }
-        __NOP();
+        //__NOP();
     }
 }
