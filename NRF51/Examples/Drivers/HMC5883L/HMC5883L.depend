@@ -151,28 +151,28 @@
 
 1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\s130.c
 
-1507886719 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\functions.c
+1507904314 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\functions.c
 	"functions.h"
 
-1507886719 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\functions.h
+1507902299 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\functions.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"variables.h"
 
-1507886719 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\variables.h
+1507902299 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\variables.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"board.h"
 
-1504776162 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\board.h
+1507902299 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\board.h
 
-1507886719 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.c
+1507903492 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.c
 	"interrupts.h"
 
-1507886719 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.h
+1507902299 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.h
 	"variables.h"
 
-1507900636 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\main.c
+1507904314 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\main.c
 	"nrf.h"
 	"ble.h"
 	"variables.h"
@@ -242,6 +242,6 @@
 
 1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\startup_nrf51.s
 
-1507900536 source:e:\vsprojects\arm\drivers\hmc5883l\hmc5883l.c
+1507900938 source:e:\vsprojects\arm\drivers\hmc5883l\hmc5883l.c
 	"HMC5883L.h"
 
