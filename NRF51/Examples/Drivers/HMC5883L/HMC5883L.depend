@@ -122,3 +122,126 @@
 1507842077 source:d:\workspace\arm\drivers\hmc5883l\hmc5883l.c
 	"HMC5883L.h"
 
+1504799590 source:e:\vsprojects\arm\nrf51\examples\basics\i2c\i2c.c
+	"i2c.h"
+
+1499765261 e:\vsprojects\arm\nrf51\examples\basics\i2c\i2c.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\inc\nrf.h
+	"nrf51.h"
+	"nrf51_bitfields.h"
+	"nrf51_deprecated.h"
+	"compiler_abstraction.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\inc\nrf51.h
+	<core_cm0.h>
+	"system_nrf51.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\inc\system_nrf51.h
+	<stdint.h>
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\inc\nrf51_bitfields.h
+	<core_cm0.h>
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\inc\nrf51_deprecated.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\inc\compiler_abstraction.h
+
+1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\s130.c
+
+1507886719 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\functions.c
+	"functions.h"
+
+1507886719 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\functions.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"variables.h"
+
+1507886719 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\variables.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"board.h"
+
+1504776162 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\board.h
+
+1507886719 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.c
+	"interrupts.h"
+
+1507886719 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.h
+	"variables.h"
+
+1507898812 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\main.c
+	"nrf.h"
+	"ble.h"
+	"variables.h"
+	"functions.h"
+	"HMC5883L.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\softdevice\include\ble.h
+	"ble_ranges.h"
+	"ble_types.h"
+	"ble_gap.h"
+	"ble_l2cap.h"
+	"ble_gatt.h"
+	"ble_gattc.h"
+	"ble_gatts.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\softdevice\include\ble_ranges.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\softdevice\include\ble_types.h
+	<stdint.h>
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\softdevice\include\ble_gap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\softdevice\include\nrf_svc.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\softdevice\include\ble_l2cap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_err.h"
+	"nrf_svc.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\softdevice\include\ble_err.h
+	"nrf_error.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\softdevice\include\nrf_error.h
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\softdevice\include\ble_gatt.h
+	"ble_types.h"
+	"ble_ranges.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\softdevice\include\ble_gattc.h
+	"ble_gatt.h"
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1503409398 e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\softdevice\include\ble_gatts.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_l2cap.h"
+	"ble_gap.h"
+	"ble_gatt.h"
+	"nrf_svc.h"
+
+1507895583 e:\vsprojects\arm\drivers\hmc5883l\hmc5883l.h
+	"stdint.h"
+	"stdbool.h"
+	"i2c.h"
+
+1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\src\system_nrf51.c
+	<stdint.h>
+	<stdbool.h>
+	"nrf.h"
+	"system_nrf51.h"
+
+1503409398 source:e:\vsprojects\arm\nrf51\examples\drivers\hmc5883l\startup_nrf51.s
+
+1507898669 source:e:\vsprojects\arm\drivers\hmc5883l\hmc5883l.c
+	"HMC5883L.h"
+
