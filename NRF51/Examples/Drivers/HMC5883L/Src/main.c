@@ -1,6 +1,8 @@
 /**
  * @brief       main.c
- * @details     [todo]
+ * @details     This example shows how to work with the external HMC5883L device,
+ *              a 3-Axis Digital Compass IC ( Magnetometer ). It collects a data every
+ *              ~ 1s and transmits them through the UART.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
@@ -32,12 +34,15 @@
 
 int main( void )
 {
+    uint8_t  myTX_buff[12]   =      { 0 };
+
     HMC5883L_status_t        aux;
     HMC5883L_vector_data_t   myData;
 
 
     conf_GPIO   ();
     conf_TWI0   ();
+    conf_UART   ();
     conf_TIMER0 ();
 
 
@@ -58,6 +63,7 @@ int main( void )
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
+
     while( 1 )
     {
         //NRF_POWER->SYSTEMOFF = 1;
@@ -73,6 +79,11 @@ int main( void )
 
         if ( mySTATE == 1 )
         {
+            NRF_GPIO->OUTCLR        =   ( 1UL << LED1 );                                // Turn the LED1 on
+
+            NVIC_DisableIRQ ( TIMER0_IRQn );                                            // Timer Interrupt DISABLED
+
+
             // Wait until a new data arrives
             // NOTE: Add a counter, if something goes wrong, the uC may get stuck here!
             do
@@ -84,6 +95,44 @@ int main( void )
             // Get the new measurement
             aux  =   HMC5883L_GetCompensatedDataOutput  ( NRF_TWI0, HMC5883L_ADDRESS, &myData, X_Offset, Y_Offset, Z_Offset );
             aux  =   HMC5883L_SetMode                   ( NRF_TWI0, HMC5883L_ADDRESS, MODE_REG_MODE_SINGLE );
+
+            // Magnetometer X-axis
+            myTX_buff[0]                 =   ( ( uint32_t )myData.DataOutput_X & 0xFF );            // LSB MAG_X
+            myTX_buff[1]                 =   ( ( uint32_t )myData.DataOutput_X >> 8 )  & 0xFF;
+            myTX_buff[2]                 =   ( ( uint32_t )myData.DataOutput_X >> 16 ) & 0xFF;
+            myTX_buff[3]                 =   ( ( uint32_t )myData.DataOutput_X >> 24 ) & 0xFF;      // MSB MAG_X
+
+            // Magnetometer Y-axis
+            myTX_buff[4]                 =   ( ( uint32_t )myData.DataOutput_Y & 0xFF );            // LSB MAG_Y
+            myTX_buff[5]                 =   ( ( uint32_t )myData.DataOutput_Y >> 8 )  & 0xFF;
+            myTX_buff[6]                 =   ( ( uint32_t )myData.DataOutput_Y >> 16 ) & 0xFF;
+            myTX_buff[7]                 =   ( ( uint32_t )myData.DataOutput_Y >> 24 ) & 0xFF;      // MSB MAG_Y
+
+            // Magnetometer Z-axis
+            myTX_buff[8]                 =   ( ( uint32_t )myData.DataOutput_Z & 0xFF );            // LSB MAG_Z
+            myTX_buff[9]                 =   ( ( uint32_t )myData.DataOutput_Z >> 8 )  & 0xFF;
+            myTX_buff[10]                =   ( ( uint32_t )myData.DataOutput_Z >> 16 ) & 0xFF;
+            myTX_buff[11]                =   ( ( uint32_t )myData.DataOutput_Z >> 24 ) & 0xFF;      // MSB MAG_Z
+
+
+            myPtr                        =   &myTX_buff[0];
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   *myPtr++;                                   // Start transmission
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+            mySTATE             =   0;
+            NVIC_EnableIRQ ( TIMER0_IRQn );                                              // Timer Interrupt ENABLED
+
+            NRF_GPIO->OUTSET    =   ( 1UL << LED1 );                                     // Turn the LED1 off
         }
         //__NOP();
     }
