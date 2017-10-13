@@ -61,9 +61,6 @@ HMC5883L_status_t  HMC5883L_Conf ( NRF_TWI_Type* myinstance, HMC5883L_address_t 
     // Data Output Rate Bits
     cmd[1] |=   myDataRate;
 
-    // Data Output Rate Bits
-    cmd[1] |=   myDataRate;
-
     // Measurement Configuration Bits
     cmd[1] |=   myMeasurementMode;
 
@@ -196,21 +193,21 @@ HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance
  */
 HMC5883L_status_t  HMC5883L_GetRawDataOutput ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myData )
 {
-    uint8_t     cmd[]  =   { HMC5883L_DATA_OUTPUT_X_MSB, 0, 0, 0, 0, 0 };       // HMC5883L_DATA_OUTPUT_X_MSB
+    uint8_t      cmd[]  =   { HMC5883L_DATA_OUTPUT_X_MSB, 0, 0, 0, 0, 0 };       // HMC5883L_DATA_OUTPUT_X_MSB
     uint32_t    aux    =   0;
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_STOP_BIT );
+    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read all data
     aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[0], 6 );
 
 
     // Parse the data
-    myData->DataOutput_X     =   ( ( cmd[0] << 8 ) | cmd[1] );
-    myData->DataOutput_Y     =   ( ( cmd[2] << 8 ) | cmd[3] );
-    myData->DataOutput_Z     =   ( ( cmd[4] << 8 ) | cmd[5] );
+    myData->DataOutput_X     =   ( ( int16_t )( cmd[0] << 8 ) | ( int16_t )cmd[1] );
+    myData->DataOutput_Y     =   ( ( int16_t )( cmd[2] << 8 ) | ( int16_t )cmd[3] );
+    myData->DataOutput_Z     =   ( ( int16_t )( cmd[4] << 8 ) | ( int16_t )cmd[5] );
 
 
 
@@ -338,29 +335,31 @@ HMC5883L_status_t  HMC5883L_ReadRegister ( NRF_TWI_Type* myinstance, HMC5883L_ad
  */
 HMC5883L_status_t  HMC5883L_SetNumSample ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_samples_t mySamples )
 {
-    uint8_t     cmd    =   HMC5883L_CONFIGURATION_REGISTER_A;
+    uint8_t     cmd[]  =   { HMC5883L_CONFIGURATION_REGISTER_A, 0 };
     uint32_t    aux    =   0;
 
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd, 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read the configuration register A
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd, 1 );
+    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[1], 1 );
 
 
     // Check if they are different, if so, update the value
-    if ( ( cmd & CONF_REG_A_SAMPLE_MASK ) !=   mySamples )
+    if ( ( cmd[1] & CONF_REG_A_SAMPLE_MASK ) !=   mySamples )
     {
+        cmd[0]  =   HMC5883L_CONFIGURATION_REGISTER_A;
+
         // Mask [ MA1 to MA0 ] Number of Samples
-        cmd &=   ~CONF_REG_A_SAMPLE_MASK;
+        cmd[1] &=   ~CONF_REG_A_SAMPLE_MASK;
 
         // Update number of samples
-        cmd |=   mySamples;
+        cmd[1] |=   mySamples;
 
         // Write the new value
-        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd, 1, I2C_STOP_BIT );
+        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
     }
 
 
@@ -397,29 +396,31 @@ HMC5883L_status_t  HMC5883L_SetNumSample ( NRF_TWI_Type* myinstance, HMC5883L_ad
  */
 HMC5883L_status_t  HMC5883L_SetDataRate ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_dor_t myDataRate )
 {
-    uint8_t     cmd    =   HMC5883L_CONFIGURATION_REGISTER_A;
+    uint8_t     cmd[]  =   { HMC5883L_CONFIGURATION_REGISTER_A, 0 };
     uint32_t    aux    =   0;
 
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd, 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read the configuration register A
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd, 1 );
+    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[1], 1 );
 
 
     // Check if they are different, if so, update the value
-    if ( ( cmd & CONF_REG_A_DATARATE_MASK ) !=   myDataRate )
+    if ( ( cmd[1] & CONF_REG_A_DATARATE_MASK ) !=   myDataRate )
     {
+        cmd[0]  =   HMC5883L_CONFIGURATION_REGISTER_A;
+
         // Mask [ DO2 to DO0 ] Data Output Rate Bits
-        cmd &=   ~CONF_REG_A_DATARATE_MASK;
+        cmd[1] &=   ~CONF_REG_A_DATARATE_MASK;
 
         // Update Data Output Rate Bits
-        cmd |=   myDataRate;
+        cmd[1] |=   myDataRate;
 
         // Write the new value
-        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd, 1, I2C_STOP_BIT );
+        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
     }
 
 
@@ -456,29 +457,31 @@ HMC5883L_status_t  HMC5883L_SetDataRate ( NRF_TWI_Type* myinstance, HMC5883L_add
  */
 HMC5883L_status_t  HMC5883L_SetMeasurementConf ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_measurement_mode_t myMeasurementMode )
 {
-    uint8_t     cmd    =   HMC5883L_CONFIGURATION_REGISTER_A;
+    uint8_t     cmd[]  =   { HMC5883L_CONFIGURATION_REGISTER_A, 0 };
     uint32_t    aux    =   0;
 
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd, 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read the configuration register A
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd, 1 );
+    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[1], 1 );
 
 
     // Check if they are different, if so, update the value
-    if ( ( cmd & CONF_REG_A_MODE_MASK ) !=   myMeasurementMode )
+    if ( ( cmd[1] & CONF_REG_A_MODE_MASK ) !=   myMeasurementMode )
     {
+        cmd[0]  =   HMC5883L_CONFIGURATION_REGISTER_A;
+
         // Mask [ MS1 to MS0 ] Measurement Configuration Bits
-        cmd &=   ~CONF_REG_A_MODE_MASK;
+        cmd[1] &=   ~CONF_REG_A_MODE_MASK;
 
         // Update Measurement Configuration Bits
-        cmd |=   myMeasurementMode;
+        cmd[1] |=   myMeasurementMode;
 
         // Write the new value
-        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd, 1, I2C_STOP_BIT );
+        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
     }
 
 
@@ -515,29 +518,31 @@ HMC5883L_status_t  HMC5883L_SetMeasurementConf ( NRF_TWI_Type* myinstance, HMC58
  */
 HMC5883L_status_t  HMC5883L_SetGain ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_b_gain_t myGain )
 {
-    uint8_t     cmd    =   HMC5883L_CONFIGURATION_REGISTER_B;
+    uint8_t     cmd[]  =   { HMC5883L_CONFIGURATION_REGISTER_B , 0 };
     uint32_t    aux    =   0;
 
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd, 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read the configuration register B
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd, 1 );
+    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[1], 1 );
 
 
     // Check if they are different, if so, update the value
-    if ( ( cmd & CONF_REG_B_GAIN_MASK ) !=   myGain )
+    if ( ( cmd[1] & CONF_REG_B_GAIN_MASK ) !=   myGain )
     {
+        cmd[0]  =   HMC5883L_CONFIGURATION_REGISTER_B;
+
         // Mask [ GN2 to GN0 ] Gain Configuration Bits
-        cmd &=   ~CONF_REG_B_GAIN_MASK;
+        cmd[1] &=   ~CONF_REG_B_GAIN_MASK;
 
         // Update Gain Configuration Bits
-        cmd |=   myGain;
+        cmd[1] |=   myGain;
 
         // Write the new value
-        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd, 1, I2C_STOP_BIT );
+        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
     }
 
 
@@ -574,29 +579,31 @@ HMC5883L_status_t  HMC5883L_SetGain ( NRF_TWI_Type* myinstance, HMC5883L_address
  */
 HMC5883L_status_t  HMC5883L_SetMode ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_mode_register_operation_mode_t myOperationMode )
 {
-    uint8_t     cmd    =   HMC5883L_MODE_REGISTER;
+    uint8_t     cmd[]  =   { HMC5883L_MODE_REGISTER, 0 };
     uint32_t    aux    =   0;
 
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd, 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read the Mode register bit
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd, 1 );
+    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[1], 1 );
 
 
     // Check if they are different, if so, update the value
-    if ( ( cmd & MODE_REG_MODE_MASK ) !=   myOperationMode )
+    if ( ( cmd[1] & MODE_REG_MODE_MASK ) !=   myOperationMode )
     {
+        cmd[0]  =   HMC5883L_MODE_REGISTER;
+
         // Mask [ MD1 to MD0 ] Mode Select Bits
-        cmd &=   ~MODE_REG_MODE_MASK;
+        cmd[1] &=   ~MODE_REG_MODE_MASK;
 
         // Update Mode Select Bits
-        cmd |=   myOperationMode;
+        cmd[1] |=   myOperationMode;
 
         // Write the new value
-        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd, 1, I2C_STOP_BIT );
+        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
     }
 
 

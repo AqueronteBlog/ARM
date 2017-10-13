@@ -179,9 +179,9 @@ typedef enum
 #define HMC5883L_VECTOR_STRUCT_H
 typedef struct
 {
-    uint16_t DataOutput_X;
-    uint16_t DataOutput_Y;
-    uint16_t DataOutput_Z;
+    float    DataOutput_X;
+    float    DataOutput_Y;
+    float    DataOutput_Z;
 
     uint8_t  IdentificationRegisterA;
     uint8_t  IdentificationRegisterB;
