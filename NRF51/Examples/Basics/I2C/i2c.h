@@ -28,6 +28,29 @@
 #define I2C_NO_STOP_BIT  0x01
 
 
+
+/**
+  * @brief   I2C PARAMETERS
+  */
+typedef struct{
+    // Port for pins: SDA and SCL
+    NRF_GPIO_Type* SDAport;
+    NRF_GPIO_Type* SCLport
+
+    // Pin number
+    uint32_t SDA;
+    uint32_t SCL;
+
+    // I2C frequency
+    uint32_t Freq;
+
+    // I2C/TWI instance
+    NRF_TWI_Type* TWIinstance;
+} I2C_parameters_t;
+
+
+
+
 /**
   * @brief   FUNCTION PROTOTYPES
   */
