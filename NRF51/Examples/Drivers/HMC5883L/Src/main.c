@@ -36,6 +36,8 @@ int main( void )
 {
     uint8_t  myTX_buff[12]   =      { 0 };
 
+    I2C_parameters_t         myHMC5883L_I2C_parameters;
+
     HMC5883L_status_t        aux;
     HMC5883L_vector_data_t   myData;
 
@@ -50,14 +52,25 @@ int main( void )
     mySTATE  =   0;                            // Reset the variable
 
 
+
+    // I2C definition
+    myHMC5883L_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myHMC5883L_I2C_parameters.SDA         =    TWI0_SDA;
+    myHMC5883L_I2C_parameters.SCL         =    TWI0_SCL;
+    myHMC5883L_I2C_parameters.ADDR        =    HMC5883L_ADDRESS;
+    myHMC5883L_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myHMC5883L_I2C_parameters.SDAport     =    NRF_GPIO;
+    myHMC5883L_I2C_parameters.SCLport     =    NRF_GPIO;
+
+
     // Configure the device
-    aux      =   HMC5883L_Conf ( NRF_TWI0, HMC5883L_ADDRESS, CONF_REG_A_SAMPLE_1, CONF_REG_A_DATARATE_15_HZ, CONF_REG_A_MODE_NORMAL,
+    aux      =   HMC5883L_Conf ( myHMC5883L_I2C_parameters, CONF_REG_A_SAMPLE_1, CONF_REG_A_DATARATE_15_HZ, CONF_REG_A_MODE_NORMAL,
                                  CONF_REG_B_GAIN_1_3_GA, MODE_REG_HIGH_SPEED_I2C_DISABLED, MODE_REG_MODE_IDLE );
 
     // Get the IDs
-    aux  =   HMC5883L_GetIdentificationRegister ( NRF_TWI0, HMC5883L_ADDRESS, HMC5883L_IDENTIFICATION_REGISTER_A, &myData );
-    aux  =   HMC5883L_GetIdentificationRegister ( NRF_TWI0, HMC5883L_ADDRESS, HMC5883L_IDENTIFICATION_REGISTER_B, &myData );
-    aux  =   HMC5883L_GetIdentificationRegister ( NRF_TWI0, HMC5883L_ADDRESS, HMC5883L_IDENTIFICATION_REGISTER_C, &myData );
+    aux  =   HMC5883L_GetIdentificationRegister ( myHMC5883L_I2C_parameters, HMC5883L_IDENTIFICATION_REGISTER_A, &myData );
+    aux  =   HMC5883L_GetIdentificationRegister ( myHMC5883L_I2C_parameters, HMC5883L_IDENTIFICATION_REGISTER_B, &myData );
+    aux  =   HMC5883L_GetIdentificationRegister ( myHMC5883L_I2C_parameters, HMC5883L_IDENTIFICATION_REGISTER_C, &myData );
 
 
 
@@ -88,13 +101,13 @@ int main( void )
             // NOTE: Add a counter, if something goes wrong, the uC may get stuck here!
             do
             {
-                aux  =   HMC5883L_GetStatus ( NRF_TWI0, HMC5883L_ADDRESS, &myData );
+                aux  =   HMC5883L_GetStatus ( myHMC5883L_I2C_parameters, &myData );
             }
             while ( ( myData.Status & STATUS_REG_RDY_MASK )  != STATUS_REG_RDY_ENABLED );
 
             // Get the new measurement
-            aux  =   HMC5883L_GetCompensatedDataOutput  ( NRF_TWI0, HMC5883L_ADDRESS, &myData, X_Offset, Y_Offset, Z_Offset );
-            aux  =   HMC5883L_SetMode                   ( NRF_TWI0, HMC5883L_ADDRESS, MODE_REG_MODE_SINGLE );
+            aux  =   HMC5883L_GetCompensatedDataOutput  ( myHMC5883L_I2C_parameters, &myData, X_Offset, Y_Offset, Z_Offset );
+            aux  =   HMC5883L_SetMode                   ( myHMC5883L_I2C_parameters, MODE_REG_MODE_SINGLE );
 
             // Magnetometer X-axis
             myTX_buff[0]                 =   ( ( uint32_t )myData.DataOutput_X & 0xFF );            // LSB MAG_X
