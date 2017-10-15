@@ -18,13 +18,12 @@
 
 
 /**
- * @brief       HMC5883L_Conf ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_register_list_t , HMC5883L_conf_reg_a_samples_t , HMC5883L_conf_reg_a_dor_t , HMC5883L_conf_reg_a_measurement_mode_t
+ * @brief       HMC5883L_Conf ( I2C_parameters_t , HMC5883L_register_list_t , HMC5883L_conf_reg_a_samples_t , HMC5883L_conf_reg_a_dor_t , HMC5883L_conf_reg_a_measurement_mode_t
  *                              HMC5883L_conf_reg_b_gain_t , HMC5883L_mode_register_high_speed_t , HMC5883L_mode_register_operation_mode_t )
  *
  * @details     It configures the device.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    myHMC5883LAddr:        I2C Device address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    mySamples:             Number of average samples.
  * @param[in]    myDataRate:            Data output rate.
  * @param[in]    myMeasurementMode:     Measurement mode.
@@ -40,12 +39,13 @@
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     13/October/2017   Unnecessary code was removed.
+ * @version     15/October/2017   Driver updated to the last I2C version.
+ *              13/October/2017   Unnecessary code was removed.
  *              12/October/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_Conf ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_samples_t mySamples, HMC5883L_conf_reg_a_dor_t myDataRate,
+HMC5883L_status_t  HMC5883L_Conf ( I2C_parameters_t myI2Cparameters, HMC5883L_conf_reg_a_samples_t mySamples, HMC5883L_conf_reg_a_dor_t myDataRate,
                                    HMC5883L_conf_reg_a_measurement_mode_t myMeasurementMode, HMC5883L_conf_reg_b_gain_t myGain, HMC5883L_mode_register_high_speed_t myI2CMode,
                                    HMC5883L_mode_register_operation_mode_t myOperationMode )
 {
@@ -54,7 +54,7 @@ HMC5883L_status_t  HMC5883L_Conf ( NRF_TWI_Type* myinstance, HMC5883L_address_t 
 
 
 // CONFIGURATION REGISTER A
-    cmd[0]  =    HMC5883L_CONFIGURATION_REGISTER_A;
+    cmd[0]  =   HMC5883L_CONFIGURATION_REGISTER_A;
 
     // Number of Samples Averaged
     cmd[1]  =   mySamples;
@@ -67,23 +67,23 @@ HMC5883L_status_t  HMC5883L_Conf ( NRF_TWI_Type* myinstance, HMC5883L_address_t 
 
 
     // Write the command to Configuration Register A
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
 // CONFIGURATION REGISTER A
-    cmd[0]  =    HMC5883L_CONFIGURATION_REGISTER_B;
+    cmd[0]  =   HMC5883L_CONFIGURATION_REGISTER_B;
 
     // Gain Configuration Bits
     cmd[1]  =   myGain;
 
     // Write the command to Configuration Register B
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
 // MODE REGISTER
-    cmd[0]  =    HMC5883L_MODE_REGISTER;
+    cmd[0]  =   HMC5883L_MODE_REGISTER;
 
     // High Speed I2C, 3400kHz
     cmd[1]  =   myI2CMode;
@@ -93,7 +93,7 @@ HMC5883L_status_t  HMC5883L_Conf ( NRF_TWI_Type* myinstance, HMC5883L_address_t 
 
 
     // Write the command to Mode Register
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -108,12 +108,11 @@ HMC5883L_status_t  HMC5883L_Conf ( NRF_TWI_Type* myinstance, HMC5883L_address_t 
 
 
 /**
- * @brief       HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_register_list_t , HMC5883L_vector_data_t*  )
+ * @brief       HMC5883L_GetIdentificationRegister ( I2C_parameters_t , HMC5883L_register_list_t , HMC5883L_vector_data_t*  )
  *
  * @details     It gets the identification register.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myHMC5883LAddr:    I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myID_reg:          Identification register to be read.
  *
  * @param[out]   myID:            Identification register value.
@@ -124,21 +123,22 @@ HMC5883L_status_t  HMC5883L_Conf ( NRF_TWI_Type* myinstance, HMC5883L_address_t 
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     12/October/2017   The ORIGIN
+ * @version     15/October/2017   Driver updated to the last I2C version.
+ *              12/October/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_register_list_t myID_reg, HMC5883L_vector_data_t* myID )
+HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( I2C_parameters_t myI2Cparameters, HMC5883L_register_list_t myID_reg, HMC5883L_vector_data_t* myID )
 {
     uint8_t     cmd  =   0;
     uint32_t    aux  =   0;
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &myID_reg, 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &myID_reg, 1, I2C_NO_STOP_BIT );
 
     // Read the data
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd, 1 );
+    aux = i2c_read  ( myI2Cparameters, &cmd, 1 );
 
 
 
@@ -173,12 +173,11 @@ HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance
 
 
 /**
- * @brief       HMC5883L_GetRawDataOutput ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_vector_data_t*  )
+ * @brief       HMC5883L_GetRawDataOutput ( I2C_parameters_t , HMC5883L_vector_data_t*  )
  *
  * @details     It gets X, Y and Z raw data output.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myHMC5883LAddr:    I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  *
  * @param[out]   myData:            X, Y and Z raw data output.
  *
@@ -188,22 +187,23 @@ HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     13/October/2017   The output must be SIGNED integer/float.
+ * @version     15/October/2017   Driver updated to the last I2C version.
+ *              13/October/2017   The output must be SIGNED integer/float.
  *              12/October/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_GetRawDataOutput ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myData )
+HMC5883L_status_t  HMC5883L_GetRawDataOutput ( I2C_parameters_t myI2Cparameters, HMC5883L_vector_data_t* myData )
 {
     uint8_t     cmd[]  =   { HMC5883L_DATA_OUTPUT_X_MSB, 0, 0, 0, 0, 0 };
     uint32_t    aux    =   0;
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read all data
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[0], 6 );
+    aux = i2c_read  ( myI2Cparameters, &cmd[0], 6 );
 
 
     // Parse the data
@@ -223,12 +223,11 @@ HMC5883L_status_t  HMC5883L_GetRawDataOutput ( NRF_TWI_Type* myinstance, HMC5883
 
 
 /**
- * @brief       HMC5883L_GetCompensatedDataOutput ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_vector_data_t* , float , float , float )
+ * @brief       HMC5883L_GetCompensatedDataOutput ( I2C_parameters_t , HMC5883L_vector_data_t* , float , float , float )
  *
  * @details     It gets X, Y and Z compensated data output.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myHMC5883LAddr:    I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myXOffset:         X-axis Offset.
  * @param[in]    myYOffset:         Y-axis Offset.
  * @param[in]    myZOffset:         Z-axis Offset.
@@ -241,11 +240,12 @@ HMC5883L_status_t  HMC5883L_GetRawDataOutput ( NRF_TWI_Type* myinstance, HMC5883
  *
  * @author      Manuel Caballero
  * @date        13/October/2017
- * @version     13/October/2017   The ORIGIN
+ * @version     15/October/2017   Driver updated to the last I2C version.
+ *              13/October/2017   The ORIGIN
  * @pre         The offset MUST be calculated previously, this driver does NOT support that functionality yet.
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_GetCompensatedDataOutput ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myData, float myXOffset, float myYOffset, float myZOffset )
+HMC5883L_status_t  HMC5883L_GetCompensatedDataOutput ( I2C_parameters_t myI2Cparameters, HMC5883L_vector_data_t* myData, float myXOffset, float myYOffset, float myZOffset )
 {
     uint8_t     cmd[]    =   { 0, 0, 0, 0, 0, 0 };
     uint32_t    aux      =   0;
@@ -257,10 +257,10 @@ HMC5883L_status_t  HMC5883L_GetCompensatedDataOutput ( NRF_TWI_Type* myinstance,
     cmd[0]   =   HMC5883L_CONFIGURATION_REGISTER_B;
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read the register
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[0], 1 );
+    aux = i2c_read  ( myI2Cparameters, &cmd[0], 1 );
 
 
     // Check which gain is in use
@@ -308,10 +308,10 @@ HMC5883L_status_t  HMC5883L_GetCompensatedDataOutput ( NRF_TWI_Type* myinstance,
     cmd[0]   =   HMC5883L_DATA_OUTPUT_X_MSB;
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read all data
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[0], 6 );
+    aux = i2c_read  ( myI2Cparameters, &cmd[0], 6 );
 
 
     // Parse the data
@@ -331,12 +331,11 @@ HMC5883L_status_t  HMC5883L_GetCompensatedDataOutput ( NRF_TWI_Type* myinstance,
 
 
 /**
- * @brief       HMC5883L_GetStatus ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_vector_data_t*  )
+ * @brief       HMC5883L_GetStatus ( I2C_parameters_t , HMC5883L_vector_data_t*  )
  *
  * @details     It reads the status register.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myHMC5883LAddr:    I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  *
  * @param[out]   myStatus:          Current status of the device.
  *
@@ -346,21 +345,22 @@ HMC5883L_status_t  HMC5883L_GetCompensatedDataOutput ( NRF_TWI_Type* myinstance,
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     12/October/2017   The ORIGIN
+ * @version     15/October/2017   Driver updated to the last I2C version.
+ *              12/October/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_GetStatus ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myStatus )
+HMC5883L_status_t  HMC5883L_GetStatus ( I2C_parameters_t myI2Cparameters, HMC5883L_vector_data_t* myStatus )
 {
     uint8_t     cmd    =   HMC5883L_STATUS_REGISTER;
     uint32_t    aux    =   0;
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd, 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
 
     // Read the status register
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &myStatus->Status, 1 );
+    aux = i2c_read  ( myI2Cparameters, &myStatus->Status, 1 );
 
 
 
@@ -374,12 +374,11 @@ HMC5883L_status_t  HMC5883L_GetStatus ( NRF_TWI_Type* myinstance, HMC5883L_addre
 
 
 /**
- * @brief       HMC5883L_ReadRegister ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_register_list_t , uint8_t*  )
+ * @brief       HMC5883L_ReadRegister ( I2C_parameters_t , HMC5883L_register_list_t , uint8_t*  )
  *
  * @details     It reads a register.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myHMC5883LAddr:    I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myRegister:        The register to be read.
  *
  * @param[out]   myRegisterData:    The value of the register.
@@ -390,11 +389,12 @@ HMC5883L_status_t  HMC5883L_GetStatus ( NRF_TWI_Type* myinstance, HMC5883L_addre
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     12/October/2017   The ORIGIN
+ * @version     15/October/2017   Driver updated to the last I2C version.
+ *              12/October/2017   The ORIGIN
  * @pre         This function neither reads the OUTPUTs nor the Status register.
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_ReadRegister ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_register_list_t myRegister, uint8_t* myRegisterData )
+HMC5883L_status_t  HMC5883L_ReadRegister ( I2C_parameters_t myI2Cparameters, HMC5883L_register_list_t myRegister, uint8_t* myRegisterData )
 {
     uint32_t    aux    =   0;
 
@@ -406,10 +406,10 @@ HMC5883L_status_t  HMC5883L_ReadRegister ( NRF_TWI_Type* myinstance, HMC5883L_ad
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &myRegister, 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &myRegister, 1, I2C_NO_STOP_BIT );
 
     // Read the register
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, myRegisterData, 1 );
+    aux = i2c_read  ( myI2Cparameters, myRegisterData, 1 );
 
 
 
@@ -423,12 +423,11 @@ HMC5883L_status_t  HMC5883L_ReadRegister ( NRF_TWI_Type* myinstance, HMC5883L_ad
 
 
 /**
- * @brief       HMC5883L_SetNumSample ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_conf_reg_a_samples_t )
+ * @brief       HMC5883L_SetNumSample ( I2C_parameters_t , HMC5883L_conf_reg_a_samples_t )
  *
  * @details     It configures the number of samples averaged.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myHMC5883LAddr:    I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    mySamples:         New Number of samples averaged.
  *
  * @param[out]   NaN.
@@ -439,13 +438,14 @@ HMC5883L_status_t  HMC5883L_ReadRegister ( NRF_TWI_Type* myinstance, HMC5883L_ad
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     13/October/2017   Error fixed, it now transmits two bytes when it checks if the
+ * @version     15/October/2017   Driver updated to the last I2C version.
+ *              13/October/2017   Error fixed, it now transmits two bytes when it checks if the
  *                                operation mode is different.
  *              12/October/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_SetNumSample ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_samples_t mySamples )
+HMC5883L_status_t  HMC5883L_SetNumSample ( I2C_parameters_t myI2Cparameters, HMC5883L_conf_reg_a_samples_t mySamples )
 {
     uint8_t     cmd[]  =   { HMC5883L_CONFIGURATION_REGISTER_A, 0 };
     uint32_t    aux    =   0;
@@ -453,10 +453,10 @@ HMC5883L_status_t  HMC5883L_SetNumSample ( NRF_TWI_Type* myinstance, HMC5883L_ad
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read the configuration register A
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[1], 1 );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
 
     // Check if they are different, if so, update the value
@@ -471,7 +471,7 @@ HMC5883L_status_t  HMC5883L_SetNumSample ( NRF_TWI_Type* myinstance, HMC5883L_ad
         cmd[1] |=   mySamples;
 
         // Write the new value
-        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
+        aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
     }
 
 
@@ -486,12 +486,11 @@ HMC5883L_status_t  HMC5883L_SetNumSample ( NRF_TWI_Type* myinstance, HMC5883L_ad
 
 
 /**
- * @brief       HMC5883L_SetDataRate ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_conf_reg_a_dor_t )
+ * @brief       HMC5883L_SetDataRate ( I2C_parameters_t , HMC5883L_conf_reg_a_dor_t )
  *
  * @details     It configures the data rate.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myHMC5883LAddr:    I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myDataRate:        New data rate.
  *
  * @param[out]   NaN.
@@ -502,13 +501,14 @@ HMC5883L_status_t  HMC5883L_SetNumSample ( NRF_TWI_Type* myinstance, HMC5883L_ad
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     13/October/2017   Error fixed, it now transmits two bytes when it checks if the
+ * @version     15/October/2017   Driver updated to the last I2C version.
+ *              13/October/2017   Error fixed, it now transmits two bytes when it checks if the
  *                                operation mode is different.
  *              12/October/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_SetDataRate ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_dor_t myDataRate )
+HMC5883L_status_t  HMC5883L_SetDataRate ( I2C_parameters_t myI2Cparameters, HMC5883L_conf_reg_a_dor_t myDataRate )
 {
     uint8_t     cmd[]  =   { HMC5883L_CONFIGURATION_REGISTER_A, 0 };
     uint32_t    aux    =   0;
@@ -516,10 +516,10 @@ HMC5883L_status_t  HMC5883L_SetDataRate ( NRF_TWI_Type* myinstance, HMC5883L_add
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read the configuration register A
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[1], 1 );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
 
     // Check if they are different, if so, update the value
@@ -534,7 +534,7 @@ HMC5883L_status_t  HMC5883L_SetDataRate ( NRF_TWI_Type* myinstance, HMC5883L_add
         cmd[1] |=   myDataRate;
 
         // Write the new value
-        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
+        aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
     }
 
 
@@ -549,12 +549,11 @@ HMC5883L_status_t  HMC5883L_SetDataRate ( NRF_TWI_Type* myinstance, HMC5883L_add
 
 
 /**
- * @brief       HMC5883L_SetMeasurementConf ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_conf_reg_a_measurement_mode_t )
+ * @brief       HMC5883L_SetMeasurementConf ( I2C_parameters_t , HMC5883L_conf_reg_a_measurement_mode_t )
  *
  * @details     It configures the measurement configuration bits.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myHMC5883LAddr:    I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myMeasurementMode: New measurement mode.
  *
  * @param[out]   NaN.
@@ -565,13 +564,14 @@ HMC5883L_status_t  HMC5883L_SetDataRate ( NRF_TWI_Type* myinstance, HMC5883L_add
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     13/October/2017   Error fixed, it now transmits two bytes when it checks if the
+ * @version     15/October/2017   Driver updated to the last I2C version.
+ *              13/October/2017   Error fixed, it now transmits two bytes when it checks if the
  *                                operation mode is different.
  *              12/October/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_SetMeasurementConf ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_measurement_mode_t myMeasurementMode )
+HMC5883L_status_t  HMC5883L_SetMeasurementConf ( I2C_parameters_t myI2Cparameters, HMC5883L_conf_reg_a_measurement_mode_t myMeasurementMode )
 {
     uint8_t     cmd[]  =   { HMC5883L_CONFIGURATION_REGISTER_A, 0 };
     uint32_t    aux    =   0;
@@ -579,10 +579,10 @@ HMC5883L_status_t  HMC5883L_SetMeasurementConf ( NRF_TWI_Type* myinstance, HMC58
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read the configuration register A
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[1], 1 );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
 
     // Check if they are different, if so, update the value
@@ -597,7 +597,7 @@ HMC5883L_status_t  HMC5883L_SetMeasurementConf ( NRF_TWI_Type* myinstance, HMC58
         cmd[1] |=   myMeasurementMode;
 
         // Write the new value
-        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
+        aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
     }
 
 
@@ -612,12 +612,11 @@ HMC5883L_status_t  HMC5883L_SetMeasurementConf ( NRF_TWI_Type* myinstance, HMC58
 
 
 /**
- * @brief       HMC5883L_SetGain ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_conf_reg_b_gain_t )
+ * @brief       HMC5883L_SetGain ( I2C_parameters_t , HMC5883L_conf_reg_b_gain_t )
  *
  * @details     It configures the gain/resolution.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myHMC5883LAddr:    I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myGain:            New gain/resolution.
  *
  * @param[out]   NaN.
@@ -628,13 +627,14 @@ HMC5883L_status_t  HMC5883L_SetMeasurementConf ( NRF_TWI_Type* myinstance, HMC58
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     13/October/2017   Error fixed, it now transmits two bytes when it checks if the
+ * @version     15/October/2017   Driver updated to the last I2C version.
+ *              13/October/2017   Error fixed, it now transmits two bytes when it checks if the
  *                                operation mode is different.
  *              12/October/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_SetGain ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_b_gain_t myGain )
+HMC5883L_status_t  HMC5883L_SetGain ( I2C_parameters_t myI2Cparameters, HMC5883L_conf_reg_b_gain_t myGain )
 {
     uint8_t     cmd[]  =   { HMC5883L_CONFIGURATION_REGISTER_B , 0 };
     uint32_t    aux    =   0;
@@ -642,10 +642,10 @@ HMC5883L_status_t  HMC5883L_SetGain ( NRF_TWI_Type* myinstance, HMC5883L_address
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read the configuration register B
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[1], 1 );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
 
     // Check if they are different, if so, update the value
@@ -660,7 +660,7 @@ HMC5883L_status_t  HMC5883L_SetGain ( NRF_TWI_Type* myinstance, HMC5883L_address
         cmd[1] |=   myGain;
 
         // Write the new value
-        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
+        aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
     }
 
 
@@ -675,12 +675,11 @@ HMC5883L_status_t  HMC5883L_SetGain ( NRF_TWI_Type* myinstance, HMC5883L_address
 
 
 /**
- * @brief       HMC5883L_SetMode ( NRF_TWI_Type* , HMC5883L_address_t , HMC5883L_mode_register_operation_mode_t )
+ * @brief       HMC5883L_SetMode ( I2C_parameters_t , HMC5883L_mode_register_operation_mode_t )
  *
  * @details     It configures the operation mode.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myHMC5883LAddr:    I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myOperationMode:   New operation mode.
  *
  * @param[out]   NaN.
@@ -691,13 +690,14 @@ HMC5883L_status_t  HMC5883L_SetGain ( NRF_TWI_Type* myinstance, HMC5883L_address
  *
  * @author      Manuel Caballero
  * @date        12/October/2017
- * @version     13/October/2017   Error fixed, it now transmits two bytes when it checks if the
+ * @version     15/October/2017   Driver updated to the last I2C version.
+ *              13/October/2017   Error fixed, it now transmits two bytes when it checks if the
  *                                operation mode is different.
  *              12/October/2017   The ORIGIN
  * @pre         NaN.
  * @warning     NaN.
  */
-HMC5883L_status_t  HMC5883L_SetMode ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_mode_register_operation_mode_t myOperationMode )
+HMC5883L_status_t  HMC5883L_SetMode ( I2C_parameters_t myI2Cparameters, HMC5883L_mode_register_operation_mode_t myOperationMode )
 {
     uint8_t     cmd[]  =   { HMC5883L_MODE_REGISTER, 0 };
     uint32_t    aux    =   0;
@@ -705,10 +705,10 @@ HMC5883L_status_t  HMC5883L_SetMode ( NRF_TWI_Type* myinstance, HMC5883L_address
 
 
     // Write the command
-    aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
 
     // Read the Mode register bit
-    aux = i2c_read  ( myinstance, myHMC5883LAddr, &cmd[1], 1 );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
 
     // Check if they are different, if so, update the value
@@ -723,7 +723,7 @@ HMC5883L_status_t  HMC5883L_SetMode ( NRF_TWI_Type* myinstance, HMC5883L_address
         cmd[1] |=   myOperationMode;
 
         // Write the new value
-        aux = i2c_write ( myinstance, myHMC5883LAddr, &cmd[0], 2, I2C_STOP_BIT );
+        aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
     }
 
 
