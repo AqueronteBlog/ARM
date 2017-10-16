@@ -224,19 +224,3 @@ HMC5883L_status_t  HMC5883L_SetDataRate               ( I2C_parameters_t myI2Cpa
 HMC5883L_status_t  HMC5883L_SetMeasurementConf        ( I2C_parameters_t myI2Cparameters, HMC5883L_conf_reg_a_measurement_mode_t myMeasurementMode );
 HMC5883L_status_t  HMC5883L_SetGain                   ( I2C_parameters_t myI2Cparameters, HMC5883L_conf_reg_b_gain_t myGain );
 HMC5883L_status_t  HMC5883L_SetMode                   ( I2C_parameters_t myI2Cparameters, HMC5883L_mode_register_operation_mode_t myOperationMode );
-
-/*
-HMC5883L_status_t  HMC5883L_Conf                      ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_samples_t  mySamples, HMC5883L_conf_reg_a_dor_t myDataRate,
-                                                        HMC5883L_conf_reg_a_measurement_mode_t myMeasurementMode, HMC5883L_conf_reg_b_gain_t myGain, HMC5883L_mode_register_high_speed_t myI2CMode,
-                                                        HMC5883L_mode_register_operation_mode_t myOperationMode );
-HMC5883L_status_t  HMC5883L_GetIdentificationRegister ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_register_list_t myID_reg, HMC5883L_vector_data_t* myID );
-HMC5883L_status_t  HMC5883L_GetRawDataOutput          ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myData );
-HMC5883L_status_t  HMC5883L_GetCompensatedDataOutput  ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myData, float myXOffset, float myYOffset, float myZOffset );
-HMC5883L_status_t  HMC5883L_GetStatus                 ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_vector_data_t* myStatus );
-HMC5883L_status_t  HMC5883L_ReadRegister              ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_register_list_t myRegister, uint8_t* myRegisterData );
-HMC5883L_status_t  HMC5883L_SetNumSample              ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_samples_t mySamples );
-HMC5883L_status_t  HMC5883L_SetDataRate               ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_dor_t myDataRate );
-HMC5883L_status_t  HMC5883L_SetMeasurementConf        ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_a_measurement_mode_t myMeasurementMode );
-HMC5883L_status_t  HMC5883L_SetGain                   ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_conf_reg_b_gain_t myGain );
-HMC5883L_status_t  HMC5883L_SetMode                   ( NRF_TWI_Type* myinstance, HMC5883L_address_t myHMC5883LAddr, HMC5883L_mode_register_operation_mode_t myOperationMode );
-*/

@@ -18,6 +18,41 @@
 
 
 /**
+ * @brief       HMC5883L_Init ( I2C_parameters_t )
+ *
+ * @details     It configures the I2C peripheral.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of HMC5883L_Init.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        16/October/2017
+ * @version     16/October/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+HMC5883L_status_t  HMC5883L_Init ( I2C_parameters_t myI2Cparameters )
+{
+    i2c_status_t aux;
+
+    aux  =   i2c_init ( myI2Cparameters );
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   HMC5883L_SUCCESS;
+    else
+        return   HMC5883L_FAILURE;
+}
+
+
+
+/**
  * @brief       HMC5883L_Conf ( I2C_parameters_t , HMC5883L_register_list_t , HMC5883L_conf_reg_a_samples_t , HMC5883L_conf_reg_a_dor_t , HMC5883L_conf_reg_a_measurement_mode_t
  *                              HMC5883L_conf_reg_b_gain_t , HMC5883L_mode_register_high_speed_t , HMC5883L_mode_register_operation_mode_t )
  *
