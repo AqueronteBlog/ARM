@@ -24,6 +24,8 @@
 #define I2C_STOP_BIT     0x00
 #define I2C_NO_STOP_BIT  0x01
 
+#define I2C_TIMEOUT      232323
+
 
 /**
   * @brief   INTERNAL CONSTANTS
@@ -64,8 +66,6 @@ typedef struct{
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-// i2c_status_t    i2c_write   ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_buff, uint32_t length, uint32_t i2c_generate_stop );
-// i2c_status_t    i2c_read    ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* i2c_buff, uint32_t length );
 i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buff, uint32_t length, uint32_t i2c_generate_stop );
 i2c_status_t    i2c_read    ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buff, uint32_t length );
 i2c_status_t    i2c_init    ( I2C_parameters_t myI2Cparameters );
