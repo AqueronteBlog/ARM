@@ -19,4 +19,4 @@
 /* FUNCTION PROTOTYPES */
 void conf_GPIO      ( void );
 void conf_TIMER0    ( void );
-void conf_TWI0      ( void );
+
