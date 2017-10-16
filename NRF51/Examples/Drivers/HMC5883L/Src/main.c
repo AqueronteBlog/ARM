@@ -43,7 +43,6 @@ int main( void )
 
 
     conf_GPIO   ();
-    conf_TWI0   ();
     conf_UART   ();
     conf_TIMER0 ();
 
@@ -61,6 +60,9 @@ int main( void )
     myHMC5883L_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
     myHMC5883L_I2C_parameters.SDAport     =    NRF_GPIO;
     myHMC5883L_I2C_parameters.SCLport     =    NRF_GPIO;
+
+    // Configure I2C peripheral
+    aux      =   HMC5883L_Init ( myHMC5883L_I2C_parameters );
 
 
     // Configure the device
