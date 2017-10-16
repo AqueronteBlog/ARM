@@ -18,12 +18,46 @@
 
 
 /**
- * @brief       PCF8591_SetADC ( NRF_TWI_Type* , PCF8591_address_t , PCF8591_analog_input_programming_t , PCF8591_auto_increment_status_t , PCF8591_channel_number_t )
+ * @brief       PCF8591_Init ( I2C_parameters_t )
+ *
+ * @details     It configures the I2C peripheral.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCF8591_Init.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        16/October/2017
+ * @version     16/October/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+PCF8591_status_t  PCF8591_Init ( I2C_parameters_t myI2Cparameters )
+{
+    i2c_status_t aux;
+
+    aux  =   i2c_init ( myI2Cparameters );
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCF8591_SUCCESS;
+    else
+        return   PCF8591_FAILURE;
+}
+
+
+
+/**
+ * @brief       PCF8591_SetADC ( I2C_parameters_t , PCF8591_analog_input_programming_t , PCF8591_auto_increment_status_t , PCF8591_channel_number_t )
  *
  * @details     It configures the ADC.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myPCF8591Addr:     I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myAnalogInputs:    The analog input programming.
  * @param[in]    myAutoIncrement:   Auto-increment flag enabled/disabled.
  * @param[in]    myADCchannel:      ADC Channel number.
@@ -36,11 +70,12 @@
  *
  * @author      Manuel Caballero
  * @date        22/September/2017
- * @version     22/September/2017   The ORIGIN
+ * @version     16/October/2017     Adapted to the new I2C driver.
+ *              22/September/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_analog_input_programming_t myAnalogInputs, PCF8591_auto_increment_status_t myAutoIncrement, PCF8591_channel_number_t myADCchannel )
+PCF8591_status_t  PCF8591_SetADC ( I2C_parameters_t myI2Cparameters, PCF8591_analog_input_programming_t myAnalogInputs, PCF8591_auto_increment_status_t myAutoIncrement, PCF8591_channel_number_t myADCchannel )
 {
     uint8_t     cmd                 =    0;
     uint32_t    aux                 =    0;
@@ -113,7 +148,7 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
     // Update Control Byte
-    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd, 1, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd, 1, I2C_STOP_BIT );
 
 
 
@@ -126,12 +161,11 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
 /**
- * @brief       PCF8591_ReadADC ( NRF_TWI_Type* , PCF8591_address_t , PCF8591_vector_data_t*  )
+ * @brief       PCF8591_ReadADC ( I2C_parameters_t , PCF8591_vector_data_t*  )
  *
  * @details     It gets the ADC result from the device.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myPCF8591Addr:     I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters
  *
  * @param[out]   myADC_Data:        ADC result into the chosen channel.
  *
@@ -141,15 +175,15 @@ PCF8591_status_t  PCF8591_SetADC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
  *
  * @author      Manuel Caballero
  * @date        22/September/2017
- * @version     22/September/2017   The ORIGIN
+ * @version     16/October/2017     Adapted to the new I2C driver.
+ *              22/September/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_vector_data_t* myADC_Data )
+PCF8591_status_t  PCF8591_ReadADC ( I2C_parameters_t myI2Cparameters, PCF8591_vector_data_t* myADC_Data )
 {
     uint8_t     cmd[]               =    { 0, 0, 0, 0, 0 };
     uint32_t    aux                 =    0;
-    uint32_t    myNumberReadings    =    0;
     uint32_t    i                   =    0;
 
 
@@ -162,7 +196,7 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
 
 
 
-    aux = i2c_read ( myinstance, myPCF8591Addr, &cmd[0], i );
+    aux = i2c_read ( myI2Cparameters, &cmd[0], i );
 
 
 
@@ -227,12 +261,11 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
 
 
 /**
- * @brief       PCF8591_SetDAC ( NRF_TWI_Type* , PCF8591_address_t , PCF8591_dac_status_t )
+ * @brief       PCF8591_SetDAC ( I2C_parameters_t , PCF8591_dac_status_t )
  *
  * @details     It enables/disables the DAC.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myPCF8591Addr:     I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myDAC_Status:      Enable/Disable DAC.
  *
  * @param[out]   NaN.
@@ -243,11 +276,12 @@ PCF8591_status_t  PCF8591_ReadADC ( NRF_TWI_Type* myinstance, PCF8591_address_t 
  *
  * @author      Manuel Caballero
  * @date        24/September/2017
- * @version     24/September/2017   The ORIGIN
+ * @version     16/October/2017     Adapted to the new I2C driver.
+ *              24/September/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_SetDAC ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, PCF8591_dac_status_t myDAC_Status )
+PCF8591_status_t  PCF8591_SetDAC ( I2C_parameters_t myI2Cparameters, PCF8591_dac_status_t myDAC_Status )
 {
     uint8_t     cmd                 =    0;
     uint32_t    aux                 =    0;
@@ -314,7 +348,7 @@ PCF8591_status_t  PCF8591_SetDAC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
     // Update Control Byte
-    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd, 1, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd, 1, I2C_STOP_BIT );
 
 
 
@@ -327,12 +361,11 @@ PCF8591_status_t  PCF8591_SetDAC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
 
 
 /**
- * @brief       PCF8591_NewDACValue ( NRF_TWI_Type* , PCF8591_address_t , uint8_t )
+ * @brief       PCF8591_NewDACValue ( I2C_parameters_t , uint8_t )
  *
  * @details     It enables/disables the DAC.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    myPCF8591Addr:     I2C Device address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myNewDACValue:     New DAC value.
  *
  * @param[out]   NaN.
@@ -343,11 +376,12 @@ PCF8591_status_t  PCF8591_SetDAC ( NRF_TWI_Type* myinstance, PCF8591_address_t m
  *
  * @author      Manuel Caballero
  * @date        24/September/2017
- * @version     24/September/2017   The ORIGIN
+ * @version     16/October/2017     Adapted to the new I2C driver.
+ *              24/September/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_NewDACValue ( NRF_TWI_Type* myinstance, PCF8591_address_t myPCF8591Addr, uint8_t myNewDACValue )
+PCF8591_status_t  PCF8591_NewDACValue ( I2C_parameters_t myI2Cparameters, uint8_t myNewDACValue )
 {
     uint8_t     cmd[]               =    { 0, 0 };
     uint32_t    aux                 =    0;
@@ -412,7 +446,7 @@ PCF8591_status_t  PCF8591_NewDACValue ( NRF_TWI_Type* myinstance, PCF8591_addres
 
     // Update Control Byte + DAC output
     cmd[ 1 ]     =   myNewDACValue;
-    aux = i2c_write ( myinstance, myPCF8591Addr, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
