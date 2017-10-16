@@ -28,21 +28,39 @@ int main( void )
 {
     uint8_t                 myNewDAC_value   =   128;
 
+    I2C_parameters_t        myPCF8591_I2C_parameters;
+
     PCF8591_status_t        aux;
     PCF8591_vector_data_t   myADC_Data;
 
+
     conf_GPIO   ();
-    conf_TWI0   ();
     //conf_TIMER0 ();
 
-    //aux = PCF8591_SetADC  ( NRF_TWI0, PCF8591_ADDRESS_0, PCF8591_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_ENABLED, PCF8591_CHANNEL_0 );
-    aux = PCF8591_SetDAC  ( NRF_TWI0, PCF8591_ADDRESS_0, PCF8591_DAC_ENABLED );
+
+
+    // I2C definition
+    myPCF8591_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myPCF8591_I2C_parameters.SDA         =    TWI0_SDA;
+    myPCF8591_I2C_parameters.SCL         =    TWI0_SCL;
+    myPCF8591_I2C_parameters.ADDR        =    PCF8591_ADDRESS_0;
+    myPCF8591_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myPCF8591_I2C_parameters.SDAport     =    NRF_GPIO;
+    myPCF8591_I2C_parameters.SCLport     =    NRF_GPIO;
+
+    // Configure I2C peripheral
+    aux      =   PCF8591_Init ( myPCF8591_I2C_parameters );
+
+
+
+    //aux = PCF8591_SetADC  ( myPCF8591_I2C_parameters, PCF8591_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_ENABLED, PCF8591_CHANNEL_0 );
+    aux = PCF8591_SetDAC  ( myPCF8591_I2C_parameters, PCF8591_DAC_ENABLED );
     while(1)
     {
-        aux = PCF8591_SetADC  ( NRF_TWI0, PCF8591_ADDRESS_0, PCF8591_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_ENABLED, PCF8591_CHANNEL_0 );
-        aux = PCF8591_ReadADC ( NRF_TWI0, PCF8591_ADDRESS_0, &myADC_Data );
+        aux = PCF8591_SetADC  ( myPCF8591_I2C_parameters, PCF8591_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_ENABLED, PCF8591_CHANNEL_0 );
+        aux = PCF8591_ReadADC ( myPCF8591_I2C_parameters, &myADC_Data );
 
-        aux = PCF8591_NewDACValue ( NRF_TWI0, PCF8591_ADDRESS_0, myNewDAC_value );
+        aux = PCF8591_NewDACValue ( myPCF8591_I2C_parameters, myNewDAC_value );
 
         if ( myNewDAC_value < 246 )
             myNewDAC_value  +=  10;
