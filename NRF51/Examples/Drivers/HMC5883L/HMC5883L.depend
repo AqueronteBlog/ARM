@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1505590707 source:d:\workspace\arm\nrf51\examples\basics\i2c\i2c.c
+1508100878 source:d:\workspace\arm\nrf51\examples\basics\i2c\i2c.c
 	"i2c.h"
 
-1501494396 d:\workspace\arm\nrf51\examples\basics\i2c\i2c.h
+1508098783 d:\workspace\arm\nrf51\examples\basics\i2c\i2c.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 
@@ -28,28 +28,28 @@
 
 1507835324 source:d:\workspace\arm\nrf51\examples\drivers\hmc5883l\s130.c
 
-1507836184 source:d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\functions.c
+1508181262 source:d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\functions.c
 	"functions.h"
 
-1507836184 d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\functions.h
+1508014572 d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\functions.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"variables.h"
 
-1507836234 d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\variables.h
+1508014572 d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\variables.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"board.h"
 
-1507835324 d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\board.h
+1508014572 d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\board.h
 
-1507836234 source:d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.c
+1508014572 source:d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.c
 	"interrupts.h"
 
-1507836234 d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.h
+1508014572 d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\interrupts.h
 	"variables.h"
 
-1507841760 source:d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\main.c
+1508181262 source:d:\workspace\arm\nrf51\examples\drivers\hmc5883l\src\main.c
 	"nrf.h"
 	"ble.h"
 	"variables.h"
@@ -106,7 +106,7 @@
 	"ble_gatt.h"
 	"nrf_svc.h"
 
-1507837638 d:\workspace\arm\drivers\hmc5883l\hmc5883l.h
+1508102323 d:\workspace\arm\drivers\hmc5883l\hmc5883l.h
 	"stdint.h"
 	"stdbool.h"
 	"i2c.h"
@@ -119,7 +119,7 @@
 
 1507835325 source:d:\workspace\arm\nrf51\examples\drivers\hmc5883l\startup_nrf51.s
 
-1507842077 source:d:\workspace\arm\drivers\hmc5883l\hmc5883l.c
+1508181261 source:d:\workspace\arm\drivers\hmc5883l\hmc5883l.c
 	"HMC5883L.h"
 
 1504799590 source:e:\vsprojects\arm\nrf51\examples\basics\i2c\i2c.c
