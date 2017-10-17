@@ -42,8 +42,9 @@ typedef enum
   */
 typedef enum
 {
-    PCF8591_DAC_ENABLED        =   1,                                /*!<  PCF8591 DAC is enabled.                                */
-    PCF8591_DAC_DISABLE        =   0                                 /*!<  PCF8591 DAC is disabled                                */
+    PCF8591_DAC_MASK           =   0x40,                            /*!<  PCF8591 DAC Mask                                       */
+    PCF8591_DAC_ENABLED        =   ( 1 << 6 ),                      /*!<  PCF8591 DAC is enabled.                                */
+    PCF8591_DAC_DISABLE        =   ( 0 << 6 )                       /*!<  PCF8591 DAC is disabled                                */
 } PCF8591_dac_status_t;
 
 
@@ -53,10 +54,11 @@ typedef enum
   */
 typedef enum
 {
-    PCF8591_FOUR_SINGLE_ENDED_INPUTS             =   0,              /*!<  PCF8591 Scale in kg.                                   */
-    PCF8591_THREE_DIFFERENTIAL_INPUTS            =   1,              /*!<  PCF8591 Scale in  g.                                   */
-    PCF8591_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED  =   2,              /*!<  PCF8591 Scale in mg.                                   */
-    PCF8591_TWO_DIFFERENTIAL_INPUTS              =   3               /*!<  PCF8591 Scale in ug.                                   */
+    PCF8591_ANALOG_MASK                                 =   0x30,           /*!<  PCF8591 Mask.                                          */
+    PCF8591_ANALOG_FOUR_SINGLE_ENDED_INPUTS             =   ( 0 << 4 ),     /*!<  PCF8591 Four single-ended inputs.                      */
+    PCF8591_ANALOG_THREE_DIFFERENTIAL_INPUTS            =   ( 1 << 4 ),     /*!<  PCF8591 Three differential inputs.                     */
+    PCF8591_ANALOG_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED  =   ( 2 << 4 ),     /*!<  PCF8591 Single-ended and differential mixed.           */
+    PCF8591_ANALOG_TWO_DIFFERENTIAL_INPUTS              =   ( 3 << 4 )      /*!<  PCF8591 Two differential inputs.                       */
 } PCF8591_analog_input_programming_t;
 
 
@@ -66,8 +68,9 @@ typedef enum
   */
 typedef enum
 {
-    PCF8591_AUTO_INCREMENT_ENABLED               =   1,              /*!<  PCF8591 Auto-increment is enabled.                     */
-    PCF8591_AUTO_INCREMENT_DISABLED              =   0               /*!<  PCF8591 Auto-increment is disabled                     */
+    PCF8591_AUTO_INCREMENT_MASK                  =   0x04,           /*!<  PCF8591 Auto-increment mask.                           */
+    PCF8591_AUTO_INCREMENT_ENABLED               =   ( 1 << 2 ),     /*!<  PCF8591 Auto-increment is enabled.                     */
+    PCF8591_AUTO_INCREMENT_DISABLED              =   ( 0 << 2 )      /*!<  PCF8591 Auto-increment is disabled                     */
 } PCF8591_auto_increment_status_t;
 
 
@@ -77,10 +80,11 @@ typedef enum
   */
 typedef enum
 {
-    PCF8591_CHANNEL_0                            =   0,              /*!<  PCF8591 Channel 0 Active                               */
-    PCF8591_CHANNEL_1                            =   1,              /*!<  PCF8591 Channel 1 Active                               */
-    PCF8591_CHANNEL_2                            =   2,              /*!<  PCF8591 Channel 2 Active                               */
-    PCF8591_CHANNEL_3                            =   3               /*!<  PCF8591 Channel 3 Active                               */
+    PCF8591_CHANNEL_MASK                         =   0x03,           /*!<  PCF8591 Channel Mask                                   */
+    PCF8591_CHANNEL_0                            =   ( 0 << 0 ),     /*!<  PCF8591 Channel 0 Active                               */
+    PCF8591_CHANNEL_1                            =   ( 1 << 0 ),     /*!<  PCF8591 Channel 1 Active                               */
+    PCF8591_CHANNEL_2                            =   ( 2 << 0 ),     /*!<  PCF8591 Channel 2 Active                               */
+    PCF8591_CHANNEL_3                            =   ( 3 << 0 )      /*!<  PCF8591 Channel 3 Active                               */
 } PCF8591_channel_number_t;
 
 
