@@ -135,9 +135,3 @@ PCF8591_status_t  PCF8591_SetADC                ( I2C_parameters_t myI2Cparamete
 PCF8591_status_t  PCF8591_ReadADC               ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters, PCF8591_vector_data_t* myADC_Data );
 PCF8591_status_t  PCF8591_SetDAC                ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters );
 PCF8591_status_t  PCF8591_NewDACValue           ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters, uint8_t myNewDACValue );
-/*
-PCF8591_status_t  PCF8591_SetADC                ( I2C_parameters_t myI2Cparameters, PCF8591_analog_input_programming_t myAnalogInputs, PCF8591_auto_increment_status_t myAutoIncrement, PCF8591_channel_number_t myADCchannel );
-PCF8591_status_t  PCF8591_ReadADC               ( I2C_parameters_t myI2Cparameters, PCF8591_vector_data_t* myADC_Data );
-PCF8591_status_t  PCF8591_SetDAC                ( I2C_parameters_t myI2Cparameters, PCF8591_dac_status_t myDAC_Status );
-PCF8591_status_t  PCF8591_NewDACValue           ( I2C_parameters_t myI2Cparameters, uint8_t myNewDACValue );
-*/
