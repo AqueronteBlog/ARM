@@ -102,11 +102,17 @@ typedef struct
 
 
 
+/**
+  * @brief   INTERNAL VARIABLES
+  */
+typedef struct
+{
+    uint8_t ANALOG_INPUT_PROGRAMMING;
+    uint8_t AUTO_INCREMENT_STATUS;
+    uint8_t CHANNEL_NUMBER;
+    uint8_t DAC_STATUS;
+} PCF8591_conf_parameters_t;
 
-uint8_t _ANALOG_INPUT_PROGRAMMING;
-uint8_t _AUTO_INCREMENT_STATUS;
-uint8_t _CHANNEL_NUMBER;
-uint8_t _DAC_STATUS;
 
 
 /**
@@ -125,7 +131,13 @@ typedef enum
   * @brief   FUNCTION PROTOTYPES
   */
 PCF8591_status_t  PCF8591_Init                  ( I2C_parameters_t myI2Cparameters );
+PCF8591_status_t  PCF8591_SetADC                ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters );
+PCF8591_status_t  PCF8591_ReadADC               ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters, PCF8591_vector_data_t* myADC_Data );
+PCF8591_status_t  PCF8591_SetDAC                ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters );
+PCF8591_status_t  PCF8591_NewDACValue           ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters, uint8_t myNewDACValue );
+/*
 PCF8591_status_t  PCF8591_SetADC                ( I2C_parameters_t myI2Cparameters, PCF8591_analog_input_programming_t myAnalogInputs, PCF8591_auto_increment_status_t myAutoIncrement, PCF8591_channel_number_t myADCchannel );
 PCF8591_status_t  PCF8591_ReadADC               ( I2C_parameters_t myI2Cparameters, PCF8591_vector_data_t* myADC_Data );
 PCF8591_status_t  PCF8591_SetDAC                ( I2C_parameters_t myI2Cparameters, PCF8591_dac_status_t myDAC_Status );
 PCF8591_status_t  PCF8591_NewDACValue           ( I2C_parameters_t myI2Cparameters, uint8_t myNewDACValue );
+*/
