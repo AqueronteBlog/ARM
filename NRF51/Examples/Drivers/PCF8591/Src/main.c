@@ -26,12 +26,13 @@
 
 int main( void )
 {
-    uint8_t                 myNewDAC_value   =   128;
+    uint8_t                     myNewDAC_value   =   128;
 
-    I2C_parameters_t        myPCF8591_I2C_parameters;
+    I2C_parameters_t            myPCF8591_I2C_parameters;
 
-    PCF8591_status_t        aux;
-    PCF8591_vector_data_t   myADC_Data;
+    PCF8591_conf_parameters_t   myPCF8591Parameters;
+    PCF8591_status_t            aux;
+    PCF8591_vector_data_t       myADC_Data;
 
 
     conf_GPIO   ();
@@ -52,15 +53,20 @@ int main( void )
     aux      =   PCF8591_Init ( myPCF8591_I2C_parameters );
 
 
+    // Configure the PCF8591 device
+    myPCF8591Parameters.ANALOG_INPUT_PROGRAMMING     =   PCF8591_ANALOG_FOUR_SINGLE_ENDED_INPUTS;
+    myPCF8591Parameters.AUTO_INCREMENT_STATUS        =   PCF8591_AUTO_INCREMENT_ENABLED;
+    myPCF8591Parameters.CHANNEL_NUMBER               =   PCF8591_CHANNEL_0;
+    myPCF8591Parameters.DAC_STATUS                   =   PCF8591_DAC_ENABLED;
 
-    //aux = PCF8591_SetADC  ( myPCF8591_I2C_parameters, PCF8591_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_ENABLED, PCF8591_CHANNEL_0 );
-    aux = PCF8591_SetDAC  ( myPCF8591_I2C_parameters, PCF8591_DAC_ENABLED );
+    //aux = PCF8591_SetADC  ( myPCF8591_I2C_parameters, PCF8591_ANALOG_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_ENABLED, PCF8591_CHANNEL_0 );
+    aux = PCF8591_SetDAC  ( myPCF8591_I2C_parameters, myPCF8591Parameters );
     while(1)
     {
-        aux = PCF8591_SetADC  ( myPCF8591_I2C_parameters, PCF8591_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_ENABLED, PCF8591_CHANNEL_0 );
-        aux = PCF8591_ReadADC ( myPCF8591_I2C_parameters, &myADC_Data );
+        aux = PCF8591_SetADC  ( myPCF8591_I2C_parameters, myPCF8591Parameters );
+        aux = PCF8591_ReadADC ( myPCF8591_I2C_parameters, myPCF8591Parameters, &myADC_Data );
 
-        aux = PCF8591_NewDACValue ( myPCF8591_I2C_parameters, myNewDAC_value );
+        aux = PCF8591_NewDACValue ( myPCF8591_I2C_parameters, myPCF8591Parameters, myNewDAC_value );
 
         if ( myNewDAC_value < 246 )
             myNewDAC_value  +=  10;
