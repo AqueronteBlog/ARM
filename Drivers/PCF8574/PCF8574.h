@@ -180,5 +180,6 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-PCF8574_status_t  PCF8574_SetPins   ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_vector_data_t  myConfDATA );
-PCF8574_status_t  PCF8574_ReadPins  ( NRF_TWI_Type* myinstance, PCF8574_address_t myPCF8574Addr, PCF8574_vector_data_t* myReadDATA );
+PCF8574_status_t  PCF8574_Init      ( I2C_parameters_t myI2Cparameters );
+PCF8574_status_t  PCF8574_SetPins   ( I2C_parameters_t myI2Cparameters, PCF8574_vector_data_t  myConfDATA );
+PCF8574_status_t  PCF8574_ReadPins  ( I2C_parameters_t myI2Cparameters, PCF8574_vector_data_t* myReadDATA );
