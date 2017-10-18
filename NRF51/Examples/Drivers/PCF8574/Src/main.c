@@ -42,8 +42,11 @@ int main( void )
     PCF8574_status_t        aux;
     PCF8574_vector_data_t   myData;
 
+    I2C_parameters_t            myPCF8574_I2C_parameters;
+
+
+
     conf_GPIO   ();
-    conf_TWI0   ();
     conf_TIMER0 ();
     conf_GPIOTE ();
 
@@ -53,11 +56,23 @@ int main( void )
     myPCF8574INT  =   0;                            // Reset the variable
 
 
+    // I2C definition
+    myPCF8574_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myPCF8574_I2C_parameters.SDA         =    TWI0_SDA;
+    myPCF8574_I2C_parameters.SCL         =    TWI0_SCL;
+    myPCF8574_I2C_parameters.ADDR        =    PCF8574_ADDRESS_0;
+    myPCF8574_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myPCF8574_I2C_parameters.SDAport     =    NRF_GPIO;
+    myPCF8574_I2C_parameters.SCLport     =    NRF_GPIO;
+
+    // Configure I2C peripheral
+    aux      =   PCF8574_Init ( myPCF8574_I2C_parameters );
+
     // Configure PCF8574: P[0-6] OUTPUTs, P7 INPUT
     myData.data   =   ( PCF8574_P0_OUTPUT_LOW | PCF8574_P1_OUTPUT_LOW | PCF8574_P2_OUTPUT_LOW | PCF8574_P3_OUTPUT_LOW |
                         PCF8574_P4_OUTPUT_LOW | PCF8574_P5_OUTPUT_LOW | PCF8574_P6_OUTPUT_LOW | PCF8574_P7_INPUT      );
 
-    aux           =    PCF8574_SetPins ( NRF_TWI0, PCF8574_ADDRESS_0, myData );
+    aux           =    PCF8574_SetPins ( myPCF8574_I2C_parameters, myData );
 
 
 
@@ -81,20 +96,20 @@ int main( void )
             myData.data   =   ( PCF8574_P0_OUTPUT_LOW | PCF8574_P1_OUTPUT_HIGH | PCF8574_P2_OUTPUT_LOW | PCF8574_P3_OUTPUT_HIGH |
                                 PCF8574_P4_OUTPUT_LOW | PCF8574_P5_OUTPUT_HIGH | PCF8574_P6_OUTPUT_LOW );
 
-            aux           =   PCF8574_SetPins  ( NRF_TWI0, PCF8574_ADDRESS_0, myData );
+            aux           =   PCF8574_SetPins  ( myPCF8574_I2C_parameters, myData );
         }
     	else
         {
     	     myData.data  =   ( PCF8574_P0_OUTPUT_HIGH | PCF8574_P1_OUTPUT_LOW | PCF8574_P2_OUTPUT_HIGH | PCF8574_P3_OUTPUT_LOW |
                                 PCF8574_P4_OUTPUT_HIGH | PCF8574_P5_OUTPUT_LOW | PCF8574_P6_OUTPUT_HIGH );
 
-            aux           =   PCF8574_SetPins  ( NRF_TWI0, PCF8574_ADDRESS_0, myData );
+            aux           =   PCF8574_SetPins  ( myPCF8574_I2C_parameters, myData );
         }
 
         if ( myPCF8574INT == 1 )
         {
         // Status of P7 changed
-            aux           =   PCF8574_ReadPins ( NRF_TWI0, PCF8574_ADDRESS_0, &myData );
+            aux           =   PCF8574_ReadPins ( myPCF8574_I2C_parameters, &myData );
 
             if ( ( myData.data & PCF8574_P7_MASK ) == PCF8574_P7_MASK )
                 NRF_GPIO->OUTCLR    =   ( 1UL << LED1 );                    // Turn the LED 1 on when P7 is HIGH
