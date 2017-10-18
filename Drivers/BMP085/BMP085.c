@@ -18,12 +18,46 @@
 
 
 /**
- * @brief       BMP085_GetCalibrationCoefficients   ( NRF_TWI_Type* , BMP085_address_t , Vector_cal_coeff_t* )
+ * @brief       BMP085_Init ( I2C_parameters_t )
+ *
+ * @details     It configures the I2C peripheral.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of BMP085_Init.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        18/October/2017
+ * @version     18/October/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+BMP085_status_t  BMP085_Init ( I2C_parameters_t myI2Cparameters )
+{
+    i2c_status_t aux;
+
+    aux  =   i2c_init ( myI2Cparameters );
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   BMP085_SUCCESS;
+    else
+        return   BMP085_FAILURE;
+}
+
+
+
+/**
+ * @brief       BMP085_GetCalibrationCoefficients   ( I2C_parameters_t , Vector_cal_coeff_t* )
  *
  * @details     It gets the calibration coefficients.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  *
  * @param[out]   Vector_cal_coeff_t:    Calibration coefficients.
  *
@@ -33,19 +67,20 @@
  *
  * @author      Manuel Caballero
  * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
+ * @version     18/October/2017     Adapted to the new I2C driver.
+ *              24/August/2017      The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-BMP085_status_t  BMP085_GetCalibrationCoefficients  ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_cal_coeff_t* myCalCoeff )
+BMP085_status_t  BMP085_GetCalibrationCoefficients  ( I2C_parameters_t myI2Cparameters, Vector_cal_coeff_t* myCalCoeff )
 {
     uint8_t     cmd[22]             =   { 0 };
     uint32_t    aux                 =    0;
 
     cmd[0]   =   BMP085_AC1_MSB;
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[0], 22 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[0], 22 );
 
     // Parse the data
     myCalCoeff->AC1  =   ( cmd[0]  << 8 ) | cmd[1];
@@ -70,12 +105,11 @@ BMP085_status_t  BMP085_GetCalibrationCoefficients  ( NRF_TWI_Type* myinstance, 
 
 
 /**
- * @brief       BMP085_TriggerTemperature   ( NRF_TWI_Type* , BMP085_address_t )
+ * @brief       BMP085_TriggerTemperature   ( I2C_parameters_t )
  *
  * @details     It triggers a new temperature measurement.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  *
  * @param[out]   NaN.
  *
@@ -85,18 +119,19 @@ BMP085_status_t  BMP085_GetCalibrationCoefficients  ( NRF_TWI_Type* myinstance, 
  *
  * @author      Manuel Caballero
  * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
+ * @version     18/October/2017     Adapted to the new I2C driver.
+ *              24/August/2017      The ORIGIN
  * @pre         NaN
  * @warning     The user MUST respect the maximum temperature conversion time, in this
  *              case, that value is 4.5ms.
  */
-BMP085_status_t  BMP085_TriggerTemperature  ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR )
+BMP085_status_t  BMP085_TriggerTemperature  ( I2C_parameters_t myI2Cparameters )
 {
     uint8_t     cmd[]             =   { BMP085_CONTROL, BMP085_TRIGGER_TEMPERATURE };
     uint32_t    aux               =    0;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -108,12 +143,11 @@ BMP085_status_t  BMP085_TriggerTemperature  ( NRF_TWI_Type* myinstance, BMP085_a
 
 
 /**
- * @brief       BMP085_ReadRawTemperature   ( NRF_TWI_Type* , BMP085_address_t , Vector_temp_f* )
+ * @brief       BMP085_ReadRawTemperature   ( I2C_parameters_t , Vector_temp_f* )
  *
  * @details     It reads an uncompensated temperature.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  *
  * @param[out]   myRawTemperature:      Uncompensated temperature.
  *
@@ -123,19 +157,20 @@ BMP085_status_t  BMP085_TriggerTemperature  ( NRF_TWI_Type* myinstance, BMP085_a
  *
  * @author      Manuel Caballero
  * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
+ * @version     18/October/2017     Adapted to the new I2C driver.
+ *              24/August/2017      The ORIGIN
  * @pre         BMP085_TriggerTemperature function MUST be called before calling this one.
  * @warning     The user MUST respect the maximum temperature conversion time, in this
  *              case, that value is 4.5ms.
  */
-BMP085_status_t  BMP085_ReadRawTemperature  ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_temp_f* myRawTemperature )
+BMP085_status_t  BMP085_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, Vector_temp_f* myRawTemperature )
 {
     uint8_t     cmd[]             =   { BMP085_READ_TEMPERATURE, 0 };
     uint32_t    aux               =    0;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[0], 2 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[0], 2 );
 
 
     // Parse the data
@@ -151,15 +186,14 @@ BMP085_status_t  BMP085_ReadRawTemperature  ( NRF_TWI_Type* myinstance, BMP085_a
 
 
 /**
- * @brief       BMP085_ReadCompensatedTemperature   ( NRF_TWI_Type* , BMP085_address_t , Vector_temp_f*, Vector_cal_coeff_t )
+ * @brief       BMP085_ReadCompensatedTemperature   ( I2C_parameters_t , Vector_temp_f*, Vector_cal_coeff_t )
  *
  * @details     It reads an compensated/true temperature.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
- * @param[in]    myCalCoeff:            Calibration coefficients.
+ * @param[in]    myI2Cparameters:           I2C parameters.
+ * @param[in]    myCalCoeff:                Calibration coefficients.
  *
- * @param[out]   myTrueTemperature:      Compensated/True temperature.
+ * @param[out]   myTrueTemperature:         Compensated/True temperature.
  *
  *
  * @return       Status of BMP085_ReadCompensatedTemperature.
@@ -167,12 +201,13 @@ BMP085_status_t  BMP085_ReadRawTemperature  ( NRF_TWI_Type* myinstance, BMP085_a
  *
  * @author      Manuel Caballero
  * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
+ * @version     18/October/2017     Adapted to the new I2C driver.
+ *              24/August/2017      The ORIGIN
  * @pre         Both BMP085_TriggerTemperature and BMP085_GetCalibrationCoefficients functions MUST be called before calling this one.
  * @warning     The user MUST respect the maximum temperature conversion time, in this
  *              case, that value is 4.5ms.
  */
-BMP085_status_t  BMP085_ReadCompensatedTemperature ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_temp_f* myTrueTemperature, Vector_cal_coeff_t myCalCoeff )
+BMP085_status_t  BMP085_ReadCompensatedTemperature ( I2C_parameters_t myI2Cparameters, Vector_temp_f* myTrueTemperature, Vector_cal_coeff_t myCalCoeff )
 {
     uint32_t    aux               =    0;
     int32_t     X1, X2, B5;
@@ -180,7 +215,7 @@ BMP085_status_t  BMP085_ReadCompensatedTemperature ( NRF_TWI_Type* myinstance, B
     Vector_temp_f myRawTemperature;
 
 
-    aux = BMP085_ReadRawTemperature ( myinstance, ADDR, &myRawTemperature );
+    aux = BMP085_ReadRawTemperature ( myI2Cparameters, &myRawTemperature );
 
 
     // Parse the data
@@ -200,12 +235,11 @@ BMP085_status_t  BMP085_ReadCompensatedTemperature ( NRF_TWI_Type* myinstance, B
 
 
 /**
- * @brief       BMP085_TriggerPressure   ( NRF_TWI_Type* , BMP085_address_t, BMP085_pressure_osrs_t )
+ * @brief       BMP085_TriggerPressure   ( I2C_parameters_t , BMP085_pressure_osrs_t )
  *
  * @details     It triggers a new pressure measurement.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myResolution:          Pressure resolution.
  *
  * @param[out]   NaN.
@@ -216,7 +250,8 @@ BMP085_status_t  BMP085_ReadCompensatedTemperature ( NRF_TWI_Type* myinstance, B
  *
  * @author      Manuel Caballero
  * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
+ * @version     18/October/2017     Adapted to the new I2C driver.
+ *              24/August/2017      The ORIGIN
  * @pre         NaN
  * @warning     The user MUST respect the maximum pressure conversion time:
  *                  Ultra Low Power Mode:   4.5ms.
@@ -224,7 +259,7 @@ BMP085_status_t  BMP085_ReadCompensatedTemperature ( NRF_TWI_Type* myinstance, B
  *                  High Resolution Mode:   13.5ms.
  *                  Ultra High Res. Mode:   25.5ms.
  */
-BMP085_status_t  BMP085_TriggerPressure  ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, BMP085_pressure_osrs_t myResolution )
+BMP085_status_t  BMP085_TriggerPressure  ( I2C_parameters_t myI2Cparameters, BMP085_pressure_osrs_t myResolution )
 {
     uint8_t     cmd[]             =   { BMP085_CONTROL, BMP085_TRIGGER_PRESSURE };
     uint32_t    aux               =    0;
@@ -233,7 +268,7 @@ BMP085_status_t  BMP085_TriggerPressure  ( NRF_TWI_Type* myinstance, BMP085_addr
     cmd[1]   |=   ( myResolution << 6 );
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -245,12 +280,11 @@ BMP085_status_t  BMP085_TriggerPressure  ( NRF_TWI_Type* myinstance, BMP085_addr
 
 
 /**
- * @brief       BMP085_ReadRawPressure   ( NRF_TWI_Type* , BMP085_address_t , Vector_pressure_f* )
+ * @brief       BMP085_ReadRawPressure   ( I2C_parameters_t , Vector_pressure_f* )
  *
  * @details     It reads an uncompensated temperature.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  *
  * @param[out]   myRawPressure:         Uncompensated temperature.
  *
@@ -260,7 +294,8 @@ BMP085_status_t  BMP085_TriggerPressure  ( NRF_TWI_Type* myinstance, BMP085_addr
  *
  * @author      Manuel Caballero
  * @date        24/August/2017
- * @version     24/August/2017   The ORIGIN
+ * @version     18/October/2017     Adapted to the new I2C driver.
+ *              24/August/2017      The ORIGIN
  * @pre         BMP085_TriggerPressure function MUST be called before calling this one.
  * @warning     The user MUST respect the maximum pressure conversion time:
  *                  Ultra Low Power Mode:   4.5ms.
@@ -268,14 +303,14 @@ BMP085_status_t  BMP085_TriggerPressure  ( NRF_TWI_Type* myinstance, BMP085_addr
  *                  High Resolution Mode:   13.5ms.
  *                  Ultra High Res. Mode:   25.5ms.
  */
-BMP085_status_t  BMP085_ReadRawPressure ( NRF_TWI_Type* myinstance, BMP085_address_t ADDR, Vector_pressure_f* myRawPressure )
+BMP085_status_t  BMP085_ReadRawPressure ( I2C_parameters_t myI2Cparameters, Vector_pressure_f* myRawPressure )
 {
     uint8_t     cmd[]             =   { BMP085_READ_PRESSURE, 0, 0 };
     uint32_t    aux               =    0;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[0], 3 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[0], 3 );
 
 
     // Parse the data
