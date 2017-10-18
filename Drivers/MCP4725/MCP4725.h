@@ -109,10 +109,11 @@ typedef enum{
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-MCP4725_status_t  MCP4725_Reset                 ( NRF_TWI_Type* myinstance );
-MCP4725_status_t  MCP4725_WakeUp                ( NRF_TWI_Type* myinstance );
-MCP4725_status_t  MCP4725_PowerMode             ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_write_command_type_t myWriteCMD, MCP4725_operation_mode_t myPowerMode );
-MCP4725_status_t  MCP4725_SetNewValue           ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_write_command_type_t myWriteCMD, Vector_new_dac_value_t myDACNewValue );
-MCP4725_status_t  MCP4725_EEPROM_Status         ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, MCP4725_eeprom_status_t* myEEPROM_Status );
-MCP4725_status_t  MCP4725_GetEEPROM_Data        ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, Vector_data_t* myEEPROMData );
-MCP4725_status_t  MCP4725_GetDAC_Data           ( NRF_TWI_Type* myinstance, MCP4725_address_t ADDR, Vector_data_t* myDACData );
+MCP4725_status_t  MCP4725_Init                  ( I2C_parameters_t myI2Cparameters );
+MCP4725_status_t  MCP4725_Reset                 ( I2C_parameters_t myI2Cparameters );
+MCP4725_status_t  MCP4725_WakeUp                ( I2C_parameters_t myI2Cparameters );
+MCP4725_status_t  MCP4725_PowerMode             ( I2C_parameters_t myI2Cparameters, MCP4725_write_command_type_t myWriteCMD, MCP4725_operation_mode_t myPowerMode );
+MCP4725_status_t  MCP4725_SetNewValue           ( I2C_parameters_t myI2Cparameters, MCP4725_write_command_type_t myWriteCMD, Vector_new_dac_value_t myDACNewValue );
+MCP4725_status_t  MCP4725_EEPROM_Status         ( I2C_parameters_t myI2Cparameters, MCP4725_eeprom_status_t* myEEPROM_Status );
+MCP4725_status_t  MCP4725_GetEEPROM_Data        ( I2C_parameters_t myI2Cparameters, Vector_data_t* myEEPROMData );
+MCP4725_status_t  MCP4725_GetDAC_Data           ( I2C_parameters_t myI2Cparameters, Vector_data_t* myDACData );
