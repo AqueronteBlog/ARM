@@ -37,17 +37,33 @@ int main( void )
     Vector_new_dac_value_t  myNewDACData;
     Vector_data_t           myDefaultData;
 
+    I2C_parameters_t        myMCP4725_I2C_parameters;
+
+
+
     conf_GPIO   ();
-    conf_TWI0   ();
     conf_TIMER0 ();
 
+
+    // I2C definition
+    myMCP4725_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myMCP4725_I2C_parameters.SDA         =    TWI0_SDA;
+    myMCP4725_I2C_parameters.SCL         =    TWI0_SCL;
+    myMCP4725_I2C_parameters.ADDR        =    MCP4725_ADDRESS_LOW;
+    myMCP4725_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myMCP4725_I2C_parameters.SDAport     =    NRF_GPIO;
+    myMCP4725_I2C_parameters.SCLport     =    NRF_GPIO;
+
+    // Configure I2C peripheral
+    aux = MCP4725_Init ( myMCP4725_I2C_parameters );
+
     // Reset and wake the device up
-    aux = MCP4725_Reset  ( NRF_TWI0 );
-    aux = MCP4725_WakeUp ( NRF_TWI0 );
+    aux = MCP4725_Reset  ( myMCP4725_I2C_parameters );
+    aux = MCP4725_WakeUp ( myMCP4725_I2C_parameters );
 
     // Read the default data in both EEPROM and DAC
-    aux = MCP4725_GetDAC_Data    ( NRF_TWI0, MCP4725_ADDRESS_LOW, &myDefaultData );
-    aux = MCP4725_GetEEPROM_Data ( NRF_TWI0, MCP4725_ADDRESS_LOW, &myDefaultData );
+    aux = MCP4725_GetDAC_Data    ( myMCP4725_I2C_parameters, &myDefaultData );
+    aux = MCP4725_GetEEPROM_Data ( myMCP4725_I2C_parameters, &myDefaultData );
 
 
     mySTATE                  =   1;                 // Reset counter
@@ -73,19 +89,19 @@ int main( void )
         // Vout ~ 0V
             NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
             myNewDACData.DAC_New_Value   =   0;
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, FAST_MODE, myNewDACData );
+            aux = MCP4725_SetNewValue ( myMCP4725_I2C_parameters, FAST_MODE, myNewDACData );
             break;
 
         case 2:
         // Vout = ~ ( Vref * 0.5 )
             myNewDACData.DAC_New_Value   =   2048;
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_AND_EEPROM_REGISTER_MODE, myNewDACData );
+            aux = MCP4725_SetNewValue ( myMCP4725_I2C_parameters, WRITE_DAC_AND_EEPROM_REGISTER_MODE, myNewDACData );
             break;
 
         case 3:
         // Vout ~ Vref
             myNewDACData.DAC_New_Value   =   4095;
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_REGISTER_MODE, myNewDACData );
+            aux = MCP4725_SetNewValue ( myMCP4725_I2C_parameters, WRITE_DAC_REGISTER_MODE, myNewDACData );
 
             mySTATE =   0;
             NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
