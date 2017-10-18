@@ -31,11 +31,25 @@ int main( void )
     uint8_t  myRawLux[]    =       { 0, 0 };
     uint32_t aux           =       0;
 
+    I2C_parameters_t        myBH1750_I2C_parameters;
+
 
     conf_GPIO   ();
     conf_UART   ();
-    conf_TWI0   ();
     conf_TIMER0 ();
+
+
+    // I2C definition
+    myBH1750_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myBH1750_I2C_parameters.SDA         =    TWI0_SDA;
+    myBH1750_I2C_parameters.SCL         =    TWI0_SCL;
+    myBH1750_I2C_parameters.ADDR        =    BH1750_ADDR_L;
+    myBH1750_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myBH1750_I2C_parameters.SDAport     =    NRF_GPIO;
+    myBH1750_I2C_parameters.SCLport     =    NRF_GPIO;
+
+    // Configure I2C peripheral
+    aux = BH1750_Init ( myBH1750_I2C_parameters );
 
 
     mySTATE                  =   0;                 // Reset counter
@@ -57,12 +71,12 @@ int main( void )
 		switch ( mySTATE ){
         default:
         case 1:
-            aux = BH1750_TriggerMeasurement ( NRF_TWI0, BH1750_ADDR_L, BH1750_ONE_TIME_H_RESOLUTION_MODE );
+            aux = BH1750_TriggerMeasurement ( myBH1750_I2C_parameters, BH1750_ONE_TIME_H_RESOLUTION_MODE );
             break;
 
         case 2:
-            aux = BH1750_ReadRawData            ( NRF_TWI0, BH1750_ADDR_L, &myRawLux[0] );
-            // aux = BH1750_ReadLux            ( NRF_TWI0, BH1750_ADDR_L, &myLux );
+            aux = BH1750_ReadRawData            ( myBH1750_I2C_parameters, &myRawLux[0] );
+            // aux = BH1750_ReadLux            ( myBH1750_I2C_parameters, &myLux );
             break;
 
         case 3:
