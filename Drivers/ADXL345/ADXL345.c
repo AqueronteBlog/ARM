@@ -20,13 +20,46 @@
 
 
 /**
- * @brief       ADXL345_GetID   ( NRF_TWI_Type*, uint32_t, uint8_t* )
+ * @brief       ADXL345_Init ( I2C_parameters_t )
+ *
+ * @details     It configures the I2C peripheral.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of ADXL345_Init.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        18/October/2017
+ * @version     18/October/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+ADXL345_status_t  ADXL345_Init ( I2C_parameters_t myI2Cparameters )
+{
+    i2c_status_t aux;
+
+    aux  =   i2c_init ( myI2Cparameters );
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   ADXL345_SUCCESS;
+    else
+        return   ADXL345_FAILURE;
+}
+
+
+
+/**
+ * @brief       ADXL345_GetID   ( I2C_parameters_t , uint8_t* )
  *
  * @details     Reseting the data register value.
  *
- * @param[in]    myinstance:    Peripheral's Instance.
- * @param[in]    ADDR:          I2C Device's address.
- * @param[in]    myID:          Device's ID, it should be 0xE5.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  *
  * @param[out]   myID:          Device's ID, it should be 0xE5.
  *
@@ -36,18 +69,20 @@
  *
  * @author      Manuel Caballero
  * @date        11/August/2017
- * @version     11/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              11/August/2017      The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_GetID   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myID )
+ADXL345_status_t  ADXL345_GetID   ( I2C_parameters_t myI2Cparameters, uint8_t* myID )
 {
     uint8_t     cmd[]               =   { ADXL345_DEVID };
     uint32_t    aux                 =    0;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &myID[0], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &myID[0], 1 );
+
 
     if ( aux == I2C_SUCCESS )
        return   ADXL345_SUCCESS;
@@ -58,14 +93,13 @@ ADXL345_status_t  ADXL345_GetID   ( NRF_TWI_Type* myinstance, ADXL345_address_t 
 
 
 /**
- * @brief       ADXL345_Init  ( NRF_TWI_Type* , ADXL345_address_t , AXDL345_bw_rate_low_power_t , AXDL345_bw_rate_rate_t ,
+ * @brief       ADXL345_Conf  ( I2C_parameters_t , AXDL345_bw_rate_low_power_t , AXDL345_bw_rate_rate_t ,
  *                              ADXL345_data_format_int_invert_t , ADXL345_data_format_full_res_t , ADXL345_data_format_justify_t ,
  *                              ADXL345_data_format_range_t )
  *
  * @details     It initializes the ADXL345.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    ADDR:              I2C Device's address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    LOWPOWER:          If the device works in low power mode or not.
  * @param[in]    RATE:              Bandwidth rate.
  * @param[in]    INT_INVERT:        If the interrupts to active high or low.
@@ -81,11 +115,12 @@ ADXL345_status_t  ADXL345_GetID   ( NRF_TWI_Type* myinstance, ADXL345_address_t 
  *
  * @author      Manuel Caballero
  * @date        14/August/2017
- * @version     14/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              14/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_Init   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_low_power_t LOWPOWER, AXDL345_bw_rate_rate_t RATE,
+ADXL345_status_t  ADXL345_Conf   ( I2C_parameters_t myI2Cparameters, AXDL345_bw_rate_low_power_t LOWPOWER, AXDL345_bw_rate_rate_t RATE,
                                    ADXL345_data_format_int_invert_t INT_INVERT, ADXL345_data_format_full_res_t FULLRESOLUTION, ADXL345_data_format_justify_t JUSTIFY,
                                    ADXL345_data_format_range_t RANGE )
 {
@@ -108,7 +143,7 @@ ADXL345_status_t  ADXL345_Init   ( NRF_TWI_Type* myinstance, ADXL345_address_t A
             return   ADXL345_FAILURE;
     }
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
     // DATA FORMAT
@@ -133,7 +168,7 @@ ADXL345_status_t  ADXL345_Init   ( NRF_TWI_Type* myinstance, ADXL345_address_t A
     else
         return   ADXL345_FAILURE;
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -147,12 +182,11 @@ ADXL345_status_t  ADXL345_Init   ( NRF_TWI_Type* myinstance, ADXL345_address_t A
 
 
 /**
- * @brief       ADXL345_PowerMode      ( NRF_TWI_Type* , ADXL345_address_t , AXDL345_power_ctl_measure_t )
+ * @brief       ADXL345_PowerMode      ( I2C_parameters_t , AXDL345_power_ctl_measure_t )
  *
  * @details     It puts the ADXL345 in Measure or Standby mode.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    ADDR:              I2C Device's address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    MEASUREMODE:       It puts the ADXL345 in Standby mode or Measure mode.
  *
  * @param[out]   NaN.
@@ -163,19 +197,20 @@ ADXL345_status_t  ADXL345_Init   ( NRF_TWI_Type* myinstance, ADXL345_address_t A
  *
  * @author      Manuel Caballero
  * @date        14/August/2017
- * @version     14/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              14/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_PowerMode      ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_power_ctl_measure_t MEASUREMODE )
+ADXL345_status_t  ADXL345_PowerMode      ( I2C_parameters_t myI2Cparameters, AXDL345_power_ctl_measure_t MEASUREMODE )
 {
     uint8_t     cmd[]               =   { ADXL345_POWER_CTL, 0 };
     uint32_t    aux                 =    0;
 
 
     // READ THE POWER_CTL REGISTER
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[1], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
 
     // Normal mode or Low Power mode
@@ -186,7 +221,7 @@ ADXL345_status_t  ADXL345_PowerMode      ( NRF_TWI_Type* myinstance, ADXL345_add
         cmd[1]   &=  ~( 1 << 3 );
     }
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -199,12 +234,11 @@ ADXL345_status_t  ADXL345_PowerMode      ( NRF_TWI_Type* myinstance, ADXL345_add
 
 
 /**
- * @brief       ADXL345_ReadRawData    ( NRF_TWI_Type* , ADXL345_address_t , Vector_t* )
+ * @brief       ADXL345_ReadRawData    ( I2C_parameters_t , Vector_t* )
  *
  * @details     It reads the raw data from ADXL345.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    ADDR:              I2C Device's address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myXYZVector:       XAxis, YAxis and ZAxis.
  *
  * @param[out]   myXYZVector:       XAxis, YAxis and ZAxis.
@@ -214,19 +248,20 @@ ADXL345_status_t  ADXL345_PowerMode      ( NRF_TWI_Type* myinstance, ADXL345_add
  *
  * @author      Manuel Caballero
  * @date        14/August/2017
- * @version     14/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              14/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_ReadRawData    ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, Vector_t* myXYZVector )
+ADXL345_status_t  ADXL345_ReadRawData    ( I2C_parameters_t myI2Cparameters, Vector_t* myXYZVector )
 {
     uint8_t     cmd[]               =   { ADXL345_DATAX0, 0, 0, 0, 0, 0, 0 };
     uint32_t    aux                 =    0;
 
 
     // Multiple-byte read: X, Y and Z Axis Raw Data
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[1], 6 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 6 );
 
 
     // Parse the data
@@ -245,12 +280,11 @@ ADXL345_status_t  ADXL345_ReadRawData    ( NRF_TWI_Type* myinstance, ADXL345_add
 
 
 /**
- * @brief       ADXL345_ReadScaledData    ( NRF_TWI_Type* , ADXL345_address_t , Vector_t* )
+ * @brief       ADXL345_ReadScaledData    ( I2C_parameters_t , Vector_t* )
  *
  * @details     It reads the scaled data from ADXL345.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myScaled_XYZVector:    XAxis, YAxis and ZAxis.
  *
  * @param[out]   myScaled_XYZVector:    XAxis, YAxis and ZAxis.
@@ -260,11 +294,12 @@ ADXL345_status_t  ADXL345_ReadRawData    ( NRF_TWI_Type* myinstance, ADXL345_add
  *
  * @author      Manuel Caballero
  * @date        14/August/2017
- * @version     14/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              14/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_ReadScaledData ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, Vector_f* myScaled_XYZVector )
+ADXL345_status_t  ADXL345_ReadScaledData ( I2C_parameters_t myI2Cparameters, Vector_f* myScaled_XYZVector )
 {
     uint8_t     cmd[]               =   { ADXL345_DATA_FORMAT };
     uint32_t    aux                 =    0;
@@ -274,13 +309,13 @@ ADXL345_status_t  ADXL345_ReadScaledData ( NRF_TWI_Type* myinstance, ADXL345_add
 
 
     // Read the Raw data
-    aux = ADXL345_ReadRawData ( myinstance, ADDR, &myXYZ_RawVector_ptr[0] );
+    aux = ADXL345_ReadRawData ( myI2Cparameters, &myXYZ_RawVector_ptr[0] );
 
 
 
     // Read DATA_FORMAT register to check if the device is working in Full Resolution and which Range
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[0], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[0], 1 );
 
     // Check if it is working in full resolution
     if ( ( cmd[0] & 0x08 )  ==  0x08 )
@@ -324,13 +359,11 @@ ADXL345_status_t  ADXL345_ReadScaledData ( NRF_TWI_Type* myinstance, ADXL345_add
 
 
 /**
- * @brief       ADXL345_GetRange    ( NRF_TWI_Type* , ADXL345_address_t , ADXL345_data_format_range_t* )
+ * @brief       ADXL345_GetRange    ( I2C_parameters_t , ADXL345_data_format_range_t* )
  *
  * @details     It reads the current range value.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
- * @param[in]    myRANGE:               Range variable.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  *
  * @param[out]   myRANGE:               Current range.
  *
@@ -339,19 +372,20 @@ ADXL345_status_t  ADXL345_ReadScaledData ( NRF_TWI_Type* myinstance, ADXL345_add
  *
  * @author      Manuel Caballero
  * @date        15/August/2017
- * @version     15/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              15/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_GetRange  ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_data_format_range_t* myRANGE )
+ADXL345_status_t  ADXL345_GetRange  ( I2C_parameters_t myI2Cparameters, ADXL345_data_format_range_t* myRANGE )
 {
     uint8_t     cmd[]               =   { ADXL345_DATA_FORMAT };
     uint32_t    aux                 =    0;
 
 
     // Read DATA_FORMAT register to get the current Range
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[0], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[0], 1 );
 
     // Update the Range variable
     *myRANGE =   ( cmd[0] & 0x03 );
@@ -365,12 +399,11 @@ ADXL345_status_t  ADXL345_GetRange  ( NRF_TWI_Type* myinstance, ADXL345_address_
 
 
 /**
- * @brief       ADXL345_SetRange    ( NRF_TWI_Type* , ADXL345_address_t , ADXL345_data_format_range_t )
+ * @brief       ADXL345_SetRange    ( I2C_parameters_t , ADXL345_data_format_range_t )
  *
  * @details     It sets a new range value.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myRANGE:               New Range value.
  *
  * @param[out]   NaN.
@@ -380,24 +413,25 @@ ADXL345_status_t  ADXL345_GetRange  ( NRF_TWI_Type* myinstance, ADXL345_address_
  *
  * @author      Manuel Caballero
  * @date        15/August/2017
- * @version     15/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              15/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_SetRange  ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_data_format_range_t myRANGE )
+ADXL345_status_t  ADXL345_SetRange  ( I2C_parameters_t myI2Cparameters, ADXL345_data_format_range_t myRANGE )
 {
     uint8_t     cmd[]               =   { ADXL345_DATA_FORMAT, 0 };
     uint32_t    aux                 =    0;
 
 
     // Read DATA_FORMAT register to mask the Range value
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[1], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
     // Update the Range variable
     cmd[1]   =   ( cmd[1] & 0xFC ) | myRANGE;
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -410,13 +444,11 @@ ADXL345_status_t  ADXL345_SetRange  ( NRF_TWI_Type* myinstance, ADXL345_address_
 
 
 /**
- * @brief       ADXL345_GetRate    ( NRF_TWI_Type* , ADXL345_address_t , AXDL345_bw_rate_rate_t* )
+ * @brief       ADXL345_GetRate    ( I2C_parameters_t , AXDL345_bw_rate_rate_t* )
  *
  * @details     It reads the current rate value.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
- * @param[in]    myRATE:                Rate variable.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  *
  * @param[out]   myRATE:                Current Rate value.
  *
@@ -425,19 +457,20 @@ ADXL345_status_t  ADXL345_SetRange  ( NRF_TWI_Type* myinstance, ADXL345_address_
  *
  * @author      Manuel Caballero
  * @date        15/August/2017
- * @version     15/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              15/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_GetRate  ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_rate_t* myRATE )
+ADXL345_status_t  ADXL345_GetRate  ( I2C_parameters_t myI2Cparameters, AXDL345_bw_rate_rate_t* myRATE )
 {
     uint8_t     cmd[]               =   { ADXL345_BW_RATE };
     uint32_t    aux                 =    0;
 
 
     // Read BW_RATE register to get the current Rate value
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[0], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[0], 1 );
 
 
     // Update the Rate variable
@@ -454,12 +487,11 @@ ADXL345_status_t  ADXL345_GetRate  ( NRF_TWI_Type* myinstance, ADXL345_address_t
 
 
 /**
- * @brief       ADXL345_SetRate    ( NRF_TWI_Type* , ADXL345_address_t , AXDL345_bw_rate_rate_t )
+ * @brief       ADXL345_SetRate    ( I2C_parameters_t , AXDL345_bw_rate_rate_t )
  *
  * @details     It sets a new rate value.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myRATE:                New Rate value.
  *
  * @param[out]   NaN.
@@ -469,19 +501,20 @@ ADXL345_status_t  ADXL345_GetRate  ( NRF_TWI_Type* myinstance, ADXL345_address_t
  *
  * @author      Manuel Caballero
  * @date        15/August/2017
- * @version     15/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              15/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_SetRate  ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_rate_t myRATE )
+ADXL345_status_t  ADXL345_SetRate  ( I2C_parameters_t myI2Cparameters, AXDL345_bw_rate_rate_t myRATE )
 {
     uint8_t     cmd[]               =   { ADXL345_BW_RATE, 0 };
     uint32_t    aux                 =    0;
 
 
     // Read BW_RATE register to mask the Rate value
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[1], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
 
     // Check the new Rate value is in range and if the device is working in Low Power mode
@@ -497,7 +530,7 @@ ADXL345_status_t  ADXL345_SetRate  ( NRF_TWI_Type* myinstance, ADXL345_address_t
     cmd[1]    =   ( cmd[1] & 0xF0 ) | myRATE;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -510,12 +543,11 @@ ADXL345_status_t  ADXL345_SetRate  ( NRF_TWI_Type* myinstance, ADXL345_address_t
 
 
 /**
- * @brief       ADXL345_SetFreeFallThreshold ( NRF_TWI_Type* , ADXL345_address_t , uint8_t )
+ * @brief       ADXL345_SetFreeFallThreshold ( I2C_parameters_t , uint8_t )
  *
  * @details     It sets a new free fall threshold value.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myThreshold:           The free fall threshold.
  *
  * @param[out]   NaN.
@@ -525,12 +557,13 @@ ADXL345_status_t  ADXL345_SetRate  ( NRF_TWI_Type* myinstance, ADXL345_address_t
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     The scale factor is 62.5mg/LSB, and the recommended value is between
  *              300mg ( 5*62.5 = 312.5mg ) - 600mg ( 9*62.5 = 562.5mg ).
  */
-ADXL345_status_t  ADXL345_SetFreeFallThreshold ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myThreshold )
+ADXL345_status_t  ADXL345_SetFreeFallThreshold ( I2C_parameters_t myI2Cparameters, uint8_t myThreshold )
 {
     uint8_t     cmd[]               =   { ADXL345_THRESH_FF, 0 };
     uint32_t    aux                 =    0;
@@ -538,7 +571,7 @@ ADXL345_status_t  ADXL345_SetFreeFallThreshold ( NRF_TWI_Type* myinstance, ADXL3
     cmd[1]   =   myThreshold;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -551,12 +584,11 @@ ADXL345_status_t  ADXL345_SetFreeFallThreshold ( NRF_TWI_Type* myinstance, ADXL3
 
 
 /**
- * @brief       ADXL345_SetFreeFallDuration  ( NRF_TWI_Type* , ADXL345_address_t , uint8_t )
+ * @brief       ADXL345_SetFreeFallDuration  ( I2C_parameters_t , uint8_t )
  *
  * @details     It sets a new free fall duration value.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myDuration:            The free fall duration.
  *
  * @param[out]   NaN.
@@ -566,12 +598,13 @@ ADXL345_status_t  ADXL345_SetFreeFallThreshold ( NRF_TWI_Type* myinstance, ADXL3
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     The scale factor is 5ms/LSB, and the recommended value is between
  *              100ms ( 5*20 = 100ms ) - 350ms ( 70*5 = 350ms ).
  */
-ADXL345_status_t  ADXL345_SetFreeFallDuration  ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myDuration )
+ADXL345_status_t  ADXL345_SetFreeFallDuration  ( I2C_parameters_t myI2Cparameters, uint8_t myDuration )
 {
     uint8_t     cmd[]               =   { ADXL345_TIME_FF, 0 };
     uint32_t    aux                 =    0;
@@ -579,7 +612,7 @@ ADXL345_status_t  ADXL345_SetFreeFallDuration  ( NRF_TWI_Type* myinstance, ADXL3
     cmd[1]   =   myDuration;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -592,12 +625,11 @@ ADXL345_status_t  ADXL345_SetFreeFallDuration  ( NRF_TWI_Type* myinstance, ADXL3
 
 
 /**
- * @brief       ADXL345_SetTapThreshold ( NRF_TWI_Type* , ADXL345_address_t , uint8_t )
+ * @brief       ADXL345_SetTapThreshold ( I2C_parameters_t , uint8_t )
  *
  * @details     It sets a new tap threshold value.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myThreshold:           The tap threshold.
  *
  * @param[out]   NaN.
@@ -607,12 +639,13 @@ ADXL345_status_t  ADXL345_SetFreeFallDuration  ( NRF_TWI_Type* myinstance, ADXL3
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     The scale factor is 62.5mg/LSB. A value of 0 may result in undesirable
  *              behavior if single tap/double tap interrupts are enabled.
  */
-ADXL345_status_t  ADXL345_SetTapThreshold ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myThreshold )
+ADXL345_status_t  ADXL345_SetTapThreshold ( I2C_parameters_t myI2Cparameters, uint8_t myThreshold )
 {
     uint8_t     cmd[]               =   { ADXL345_THRESH_TAP, 0 };
     uint32_t    aux                 =    0;
@@ -620,7 +653,7 @@ ADXL345_status_t  ADXL345_SetTapThreshold ( NRF_TWI_Type* myinstance, ADXL345_ad
     cmd[1]   =   myThreshold;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -633,13 +666,12 @@ ADXL345_status_t  ADXL345_SetTapThreshold ( NRF_TWI_Type* myinstance, ADXL345_ad
 
 
 /**
- * @brief       ADXL345_SetTapDuration  ( NRF_TWI_Type* , ADXL345_address_t , uint8_t )
+ * @brief       ADXL345_SetTapDuration  ( I2C_parameters_t , uint8_t )
  *
  * @details     It sets a new tap duration value. Representing the maximum time that an
  *              event must be above the THRESH_TAP threshold to qualify as a tap event.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myDuration:            The tap duration.
  *
  * @param[out]   NaN.
@@ -649,11 +681,12 @@ ADXL345_status_t  ADXL345_SetTapThreshold ( NRF_TWI_Type* myinstance, ADXL345_ad
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     The scale factor is 625µs/LSB. A value of 0 disables the single tap/double tap functions.
  */
-ADXL345_status_t  ADXL345_SetTapDuration  ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myDuration )
+ADXL345_status_t  ADXL345_SetTapDuration  ( I2C_parameters_t myI2Cparameters, uint8_t myDuration )
 {
     uint8_t     cmd[]               =   { ADXL345_DUR, 0 };
     uint32_t    aux                 =    0;
@@ -661,7 +694,7 @@ ADXL345_status_t  ADXL345_SetTapDuration  ( NRF_TWI_Type* myinstance, ADXL345_ad
     cmd[1]   =   myDuration;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -674,14 +707,13 @@ ADXL345_status_t  ADXL345_SetTapDuration  ( NRF_TWI_Type* myinstance, ADXL345_ad
 
 
 /**
- * @brief       ADXL345_SetDoubleTapLatency  ( NRF_TWI_Type* , ADXL345_address_t , uint8_t )
+ * @brief       ADXL345_SetDoubleTapLatency  ( I2C_parameters_t , uint8_t )
  *
  * @details     It sets a new latency value. Representing the wait time from the detection of a tap
  *              event to the start of the time window ( defined by the window register ) during which
  *              a possible second tap event can be detected.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myLatency:             The latency value.
  *
  * @param[out]   NaN.
@@ -691,11 +723,12 @@ ADXL345_status_t  ADXL345_SetTapDuration  ( NRF_TWI_Type* myinstance, ADXL345_ad
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     The scale factor is 1.25ms/LSB. A value of 0 disables the double tap function.
  */
-ADXL345_status_t  ADXL345_SetDoubleTapLatency ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myLatency )
+ADXL345_status_t  ADXL345_SetDoubleTapLatency ( I2C_parameters_t myI2Cparameters, uint8_t myLatency )
 {
     uint8_t     cmd[]               =   { ADXL345_LATENT, 0 };
     uint32_t    aux                 =    0;
@@ -703,7 +736,7 @@ ADXL345_status_t  ADXL345_SetDoubleTapLatency ( NRF_TWI_Type* myinstance, ADXL34
     cmd[1]   =   myLatency;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -716,13 +749,12 @@ ADXL345_status_t  ADXL345_SetDoubleTapLatency ( NRF_TWI_Type* myinstance, ADXL34
 
 
 /**
- * @brief       ADXL345_SetDoubleTapWindow  ( NRF_TWI_Type* , ADXL345_address_t , uint8_t )
+ * @brief       ADXL345_SetDoubleTapWindow  ( I2C_parameters_t , uint8_t )
  *
  * @details     It sets a new window value. Representing the amount of time after the expiration of the
  *              latency time (determined by the latent register) during which a second valid tap can begin.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myWindow:              The window value.
  *
  * @param[out]   NaN.
@@ -732,11 +764,12 @@ ADXL345_status_t  ADXL345_SetDoubleTapLatency ( NRF_TWI_Type* myinstance, ADXL34
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     The scale factor is 1.25 ms/LSB. A value of 0 disables the double tap function.
  */
-ADXL345_status_t  ADXL345_SetDoubleTapWindow ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myWindow )
+ADXL345_status_t  ADXL345_SetDoubleTapWindow ( I2C_parameters_t myI2Cparameters, uint8_t myWindow )
 {
     uint8_t     cmd[]               =   { ADXL345_WINDOW, 0 };
     uint32_t    aux                 =    0;
@@ -744,7 +777,7 @@ ADXL345_status_t  ADXL345_SetDoubleTapWindow ( NRF_TWI_Type* myinstance, ADXL345
     cmd[1]   =   myWindow;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -757,12 +790,11 @@ ADXL345_status_t  ADXL345_SetDoubleTapWindow ( NRF_TWI_Type* myinstance, ADXL345
 
 
 /**
- * @brief       ADXL345_SetActivityThreshold  ( NRF_TWI_Type* , ADXL345_address_t , uint8_t )
+ * @brief       ADXL345_SetActivityThreshold  ( I2C_parameters_t , uint8_t )
  *
  * @details     It sets a new activity threshold value.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myActivityThreshold:   The activity threshold value.
  *
  * @param[out]   NaN.
@@ -772,12 +804,13 @@ ADXL345_status_t  ADXL345_SetDoubleTapWindow ( NRF_TWI_Type* myinstance, ADXL345
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     The scale factor is 62.5mg/LSB. A value of 0 may result in undesirable behavior
  *              if the activity interrupt is enabled.
  */
-ADXL345_status_t  ADXL345_SetActivityThreshold ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myActivityThreshold )
+ADXL345_status_t  ADXL345_SetActivityThreshold ( I2C_parameters_t myI2Cparameters, uint8_t myActivityThreshold )
 {
     uint8_t     cmd[]               =   { ADXL345_THRESH_ACT, 0 };
     uint32_t    aux                 =    0;
@@ -785,7 +818,7 @@ ADXL345_status_t  ADXL345_SetActivityThreshold ( NRF_TWI_Type* myinstance, ADXL3
     cmd[1]   =   myActivityThreshold;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -798,12 +831,11 @@ ADXL345_status_t  ADXL345_SetActivityThreshold ( NRF_TWI_Type* myinstance, ADXL3
 
 
 /**
- * @brief       ADXL345_SetInactivityThreshold  ( NRF_TWI_Type* , ADXL345_address_t , uint8_t )
+ * @brief       ADXL345_SetInactivityThreshold  ( I2C_parameters_t , uint8_t )
  *
  * @details     It sets a new inactivity threshold value.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myInactivityThreshold: The inactivity threshold value.
  *
  * @param[out]   NaN.
@@ -813,12 +845,13 @@ ADXL345_status_t  ADXL345_SetActivityThreshold ( NRF_TWI_Type* myinstance, ADXL3
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     The scale factor is 62.5mg/LSB. A value of 0 may result in undesirable behavior if
  *              the inactivity interrupt is enabled.
  */
-ADXL345_status_t  ADXL345_SetInactivityThreshold ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myInactivityThreshold )
+ADXL345_status_t  ADXL345_SetInactivityThreshold ( I2C_parameters_t myI2Cparameters, uint8_t myInactivityThreshold )
 {
     uint8_t     cmd[]               =   { ADXL345_THRESH_INACT, 0 };
     uint32_t    aux                 =    0;
@@ -826,7 +859,7 @@ ADXL345_status_t  ADXL345_SetInactivityThreshold ( NRF_TWI_Type* myinstance, ADX
     cmd[1]   =   myInactivityThreshold;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -839,13 +872,12 @@ ADXL345_status_t  ADXL345_SetInactivityThreshold ( NRF_TWI_Type* myinstance, ADX
 
 
 /**
- * @brief       ADXL345_SetTimeInactivity  ( NRF_TWI_Type* , ADXL345_address_t , uint8_t )
+ * @brief       ADXL345_SetTimeInactivity  ( I2C_parameters_t , uint8_t )
  *
  * @details     It sets a new time inactivity value. Representing the amount of time that acceleration
  *              must be less than the value in the THRESH_INACT register for inactivity to be declared.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myTimeInactivity:      The time inactivity value.
  *
  * @param[out]   NaN.
@@ -855,11 +887,12 @@ ADXL345_status_t  ADXL345_SetInactivityThreshold ( NRF_TWI_Type* myinstance, ADX
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     The scale factor is 1 sec/LSB.
  */
-ADXL345_status_t  ADXL345_SetTimeInactivity ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myTimeInactivity )
+ADXL345_status_t  ADXL345_SetTimeInactivity ( I2C_parameters_t myI2Cparameters, uint8_t myTimeInactivity )
 {
     uint8_t     cmd[]               =   { ADXL345_TIME_INACT, 0 };
     uint32_t    aux                 =    0;
@@ -867,7 +900,7 @@ ADXL345_status_t  ADXL345_SetTimeInactivity ( NRF_TWI_Type* myinstance, ADXL345_
     cmd[1]   =   myTimeInactivity;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -880,12 +913,11 @@ ADXL345_status_t  ADXL345_SetTimeInactivity ( NRF_TWI_Type* myinstance, ADXL345_
 
 
 /**
- * @brief       ADXL345_SetActivity_AC_DC_Coupled  ( NRF_TWI_Type* , ADXL345_address_t , ADXL345_act_inact_ctl_activity_dc_coupled_t )
+ * @brief       ADXL345_SetActivity_AC_DC_Coupled  ( I2C_parameters_t , ADXL345_act_inact_ctl_activity_dc_coupled_t )
  *
  * @details     It sets Activity in DC or AC coupled mode.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myDC_Coupled:          DC/AC mode.
  *
  * @param[out]   NaN.
@@ -895,19 +927,20 @@ ADXL345_status_t  ADXL345_SetTimeInactivity ( NRF_TWI_Type* myinstance, ADXL345_
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_SetActivity_AC_DC_Coupled    ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_activity_dc_coupled_t myDC_Coupled )
+ADXL345_status_t  ADXL345_SetActivity_AC_DC_Coupled    ( I2C_parameters_t myI2Cparameters, ADXL345_act_inact_ctl_activity_dc_coupled_t myDC_Coupled )
 {
     uint8_t     cmd[]               =   { ADXL345_ACT_INACT_CTL, 0 };
     uint32_t    aux                 =    0;
 
 
     // Read ACT_INACT_CTL register to mask the ACT ac/dc ( D7 ) value
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[1], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
 
     if ( myDC_Coupled == ACTIVITY_DC_Enabled )
@@ -916,7 +949,7 @@ ADXL345_status_t  ADXL345_SetActivity_AC_DC_Coupled    ( NRF_TWI_Type* myinstanc
         cmd[1]   |=   0x80;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -929,12 +962,11 @@ ADXL345_status_t  ADXL345_SetActivity_AC_DC_Coupled    ( NRF_TWI_Type* myinstanc
 
 
 /**
- * @brief       ADXL345_SetInactivity_AC_DC_Coupled  ( NRF_TWI_Type* , ADXL345_address_t , ADXL345_act_inact_ctl_inactivity_dc_coupled_t )
+ * @brief       ADXL345_SetInactivity_AC_DC_Coupled  ( I2C_parameters_t , ADXL345_act_inact_ctl_inactivity_dc_coupled_t )
  *
  * @details     It sets Inactivity in DC or AC coupled mode.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myDC_Coupled:          DC/AC mode.
  *
  * @param[out]   NaN.
@@ -944,19 +976,20 @@ ADXL345_status_t  ADXL345_SetActivity_AC_DC_Coupled    ( NRF_TWI_Type* myinstanc
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_SetInactivity_AC_DC_Coupled   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_inactivity_dc_coupled_t myDC_Coupled )
+ADXL345_status_t  ADXL345_SetInactivity_AC_DC_Coupled   ( I2C_parameters_t myI2Cparameters, ADXL345_act_inact_ctl_inactivity_dc_coupled_t myDC_Coupled )
 {
     uint8_t     cmd[]               =   { ADXL345_ACT_INACT_CTL, 0 };
     uint32_t    aux                 =    0;
 
 
     // Read ACT_INACT_CTL register to mask the INACT ac/dc ( D3 ) value
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[1], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
 
     if ( myDC_Coupled == INACTIVITY_DC_Enabled )
@@ -965,7 +998,7 @@ ADXL345_status_t  ADXL345_SetInactivity_AC_DC_Coupled   ( NRF_TWI_Type* myinstan
         cmd[1]   |=   0x08;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -978,12 +1011,11 @@ ADXL345_status_t  ADXL345_SetInactivity_AC_DC_Coupled   ( NRF_TWI_Type* myinstan
 
 
 /**
- * @brief       ADXL345_SetActivity_Axis  ( NRF_TWI_Type* , ADXL345_address_t , ADXL345_act_inact_ctl_activity_axis_t )
+ * @brief       ADXL345_SetActivity_Axis  ( I2C_parameters_t , ADXL345_act_inact_ctl_activity_axis_t )
  *
  * @details     It sets the axis to be enabled for Activity.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myAxisEnabled:         Enable axis.
  *
  * @param[out]   NaN.
@@ -993,19 +1025,20 @@ ADXL345_status_t  ADXL345_SetInactivity_AC_DC_Coupled   ( NRF_TWI_Type* myinstan
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_SetActivity_Axis  ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_activity_axis_t myAxisEnabled )
+ADXL345_status_t  ADXL345_SetActivity_Axis  ( I2C_parameters_t myI2Cparameters, ADXL345_act_inact_ctl_activity_axis_t myAxisEnabled )
 {
     uint8_t     cmd[]               =   { ADXL345_ACT_INACT_CTL, 0 };
     uint32_t    aux                 =    0;
 
 
     // Read ACT_INACT_CTL register to mask the axis ( D6 - D4 ) value
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[1], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
     // Clear all the Axis
     cmd[1]   &=   0x8F;
@@ -1047,7 +1080,7 @@ ADXL345_status_t  ADXL345_SetActivity_Axis  ( NRF_TWI_Type* myinstance, ADXL345_
     }
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -1060,12 +1093,11 @@ ADXL345_status_t  ADXL345_SetActivity_Axis  ( NRF_TWI_Type* myinstance, ADXL345_
 
 
 /**
- * @brief       ADXL345_SetInactivity_Axis  ( NRF_TWI_Type* , ADXL345_address_t , ADXL345_act_inact_ctl_inactivity_axis_t )
+ * @brief       ADXL345_SetInactivity_Axis  ( I2C_parameters_t , ADXL345_act_inact_ctl_inactivity_axis_t )
  *
  * @details     It sets the axis to be enabled for Inactivity.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myAxisEnabled:         Enable axis.
  *
  * @param[out]   NaN.
@@ -1075,19 +1107,20 @@ ADXL345_status_t  ADXL345_SetActivity_Axis  ( NRF_TWI_Type* myinstance, ADXL345_
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_SetInactivity_Axis    ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_inactivity_axis_t myAxisEnabled )
+ADXL345_status_t  ADXL345_SetInactivity_Axis    ( I2C_parameters_t myI2Cparameters, ADXL345_act_inact_ctl_inactivity_axis_t myAxisEnabled )
 {
     uint8_t     cmd[]               =   { ADXL345_ACT_INACT_CTL, 0 };
     uint32_t    aux                 =    0;
 
 
     // Read ACT_INACT_CTL register to mask the axis ( D2 - D0 ) value
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[1], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
     // Clear all the Axis
     cmd[1]   &=   0xF8;
@@ -1129,7 +1162,7 @@ ADXL345_status_t  ADXL345_SetInactivity_Axis    ( NRF_TWI_Type* myinstance, ADXL
     }
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -1142,12 +1175,11 @@ ADXL345_status_t  ADXL345_SetInactivity_Axis    ( NRF_TWI_Type* myinstance, ADXL
 
 
 /**
- * @brief       ADXL345_SetTap_Axis  ( NRF_TWI_Type* , ADXL345_address_t , ADXL345_tap_axes_axis_t )
+ * @brief       ADXL345_SetTap_Axis  ( I2C_parameters_t , ADXL345_tap_axes_axis_t )
  *
  * @details     It sets the axis to be enabled for One/Double tap.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myAxisEnabled:         Enable axis.
  *
  * @param[out]   NaN.
@@ -1157,19 +1189,20 @@ ADXL345_status_t  ADXL345_SetInactivity_Axis    ( NRF_TWI_Type* myinstance, ADXL
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_SetTap_Axis   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_tap_axes_axis_t myAxisEnabled )
+ADXL345_status_t  ADXL345_SetTap_Axis   ( I2C_parameters_t myI2Cparameters, ADXL345_tap_axes_axis_t myAxisEnabled )
 {
     uint8_t     cmd[]               =   { ADXL345_TAP_AXES, 0 };
     uint32_t    aux                 =    0;
 
 
     // Read TAP_AXES register to mask the axis ( D2 - D0 ) value
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[1], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
     // Clear all the Axis
     cmd[1]   &=   0xF8;
@@ -1211,7 +1244,7 @@ ADXL345_status_t  ADXL345_SetTap_Axis   ( NRF_TWI_Type* myinstance, ADXL345_addr
     }
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -1224,13 +1257,12 @@ ADXL345_status_t  ADXL345_SetTap_Axis   ( NRF_TWI_Type* myinstance, ADXL345_addr
 
 
 /**
- * @brief       ADXL345_SetDouble_Suppress  ( NRF_TWI_Type* , ADXL345_address_t , ADXL345_tap_axes_suppress_t )
+ * @brief       ADXL345_SetDouble_Suppress  ( I2C_parameters_t , ADXL345_tap_axes_suppress_t )
  *
  * @details     Setting the suppress bit suppresses double tap detection if acceleration greater than the value
  *              in THRESH_TAP is present between taps.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    mySuppressEnabled:     Enable/Disable.
  *
  * @param[out]   NaN.
@@ -1240,19 +1272,20 @@ ADXL345_status_t  ADXL345_SetTap_Axis   ( NRF_TWI_Type* myinstance, ADXL345_addr
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_SetDouble_Suppress    ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_tap_axes_suppress_t mySuppressEnabled )
+ADXL345_status_t  ADXL345_SetDouble_Suppress    ( I2C_parameters_t myI2Cparameters, ADXL345_tap_axes_suppress_t mySuppressEnabled )
 {
     uint8_t     cmd[]               =   { ADXL345_TAP_AXES, 0 };
     uint32_t    aux                 =    0;
 
 
     // Read TAP_AXES register to mask the suppress ( D3 ) value
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[1], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
     // Clear the current value
     cmd[1]   &=   0xF7;
@@ -1263,7 +1296,7 @@ ADXL345_status_t  ADXL345_SetDouble_Suppress    ( NRF_TWI_Type* myinstance, ADXL
 
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -1276,13 +1309,11 @@ ADXL345_status_t  ADXL345_SetDouble_Suppress    ( NRF_TWI_Type* myinstance, ADXL
 
 
 /**
- * @brief       ADXL345_Read_ACT_TAP_STATUS   ( NRF_TWI_Type*, uint32_t, uint8_t* )
+ * @brief       ADXL345_Read_ACT_TAP_STATUS   ( I2C_parameters_t , uint8_t* )
  *
  * @details     It reads the ACT_TAP_STATUS register.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    ADDR:              I2C Device's address.
- * @param[in]    myACT_TAP_STATUS:  Status variable.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  *
  * @param[out]   myACT_TAP_STATUS:  Current ACT_TAP_STATUS.
  *
@@ -1292,18 +1323,21 @@ ADXL345_status_t  ADXL345_SetDouble_Suppress    ( NRF_TWI_Type* myinstance, ADXL
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_Read_ACT_TAP_STATUS   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myACT_TAP_STATUS )
+ADXL345_status_t  ADXL345_Read_ACT_TAP_STATUS   ( I2C_parameters_t myI2Cparameters, uint8_t* myACT_TAP_STATUS )
 {
     uint8_t     cmd[]               =   { ADXL345_ACT_TAP_STATUS };
     uint32_t    aux                 =    0;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &myACT_TAP_STATUS[0], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &myACT_TAP_STATUS[0], 1 );
+
+
 
     if ( aux == I2C_SUCCESS )
        return   ADXL345_SUCCESS;
@@ -1314,12 +1348,11 @@ ADXL345_status_t  ADXL345_Read_ACT_TAP_STATUS   ( NRF_TWI_Type* myinstance, ADXL
 
 
 /**
- * @brief       ADXL345_EnableInterrupts  ( NRF_TWI_Type* , ADXL345_address_t , AXDL345_int_map_t )
+ * @brief       ADXL345_EnableInterrupts  ( I2C_parameters_t , AXDL345_int_map_t )
  *
  * @details     It enables the interrupts.
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myInterruptsMap:       Map the interrupt sources.
  *
  * @param[out]   NaN.
@@ -1329,11 +1362,12 @@ ADXL345_status_t  ADXL345_Read_ACT_TAP_STATUS   ( NRF_TWI_Type* myinstance, ADXL
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_EnableInterrupts  ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_int_map_t myInterruptsMap )
+ADXL345_status_t  ADXL345_EnableInterrupts  ( I2C_parameters_t myI2Cparameters, AXDL345_int_map_t myInterruptsMap )
 {
     uint8_t     cmd[]               =   { ADXL345_INT_ENABLE, 0 };
     uint32_t    aux                 =    0;
@@ -1343,7 +1377,7 @@ ADXL345_status_t  ADXL345_EnableInterrupts  ( NRF_TWI_Type* myinstance, ADXL345_
     cmd[1]    =   myInterruptsMap;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -1356,12 +1390,11 @@ ADXL345_status_t  ADXL345_EnableInterrupts  ( NRF_TWI_Type* myinstance, ADXL345_
 
 
 /**
- * @brief       ADXL345_SetInterruptsMap  ( NRF_TWI_Type* , ADXL345_address_t , AXDL345_int_map_t, AXDL345_int_pin_t )
+ * @brief       ADXL345_SetInterruptsMap  ( I2C_parameters_t , AXDL345_int_map_t, AXDL345_int_pin_t )
  *
  * @details     It links the interrupt sources to the right pin ( 1 or 2 ).
  *
- * @param[in]    myinstance:            Peripheral's Instance.
- * @param[in]    ADDR:                  I2C Device's address.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  * @param[in]    myInterruptsMap:       Interrupt sources.
  * @param[in]    myInterruptPin:        Map the interrupt source to pin 1 or 2.
  *
@@ -1372,19 +1405,20 @@ ADXL345_status_t  ADXL345_EnableInterrupts  ( NRF_TWI_Type* myinstance, ADXL345_
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_SetInterruptsMap  ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_int_map_t myInterruptsMap, AXDL345_int_pin_t myInterruptPin )
+ADXL345_status_t  ADXL345_SetInterruptsMap  ( I2C_parameters_t myI2Cparameters, AXDL345_int_map_t myInterruptsMap, AXDL345_int_pin_t myInterruptPin )
 {
     uint8_t     cmd[]               =   { ADXL345_INT_MAP, 0 };
     uint32_t    aux                 =    0;
 
 
     // Read INT_MAP register to mask the interrupts
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &cmd[1], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
 
     if ( myInterruptPin == INT1_PIN )
@@ -1393,7 +1427,7 @@ ADXL345_status_t  ADXL345_SetInterruptsMap  ( NRF_TWI_Type* myinstance, ADXL345_
         cmd[1]    |=   myInterruptsMap;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 2, I2C_STOP_BIT );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -1406,12 +1440,11 @@ ADXL345_status_t  ADXL345_SetInterruptsMap  ( NRF_TWI_Type* myinstance, ADXL345_
 
 
 /**
- * @brief       ADXL345_ReadInterruptSource   ( NRF_TWI_Type*, uint32_t, uint8_t* )
+ * @brief       ADXL345_ReadInterruptSource   ( I2C_parameters_t , uint8_t* )
  *
  * @details     It reads the interrupt sources.
  *
- * @param[in]    myinstance:        Peripheral's Instance.
- * @param[in]    ADDR:              I2C Device's address.
+ * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myIntSource:       Status variable.
  *
  * @param[out]   myIntSource:       Current ACT_TAP_STATUS.
@@ -1422,18 +1455,21 @@ ADXL345_status_t  ADXL345_SetInterruptsMap  ( NRF_TWI_Type* myinstance, ADXL345_
  *
  * @author      Manuel Caballero
  * @date        18/August/2017
- * @version     18/August/2017   The ORIGIN
+ * @version     18/October/2017    Adapted to the new I2C driver.
+ *              18/August/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-ADXL345_status_t  ADXL345_ReadInterruptSource   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myIntSource )
+ADXL345_status_t  ADXL345_ReadInterruptSource   ( I2C_parameters_t myI2Cparameters, uint8_t* myIntSource )
 {
     uint8_t     cmd[]               =   { ADXL345_INT_SOURCE };
     uint32_t    aux                 =    0;
 
 
-    aux = i2c_write ( myinstance, ADDR, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myinstance, ADDR, &myIntSource[0], 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &myIntSource[0], 1 );
+
+
 
     if ( aux == I2C_SUCCESS )
        return   ADXL345_SUCCESS;

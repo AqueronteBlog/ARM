@@ -342,44 +342,45 @@ typedef enum{
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-ADXL345_status_t  ADXL345_Init                          ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_low_power_t LOWPOWER, AXDL345_bw_rate_rate_t RATE,
+ADXL345_status_t  ADXL345_Init                          ( I2C_parameters_t myI2Cparameters );
+ADXL345_status_t  ADXL345_Conf                          ( I2C_parameters_t myI2Cparameters, AXDL345_bw_rate_low_power_t LOWPOWER, AXDL345_bw_rate_rate_t RATE,
                                                           ADXL345_data_format_int_invert_t INT_INVERT, ADXL345_data_format_full_res_t FULLRESOLUTION, ADXL345_data_format_justify_t JUSTIFY,
                                                           ADXL345_data_format_range_t RANGE );
 
-ADXL345_status_t  ADXL345_PowerMode                     ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_power_ctl_measure_t MEASUREMODE );
+ADXL345_status_t  ADXL345_PowerMode                     ( I2C_parameters_t myI2Cparameters, AXDL345_power_ctl_measure_t MEASUREMODE );
 
-ADXL345_status_t  ADXL345_GetID                         ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myID );
+ADXL345_status_t  ADXL345_GetID                         ( I2C_parameters_t myI2Cparameters, uint8_t* myID );
 
-ADXL345_status_t  ADXL345_GetRange                      ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_data_format_range_t* myRANGE );
-ADXL345_status_t  ADXL345_SetRange                      ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_data_format_range_t  myRANGE );
+ADXL345_status_t  ADXL345_GetRange                      ( I2C_parameters_t myI2Cparameters, ADXL345_data_format_range_t* myRANGE );
+ADXL345_status_t  ADXL345_SetRange                      ( I2C_parameters_t myI2Cparameters, ADXL345_data_format_range_t  myRANGE );
 
-ADXL345_status_t  ADXL345_GetRate                       ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_rate_t* myRATE );
-ADXL345_status_t  ADXL345_SetRate                       ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_bw_rate_rate_t  myRATE );
+ADXL345_status_t  ADXL345_GetRate                       ( I2C_parameters_t myI2Cparameters, AXDL345_bw_rate_rate_t* myRATE );
+ADXL345_status_t  ADXL345_SetRate                       ( I2C_parameters_t myI2Cparameters, AXDL345_bw_rate_rate_t  myRATE );
 
-ADXL345_status_t  ADXL345_ReadRawData                   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, Vector_t* myXYZVector );
-ADXL345_status_t  ADXL345_ReadScaledData                ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, Vector_f* myScaled_XYZVector );
+ADXL345_status_t  ADXL345_ReadRawData                   ( I2C_parameters_t myI2Cparameters, Vector_t* myXYZVector );
+ADXL345_status_t  ADXL345_ReadScaledData                ( I2C_parameters_t myI2Cparameters, Vector_f* myScaled_XYZVector );
 
-ADXL345_status_t  ADXL345_SetFreeFallThreshold          ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myThreshold );
-ADXL345_status_t  ADXL345_SetFreeFallDuration           ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myDuration );
+ADXL345_status_t  ADXL345_SetFreeFallThreshold          ( I2C_parameters_t myI2Cparameters, uint8_t myThreshold );
+ADXL345_status_t  ADXL345_SetFreeFallDuration           ( I2C_parameters_t myI2Cparameters, uint8_t myDuration );
 
-ADXL345_status_t  ADXL345_SetTapThreshold               ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myThreshold );
-ADXL345_status_t  ADXL345_SetTapDuration                ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myDuration );
-ADXL345_status_t  ADXL345_SetDoubleTapLatency           ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myLatency );
-ADXL345_status_t  ADXL345_SetDoubleTapWindow            ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myWindow );
-ADXL345_status_t  ADXL345_SetTap_Axis                   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_tap_axes_axis_t myAxisEnabled );
-ADXL345_status_t  ADXL345_SetDouble_Suppress            ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_tap_axes_suppress_t mySuppressEnabled );
+ADXL345_status_t  ADXL345_SetTapThreshold               ( I2C_parameters_t myI2Cparameters, uint8_t myThreshold );
+ADXL345_status_t  ADXL345_SetTapDuration                ( I2C_parameters_t myI2Cparameters, uint8_t myDuration );
+ADXL345_status_t  ADXL345_SetDoubleTapLatency           ( I2C_parameters_t myI2Cparameters, uint8_t myLatency );
+ADXL345_status_t  ADXL345_SetDoubleTapWindow            ( I2C_parameters_t myI2Cparameters, uint8_t myWindow );
+ADXL345_status_t  ADXL345_SetTap_Axis                   ( I2C_parameters_t myI2Cparameters, ADXL345_tap_axes_axis_t myAxisEnabled );
+ADXL345_status_t  ADXL345_SetDouble_Suppress            ( I2C_parameters_t myI2Cparameters, ADXL345_tap_axes_suppress_t mySuppressEnabled );
 
-ADXL345_status_t  ADXL345_SetActivityThreshold          ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myActivityThreshold );
-ADXL345_status_t  ADXL345_SetActivity_AC_DC_Coupled     ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_activity_dc_coupled_t myDC_Coupled );
-ADXL345_status_t  ADXL345_SetActivity_Axis              ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_activity_axis_t myAxisEnabled );
+ADXL345_status_t  ADXL345_SetActivityThreshold          ( I2C_parameters_t myI2Cparameters, uint8_t myActivityThreshold );
+ADXL345_status_t  ADXL345_SetActivity_AC_DC_Coupled     ( I2C_parameters_t myI2Cparameters, ADXL345_act_inact_ctl_activity_dc_coupled_t myDC_Coupled );
+ADXL345_status_t  ADXL345_SetActivity_Axis              ( I2C_parameters_t myI2Cparameters, ADXL345_act_inact_ctl_activity_axis_t myAxisEnabled );
 
-ADXL345_status_t  ADXL345_Read_ACT_TAP_STATUS           ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myACT_TAP_STATUS );
+ADXL345_status_t  ADXL345_Read_ACT_TAP_STATUS           ( I2C_parameters_t myI2Cparameters, uint8_t* myACT_TAP_STATUS );
 
-ADXL345_status_t  ADXL345_SetInactivityThreshold        ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myInactivityThreshold );
-ADXL345_status_t  ADXL345_SetTimeInactivity             ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t myTimeInactivity );
-ADXL345_status_t  ADXL345_SetInactivity_AC_DC_Coupled   ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_inactivity_dc_coupled_t myDC_Coupled );
-ADXL345_status_t  ADXL345_SetInactivity_Axis            ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, ADXL345_act_inact_ctl_inactivity_axis_t myAxisEnabled );
+ADXL345_status_t  ADXL345_SetInactivityThreshold        ( I2C_parameters_t myI2Cparameters, uint8_t myInactivityThreshold );
+ADXL345_status_t  ADXL345_SetTimeInactivity             ( I2C_parameters_t myI2Cparameters, uint8_t myTimeInactivity );
+ADXL345_status_t  ADXL345_SetInactivity_AC_DC_Coupled   ( I2C_parameters_t myI2Cparameters, ADXL345_act_inact_ctl_inactivity_dc_coupled_t myDC_Coupled );
+ADXL345_status_t  ADXL345_SetInactivity_Axis            ( I2C_parameters_t myI2Cparameters, ADXL345_act_inact_ctl_inactivity_axis_t myAxisEnabled );
 
-ADXL345_status_t  ADXL345_SetInterruptsMap              ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_int_map_t myInterruptsMap, AXDL345_int_pin_t myInterruptPin );
-ADXL345_status_t  ADXL345_EnableInterrupts              ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, AXDL345_int_map_t myInterruptsEnabled );
-ADXL345_status_t  ADXL345_ReadInterruptSource           ( NRF_TWI_Type* myinstance, ADXL345_address_t ADDR, uint8_t* myIntSource );
+ADXL345_status_t  ADXL345_SetInterruptsMap              ( I2C_parameters_t myI2Cparameters, AXDL345_int_map_t myInterruptsMap, AXDL345_int_pin_t myInterruptPin );
+ADXL345_status_t  ADXL345_EnableInterrupts              ( I2C_parameters_t myI2Cparameters, AXDL345_int_map_t myInterruptsEnabled );
+ADXL345_status_t  ADXL345_ReadInterruptSource           ( I2C_parameters_t myI2Cparameters, uint8_t* myIntSource );
