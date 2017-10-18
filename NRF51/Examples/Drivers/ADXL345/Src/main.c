@@ -28,24 +28,39 @@
 
 int main( void )
 {
-    uint32_t aux           =       0;
     uint8_t  myTX_buff[]   =      { 0, 0, 0, 0, 0, 0 };
 
+    ADXL345_status_t            aux;
     Vector_t                    myXYZVector, *myXYZptr = &myXYZVector;
+
+    I2C_parameters_t            myADXL345_I2C_parameters;
+
 
 
     conf_GPIO   ();
     conf_UART   ();
-    conf_TWI0   ();
     conf_TIMER0 ();
 
 
-    ADXL345_Init   ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, BW_RATE_LOW_POWER_Disabled, BW_RATE_RATE_100HZ,
-                     DATA_FORMAT_INT_INVERT_Disabled, DATA_FORMAT_FULL_RES_Enabled, DATA_FORMAT_JUSTIFY_Disabled,
-                     DATA_FORMAT_RANGE_4_G );
+
+    // I2C definition
+    myADXL345_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myADXL345_I2C_parameters.SDA         =    TWI0_SDA;
+    myADXL345_I2C_parameters.SCL         =    TWI0_SCL;
+    myADXL345_I2C_parameters.ADDR        =    ADXL345_ALT_ADDRESS_LOW;
+    myADXL345_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myADXL345_I2C_parameters.SDAport     =    NRF_GPIO;
+    myADXL345_I2C_parameters.SCLport     =    NRF_GPIO;
+
+    // Configure I2C peripheral
+    aux = ADXL345_Init   ( myADXL345_I2C_parameters );
+
+    aux = ADXL345_Conf   ( myADXL345_I2C_parameters, BW_RATE_LOW_POWER_Disabled, BW_RATE_RATE_100HZ,
+                           DATA_FORMAT_INT_INVERT_Disabled, DATA_FORMAT_FULL_RES_Enabled, DATA_FORMAT_JUSTIFY_Disabled,
+                           DATA_FORMAT_RANGE_4_G );
 
 
-    ADXL345_PowerMode ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, MEASURE_MODE );
+    aux = ADXL345_PowerMode ( myADXL345_I2C_parameters, MEASURE_MODE );
 
 
     mySTATE                  =   0;                 // Reset counter
@@ -67,7 +82,7 @@ int main( void )
 		switch ( mySTATE ){
         default:
         case 1:
-            aux = ADXL345_ReadRawData       ( NRF_TWI0, ADXL345_ALT_ADDRESS_LOW, &myXYZptr[0] );
+            aux = ADXL345_ReadRawData       ( myADXL345_I2C_parameters, &myXYZptr[0] );
             break;
 
         case 2:
