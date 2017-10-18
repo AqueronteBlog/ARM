@@ -35,13 +35,28 @@ int main( void )
     Vector_pressure_f           myUP;
     Vector_compensated_data_f   myTrueData;
 
+    I2C_parameters_t            myBMP085_I2C_parameters;
+
+
     conf_GPIO   ();
     conf_UART   ();
-    conf_TWI0   ();
     conf_TIMER0 ();
 
 
-    aux = BMP085_GetCalibrationCoefficients  ( NRF_TWI0, BMP085_ADDRESS, &myCalCoeff );
+    // I2C definition
+    myBMP085_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myBMP085_I2C_parameters.SDA         =    TWI0_SDA;
+    myBMP085_I2C_parameters.SCL         =    TWI0_SCL;
+    myBMP085_I2C_parameters.ADDR        =    BMP085_ADDRESS;
+    myBMP085_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myBMP085_I2C_parameters.SDAport     =    NRF_GPIO;
+    myBMP085_I2C_parameters.SCLport     =    NRF_GPIO;
+
+    // Configure I2C peripheral
+    aux = BMP085_Init ( myBMP085_I2C_parameters );
+
+
+    aux = BMP085_GetCalibrationCoefficients  ( myBMP085_I2C_parameters, &myCalCoeff );
 
 
     mySTATE                  =   1;                 // Reset counter
@@ -63,15 +78,15 @@ int main( void )
 		switch ( mySTATE ){
         //default:
         case 1:
-            aux = BMP085_TriggerTemperature ( NRF_TWI0, BMP085_ADDRESS );
+            aux = BMP085_TriggerTemperature ( myBMP085_I2C_parameters );
             break;
 
         case 2:
-            aux = BMP085_ReadRawTemperature ( NRF_TWI0, BMP085_ADDRESS, &myUT );
-            aux = BMP085_TriggerPressure ( NRF_TWI0, BMP085_ADDRESS, PRESSURE_STANDARD_MODE );
+            aux = BMP085_ReadRawTemperature ( myBMP085_I2C_parameters, &myUT );
+            aux = BMP085_TriggerPressure ( myBMP085_I2C_parameters, PRESSURE_STANDARD_MODE );
             break;
         case 3:
-            aux = BMP085_ReadRawPressure ( NRF_TWI0, BMP085_ADDRESS, &myUP );
+            aux = BMP085_ReadRawPressure ( myBMP085_I2C_parameters, &myUP );
 
             myTrueData = BMP085_CalculateCompensated_Temperature_Pressure ( myCalCoeff, myUT, myUP, PRESSURE_STANDARD_MODE );
             // Start transmitting through the UART
