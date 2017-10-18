@@ -63,10 +63,11 @@ uint32_t    BH1750_Mode;
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-uint32_t  BH1750_PowerDown          ( NRF_TWI_Type* myinstance, uint32_t ADDR );
-uint32_t  BH1750_PowerOn            ( NRF_TWI_Type* myinstance, uint32_t ADDR );
-uint32_t  BH1750_ResetDataRegister  ( NRF_TWI_Type* myinstance, uint32_t ADDR );
-uint32_t  BH1750_TriggerMeasurement ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint32_t MODE );
-uint32_t  BH1750_NewSensitivity     ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t newSensitivity );
-uint32_t  BH1750_ReadRawData        ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myRawData );
-uint32_t  BH1750_ReadLux            ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* myLux );
+uint32_t  BH1750_Init               ( I2C_parameters_t myI2Cparameters );
+uint32_t  BH1750_PowerDown          ( I2C_parameters_t myI2Cparameters );
+uint32_t  BH1750_PowerOn            ( I2C_parameters_t myI2Cparameters );
+uint32_t  BH1750_ResetDataRegister  ( I2C_parameters_t myI2Cparameters );
+uint32_t  BH1750_TriggerMeasurement ( I2C_parameters_t myI2Cparameters, uint32_t MODE );
+uint32_t  BH1750_NewSensitivity     ( I2C_parameters_t myI2Cparameters, uint8_t newSensitivity );
+uint32_t  BH1750_ReadRawData        ( I2C_parameters_t myI2Cparameters, uint8_t* myRawData );
+uint32_t  BH1750_ReadLux            ( I2C_parameters_t myI2Cparameters, float* myLux );
