@@ -87,12 +87,13 @@ uint32_t    HTU21D_Resolution;
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-uint32_t  HTU21D_Init               ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint32_t MODE, uint32_t RESOLUTION, uint32_t HEATER );
-uint32_t  HTU21D_SoftReset          ( NRF_TWI_Type* myinstance, uint32_t ADDR );
-uint32_t  HTU21D_TriggerTemperature ( NRF_TWI_Type* myinstance, uint32_t ADDR );
-uint32_t  HTU21D_ReadTemperature    ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* mytemperature );
-uint32_t  HTU21D_ReadRawTemperature ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myRawtemperature );
-uint32_t  HTU21D_TriggerHumidity    ( NRF_TWI_Type* myinstance, uint32_t ADDR );
-uint32_t  HTU21D_ReadHumidity       ( NRF_TWI_Type* myinstance, uint32_t ADDR, float* myhumidity );
-uint32_t  HTU21D_ReadRawHumidity    ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* myRawhumidity );
-uint32_t  HTU21D_BatteryStatus      ( NRF_TWI_Type* myinstance, uint32_t ADDR, uint8_t* battStatus );
+uint32_t  HTU21D_Init               ( I2C_parameters_t myI2Cparameters );
+uint32_t  HTU21D_Conf               ( I2C_parameters_t myI2Cparameters, uint32_t MODE, uint32_t RESOLUTION, uint32_t HEATER );
+uint32_t  HTU21D_SoftReset          ( I2C_parameters_t myI2Cparameters );
+uint32_t  HTU21D_TriggerTemperature ( I2C_parameters_t myI2Cparameters );
+uint32_t  HTU21D_ReadTemperature    ( I2C_parameters_t myI2Cparameters, float* mytemperature );
+uint32_t  HTU21D_ReadRawTemperature ( I2C_parameters_t myI2Cparameters, uint8_t* myRawtemperature );
+uint32_t  HTU21D_TriggerHumidity    ( I2C_parameters_t myI2Cparameters );
+uint32_t  HTU21D_ReadHumidity       ( I2C_parameters_t myI2Cparameters, float* myhumidity );
+uint32_t  HTU21D_ReadRawHumidity    ( I2C_parameters_t myI2Cparameters, uint8_t* myRawhumidity );
+uint32_t  HTU21D_BatteryStatus      ( I2C_parameters_t myI2Cparameters, uint8_t* battStatus );
