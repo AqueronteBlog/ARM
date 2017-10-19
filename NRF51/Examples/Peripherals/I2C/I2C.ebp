@@ -64,14 +64,14 @@
 			<Add option="-eb_start_files" />
 			<Add option="-eb_lib=n" />
 		</Linker>
-		<Unit filename="..\..\..\Drivers\HTU21D\HTU21D.c">
+		<Unit filename="..\..\..\..\Drivers\HTU21D\HTU21D.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\..\Drivers\HTU21D\HTU21D.h" />
-		<Unit filename="..\Basics\I2C\i2c.c">
+		<Unit filename="..\..\..\..\Drivers\HTU21D\HTU21D.h" />
+		<Unit filename="..\..\Basics\I2C\i2c.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\Basics\I2C\i2c.h" />
+		<Unit filename="..\..\Basics\I2C\i2c.h" />
 		<Unit filename="gcc_nrf51_s130_xxaa.ld" />
 		<Unit filename="Inc\compiler_abstraction.h" />
 		<Unit filename="Inc\nrf.h" />
