@@ -11,7 +11,7 @@
  * @version     19/October/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
+ * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ).
  */
 
 
@@ -52,6 +52,18 @@ typedef enum
     SI7006_READ_FIRMWARE_VERSION_CMD1                           =   0x84,               /*!<  Read Firmware Revision                                */
     SI7006_READ_FIRMWARE_VERSION_CMD2                           =   0xB8                /*!<  Read Firmware Revision                                */
 } SI7006_command_code_t;
+
+
+
+// MASTER MODE
+/**
+  * @brief   MEASUREMENT RESOLUTION
+  */
+typedef enum
+{
+    SI7006_HOLD_MASTER_MODE                 =   0x01,           /*!<  SI7006 HOLD MASTER MODE enabled                       */
+    SI7006_NO_HOLD_MASTER_MODE              =   0x00            /*!<  SI7006 NO HOLD MASTER MODE enabled                    */
+} SI7006_master_mode_t;
 
 
 
@@ -113,8 +125,8 @@ typedef enum
 #define SI7006_VECTOR_STRUCT_H
 typedef struct
 {
-    uint16_t RelativeHumidity;
-    uint16_t Temperature;
+    float    RelativeHumidity;
+    float    Temperature;
 
     uint32_t ElectronicSerialNumber_LSB;
     uint32_t ElectronicSerialNumber_MSB;
@@ -165,7 +177,7 @@ SI7006_status_t  SI7006_GetFirmwareRevision         ( I2C_parameters_t myI2Cpara
 
 /** It performs a new temperature measurement.
   */
-SI7006_status_t  SI7006_TriggerTemperature          ( I2C_parameters_t myI2Cparameters );
+SI7006_status_t  SI7006_TriggerTemperature          ( I2C_parameters_t myI2Cparameters, SI7006_master_mode_t myMode );
 
 /** It read the temperature.
   */
@@ -185,7 +197,7 @@ SI7006_status_t  SI7006_ReadTemperatureFromRH       ( I2C_parameters_t myI2Cpara
 
 /** It performs a new relative humidity measurement.
   */
-SI7006_status_t  SI7006_TriggerHumidity             ( I2C_parameters_t myI2Cparameters );
+SI7006_status_t  SI7006_TriggerHumidity             ( I2C_parameters_t myI2Cparameters, SI7006_master_mode_t myMode );
 
 /** It reads the relative humidity.
   */
