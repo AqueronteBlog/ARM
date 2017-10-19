@@ -1,14 +1,14 @@
 /**
- * @brief       PCF8591.h
- * @details     8-bit A/D and D/A converter.
+ * @brief       SI7006.h
+ * @details     I2C HUMIDITY AND TEMPERATURE SENSOR.
  *              Header file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        22/September/2017
- * @version     22/September/2017    The ORIGIN
+ * @date        19/October/2017
+ * @version     19/October/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -25,93 +25,106 @@
   */
 typedef enum
 {
-    PCF8591_ADDRESS_0     =   0x48,                   /*!<   A2 A1 A0: 000                                            */
-    PCF8591_ADDRESS_1     =   0x49,                   /*!<   A2 A1 A0: 001                                            */
-    PCF8591_ADDRESS_2     =   0x4A,                   /*!<   A2 A1 A0: 010                                            */
-    PCF8591_ADDRESS_3     =   0x4B,                   /*!<   A2 A1 A0: 011                                            */
-    PCF8591_ADDRESS_4     =   0x4C,                   /*!<   A2 A1 A0: 100                                            */
-    PCF8591_ADDRESS_5     =   0x4D,                   /*!<   A2 A1 A0: 101                                            */
-    PCF8591_ADDRESS_6     =   0x4E,                   /*!<   A2 A1 A0: 110                                            */
-    PCF8591_ADDRESS_7     =   0x4F                    /*!<   A2 A1 A0: 111                                            */
-} PCF8591_address_t;
+    SI7006_ADDRESS     =   0x40                                                         /*!<   SI7006 I2C Address                                   */
+} SI7006_address_t;
 
 
-// CONTROL BYTE
+// REGISTERS
 /**
-  * @brief   ANALOG OUTPUT ENABLE FLAG
+  * @brief   COMMAND CODE
   */
 typedef enum
 {
-    PCF8591_DAC_MASK           =   0x40,                            /*!<  PCF8591 DAC Mask                                       */
-    PCF8591_DAC_ENABLED        =   ( 1 << 6 ),                      /*!<  PCF8591 DAC is enabled.                                */
-    PCF8591_DAC_DISABLE        =   ( 0 << 6 )                       /*!<  PCF8591 DAC is disabled                                */
-} PCF8591_dac_status_t;
+    SI7006_MEASURE_RELATIVE_HUMIDITY_HOLD_MASTER_MODE           =   0xE5,               /*!<  Measure Relative Humidity, Hold Master Mode           */
+    SI7006_MEASURE_RELATIVE_HUMIDITY_NO_HOLD_MASTER_MODE        =   0xF5,               /*!<  Measure Relative Humidity, No Hold Master Mode        */
+    SI7006_MEASURE_TEMPERATURE_HOLD_MASTER_MODE                 =   0xE3,               /*!<  Measure Temperature, Hold Master Mode                 */
+    SI7006_MEASURE_TEMPERATURE_NO_HOLD_MASTER_MODE              =   0xF3,               /*!<  Measure Temperature, No Hold Master Mode              */
+    SI7006_READ_TEMPERATURE_VALUE_FROM_PREVIOUS_RH_MEASUREMENT  =   0xE0,               /*!<  Read Temperature Value from Previous RH Measurement   */
+    SI7006_RESET                                                =   0xFE,               /*!<  Reset                                                 */
+    SI7006_WRITE_RH_T_USER_REGISTER_1                           =   0xE6,               /*!<  Write RH/T User Register 1                            */
+    SI7006_READ_RH_T_USER_REGISTER_1                            =   0xE7,               /*!<  Read RH/T User Register 1                             */
+    SI7006_WRITE_HEATER_CONTROL_REGISTER                        =   0x51,               /*!<  Write Heater Control Register                         */
+    SI7006_READ_HEATER_CONTROL_REGISTER                         =   0x11,               /*!<  Read Heater Control Register                          */
+    SI7006_READ_ELECTRONIC_ID_FIRST_BYTE_CMD1                   =   0xFA,               /*!<  Read Electronic ID 1st Byte                           */
+    SI7006_READ_ELECTRONIC_ID_FIRST_BYTE_CMD2                   =   0x0F,               /*!<  Read Electronic ID 1st Byte                           */
+    SI7006_READ_ELECTRONIC_ID_SECOND_BYTE_CMD1                  =   0xFC,               /*!<  Read Electronic ID 2nd Byte                           */
+    SI7006_READ_ELECTRONIC_ID_SECOND_BYTE_CMD2                  =   0xC9,               /*!<  Read Electronic ID 2nd Byte                           */
+    SI7006_READ_FIRMWARE_VERSION_CMD1                           =   0x84,               /*!<  Read Firmware Revision                                */
+    SI7006_READ_FIRMWARE_VERSION_CMD2                           =   0xB8                /*!<  Read Firmware Revision                                */
+} SI7006_command_code_t;
+
+
+
+// USER REGISTER 1
+/*
+    NOTE:   Reset Settings = 0011_1010.
+            Except where noted, reserved register bits will always read back as “1,” and are not affected by write operations. For
+            future compatibility, it is recommended that prior to a write operation, registers should be read. Then the values read
+            from the RSVD bits should be written back unchanged during the write operation.
+*/
+/**
+  * @brief   MEASUREMENT RESOLUTION
+  */
+typedef enum
+{
+    SI7006_RESOLUTION_MASK                  =   0x81,           /*!<  SI7006 Measurement Resolution                         */
+    SI7006_RESOLUTION_RH_12_TEMP_14         =   0x00,           /*!<  SI7006 12b RH 14b Temp.                               */
+    SI7006_RESOLUTION_RH_8_TEMP_12          =   0x01,           /*!<  SI7006 9b  RH 12b Temp.                               */
+    SI7006_RESOLUTION_RH_10_TEMP_13         =   0x80,           /*!<  SI7006 10b RH 13b Temp.                               */
+    SI7006_RESOLUTION_RH_11_TEMP_11         =   0x81            /*!<  SI7006 11b RH 11b Temp.                               */
+} SI7006_measurement_resolution_t;
 
 
 
 /**
-  * @brief   ANALOG INPUT PROGRAMMING
+  * @brief   VDDS
   */
+/*
+    NOTE:   The minimum recommended operating voltage is 1.9 V. A transition
+            of the VDD status bit from 0 to 1 indicates that VDD is
+            between 1.8 V and 1.9 V. If the VDD drops below 1.8 V, the
+            device will no longer operate correctly.
+*/
 typedef enum
 {
-    PCF8591_ANALOG_MASK                                 =   0x30,           /*!<  PCF8591 Mask.                                          */
-    PCF8591_ANALOG_FOUR_SINGLE_ENDED_INPUTS             =   ( 0 << 4 ),     /*!<  PCF8591 Four single-ended inputs.                      */
-    PCF8591_ANALOG_THREE_DIFFERENTIAL_INPUTS            =   ( 1 << 4 ),     /*!<  PCF8591 Three differential inputs.                     */
-    PCF8591_ANALOG_SINGLE_ENDED_AND_DIFFERENTIAL_MIXED  =   ( 2 << 4 ),     /*!<  PCF8591 Single-ended and differential mixed.           */
-    PCF8591_ANALOG_TWO_DIFFERENTIAL_INPUTS              =   ( 3 << 4 )      /*!<  PCF8591 Two differential inputs.                       */
-} PCF8591_analog_input_programming_t;
+    SI7006_VDDS_STATUS_MASK                 =   0x40,           /*!<  SI7006 VDD mask.                                      */
+    SI7006_VDDS_STATUS_VDD_OK               =   ( 1 << 6 ),     /*!<  VDD OK.                                               */
+    SI7006_VDDS_STATUS_VDD_LOW              =   ( 0 << 6 )      /*!<  VDD Low.                                              */
+} SI7006_vdds_status_t;
 
 
 
 /**
-  * @brief   AUTO-INCREMENT FLAG
+  * @brief   HTRE
   */
 typedef enum
 {
-    PCF8591_AUTO_INCREMENT_MASK                  =   0x04,           /*!<  PCF8591 Auto-increment mask.                           */
-    PCF8591_AUTO_INCREMENT_ENABLED               =   ( 1 << 2 ),     /*!<  PCF8591 Auto-increment is enabled.                     */
-    PCF8591_AUTO_INCREMENT_DISABLED              =   ( 0 << 2 )      /*!<  PCF8591 Auto-increment is disabled                     */
-} PCF8591_auto_increment_status_t;
+    SI7006_HTRE_MASK                        =   0x03,           /*!<  SI7006 HTRE Mask                                   */
+    SI7006_HTRE_ENABLED                     =   ( 1 << 2 ),     /*!<  SI7006 On-chip Heater Enable                          */
+    SI7006_HTRE_DISABLED                    =   ( 0 << 2 )      /*!<  SI7006 On-chip Heater Disable                         */
+} SI7006_heater_t;
 
 
 
-/**
-  * @brief   A/D CHANNEL NUMBER
-  */
-typedef enum
-{
-    PCF8591_CHANNEL_MASK                         =   0x03,           /*!<  PCF8591 Channel Mask                                   */
-    PCF8591_CHANNEL_0                            =   ( 0 << 0 ),     /*!<  PCF8591 Channel 0 Active                               */
-    PCF8591_CHANNEL_1                            =   ( 1 << 0 ),     /*!<  PCF8591 Channel 1 Active                               */
-    PCF8591_CHANNEL_2                            =   ( 2 << 0 ),     /*!<  PCF8591 Channel 2 Active                               */
-    PCF8591_CHANNEL_3                            =   ( 3 << 0 )      /*!<  PCF8591 Channel 3 Active                               */
-} PCF8591_channel_number_t;
 
 
 
-#ifndef VECTOR_STRUCT_H
-#define VECTOR_STRUCT_H
+#ifndef SI7006_VECTOR_STRUCT_H
+#define SI7006_VECTOR_STRUCT_H
 typedef struct
 {
-    uint8_t ADC_Channel_0;
-    uint8_t ADC_Channel_1;
-    uint8_t ADC_Channel_2;
-    uint8_t ADC_Channel_3;
-} PCF8591_vector_data_t;
+    uint16_t RelativeHumidity;
+    uint16_t Temperature;
+
+    uint32_t ElectronicSerialNumber_LSB;
+    uint32_t ElectronicSerialNumber_MSB;
+
+    uint8_t  FirmwareRevision;
+    uint8_t  BatteryStatus;
+} SI7006_vector_data_t;
 #endif
 
 
-
-/**
-  * @brief   INTERNAL VARIABLES
-  */
-typedef struct
-{
-    uint8_t ANALOG_INPUT_PROGRAMMING;
-    uint8_t AUTO_INCREMENT_STATUS;
-    uint8_t CHANNEL_NUMBER;
-    uint8_t DAC_STATUS;
-} PCF8591_conf_parameters_t;
 
 
 
@@ -120,9 +133,9 @@ typedef struct
   */
 typedef enum
 {
-    PCF8591_SUCCESS     =       0,
-    PCF8591_FAILURE     =       1
-} PCF8591_status_t;
+    SI7006_SUCCESS     =       0,
+    SI7006_FAILURE     =       1
+} SI7006_status_t;
 
 
 
@@ -130,8 +143,58 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-PCF8591_status_t  PCF8591_Init                  ( I2C_parameters_t myI2Cparameters );
-PCF8591_status_t  PCF8591_SetADC                ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters );
-PCF8591_status_t  PCF8591_ReadADC               ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters, PCF8591_vector_data_t* myADC_Data );
-PCF8591_status_t  PCF8591_SetDAC                ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters );
-PCF8591_status_t  PCF8591_NewDACValue           ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters, uint8_t myNewDACValue );
+/** It configures the I2C peripheral.
+  */
+SI7006_status_t  SI7006_Init                        ( I2C_parameters_t myI2Cparameters );
+
+/** It configures the device: resolution and heater.
+  */
+SI7006_status_t  SI7006_Conf                        ( I2C_parameters_t myI2Cparameters, SI7006_measurement_resolution_t myResolution, SI7006_heater_t myHeater );
+
+/** It performs a software reset.
+  */
+SI7006_status_t  SI7006_SoftReset                   ( I2C_parameters_t myI2Cparameters );
+
+/** It gets the electronic serial number.
+  */
+SI7006_status_t  SI7006_GetElectronicSerialNumber   ( I2C_parameters_t myI2Cparameters, SI7006_vector_data_t* mySerialNumber );
+
+/** It gets the firmware revision.
+  */
+SI7006_status_t  SI7006_GetFirmwareRevision         ( I2C_parameters_t myI2Cparameters, SI7006_vector_data_t* myFirmwareRevision );
+
+/** It performs a new temperature measurement.
+  */
+SI7006_status_t  SI7006_TriggerTemperature          ( I2C_parameters_t myI2Cparameters );
+
+/** It read the temperature.
+  */
+SI7006_status_t  SI7006_ReadTemperature             ( I2C_parameters_t myI2Cparameters, SI7006_vector_data_t* myTemperature );
+
+/** It reads the raw data from temperature.
+  */
+SI7006_status_t  SI7006_ReadRawTemperature          ( I2C_parameters_t myI2Cparameters, SI7006_vector_data_t* myTemperature );
+
+/** It reads the raw temperature data after a relative humidity measurement was done.
+  */
+SI7006_status_t  SI7006_ReadRawTemperatureFromRH    ( I2C_parameters_t myI2Cparameters, SI7006_vector_data_t* myTemperature );
+
+/** It reads the temperature after a relative humidity measurement was done.
+  */
+SI7006_status_t  SI7006_ReadTemperatureFromRH       ( I2C_parameters_t myI2Cparameters, SI7006_vector_data_t* myTemperature );
+
+/** It performs a new relative humidity measurement.
+  */
+SI7006_status_t  SI7006_TriggerHumidity             ( I2C_parameters_t myI2Cparameters );
+
+/** It reads the relative humidity.
+  */
+SI7006_status_t  SI7006_ReadHumidity                ( I2C_parameters_t myI2Cparameters, SI7006_vector_data_t* myHumidity );
+
+/** It reads the raw data from relative humidity.
+  */
+SI7006_status_t  SI7006_ReadRawHumidity             ( I2C_parameters_t myI2Cparameters, SI7006_vector_data_t* myHumidity );
+
+/** It gets the battery status.
+  */
+SI7006_status_t  SI7006_GetBatteryStatus            ( I2C_parameters_t myI2Cparameters, SI7006_vector_data_t* myBatteryStatus );

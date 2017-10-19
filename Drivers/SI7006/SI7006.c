@@ -1,24 +1,24 @@
 /**
- * @brief       PCF8591.c
- * @details     8-bit A/D and D/A converter.
+ * @brief       SI7006.c
+ * @details     I2C HUMIDITY AND TEMPERATURE SENSOR.
  *              Functions file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        22/September/2017
- * @version     22/September/2017    The ORIGIN
+ * @date        19/October/2017
+ * @version     19/October/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "PCF8591.h"
+#include "SI7006.h"
 
 
 /**
- * @brief       PCF8591_Init ( I2C_parameters_t )
+ * @brief       SI7006_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,16 +27,16 @@
  * @param[out]   NaN.
  *
  *
- * @return       Status of PCF8591_Init.
+ * @return       Status of SI7006_Init.
  *
  *
  * @author      Manuel Caballero
- * @date        16/October/2017
- * @version     16/October/2017   The ORIGIN
+ * @date        19/October/2017
+ * @version     19/October/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_Init ( I2C_parameters_t myI2Cparameters )
+SI7006_status_t  SI7006_Init ( I2C_parameters_t myI2Cparameters )
 {
     i2c_status_t aux;
 
@@ -45,15 +45,15 @@ PCF8591_status_t  PCF8591_Init ( I2C_parameters_t myI2Cparameters )
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8591_SUCCESS;
+        return   SI7006_SUCCESS;
     else
-        return   PCF8591_FAILURE;
+        return   SI7006_FAILURE;
 }
 
 
 
 /**
- * @brief       PCF8591_SetADC ( I2C_parameters_t , PCF8591_conf_parameters_t )
+ * @brief       SI7006_SetADC ( I2C_parameters_t , SI7006_conf_parameters_t )
  *
  * @details     It configures the ADC.
  *
@@ -63,7 +63,7 @@ PCF8591_status_t  PCF8591_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   NaN.
  *
  *
- * @return       Status of PCF8591_SetADC.
+ * @return       Status of SI7006_SetADC.
  *
  *
  * @author      Manuel Caballero
@@ -74,7 +74,7 @@ PCF8591_status_t  PCF8591_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_SetADC ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters )
+SI7006_status_t  SI7006_SetADC ( I2C_parameters_t myI2Cparameters, SI7006_conf_parameters_t myConfParameters )
 {
     uint8_t     cmd                 =    0;
     uint32_t    aux                 =    0;
@@ -102,15 +102,15 @@ PCF8591_status_t  PCF8591_SetADC ( I2C_parameters_t myI2Cparameters, PCF8591_con
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8591_SUCCESS;
+        return   SI7006_SUCCESS;
     else
-        return   PCF8591_FAILURE;
+        return   SI7006_FAILURE;
 }
 
 
 
 /**
- * @brief       PCF8591_ReadADC ( I2C_parameters_t , PCF8591_conf_parameters_t , PCF8591_vector_data_t*  )
+ * @brief       SI7006_ReadADC ( I2C_parameters_t , SI7006_conf_parameters_t , SI7006_vector_data_t*  )
  *
  * @details     It gets the ADC result from the device.
  *
@@ -120,7 +120,7 @@ PCF8591_status_t  PCF8591_SetADC ( I2C_parameters_t myI2Cparameters, PCF8591_con
  * @param[out]   myADC_Data:        ADC result into the chosen channel.
  *
  *
- * @return       Status of PCF8591_ReadADC.
+ * @return       Status of SI7006_ReadADC.
  *
  *
  * @author      Manuel Caballero
@@ -131,7 +131,7 @@ PCF8591_status_t  PCF8591_SetADC ( I2C_parameters_t myI2Cparameters, PCF8591_con
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_ReadADC ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters, PCF8591_vector_data_t* myADC_Data )
+SI7006_status_t  SI7006_ReadADC ( I2C_parameters_t myI2Cparameters, SI7006_conf_parameters_t myConfParameters, SI7006_vector_data_t* myADC_Data )
 {
     uint8_t     cmd[]               =    { 0, 0, 0, 0, 0 };
     uint32_t    aux                 =    0;
@@ -140,7 +140,7 @@ PCF8591_status_t  PCF8591_ReadADC ( I2C_parameters_t myI2Cparameters, PCF8591_co
 
 
 
-    if ( myConfParameters.AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+    if ( myConfParameters.AUTO_INCREMENT_STATUS == SI7006_AUTO_INCREMENT_ENABLED )
         i    =   5;
     else
         i    =   2;
@@ -155,10 +155,10 @@ PCF8591_status_t  PCF8591_ReadADC ( I2C_parameters_t myI2Cparameters, PCF8591_co
     switch ( myConfParameters.CHANNEL_NUMBER )
     {
     default:
-    case PCF8591_CHANNEL_0:
+    case SI7006_CHANNEL_0:
         myADC_Data->ADC_Channel_0    =   cmd[ 1 ];
 
-        if ( myConfParameters.AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        if ( myConfParameters.AUTO_INCREMENT_STATUS == SI7006_AUTO_INCREMENT_ENABLED )
         {
             myADC_Data->ADC_Channel_1    =   cmd[ 2 ];
             myADC_Data->ADC_Channel_2    =   cmd[ 3 ];
@@ -166,10 +166,10 @@ PCF8591_status_t  PCF8591_ReadADC ( I2C_parameters_t myI2Cparameters, PCF8591_co
         }
         break;
 
-    case PCF8591_CHANNEL_1:
+    case SI7006_CHANNEL_1:
         myADC_Data->ADC_Channel_1    =   cmd[ 1 ];
 
-        if ( myConfParameters.AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        if ( myConfParameters.AUTO_INCREMENT_STATUS == SI7006_AUTO_INCREMENT_ENABLED )
         {
             myADC_Data->ADC_Channel_2    =   cmd[ 2 ];
             myADC_Data->ADC_Channel_3    =   cmd[ 3 ];
@@ -177,10 +177,10 @@ PCF8591_status_t  PCF8591_ReadADC ( I2C_parameters_t myI2Cparameters, PCF8591_co
         }
         break;
 
-    case PCF8591_CHANNEL_2:
+    case SI7006_CHANNEL_2:
         myADC_Data->ADC_Channel_2    =   cmd[ 1 ];
 
-        if ( myConfParameters.AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        if ( myConfParameters.AUTO_INCREMENT_STATUS == SI7006_AUTO_INCREMENT_ENABLED )
         {
             myADC_Data->ADC_Channel_3    =   cmd[ 2 ];
             myADC_Data->ADC_Channel_0    =   cmd[ 3 ];
@@ -188,10 +188,10 @@ PCF8591_status_t  PCF8591_ReadADC ( I2C_parameters_t myI2Cparameters, PCF8591_co
         }
         break;
 
-    case PCF8591_CHANNEL_3:
+    case SI7006_CHANNEL_3:
         myADC_Data->ADC_Channel_3    =   cmd[ 1 ];
 
-        if ( myConfParameters.AUTO_INCREMENT_STATUS == PCF8591_AUTO_INCREMENT_ENABLED )
+        if ( myConfParameters.AUTO_INCREMENT_STATUS == SI7006_AUTO_INCREMENT_ENABLED )
         {
             myADC_Data->ADC_Channel_0    =   cmd[ 2 ];
             myADC_Data->ADC_Channel_1    =   cmd[ 3 ];
@@ -204,15 +204,15 @@ PCF8591_status_t  PCF8591_ReadADC ( I2C_parameters_t myI2Cparameters, PCF8591_co
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8591_SUCCESS;
+        return   SI7006_SUCCESS;
     else
-        return   PCF8591_FAILURE;
+        return   SI7006_FAILURE;
 }
 
 
 
 /**
- * @brief       PCF8591_SetDAC ( I2C_parameters_t , PCF8591_conf_parameters_t )
+ * @brief       SI7006_SetDAC ( I2C_parameters_t , SI7006_conf_parameters_t )
  *
  * @details     It enables/disables the DAC.
  *
@@ -222,7 +222,7 @@ PCF8591_status_t  PCF8591_ReadADC ( I2C_parameters_t myI2Cparameters, PCF8591_co
  * @param[out]   NaN.
  *
  *
- * @return       Status of PCF8591_SetDAC.
+ * @return       Status of SI7006_SetDAC.
  *
  *
  * @author      Manuel Caballero
@@ -233,7 +233,7 @@ PCF8591_status_t  PCF8591_ReadADC ( I2C_parameters_t myI2Cparameters, PCF8591_co
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_SetDAC ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters )
+SI7006_status_t  SI7006_SetDAC ( I2C_parameters_t myI2Cparameters, SI7006_conf_parameters_t myConfParameters )
 {
     uint8_t     cmd                 =    0;
     uint32_t    aux                 =    0;
@@ -263,15 +263,15 @@ PCF8591_status_t  PCF8591_SetDAC ( I2C_parameters_t myI2Cparameters, PCF8591_con
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8591_SUCCESS;
+        return   SI7006_SUCCESS;
     else
-        return   PCF8591_FAILURE;
+        return   SI7006_FAILURE;
 }
 
 
 
 /**
- * @brief       PCF8591_NewDACValue ( I2C_parameters_t , PCF8591_conf_parameters_t , uint8_t )
+ * @brief       SI7006_NewDACValue ( I2C_parameters_t , SI7006_conf_parameters_t , uint8_t )
  *
  * @details     It enables/disables the DAC.
  *
@@ -282,7 +282,7 @@ PCF8591_status_t  PCF8591_SetDAC ( I2C_parameters_t myI2Cparameters, PCF8591_con
  * @param[out]   NaN.
  *
  *
- * @return       Status of PCF8591_NewDACValue.
+ * @return       Status of SI7006_NewDACValue.
  *
  *
  * @author      Manuel Caballero
@@ -293,7 +293,7 @@ PCF8591_status_t  PCF8591_SetDAC ( I2C_parameters_t myI2Cparameters, PCF8591_con
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8591_status_t  PCF8591_NewDACValue ( I2C_parameters_t myI2Cparameters, PCF8591_conf_parameters_t myConfParameters, uint8_t myNewDACValue )
+SI7006_status_t  SI7006_NewDACValue ( I2C_parameters_t myI2Cparameters, SI7006_conf_parameters_t myConfParameters, uint8_t myNewDACValue )
 {
     uint8_t     cmd[]               =    { 0, 0 };
     uint32_t    aux                 =    0;
@@ -325,7 +325,7 @@ PCF8591_status_t  PCF8591_NewDACValue ( I2C_parameters_t myI2Cparameters, PCF859
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8591_SUCCESS;
+        return   SI7006_SUCCESS;
     else
-        return   PCF8591_FAILURE;
+        return   SI7006_FAILURE;
 }
