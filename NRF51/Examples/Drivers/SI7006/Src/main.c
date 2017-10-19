@@ -21,61 +21,39 @@
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
-#include "PCF8591.h"
+#include "SI7006.h"
 
 
 int main( void )
 {
-    uint8_t                     myNewDAC_value   =   128;
+    I2C_parameters_t           mySI7006_I2C_parameters;
 
-    I2C_parameters_t            myPCF8591_I2C_parameters;
-
-    PCF8591_conf_parameters_t   myPCF8591Parameters;
-    PCF8591_status_t            aux;
-    PCF8591_vector_data_t       myADC_Data;
+    SI7006_status_t            aux;
+    SI7006_vector_data_t       mySI7006_Data;
 
 
     conf_GPIO   ();
-    //conf_TIMER0 ();
+    conf_TIMER0 ();
 
 
 
     // I2C definition
-    myPCF8591_I2C_parameters.TWIinstance =    NRF_TWI0;
-    myPCF8591_I2C_parameters.SDA         =    TWI0_SDA;
-    myPCF8591_I2C_parameters.SCL         =    TWI0_SCL;
-    myPCF8591_I2C_parameters.ADDR        =    PCF8591_ADDRESS_0;
-    myPCF8591_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-    myPCF8591_I2C_parameters.SDAport     =    NRF_GPIO;
-    myPCF8591_I2C_parameters.SCLport     =    NRF_GPIO;
+    mySI7006_I2C_parameters.TWIinstance =    NRF_TWI0;
+    mySI7006_I2C_parameters.SDA         =    TWI0_SDA;
+    mySI7006_I2C_parameters.SCL         =    TWI0_SCL;
+    mySI7006_I2C_parameters.ADDR        =    SI7006_ADDRESS;
+    mySI7006_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    mySI7006_I2C_parameters.SDAport     =    NRF_GPIO;
+    mySI7006_I2C_parameters.SCLport     =    NRF_GPIO;
 
     // Configure I2C peripheral
-    aux      =   PCF8591_Init ( myPCF8591_I2C_parameters );
+    aux      =   SI7006_Init ( mySI7006_I2C_parameters );
 
 
-    // Configure the PCF8591 device
-    myPCF8591Parameters.ANALOG_INPUT_PROGRAMMING     =   PCF8591_ANALOG_FOUR_SINGLE_ENDED_INPUTS;
-    myPCF8591Parameters.AUTO_INCREMENT_STATUS        =   PCF8591_AUTO_INCREMENT_ENABLED;
-    myPCF8591Parameters.CHANNEL_NUMBER               =   PCF8591_CHANNEL_0;
-    myPCF8591Parameters.DAC_STATUS                   =   PCF8591_DAC_ENABLED;
-
-    //aux = PCF8591_SetADC  ( myPCF8591_I2C_parameters, PCF8591_ANALOG_FOUR_SINGLE_ENDED_INPUTS, PCF8591_AUTO_INCREMENT_ENABLED, PCF8591_CHANNEL_0 );
-    aux = PCF8591_SetDAC  ( myPCF8591_I2C_parameters, myPCF8591Parameters );
-    while(1)
-    {
-        aux = PCF8591_SetADC  ( myPCF8591_I2C_parameters, myPCF8591Parameters );
-        aux = PCF8591_ReadADC ( myPCF8591_I2C_parameters, myPCF8591Parameters, &myADC_Data );
-
-        aux = PCF8591_NewDACValue ( myPCF8591_I2C_parameters, myPCF8591Parameters, myNewDAC_value );
-
-        if ( myNewDAC_value < 246 )
-            myNewDAC_value  +=  10;
-        else
-            myNewDAC_value   =   0;
-    }
+    // Configure the device
+    aux = SI7006_Conf  ( mySI7006_I2C_parameters, SI7006_RESOLUTION_RH_12_TEMP_14, SI7006_HTRE_DISABLED );
 
 
-    /*
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
@@ -97,20 +75,15 @@ int main( void )
         case 1:
         // Vout ~ 0V
             NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
-            myNewDACData.DAC_New_Value   =   0;
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, FAST_MODE, myNewDACData );
+
+            aux = SI7006_TriggerHumidity ( mySI7006_I2C_parameters, SI7006_MEASURE_RELATIVE_HUMIDITY_NO_HOLD_MASTER_MODE );
             break;
 
         case 2:
         // Vout = ~ ( Vref * 0.5 )
-            myNewDACData.DAC_New_Value   =   2048;
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_AND_EEPROM_REGISTER_MODE, myNewDACData );
-            break;
 
-        case 3:
-        // Vout ~ Vref
-            myNewDACData.DAC_New_Value   =   4095;
-            aux = MCP4725_SetNewValue ( NRF_TWI0, MCP4725_ADDRESS_LOW, WRITE_DAC_REGISTER_MODE, myNewDACData );
+            aux = SI7006_ReadHumidity           ( mySI7006_I2C_parameters, &mySI7006_Data );
+            aux = SI7006_ReadTemperatureFromRH  ( mySI7006_I2C_parameters, &mySI7006_Data );
 
             mySTATE =   0;
             NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
@@ -118,7 +91,5 @@ int main( void )
     	}
 
         //__NOP();
-
     }
-    */
 }
