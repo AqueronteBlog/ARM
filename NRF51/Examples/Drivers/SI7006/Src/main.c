@@ -18,6 +18,7 @@
  */
 
 #include "nrf.h"
+#include "nrf_delay.h"
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
@@ -47,12 +48,21 @@ int main( void )
     mySI7006_I2C_parameters.SCLport     =    NRF_GPIO;
 
     // Configure I2C peripheral
-    aux      =   SI7006_Init ( mySI7006_I2C_parameters );
+    aux  =   SI7006_Init ( mySI7006_I2C_parameters );
 
+
+    // Reset the device
+    aux  =   SI7006_SoftReset ( mySI7006_I2C_parameters );
+    nrf_delay_ms ( 15 );
 
     // Configure the device
-    aux = SI7006_Conf  ( mySI7006_I2C_parameters, SI7006_RESOLUTION_RH_12_TEMP_14, SI7006_HTRE_DISABLED );
+    aux  =   SI7006_Conf  ( mySI7006_I2C_parameters, SI7006_RESOLUTION_RH_12_TEMP_14, SI7006_HTRE_DISABLED );
 
+    // Get the Electronic Serial Number
+    aux  =   SI7006_GetElectronicSerialNumber ( mySI7006_I2C_parameters, &mySI7006_Data );
+
+    // Get the Firmware revision
+    aux  =   SI7006_GetFirmwareRevision       ( mySI7006_I2C_parameters, &mySI7006_Data );
 
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
@@ -73,14 +83,14 @@ int main( void )
     	switch ( mySTATE ){
         default:
         case 1:
-        // Vout ~ 0V
+        // Trigger a new Humidity and Temperature measurement
             NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
 
             aux = SI7006_TriggerHumidity ( mySI7006_I2C_parameters, SI7006_MEASURE_RELATIVE_HUMIDITY_NO_HOLD_MASTER_MODE );
             break;
 
         case 2:
-        // Vout = ~ ( Vref * 0.5 )
+        // Get the result: Humidity and Temperature
 
             aux = SI7006_ReadHumidity           ( mySI7006_I2C_parameters, &mySI7006_Data );
             aux = SI7006_ReadTemperatureFromRH  ( mySI7006_I2C_parameters, &mySI7006_Data );
