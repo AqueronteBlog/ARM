@@ -255,6 +255,62 @@ SI7006_status_t  SI7006_GetFirmwareRevision ( I2C_parameters_t myI2Cparameters, 
 
 
 /**
+ * @brief       SI7006_SetHeaterCurrent ( I2C_parameters_t , uint8_t )
+ *
+ * @details     It sets the heater current.
+ *
+ * @param[in]    myI2Cparameters:    I2C parameters.
+ * @param[in]    myHeaterCurrent:    New heater current value
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of SI7006_SetHeaterCurrent.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/October/2017
+ * @version     19/October/2017   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+SI7006_status_t  SI7006_SetHeaterCurrent ( I2C_parameters_t myI2Cparameters, uint8_t myHeaterCurrent )
+{
+    uint8_t   cmd[]    =    { SI7006_READ_HEATER_CONTROL_REGISTER, 0 };
+    uint32_t  aux      =    0;
+
+
+    // myHeaterCurrent MUST be from 0 ( 0x00 ) to 15 ( 0x0F )
+    if ( myHeaterCurrent <= 15 ) {
+        // Read the heater control register
+        aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+        aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+
+        // Mask the data
+        cmd[1]  &=  0xF0;
+
+        // Update the value
+        cmd[0]  =   SI7006_WRITE_HEATER_CONTROL_REGISTER;
+        cmd[1] |=   myHeaterCurrent;
+
+
+        aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+    } else
+        return   SI7006_FAILURE;
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   SI7006_SUCCESS;
+    else
+        return   SI7006_FAILURE;
+}
+
+
+
+/**
  * @brief       SI7006_TriggerTemperature ( I2C_parameters_t , SI7006_master_mode_t )
  *
  * @details     It performs a new temperature measurement.

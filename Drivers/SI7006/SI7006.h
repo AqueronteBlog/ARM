@@ -175,6 +175,10 @@ SI7006_status_t  SI7006_GetElectronicSerialNumber   ( I2C_parameters_t myI2Cpara
   */
 SI7006_status_t  SI7006_GetFirmwareRevision         ( I2C_parameters_t myI2Cparameters, SI7006_vector_data_t* myFirmwareRevision );
 
+/** It sets the heater current.
+*/
+SI7006_status_t  SI7006_SetHeaterCurrent            ( I2C_parameters_t myI2Cparameters, uint8_t myHeaterCurrent );
+
 /** It performs a new temperature measurement.
   */
 SI7006_status_t  SI7006_TriggerTemperature          ( I2C_parameters_t myI2Cparameters, SI7006_master_mode_t myMode );
