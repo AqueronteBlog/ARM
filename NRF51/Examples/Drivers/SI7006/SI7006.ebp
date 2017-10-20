@@ -78,6 +78,7 @@
 		<Unit filename="Inc\nrf51.h" />
 		<Unit filename="Inc\nrf51_bitfields.h" />
 		<Unit filename="Inc\nrf51_deprecated.h" />
+		<Unit filename="Inc\nrf_delay.h" />
 		<Unit filename="Inc\system_nrf51.h" />
 		<Unit filename="readme.txt" />
 		<Unit filename="S130.c">
