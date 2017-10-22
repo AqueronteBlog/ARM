@@ -20,6 +20,7 @@
  */
 
 #include "nrf.h"
+#include "nrf_delay.h"
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
@@ -29,11 +30,9 @@
 int main( void )
 {
     uint32_t ii             =       0;
-    // float    myTEMP         =       0;
-    // float    myRH           =       0;
-    uint8_t  myRawTemp[]    =       { 0, 0, 0 };
-    uint8_t  myRawRH[]      =       { 0, 0, 0 };
-    uint32_t aux            =       0;
+
+    HTU21D_status_t         aux;
+    HTU21D_vector_data_t    myHTU21D_Data;
 
     I2C_parameters_t        myHTU21D_I2C_parameters;
 
@@ -47,7 +46,7 @@ int main( void )
     myHTU21D_I2C_parameters.TWIinstance =    NRF_TWI0;
     myHTU21D_I2C_parameters.SDA         =    TWI0_SDA;
     myHTU21D_I2C_parameters.SCL         =    TWI0_SCL;
-    myHTU21D_I2C_parameters.ADDR        =    HTU21D_ADDR;
+    myHTU21D_I2C_parameters.ADDR        =    HTU21D_ADDRESS;
     myHTU21D_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
     myHTU21D_I2C_parameters.SDAport     =    NRF_GPIO;
     myHTU21D_I2C_parameters.SCLport     =    NRF_GPIO;
@@ -59,7 +58,9 @@ int main( void )
     mySTATE                  =   0;                 // Reset counter
 
     aux = HTU21D_SoftReset ( myHTU21D_I2C_parameters );
-    aux = HTU21D_Conf      ( myHTU21D_I2C_parameters, HTU21D_MODE_NO_HOLD_MASTER, USER_REGISTER_RESOLUTION_11RH_11TEMP, USER_REGISTER_HEATER_DISABLED );
+    nrf_delay_ms ( 15 );
+
+    aux = HTU21D_Conf      ( myHTU21D_I2C_parameters, USER_REGISTER_RESOLUTION_11RH_11TEMP, USER_REGISTER_HEATER_DISABLED );
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
@@ -78,48 +79,23 @@ int main( void )
 		switch ( mySTATE ){
         default:
         case 1:
-            aux = HTU21D_TriggerTemperature ( myHTU21D_I2C_parameters );
+            aux = HTU21D_TriggerTemperature ( myHTU21D_I2C_parameters, HTU21D_NO_HOLD_MASTER_MODE );
             break;
 
         case 2:
-            // aux = HTU21D_ReadTemperature    ( NRF_TWI0, HTU21D_ADDR, &myTEMP );
-            aux = HTU21D_ReadRawTemperature ( myHTU21D_I2C_parameters, &myRawTemp[0] );
-            aux = HTU21D_TriggerHumidity    ( myHTU21D_I2C_parameters );
+             aux = HTU21D_ReadTemperature    ( myHTU21D_I2C_parameters, &myHTU21D_Data );
+            //aux = HTU21D_ReadRawTemperature ( myHTU21D_I2C_parameters, &myHTU21D_Data );
+            aux = HTU21D_TriggerHumidity    ( myHTU21D_I2C_parameters, HTU21D_NO_HOLD_MASTER_MODE );
             break;
 
         case 3:
-            // aux = HTU21D_ReadHumidity       ( NRF_TWI0, HTU21D_ADDR, &myRH );
-            aux = HTU21D_ReadRawTemperature ( myHTU21D_I2C_parameters, &myRawRH[0] );
-
-            // Store Temperature & Humidity into the UART TX buffer
-            for ( ii = 0; ii < 3; ii++ )                            // Temperature + Checksum: 3 first bytes
-                TX_buff[ii]  =  myRawTemp[ii];
-
-            for ( ii = 3; ii < 6; ii++ )                            // Humidity + Checksum: The other 3 bytes
-                TX_buff[ii]  =  myRawRH[ii - 3];
-
-
-            // Start transmitting through the UART
-            NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
-
-            myPtr                        =   &TX_buff[0];
-            TX_inProgress                =   YES;
-            NRF_UART0->TASKS_STARTTX     =   1;
-            NRF_UART0->TXD               =   *myPtr++;
-
-            // Wait until the message is transmitted
-            while ( TX_inProgress == YES ){
-                __WFE();
-                // Make sure any pending events are cleared
-                __SEV();
-                __WFE();
-            }
+             aux = HTU21D_ReadHumidity       ( myHTU21D_I2C_parameters, &myHTU21D_Data );
+            //aux = HTU21D_ReadRawTemperature ( myHTU21D_I2C_parameters, &myHTU21D_Data );
 
             mySTATE =   0;
             break;
 		}
 
         //__NOP();
-
     }
 }
