@@ -36,7 +36,7 @@
  * @pre         NaN
  * @warning     NaN.
  */
-uint32_t  HTU21D_Init ( I2C_parameters_t myI2Cparameters )
+HTU21D_status_t  HTU21D_Init ( I2C_parameters_t myI2Cparameters )
 {
     i2c_status_t aux;
 
@@ -53,13 +53,12 @@ uint32_t  HTU21D_Init ( I2C_parameters_t myI2Cparameters )
 
 
 /**
- * @brief       HTU21D_Conf    ( I2C_parameters_t , uint32_t , uint32_t , uint32_t  )
- * @details     Initialing the HTU21D and defines
+ * @brief       HTU21D_Conf    ( I2C_parameters_t , HTU21D_measurement_resolution_t , HTU21D_on_chip_heater_t )
+ * @details     Configure the HTU21D device.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    MODE:              HTU21D Hold Master or No Hold Master mode.
- * @param[in]    RESOLUTION:        HTU21D Resolution.
- * @param[in]    HEATER:            HTU21D Heater Enabled or Disabled.
+ * @param[in]    myResolution:      HTU21D Resolution.
+ * @param[in]    myHeater:          HTU21D Heater Enabled or Disabled.
  *
  * @param[out]   Status of HTU21D_Init.
  *
@@ -68,44 +67,37 @@ uint32_t  HTU21D_Init ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        6/July/2017
- * @version     18/October/2017    Adapted to the new I2C driver.
+ * @version     22/October/2017    The library was improved, better architecture.
+ *              18/October/2017    Adapted to the new I2C driver.
  *              6/July/2017        The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-uint32_t  HTU21D_Conf    ( I2C_parameters_t myI2Cparameters, uint32_t MODE, uint32_t RESOLUTION, uint32_t HEATER )
+HTU21D_status_t  HTU21D_Conf    ( I2C_parameters_t myI2Cparameters, HTU21D_measurement_resolution_t myResolution, HTU21D_on_chip_heater_t myHeater )
 {
-    uint8_t     cmd []              =    { HTU21D_READ_REGISTER, 0 };
-    uint32_t    aux                 =    0;
+    uint8_t      cmd[]              =    { HTU21D_READ_REGISTER, 0 };
+    i2c_status_t aux;
 
-
-    HTU21D_Mode         =   MODE;
 
 
     // Reserved bits must not be changed. Therefore, for any writing to user register, default values of reserved bits must be read first
     // Datasheet: User register p.13.
     aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_STOP_BIT );
-    aux = i2c_read  ( myI2Cparameters, &cmd[0], 1 );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
-    cmd[0]          &=   ~( USER_REGISTER_RESOLUTION_MASK | USER_REGISTER_STATUS_END_BATTERY_MASK | USER_REGISTER_HEATER_MASK | USER_REGISTER_OTP_MASK );
-    cmd[1]           =   ( cmd[0] | ( ( RESOLUTION | HEATER ) | USER_REGISTER_OTP_DISABLED ) );
+    cmd[1]          &=   ~( USER_REGISTER_RESOLUTION_MASK | USER_REGISTER_STATUS_END_BATTERY_MASK | USER_REGISTER_HEATER_MASK | USER_REGISTER_OTP_MASK );
+    cmd[1]          |=    ( myResolution | myHeater | USER_REGISTER_OTP_DISABLED );
     cmd[0]           =   HTU21D_WRITE_REGISTER;
 
     aux = i2c_write  ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
-    /*
-    // REad back the register
-    cmd[0]           =   HTU21D_READ_REGISTER;
-    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_STOP_BIT );
-    aux = i2c_read  ( myI2Cparameters, &cmd[0], 1 );
-    */
 
 
-    if ( aux == HTU21D_SUCCESS )
+
+    if ( aux == I2C_SUCCESS  )
         return   HTU21D_SUCCESS;
     else
         return   HTU21D_FAILURE;
-
 }
 
 
@@ -123,22 +115,23 @@ uint32_t  HTU21D_Conf    ( I2C_parameters_t myI2Cparameters, uint32_t MODE, uint
  *
  * @author      Manuel Caballero
  * @date        6/July/2017
- * @version     18/October/2017    Adapted to the new I2C driver.
+ * @version     22/October/2017    The library was improved, better architecture.
+ *              18/October/2017    Adapted to the new I2C driver.
  *              6/July/2017        The ORIGIN
  * @pre         NaN
  * @warning     The soft reset takes less than 15ms. The user must take this
  *              into account.
  */
-uint32_t  HTU21D_SoftReset   ( I2C_parameters_t myI2Cparameters )
+HTU21D_status_t  HTU21D_SoftReset   ( I2C_parameters_t myI2Cparameters )
 {
-    uint8_t     cmd[]               =   { HTU21D_SOFT_RESET };
-    uint32_t    aux                 =    0;
+    uint8_t      cmd[]               =   { HTU21D_SOFT_RESET };
+    i2c_status_t aux;
 
 
     aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_STOP_BIT );
 
 
-    if ( aux == HTU21D_SUCCESS )
+    if ( aux == I2C_SUCCESS )
        return   HTU21D_SUCCESS;
     else
        return   HTU21D_FAILURE;
@@ -146,10 +139,11 @@ uint32_t  HTU21D_SoftReset   ( I2C_parameters_t myI2Cparameters )
 
 
  /**
- * @brief       HTU21D_TriggerTemperature   ( I2C_parameters_t )
+ * @brief       HTU21D_TriggerTemperature   ( I2C_parameters_t , HTU21D_master_mode_t )
  * @details     Trigger a new temperature measurement.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myMode:            Hold/No Hold mode.
  *
  * @param[out]   Status of HTU21D_TriggerTemperature.
  *
@@ -158,23 +152,46 @@ uint32_t  HTU21D_SoftReset   ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        6/July/2017
- * @version     18/October/2017    Adapted to the new I2C driver.
+ * @version     22/October/2017    The library was improved, better architecture.
+ *              18/October/2017    Adapted to the new I2C driver.
  *              6/July/2017        The ORIGIN
  * @pre         NaN
- * @warning     The measuring time depends on the chosen resolution. The user
- *              must take this into account.
- * @warning     No Hold Master is ONLY implemented.
+ * @warning     The user MUST respect the total conversion time.
+ *              14-bit temperature: 44ms ( 50ms max )
+ *              13-bit temperature: 22ms ( 25ms max )
+ *              12-bit temperature: 11ms ( 13ms max )
+ *              11-bit temperature:  6ms (  7ms max )
  */
-uint32_t  HTU21D_TriggerTemperature    ( I2C_parameters_t myI2Cparameters )
+HTU21D_status_t  HTU21D_TriggerTemperature    ( I2C_parameters_t myI2Cparameters, HTU21D_master_mode_t myMode )
 {
-    uint8_t     cmd[]               =   { HTU21D_TRIGGER_TEMPERATURE_MEASUREMENT_NO_HOLD_MASTER };
-    uint32_t    aux                 =    0;
+    uint8_t      cmd        =    0;
+    uint8_t      myI2C_stop =    I2C_STOP_BIT;
+
+    i2c_status_t aux;
 
 
-    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_STOP_BIT );
+    // Check the mode if it is HOLD MASTER MODE, then not generate a stop bit
+    if ( myMode == HTU21D_HOLD_MASTER_MODE )
+    {
+        cmd         =    HTU21D_TRIGGER_TEMPERATURE_MEASUREMENT_HOLD_MASTER;
+        myI2C_stop  =    I2C_NO_STOP_BIT;
+    }
+    else
+    {
+        cmd         =    HTU21D_TRIGGER_TEMPERATURE_MEASUREMENT_NO_HOLD_MASTER;
+        myI2C_stop  =    I2C_STOP_BIT;
+    }
 
 
-    if ( aux == HTU21D_SUCCESS )
+
+    aux = i2c_write ( myI2Cparameters, &cmd, 1, myI2C_stop );
+
+
+    // NOTE: The user has to respect the total conversion time!
+
+
+
+    if ( aux == I2C_SUCCESS )
        return   HTU21D_SUCCESS;
     else
        return   HTU21D_FAILURE;
@@ -182,11 +199,11 @@ uint32_t  HTU21D_TriggerTemperature    ( I2C_parameters_t myI2Cparameters )
 
 
  /**
- * @brief       HTU21D_ReadTemperature   ( I2C_parameters_t , float* )
+ * @brief       HTU21D_ReadTemperature   ( I2C_parameters_t , HTU21D_vector_data_t* )
  * @details     Read a new temperature measurement.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    mytemperature:     Variable to store the temperature.
+ * @param[in]    myTemperature:     Variable to store the temperature.
  *
  * @param[out]   Status of HTU21D_ReadTemperature.
  *
@@ -195,29 +212,30 @@ uint32_t  HTU21D_TriggerTemperature    ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        6/July/2017
- * @version     18/October/2017    Adapted to the new I2C driver.
+ * @version     22/October/2017    The library was improved, better architecture.
+ *              18/October/2017    Adapted to the new I2C driver.
  *              6/July/2017        The ORIGIN
  * @pre         NaN
  * @warning     The measuring time depends on the chosen resolution. The user
  *              must take this into account.
- * @warning     No Hold Master is ONLY implemented.
  * @warning     HTU21D_TriggerTemperature MUST be call before.
  */
-uint32_t  HTU21D_ReadTemperature    ( I2C_parameters_t myI2Cparameters, float* mytemperature )
+HTU21D_status_t  HTU21D_ReadTemperature    ( I2C_parameters_t myI2Cparameters, HTU21D_vector_data_t* myTemperature )
 {
-    uint32_t    aux                 =    0;
-    uint8_t     myRawTemp[]         =   { 0, 0, 0};
+    uint8_t      myRawTemp[]         =   { 0, 0, 0};
+    i2c_status_t aux;
 
 
     aux = i2c_read ( myI2Cparameters, &myRawTemp[0], 3 );
 
 
-    *mytemperature    =   ( myRawTemp[0] << 8 ) | myRawTemp[1];
-    *mytemperature   /=   65536.0;
-    *mytemperature    =   ( *mytemperature * 175.72 ) - 46.85;
+    myTemperature->Temperature     =   ( myRawTemp[0] << 8 ) | myRawTemp[1];
+    myTemperature->Temperature    /=   65536.0;
+    myTemperature->Temperature    *=   175.72;
+    myTemperature->Temperature    -=   46.85;
 
 
-    if ( aux == HTU21D_SUCCESS )
+    if ( aux == I2C_SUCCESS )
        return   HTU21D_SUCCESS;
     else
        return   HTU21D_FAILURE;
@@ -226,11 +244,11 @@ uint32_t  HTU21D_ReadTemperature    ( I2C_parameters_t myI2Cparameters, float* m
 
 
 /**
- * @brief       HTU21D_ReadRawTemperature   ( I2C_parameters_t , uint8_t* )
+ * @brief       HTU21D_ReadRawTemperature   ( I2C_parameters_t , HTU21D_vector_data_t* )
  * @details     Read a new raw temperature measurement.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myRawtemperature:  Variable to store the temperature.
+ * @param[in]    myRawTemperature:  Variable to store the temperature.
  *
  * @param[out]   Status of HTU21D_ReadTemperature.
  *
@@ -239,7 +257,8 @@ uint32_t  HTU21D_ReadTemperature    ( I2C_parameters_t myI2Cparameters, float* m
  *
  * @author      Manuel Caballero
  * @date        11/July/2017
- * @version     18/October/2017    Adapted to the new I2C driver.
+ * @version     22/October/2017    The library was improved, better architecture.
+ *              18/October/2017    Adapted to the new I2C driver.
  *              11/July/2017       The ORIGIN
  * @pre         NaN
  * @warning     The measuring time depends on the chosen resolution. The user
@@ -247,15 +266,20 @@ uint32_t  HTU21D_ReadTemperature    ( I2C_parameters_t myI2Cparameters, float* m
  * @warning     No Hold Master is ONLY implemented.
  * @warning     HTU21D_TriggerTemperature MUST be call before.
  */
-uint32_t  HTU21D_ReadRawTemperature    ( I2C_parameters_t myI2Cparameters, uint8_t* myRawtemperature )
+HTU21D_status_t  HTU21D_ReadRawTemperature    ( I2C_parameters_t myI2Cparameters, HTU21D_vector_data_t* myRawTemperature )
 {
-    uint32_t    aux                 =    0;
+    uint8_t      myRawTemp[]         =   { 0, 0, 0};
+    i2c_status_t aux;
 
 
-    aux = i2c_read ( myI2Cparameters, &myRawtemperature[0], 3 );
+    aux = i2c_read ( myI2Cparameters, &myRawTemp[0], 3 );
 
 
-    if ( aux == HTU21D_SUCCESS )
+    myRawTemperature->Temperature     =   ( myRawTemp[0] << 8 ) | myRawTemp[1];
+
+
+
+    if ( aux == I2C_SUCCESS )
        return   HTU21D_SUCCESS;
     else
        return   HTU21D_FAILURE;
@@ -263,10 +287,11 @@ uint32_t  HTU21D_ReadRawTemperature    ( I2C_parameters_t myI2Cparameters, uint8
 
 
  /**
- * @brief       HTU21D_TriggerHumidity   ( I2C_parameters_t )
+ * @brief       HTU21D_TriggerHumidity   ( I2C_parameters_t , HTU21D_master_mode_t )
  * @details     Trigger a new humidity measurement.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myMode:            Hold/No Hold mode.
  *
  * @param[out]   Status of HTU21D_TriggerHumidity.
  *
@@ -275,23 +300,45 @@ uint32_t  HTU21D_ReadRawTemperature    ( I2C_parameters_t myI2Cparameters, uint8
  *
  * @author      Manuel Caballero
  * @date        6/July/2017
- * @version     18/October/2017    Adapted to the new I2C driver.
+ * @version     22/October/2017    The library was improved, better architecture.
+ *              18/October/2017    Adapted to the new I2C driver.
  *              6/July/2017        The ORIGIN
  * @pre         NaN
- * @warning     The measuring time depends on the chosen resolution. The user
- *              must take this into account.
- * @warning     No Hold Master is ONLY implemented.
+ * @warning     The user MUST respect the total conversion time.
+ *              12-bit RH: 14ms   ( 16ms max )
+ *              11-bit RH:  7ms   (  8ms max )
+ *              10-bit RH:  4ms   (  5ms max )
+ *               8-bit RH:  2ms   (  3ms max )
  */
-uint32_t  HTU21D_TriggerHumidity    ( I2C_parameters_t myI2Cparameters )
+HTU21D_status_t  HTU21D_TriggerHumidity    ( I2C_parameters_t myI2Cparameters, HTU21D_master_mode_t myMode )
 {
-    uint8_t     cmd[]               =   { HTU21D_TRIGGER_HUMIDITY_MEASUREMENT_NO_HOLD_MASTER };
-    uint32_t    aux                 =    0;
+    uint8_t      cmd        =    0;
+    uint8_t      myI2C_stop =    I2C_STOP_BIT;
+
+    i2c_status_t aux;
 
 
-    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_STOP_BIT );
+    // Check the mode if it is HOLD MASTER MODE, then not generate a stop bit
+    if ( myMode == HTU21D_HOLD_MASTER_MODE )
+    {
+        cmd         =    HTU21D_TRIGGER_HUMIDITY_MEASUREMENT_HOLD_MASTER;
+        myI2C_stop  =    I2C_NO_STOP_BIT;
+    }
+    else
+    {
+        cmd         =    HTU21D_TRIGGER_HUMIDITY_MEASUREMENT_NO_HOLD_MASTER;
+        myI2C_stop  =    I2C_STOP_BIT;
+    }
 
 
-    if ( aux == HTU21D_SUCCESS )
+
+    aux = i2c_write ( myI2Cparameters, &cmd, 1, myI2C_stop );
+
+
+    // NOTE: The user has to respect the total conversion time!
+
+
+    if ( aux == I2C_SUCCESS )
        return   HTU21D_SUCCESS;
     else
        return   HTU21D_FAILURE;
@@ -299,11 +346,11 @@ uint32_t  HTU21D_TriggerHumidity    ( I2C_parameters_t myI2Cparameters )
 
 
 /**
- * @brief       HTU21D_ReadHumidity   ( I2C_parameters_t , float* )
+ * @brief       HTU21D_ReadHumidity   ( I2C_parameters_t , HTU21D_vector_data_t* )
  * @details     Read a new humidity measurement.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myhumidity:        Variable to store the humidity.
+ * @param[in]    myHumidity:        Variable to store the humidity.
  *
  * @param[out]   Status of HTU21D_ReadHumidity.
  *
@@ -312,29 +359,31 @@ uint32_t  HTU21D_TriggerHumidity    ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        6/July/2017
- * @version     18/October/2017    Adapted to the new I2C driver.
+ * @version     22/October/2017    The library was improved, better architecture.
+ *              18/October/2017    Adapted to the new I2C driver.
  *              6/July/2017        The ORIGIN
  * @pre         NaN
  * @warning     The measuring time depends on the chosen resolution. The user
  *              must take this into account.
- * @warning     No Hold Master is ONLY implemented.
  * @warning     HTU21D_TriggerHumidity MUST be call before.
  */
-uint32_t  HTU21D_ReadHumidity    ( I2C_parameters_t myI2Cparameters, float* myhumidity )
+HTU21D_status_t  HTU21D_ReadHumidity    ( I2C_parameters_t myI2Cparameters, HTU21D_vector_data_t* myHumidity )
 {
-    uint32_t    aux                 =    0;
-    uint8_t     myRawRH[]           =    { 0, 0, 0};
+    uint8_t      myRawRH[]           =    { 0, 0, 0};
+    i2c_status_t aux;
 
 
     aux = i2c_read ( myI2Cparameters, &myRawRH[0], 3 );
 
 
-    *myhumidity    =   ( myRawRH[0] << 8 ) | myRawRH[1];
-    *myhumidity   /=   65536.0;
-    *myhumidity    =   ( *myhumidity * 125.0 ) - 6.0;
+    myHumidity->RelativeHumidity    =   ( myRawRH[0] << 8 ) | myRawRH[1];
+    myHumidity->RelativeHumidity   /=   65536.0;
+    myHumidity->RelativeHumidity   *=   125.0;
+    myHumidity->RelativeHumidity   -=   6.0;
 
 
-    if ( aux == HTU21D_SUCCESS )
+
+    if ( aux == I2C_SUCCESS )
        return   HTU21D_SUCCESS;
     else
        return   HTU21D_FAILURE;
@@ -343,11 +392,11 @@ uint32_t  HTU21D_ReadHumidity    ( I2C_parameters_t myI2Cparameters, float* myhu
 
 
 /**
- * @brief       HTU21D_ReadRawHumidity   ( I2C_parameters_t , uint8_t* )
+ * @brief       HTU21D_ReadRawHumidity   ( I2C_parameters_t , HTU21D_vector_data_t* )
  * @details     Read a new raw humidity measurement.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myhumidity:        Variable to store the humidity.
+ * @param[in]    myHumidity:        Variable to store the humidity.
  *
  * @param[out]   Status of HTU21D_ReadHumidity.
  *
@@ -356,7 +405,8 @@ uint32_t  HTU21D_ReadHumidity    ( I2C_parameters_t myI2Cparameters, float* myhu
  *
  * @author      Manuel Caballero
  * @date        11/July/2017
- * @version     18/October/2017    Adapted to the new I2C driver.
+ * @version     22/October/2017    The library was improved, better architecture.
+ *              18/October/2017    Adapted to the new I2C driver.
  *              11/July/2017       The ORIGIN
  * @pre         NaN
  * @warning     The measuring time depends on the chosen resolution. The user
@@ -364,16 +414,20 @@ uint32_t  HTU21D_ReadHumidity    ( I2C_parameters_t myI2Cparameters, float* myhu
  * @warning     No Hold Master is ONLY implemented.
  * @warning     HTU21D_TriggerHumidity MUST be call before.
  */
-uint32_t  HTU21D_ReadRawHumidity    ( I2C_parameters_t myI2Cparameters, uint8_t* myRawhumidity )
+HTU21D_status_t  HTU21D_ReadRawHumidity    ( I2C_parameters_t myI2Cparameters, HTU21D_vector_data_t* myHumidity )
 {
-    uint32_t    aux                 =    0;
+    uint8_t      myRawRH[]           =    { 0, 0, 0};
+    i2c_status_t aux;
 
 
-    aux = i2c_read ( myI2Cparameters, &myRawhumidity[0], 3 );
+    aux = i2c_read ( myI2Cparameters, &myRawRH[0], 3 );
+
+
+    myHumidity->RelativeHumidity    =   ( myRawRH[0] << 8 ) | myRawRH[1];
 
 
 
-    if ( aux == HTU21D_SUCCESS )
+    if ( aux == I2C_SUCCESS )
        return   HTU21D_SUCCESS;
     else
        return   HTU21D_FAILURE;
@@ -381,11 +435,11 @@ uint32_t  HTU21D_ReadRawHumidity    ( I2C_parameters_t myI2Cparameters, uint8_t*
 
 
 /**
- * @brief       HTU21D_BatteryStatus   ( I2C_parameters_t , uint8_t* )
+ * @brief       HTU21D_BatteryStatus   ( I2C_parameters_t , HTU21D_vector_data_t* )
  * @details     Read the user register to check the battery status.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    battStatus:        Variable to store the battery status.
+ * @param[in]    myBattStatus:      Variable to store the battery status.
  *
  * @param[out]   Status of HTU21D_BatteryStatus.
  *
@@ -394,22 +448,27 @@ uint32_t  HTU21D_ReadRawHumidity    ( I2C_parameters_t myI2Cparameters, uint8_t*
  *
  * @author      Manuel Caballero
  * @date        6/July/2017
- * @version     18/October/2017    Adapted to the new I2C driver.
+ * @version     22/October/2017    The library was improved, better architecture.
+ *              18/October/2017    Adapted to the new I2C driver.
  *              6/July/2017        The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-uint32_t  HTU21D_BatteryStatus      ( I2C_parameters_t myI2Cparameters, uint8_t* battStatus )
+HTU21D_status_t  HTU21D_BatteryStatus      ( I2C_parameters_t myI2Cparameters, HTU21D_vector_data_t* myBattStatus )
 {
-    uint8_t     cmd[]               =   { HTU21D_READ_REGISTER };
-    uint32_t    aux                 =    0;
+    uint8_t      cmd               =   HTU21D_READ_REGISTER;
+    i2c_status_t aux;
 
 
-    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_STOP_BIT );
-    aux = i2c_read  ( myI2Cparameters, battStatus, 1 );
+    aux = i2c_write ( myI2Cparameters, &cmd, 1, I2C_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd, 1 );
 
 
-    if ( aux == HTU21D_SUCCESS )
+    myBattStatus->BatteryStatus   =   ( cmd & USER_REGISTER_STATUS_END_BATTERY_MASK );
+
+
+
+    if ( aux == I2C_SUCCESS )
        return   HTU21D_SUCCESS;
     else
        return   HTU21D_FAILURE;
