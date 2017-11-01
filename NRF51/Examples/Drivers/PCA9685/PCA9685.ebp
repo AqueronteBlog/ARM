@@ -64,6 +64,10 @@
 			<Add option="-eb_start_files" />
 			<Add option="-eb_lib=n" />
 		</Linker>
+		<Unit filename="..\..\..\..\Drivers\PCA9685\PCA9685.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\..\..\Drivers\PCA9685\PCA9685.h" />
 		<Unit filename="..\..\Basics\I2C\i2c.c">
 			<Option compilerVar="CC" />
 		</Unit>
