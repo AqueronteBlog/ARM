@@ -35,7 +35,7 @@
   */
 typedef enum
 {
-    PCA9685_ADDRESS_0     =   0x40                           /*!<   A5 A4 A3 A2 A1 A0: 000 000                              */
+    PCA9685_ADDRESS_0     =   0x40                    /*!<   A5 A4 A3 A2 A1 A0: 000 000                            */
 } PCA9685_address_t;
 
 
@@ -122,6 +122,36 @@ typedef enum
     PRE_SCALE       =   0xFE,                         /*!<  prescaler for PWM output frequency                      */
     TESTMODE        =   0xFF                          /*!<  defines the test mode to be entered                     */
 } PCA9685_registers_t;
+
+
+
+// LED Sub Call I2C-bus addresses
+/**
+  * @brief   SUBADDRESS. NOTE:  At power-up, Sub Call I 2 C-bus addresses are disabled. PCA9685 does not send an
+  *                             ACK when E2h (R/W = 0) or E3h (R/W = 1), E4h (R/W = 0) or E5h (R/W = 1), or
+  *                             E8h (R/W = 0) or E9h (R/W = 1) is sent by the master.
+  */
+typedef enum
+{
+    SUBADR1_REG               =   0xE2,               /*!<  Subaddress 1                                                  */
+    SUBADR2_REG               =   0xE4,               /*!<  Subaddress 2                                                  */
+    SUBADR3_REG               =   0xE8                /*!<  Subaddress 3                                                  */
+} PCA9685_subaddresses_t;
+
+
+
+
+// Software Reset I2C-bus address
+/**
+  * @brief   SWRST. NOTE:   The Software Reset address (SWRST Call) must be used with
+  *                         R/#W = logic 0. If R/#W = logic 1, the PCA9685 does not acknowledge the SWRST.
+  */
+typedef enum
+{
+    GENERAL_CALL_ADDRESS  =   0x00,                     /*!<  Software reset                                                */
+    SWRST                 =   0x06                      /*!<  Software reset                                                */
+} PCA9685_software_reset_t;
+
 
 
 
@@ -291,6 +321,6 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-PCA9685_status_t  PCA9685_Init      ( I2C_parameters_t myI2Cparameters );
-PCA9685_status_t  PCA9685_SetPins   ( I2C_parameters_t myI2Cparameters, PCA9685_vector_data_t  myConfDATA );
-PCA9685_status_t  PCA9685_ReadPins  ( I2C_parameters_t myI2Cparameters, PCA9685_vector_data_t* myReadDATA );
+PCA9685_status_t  PCA9685_Init          ( I2C_parameters_t myI2Cparameters );
+PCA9685_status_t  PCA9685_SoftReset     ( I2C_parameters_t myI2Cparameters );
+// PCA9685_status_t  PCA9685_ReadPins  ( I2C_parameters_t myI2Cparameters, PCA9685_vector_data_t* myReadDATA );
