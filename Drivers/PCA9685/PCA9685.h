@@ -125,132 +125,141 @@ typedef enum
 
 
 
-// REGISTER COMMANDS
+// MODE REGISTER 1, MODE1
 /**
-  * @brief   MODE REGISTER 1, MODE1
+  * @brief   RESTART
   */
 typedef enum
 {
-    MODE1_RESTART_MASK      =   0x80,                   /*!<  RESTART bit mask                                              */
-    MODE1_RESTART_ENABLED   =   0x80,                   /*!<  Restart enabled                                               */
-    MODE1_RESTART_DISABLED  =   0x00,                   /*!<  Restart disabled ( default )                                  */
-
-    MODE1_EXTCLK_MASK       =   0x40,                   /*!<  EXTCLK bit mask                                               */
-    MODE1_EXTCLK_ENABLED    =   0x40,                   /*!<  Use EXTERNAL clock                                            */
-    MODE1_EXTCLK_DISABLED   =   0x00,                   /*!<  Use INTERNAL clock ( default )                                */
-
-    MODE1_AI_MASK           =   0x20,                   /*!<  AI bit mask                                                   */
-    MODE1_AI_ENABLED        =   0x20,                   /*!<  Auto-Increment enabled                                        */
-    MODE1_AI_DISABLED       =   0x00,                   /*!<  Auto-Increment disabled ( default )                           */
-
-    MODE1_SLEEP_MASK        =   0x10,                   /*!<  SLEEP bit mask                                                */
-    MODE1_SLEEP_ENABLED     =   0x10,                   /*!<  Low power mode. Oscillator off ( default )                    */
-    MODE1_SLEEP_DISABLED    =   0x00,                   /*!<  Normal mode                                                   */
-
-    MODE1_SUB1_MASK         =   0x08,                   /*!<  SUB1 bit mask                                                 */
-    MODE1_SUB1_ENABLED      =   0x08,                   /*!<  PCA9685 responds to I2C-bus subaddress 1                      */
-    MODE1_SUB1_DISABLED     =   0x00,                   /*!<  PCA9685 does not respond to I2C-bus subaddress 1 ( default )  */
-
-    MODE1_SUB2_MASK         =   0x04,                   /*!<  SUB2 bit mask                                                 */
-    MODE1_SUB2_ENABLED      =   0x04,                   /*!<  PCA9685 responds to I2C-bus subaddress 2                      */
-    MODE1_SUB2_DISABLED     =   0x00,                   /*!<  PCA9685 does not respond to I2C-bus subaddress 2 ( default )  */
-
-    MODE1_SUB3_MASK         =   0x02,                   /*!<  SUB1 bit mask                                                 */
-    MODE1_SUB3_ENABLED      =   0x02,                   /*!<  PCA9685 responds to I2C-bus subaddress 3                      */
-    MODE1_SUB3_DISABLED     =   0x00,                   /*!<  PCA9685 does not respond to I2C-bus subaddress 3 ( default )  */
-
-    MODE1_SUB3_MASK         =   0x02,                   /*!<  SUB1 bit mask                                                 */
-    MODE1_SUB3_ENABLED      =   0x02,                   /*!<  PCA9685 responds to I2C-bus subaddress 3                      */
-    MODE1_SUB3_DISABLED     =   0x00,                   /*!<  PCA9685 does not respond to I2C-bus subaddress 3 ( default )  */
-} PCA9685_mode1_reg_t;
+    MODE1_RESTART_MASK      =   ( 1 << 7 ),             /*!<  RESTART bit mask                                              */
+    MODE1_RESTART_ENABLED   =   ( 1 << 7 ),             /*!<  Restart enabled                                               */
+    MODE1_RESTART_DISABLED  =   ( 0 << 7 )              /*!<  Restart disabled ( default )                                  */
+} PCA9685_mode1_restart_t;
 
 
 /**
-  * @brief   PIN MASK
+  * @brief   EXTCLK
   */
 typedef enum
 {
-    PCA9685_P0_MASK          =   0b00000001,                  /*!<  PCA9685 P0 INPUT                                       */
-    PCA9685_P1_MASK          =   0b00000010,                  /*!<  PCA9685 P1 INPUT                                       */
-    PCA9685_P2_MASK          =   0b00000100,                  /*!<  PCA9685 P2 INPUT                                       */
-    PCA9685_P3_MASK          =   0b00001000,                  /*!<  PCA9685 P3 INPUT                                       */
-    PCA9685_P4_MASK          =   0b00010000,                  /*!<  PCA9685 P4 INPUT                                       */
-    PCA9685_P5_MASK          =   0b00100000,                  /*!<  PCA9685 P5 INPUT                                       */
-    PCA9685_P6_MASK          =   0b01000000,                  /*!<  PCA9685 P6 INPUT                                       */
-    PCA9685_P7_MASK          =   0b10000000                   /*!<  PCA9685 P7 INPUT                                       */
-} PCA9685_pin_mask_t;
-
+    MODE1_EXTCLK_MASK       =   ( 1 << 6 ),             /*!<  EXTCLK bit mask                                               */
+    MODE1_EXTCLK_ENABLED    =   ( 1 << 6 ),             /*!<  Use EXTERNAL clock                                            */
+    MODE1_EXTCLK_DISABLED   =   ( 0 << 6 )              /*!<  Use INTERNAL clock ( default )                                */
+} PCA9685_mode1_extclk_t;
 
 
 /**
-  * @brief   PIN CONFIGURATION
+  * @brief   AI
   */
 typedef enum
 {
-    PCA9685_P0_INPUT        =   ( 1 << PCA9685_P0 ),           /*!<  PCA9685 P0 INPUT                                       */
-    PCA9685_P0_OUTPUT_HIGH  =   ( 1 << PCA9685_P0 ),           /*!<  PCA9685 P0 OUTPUT HIGH                                 */
-    PCA9685_P0_OUTPUT_LOW   =   ( 0 << PCA9685_P0 ),           /*!<  PCA9685 P0 OUTPUT LOW                                  */
-
-    PCA9685_P1_INPUT        =   ( 1 << PCA9685_P1 ),           /*!<  PCA9685 P1 INPUT                                       */
-    PCA9685_P1_OUTPUT_HIGH  =   ( 1 << PCA9685_P1 ),           /*!<  PCA9685 P1 OUTPUT HIGH                                 */
-    PCA9685_P1_OUTPUT_LOW   =   ( 0 << PCA9685_P1 ),           /*!<  PCA9685 P1 OUTPUT LOW                                  */
-
-    PCA9685_P2_INPUT        =   ( 1 << PCA9685_P2 ),           /*!<  PCA9685 P2 INPUT                                       */
-    PCA9685_P2_OUTPUT_HIGH  =   ( 1 << PCA9685_P2 ),           /*!<  PCA9685 P2 OUTPUT HIGH                                 */
-    PCA9685_P2_OUTPUT_LOW   =   ( 0 << PCA9685_P2 ),           /*!<  PCA9685 P2 OUTPUT LOW                                  */
-
-    PCA9685_P3_INPUT        =   ( 1 << PCA9685_P3 ),           /*!<  PCA9685 P3 INPUT                                       */
-    PCA9685_P3_OUTPUT_HIGH  =   ( 1 << PCA9685_P3 ),           /*!<  PCA9685 P3 OUTPUT HIGH                                 */
-    PCA9685_P3_OUTPUT_LOW   =   ( 0 << PCA9685_P3 ),           /*!<  PCA9685 P3 OUTPUT LOW                                  */
-
-    PCA9685_P4_INPUT        =   ( 1 << PCA9685_P4 ),           /*!<  PCA9685 P4 INPUT                                       */
-    PCA9685_P4_OUTPUT_HIGH  =   ( 1 << PCA9685_P4 ),           /*!<  PCA9685 P4 OUTPUT HIGH                                 */
-    PCA9685_P4_OUTPUT_LOW   =   ( 0 << PCA9685_P4 ),           /*!<  PCA9685 P4 OUTPUT LOW                                  */
-
-    PCA9685_P5_INPUT        =   ( 1 << PCA9685_P5 ),           /*!<  PCA9685 P5 INPUT                                       */
-    PCA9685_P5_OUTPUT_HIGH  =   ( 1 << PCA9685_P5 ),           /*!<  PCA9685 P5 OUTPUT HIGH                                 */
-    PCA9685_P5_OUTPUT_LOW   =   ( 0 << PCA9685_P5 ),           /*!<  PCA9685 P5 OUTPUT LOW                                  */
-
-    PCA9685_P6_INPUT        =   ( 1 << PCA9685_P6 ),           /*!<  PCA9685 P6 INPUT                                       */
-    PCA9685_P6_OUTPUT_HIGH  =   ( 1 << PCA9685_P6 ),           /*!<  PCA9685 P6 OUTPUT HIGH                                 */
-    PCA9685_P6_OUTPUT_LOW   =   ( 0 << PCA9685_P6 ),           /*!<  PCA9685 P6 OUTPUT LOW                                  */
-
-    PCA9685_P7_INPUT        =   ( 1 << PCA9685_P7 ),           /*!<  PCA9685 P7 INPUT                                       */
-    PCA9685_P7_OUTPUT_HIGH  =   ( 1 << PCA9685_P7 ),           /*!<  PCA9685 P7 OUTPUT HIGH                                 */
-    PCA9685_P7_OUTPUT_LOW   =   ( 0 << PCA9685_P7 )            /*!<  PCA9685 P7 OUTPUT LOW                                  */
-} PCA9685_pin_configuration_t;
-
+    MODE1_AI_MASK           =   ( 1 << 5 ),             /*!<  AI bit mask                                                   */
+    MODE1_AI_ENABLED        =   ( 1 << 5 ),             /*!<  Auto-Increment enabled                                        */
+    MODE1_AI_DISABLED       =   ( 0 << 5 )              /*!<  Auto-Increment disabled ( default )                           */
+} PCA9685_mode1_ai_t;
 
 
 /**
-  * @brief   PIN STATUS
+  * @brief   SLEEP
   */
 typedef enum
 {
-    PCA9685_P0_HIGH  =   ( 1 << PCA9685_P0 ),                  /*!<  PCA9685 P0 STATUS HIGH                                 */
-    PCA9685_P0_LOW   =   ( 0 << PCA9685_P0 ),                  /*!<  PCA9685 P0 STATUS LOW                                  */
+    MODE1_SLEEP_MASK        =   ( 1 << 4 ),             /*!<  SLEEP bit mask                                                */
+    MODE1_SLEEP_ENABLED     =   ( 1 << 4 ),             /*!<  Low power mode. Oscillator off ( default )                    */
+    MODE1_SLEEP_DISABLED    =   ( 0 << 4 )              /*!<  Normal mode                                                   */
+} PCA9685_mode1_sleep_t;
 
-    PCA9685_P1_HIGH  =   ( 1 << PCA9685_P1 ),                  /*!<  PCA9685 P1 STATUS HIGH                                 */
-    PCA9685_P1_LOW   =   ( 0 << PCA9685_P1 ),                  /*!<  PCA9685 P1 STATUS LOW                                  */
 
-    PCA9685_P2_HIGH  =   ( 1 << PCA9685_P2 ),                  /*!<  PCA9685 P2 STATUS HIGH                                 */
-    PCA9685_P2_LOW   =   ( 0 << PCA9685_P2 ),                  /*!<  PCA9685 P2 STATUS LOW                                  */
+/**
+  * @brief   SUB1
+  */
+typedef enum
+{
+    MODE1_SUB1_MASK         =   ( 1 << 3 ),             /*!<  SUB1 bit mask                                                 */
+    MODE1_SUB1_ENABLED      =   ( 1 << 3 ),             /*!<  PCA9685 responds to I2C-bus subaddress 1                      */
+    MODE1_SUB1_DISABLED     =   ( 0 << 3 )              /*!<  PCA9685 does not respond to I2C-bus subaddress 1 ( default )  */
+} PCA9685_mode1_sub1_t;
 
-    PCA9685_P3_HIGH  =   ( 1 << PCA9685_P3 ),                  /*!<  PCA9685 P3 STATUS HIGH                                 */
-    PCA9685_P3_LOW   =   ( 0 << PCA9685_P3 ),                  /*!<  PCA9685 P3 STATUS LOW                                  */
 
-    PCA9685_P4_HIGH  =   ( 1 << PCA9685_P4 ),                  /*!<  PCA9685 P4 STATUS HIGH                                 */
-    PCA9685_P4_LOW   =   ( 0 << PCA9685_P4 ),                  /*!<  PCA9685 P4 STATUS LOW                                  */
+/**
+  * @brief   SUB2
+  */
+typedef enum
+{
+    MODE1_SUB2_MASK         =   ( 1 << 2 ),             /*!<  SUB2 bit mask                                                 */
+    MODE1_SUB2_ENABLED      =   ( 1 << 2 ),             /*!<  PCA9685 responds to I2C-bus subaddress 2                      */
+    MODE1_SUB2_DISABLED     =   ( 0 << 2 )              /*!<  PCA9685 does not respond to I2C-bus subaddress 2 ( default )  */
+} PCA9685_mode1_sub2_t;
 
-    PCA9685_P5_HIGH  =   ( 1 << PCA9685_P5 ),                  /*!<  PCA9685 P5 STATUS HIGH                                 */
-    PCA9685_P5_LOW   =   ( 0 << PCA9685_P5 ),                  /*!<  PCA9685 P5 STATUS LOW                                  */
 
-    PCA9685_P6_HIGH  =   ( 1 << PCA9685_P6 ),                  /*!<  PCA9685 P6 STATUS HIGH                                 */
-    PCA9685_P6_LOW   =   ( 0 << PCA9685_P6 ),                  /*!<  PCA9685 P6 STATUS LOW                                  */
+/**
+  * @brief   SUB3
+  */
+typedef enum
+{
+    MODE1_SUB3_MASK         =   ( 1 << 1 ),             /*!<  SUB1 bit mask                                                 */
+    MODE1_SUB3_ENABLED      =   ( 1 << 1 ),             /*!<  PCA9685 responds to I2C-bus subaddress 3                      */
+    MODE1_SUB3_DISABLED     =   ( 0 << 1 )              /*!<  PCA9685 does not respond to I2C-bus subaddress 3 ( default )  */
+} PCA9685_mode1_sub3_t;
 
-    PCA9685_P7_HIGH  =   ( 1 << PCA9685_P7 ),                  /*!<  PCA9685 P7 STATUS HIGH                                 */
-    PCA9685_P7_LOW   =   ( 0 << PCA9685_P7 )                   /*!<  PCA9685 P7 STATUS LOW                                  */
-} PCA9685_pin_status_t;
+
+/**
+  * @brief   ALLCALL
+  */
+typedef enum
+{
+    MODE1_ALLCALL_MASK      =   ( 1 << 0 ),             /*!<  ALLCALL bit mask                                              */
+    MODE1_ALLCALL_ENABLED   =   ( 1 << 0 ),             /*!<  PCA9685 responds to LED All Call I2C-bus address ( default )  */
+    MODE1_ALLCALL_DISABLED  =   ( 0 << 0 )              /*!<  PCA9685 does not respond to LED All Call I2C-bus address      */
+} PCA9685_mode1_allcall_t;
+
+
+
+// MODE REGISTER 2, MODE2
+/**
+  * @brief   INVRT
+  */
+typedef enum
+{
+    MODE2_INVRT_MASK      =   ( 1 << 4 ),               /*!<  INVRT bit mask                                                                                                */
+    MODE2_INVRT_ENABLED   =   ( 1 << 4 ),               /*!<  Output logic state inverted. Value to use when no external driver used. Applicable when OE = 0                */
+    MODE2_INVRT_DISABLED  =   ( 0 << 4 )                /*!<  Output logic state not inverted. Value to use when external driver used. Applicable when OE = 0. ( default )  */
+} PCA9685_mode2_invrt_t;
+
+
+/**
+  * @brief   OCH
+  */
+typedef enum
+{
+    MODE2_OCH_MASK                      =   ( 1 << 3 ),     /*!<  ALLCALL bit mask                                              */
+    MODE2_OCH_OUTPUT_CHANGE_STOP_CMD    =   ( 0 << 3 ),     /*!<  Outputs change on STOP command ( default )                    */
+    MODE2_OCH_OUTPUT_CHANGE_ACK_CMD     =   ( 1 << 3 )      /*!<  Outputs change on ACK                                         */
+} PCA9685_mode2_och_t;
+
+
+/**
+  * @brief   OUTDRV
+  */
+typedef enum
+{
+    MODE2_OUTDRV_MASK                   =   ( 1 << 2 ),     /*!<  OUTDRV bit mask                                                                */
+    MODE2_OUTDRV_TOTEM_POLE_STRUCTURE   =   ( 1 << 2 ),     /*!<  The 16 LEDn outputs are configured with a totem pole structure ( default )     */
+    MODE2_OUTDRV_OPEN_DRAIN_STRUCTURE   =   ( 0 << 2 )      /*!<  The 16 LEDn outputs are configured with an open-drain structure                */
+} PCA9685_mode2_outdrv_t;
+
+
+/**
+  * @brief   OUTNE
+  */
+typedef enum
+{
+    MODE2_OUTNE_MASK                    =   ( 3 << 0 ),     /*!<  OUTNE bit mask                                                                */
+    MODE2_OUTNE_LEDn_LOW                =   ( 0 << 0 ),     /*!<  When #OE = 1 (output drivers not enabled), LEDn = 0 ( default )               */
+    MODE2_OUTNE_LEDn_HIGH               =   ( 1 << 0 ),     /*!<  When #OE = 1 (output drivers not enabled): LEDn = 1 when OUTDRV = 1
+                                                                  LEDn = high-impedance when OUTDRV = 0 (same as OUTNE[1:0] = 10)               */
+    MODE2_OUTNE_LEDn_HIGH_IMPEDANCE     =   ( 2 << 0 )      /*!<  When #OE = 1 (output drivers not enabled), LEDn = high-impedance              */
+} PCA9685_mode2_outne_t;
 
 
 
