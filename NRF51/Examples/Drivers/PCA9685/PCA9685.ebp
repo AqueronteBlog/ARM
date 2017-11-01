@@ -78,6 +78,7 @@
 		<Unit filename="Inc\nrf51.h" />
 		<Unit filename="Inc\nrf51_bitfields.h" />
 		<Unit filename="Inc\nrf51_deprecated.h" />
+		<Unit filename="Inc\nrf_delay.h" />
 		<Unit filename="Inc\system_nrf51.h" />
 		<Unit filename="PCA9685.ebp" />
 		<Unit filename="readme.txt" />
@@ -105,12 +106,22 @@
 		<Unit filename="softdevice\Include\nrf_soc.h" />
 		<Unit filename="softdevice\Include\nrf_svc.h" />
 		<Unit filename="softdevice\Include\softdevice_assert.h" />
+		<Unit filename="Src\board.h" />
+		<Unit filename="Src\functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Src\functions.h" />
+		<Unit filename="Src\interrupts.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Src\interrupts.h" />
 		<Unit filename="Src\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Src\system_nrf51.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Src\variables.h" />
 		<Unit filename="startup_nrf51.s">
 			<Option compilerVar="ASM" />
 		</Unit>
