@@ -90,3 +90,79 @@ PCA9685_status_t  PCA9685_SoftReset   ( I2C_parameters_t myI2Cparameters )
     else
         return   PCA9685_FAILURE;
 }
+
+
+
+
+/**
+ * @brief       PCA9685_SetPWM_Freq ( I2C_parameters_t , float )
+ *
+ * @details     It sets a new PWM frequency.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myNewFrequency:    New PWM frequency.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetPWM_Freq.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        2/November/2017
+ * @version     2/November/2017     The ORIGIN
+ * @pre         This library can ONLY work with the internal clock, otherwise
+ *              PCA9685_INTERNAL_CLOCK must be changed in the header file.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetPWM_Freq ( I2C_parameters_t myI2Cparameters, float myNewFrequency )
+{
+    uint8_t      cmd[]       =   { MODE1, 0 };
+    uint8_t      prev_mode1  =   0;
+    float        aux_pre     =   0;
+    i2c_status_t aux;
+
+
+    // The maximum PWM frequency is 1526 Hz and the minimum PWM frequency is 24 Hz.
+    if ( ( myNewFrequency < 24 ) || ( myNewFrequency > 1526 ) )
+        return   PCA9685_FAILURE;
+
+
+    // The device MUST be in SLEEP mode
+    aux      =   i2c_read  ( myI2Cparameters, &prev_mode1, 1 );
+    cmd[1]   =   ( prev_mode1 | MODE1_SLEEP_ENABLED );
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+
+
+    // Calculate the new PWM frequency
+    if ( myNewFrequency == 24 )
+        cmd[1]   =   255;
+    else
+    {
+        aux_pre  =   ( PCA9685_INTERNAL_CLOCK / ( PCA9685_ADC_STEPS * myNewFrequency ) ) - 1;
+        // The next portion of code behaves as round function:
+        cmd[1]   =   aux_pre;
+        aux_pre -=   cmd[1];
+        aux_pre *=   10;
+
+        if ( aux_pre >= 5 )
+            cmd[1]++;
+    }
+
+    cmd[0]   =   PRE_SCALE;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+
+
+    // Restore the device's mode
+    cmd[0]   =   MODE1;
+    cmd[1]   =   prev_mode1;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}

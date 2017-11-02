@@ -317,10 +317,18 @@ typedef enum
 
 
 
+typedef enum
+{
+    PCA9685_INTERNAL_CLOCK  =   25000000,
+    PCA9685_ADC_STEPS       =   4096
+} PCA9685_internal_parameters_t;
+
+
+
 
 /**
   * @brief   FUNCTION PROTOTYPES
   */
 PCA9685_status_t  PCA9685_Init          ( I2C_parameters_t myI2Cparameters );
 PCA9685_status_t  PCA9685_SoftReset     ( I2C_parameters_t myI2Cparameters );
-// PCA9685_status_t  PCA9685_ReadPins  ( I2C_parameters_t myI2Cparameters, PCA9685_vector_data_t* myReadDATA );
+PCA9685_status_t  PCA9685_SetPWM_Freq   ( I2C_parameters_t myI2Cparameters, float myNewFrequency );
