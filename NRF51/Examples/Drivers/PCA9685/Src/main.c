@@ -55,6 +55,10 @@ int main( void )
     aux  =   PCA9685_SoftReset ( myPCA9685_I2C_parameters );
     nrf_delay_us ( 5 );
 
+
+    aux  =   PCA9685_SetPWM_Freq ( myPCA9685_I2C_parameters, 200 );
+    __NOP();
+
 /*
 
     // Configure the device
