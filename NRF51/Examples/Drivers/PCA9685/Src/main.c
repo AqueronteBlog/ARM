@@ -57,6 +57,8 @@ int main( void )
 
 
     aux  =   PCA9685_SetPWM_Freq ( myPCA9685_I2C_parameters, 200 );
+
+    aux  =   PCA9685_SetMode ( myPCA9685_I2C_parameters, MODE1_SLEEP_DISABLED );
     __NOP();
 
 /*
