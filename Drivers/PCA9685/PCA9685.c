@@ -95,6 +95,52 @@ PCA9685_status_t  PCA9685_SoftReset   ( I2C_parameters_t myI2Cparameters )
 
 
 /**
+ * @brief       PCA9685_SetMode ( I2C_parameters_t , PCA9685_mode1_sleep_t )
+ *
+ * @details     It configures the device in Low power mode or in Normal operation
+ *              mode.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myMode:            Sleep or Normal mode.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        2/November/2017
+ * @version     2/November/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetMode   ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_sleep_t myMode )
+{
+    uint8_t      cmd[]   =   { MODE1, 0 };
+    i2c_status_t aux;
+
+
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+    cmd[1]  &=  ~MODE1_SLEEP_MASK;
+    cmd[1]  |=   myMode;
+
+
+    aux = i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+
+/**
  * @brief       PCA9685_SetPWM_Freq ( I2C_parameters_t , float )
  *
  * @details     It sets a new PWM frequency.
@@ -129,9 +175,10 @@ PCA9685_status_t  PCA9685_SetPWM_Freq ( I2C_parameters_t myI2Cparameters, float 
 
 
     // The device MUST be in SLEEP mode
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &prev_mode1, 1 );
     cmd[1]   =   ( prev_mode1 | MODE1_SLEEP_ENABLED );
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
     // Calculate the new PWM frequency
@@ -150,13 +197,13 @@ PCA9685_status_t  PCA9685_SetPWM_Freq ( I2C_parameters_t myI2Cparameters, float 
     }
 
     cmd[0]   =   PRE_SCALE;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
     // Restore the device's mode
     cmd[0]   =   MODE1;
     cmd[1]   =   prev_mode1;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 

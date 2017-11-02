@@ -311,17 +311,39 @@ typedef struct
   */
 typedef enum
 {
+    PCA9685_INTERNAL_CLOCK  =   25000000,       /*!<  Internal clock frequency                                                      */
+    PCA9685_ADC_STEPS       =   4096            /*!<  ADC 12-bits                                                                   */
+} PCA9685_internal_parameters_t;
+
+
+typedef enum
+{
+    PCA9685_LED0   =   0x01,                    /*!<  LED0 channel                                                                  */
+    PCA9685_LED1   =   0x02,                    /*!<  LED1 channel                                                                  */
+    PCA9685_LED2   =   0x03,                    /*!<  LED2 channel                                                                  */
+    PCA9685_LED3   =   0x04,                    /*!<  LED3 channel                                                                  */
+    PCA9685_LED4   =   0x05,                    /*!<  LED4 channel                                                                  */
+    PCA9685_LED5   =   0x06,                    /*!<  LED5 channel                                                                  */
+    PCA9685_LED6   =   0x07,                    /*!<  LED6 channel                                                                  */
+    PCA9685_LED7   =   0x08,                    /*!<  LED7 channel                                                                  */
+    PCA9685_LED8   =   0x09,                    /*!<  LED8 channel                                                                  */
+    PCA9685_LED9   =   0x0A,                    /*!<  LED9 channel                                                                  */
+    PCA9685_LED10  =   0x0B,                    /*!<  LED10 channel                                                                 */
+    PCA9685_LED11  =   0x0C,                    /*!<  LED11 channel                                                                 */
+    PCA9685_LED12  =   0x0D,                    /*!<  LED12 channel                                                                 */
+    PCA9685_LED13  =   0x0E,                    /*!<  LED13 channel                                                                 */
+    PCA9685_LED14  =   0x0F,                    /*!<  LED14 channel                                                                 */
+    PCA9685_LED15  =   0x10                     /*!<  LED15 channel                                                                 */
+} PCA9685_led_channel_t;
+
+
+typedef enum
+{
     PCA9685_SUCCESS     =       0,
     PCA9685_FAILURE     =       1
 } PCA9685_status_t;
 
 
-
-typedef enum
-{
-    PCA9685_INTERNAL_CLOCK  =   25000000,
-    PCA9685_ADC_STEPS       =   4096
-} PCA9685_internal_parameters_t;
 
 
 
@@ -329,6 +351,22 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-PCA9685_status_t  PCA9685_Init          ( I2C_parameters_t myI2Cparameters );
-PCA9685_status_t  PCA9685_SoftReset     ( I2C_parameters_t myI2Cparameters );
-PCA9685_status_t  PCA9685_SetPWM_Freq   ( I2C_parameters_t myI2Cparameters, float myNewFrequency );
+/** It configures the I2C peripheral.
+  */
+PCA9685_status_t  PCA9685_Init              ( I2C_parameters_t myI2Cparameters );
+
+/** It resets the device by software.
+  */
+PCA9685_status_t  PCA9685_SoftReset         ( I2C_parameters_t myI2Cparameters );
+
+/** It configures the mode of the device: Sleep or Normal operation mode.
+  */
+PCA9685_status_t  PCA9685_SetMode           ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_sleep_t myMode );
+
+/** It configures a new PWM frequency.
+  */
+PCA9685_status_t  PCA9685_SetPWM_Freq       ( I2C_parameters_t myI2Cparameters, float myNewFrequency );
+
+/** It configures a new PWM duty cycle on a given LED.
+  */
+PCA9685_status_t  PCA9685_SetPWM_DutyCycle  ( I2C_parameters_t myI2Cparameters, PCA9685_led_channel_t myLEDchannel, uint8_t myDelay, uint8_t myPWM_DutyCycle );
