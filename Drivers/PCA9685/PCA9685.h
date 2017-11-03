@@ -318,22 +318,22 @@ typedef enum
 
 typedef enum
 {
-    PCA9685_LED0   =   0x01,                    /*!<  LED0 channel                                                                  */
-    PCA9685_LED1   =   0x02,                    /*!<  LED1 channel                                                                  */
-    PCA9685_LED2   =   0x03,                    /*!<  LED2 channel                                                                  */
-    PCA9685_LED3   =   0x04,                    /*!<  LED3 channel                                                                  */
-    PCA9685_LED4   =   0x05,                    /*!<  LED4 channel                                                                  */
-    PCA9685_LED5   =   0x06,                    /*!<  LED5 channel                                                                  */
-    PCA9685_LED6   =   0x07,                    /*!<  LED6 channel                                                                  */
-    PCA9685_LED7   =   0x08,                    /*!<  LED7 channel                                                                  */
-    PCA9685_LED8   =   0x09,                    /*!<  LED8 channel                                                                  */
-    PCA9685_LED9   =   0x0A,                    /*!<  LED9 channel                                                                  */
-    PCA9685_LED10  =   0x0B,                    /*!<  LED10 channel                                                                 */
-    PCA9685_LED11  =   0x0C,                    /*!<  LED11 channel                                                                 */
-    PCA9685_LED12  =   0x0D,                    /*!<  LED12 channel                                                                 */
-    PCA9685_LED13  =   0x0E,                    /*!<  LED13 channel                                                                 */
-    PCA9685_LED14  =   0x0F,                    /*!<  LED14 channel                                                                 */
-    PCA9685_LED15  =   0x10                     /*!<  LED15 channel                                                                 */
+    PCA9685_LED0   =   0x00,                    /*!<  LED0 channel                                                                  */
+    PCA9685_LED1   =   0x01,                    /*!<  LED1 channel                                                                  */
+    PCA9685_LED2   =   0x02,                    /*!<  LED2 channel                                                                  */
+    PCA9685_LED3   =   0x03,                    /*!<  LED3 channel                                                                  */
+    PCA9685_LED4   =   0x04,                    /*!<  LED4 channel                                                                  */
+    PCA9685_LED5   =   0x05,                    /*!<  LED5 channel                                                                  */
+    PCA9685_LED6   =   0x06,                    /*!<  LED6 channel                                                                  */
+    PCA9685_LED7   =   0x07,                    /*!<  LED7 channel                                                                  */
+    PCA9685_LED8   =   0x08,                    /*!<  LED8 channel                                                                  */
+    PCA9685_LED9   =   0x09,                    /*!<  LED9 channel                                                                  */
+    PCA9685_LED10  =   0x0A,                    /*!<  LED10 channel                                                                 */
+    PCA9685_LED11  =   0x0B,                    /*!<  LED11 channel                                                                 */
+    PCA9685_LED12  =   0x0C,                    /*!<  LED12 channel                                                                 */
+    PCA9685_LED13  =   0x0D,                    /*!<  LED13 channel                                                                 */
+    PCA9685_LED14  =   0x0E,                    /*!<  LED14 channel                                                                 */
+    PCA9685_LED15  =   0x0F                     /*!<  LED15 channel                                                                 */
 } PCA9685_led_channel_t;
 
 
@@ -344,6 +344,22 @@ typedef enum
 } PCA9685_status_t;
 
 
+
+// MACRO: round function
+#define _MYROUND( x ) ({        \
+        uint32_t aux_pre;       \
+        float    aux_x;         \
+                                \
+        aux_x    =   (x);       \
+        aux_pre  =   (x);       \
+        aux_x   -=   aux_pre;   \
+        aux_x   *=   10;        \
+                                \
+        if ( aux_x >= 5 )       \
+            aux_pre++;          \
+                                \
+        aux_pre;                \
+        })
 
 
 

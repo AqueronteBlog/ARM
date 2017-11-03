@@ -165,7 +165,7 @@ PCA9685_status_t  PCA9685_SetPWM_Freq ( I2C_parameters_t myI2Cparameters, float 
 {
     uint8_t      cmd[]       =   { MODE1, 0 };
     uint8_t      prev_mode1  =   0;
-    float        aux_pre     =   0;
+    //float        aux_pre     =   0;
     i2c_status_t aux;
 
 
@@ -185,16 +185,8 @@ PCA9685_status_t  PCA9685_SetPWM_Freq ( I2C_parameters_t myI2Cparameters, float 
     if ( myNewFrequency == 24 )
         cmd[1]   =   255;
     else
-    {
-        aux_pre  =   ( PCA9685_INTERNAL_CLOCK / ( PCA9685_ADC_STEPS * myNewFrequency ) ) - 1;
-        // The next portion of code behaves as round function:
-        cmd[1]   =   aux_pre;
-        aux_pre -=   cmd[1];
-        aux_pre *=   10;
+        cmd[1]   =   _MYROUND ( ( PCA9685_INTERNAL_CLOCK / ( PCA9685_ADC_STEPS * myNewFrequency ) ) - 1 );
 
-        if ( aux_pre >= 5 )
-            cmd[1]++;
-    }
 
     cmd[0]   =   PRE_SCALE;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -204,6 +196,94 @@ PCA9685_status_t  PCA9685_SetPWM_Freq ( I2C_parameters_t myI2Cparameters, float 
     cmd[0]   =   MODE1;
     cmd[1]   =   prev_mode1;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+
+/**
+ * @brief       PCA9685_SetPWM_DutyCycle ( I2C_parameters_t , PCA9685_led_channel_t , uint8_t , uint8_t )
+ *
+ * @details     It sets a new PWM duty cycle on the given LED ( channel ).
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myLEDchannel:      Chosen LED ( channel ).
+ * @param[in]    myDelay:           PWM delay.
+ * @param[in]    myPWM_DutyCycle:   PWM duty cycle.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetPWM_DutyCycle.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        3/November/2017
+ * @version     3/November/2017     The ORIGIN
+ * @pre         Datasheet p.15 ( Example 1 and Example 2).
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetPWM_DutyCycle ( I2C_parameters_t myI2Cparameters, PCA9685_led_channel_t myLEDchannel, uint8_t myDelay, uint8_t myPWM_DutyCycle )
+{
+    uint8_t      cmd[]       =   { 0, 0 };
+    uint32_t     myAux       =   0;
+
+    i2c_status_t aux;
+
+
+    // The range is from 0% up to 100%.
+    if ( ( myDelay > 100 ) || ( myPWM_DutyCycle > 100 ) )
+        return   PCA9685_FAILURE;
+
+
+
+    // DELAY TIME: LEDn_ON_L + LEDn_ON_H
+    myAux   =   _MYROUND ( ( myDelay / 100.0 ) * PCA9685_ADC_STEPS ) - 1;
+
+    // LEDn_ON_L
+    cmd[0]  =   LED0_ON_L + ( myLEDchannel << 2 );
+    cmd[1]  =   ( myAux & 0xFF );
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDn_ON_H
+    cmd[0]  =   LED0_ON_H + ( myLEDchannel << 2 );
+    cmd[1]  =   ( ( myAux >> 8 ) & 0xFF );
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    // LED OFF TIME: LEDn_OFF_L + LEDn_OFF_H
+    myAux  +=    _MYROUND ( ( myPWM_DutyCycle / 100.0 ) * PCA9685_ADC_STEPS );
+
+    if ( ( myDelay + myPWM_DutyCycle ) <= 100 )
+        myAux--;
+    else
+        myAux   +=   -4096;
+
+
+    // LEDn_OFF_L
+    cmd[0]  =   LED0_OFF_L + ( myLEDchannel << 2 );
+    cmd[1]  =   ( myAux & 0xFF );
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDn_OFF_H
+    cmd[0]  =   LED0_OFF_H + ( myLEDchannel << 2 );
+    cmd[1]  =   ( ( myAux >> 8 ) & 0xFF );
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
 
 
 
