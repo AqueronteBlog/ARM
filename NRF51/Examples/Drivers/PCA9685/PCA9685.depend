@@ -49,7 +49,7 @@
 1506068425 e:\vsprojects\arm\nrf51\examples\drivers\pca9685\src\interrupts.h
 	"variables.h"
 
-1509642318 source:e:\vsprojects\arm\nrf51\examples\drivers\pca9685\src\main.c
+1509729885 source:e:\vsprojects\arm\nrf51\examples\drivers\pca9685\src\main.c
 	"nrf.h"
 	"nrf_delay.h"
 	"ble.h"
@@ -110,10 +110,9 @@
 	"ble_gatt.h"
 	"nrf_svc.h"
 
-1509641404 e:\vsprojects\arm\drivers\pca9685\pca9685.h
+1509714934 e:\vsprojects\arm\drivers\pca9685\pca9685.h
 	"stdint.h"
 	"stdbool.h"
-	"math.h"
 	"i2c.h"
 
 1503405798 source:e:\vsprojects\arm\nrf51\examples\drivers\pca9685\src\system_nrf51.c
@@ -124,6 +123,6 @@
 
 1503405798 source:e:\vsprojects\arm\nrf51\examples\drivers\pca9685\startup_nrf51.s
 
-1509642189 source:e:\vsprojects\arm\drivers\pca9685\pca9685.c
+1509727101 source:e:\vsprojects\arm\drivers\pca9685\pca9685.c
 	"PCA9685.h"
 
