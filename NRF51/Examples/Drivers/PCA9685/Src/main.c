@@ -56,9 +56,11 @@ int main( void )
     nrf_delay_us ( 5 );
 
 
-    aux  =   PCA9685_SetPWM_Freq ( myPCA9685_I2C_parameters, 200 );
+    aux  =   PCA9685_SetPWM_Freq ( myPCA9685_I2C_parameters, 60 );
 
     aux  =   PCA9685_SetMode ( myPCA9685_I2C_parameters, MODE1_SLEEP_DISABLED );
+
+    aux  =   PCA9685_SetPWM_DutyCycle ( myPCA9685_I2C_parameters, PCA9685_LED3, 1, 95 );       // LED3: Delay Time = 1% | PWM duty cycle = 50%
     __NOP();
 
 /*
