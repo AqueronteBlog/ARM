@@ -244,6 +244,10 @@ PCA9685_status_t  PCA9685_SetPWM_DutyCycle ( I2C_parameters_t myI2Cparameters, P
         return   PCA9685_FAILURE;
 
 
+    // Delay time cannot be 0%
+    if ( myDelay == 0 )
+        myDelay  =   1;
+
 
     // DELAY TIME: LEDn_ON_L + LEDn_ON_H
     myAux   =   _MYROUND ( ( myDelay / 100.0 ) * PCA9685_ADC_STEPS ) - 1;
@@ -256,7 +260,11 @@ PCA9685_status_t  PCA9685_SetPWM_DutyCycle ( I2C_parameters_t myI2Cparameters, P
 
     // LEDn_ON_H
     cmd[0]  =   LED0_ON_H + ( myLEDchannel << 2 );
-    cmd[1]  =   ( ( myAux >> 8 ) & 0xFF );
+
+    if ( myPWM_DutyCycle == 100 )
+        cmd[1]  =   0x10;                                   // LEDn full ON
+    else
+        cmd[1]  =   ( ( myAux >> 8 ) & 0xFF );
 
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -279,10 +287,380 @@ PCA9685_status_t  PCA9685_SetPWM_DutyCycle ( I2C_parameters_t myI2Cparameters, P
 
     // LEDn_OFF_H
     cmd[0]  =   LED0_OFF_H + ( myLEDchannel << 2 );
-    cmd[1]  =   ( ( myAux >> 8 ) & 0xFF );
+
+    if ( myPWM_DutyCycle == 0 )
+        cmd[1]  =   0x10;                                   // LEDn full OFF
+    else
+        cmd[1]  =   ( ( myAux >> 8 ) & 0xFF );
 
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+
+/**
+ * @brief       PCA9685_SetPWM_DutyCycle_AllLEDs ( I2C_parameters_t , uint8_t , uint8_t )
+ *
+ * @details     It sets a new PWM duty cycle on all LEDs ( all channels ).
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myDelay:           PWM delay.
+ * @param[in]    myPWM_DutyCycle:   PWM duty cycle.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetPWM_DutyCycle_AllLEDs.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/November/2017
+ * @version     6/November/2017     The ORIGIN
+ * @pre         Datasheet p.15 ( Example 1 and Example 2).
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetPWM_DutyCycle_AllLEDs ( I2C_parameters_t myI2Cparameters, uint8_t myDelay, uint8_t myPWM_DutyCycle )
+{
+    uint8_t      cmd[]       =   { 0, 0 };
+    uint32_t     myAux       =   0;
+
+    i2c_status_t aux;
+
+
+    // The range is from 0% up to 100%.
+    if ( ( myDelay > 100 ) || ( myPWM_DutyCycle > 100 ) )
+        return   PCA9685_FAILURE;
+
+
+    // Delay time cannot be 0%
+    if ( myDelay == 0 )
+        myDelay  =   1;
+
+
+    // DELAY TIME: LEDs_ON_L + LEDs_ON_H
+    myAux   =   _MYROUND ( ( myDelay / 100.0 ) * PCA9685_ADC_STEPS ) - 1;
+
+    // LEDs_ON_L
+    cmd[0]  =   ALL_LED_ON_L;
+    cmd[1]  =   ( myAux & 0xFF );
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDs_ON_H
+    cmd[0]  =   ALL_LED_ON_H;
+
+    if ( myPWM_DutyCycle == 100 )
+        cmd[1]  =   0x10;                                   // All LEDs full ON
+    else
+        cmd[1]  =   ( ( myAux >> 8 ) & 0xFF );
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    // LED OFF TIME: LEDs_OFF_L + LEDs_OFF_H
+    myAux  +=    _MYROUND ( ( myPWM_DutyCycle / 100.0 ) * PCA9685_ADC_STEPS );
+
+    if ( ( myDelay + myPWM_DutyCycle ) <= 100 )
+        myAux--;
+    else
+        myAux   +=   -4096;
+
+
+    // LEDs_OFF_L
+    cmd[0]  =   ALL_LED_OFF_L;
+    cmd[1]  =   ( myAux & 0xFF );
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDs_OFF_H
+    cmd[0]  =   ALL_LED_OFF_H;
+
+    if ( myPWM_DutyCycle == 0 )
+        cmd[1]  =   0x10;                                   // All LEDs full OFF
+    else
+        cmd[1]  =   ( ( myAux >> 8 ) & 0xFF );
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+/**
+ * @brief       PCA9685_SetLED_ON ( I2C_parameters_t , PCA9685_led_channel_t )
+ *
+ * @details     It sets LEDn ON.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myLEDchannel:      Chosen LED ( channel ).
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetLED_ON.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/November/2017
+ * @version     6/November/2017     The ORIGIN
+ * @pre         Update on ACK requires all 4 PWM channel registers to be loaded before outputs will
+ *              change on the last ACK.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetLED_ON ( I2C_parameters_t myI2Cparameters, PCA9685_led_channel_t myLEDchannel )
+{
+    uint8_t      cmd[]       =   { 0, 0 };
+
+    i2c_status_t aux;
+
+
+
+    // LEDn_ON_L
+    cmd[0]  =   LED0_ON_L + ( myLEDchannel << 2 );
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDn_ON_H
+    cmd[0]  =   LED0_ON_H + ( myLEDchannel << 2 );
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    // LEDn_OFF_L
+    cmd[0]  =   LED0_OFF_L + ( myLEDchannel << 2 );
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDn_OFF_H
+    cmd[0]  =   LED0_OFF_H + ( myLEDchannel << 2 );
+    cmd[1]  =   0x10;                                       // LEDn full OFF
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+
+/**
+ * @brief       PCA9685_SetLED_OFF ( I2C_parameters_t , PCA9685_led_channel_t )
+ *
+ * @details     It sets LEDn OFF.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myLEDchannel:      Chosen LED ( channel ).
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetLED_OFF.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/November/2017
+ * @version     6/November/2017     The ORIGIN
+ * @pre         Update on ACK requires all 4 PWM channel registers to be loaded before outputs will
+ *              change on the last ACK.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetLED_OFF ( I2C_parameters_t myI2Cparameters, PCA9685_led_channel_t myLEDchannel )
+{
+    uint8_t      cmd[]       =   { 0, 0 };
+
+    i2c_status_t aux;
+
+
+
+    // LEDn_ON_L
+    cmd[0]  =   LED0_ON_L + ( myLEDchannel << 2 );
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDn_ON_H
+    cmd[0]  =   LED0_ON_H + ( myLEDchannel << 2 );
+    cmd[1]  =   0x10;                                       // LEDn full ON
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    // LEDn_OFF_L
+    cmd[0]  =   LED0_OFF_L + ( myLEDchannel << 2 );
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDn_OFF_H
+    cmd[0]  =   LED0_OFF_H + ( myLEDchannel << 2 );
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+
+/**
+ * @brief       PCA9685_SetAllLED_ON ( I2C_parameters_t )
+ *
+ * @details     It sets All LEDs ON.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetAllLED_ON.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/November/2017
+ * @version     6/November/2017     The ORIGIN
+ * @pre         Update on ACK requires all 4 PWM channel registers to be loaded before outputs will
+ *              change on the last ACK.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetAllLED_ON ( I2C_parameters_t myI2Cparameters )
+{
+    uint8_t      cmd[]       =   { 0, 0 };
+
+    i2c_status_t aux;
+
+
+
+    // LEDs_ON_L
+    cmd[0]  =   ALL_LED_ON_L;
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDs_ON_H
+    cmd[0]  =   ALL_LED_ON_H;
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    // LEDs_OFF_L
+    cmd[0]  =   ALL_LED_OFF_L;
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDs_OFF_H
+    cmd[0]  =   ALL_LED_OFF_H;
+    cmd[1]  =   0x10;                                       // LEDn full OFF
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+
+/**
+ * @brief       PCA9685_SetAllLED_OFF ( I2C_parameters_t )
+ *
+ * @details     It sets All LEDs OFF.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetAllLED_OFF.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/November/2017
+ * @version     6/November/2017     The ORIGIN
+ * @pre         Update on ACK requires all 4 PWM channel registers to be loaded before outputs will
+ *              change on the last ACK.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetAllLED_OFF ( I2C_parameters_t myI2Cparameters )
+{
+    uint8_t      cmd[]       =   { 0, 0 };
+
+    i2c_status_t aux;
+
+
+
+    // LEDs_ON_L
+    cmd[0]  =   ALL_LED_ON_L;
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDs_ON_H
+    cmd[0]  =   ALL_LED_ON_H;
+    cmd[1]  =   0x10;                                       // LEDn full ON
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    // LEDs_OFF_L
+    cmd[0]  =   ALL_LED_OFF_L;
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+    // LEDs_OFF_H
+    cmd[0]  =   ALL_LED_OFF_H;
+    cmd[1]  =   0x00;                                       // Dummy value
+
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 

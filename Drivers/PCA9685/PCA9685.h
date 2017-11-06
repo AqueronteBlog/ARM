@@ -369,20 +369,40 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-PCA9685_status_t  PCA9685_Init              ( I2C_parameters_t myI2Cparameters );
+PCA9685_status_t  PCA9685_Init                      ( I2C_parameters_t myI2Cparameters );
 
 /** It resets the device by software.
   */
-PCA9685_status_t  PCA9685_SoftReset         ( I2C_parameters_t myI2Cparameters );
+PCA9685_status_t  PCA9685_SoftReset                 ( I2C_parameters_t myI2Cparameters );
 
 /** It configures the mode of the device: Sleep or Normal operation mode.
   */
-PCA9685_status_t  PCA9685_SetMode           ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_sleep_t myMode );
+PCA9685_status_t  PCA9685_SetMode                   ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_sleep_t myMode );
 
 /** It configures a new PWM frequency.
   */
-PCA9685_status_t  PCA9685_SetPWM_Freq       ( I2C_parameters_t myI2Cparameters, float myNewFrequency );
+PCA9685_status_t  PCA9685_SetPWM_Freq               ( I2C_parameters_t myI2Cparameters, float myNewFrequency );
 
 /** It configures a new PWM duty cycle on a given LED.
   */
-PCA9685_status_t  PCA9685_SetPWM_DutyCycle  ( I2C_parameters_t myI2Cparameters, PCA9685_led_channel_t myLEDchannel, uint8_t myDelay, uint8_t myPWM_DutyCycle );
+PCA9685_status_t  PCA9685_SetPWM_DutyCycle          ( I2C_parameters_t myI2Cparameters, PCA9685_led_channel_t myLEDchannel, uint8_t myDelay, uint8_t myPWM_DutyCycle );
+
+/** It configures a new PWM duty cycle on all LEDs.
+  */
+PCA9685_status_t  PCA9685_SetPWM_DutyCycle_AllLEDs  ( I2C_parameters_t myI2Cparameters, uint8_t myDelay, uint8_t myPWM_DutyCycle );
+
+/** It sets the LEDn ON.
+  */
+PCA9685_status_t  PCA9685_SetLED_ON                 ( I2C_parameters_t myI2Cparameters, PCA9685_led_channel_t myLEDchannel );
+
+/** It sets the LEDn OFF.
+  */
+PCA9685_status_t  PCA9685_SetLED_OFF                ( I2C_parameters_t myI2Cparameters, PCA9685_led_channel_t myLEDchannel );
+
+/** It sets All LEDs ON.
+  */
+PCA9685_status_t  PCA9685_SetAllLED_ON              ( I2C_parameters_t myI2Cparameters );
+
+/** It sets All LEDs OFF.
+  */
+PCA9685_status_t  PCA9685_SetAllLED_OFF             ( I2C_parameters_t myI2Cparameters );
