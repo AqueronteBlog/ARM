@@ -228,7 +228,7 @@ PCA9685_status_t  PCA9685_SetPWM_Freq ( I2C_parameters_t myI2Cparameters, float 
  * @author      Manuel Caballero
  * @date        3/November/2017
  * @version     3/November/2017     The ORIGIN
- * @pre         Datasheet p.15 ( Example 1 and Example 2).
+ * @pre         Datasheet p.17 ( Example 1 and Example 2).
  * @warning     NaN.
  */
 PCA9685_status_t  PCA9685_SetPWM_DutyCycle ( I2C_parameters_t myI2Cparameters, PCA9685_led_channel_t myLEDchannel, uint8_t myDelay, uint8_t myPWM_DutyCycle )
@@ -326,7 +326,7 @@ PCA9685_status_t  PCA9685_SetPWM_DutyCycle ( I2C_parameters_t myI2Cparameters, P
  * @author      Manuel Caballero
  * @date        6/November/2017
  * @version     6/November/2017     The ORIGIN
- * @pre         Datasheet p.15 ( Example 1 and Example 2).
+ * @pre         Datasheet p.17 ( Example 1 and Example 2).
  * @warning     NaN.
  */
 PCA9685_status_t  PCA9685_SetPWM_DutyCycle_AllLEDs ( I2C_parameters_t myI2Cparameters, uint8_t myDelay, uint8_t myPWM_DutyCycle )
@@ -442,7 +442,7 @@ PCA9685_status_t  PCA9685_SetLED_ON ( I2C_parameters_t myI2Cparameters, PCA9685_
 
     // LEDn_ON_H
     cmd[0]  =   LED0_ON_H + ( myLEDchannel << 2 );
-    cmd[1]  =   0x00;                                       // Dummy value
+    cmd[1]  =   0x10;                                       // LEDn full ON
 
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -456,7 +456,7 @@ PCA9685_status_t  PCA9685_SetLED_ON ( I2C_parameters_t myI2Cparameters, PCA9685_
 
     // LEDn_OFF_H
     cmd[0]  =   LED0_OFF_H + ( myLEDchannel << 2 );
-    cmd[1]  =   0x10;                                       // LEDn full OFF
+    cmd[1]  =   0x00;                                       // LEDn full OFF
 
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -510,7 +510,7 @@ PCA9685_status_t  PCA9685_SetLED_OFF ( I2C_parameters_t myI2Cparameters, PCA9685
 
     // LEDn_ON_H
     cmd[0]  =   LED0_ON_H + ( myLEDchannel << 2 );
-    cmd[1]  =   0x10;                                       // LEDn full ON
+    cmd[1]  =   0x00;                                       // Dummy value
 
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -524,7 +524,7 @@ PCA9685_status_t  PCA9685_SetLED_OFF ( I2C_parameters_t myI2Cparameters, PCA9685
 
     // LEDn_OFF_H
     cmd[0]  =   LED0_OFF_H + ( myLEDchannel << 2 );
-    cmd[1]  =   0x00;                                       // Dummy value
+    cmd[1]  =   0x10;                                       // LEDn full OFF
 
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -577,7 +577,7 @@ PCA9685_status_t  PCA9685_SetAllLED_ON ( I2C_parameters_t myI2Cparameters )
 
     // LEDs_ON_H
     cmd[0]  =   ALL_LED_ON_H;
-    cmd[1]  =   0x00;                                       // Dummy value
+    cmd[1]  =   0x10;                                       // All LEDs full ON
 
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -591,7 +591,7 @@ PCA9685_status_t  PCA9685_SetAllLED_ON ( I2C_parameters_t myI2Cparameters )
 
     // LEDs_OFF_H
     cmd[0]  =   ALL_LED_OFF_H;
-    cmd[1]  =   0x10;                                       // LEDn full OFF
+    cmd[1]  =   0x00;                                       // Dummy value
 
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -644,7 +644,7 @@ PCA9685_status_t  PCA9685_SetAllLED_OFF ( I2C_parameters_t myI2Cparameters )
 
     // LEDs_ON_H
     cmd[0]  =   ALL_LED_ON_H;
-    cmd[1]  =   0x10;                                       // LEDn full ON
+    cmd[1]  =   0x00;                                       // Dummy value
 
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -658,7 +658,7 @@ PCA9685_status_t  PCA9685_SetAllLED_OFF ( I2C_parameters_t myI2Cparameters )
 
     // LEDs_OFF_H
     cmd[0]  =   ALL_LED_OFF_H;
-    cmd[1]  =   0x00;                                       // Dummy value
+    cmd[1]  =   0x10;                                       // All LEDs full OFF
 
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
