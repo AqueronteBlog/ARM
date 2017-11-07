@@ -16,7 +16,7 @@
 
 /**
  * @brief       void TIMER0_IRQHandler ()
- * @details     There is a new interrupt every 0.5s, increment the myState variable
+ * @details     There is a new interrupt every 1s, increment the myState variable
  *              so in the main can process that information.
  *
  *

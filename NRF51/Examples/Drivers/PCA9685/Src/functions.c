@@ -50,7 +50,7 @@ void conf_GPIO  ( void )
 
 /**
  * @brief       void conf_TIMER0  ( void )
- * @details     One channels will create an interrupt about every 0.5s.
+ * @details     One channels will create an interrupt about every 1s.
  *
  *              Timer0:
  *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
@@ -58,7 +58,7 @@ void conf_GPIO  ( void )
  *                  * Interrupt ENABLE.
  *
  *                 --- Channel 0:
- *                  * Overflow:             ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (1MHz)^(-1) ) ~ 0.5s.
+ *                  * Overflow:             ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500kHz)^(-1) ) ~ 1s.
  *
  * @return      NA
  *
@@ -76,7 +76,7 @@ void conf_TIMER0  ( void )
     NRF_TIMER0->BITMODE     =   TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos;                   // 32 bit mode.
     NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
-    NRF_TIMER0->CC[0]       =   500000;                                                                    // ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (1MHz)^(-1) ) ~ 0.5s
+    NRF_TIMER0->CC[0]       =   500000;                                                                    // ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500KHz)^(-1) ) ~ 1s
 
     NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos );
 
