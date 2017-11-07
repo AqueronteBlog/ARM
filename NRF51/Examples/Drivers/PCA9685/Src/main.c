@@ -1,9 +1,12 @@
 /**
  * @brief       main.c
- * @details     [TODO]
+ * @details     This project shows how to work with the external sensor PCA9685 A 16-channel,
+ *              12-bit PWM Fm+ I2C-bus LED controller.
  *
- *              The voltage will change every 0.5 seconds by the timer, the rest of the time, the
- *              microcontroller is in low power.
+ *              The PWM duty cycle will change every 1s on all the LEDs from 99% to 1% ( 99% --> 1% --> 1% --> 99% )
+ *              but on the LED1, there will three stages: 99% --> 1% --> 30% --> 99%.
+ *
+ *              The rest of the time, the microcontroller is in low power.
  *
  * @return      NA
  *
@@ -28,9 +31,7 @@
 int main( void )
 {
     I2C_parameters_t           myPCA9685_I2C_parameters;
-
     PCA9685_status_t           aux;
-    //PCA9685_vector_data_t      myPCA9685_Data;
 
 
     conf_GPIO   ();
@@ -55,36 +56,14 @@ int main( void )
     aux  =   PCA9685_SoftReset ( myPCA9685_I2C_parameters );
     nrf_delay_us ( 5 );
 
+    // Configure the PWM frequency and wake up the device
+    aux  =   PCA9685_SetPWM_Freq ( myPCA9685_I2C_parameters, 1000 );                    // PWM frequency: 1kHz
+    aux  =   PCA9685_SetMode     ( myPCA9685_I2C_parameters, MODE1_SLEEP_DISABLED );
 
-    aux  =   PCA9685_SetPWM_Freq ( myPCA9685_I2C_parameters, 1000 );
-
-    aux  =   PCA9685_SetMode ( myPCA9685_I2C_parameters, MODE1_SLEEP_DISABLED );
-
-    aux  =   PCA9685_SetPWM_DutyCycle ( myPCA9685_I2C_parameters, PCA9685_LED3, 0, 50 );     // LED3: Delay Time = 1% | PWM duty cycle = 50%
-
-
-    while( 1 ){
-        aux  =   PCA9685_SetPWM_DutyCycle_AllLEDs ( myPCA9685_I2C_parameters, 0, 99 );       // All LEDs: Delay Time = 1% | PWM duty cycle = 99%
-        nrf_delay_ms ( 10 );
-        aux  =   PCA9685_SetPWM_DutyCycle_AllLEDs ( myPCA9685_I2C_parameters, 100, 1 );      // All LEDs: Delay Time = 100% | PWM duty cycle = 1%
-        nrf_delay_ms ( 10 );
-    }
-
-/*
-
-    // Configure the device
-    aux  =   PCA9685_Conf  ( myPCA9685_I2C_parameters, PCA9685_RESOLUTION_RH_12_TEMP_14, PCA9685_HTRE_DISABLED );
-
-    // Get the Electronic Serial Number
-    aux  =   PCA9685_GetElectronicSerialNumber ( myPCA9685_I2C_parameters, &myPCA9685_Data );
-
-    // Get the Firmware revision
-    aux  =   PCA9685_GetFirmwareRevision       ( myPCA9685_I2C_parameters, &myPCA9685_Data );
 
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
-*/
     while( 1 )
     {
         //NRF_POWER->SYSTEMOFF = 1;
@@ -96,27 +75,28 @@ int main( void )
     	__SEV();
     	__WFE();
 
-/*
+
+        NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
     	switch ( mySTATE ){
         default:
         case 1:
-        // Trigger a new Humidity and Temperature measurement
-            NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
-
-            aux = PCA9685_TriggerHumidity ( myPCA9685_I2C_parameters, PCA9685_MEASURE_RELATIVE_HUMIDITY_NO_HOLD_MASTER_MODE );
+        // All LEDs: Delay Time = 1% | PWM duty cycle = 99%
+            aux  =   PCA9685_SetPWM_DutyCycle_AllLEDs ( myPCA9685_I2C_parameters, 0, 99 );
             break;
 
         case 2:
-        // Get the result: Humidity and Temperature
+        // All LEDs: Delay Time = 100% | PWM duty cycle = 1%
+            aux  =   PCA9685_SetPWM_DutyCycle_AllLEDs ( myPCA9685_I2C_parameters, 100, 1 );
+            break;
 
-            aux = PCA9685_ReadHumidity           ( myPCA9685_I2C_parameters, &myPCA9685_Data );
-            aux = PCA9685_ReadTemperatureFromRH  ( myPCA9685_I2C_parameters, &myPCA9685_Data );
+        case 3:
+        // LED1: Delay Time = 10% | PWM duty cycle = 30%
+            aux  =   PCA9685_SetPWM_DutyCycle ( myPCA9685_I2C_parameters, PCA9685_LED1, 10, 30 );
 
             mySTATE =   0;
-            NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
             break;
     	}
-*/
+    	NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
         //__NOP();
     }
 }
