@@ -29,8 +29,8 @@
   *
   *                                     To access to a certain address just use the following method:  PCA9685_ADDRESS_0 + Counter_Address
   *                                     Ex:
-  *                                         PCA9685_ADDRESS_0 + 1 = 0x40 + 1  = 0x41 ( 0b1000001 )
-  *                                         PCA9685_ADDRESS_0 + 1 = 0x40 + 10 = 0x41 ( 0b1001010 )
+  *                                         PCA9685_ADDRESS_0 + 1  = 0x40 + 1  = 0x41 ( 0b1000001 )
+  *                                         PCA9685_ADDRESS_0 + 10 = 0x40 + 10 = 0x4A ( 0b1001010 )
   *                                         and so on...
   */
 typedef enum
