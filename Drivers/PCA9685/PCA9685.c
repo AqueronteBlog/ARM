@@ -671,3 +671,286 @@ PCA9685_status_t  PCA9685_SetAllLED_OFF ( I2C_parameters_t myI2Cparameters )
     else
         return   PCA9685_FAILURE;
 }
+
+
+
+
+/**
+ * @brief       PCA9685_SetSUB1 ( I2C_parameters_t , PCA9685_mode1_sub1_t )
+ *
+ * @details     The device responds ( Enabled ) or not ( Disabled ) to I2C-bus subaddress 1.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    mySUB1_mode:       SUB1 Enabled/Disabled.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetSUB1.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        7/November/2017
+ * @version     7/November/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetSUB1 ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_sub1_t mySUB1_mode )
+{
+    uint8_t      cmd[]       =   { MODE1, 0 };
+
+    i2c_status_t aux;
+
+
+    // Mask SUB1 and update its value
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+    cmd[1]  &=   ~MODE1_SUB1_MASK;
+    cmd[1]  |=   mySUB1_mode;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+
+/**
+ * @brief       PCA9685_SetSUB2 ( I2C_parameters_t , PCA9685_mode1_sub2_t )
+ *
+ * @details     The device responds ( Enabled ) or not ( Disabled ) to I2C-bus subaddress 2.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    mySUB2_mode:       SUB2 Enabled/Disabled.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetSUB2.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        7/November/2017
+ * @version     7/November/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetSUB2 ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_sub2_t mySUB2_mode )
+{
+    uint8_t      cmd[]       =   { MODE1, 0 };
+
+    i2c_status_t aux;
+
+
+    // Mask SUB2 and update its value
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+    cmd[1]  &=   ~MODE1_SUB2_MASK;
+    cmd[1]  |=   mySUB2_mode;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+
+/**
+ * @brief       PCA9685_SetSUB3 ( I2C_parameters_t , PCA9685_mode1_sub3_t )
+ *
+ * @details     The device responds ( Enabled ) or not ( Disabled ) to I2C-bus subaddress 3.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    mySUB3_mode:       SUB3 Enabled/Disabled.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetSUB3.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        7/November/2017
+ * @version     7/November/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetSUB3 ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_sub3_t mySUB3_mode )
+{
+    uint8_t      cmd[]       =   { MODE1, 0 };
+
+    i2c_status_t aux;
+
+
+    // Mask SUB3 and update its value
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+    cmd[1]  &=   ~MODE1_SUB3_MASK;
+    cmd[1]  |=   mySUB3_mode;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+
+/**
+ * @brief       PCA9685_SetALLCALL ( I2C_parameters_t , PCA9685_mode1_allcall_t )
+ *
+ * @details     The device responds ( Enabled ) or not ( Disabled ) to LED All Call I2C-bus address.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myALLCALL_mode:    ALLCALL Enabled/Disabled.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetALLCALL.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        7/November/2017
+ * @version     7/November/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetALLCALL ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_allcall_t myALLCALL_mode )
+{
+    uint8_t      cmd[]       =   { MODE1, 0 };
+
+    i2c_status_t aux;
+
+
+    // Mask SUB3 and update its value
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+    cmd[1]  &=   ~MODE1_ALLCALL_MASK;
+    cmd[1]  |=   myALLCALL_mode;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+
+/**
+ * @brief       PCA9685_SetINVERT ( I2C_parameters_t , PCA9685_mode2_invrt_t )
+ *
+ * @details     Output logic state inverted ( Enabled ) or not ( Disabled ). Value to use
+ *              when external driver used. Applicable when #OE = 0
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myINVERT_mode:     INVERT Enabled/Disabled.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetINVERT.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        7/November/2017
+ * @version     7/November/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetINVERT ( I2C_parameters_t myI2Cparameters, PCA9685_mode2_invrt_t myINVERT_mode )
+{
+    uint8_t      cmd[]       =   { MODE2, 0 };
+
+    i2c_status_t aux;
+
+
+    // Mask SUB3 and update its value
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+    cmd[1]  &=   ~MODE2_INVRT_MASK;
+    cmd[1]  |=   myINVERT_mode;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}
+
+
+
+
+/**
+ * @brief       PCA9685_SetOUTDRV ( I2C_parameters_t , PCA9685_mode2_outdrv_t )
+ *
+ * @details     It sets the 16 LEDn as open-drain or totem pole structure.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myOUTDRV_mode:     OUTDRV mode.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of PCA9685_SetOUTDRV.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        7/November/2017
+ * @version     7/November/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+PCA9685_status_t  PCA9685_SetOUTDRV ( I2C_parameters_t myI2Cparameters, PCA9685_mode2_outdrv_t myOUTDRV_mode )
+{
+    uint8_t      cmd[]       =   { MODE2, 0 };
+
+    i2c_status_t aux;
+
+
+    // Mask SUB3 and update its value
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+    cmd[1]  &=   ~MODE2_OUTDRV_MASK;
+    cmd[1]  |=   myOUTDRV_mode;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   PCA9685_SUCCESS;
+    else
+        return   PCA9685_FAILURE;
+}

@@ -47,7 +47,7 @@ typedef enum
 {
     MODE1           =   0x00,                         /*!<  Mode register 1                                         */
     MODE2           =   0x01,                         /*!<  Mode register 2                                         */
-    SUDADR1         =   0x02,                         /*!<  I2C-bus subaddress 1                                    */
+    SUBADR1         =   0x02,                         /*!<  I2C-bus subaddress 1                                    */
     SUBADR2         =   0x03,                         /*!<  I2C-bus subaddress 2                                    */
     SUBADR3         =   0x04,                         /*!<  I2C-bus subaddress 3                                    */
     ALLCALLADR      =   0x05,                         /*!<  LED All Call I2C-bus address                            */
@@ -295,17 +295,6 @@ typedef enum
 
 
 
-#ifndef PCA9685_VECTOR_STRUCT_H
-#define PCA9685_VECTOR_STRUCT_H
-typedef struct
-{
-    uint8_t data;
-} PCA9685_vector_data_t;
-#endif
-
-
-
-
 /**
   * @brief   INTERNAL CONSTANTS
   */
@@ -406,3 +395,31 @@ PCA9685_status_t  PCA9685_SetAllLED_ON              ( I2C_parameters_t myI2Cpara
 /** It sets All LEDs OFF.
   */
 PCA9685_status_t  PCA9685_SetAllLED_OFF             ( I2C_parameters_t myI2Cparameters );
+
+/** It sets SUB1 mode.
+  */
+PCA9685_status_t  PCA9685_SetSUB1                   ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_sub1_t mySUB1_mode );
+
+/** It sets SUB2 mode.
+  */
+PCA9685_status_t  PCA9685_SetSUB2                   ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_sub2_t mySUB2_mode );
+
+/** It sets SUB3 mode.
+  */
+PCA9685_status_t  PCA9685_SetSUB3                   ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_sub3_t mySUB3_mode );
+
+/** It sets ALLCALL mode.
+  */
+PCA9685_status_t  PCA9685_SetALLCALL                ( I2C_parameters_t myI2Cparameters, PCA9685_mode1_allcall_t myALLCALL_mode );
+
+/** It sets INVERT mode.
+  */
+PCA9685_status_t  PCA9685_SetINVERT                 ( I2C_parameters_t myI2Cparameters, PCA9685_mode2_invrt_t myINVERT_mode );
+
+/** It sets OCH mode.
+  */
+PCA9685_status_t  PCA9685_SetOCH                    ( I2C_parameters_t myI2Cparameters, PCA9685_mode2_och_t myOCH_mode );
+
+/** It sets OUTDRV mode.
+  */
+PCA9685_status_t  PCA9685_SetOUTDRV                 ( I2C_parameters_t myI2Cparameters, PCA9685_mode2_outdrv_t myOUTDRV_mode );
