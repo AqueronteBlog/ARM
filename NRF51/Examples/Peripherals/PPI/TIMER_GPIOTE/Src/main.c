@@ -1,8 +1,9 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows how to work with the PPI peripheral. The LED1
+ *              blinks every 1s. PPI interconnects the Timer event with the GPIOTE task.
  *
- *              The rest of the time, the microcontroller is in low power.
+ *              The microcontroller is in low power all the time.
  *
  * @return      NA
  *
@@ -17,7 +18,6 @@
  */
 
 #include "nrf.h"
-#include "nrf_delay.h"
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
@@ -28,7 +28,7 @@ int main( void )
     conf_GPIO   ();
     conf_GPIOTE ();
     conf_TIMER0 ();
-
+    conf_PPI    ();
 
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
