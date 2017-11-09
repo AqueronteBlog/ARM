@@ -6,8 +6,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        22/September/2017
- * @version     22/September/2017    The ORIGIN
+ * @date        9/November/2017
+ * @version     9/November/2017    The ORIGIN
  * @pre         NaN
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -17,13 +17,9 @@
 
 
 /* INTERRUPT PRTOTYPES */
-void TIMER0_IRQHandler ( void );
+
 
 
 
 /* VARIABLES */
-extern uint8_t   dataToBeTX;
-extern uint32_t  mySTATE;
-extern uint32_t  TX_inProgress;
-extern uint8_t   TX_buff[];
-extern uint8_t   *myPtr;
+
