@@ -74,8 +74,8 @@ void conf_GPIOTE  ( void )
 
 
 
-    // Reset the task
-    NRF_GPIOTE->TASKS_OUT[LED1]  =   0;
+    // Reset the task for channel 0
+    NRF_GPIOTE->TASKS_OUT[0]  =   0;
 
 
     /*
@@ -120,12 +120,43 @@ void conf_TIMER0  ( void )
     NRF_TIMER0->BITMODE     =   TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos;                   // 32 bit mode.
     NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
-    NRF_TIMER0->CC[0]       =   500000;                                                                    // ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500KHz)^(-1) ) ~ 1s
+    NRF_TIMER0->CC[0]       =   500000;                                                                     // ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500KHz)^(-1) ) ~ 1s
 
-    NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos );
+    // NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos );
 
     NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE0_CLEAR_Enabled << TIMER_SHORTS_COMPARE0_CLEAR_Pos ); // Create an Event-Task shortcut to clear TIMER0 on COMPARE[0].
 
 
-    // NVIC_EnableIRQ ( TIMER0_IRQn );                                                                         // Enable Interrupt for the Timer0 in the core.
+    // NVIC_EnableIRQ ( TIMER0_IRQn );                                                                      // Enable Interrupt for the Timer0 in the core.
 }
+
+
+
+
+/**
+ * @brief       void conf_PPI  ( void )
+ * @details     It interconnects NRF_TIMER0->EVENTS_COMPARE[0] with NRF_GPIOTE->TASKS_OUT[0].
+ *
+ *              Channel 0:
+ *                  * Event: NRF_TIMER0->EVENTS_COMPARE[0].
+ *                  * Task:  NRF_GPIOTE->TASKS_OUT[0].
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        9/November/2017
+ * @version     9/November/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+void conf_PPI  ( void )
+{
+    //NRF_PPI->CHG[0].DIS  =   1;
+
+    NRF_PPI->CH[0].EEP   =   ( uint32_t )&NRF_TIMER0->EVENTS_COMPARE[0];
+    NRF_PPI->CH[0].TEP   =   ( uint32_t )&NRF_GPIOTE->TASKS_OUT[0];
+
+    // Enable PPI channel 0
+    NRF_PPI->CHEN        =   ( PPI_CHEN_CH0_Enabled << PPI_CHEN_CH0_Pos );
+}
+

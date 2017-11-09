@@ -5,8 +5,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        22/September/2017
- * @version     22/September/2017   The ORIGIN
+ * @date        9/November/2017
+ * @version     9/November/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -20,4 +20,4 @@
 void conf_GPIO      ( void );
 void conf_GPIOTE    ( void );
 void conf_TIMER0    ( void );
-
+void conf_PPI       ( void );
