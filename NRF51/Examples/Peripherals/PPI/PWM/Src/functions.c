@@ -19,6 +19,33 @@
 
 
 /**
+ * @brief       void conf_CLK  ( void )
+ * @details     It activates the external HFCLK crystal oscillator ( 16MHz ).
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        21/June/2017
+ * @version     21/June/2017      The ORIGIN
+ * @pre         NaN
+ * @warning     In case to use a 32MHz crystal oscillator, it also has to be configured
+ *              in system_nrf51.c file ( #define __SYSTEM_CLOCK (16000000UL) )
+ */
+void conf_CLK  ( void )
+{
+    NRF_CLOCK->XTALFREQ             =   ( CLOCK_XTALFREQ_XTALFREQ_16MHz << CLOCK_XTALFREQ_XTALFREQ_Pos );
+    NRF_CLOCK->EVENTS_HFCLKSTARTED  =   0;                      // Reset flag
+    NRF_CLOCK->TASKS_HFCLKSTART     =   1;                      // Start External crystal CLK
+
+    while ( NRF_CLOCK->EVENTS_HFCLKSTARTED  !=   1 );           // [TODO]       This is DANGEROUS, if something goes wrong, the uC will get stuck here!!!.
+                                                                // [WORKAROUND] Insert a counter.
+}
+
+
+
+
+/**
  * @brief       void conf_GPIO  ( void )
  * @details     It configures GPIO to work with the LEDs.
  *
@@ -94,22 +121,21 @@ void conf_GPIOTE  ( void )
 
 /**
  * @brief       void conf_TIMER0  ( void )
- * @details     Timer0 Channel 0 will create an event about every 1ms ( 1kHz ) while Timer0 Channel 1 will
- *              create an event about every 200us.
+ * @details     Timer0 Channel 0 and Channel 1.
  *
- *              Channel 0: PWM frequency:   1kHz
- *              Channel 1: PWM Duty cycle:  20%
+ *              PWM frequency:   1kHz:   1ms * 500kHz = 500
+ *              PWM Duty cycle:  35%:    500 * 0.35   = 175
  *
  *              Timer0:
  *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
  *                  * 32-bits mode.
  *                  * Interrupt DISABLED.
  *
- *                 --- Channel 0:
- *                  * Overflow:             ( 500 * ( f_Timer0 )^( -1 ) ) = ( 500 * ( 500kHz )^( -1 ) ) ~ 1ms ( 1kHz ).
+ *                 --- Channel 0: PWM frequency:  PWM_freq - LED_ON: 500 - 175 = 325
+ *                  * Overflow:             ( 325 * (f_Timer0)^(-1) ) = ( 325 * (500KHz)^(-1) ) ~ 650us.
  *
- *                 --- Channel 1:
- *                  * Overflow:             ( 100 * ( f_Timer0 )^( -1 ) ) = ( 100 * ( 500kHz )^( -1 ) ) ~ 200us ( 5kHz ).
+ *                 --- Channel 1: PWM Duty cycle: ( ( PWM_freq - LED_ON ) + LED_ON ): ( ( 500 - 175 ) + 175 ) = 500
+ *                  * Overflow:             ( 500 * (f_Timer0)^(-1) ) = ( 500 * (500KHz)^(-1) ) ~ 1ms.
  *
  * @return      NA
  *
@@ -127,12 +153,11 @@ void conf_TIMER0  ( void )
     NRF_TIMER0->BITMODE     =   ( TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos );               // 32 bit mode.
     NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
-    NRF_TIMER0->CC[0]       =   500;                                                                        // ( 500 * (f_Timer0)^(-1) ) = ( 500 * (500KHz)^(-1) ) ~ 1ms
-    NRF_TIMER0->CC[1]       =   100;                                                                        // ( 100 * (f_Timer0)^(-1) ) = ( 100 * (500KHz)^(-1) ) ~ 200us
+    NRF_TIMER0->CC[0]       =   ( 500 - 175 );                                                              // ( 325 * (f_Timer0)^(-1) ) = ( 325 * (500KHz)^(-1) ) ~ 650us
+    NRF_TIMER0->CC[1]       =   ( ( 500 - 175 ) + 175 );                                                    // ( 500 * (f_Timer0)^(-1) ) = ( 500 * (500KHz)^(-1) ) ~ 1ms ( 1kHz )
 
 
-    NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE0_CLEAR_Enabled << TIMER_SHORTS_COMPARE0_CLEAR_Pos )| // Create an Event-Task shortcut to clear TIMER0 on COMPARE[0] and COMPARE[1].
-                                ( TIMER_SHORTS_COMPARE1_CLEAR_Enabled << TIMER_SHORTS_COMPARE1_CLEAR_Pos );
+    NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE1_CLEAR_Enabled << TIMER_SHORTS_COMPARE1_CLEAR_Pos );
 }
 
 
@@ -140,10 +165,15 @@ void conf_TIMER0  ( void )
 
 /**
  * @brief       void conf_PPI  ( void )
- * @details     It interconnects NRF_TIMER0->EVENTS_COMPARE[0] with NRF_GPIOTE->TASKS_OUT[0].
+ * @details     It interconnects NRF_TIMER0->EVENTS_COMPARE[0] and NRF_TIMER0->EVENTS_COMPARE[1]
+ *              with NRF_GPIOTE->TASKS_OUT[0].
  *
  *              Channel 0:
  *                  * Event: NRF_TIMER0->EVENTS_COMPARE[0].
+ *                  * Task:  NRF_GPIOTE->TASKS_OUT[0].
+ *
+ *              Channel 1:
+ *                  * Event: NRF_TIMER0->EVENTS_COMPARE[1].
  *                  * Task:  NRF_GPIOTE->TASKS_OUT[0].
  *
  * @return      NA
@@ -156,12 +186,18 @@ void conf_TIMER0  ( void )
  */
 void conf_PPI  ( void )
 {
-    //NRF_PPI->CHG[0].DIS  =   1;
+    // Disable PPI channel 0 and channel 1
+    NRF_PPI->CHENCLR     =   ( PPI_CHENCLR_CH0_Clear << PPI_CHENCLR_CH0_Pos )|
+                             ( PPI_CHENCLR_CH1_Clear << PPI_CHENCLR_CH1_Pos );
 
     NRF_PPI->CH[0].EEP   =   ( uint32_t )&NRF_TIMER0->EVENTS_COMPARE[0];
     NRF_PPI->CH[0].TEP   =   ( uint32_t )&NRF_GPIOTE->TASKS_OUT[0];
 
-    // Enable PPI channel 0
-    NRF_PPI->CHEN        =   ( PPI_CHEN_CH0_Enabled << PPI_CHEN_CH0_Pos );
+    NRF_PPI->CH[1].EEP   =   ( uint32_t )&NRF_TIMER0->EVENTS_COMPARE[1];
+    NRF_PPI->CH[1].TEP   =   ( uint32_t )&NRF_GPIOTE->TASKS_OUT[0];
+
+    // Enable PPI channel 0 and channel 1
+    NRF_PPI->CHEN        =   ( PPI_CHEN_CH0_Enabled << PPI_CHEN_CH0_Pos )|
+                             ( PPI_CHEN_CH1_Enabled << PPI_CHEN_CH1_Pos );
 }
 
