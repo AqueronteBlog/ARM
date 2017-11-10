@@ -1,8 +1,11 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows how to generate PWM signal using the Timer, GPTIOE
+ *              and the PPI peripherals. The output PWM signal ( P0.21 ) has a frequency
+ *              of 1kHz and a 35% duty cycle.
  *
- *              The microcontroller is in low power all the time.
+ *              The external 16MHz clock is used to get better results. The microcontroller
+ *              is in low power all the time.
  *
  * @return      NA
  *
@@ -24,6 +27,7 @@
 
 int main( void )
 {
+    conf_CLK    ();
     conf_GPIO   ();
     conf_GPIOTE ();
     conf_TIMER0 ();
