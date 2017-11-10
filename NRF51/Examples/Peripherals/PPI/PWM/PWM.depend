@@ -1,0 +1,108 @@
+# depslib dependency file v1.0
+1510334511 source:e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\src\functions.c
+	"functions.h"
+
+1510331830 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\src\functions.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"variables.h"
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\inc\nrf.h
+	"nrf51.h"
+	"nrf51_bitfields.h"
+	"nrf51_deprecated.h"
+	"compiler_abstraction.h"
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\inc\nrf51.h
+	<core_cm0.h>
+	"system_nrf51.h"
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\inc\system_nrf51.h
+	<stdint.h>
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\inc\nrf51_bitfields.h
+	<core_cm0.h>
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\inc\nrf51_deprecated.h
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\inc\compiler_abstraction.h
+
+1510223290 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\src\variables.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"board.h"
+
+1504772562 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\src\board.h
+
+1510330660 source:e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\src\interrupts.c
+	"interrupts.h"
+
+1510223290 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\src\interrupts.h
+	"variables.h"
+
+1510334390 source:e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\src\main.c
+	"nrf.h"
+	"ble.h"
+	"variables.h"
+	"functions.h"
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\softdevice\include\ble.h
+	"ble_ranges.h"
+	"ble_types.h"
+	"ble_gap.h"
+	"ble_l2cap.h"
+	"ble_gatt.h"
+	"ble_gattc.h"
+	"ble_gatts.h"
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\softdevice\include\ble_ranges.h
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\softdevice\include\ble_types.h
+	<stdint.h>
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\softdevice\include\ble_gap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\softdevice\include\nrf_svc.h
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\softdevice\include\ble_l2cap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_err.h"
+	"nrf_svc.h"
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\softdevice\include\ble_err.h
+	"nrf_error.h"
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\softdevice\include\nrf_error.h
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\softdevice\include\ble_gatt.h
+	"ble_types.h"
+	"ble_ranges.h"
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\softdevice\include\ble_gattc.h
+	"ble_gatt.h"
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1503405798 e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\softdevice\include\ble_gatts.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_l2cap.h"
+	"ble_gap.h"
+	"ble_gatt.h"
+	"nrf_svc.h"
+
+1503405798 source:e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\src\system_nrf51.c
+	<stdint.h>
+	<stdbool.h>
+	"nrf.h"
+	"system_nrf51.h"
+
+1503405798 source:e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\startup_nrf51.s
+
+1503405798 source:e:\vsprojects\arm\nrf51\examples\peripherals\ppi\pwm\s130.c
+
