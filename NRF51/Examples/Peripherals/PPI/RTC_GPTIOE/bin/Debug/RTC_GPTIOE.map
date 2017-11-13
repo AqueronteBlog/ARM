@@ -88,7 +88,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x28 obj\debug\src\interrupts.o
  .debug_macro   0x00000000       0x1c obj\debug\src\interrupts.o
  .debug_line    0x00000000      0x2e9 obj\debug\src\interrupts.o
- .debug_str     0x00000000    0x2eede obj\debug\src\interrupts.o
+ .debug_str     0x00000000    0x2eedf obj\debug\src\interrupts.o
  .comment       0x00000000       0x6f obj\debug\src\interrupts.o
  .ARM.attributes
                 0x00000000       0x31 obj\debug\src\interrupts.o
@@ -589,12 +589,12 @@ OUTPUT(bin\Debug\RTC_GPTIOE.elf elf32-littlearm)
  .comment       0x0000006e       0x6f obj\debug\src\system_nrf51.o
  .comment       0x0000006e       0x6f obj\debug\s130.o
 
-.debug_info     0x00000000     0x2e3d
+.debug_info     0x00000000     0x2e3e
  .debug_info    0x00000000      0x8a0 obj\debug\src\functions.o
  .debug_info    0x000008a0     0x22e0 obj\debug\src\main.o
  .debug_info    0x00002b80      0x1ec obj\debug\src\system_nrf51.o
- .debug_info    0x00002d6c       0x73 obj\debug\startup_nrf51.o
- .debug_info    0x00002ddf       0x5e obj\debug\s130.o
+ .debug_info    0x00002d6c       0x74 obj\debug\startup_nrf51.o
+ .debug_info    0x00002de0       0x5e obj\debug\s130.o
 
 .debug_abbrev   0x00000000      0x4e5
  .debug_abbrev  0x00000000      0x132 obj\debug\src\functions.o
@@ -661,15 +661,15 @@ OUTPUT(bin\Debug\RTC_GPTIOE.elf elf32-littlearm)
  .debug_line    0x00000ec6       0x6e obj\debug\startup_nrf51.o
  .debug_line    0x00000f34       0x27 obj\debug\s130.o
 
-.debug_str      0x00000000    0x346fd
- .debug_str     0x00000000    0x2f068 obj\debug\src\functions.o
-                              0x2f1d5 (size before relaxing)
- .debug_str     0x0002f068     0x54e6 obj\debug\src\main.o
-                              0x345a3 (size before relaxing)
- .debug_str     0x0003454e      0x13a obj\debug\src\system_nrf51.o
-                              0x2eff2 (size before relaxing)
- .debug_str     0x00034688       0x75 obj\debug\s130.o
-                               0x23e5 (size before relaxing)
+.debug_str      0x00000000    0x346fe
+ .debug_str     0x00000000    0x2f069 obj\debug\src\functions.o
+                              0x2f1d6 (size before relaxing)
+ .debug_str     0x0002f069     0x54e6 obj\debug\src\main.o
+                              0x345a4 (size before relaxing)
+ .debug_str     0x0003454f      0x13a obj\debug\src\system_nrf51.o
+                              0x2eff3 (size before relaxing)
+ .debug_str     0x00034689       0x75 obj\debug\s130.o
+                               0x23e6 (size before relaxing)
 
 .debug_frame    0x00000000      0x5a0
  .debug_frame   0x00000000       0xa0 obj\debug\src\functions.o
