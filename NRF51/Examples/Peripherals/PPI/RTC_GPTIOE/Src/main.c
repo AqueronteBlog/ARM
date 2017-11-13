@@ -3,7 +3,7 @@
  * @details     This example shows how to work with the PPI peripheral. The LED1
  *              blinks every 125ms. PPI interconnects the RTC event with the GPIOTE task.
  *
- *              The microcontroller is in low power all the time.
+ *              The microcontroller is in low power the rest of the time.
  *
  * @return      NA
  *
