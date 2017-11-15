@@ -28,6 +28,7 @@ int main( void )
     conf_GPIO   ();
     conf_GPIOTE ();
     conf_RTC1   ();
+    conf_ADC    ();
     conf_PPI    ();
 
 
