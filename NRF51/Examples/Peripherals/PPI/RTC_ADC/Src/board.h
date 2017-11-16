@@ -25,3 +25,8 @@
 /* TWI0 */
 #define TWI0_SCL    7      /*!<   TWI0 SCL: P0.7    */
 #define TWI0_SDA    30     /*!<   TWI0 SDA: P0.30   */
+
+
+/* UART0 */
+#define UART0_TX    9      /*!<   UART TX: P0.21   */
+#define UART0_RX    11     /*!<   UART RX: P0.22   */
