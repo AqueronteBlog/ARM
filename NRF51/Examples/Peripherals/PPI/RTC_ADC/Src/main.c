@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows how to work with the peripherals PPI and RTC.
  *
  *              The microcontroller is in low power the rest of the time.
  *
@@ -27,6 +27,7 @@ int main( void )
     conf_LFCLK  ();
     conf_GPIO   ();
     conf_GPIOTE ();
+    conf_UART   ();
     conf_RTC1   ();
     conf_ADC    ();
     conf_PPI    ();
