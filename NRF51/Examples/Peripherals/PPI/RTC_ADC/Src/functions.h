@@ -23,3 +23,4 @@ void conf_GPIOTE    ( void );
 void conf_RTC1      ( void );
 void conf_ADC       ( void );
 void conf_PPI       ( void );
+void conf_UART      ( void );
