@@ -27,5 +27,5 @@
 
 
 /* VARIABLES */
-
+uint8_t myADCvalue;                      /*!<   It will store the data from the ADC     */
 
