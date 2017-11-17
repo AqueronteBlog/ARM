@@ -105,17 +105,6 @@ void conf_GPIOTE  ( void )
 
     // Reset the task for channel 0
     NRF_GPIOTE->TASKS_OUT[0]  =   0;
-
-
-    /*
-    NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_IN0_Enabled << GPIOTE_INTENSET_IN0_Pos;
-    NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_IN1_Enabled << GPIOTE_INTENSET_IN1_Pos;
-    NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_IN2_Enabled << GPIOTE_INTENSET_IN2_Pos;
-    NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_IN3_Enabled << GPIOTE_INTENSET_IN3_Pos;
-    */
-
-    // Enable Interrupt
-    // NVIC_EnableIRQ ( GPIOTE_IRQn );
 }
 
 
@@ -123,16 +112,19 @@ void conf_GPIOTE  ( void )
 
 /**
  * @brief       void conf_RTC1  ( void )
- * @details     Tick will create an event every 125ms.
+ * @details     Channel 0 will create an interrupt every 2s.
  *
  *              RTC1:
- *                  * Prescaler:            4095   ( f_RTC0 = ( 32.768kHz / ( 4095 + 1 ) ) = 8Hz ( 125ms ) ).
+ *                  * Prescaler:            327   ( f_RTC1 = ( 32.768kHz / ( 327 + 1 ) ) ~ 99.9Hz ( ~10ms ) ).
+ *                  * Channel 0:            10ms*200 = 2s
+ *                  * Interrupt ENABLE.
  *
  * @return      NA
  *
  * @author      Manuel Caballero
  * @date        15/November/2017
- * @version     15/November/2017   RTC1 as a ticker
+ * @version     17/November/2017   RTC1 as a timer
+ *              15/November/2017   RTC1 as a ticker
  *              12/November/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
@@ -140,11 +132,15 @@ void conf_GPIOTE  ( void )
 void conf_RTC1  ( void )
 {
     NRF_RTC1->TASKS_STOP  =   1;
-    NRF_RTC1->PRESCALER   =   4095;                                                                       // f_RTC1 = ( 32.768kHz / ( 4095 + 1 ) ) = 8Hz ( 125ms )
+    NRF_RTC1->PRESCALER   =   327;                                                                        // f_RTC1 = ( 32.768kHz / ( 327 + 1 ) ) ~ 99.9Hz ( ~10ms )
     NRF_RTC1->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
+    NRF_RTC1->CC[0]       =   200;                                                                        // ( 200 * (f_RTC1)^(-1) ) = ( 200 * (99.9Hz)^(-1) ) ~ 2s
 
-    NRF_RTC1->EVTENSET   |=   ( RTC_EVTENSET_TICK_Enabled << RTC_EVTENSET_TICK_Pos );
+    NRF_RTC1->INTENSET    =   ( RTC_INTENSET_COMPARE0_Enabled << RTC_INTENSET_COMPARE0_Pos );
+    NRF_RTC1->EVTENSET    =   ( RTC_EVTENSET_COMPARE0_Enabled << RTC_EVTENSET_COMPARE0_Pos );
+
+    NVIC_EnableIRQ ( RTC1_IRQn );                                                                         // Enable Interrupt for the RTC1 in the core.
 }
 
 
@@ -155,7 +151,7 @@ void conf_RTC1  ( void )
  * @details     It sets up two PPI channels.
  *
  *              Channel 0:
- *                  * Event: NRF_RTC1->EVENTS_TICK.
+ *                  * Event: NRF_RTC1->EVENTS_COMPARE[0].
  *                  * Task:  NRF_ADC->TASKS_START.
  *
  *              Channel 1:
@@ -172,9 +168,7 @@ void conf_RTC1  ( void )
  */
 void conf_PPI  ( void )
 {
-    //NRF_PPI->CHG[0].DIS  =   1;
-
-    NRF_PPI->CH[0].EEP   =   ( uint32_t )&NRF_RTC1->EVENTS_TICK;
+    NRF_PPI->CH[0].EEP   =   ( uint32_t )&NRF_RTC1->EVENTS_COMPARE[0];
     NRF_PPI->CH[0].TEP   =   ( uint32_t )&NRF_ADC->TASKS_START;
 
     NRF_PPI->CH[1].EEP   =   ( uint32_t )&NRF_ADC->EVENTS_END;
@@ -220,14 +214,14 @@ void conf_ADC  ( void )
                              ( ADC_CONFIG_REFSEL_VBG                      << ADC_CONFIG_REFSEL_Pos );
 
 
-    // NRF_ADC->INTENSET    =   ( ADC_INTENSET_END_Enabled << ADC_INTENSET_END_Pos );
+    NRF_ADC->INTENSET    =   ( ADC_INTENSET_END_Enabled << ADC_INTENSET_END_Pos );
 
 
 
     NRF_ADC->ENABLE      =   ( ADC_ENABLE_ENABLE_Enabled << ADC_ENABLE_ENABLE_Pos );
 
 
-    // NVIC_EnableIRQ ( ADC_IRQn );                                                                         // Enable Interrupt for the ADC in the core.
+    NVIC_EnableIRQ ( ADC_IRQn );                                                                         // Enable Interrupt for the ADC in the core.
 }
 
 
