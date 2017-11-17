@@ -1,6 +1,22 @@
 /**
  * @brief       main.c
- * @details     This example shows how to work with the peripherals PPI and RTC.
+ * @details     This example shows how to work with the peripherals PPI and ADC. There are
+ *              two PPI channels:
+ *
+ *                  --- Channel0:
+ *                       * Event: NRF_RTC1->EVENTS_COMPARE[0].
+ *                       * Task:  NRF_ADC->TASKS_START.
+ *
+ *                  --- Channel 1:
+ *                      * Event: NRF_ADC->EVENTS_END.
+ *                      * Task:  NRF_GPIOTE->TASKS_OUT[0].
+ *
+ *              Every 2 seconds, the RTC1 will produce an event making the ADC to perform
+ *              a new Battery voltage measurement. When the ADC finishes, the raw data is sent
+ *              through the UART.
+ *
+ *              The LED1 changes its state when there is a new ADC reading while the LED2 indicates
+ *              the raw ADC data is transmitted through the UART.
  *
  *              The microcontroller is in low power the rest of the time.
  *
