@@ -17,9 +17,12 @@
 
 
 /* INTERRUPT PRTOTYPES */
-
+void UART0_IRQHandler  ( void );
+void ADC_IRQHandler    ( void );
+void RTC1_IRQHandler   ( void );
 
 
 
 /* VARIABLES */
+extern uint8_t myADCvalue;
 
