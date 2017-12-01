@@ -1,24 +1,24 @@
 /**
- * @brief       PCF8574.h
- * @details     Remote 8-bit I/O expander for I2C-bus with interrupt.
+ * @brief       DS3231.h
+ * @details     Extremely Accurate I2C-Integrated RTC/TCXO/Crystal.
  *              Functions file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        11/October/2017
- * @version     11/October/2017    The ORIGIN
+ * @date        1/December/2017
+ * @version     1/December/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "PCF8574.h"
+#include "DS3231.h"
 
 
 /**
- * @brief       PCF8574_Init ( I2C_parameters_t )
+ * @brief       DS3231_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,7 +27,7 @@
  * @param[out]   NaN.
  *
  *
- * @return       Status of PCF8574_Init.
+ * @return       Status of DS3231_Init.
  *
  *
  * @author      Manuel Caballero
@@ -36,7 +36,7 @@
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8574_status_t  PCF8574_Init ( I2C_parameters_t myI2Cparameters )
+DS3231_status_t  DS3231_Init ( I2C_parameters_t myI2Cparameters )
 {
     i2c_status_t aux;
 
@@ -45,15 +45,15 @@ PCF8574_status_t  PCF8574_Init ( I2C_parameters_t myI2Cparameters )
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8574_SUCCESS;
+        return   DS3231_SUCCESS;
     else
-        return   PCF8574_FAILURE;
+        return   DS3231_FAILURE;
 }
 
 
 
 /**
- * @brief       PCF8574_SetPins ( I2C_parameters_t , PCF8574_vector_data_t )
+ * @brief       DS3231_SetPins ( I2C_parameters_t , DS3231_vector_data_t )
  *
  * @details     It configures the port of the device.
  *
@@ -63,7 +63,7 @@ PCF8574_status_t  PCF8574_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   NaN.
  *
  *
- * @return       Status of PCF8574_SetPins.
+ * @return       Status of DS3231_SetPins.
  *
  *
  * @author      Manuel Caballero
@@ -73,7 +73,7 @@ PCF8574_status_t  PCF8574_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8574_status_t  PCF8574_SetPins   ( I2C_parameters_t myI2Cparameters, PCF8574_vector_data_t  myConfDATA )
+DS3231_status_t  DS3231_SetPins   ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myConfDATA )
 {
     uint32_t     aux     =    0;
 
@@ -84,15 +84,15 @@ PCF8574_status_t  PCF8574_SetPins   ( I2C_parameters_t myI2Cparameters, PCF8574_
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8574_SUCCESS;
+        return   DS3231_SUCCESS;
     else
-        return   PCF8574_FAILURE;
+        return   DS3231_FAILURE;
 }
 
 
 
 /**
- * @brief       PCF8574_ReadPins ( I2C_parameters_t , PCF8574_vector_data_t*  )
+ * @brief       DS3231_ReadPins ( I2C_parameters_t , DS3231_vector_data_t*  )
  *
  * @details     It gets the data from the device ( port status ).
  *
@@ -101,7 +101,7 @@ PCF8574_status_t  PCF8574_SetPins   ( I2C_parameters_t myI2Cparameters, PCF8574_
  * @param[out]   myReadDATA:        ADC result into the chosen channel.
  *
  *
- * @return       Status of PCF8574_ReadPins.
+ * @return       Status of DS3231_ReadPins.
  *
  *
  * @author      Manuel Caballero
@@ -111,7 +111,7 @@ PCF8574_status_t  PCF8574_SetPins   ( I2C_parameters_t myI2Cparameters, PCF8574_
  * @pre         NaN
  * @warning     NaN.
  */
-PCF8574_status_t  PCF8574_ReadPins ( I2C_parameters_t myI2Cparameters, PCF8574_vector_data_t* myReadDATA )
+DS3231_status_t  DS3231_ReadPins ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t* myReadDATA )
 {
     uint32_t     aux  =    0;
 
@@ -123,7 +123,7 @@ PCF8574_status_t  PCF8574_ReadPins ( I2C_parameters_t myI2Cparameters, PCF8574_v
 
 
     if ( aux == I2C_SUCCESS )
-        return   PCF8574_SUCCESS;
+        return   DS3231_SUCCESS;
     else
-        return   PCF8574_FAILURE;
+        return   DS3231_FAILURE;
 }
