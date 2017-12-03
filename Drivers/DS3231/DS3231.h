@@ -21,46 +21,40 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESSES. NOTE: There are two version: DS3231 and DS3231A with different address only,
-  *                             its functionality remains the same.
+  * @brief   DEFAULT ADDRESSES.
   */
 typedef enum
 {
-    DS3231_ADDRESS_0     =   0x20,                   /*!<   A2 A1 A0: 000                                            */
-    DS3231_ADDRESS_1     =   0x21,                   /*!<   A2 A1 A0: 001                                            */
-    DS3231_ADDRESS_2     =   0x22,                   /*!<   A2 A1 A0: 010                                            */
-    DS3231_ADDRESS_3     =   0x23,                   /*!<   A2 A1 A0: 011                                            */
-    DS3231_ADDRESS_4     =   0x24,                   /*!<   A2 A1 A0: 100                                            */
-    DS3231_ADDRESS_5     =   0x25,                   /*!<   A2 A1 A0: 101                                            */
-    DS3231_ADDRESS_6     =   0x26,                   /*!<   A2 A1 A0: 110                                            */
-    DS3231_ADDRESS_7     =   0x27,                   /*!<   A2 A1 A0: 111                                            */
-
-    DS3231A_ADDRESS_0    =   0x38,                   /*!<   A2 A1 A0: 000                                            */
-    DS3231A_ADDRESS_1    =   0x39,                   /*!<   A2 A1 A0: 001                                            */
-    DS3231A_ADDRESS_2    =   0x3A,                   /*!<   A2 A1 A0: 010                                            */
-    DS3231A_ADDRESS_3    =   0x3B,                   /*!<   A2 A1 A0: 011                                            */
-    DS3231A_ADDRESS_4    =   0x3C,                   /*!<   A2 A1 A0: 100                                            */
-    DS3231A_ADDRESS_5    =   0x3D,                   /*!<   A2 A1 A0: 101                                            */
-    DS3231A_ADDRESS_6    =   0x3E,                   /*!<   A2 A1 A0: 110                                            */
-    DS3231A_ADDRESS_7    =   0x3F                    /*!<   A2 A1 A0: 111                                            */
+    DS3231_ADDRESS     =   0x68                   /*!<   Address                                            */
 } DS3231_address_t;
 
 
-// DATA BYTE
+// REGISTERS
 /**
-  * @brief   PIN NUMBER
+  * @brief   TIMEKEEPING REGISTERS
   */
 typedef enum
 {
-    DS3231_P0              =   0,                            /*!<  DS3231 P0 INPUT                                       */
-    DS3231_P1              =   1,                            /*!<  DS3231 P1 INPUT                                       */
-    DS3231_P2              =   2,                            /*!<  DS3231 P2 INPUT                                       */
-    DS3231_P3              =   3,                            /*!<  DS3231 P3 INPUT                                       */
-    DS3231_P4              =   4,                            /*!<  DS3231 P4 INPUT                                       */
-    DS3231_P5              =   5,                            /*!<  DS3231 P5 INPUT                                       */
-    DS3231_P6              =   6,                            /*!<  DS3231 P6 INPUT                                       */
-    DS3231_P7              =   7                             /*!<  DS3231 P7 INPUT                                       */
-} DS3231_pin_number_t;
+    DS3231_SECONDS          =   0x00,               /*!<  Seconds. RANGE 00-59                                  */
+    DS3231_MINUTES          =   0x01,               /*!<  Minutes. RANGE 00-59                                  */
+    DS3231_HOURS            =   0x02,               /*!<  Hours. 1-12 + AM/PM 00-23                             */
+    DS3231_DAY              =   0x03,               /*!<  Day. 1-7                                              */
+    DS3231_DATE             =   0x04,               /*!<  Date. 01-31                                           */
+    DS3231_MONTH_CENTURY    =   0x05,               /*!<  Month/Century. 01-12 + Century                        */
+    DS3231_YEAR             =   0x06,               /*!<  Year. 00-99                                           */
+    DS3231_ALARM_1_SEONDS   =   0x07,               /*!<  Alarm 1 seconds. 00-59                                */
+    DS3231_ALARM_1_MINUTES  =   0x08,               /*!<  Alarm 1 minutes. 00-59                                */
+    DS3231_ALARM_1_HOURS    =   0x09,               /*!<  Alarm 1 hours. 1-12 + AM/PM 00-23                     */
+    DS3231_ALARM_1_DAY_DATE =   0x0A,               /*!<  Alarm 1 day/date. 1-7/1-31                            */
+    DS3231_ALARM_2_MINUTES  =   0x0B,               /*!<  Alarm 2 minutes. 00-59                                */
+    DS3231_ALARM_2_HOURS    =   0x0C,               /*!<  Alarm 2 hours. 1-12 + AM/PM 00-23                     */
+    DS3231_ALARM_2_DAY_DATE =   0x0D,               /*!<  Alarm 2 day/date. 1-7/1-31                            */
+    DS3231_CONTROL          =   0x0E,               /*!<  Control                                               */
+    DS3231_CONTROL_STATUS   =   0x0F,               /*!<  Control/Status                                        */
+    DS3231_AGING_OFFSET     =   0x10,               /*!<  Aging offset                                          */
+    DS3231_MSB_TEMPERATURE  =   0x11,               /*!<  MSB of Temp                                           */
+    DS3231_LSB_TEMPERATURE  =   0x12                /*!<  LSB of Temp                                           */
+} DS3231_registers_t;
 
 
 /**
