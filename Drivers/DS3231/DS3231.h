@@ -57,92 +57,85 @@ typedef enum
 } DS3231_registers_t;
 
 
+
+// CONTROL REGISTER
 /**
-  * @brief   PIN MASK
+  * @brief   Enable Oscillator ( #EOSC )
   */
 typedef enum
 {
-    DS3231_P0_MASK          =   0b00000001,                  /*!<  DS3231 P0 INPUT                                       */
-    DS3231_P1_MASK          =   0b00000010,                  /*!<  DS3231 P1 INPUT                                       */
-    DS3231_P2_MASK          =   0b00000100,                  /*!<  DS3231 P2 INPUT                                       */
-    DS3231_P3_MASK          =   0b00001000,                  /*!<  DS3231 P3 INPUT                                       */
-    DS3231_P4_MASK          =   0b00010000,                  /*!<  DS3231 P4 INPUT                                       */
-    DS3231_P5_MASK          =   0b00100000,                  /*!<  DS3231 P5 INPUT                                       */
-    DS3231_P6_MASK          =   0b01000000,                  /*!<  DS3231 P6 INPUT                                       */
-    DS3231_P7_MASK          =   0b10000000                   /*!<  DS3231 P7 INPUT                                       */
-} DS3231_pin_mask_t;
-
+    CONTROL_STATUS_ENABLE_OSCILLATOR_MASK       =   ( 1 << 7 ),     /*!<  #EOSC Mask                            */
+    CONTROL_STATUS_ENABLE_OSCILLATOR_ENABLED    =   ( 1 << 7 ),     /*!<  Enable oscillator                     */
+    CONTROL_STATUS_ENABLE_OSCILLATOR_DISABLED   =   ( 0 << 7 )      /*!<  Disable oscillator                    */
+} DS3231_control_status_enable_oscillator_t;
 
 
 /**
-  * @brief   PIN CONFIGURATION
+  * @brief   Battery-Backed Square-Wave Enable ( BBSQW )
   */
 typedef enum
 {
-    DS3231_P0_INPUT        =   ( 1 << DS3231_P0 ),           /*!<  DS3231 P0 INPUT                                       */
-    DS3231_P0_OUTPUT_HIGH  =   ( 1 << DS3231_P0 ),           /*!<  DS3231 P0 OUTPUT HIGH                                 */
-    DS3231_P0_OUTPUT_LOW   =   ( 0 << DS3231_P0 ),           /*!<  DS3231 P0 OUTPUT LOW                                  */
-
-    DS3231_P1_INPUT        =   ( 1 << DS3231_P1 ),           /*!<  DS3231 P1 INPUT                                       */
-    DS3231_P1_OUTPUT_HIGH  =   ( 1 << DS3231_P1 ),           /*!<  DS3231 P1 OUTPUT HIGH                                 */
-    DS3231_P1_OUTPUT_LOW   =   ( 0 << DS3231_P1 ),           /*!<  DS3231 P1 OUTPUT LOW                                  */
-
-    DS3231_P2_INPUT        =   ( 1 << DS3231_P2 ),           /*!<  DS3231 P2 INPUT                                       */
-    DS3231_P2_OUTPUT_HIGH  =   ( 1 << DS3231_P2 ),           /*!<  DS3231 P2 OUTPUT HIGH                                 */
-    DS3231_P2_OUTPUT_LOW   =   ( 0 << DS3231_P2 ),           /*!<  DS3231 P2 OUTPUT LOW                                  */
-
-    DS3231_P3_INPUT        =   ( 1 << DS3231_P3 ),           /*!<  DS3231 P3 INPUT                                       */
-    DS3231_P3_OUTPUT_HIGH  =   ( 1 << DS3231_P3 ),           /*!<  DS3231 P3 OUTPUT HIGH                                 */
-    DS3231_P3_OUTPUT_LOW   =   ( 0 << DS3231_P3 ),           /*!<  DS3231 P3 OUTPUT LOW                                  */
-
-    DS3231_P4_INPUT        =   ( 1 << DS3231_P4 ),           /*!<  DS3231 P4 INPUT                                       */
-    DS3231_P4_OUTPUT_HIGH  =   ( 1 << DS3231_P4 ),           /*!<  DS3231 P4 OUTPUT HIGH                                 */
-    DS3231_P4_OUTPUT_LOW   =   ( 0 << DS3231_P4 ),           /*!<  DS3231 P4 OUTPUT LOW                                  */
-
-    DS3231_P5_INPUT        =   ( 1 << DS3231_P5 ),           /*!<  DS3231 P5 INPUT                                       */
-    DS3231_P5_OUTPUT_HIGH  =   ( 1 << DS3231_P5 ),           /*!<  DS3231 P5 OUTPUT HIGH                                 */
-    DS3231_P5_OUTPUT_LOW   =   ( 0 << DS3231_P5 ),           /*!<  DS3231 P5 OUTPUT LOW                                  */
-
-    DS3231_P6_INPUT        =   ( 1 << DS3231_P6 ),           /*!<  DS3231 P6 INPUT                                       */
-    DS3231_P6_OUTPUT_HIGH  =   ( 1 << DS3231_P6 ),           /*!<  DS3231 P6 OUTPUT HIGH                                 */
-    DS3231_P6_OUTPUT_LOW   =   ( 0 << DS3231_P6 ),           /*!<  DS3231 P6 OUTPUT LOW                                  */
-
-    DS3231_P7_INPUT        =   ( 1 << DS3231_P7 ),           /*!<  DS3231 P7 INPUT                                       */
-    DS3231_P7_OUTPUT_HIGH  =   ( 1 << DS3231_P7 ),           /*!<  DS3231 P7 OUTPUT HIGH                                 */
-    DS3231_P7_OUTPUT_LOW   =   ( 0 << DS3231_P7 )            /*!<  DS3231 P7 OUTPUT LOW                                  */
-} DS3231_pin_configuration_t;
-
+    CONTROL_STATUS_BBSQW_MASK       =   ( 1 << 6 ),                 /*!<  BBSQW Mask                            */
+    CONTROL_STATUS_BBSQW_ENABLED    =   ( 1 << 6 ),                 /*!<  Enable BBSQW                          */
+    CONTROL_STATUS_BBSQW_DISABLED   =   ( 0 << 6 )                  /*!<  Disable BBSQW                         */
+} DS3231_control_status_bbsqw_t;
 
 
 /**
-  * @brief   PIN STATUS
+  * @brief   Convert Temperature ( CONV )
   */
 typedef enum
 {
-    DS3231_P0_HIGH  =   ( 1 << DS3231_P0 ),                  /*!<  DS3231 P0 STATUS HIGH                                 */
-    DS3231_P0_LOW   =   ( 0 << DS3231_P0 ),                  /*!<  DS3231 P0 STATUS LOW                                  */
+    CONTROL_STATUS_CONVERT_TEMPERATURE_MASK       =   ( 1 << 5 ),   /*!<  CONVERT TEMPERATURE Mask              */
+    CONTROL_STATUS_CONVERT_TEMPERATURE_ENABLED    =   ( 1 << 5 ),   /*!<  Enable CONVERT_TEMPERATURE            */
+    CONTROL_STATUS_CONVERT_TEMPERATURE_DISABLED   =   ( 0 << 5 )    /*!<  Disable CONVERT_TEMPERATURE           */
+} DS3231_control_status_convert_temperature_t;
 
-    DS3231_P1_HIGH  =   ( 1 << DS3231_P1 ),                  /*!<  DS3231 P1 STATUS HIGH                                 */
-    DS3231_P1_LOW   =   ( 0 << DS3231_P1 ),                  /*!<  DS3231 P1 STATUS LOW                                  */
 
-    DS3231_P2_HIGH  =   ( 1 << DS3231_P2 ),                  /*!<  DS3231 P2 STATUS HIGH                                 */
-    DS3231_P2_LOW   =   ( 0 << DS3231_P2 ),                  /*!<  DS3231 P2 STATUS LOW                                  */
+/**
+  * @brief   Rate Select ( RS2 and RS1 )
+  */
+typedef enum
+{
+    CONTROL_STATUS_RATE_SELECT_MASK         =   ( 3 << 3 ),         /*!<  Rate select Mask                      */
+    CONTROL_STATUS_RATE_SELECT_1_HZ         =   ( 0 << 3 ),         /*!<  Rate select 1 Hz                      */
+    CONTROL_STATUS_RATE_SELECT_1_024_KHZ    =   ( 1 << 3 ),         /*!<  Rate select 1.024 kHz                 */
+    CONTROL_STATUS_RATE_SELECT_4_096_KHZ    =   ( 2 << 3 ),         /*!<  Rate select 4.096 kHz                 */
+    CONTROL_STATUS_RATE_SELECT_8_192_KHZ    =   ( 3 << 3 )          /*!<  Rate select 8.192 kHz                 */
+} DS3231_control_status_rate_select_t;
 
-    DS3231_P3_HIGH  =   ( 1 << DS3231_P3 ),                  /*!<  DS3231 P3 STATUS HIGH                                 */
-    DS3231_P3_LOW   =   ( 0 << DS3231_P3 ),                  /*!<  DS3231 P3 STATUS LOW                                  */
 
-    DS3231_P4_HIGH  =   ( 1 << DS3231_P4 ),                  /*!<  DS3231 P4 STATUS HIGH                                 */
-    DS3231_P4_LOW   =   ( 0 << DS3231_P4 ),                  /*!<  DS3231 P4 STATUS LOW                                  */
+/**
+  * @brief   Interrupt Control ( INTCN )
+  */
+typedef enum
+{
+    CONTROL_STATUS_INTERRUPT_CONTROL_MASK       =   ( 1 << 2 ),     /*!<  Interrupt control Mask              */
+    CONTROL_STATUS_INTERRUPT_CONTROL_SQW        =   ( 0 << 2 ),     /*!<  Square wave is output               */
+    CONTROL_STATUS_INTERRUPT_CONTROL_INT        =   ( 1 << 2 )      /*!<  Alarm activates the output          */
+} DS3231_control_status_interrupt_control_t;
 
-    DS3231_P5_HIGH  =   ( 1 << DS3231_P5 ),                  /*!<  DS3231 P5 STATUS HIGH                                 */
-    DS3231_P5_LOW   =   ( 0 << DS3231_P5 ),                  /*!<  DS3231 P5 STATUS LOW                                  */
 
-    DS3231_P6_HIGH  =   ( 1 << DS3231_P6 ),                  /*!<  DS3231 P6 STATUS HIGH                                 */
-    DS3231_P6_LOW   =   ( 0 << DS3231_P6 ),                  /*!<  DS3231 P6 STATUS LOW                                  */
+/**
+  * @brief   Alarm 2 Interrupt Enable ( A2IE )
+  */
+typedef enum
+{
+    CONTROL_STATUS_ALARM2_MASK       =   ( 1 << 1 ),                /*!<  Alarm 2 Mask                        */
+    CONTROL_STATUS_ALARM2_ENABLED    =   ( 1 << 1 ),                /*!<  Alarm 2 enabled                     */
+    CONTROL_STATUS_ALARM2_DISABLED   =   ( 0 << 1 )                 /*!<  Alarm 2 disabled                    */
+} DS3231_control_status_alarm2_t;
 
-    DS3231_P7_HIGH  =   ( 1 << DS3231_P7 ),                  /*!<  DS3231 P7 STATUS HIGH                                 */
-    DS3231_P7_LOW   =   ( 0 << DS3231_P7 )                   /*!<  DS3231 P7 STATUS LOW                                  */
-} DS3231_pin_status_t;
+
+/**
+  * @brief   Alarm 1 Interrupt Enable ( A1IE )
+  */
+typedef enum
+{
+    CONTROL_STATUS_ALARM1_MASK       =   ( 1 << 0 ),                /*!<  Alarm 1 Mask                        */
+    CONTROL_STATUS_ALARM1_ENABLED    =   ( 1 << 0 ),                /*!<  Alarm 1 enabled                     */
+    CONTROL_STATUS_ALARM1_DISABLED   =   ( 0 << 0 )                 /*!<  Alarm 1 disabled                    */
+} DS3231_control_status_alarm1_t;
 
 
 
