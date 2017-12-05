@@ -139,13 +139,78 @@ typedef enum
 
 
 
+// STATUS REGISTER
+/**
+  * @brief   Oscillator Stop Flag ( OSF )
+  */
+typedef enum
+{
+    STATUS_OSCILLATOR_STOP_FLAG_MASK       =   ( 1 << 7 ),          /*!<  OSF Mask                              */
+    STATUS_OSCILLATOR_STOP_FLAG_ENABLED    =   ( 1 << 7 ),          /*!<  Flag ON                               */
+    STATUS_OSCILLATOR_STOP_FLAG_DISABLED   =   ( 0 << 7 ),          /*!<  Flag OFF                              */
+    STATUS_OSCILLATOR_STOP_FLAG_RESET      =   ( 0 << 7 )           /*!<  Reset flag                            */
+} DS3231_status_oscillator_stop_flag_t;
+
+
+/**
+  * @brief   Enable 32kHz Output ( EN32kHz )
+  */
+typedef enum
+{
+    STATUS_ENABLE_32KHZ_OUTPUT_MASK       =   ( 1 << 3 ),          /*!<  32kHz output mask                     */
+    STATUS_ENABLE_32KHZ_OUTPUT_ENABLED    =   ( 1 << 3 ),          /*!<  32kHz output on 32kHz pin             */
+    STATUS_ENABLE_32KHZ_OUTPUT_DISABLED   =   ( 0 << 3 )           /*!<  32kHz output disabled                 */
+} DS3231_status_enable_32khz_output_t;
+
+
+/**
+  * @brief   Busy ( BSY )
+  */
+typedef enum
+{
+    STATUS_BUSY_MASK        =   ( 1 << 2 ),                         /*!<  BSY mask                              */
+    STATUS_BUSY_BUSY        =   ( 1 << 2 ),                         /*!<  device busy executing TCXO functions  */
+    STATUS_BUSY_NOBUSY      =   ( 0 << 2 )                          /*!<  device IS NOT busy                    */
+} DS3231_status_busy_t;
+
+
+/**
+  * @brief   Alarm 2 Flag ( A2F )
+  */
+typedef enum
+{
+    STATUS_ALARM2_FLAG_MASK        =   ( 1 << 1 ),                  /*!<  Alarm 2 flag mask                     */
+    STATUS_ALARM2_FLAG_ENABLED     =   ( 1 << 1 ),                  /*!<  Alarm 2 flag enabled                  */
+    STATUS_ALARM2_FLAG_DISABLED    =   ( 0 << 1 ),                  /*!<  Alarm 2 flag disabled                 */
+    STATUS_ALARM2_FLAG_RESET       =   ( 0 << 1 ),                  /*!<  Alarm 2 flag reset flag               */
+} DS3231_status_alarm2_flag_t;
+
+
+
+/**
+  * @brief   Alarm 1 Flag ( A1F )
+  */
+typedef enum
+{
+    STATUS_ALARM1_FLAG_MASK        =   ( 1 << 0 ),                  /*!<  Alarm 1 flag mask                     */
+    STATUS_ALARM1_FLAG_ENABLED     =   ( 1 << 0 ),                  /*!<  Alarm 1 flag enabled                  */
+    STATUS_ALARM1_FLAG_DISABLED    =   ( 0 << 0 ),                  /*!<  Alarm 1 flag disabled                 */
+    STATUS_ALARM1_FLAG_RESET       =   ( 0 << 0 ),                  /*!<  Alarm 1 flag reset flag               */
+} DS3231_status_alarm1_flag_t;
+
+
+
 
 
 #ifndef DS3231_VECTOR_STRUCT_H
 #define DS3231_VECTOR_STRUCT_H
 typedef struct
 {
-    uint8_t data;
+    uint8_t myAgingOffset;
+    uint8_t myMSBTemperature;
+    uint8_t myLSBTemperature;
+
+    int16_t myTemperature;
 } DS3231_vector_data_t;
 #endif
 
