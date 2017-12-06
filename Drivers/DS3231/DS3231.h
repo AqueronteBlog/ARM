@@ -200,6 +200,32 @@ typedef enum
 
 
 
+// ALARMS
+/**
+  * @brief   Alarm 1 Mask Bits
+  */
+typedef enum
+{
+    ALARM1_ALARM_ONCE_PER_SECOND                        =   1,      /*!<  Alarm 1 once per second                               */
+    ALARM1_WHEN_SECONDS_MATCH                           =   2,      /*!<  Alarm 1 when seconds match                            */
+    ALARM1_WHEN_MINUTES_AND_SECONDS_MATCH               =   3,      /*!<  Alarm 1 when minutes and seconds match                */
+    ALARM1_WHEN_HOURS_MINUTES_AND_SECONDS_MATCH         =   4,      /*!<  Alarm 1 when hours, minutes, and seconds match        */
+    ALARM1_WHEN_DATE_HOURS_MINUTES_AND_SECONDS_MATCH    =   5,      /*!<  Alarm 1 when date, hours, minutes, and seconds match  */
+    ALARM1_WHEN_DAY_HOURS_MINUTES_AND_SECONDS_MATCH     =   6       /*!<  Alarm 1 when day, hours, minutes, and seconds match   */
+} DS3231_alarm1_register_t;
+
+
+typedef enum
+{
+    ALARM2_ALARM_ONCE_PER_MINUTE                        =   1,      /*!<  Alarm 2 once per minute                               */
+    ALARM2_WHEN_MINUTES_MATCH                           =   2,      /*!<  Alarm 2 when minutes match                            */
+    ALARM2_WHEN_HOURS_MINUTES_MATCH                     =   3,      /*!<  Alarm 2 when hours and minutes match                  */
+    ALARM2_WHEN_DATE_HOURS_AND_MINUTES_MATCH            =   4,      /*!<  Alarm 2 when date, hours and minutes match            */
+    ALARM2_WHEN_DAY_HOURS_AND_MINUTES_MATCH             =   5       /*!<  Alarm 2 when day, hours and minutes match             */
+} DS3231_alarm2_register_t;
+
+
+
 
 
 #ifndef DS3231_VECTOR_STRUCT_H
