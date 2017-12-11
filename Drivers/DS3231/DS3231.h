@@ -236,7 +236,7 @@ typedef struct
     uint8_t myMSBTemperature;
     uint8_t myLSBTemperature;
 
-    int16_t myTemperature;
+    float   myTemperature;
 } DS3231_vector_data_t;
 #endif
 
@@ -258,6 +258,6 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-DS3231_status_t  DS3231_Init      ( I2C_parameters_t myI2Cparameters );
-DS3231_status_t  DS3231_SetPins   ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myConfDATA );
-DS3231_status_t  DS3231_ReadPins  ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t* myReadDATA );
+DS3231_status_t  DS3231_Init                ( I2C_parameters_t myI2Cparameters );
+DS3231_status_t  DS3231_ReadTemperature     ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myTemperature );
+DS3231_status_t  DS3231_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myRawTemperature );

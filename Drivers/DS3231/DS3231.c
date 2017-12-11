@@ -31,8 +31,8 @@
  *
  *
  * @author      Manuel Caballero
- * @date        18/October/2017
- * @version     18/October/2017   The ORIGIN
+ * @date        1/December/2017
+ * @version     1/December/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
@@ -53,33 +53,67 @@ DS3231_status_t  DS3231_Init ( I2C_parameters_t myI2Cparameters )
 
 
 /**
- * @brief       DS3231_SetPins ( I2C_parameters_t , DS3231_vector_data_t )
+ * @brief       DS3231_ReadTemperature ( I2C_parameters_t , DS3231_vector_data_t )
  *
- * @details     It configures the port of the device.
+ * @details     It gets the temperature.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myConfDATA:        Data to set up the device.
  *
- * @param[out]   NaN.
+ * @param[out]   myTemperature:     Temperature data.
  *
  *
- * @return       Status of DS3231_SetPins.
+ * @return       Status of DS3231_ReadTemperature.
  *
  *
  * @author      Manuel Caballero
- * @date        11/October/2017
- * @version     18/October/2017     Adapted to the new I2C driver.
- *              11/October/2017     The ORIGIN
+ * @date        11/December/2017
+ * @version     11/December/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-DS3231_status_t  DS3231_SetPins   ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myConfDATA )
+DS3231_status_t  DS3231_ReadTemperature   ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myTemperature )
 {
-    uint32_t     aux     =    0;
+    uint8_t      cmd[]       =   { DS3231_MSB_TEMPERATURE, 0 };
+    uint32_t     aux         =   0;
 
 
-    // Configure the ports of the device
-    aux = i2c_write ( myI2Cparameters, &myConfDATA.data, 1, I2C_STOP_BIT );
+    // It gets the temperature
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+
+    // Parse the data
+    // 1. Check if the Temperature is positive or negative
+    if ( ( cmd[0] & 0b10000000 ) == 0b00000000 )
+        myTemperature.myTemperature   =   cmd[0];                           // Positive value
+    else
+        myTemperature.myTemperature   =   -1.0 * ( ( ~cmd[0] ) + 1 );       // Negative value
+
+
+    // 2. Decimal part. 0.25°C resolution
+    switch( cmd[1] )
+    {
+    // x.00°C
+    default:
+    case 0b00000000:
+        break;
+
+    // x.25°C
+    case 0b01000000:
+        myTemperature.myTemperature  +=    0.25;
+        break;
+
+    // x.50°C
+    case 0b10000000:
+        myTemperature.myTemperature  +=    0.50;
+        break;
+
+    // x.75°C
+    case 0b11000000:
+        myTemperature.myTemperature  +=    0.75;
+        break;
+    }
+
 
 
 
@@ -92,32 +126,38 @@ DS3231_status_t  DS3231_SetPins   ( I2C_parameters_t myI2Cparameters, DS3231_vec
 
 
 /**
- * @brief       DS3231_ReadPins ( I2C_parameters_t , DS3231_vector_data_t*  )
+ * @brief       DS3231_ReadRawTemperature ( I2C_parameters_t , DS3231_vector_data_t )
  *
- * @details     It gets the data from the device ( port status ).
+ * @details     It gets the raw temperature.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
  *
- * @param[out]   myReadDATA:        ADC result into the chosen channel.
+ * @param[out]   myRawTemperature:  Raw Temperature data.
  *
  *
- * @return       Status of DS3231_ReadPins.
+ * @return       Status of DS3231_ReadTemperature.
  *
  *
  * @author      Manuel Caballero
- * @date        11/October/2017
- * @version     18/October/2017     Adapted to the new I2C driver.
- *              11/October/2017     The ORIGIN
+ * @date        11/December/2017
+ * @version     11/December/2017     The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
-DS3231_status_t  DS3231_ReadPins ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t* myReadDATA )
+DS3231_status_t  DS3231_ReadRawTemperature   ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myRawTemperature )
 {
-    uint32_t     aux  =    0;
+    uint8_t      cmd[]       =   { DS3231_MSB_TEMPERATURE, 0 };
+    uint32_t     aux         =   0;
 
 
-    // Read the port
-    aux = i2c_read ( myI2Cparameters, &myReadDATA->data, 1 );
+    // It gets the temperature
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+
+    // Parse the data
+    myRawTemperature.myMSBTemperature    =   cmd[0];
+    myRawTemperature.myLSBTemperature    =   cmd[1];
 
 
 
