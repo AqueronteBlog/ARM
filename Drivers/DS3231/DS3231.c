@@ -85,9 +85,9 @@ DS3231_status_t  DS3231_ReadTemperature   ( I2C_parameters_t myI2Cparameters, DS
     // Parse the data
     // 1. Check if the Temperature is positive or negative
     if ( ( cmd[0] & 0b10000000 ) == 0b00000000 )
-        myTemperature.myTemperature   =   cmd[0];                           // Positive value
+        myTemperature.Temperature   =   cmd[0];                           // Positive value
     else
-        myTemperature.myTemperature   =   -1.0 * ( ( ~cmd[0] ) + 1 );       // Negative value
+        myTemperature.Temperature   =   -1.0 * ( ( ~cmd[0] ) + 1 );       // Negative value
 
 
     // 2. Decimal part. 0.25°C resolution
@@ -100,17 +100,17 @@ DS3231_status_t  DS3231_ReadTemperature   ( I2C_parameters_t myI2Cparameters, DS
 
     // x.25°C
     case 0b01000000:
-        myTemperature.myTemperature  +=    0.25;
+        myTemperature.Temperature  +=    0.25;
         break;
 
     // x.50°C
     case 0b10000000:
-        myTemperature.myTemperature  +=    0.50;
+        myTemperature.Temperature  +=    0.50;
         break;
 
     // x.75°C
     case 0b11000000:
-        myTemperature.myTemperature  +=    0.75;
+        myTemperature.Temperature  +=    0.75;
         break;
     }
 
@@ -156,9 +156,48 @@ DS3231_status_t  DS3231_ReadRawTemperature   ( I2C_parameters_t myI2Cparameters,
 
 
     // Parse the data
-    myRawTemperature.myMSBTemperature    =   cmd[0];
-    myRawTemperature.myLSBTemperature    =   cmd[1];
+    myRawTemperature.MSBTemperature    =   cmd[0];
+    myRawTemperature.LSBTemperature    =   cmd[1];
 
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   DS3231_SUCCESS;
+    else
+        return   DS3231_FAILURE;
+}
+
+
+
+/**
+ * @brief       DS3231_ReadRawAging ( I2C_parameters_t , DS3231_vector_data_t )
+ *
+ * @details     It gets the raw aging.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myRawAging:        Raw Aging data.
+ *
+ *
+ * @return       Status of DS3231_ReadRawAging.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/December/2017
+ * @version     12/December/2017     The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+DS3231_status_t  DS3231_ReadRawAging ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t myRawAging )
+{
+    uint8_t      cmd       =   DS3231_AGING_OFFSET;
+    uint32_t     aux       =   0;
+
+
+    // It gets the raw aging value
+    aux = i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &myRawAging.RawAging, 1 );
 
 
 

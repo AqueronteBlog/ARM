@@ -232,11 +232,12 @@ typedef enum
 #define DS3231_VECTOR_STRUCT_H
 typedef struct
 {
-    uint8_t myAgingOffset;
-    uint8_t myMSBTemperature;
-    uint8_t myLSBTemperature;
+    uint8_t AgingOffset;
+    uint8_t MSBTemperature;
+    uint8_t LSBTemperature;
+    uint8_t RawAging;
 
-    float   myTemperature;
+    float   Temperature;
 } DS3231_vector_data_t;
 #endif
 
@@ -258,6 +259,18 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
+/** It configures the SPI peripheral.
+    */
 DS3231_status_t  DS3231_Init                ( I2C_parameters_t myI2Cparameters );
+
+/** It reads the temperature data.
+      */
 DS3231_status_t  DS3231_ReadTemperature     ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myTemperature );
+
+/** It reads the raw temperature data.
+      */
 DS3231_status_t  DS3231_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myRawTemperature );
+
+/** It reads the raw aging data.
+      */
+DS3231_status_t  DS3231_ReadRawAging        ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myRawAging );
