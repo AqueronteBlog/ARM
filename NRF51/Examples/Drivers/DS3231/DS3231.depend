@@ -110,7 +110,7 @@
 	"ble_gatt.h"
 	"nrf_svc.h"
 
-1513023389 d:\workspace\arm\drivers\ds3231\ds3231.h
+1513108428 d:\workspace\arm\drivers\ds3231\ds3231.h
 	"stdint.h"
 	"stdbool.h"
 	"i2c.h"
@@ -123,6 +123,6 @@
 
 1509476726 source:d:\workspace\arm\nrf51\examples\drivers\ds3231\startup_nrf51.s
 
-1512157197 source:d:\workspace\arm\drivers\ds3231\ds3231.c
+1513107998 source:d:\workspace\arm\drivers\ds3231\ds3231.c
 	"DS3231.h"
 
