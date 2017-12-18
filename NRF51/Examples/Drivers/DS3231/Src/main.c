@@ -28,6 +28,7 @@ int main( void )
 {
     I2C_parameters_t          myDS3231_I2C_parameters;
     DS3231_status_t           aux;
+    DS3231_vector_data_t      myDS3231_data;
 
 
     conf_GPIO   ();
@@ -39,17 +40,23 @@ int main( void )
     myDS3231_I2C_parameters.TWIinstance =    NRF_TWI0;
     myDS3231_I2C_parameters.SDA         =    TWI0_SDA;
     myDS3231_I2C_parameters.SCL         =    TWI0_SCL;
-    //myDS3231_I2C_parameters.ADDR        =    DS3231_ADDRESS_0;
+    myDS3231_I2C_parameters.ADDR        =    DS3231_ADDRESS;
     myDS3231_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
     myDS3231_I2C_parameters.SDAport     =    NRF_GPIO;
     myDS3231_I2C_parameters.SCLport     =    NRF_GPIO;
 
     // Configure I2C peripheral
-    //aux  =   DS3231_Init ( myDS3231_I2C_parameters );
+    aux  =   DS3231_Init ( myDS3231_I2C_parameters );
 
 
     // Reset the device
-    //aux  =   DS3231_SoftReset ( myDS3231_I2C_parameters );
+    aux  =   DS3231_Status32kHzPin  ( myDS3231_I2C_parameters, STATUS_ENABLE_32KHZ_OUTPUT_DISABLED );
+    while(1){
+        aux  =   DS3231_StartNewConvertTemperature  ( myDS3231_I2C_parameters );
+        aux  =   DS3231_ReadRawTemperature          ( myDS3231_I2C_parameters, &myDS3231_data );
+        aux  =   DS3231_ReadTemperature             ( myDS3231_I2C_parameters, &myDS3231_data );
+        aux  =   DS3231_ReadRawAging                ( myDS3231_I2C_parameters, &myDS3231_data );
+    }
     //nrf_delay_us ( 5 );
 
 
