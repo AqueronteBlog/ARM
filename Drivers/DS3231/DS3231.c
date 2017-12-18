@@ -403,37 +403,47 @@ DS3231_status_t  DS3231_ClearAlarmFlag  ( I2C_parameters_t myI2Cparameters, DS32
  */
 DS3231_status_t  DS3231_SetAlarm1   ( I2C_parameters_t myI2Cparameters, DS3231_alarm1_register_t myAlarm1 )
 {
-    uint8_t      cmd[]     =   { 0, 0, 0, 0, 0, 0 };        // REGISTER | A1M1 | A1M2 | A1M3 | A1M4 | DYDT
-    uint32_t     aux       =   0;
+    uint8_t      cmd                =   0;
+    uint32_t     aux                =   0;              // A1M1
+    uint32_t     Alarm1SecondAux    =   0;              // A1M2
+    uint32_t     Alarm1MinuteAux    =   0;              // A1M3
+    uint32_t     Alarm1HourAux      =   0;              // A1M4
+    uint32_t     Alarm1DayDateAux   =   0;              // DYDT
 
 
     // Read all the registers involved in the alarm1
     // A1M1
-    cmd[0]   =   DS3231_ALARM_1_SECONDS;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
-    cmd[1]  &=  ~ALARM1_A1M1_MASK;
+    cmd      =   DS3231_ALARM_1_SECONDS;
+    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
+
+    Alarm1SecondAux  =  ( cmd & ~ALARM1_A1M1_MASK );
 
     // A1M2
-    cmd[0]   =   DS3231_ALARM_1_MINUTES;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux      =   i2c_read  ( myI2Cparameters, &cmd[2], 1 );
-    cmd[2]  &=  ~ALARM1_A1M2_MASK;
+    cmd      =   DS3231_ALARM_1_MINUTES;
+    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
+
+    Alarm1MinuteAux  =  ( cmd & ~ALARM1_A1M2_MASK );
 
     // A1M3
-    cmd[0]   =   DS3231_ALARM_1_HOURS;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux      =   i2c_read  ( myI2Cparameters, &cmd[3], 1 );
-    cmd[3]  &=  ~ALARM1_A1M3_MASK;
+    cmd      =   DS3231_ALARM_1_HOURS;
+    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
 
-    // A1M4 & DY/#DT
-    cmd[0]   =   DS3231_ALARM_1_HOURS;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux      =   i2c_read  ( myI2Cparameters, &cmd[4], 1 );
-    cmd[5]   =   ( cmd[4] & ~ALARM1_DYDT_MASK );
-    cmd[4]  &=  ~ALARM1_A1M4_MASK;
+    Alarm1HourAux  =  ( cmd & ~ALARM1_A1M3_MASK );
+
+    // A1M4 & DY/DT
+    cmd      =   DS3231_ALARM_1_DAY_DATE;
+    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
+
+    Alarm1DayDateAux  =  ( cmd & ~( ALARM1_A1M4_MASK | ALARM1_DYDT_MASK ) );
 
 
+    // Set all ( A1M1, A1M2, A1M3 A1M4 and DY/DT ) to 0
+ //   cmd[0]   =   DS3231_ALARM_1_SECONDS;
+ //   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_STOP_BIT );
 
 
 
@@ -454,10 +464,6 @@ DS3231_status_t  DS3231_SetAlarm1   ( I2C_parameters_t myI2Cparameters, DS3231_a
         break;
     }
 
-
-    // It reads the status register to parse the data
-    aux  =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux  =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
 
 
 
