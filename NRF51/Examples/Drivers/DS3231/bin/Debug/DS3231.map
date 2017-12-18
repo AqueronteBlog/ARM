@@ -365,7 +365,7 @@ Discarded input sections
  .text.DS3231_ClearAlarmFlag
                 0x00000000       0xf0 obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
  .text.DS3231_SetAlarm1
-                0x00000000      0x24c obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
+                0x00000000      0x1e8 obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
  .debug_macro   0x00000000      0x82c obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
  .debug_macro   0x00000000       0x22 obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
  .debug_macro   0x00000000       0x87 obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
@@ -734,7 +734,7 @@ OUTPUT(bin\Debug\DS3231.elf elf32-littlearm)
  .comment       0x0000006e       0x6f obj\debug\src\system_nrf51.o
  .comment       0x0000006e       0x6f obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
 
-.debug_info     0x00000000     0x4302
+.debug_info     0x00000000     0x432e
  .debug_info    0x00000000      0x6b3 obj\debug\~#\~#\basics\i2c\i2c.o
  .debug_info    0x000006b3       0x5e obj\debug\s130.o
  .debug_info    0x00000711      0x5d1 obj\debug\src\functions.o
@@ -742,9 +742,9 @@ OUTPUT(bin\Debug\DS3231.elf elf32-littlearm)
  .debug_info    0x00000fb1     0x262a obj\debug\src\main.o
  .debug_info    0x000035db      0x1ec obj\debug\src\system_nrf51.o
  .debug_info    0x000037c7       0x68 obj\debug\startup_nrf51.o
- .debug_info    0x0000382f      0xad3 obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
+ .debug_info    0x0000382f      0xaff obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
 
-.debug_abbrev   0x00000000      0x904
+.debug_abbrev   0x00000000      0x926
  .debug_abbrev  0x00000000      0x159 obj\debug\~#\~#\basics\i2c\i2c.o
  .debug_abbrev  0x00000159       0x48 obj\debug\s130.o
  .debug_abbrev  0x000001a1      0x144 obj\debug\src\functions.o
@@ -752,7 +752,7 @@ OUTPUT(bin\Debug\DS3231.elf elf32-littlearm)
  .debug_abbrev  0x000003b8      0x2ae obj\debug\src\main.o
  .debug_abbrev  0x00000666       0xf4 obj\debug\src\system_nrf51.o
  .debug_abbrev  0x0000075a       0x14 obj\debug\startup_nrf51.o
- .debug_abbrev  0x0000076e      0x196 obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
+ .debug_abbrev  0x0000076e      0x1b8 obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
 
 .debug_aranges  0x00000000      0x348
  .debug_aranges
@@ -818,7 +818,7 @@ OUTPUT(bin\Debug\DS3231.elf elf32-littlearm)
  .debug_macro   0x00009e30       0xdf obj\debug\src\system_nrf51.o
  .debug_macro   0x00009f0f       0xed obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
 
-.debug_line     0x00000000     0x1aaf
+.debug_line     0x00000000     0x1aae
  .debug_line    0x00000000      0x3bb obj\debug\~#\~#\basics\i2c\i2c.o
  .debug_line    0x000003bb       0x27 obj\debug\s130.o
  .debug_line    0x000003e2      0x341 obj\debug\src\functions.o
@@ -826,9 +826,9 @@ OUTPUT(bin\Debug\DS3231.elf elf32-littlearm)
  .debug_line    0x00000a26      0x86a obj\debug\src\main.o
  .debug_line    0x00001290      0x34e obj\debug\src\system_nrf51.o
  .debug_line    0x000015de       0x6e obj\debug\startup_nrf51.o
- .debug_line    0x0000164c      0x463 obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
+ .debug_line    0x0000164c      0x462 obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
 
-.debug_str      0x00000000    0x350ee
+.debug_str      0x00000000    0x3512d
  .debug_str     0x00000000    0x2f01f obj\debug\~#\~#\basics\i2c\i2c.o
                               0x2f1a3 (size before relaxing)
  .debug_str     0x0002f01f       0x75 obj\debug\s130.o
@@ -841,8 +841,8 @@ OUTPUT(bin\Debug\DS3231.elf elf32-littlearm)
                               0x3487a (size before relaxing)
  .debug_str     0x000349ab       0xe4 obj\debug\src\system_nrf51.o
                               0x2efe7 (size before relaxing)
- .debug_str     0x00034a8f      0x65f obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
-                              0x2f8d5 (size before relaxing)
+ .debug_str     0x00034a8f      0x69e obj\debug\~#\~#\~#\~#\drivers\ds3231\ds3231.o
+                              0x2f914 (size before relaxing)
 
 .debug_frame    0x00000000      0x81c
  .debug_frame   0x00000000       0x78 obj\debug\~#\~#\basics\i2c\i2c.o
