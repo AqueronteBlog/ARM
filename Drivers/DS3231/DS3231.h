@@ -42,7 +42,7 @@ typedef enum
     DS3231_DATE             =   0x04,               /*!<  Date. 01-31                                           */
     DS3231_MONTH_CENTURY    =   0x05,               /*!<  Month/Century. 01-12 + Century                        */
     DS3231_YEAR             =   0x06,               /*!<  Year. 00-99                                           */
-    DS3231_ALARM_1_SEONDS   =   0x07,               /*!<  Alarm 1 seconds. 00-59                                */
+    DS3231_ALARM_1_SECONDS  =   0x07,               /*!<  Alarm 1 seconds. 00-59                                */
     DS3231_ALARM_1_MINUTES  =   0x08,               /*!<  Alarm 1 minutes. 00-59                                */
     DS3231_ALARM_1_HOURS    =   0x09,               /*!<  Alarm 1 hours. 1-12 + AM/PM 00-23                     */
     DS3231_ALARM_1_DAY_DATE =   0x0A,               /*!<  Alarm 1 day/date. 1-7/1-31                            */
@@ -225,6 +225,129 @@ typedef enum
 } DS3231_alarm2_register_t;
 
 
+// TIMEKEEPING REGISTERS
+// SECONDS
+typedef enum
+{
+    SECONDS_SECONDS_MASK                                =   0x0F,   /*!<  Seconds Seconds mask                                  */
+    SECONDS_10SECONDS_MASK                              =   0x70    /*!<  Seconds 10Seconds mask                                */
+} DS3231_seconds_t;
+
+
+// MINUTES
+typedef enum
+{
+    MINUTES_MINUTES_MASK                                =   0x0F,   /*!<  Minutes Minutes mask                                  */
+    MINUTES_10MINUTES_MASK                              =   0x70    /*!<  Minutes 10Minutes mask                                */
+} DS3231_minutes_t;
+
+
+// HOURS
+typedef enum
+{
+    HOURS_HOUR_MASK                                     =   0x0F,   /*!<  Hour Hour mask                                        */
+    HOURS_10HOUR_MASK                                   =   0x10    /*!<  Hour 10Hour mask                                      */
+} DS3231_hours_t;
+
+
+// DAY
+typedef enum
+{
+    DAY_DAY_MASK                                        =   0x07    /*!<  Day Day mask                                          */
+} DS3231_day_t;
+
+
+// DATE
+typedef enum
+{
+    DATE_DATE_MASK                                       =   0x0F,   /*!<  Date Date mask                                       */
+    DATE_10DATE_MASK                                     =   0x30    /*!<  Date 10Date mask                                     */
+} DS3231_date_t;
+
+
+// MONTH/CENTURY
+typedef enum
+{
+    MONTH_MONTH_MASK                                      =   0x0F,  /*!<  Month Month mask                                     */
+    MONTH_10MONTH_MASK                                    =   0x10,  /*!<  Month 10Month mask                                   */
+    MONTH_CENTURY_MASK                                    =   0x80   /*!<  Month Century mask                                   */
+} DS3231_month_t;
+
+
+// YEAR
+typedef enum
+{
+    YEAR_YEAR_MASK                                        =   0x0F,   /*!<  Year Year mask                                       */
+    YEAR_10YEAR_MASK                                      =   0xF0    /*!<  Year 10Year mask                                     */
+} DS3231_year_t;
+
+
+// ALARM 1 SECONDS
+typedef enum
+{
+    ALARM1_A1M1_MASK                                       =   0x80,   /*!<  Alarm1 A1M1 mask                                    */
+    ALARM1_10SECONDS_MASK                                  =   0x70,   /*!<  Alarm1 10Seconds mask                               */
+    ALARM1_SECONDS_MASK                                    =   0x0F    /*!<  Alarm1 Seconds mask                                 */
+} DS3231_alarm1_seconds_t;
+
+
+// ALARM 1 MINUTES
+typedef enum
+{
+    ALARM1_A1M2_MASK                                       =   0x80,   /*!<  Alarm1 A1M2 mask                                    */
+    ALARM1_10MINUTES_MASK                                  =   0x70,   /*!<  Alarm1 10Minutes mask                               */
+    ALARM1_MINUTES_MASK                                    =   0x0F    /*!<  Alarm1 Minutes mask                                 */
+} DS3231_alarm1_minutes_t;
+
+
+// ALARM 1 HOURS
+typedef enum
+{
+    ALARM1_A1M3_MASK                                       =   0x80,   /*!<  Alarm1 A1M3 mask                                    */
+    ALARM1_10HOUR_MASK                                     =   0x10,   /*!<  Alarm1 10Hour mask                                  */
+    ALARM1_HOUR_MASK                                       =   0x0F    /*!<  Alarm1 Hour mask                                    */
+} DS3231_alarm1_hours_t;
+
+
+// ALARM 1 DAY/DATE
+typedef enum
+{
+    ALARM1_A1M4_MASK                                       =   0x80,   /*!<  Alarm1 A1M4 mask                                    */
+    ALARM1_DYDT_MASK                                       =   0x40,   /*!<  Alarm1 DY/DT mask                                   */
+    ALARM1_10DATE_MASK                                     =   0x30,   /*!<  Alarm1 10Date mask                                  */
+    ALARM1_DATE_DAY_MASK                                   =   0x0F    /*!<  Alarm1 Day/Date mask                                */
+} DS3231_alarm1_day_date_t;
+
+
+// ALARM 2 MINUTES
+typedef enum
+{
+    ALARM2_A2M2_MASK                                       =   0x80,   /*!<  Alarm2 A2M2 mask                                    */
+    ALARM2_10MINUTES_MASK                                  =   0x70,   /*!<  Alarm2 10Minutes mask                               */
+    ALARM2_MINUTES_MASK                                    =   0x0F    /*!<  Alarm2 Minutes mask                                 */
+} DS3231_alarm2_minutes_t;
+
+
+// ALARM 2 HOURS
+typedef enum
+{
+    ALARM2_A2M3_MASK                                       =   0x80,   /*!<  Alarm2 A1M3 mask                                    */
+    ALARM2_10HOUR_MASK                                     =   0x10,   /*!<  Alarm2 10Hour mask                                  */
+    ALARM2_HOUR_MASK                                       =   0x0F    /*!<  Alarm2 Hour mask                                    */
+} DS3231_alarm2_hours_t;
+
+
+// ALARM 2 DAY/DATE
+typedef enum
+{
+    ALARM2_A2M4_MASK                                       =   0x80,   /*!<  Alarm2 A2M4 mask                                    */
+    ALARM2_DYDT_MASK                                       =   0x40,   /*!<  Alarm2 DY/DT mask                                   */
+    ALARM2_10DATE_MASK                                     =   0x30,   /*!<  Alarm2 10Date mask                                  */
+    ALARM2_DATE_DAY_MASK                                   =   0x0F    /*!<  Alarm2 Day/Date mask                                */
+} DS3231_alarm2_day_date_t;
+
+
+
 
 
 
@@ -250,7 +373,9 @@ typedef struct
 typedef enum
 {
     DS3231_SUCCESS     =       0,
-    DS3231_FAILURE     =       1
+    DS3231_FAILURE     =       1,
+
+    DS3231_TIMEOUT     =       1000
 } DS3231_status_t;
 
 
@@ -261,16 +386,32 @@ typedef enum
   */
 /** It configures the SPI peripheral.
     */
-DS3231_status_t  DS3231_Init                ( I2C_parameters_t myI2Cparameters );
+DS3231_status_t  DS3231_Init                        ( I2C_parameters_t myI2Cparameters );
 
 /** It reads the temperature data.
       */
-DS3231_status_t  DS3231_ReadTemperature     ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myTemperature );
+DS3231_status_t  DS3231_ReadTemperature             ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t*  myTemperature );
 
 /** It reads the raw temperature data.
       */
-DS3231_status_t  DS3231_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myRawTemperature );
+DS3231_status_t  DS3231_ReadRawTemperature          ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t*  myRawTemperature );
+
+/** It triggers a new temperature measurement.
+      */
+DS3231_status_t  DS3231_StartNewConvertTemperature  ( I2C_parameters_t myI2Cparameters );
 
 /** It reads the raw aging data.
       */
-DS3231_status_t  DS3231_ReadRawAging        ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t  myRawAging );
+DS3231_status_t  DS3231_ReadRawAging                ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t*  myRawAging );
+
+/** It sets the 32kHz pin output: Enabled/Disabled.
+      */
+DS3231_status_t  DS3231_Status32kHzPin              ( I2C_parameters_t myI2Cparameters, DS3231_status_enable_32khz_output_t  my32kHzPin );
+
+/** It clears alarm flags.
+      */
+DS3231_status_t  DS3231_ClearAlarmFlag              ( I2C_parameters_t myI2Cparameters, DS3231_status_alarm1_flag_t  myA1F, DS3231_status_alarm2_flag_t myA2F );
+
+/** It sets the alarm1.
+      */
+DS3231_status_t  DS3231_SetAlarm1                   ( I2C_parameters_t myI2Cparameters, DS3231_alarm1_register_t myAlarm1 );
