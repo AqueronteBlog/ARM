@@ -26,9 +26,10 @@
 
 int main( void )
 {
-    I2C_parameters_t          myDS3231_I2C_parameters;
-    DS3231_status_t           aux;
-    DS3231_vector_data_t      myDS3231_data;
+    I2C_parameters_t            myDS3231_I2C_parameters;
+    DS3231_status_t             aux;
+    DS3231_vector_data_t        myDS3231_data;
+    DS3231_vector_date_time_t   myDS3231_date_time;
 
 
     conf_GPIO   ();
@@ -50,12 +51,24 @@ int main( void )
 
 
     // Reset the device
-    aux  =   DS3231_Status32kHzPin  ( myDS3231_I2C_parameters, STATUS_ENABLE_32KHZ_OUTPUT_DISABLED );
+    aux  =   DS3231_Status32kHzPin      ( myDS3231_I2C_parameters, STATUS_ENABLE_32KHZ_OUTPUT_DISABLED );
+    aux  =   DS3231_SetSquareWaveOutput ( myDS3231_I2C_parameters, CONTROL_STATUS_RATE_SELECT_1_HZ );
+
+    // TIME: 12:48:20   24H PM
+    myDS3231_date_time.Hours         =   12;
+    myDS3231_date_time.Minutes       =   53;
+    myDS3231_date_time.Seconds       =   20;
+    myDS3231_date_time.Mode_12_n24   =   HOURS_12_ENABLED;
+    myDS3231_date_time.Mode_nAM_PM   =   HOURS_PM_ENABLED;
+    aux  =   DS3231_SetTime ( myDS3231_I2C_parameters, myDS3231_date_time );
     while(1){
         aux  =   DS3231_StartNewConvertTemperature  ( myDS3231_I2C_parameters );
         aux  =   DS3231_ReadRawTemperature          ( myDS3231_I2C_parameters, &myDS3231_data );
         aux  =   DS3231_ReadTemperature             ( myDS3231_I2C_parameters, &myDS3231_data );
         aux  =   DS3231_ReadRawAging                ( myDS3231_I2C_parameters, &myDS3231_data );
+
+        aux  =   DS3231_GetDate                     ( myDS3231_I2C_parameters, &myDS3231_date_time );
+        aux  =   DS3231_GetTime                     ( myDS3231_I2C_parameters, &myDS3231_date_time );
     }
     //nrf_delay_us ( 5 );
 
