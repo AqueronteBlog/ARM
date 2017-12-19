@@ -215,6 +215,9 @@ typedef enum
 } DS3231_alarm1_register_t;
 
 
+/**
+  * @brief   Alarm 2 Mask Bits
+  */
 typedef enum
 {
     ALARM2_ALARM_ONCE_PER_MINUTE                        =   1,      /*!<  Alarm 2 once per minute                               */
@@ -245,8 +248,16 @@ typedef enum
 // HOURS
 typedef enum
 {
-    HOURS_HOUR_MASK                                     =   0x0F,   /*!<  Hour Hour mask                                        */
-    HOURS_10HOUR_MASK                                   =   0x10    /*!<  Hour 10Hour mask                                      */
+    HOURS_HOUR_MASK                                     =   0x0F,       /*!<  Hour Hour mask                                        */
+    HOURS_10HOUR_MASK                                   =   0x10,       /*!<  Hour 10Hour mask                                      */
+
+    HOURS_nAM_PM_MASK                                   =   0x20,       /*!<  Hour #AM/PM mask                                      */
+    HOURS_AM_ENABLED                                    =   ( 0 << 5 ), /*!<  Hour AM ENABLED                                       */
+    HOURS_PM_ENABLED                                    =   ( 1 << 5 ), /*!<  Hour PM ENABLED                                       */
+
+    HOURS_12_n24_MASK                                   =   0x40,       /*!<  Hour 12/#24 mask                                      */
+    HOURS_12_ENABLED                                    =   ( 1 << 6 ), /*!<  Hour 12 ENABLED                                       */
+    HOURS_24_ENABLED                                    =   ( 0 << 6 ), /*!<  Hour 24 ENABLED                                       */
 } DS3231_hours_t;
 
 
@@ -348,6 +359,15 @@ typedef enum
 
 
 
+// MACRO: It turns BCD into decimal
+#define _MYBCD_TO_DECIMAL( x ) ({                           \
+        ( ( x & 0x0F ) + ( ( ( x & 0xF0 ) >> 4) * 10) );    \
+        })
+
+// MACRO: It turns decimal into BCD
+#define _MYDECIMAL_TO_BCD( x ) ({                               \
+        ( ( ( x / 10) << 4 ) & 0xF0 ) | ( ( x % 10 ) & 0x0F );  \
+        })
 
 
 
@@ -355,13 +375,27 @@ typedef enum
 #define DS3231_VECTOR_STRUCT_H
 typedef struct
 {
-    uint8_t AgingOffset;
     uint8_t MSBTemperature;
     uint8_t LSBTemperature;
     uint8_t RawAging;
 
     float   Temperature;
 } DS3231_vector_data_t;
+
+typedef struct
+{
+    uint8_t Day;
+    uint8_t Month;
+    uint8_t Year;
+
+    uint8_t DayOfWeek;
+
+    uint8_t Hours;
+    uint8_t Minutes;
+    uint8_t Seconds;
+    uint8_t Mode_nAM_PM;                        /*!<  Mode_nAM_PM = 0    -> AM | Mode_nAM_PM = 0x20 -> PM     */
+    uint8_t Mode_12_n24;                        /*!<  Mode_12_n24 = 0x40 -> 12 | Mode_12_n24 = 0    -> 24     */
+} DS3231_vector_date_time_t;
 #endif
 
 
@@ -415,3 +449,29 @@ DS3231_status_t  DS3231_ClearAlarmFlag              ( I2C_parameters_t myI2Cpara
 /** It sets the alarm1.
       */
 DS3231_status_t  DS3231_SetAlarm1                   ( I2C_parameters_t myI2Cparameters, DS3231_alarm1_register_t myAlarm1 );
+
+/** It sets the alarm2.
+      */
+DS3231_status_t  DS3231_SetAlarm2                   ( I2C_parameters_t myI2Cparameters, DS3231_alarm2_register_t myAlarm2 );
+
+/** It enables/disables Alarm ( 1 and 2 ) interrupts.
+      */
+DS3231_status_t  DS3231_SetAlarmsInterrupt          ( I2C_parameters_t myI2Cparameters, DS3231_control_status_alarm1_t myAlarm1, DS3231_control_status_alarm2_t myAlarm2 );
+
+/** It sets square-wave output frequency.
+      */
+DS3231_status_t  DS3231_SetSquareWaveOutput         ( I2C_parameters_t myI2Cparameters, DS3231_control_status_rate_select_t myRate );
+
+/** It gets the date.
+      */
+DS3231_status_t  DS3231_GetDate                     ( I2C_parameters_t myI2Cparameters, DS3231_vector_date_time_t* myDate );
+
+
+
+/** It gets the time.
+      */
+DS3231_status_t  DS3231_GetTime                     ( I2C_parameters_t myI2Cparameters, DS3231_vector_date_time_t* myTime );
+
+/** It sets the time.
+      */
+DS3231_status_t  DS3231_SetTime                     ( I2C_parameters_t myI2Cparameters, DS3231_vector_date_time_t myTime );
