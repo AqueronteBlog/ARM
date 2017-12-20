@@ -28,4 +28,7 @@
 
 /* VARIABLES */
 uint32_t mySTATE;                       /*!<   It indicates the next action to be performed                                       */
+uint8_t  dataToBeTX;                    /*!<   A counter. It indicates how many data it will be transmitted through the UART      */
+uint32_t TX_inProgress;                 /*!<   It indicates if a transmission is in progress                                      */
+uint8_t *myPtr;                         /*!<   Pointer to point out the data from the external sensor                             */
 
