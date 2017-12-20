@@ -758,29 +758,85 @@ DS3231_status_t  DS3231_GetDate ( I2C_parameters_t myI2Cparameters, DS3231_vecto
     aux  =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
     aux  =   i2c_read  ( myI2Cparameters, &cmd, 1 );
 
-    myDate->Day          =   cmd;
+    myDate->Date         =   _MYBCD_TO_DECIMAL( cmd );
 
     // Read Month Register
     cmd  =   DS3231_MONTH_CENTURY;
     aux  =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
     aux  =   i2c_read  ( myI2Cparameters, &cmd, 1 );
 
-    myDate->Month        =   cmd;
+    myDate->Month        =   _MYBCD_TO_DECIMAL( cmd & MONTH_MONTH_MASK );
+    myDate->Century      =   _MYBCD_TO_DECIMAL( cmd & MONTH_CENTURY_MASK );
 
     // Read Year Register
     cmd  =   DS3231_YEAR;
     aux  =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
     aux  =   i2c_read  ( myI2Cparameters, &cmd, 1 );
 
-    myDate->Year         =   cmd;
+    myDate->Year         =   _MYBCD_TO_DECIMAL( cmd );
 
     // Read Day of the Week Register
     cmd  =   DS3231_DAY;
     aux  =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
     aux  =   i2c_read  ( myI2Cparameters, &cmd, 1 );
 
-    myDate->DayOfWeek    =   cmd;
+    myDate->DayOfWeek    =   _MYBCD_TO_DECIMAL( cmd );
 
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   DS3231_SUCCESS;
+    else
+        return   DS3231_FAILURE;
+}
+
+
+/**
+ * @brief       DS3231_SetDate ( I2C_parameters_t , DS3231_vector_date_time_t )
+ *
+ * @details     It sets the date.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myTime:            Date to store.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of DS3231_SetDate.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/December/2017
+ * @version     20/December/2017     The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+DS3231_status_t  DS3231_SetDate ( I2C_parameters_t myI2Cparameters, DS3231_vector_date_time_t myDate )
+{
+    uint8_t      cmd[]   =   { 0, 0 };
+    uint32_t     aux     =   0;
+
+
+    // Update Date Register
+    cmd[0]  =   DS3231_DATE;
+    cmd[1]  =   _MYDECIMAL_TO_BCD( myDate.Date );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+
+    // Update Month Register
+    cmd[0]  =   DS3231_MONTH_CENTURY;
+    cmd[1]  =   _MYDECIMAL_TO_BCD( myDate.Month | myDate.Century );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+
+    // Update Year Register
+    cmd[0]  =   DS3231_YEAR;
+    cmd[1]  =   _MYDECIMAL_TO_BCD( myDate.Year );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+
+    // Update Day Register
+    cmd[0]  =   DS3231_DAY;
+    cmd[1]  =   _MYDECIMAL_TO_BCD( myDate.DayOfWeek );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
@@ -850,7 +906,7 @@ DS3231_status_t  DS3231_GetTime ( I2C_parameters_t myI2Cparameters, DS3231_vecto
 }
 
 /**
- * @brief       DS3231_SetTime ( I2C_parameters_t , DS3231_vector_date_time_t* )
+ * @brief       DS3231_SetTime ( I2C_parameters_t , DS3231_vector_date_time_t )
  *
  * @details     It sets the time in BCD.
  *
@@ -889,6 +945,47 @@ DS3231_status_t  DS3231_SetTime ( I2C_parameters_t myI2Cparameters, DS3231_vecto
     cmd[0]  =   DS3231_SECONDS;
     cmd[1]  =   _MYDECIMAL_TO_BCD( myTime.Seconds );
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   DS3231_SUCCESS;
+    else
+        return   DS3231_FAILURE;
+}
+
+
+
+/**
+ * @brief       DS3231_GetControlStatusRegister ( I2C_parameters_t , DS3231_vector_data_t* )
+ *
+ * @details     It gets the Control/Status register.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ * @param[in]    myControlStatusReg:    Current value of the Register.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of DS3231_GetControlStatusRegister.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/December/2017
+ * @version     20/December/2017     The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+DS3231_status_t  DS3231_GetControlStatusRegister ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t* myControlStatusReg )
+{
+    uint8_t      cmd     =   DS3231_CONTROL_STATUS;
+    uint32_t     aux     =   0;
+
+
+    // Read Control/Status Register
+    aux  =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
+    aux  =   i2c_read  ( myI2Cparameters, &myControlStatusReg->Control_Status_Register, 1 );
 
 
 

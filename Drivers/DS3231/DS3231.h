@@ -378,17 +378,18 @@ typedef struct
     uint8_t MSBTemperature;
     uint8_t LSBTemperature;
     uint8_t RawAging;
+    uint8_t Control_Status_Register;
 
     float   Temperature;
 } DS3231_vector_data_t;
 
 typedef struct
 {
-    uint8_t Day;
+    uint8_t Date;
     uint8_t Month;
     uint8_t Year;
-
     uint8_t DayOfWeek;
+    uint8_t Century;
 
     uint8_t Hours;
     uint8_t Minutes;
@@ -466,7 +467,9 @@ DS3231_status_t  DS3231_SetSquareWaveOutput         ( I2C_parameters_t myI2Cpara
       */
 DS3231_status_t  DS3231_GetDate                     ( I2C_parameters_t myI2Cparameters, DS3231_vector_date_time_t* myDate );
 
-
+/** It sets the date.
+      */
+DS3231_status_t  DS3231_SetDate                     ( I2C_parameters_t myI2Cparameters, DS3231_vector_date_time_t myDate );
 
 /** It gets the time.
       */
@@ -475,3 +478,7 @@ DS3231_status_t  DS3231_GetTime                     ( I2C_parameters_t myI2Cpara
 /** It sets the time.
       */
 DS3231_status_t  DS3231_SetTime                     ( I2C_parameters_t myI2Cparameters, DS3231_vector_date_time_t myTime );
+
+/** It gets the CONTROL/STATUS register.
+      */
+DS3231_status_t  DS3231_GetControlStatusRegister    ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t* myControlStatusReg );
