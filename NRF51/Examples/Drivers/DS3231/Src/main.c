@@ -1,6 +1,11 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows hot to work with the external device: DS3231 an
+ *              Extremely Accurate I2C-Integrated RTC/TCXO/Crystal.
+ *
+ *              Fist of all, it sets the date and the time and every 1 seconds,
+ *              it reads the date, time and the temperature. It will send the date
+ *              and the time through the UART.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
@@ -26,6 +31,9 @@
 
 int main( void )
 {
+    uint8_t  myTX_buff[10]   =      { 0 };
+
+
     I2C_parameters_t            myDS3231_I2C_parameters;
     DS3231_status_t             aux;
     DS3231_vector_data_t        myDS3231_data;
@@ -33,6 +41,7 @@ int main( void )
 
 
     conf_GPIO   ();
+    conf_UART   ();
     conf_TIMER0 ();
 
 
@@ -50,30 +59,31 @@ int main( void )
     aux  =   DS3231_Init ( myDS3231_I2C_parameters );
 
 
-    // Reset the device
+    // Disable the 32kHz output pin
     aux  =   DS3231_Status32kHzPin      ( myDS3231_I2C_parameters, STATUS_ENABLE_32KHZ_OUTPUT_DISABLED );
-    aux  =   DS3231_SetSquareWaveOutput ( myDS3231_I2C_parameters, CONTROL_STATUS_RATE_SELECT_1_HZ );
 
-    // TIME: 12:48:20   24H PM
-    myDS3231_date_time.Hours         =   12;
-    myDS3231_date_time.Minutes       =   53;
-    myDS3231_date_time.Seconds       =   20;
+
+    // DATE: 20/12/17  Century = 1  Wednesday ( = 3 )
+    myDS3231_date_time.Date         =   20;
+    myDS3231_date_time.Month        =   12;
+    myDS3231_date_time.Year         =   17;
+    myDS3231_date_time.Century      =   MONTH_CENTURY_MASK;
+    myDS3231_date_time.DayOfWeek    =   3;
+    aux  =   DS3231_SetDate ( myDS3231_I2C_parameters, myDS3231_date_time );
+
+
+    // TIME: 11:22:33  12h PM
+    myDS3231_date_time.Hours         =   11;
+    myDS3231_date_time.Minutes       =   22;
+    myDS3231_date_time.Seconds       =   33;
     myDS3231_date_time.Mode_12_n24   =   HOURS_12_ENABLED;
     myDS3231_date_time.Mode_nAM_PM   =   HOURS_PM_ENABLED;
     aux  =   DS3231_SetTime ( myDS3231_I2C_parameters, myDS3231_date_time );
-    while(1){
-        aux  =   DS3231_StartNewConvertTemperature  ( myDS3231_I2C_parameters );
-        aux  =   DS3231_ReadRawTemperature          ( myDS3231_I2C_parameters, &myDS3231_data );
-        aux  =   DS3231_ReadTemperature             ( myDS3231_I2C_parameters, &myDS3231_data );
-        aux  =   DS3231_ReadRawAging                ( myDS3231_I2C_parameters, &myDS3231_data );
-
-        aux  =   DS3231_GetDate                     ( myDS3231_I2C_parameters, &myDS3231_date_time );
-        aux  =   DS3231_GetTime                     ( myDS3231_I2C_parameters, &myDS3231_date_time );
-    }
-    //nrf_delay_us ( 5 );
 
 
-    //NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
+    mySTATE  =   0;                                 // Reset the variable
+
+    NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
     while( 1 )
     {
@@ -81,34 +91,54 @@ int main( void )
         NRF_POWER->TASKS_LOWPWR = 1;                // Sub power mode: Low power.
 
         // Enter System ON sleep mode
-    	__WFE();
-    	// Make sure any pending events are cleared
-    	__SEV();
-    	__WFE();
+        __WFE();
+        // Make sure any pending events are cleared
+        __SEV();
+        __WFE();
 
-/*
+
         NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
-    	switch ( mySTATE ){
-        default:
-        case 1:
-        // All LEDs: Delay Time = 1% | PWM duty cycle = 99%
-            aux  =   DS3231_SetPWM_DutyCycle_AllLEDs ( myDS3231_I2C_parameters, 0, 99 );
-            break;
+        if ( mySTATE == 1 )
+        {
+            NVIC_DisableIRQ ( TIMER0_IRQn );                                            // Timer Interrupt DISABLED
 
-        case 2:
-        // All LEDs: Delay Time = 100% | PWM duty cycle = 1%
-            aux  =   DS3231_SetPWM_DutyCycle_AllLEDs ( myDS3231_I2C_parameters, 100, 1 );
-            break;
+            // Get the data
+            aux  =   DS3231_ReadTemperature             ( myDS3231_I2C_parameters, &myDS3231_data );
+            aux  =   DS3231_GetDate                     ( myDS3231_I2C_parameters, &myDS3231_date_time );
+            aux  =   DS3231_GetTime                     ( myDS3231_I2C_parameters, &myDS3231_date_time );
 
-        case 3:
-        // LED1: Delay Time = 10% | PWM duty cycle = 30%
-            aux  =   DS3231_SetPWM_DutyCycle ( myDS3231_I2C_parameters, DS3231_LED1, 10, 30 );
+            // Parse the data
+            myTX_buff[0]                 =   myDS3231_date_time.Century;
+            myTX_buff[1]                 =   myDS3231_date_time.Date;
+            myTX_buff[2]                 =   myDS3231_date_time.Month;
+            myTX_buff[3]                 =   myDS3231_date_time.Year;
+            myTX_buff[4]                 =   myDS3231_date_time.DayOfWeek;
+            myTX_buff[5]                 =   myDS3231_date_time.Hours;
+            myTX_buff[6]                 =   myDS3231_date_time.Minutes;
+            myTX_buff[7]                 =   myDS3231_date_time.Seconds;
+            myTX_buff[8]                 =   myDS3231_date_time.Mode_12_n24;
+            myTX_buff[9]                 =   myDS3231_date_time.Mode_nAM_PM;
 
-            mySTATE =   0;
-            break;
-    	}
-    	NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
+
+            myPtr                        =   &myTX_buff[0];
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   *myPtr++;                                   // Start transmission
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES )
+            {
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+            mySTATE             =   0;
+            NVIC_EnableIRQ ( TIMER0_IRQn );                                              // Timer Interrupt ENABLED
+        }
+        NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
         //__NOP();
-*/
     }
 }
