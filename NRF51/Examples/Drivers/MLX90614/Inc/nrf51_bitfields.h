@@ -6428,6 +6428,14 @@
 #define TWI_ERRORSRC_ANACK_Present (1UL) /*!< Error present. */
 #define TWI_ERRORSRC_ANACK_Clear (1UL) /*!< Clear error on write. */
 
+/* Bit 0 : OVERRUN A new byte was received before previous byte got read by software from the RXD register. */
+#define TWI_ERRORSRC_OVERRUN_Pos (0UL) /*!< Position of OVERRUN field. */
+#define TWI_ERRORSRC_OVERRUN_Msk (0x1UL << TWI_ERRORSRC_ANACK_Pos) /*!< Bit mask of OVERRUN field. */
+#define TWI_ERRORSRC_OVERRUN_NotPresent (0UL) /*!< Error not present. */
+#define TWI_ERRORSRC_OVERRUN_Present (1UL) /*!< Error present. */
+#define TWI_ERRORSRC_OVERRUN_Clear (1UL) /*!< Clear error on write. */
+
+
 /* Register: TWI_ENABLE */
 /* Description: Enable two-wire master. */
 
