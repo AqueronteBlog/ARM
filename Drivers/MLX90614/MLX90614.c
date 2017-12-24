@@ -1,5 +1,5 @@
 /**
- * @brief       DS3231.h
+ * @brief       MLX90614.h
  * @details     Extremely Accurate I2C-Integrated RTC/TCXO/Crystal.
  *              Functions file.
  *
@@ -14,11 +14,11 @@
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "DS3231.h"
+#include "MLX90614.h"
 
 
 /**
- * @brief       DS3231_Init ( I2C_parameters_t )
+ * @brief       MLX90614_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,7 +27,7 @@
  * @param[out]   NaN.
  *
  *
- * @return       Status of DS3231_Init.
+ * @return       Status of MLX90614_Init.
  *
  *
  * @author      Manuel Caballero
@@ -36,7 +36,7 @@
  * @pre         NaN
  * @warning     NaN.
  */
-DS3231_status_t  DS3231_Init ( I2C_parameters_t myI2Cparameters )
+MLX90614_status_t  MLX90614_Init ( I2C_parameters_t myI2Cparameters )
 {
     i2c_status_t aux;
 
@@ -45,15 +45,15 @@ DS3231_status_t  DS3231_Init ( I2C_parameters_t myI2Cparameters )
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS3231_SUCCESS;
+        return   MLX90614_SUCCESS;
     else
-        return   DS3231_FAILURE;
+        return   MLX90614_FAILURE;
 }
 
 
 
 /**
- * @brief       DS3231_ReadTemperature ( I2C_parameters_t , DS3231_vector_data_t* )
+ * @brief       MLX90614_ReadTemperature ( I2C_parameters_t , MLX90614_vector_data_t* )
  *
  * @details     It gets the temperature.
  *
@@ -62,7 +62,7 @@ DS3231_status_t  DS3231_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   myTemperature:     Temperature data.
  *
  *
- * @return       Status of DS3231_ReadTemperature.
+ * @return       Status of MLX90614_ReadTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -71,9 +71,9 @@ DS3231_status_t  DS3231_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         The temperature registers are updated after each user-initiated conversion and on every 64-second conversion.
  * @warning     NaN.
  */
-DS3231_status_t  DS3231_ReadTemperature   ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t*  myTemperature )
+MLX90614_status_t  MLX90614_ReadTemperature   ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myTemperature )
 {
-    uint8_t      cmd[]       =   { DS3231_MSB_TEMPERATURE, 0 };
+    uint8_t      cmd[]       =   { MLX90614_MSB_TEMPERATURE, 0 };
     uint32_t     aux         =   0;
 
 
@@ -118,15 +118,15 @@ DS3231_status_t  DS3231_ReadTemperature   ( I2C_parameters_t myI2Cparameters, DS
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS3231_SUCCESS;
+        return   MLX90614_SUCCESS;
     else
-        return   DS3231_FAILURE;
+        return   MLX90614_FAILURE;
 }
 
 
 
 /**
- * @brief       DS3231_ReadRawTemperature ( I2C_parameters_t , DS3231_vector_data_t* )
+ * @brief       MLX90614_ReadRawTemperature ( I2C_parameters_t , MLX90614_vector_data_t* )
  *
  * @details     It gets the raw temperature.
  *
@@ -135,7 +135,7 @@ DS3231_status_t  DS3231_ReadTemperature   ( I2C_parameters_t myI2Cparameters, DS
  * @param[out]   myRawTemperature:  Raw Temperature data.
  *
  *
- * @return       Status of DS3231_ReadTemperature.
+ * @return       Status of MLX90614_ReadTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -144,9 +144,9 @@ DS3231_status_t  DS3231_ReadTemperature   ( I2C_parameters_t myI2Cparameters, DS
  * @pre         The temperature registers are updated after each user-initiated conversion and on every 64-second conversion.
  * @warning     NaN.
  */
-DS3231_status_t  DS3231_ReadRawTemperature   ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t*  myRawTemperature )
+MLX90614_status_t  MLX90614_ReadRawTemperature   ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myRawTemperature )
 {
-    uint8_t      cmd[]       =   { DS3231_MSB_TEMPERATURE, 0 };
+    uint8_t      cmd[]       =   { MLX90614_MSB_TEMPERATURE, 0 };
     uint32_t     aux         =   0;
 
 
@@ -163,15 +163,15 @@ DS3231_status_t  DS3231_ReadRawTemperature   ( I2C_parameters_t myI2Cparameters,
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS3231_SUCCESS;
+        return   MLX90614_SUCCESS;
     else
-        return   DS3231_FAILURE;
+        return   MLX90614_FAILURE;
 }
 
 
 
 /**
- * @brief       DS3231_StartNewConvertTemperature  ( I2C_parameters_t )
+ * @brief       MLX90614_StartNewConvertTemperature  ( I2C_parameters_t )
  *
  * @details     It triggers a new temperature conversion.
  *
@@ -180,7 +180,7 @@ DS3231_status_t  DS3231_ReadRawTemperature   ( I2C_parameters_t myI2Cparameters,
  * @param[out]   NaN.
  *
  *
- * @return       Status of DS3231_StartNewConvertTemperature.
+ * @return       Status of MLX90614_StartNewConvertTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -189,9 +189,9 @@ DS3231_status_t  DS3231_ReadRawTemperature   ( I2C_parameters_t myI2Cparameters,
  * @pre         NaN
  * @warning     NaN.
  */
-DS3231_status_t  DS3231_StartNewConvertTemperature  ( I2C_parameters_t myI2Cparameters )
+MLX90614_status_t  MLX90614_StartNewConvertTemperature  ( I2C_parameters_t myI2Cparameters )
 {
-    uint8_t      cmd[]  =   { DS3231_CONTROL_STATUS, 0 };
+    uint8_t      cmd[]  =   { MLX90614_CONTROL_STATUS, 0 };
     uint32_t     aux    =   0;
     uint32_t     ii     =   0;
 
@@ -204,12 +204,12 @@ DS3231_status_t  DS3231_StartNewConvertTemperature  ( I2C_parameters_t myI2Cpara
 
         ii++;
     }
-    while ( ( ( cmd[1] & STATUS_BUSY_MASK ) != STATUS_BUSY_NOBUSY ) && ( ii < DS3231_TIMEOUT ) );
+    while ( ( ( cmd[1] & STATUS_BUSY_MASK ) != STATUS_BUSY_NOBUSY ) && ( ii < MLX90614_TIMEOUT ) );
 
 
     // if something went wrong, there will not be a new temperature conversion
-    cmd[0]  =   DS3231_CONTROL;
-    if ( ii < DS3231_TIMEOUT )
+    cmd[0]  =   MLX90614_CONTROL;
+    if ( ii < MLX90614_TIMEOUT )
     {
         // It triggers a new temperature conversion
         // It reads CONTROL register
@@ -229,26 +229,26 @@ DS3231_status_t  DS3231_StartNewConvertTemperature  ( I2C_parameters_t myI2Cpara
 
             ii++;
         }
-        while ( ( ( cmd[1] & CONTROL_STATUS_CONVERT_TEMPERATURE_MASK ) != CONTROL_STATUS_CONVERT_TEMPERATURE_DISABLED ) && ( ii < DS3231_TIMEOUT ) );
+        while ( ( ( cmd[1] & CONTROL_STATUS_CONVERT_TEMPERATURE_MASK ) != CONTROL_STATUS_CONVERT_TEMPERATURE_DISABLED ) && ( ii < MLX90614_TIMEOUT ) );
     }
 
     // If TIMEOUT happens, something went wrong!
-    if ( ii >= DS3231_TIMEOUT )
+    if ( ii >= MLX90614_TIMEOUT )
         aux   =   I2C_FAILURE;
 
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS3231_SUCCESS;
+        return   MLX90614_SUCCESS;
     else
-        return   DS3231_FAILURE;
+        return   MLX90614_FAILURE;
 }
 
 
 
 /**
- * @brief       DS3231_ReadRawAging ( I2C_parameters_t , DS3231_vector_data_t* )
+ * @brief       MLX90614_ReadRawAging ( I2C_parameters_t , MLX90614_vector_data_t* )
  *
  * @details     It gets the raw aging.
  *
@@ -257,7 +257,7 @@ DS3231_status_t  DS3231_StartNewConvertTemperature  ( I2C_parameters_t myI2Cpara
  * @param[out]   myRawAging:        Raw Aging data.
  *
  *
- * @return       Status of DS3231_ReadRawAging.
+ * @return       Status of MLX90614_ReadRawAging.
  *
  *
  * @author      Manuel Caballero
@@ -266,9 +266,9 @@ DS3231_status_t  DS3231_StartNewConvertTemperature  ( I2C_parameters_t myI2Cpara
  * @pre         NaN
  * @warning     NaN.
  */
-DS3231_status_t  DS3231_ReadRawAging ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t* myRawAging )
+MLX90614_status_t  MLX90614_ReadRawAging ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t* myRawAging )
 {
-    uint8_t      cmd       =   DS3231_AGING_OFFSET;
+    uint8_t      cmd       =   MLX90614_AGING_OFFSET;
     uint32_t     aux       =   0;
 
 
@@ -279,15 +279,15 @@ DS3231_status_t  DS3231_ReadRawAging ( I2C_parameters_t myI2Cparameters, DS3231_
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS3231_SUCCESS;
+        return   MLX90614_SUCCESS;
     else
-        return   DS3231_FAILURE;
+        return   MLX90614_FAILURE;
 }
 
 
 
 /**
- * @brief       DS3231_Status32kHzPin ( I2C_parameters_t , DS3231_status_enable_32khz_output_t )
+ * @brief       MLX90614_Status32kHzPin ( I2C_parameters_t , MLX90614_status_enable_32khz_output_t )
  *
  * @details     It enables/disables the 32kHz output pin.
  *
@@ -297,7 +297,7 @@ DS3231_status_t  DS3231_ReadRawAging ( I2C_parameters_t myI2Cparameters, DS3231_
  * @param[out]   NaN.
  *
  *
- * @return       Status of DS3231_Status32kHzPin.
+ * @return       Status of MLX90614_Status32kHzPin.
  *
  *
  * @author      Manuel Caballero
@@ -306,9 +306,9 @@ DS3231_status_t  DS3231_ReadRawAging ( I2C_parameters_t myI2Cparameters, DS3231_
  * @pre         NaN
  * @warning     NaN.
  */
-DS3231_status_t  DS3231_Status32kHzPin  ( I2C_parameters_t myI2Cparameters, DS3231_status_enable_32khz_output_t  my32kHzPin )
+MLX90614_status_t  MLX90614_Status32kHzPin  ( I2C_parameters_t myI2Cparameters, MLX90614_status_enable_32khz_output_t  my32kHzPin )
 {
-    uint8_t      cmd[]     =   { DS3231_CONTROL_STATUS, 0 };
+    uint8_t      cmd[]     =   { MLX90614_CONTROL_STATUS, 0 };
     uint32_t     aux       =   0;
 
 
@@ -326,15 +326,15 @@ DS3231_status_t  DS3231_Status32kHzPin  ( I2C_parameters_t myI2Cparameters, DS32
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS3231_SUCCESS;
+        return   MLX90614_SUCCESS;
     else
-        return   DS3231_FAILURE;
+        return   MLX90614_FAILURE;
 }
 
 
 
 /**
- * @brief       DS3231_ClearAlarmFlag ( I2C_parameters_t , DS3231_status_alarm1_flag_t , DS3231_status_alarm2_flag_t )
+ * @brief       MLX90614_ClearAlarmFlag ( I2C_parameters_t , MLX90614_status_alarm1_flag_t , MLX90614_status_alarm2_flag_t )
  *
  * @details     It clears alarm flags.
  *
@@ -345,7 +345,7 @@ DS3231_status_t  DS3231_Status32kHzPin  ( I2C_parameters_t myI2Cparameters, DS32
  * @param[out]   NaN.
  *
  *
- * @return       Status of DS3231_ClearAlarmFlag.
+ * @return       Status of MLX90614_ClearAlarmFlag.
  *
  *
  * @author      Manuel Caballero
@@ -354,9 +354,9 @@ DS3231_status_t  DS3231_Status32kHzPin  ( I2C_parameters_t myI2Cparameters, DS32
  * @pre         NaN
  * @warning     NaN.
  */
-DS3231_status_t  DS3231_ClearAlarmFlag  ( I2C_parameters_t myI2Cparameters, DS3231_status_alarm1_flag_t myA1F, DS3231_status_alarm2_flag_t myA2F )
+MLX90614_status_t  MLX90614_ClearAlarmFlag  ( I2C_parameters_t myI2Cparameters, MLX90614_status_alarm1_flag_t myA1F, MLX90614_status_alarm2_flag_t myA2F )
 {
-    uint8_t      cmd[]     =   { DS3231_CONTROL_STATUS, 0 };
+    uint8_t      cmd[]     =   { MLX90614_CONTROL_STATUS, 0 };
     uint32_t     aux       =   0;
 
 
@@ -374,15 +374,15 @@ DS3231_status_t  DS3231_ClearAlarmFlag  ( I2C_parameters_t myI2Cparameters, DS32
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS3231_SUCCESS;
+        return   MLX90614_SUCCESS;
     else
-        return   DS3231_FAILURE;
+        return   MLX90614_FAILURE;
 }
 
 
 
 /**
- * @brief       DS3231_SetAlarm1 ( I2C_parameters_t , DS3231_alarm1_register_t )
+ * @brief       MLX90614_SetAlarm1 ( I2C_parameters_t , MLX90614_alarm1_register_t )
  *
  * @details     It sets the alarm 1.
  *
@@ -392,7 +392,7 @@ DS3231_status_t  DS3231_ClearAlarmFlag  ( I2C_parameters_t myI2Cparameters, DS32
  * @param[out]   NaN.
  *
  *
- * @return       Status of DS3231_SetAlarm1.
+ * @return       Status of MLX90614_SetAlarm1.
  *
  *
  * @author      Manuel Caballero
@@ -401,7 +401,7 @@ DS3231_status_t  DS3231_ClearAlarmFlag  ( I2C_parameters_t myI2Cparameters, DS32
  * @pre         NaN
  * @warning     NaN.
  */
-DS3231_status_t  DS3231_SetAlarm1   ( I2C_parameters_t myI2Cparameters, DS3231_alarm1_register_t myAlarm1 )
+MLX90614_status_t  MLX90614_SetAlarm1   ( I2C_parameters_t myI2Cparameters, MLX90614_alarm1_register_t myAlarm1 )
 {
     uint8_t      cmd                =   0;
     uint32_t     aux                =   0;              // A1M1
@@ -413,28 +413,28 @@ DS3231_status_t  DS3231_SetAlarm1   ( I2C_parameters_t myI2Cparameters, DS3231_a
 
     // Read all the registers involved in the alarm1
     // A1M1
-    cmd      =   DS3231_ALARM_1_SECONDS;
+    cmd      =   MLX90614_ALARM_1_SECONDS;
     aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
 
     Alarm1SecondAux  =  ( cmd & ~ALARM1_A1M1_MASK );
 
     // A1M2
-    cmd      =   DS3231_ALARM_1_MINUTES;
+    cmd      =   MLX90614_ALARM_1_MINUTES;
     aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
 
     Alarm1MinuteAux  =  ( cmd & ~ALARM1_A1M2_MASK );
 
     // A1M3
-    cmd      =   DS3231_ALARM_1_HOURS;
+    cmd      =   MLX90614_ALARM_1_HOURS;
     aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
 
     Alarm1HourAux  =  ( cmd & ~ALARM1_A1M3_MASK );
 
     // A1M4 & DY/DT
-    cmd      =   DS3231_ALARM_1_DAY_DATE;
+    cmd      =   MLX90614_ALARM_1_DAY_DATE;
     aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
 
@@ -442,7 +442,7 @@ DS3231_status_t  DS3231_SetAlarm1   ( I2C_parameters_t myI2Cparameters, DS3231_a
 
 
     // Set all ( A1M1, A1M2, A1M3 A1M4 and DY/DT ) to 0
- //   cmd[0]   =   DS3231_ALARM_1_SECONDS;
+ //   cmd[0]   =   MLX90614_ALARM_1_SECONDS;
  //   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_STOP_BIT );
 
 
@@ -471,7 +471,7 @@ DS3231_status_t  DS3231_SetAlarm1   ( I2C_parameters_t myI2Cparameters, DS3231_a
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS3231_SUCCESS;
+        return   MLX90614_SUCCESS;
     else
-        return   DS3231_FAILURE;
+        return   MLX90614_FAILURE;
 }

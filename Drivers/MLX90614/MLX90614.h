@@ -1,5 +1,5 @@
 /**
- * @brief       DS3231.h
+ * @brief       MLX90614.h
  * @details     Extremely Accurate I2C-Integrated RTC/TCXO/Crystal.
  *              Header file.
  *
@@ -25,8 +25,8 @@
   */
 typedef enum
 {
-    DS3231_ADDRESS     =   0x68                   /*!<   Address                                            */
-} DS3231_address_t;
+    MLX90614_ADDRESS     =   0x68                   /*!<   Address                                            */
+} MLX90614_address_t;
 
 
 // REGISTERS
@@ -35,26 +35,26 @@ typedef enum
   */
 typedef enum
 {
-    DS3231_SECONDS          =   0x00,               /*!<  Seconds. RANGE 00-59                                  */
-    DS3231_MINUTES          =   0x01,               /*!<  Minutes. RANGE 00-59                                  */
-    DS3231_HOURS            =   0x02,               /*!<  Hours. 1-12 + AM/PM 00-23                             */
-    DS3231_DAY              =   0x03,               /*!<  Day. 1-7                                              */
-    DS3231_DATE             =   0x04,               /*!<  Date. 01-31                                           */
-    DS3231_MONTH_CENTURY    =   0x05,               /*!<  Month/Century. 01-12 + Century                        */
-    DS3231_YEAR             =   0x06,               /*!<  Year. 00-99                                           */
-    DS3231_ALARM_1_SECONDS  =   0x07,               /*!<  Alarm 1 seconds. 00-59                                */
-    DS3231_ALARM_1_MINUTES  =   0x08,               /*!<  Alarm 1 minutes. 00-59                                */
-    DS3231_ALARM_1_HOURS    =   0x09,               /*!<  Alarm 1 hours. 1-12 + AM/PM 00-23                     */
-    DS3231_ALARM_1_DAY_DATE =   0x0A,               /*!<  Alarm 1 day/date. 1-7/1-31                            */
-    DS3231_ALARM_2_MINUTES  =   0x0B,               /*!<  Alarm 2 minutes. 00-59                                */
-    DS3231_ALARM_2_HOURS    =   0x0C,               /*!<  Alarm 2 hours. 1-12 + AM/PM 00-23                     */
-    DS3231_ALARM_2_DAY_DATE =   0x0D,               /*!<  Alarm 2 day/date. 1-7/1-31                            */
-    DS3231_CONTROL          =   0x0E,               /*!<  Control                                               */
-    DS3231_CONTROL_STATUS   =   0x0F,               /*!<  Control/Status                                        */
-    DS3231_AGING_OFFSET     =   0x10,               /*!<  Aging offset                                          */
-    DS3231_MSB_TEMPERATURE  =   0x11,               /*!<  MSB of Temp                                           */
-    DS3231_LSB_TEMPERATURE  =   0x12                /*!<  LSB of Temp                                           */
-} DS3231_registers_t;
+    MLX90614_SECONDS          =   0x00,               /*!<  Seconds. RANGE 00-59                                  */
+    MLX90614_MINUTES          =   0x01,               /*!<  Minutes. RANGE 00-59                                  */
+    MLX90614_HOURS            =   0x02,               /*!<  Hours. 1-12 + AM/PM 00-23                             */
+    MLX90614_DAY              =   0x03,               /*!<  Day. 1-7                                              */
+    MLX90614_DATE             =   0x04,               /*!<  Date. 01-31                                           */
+    MLX90614_MONTH_CENTURY    =   0x05,               /*!<  Month/Century. 01-12 + Century                        */
+    MLX90614_YEAR             =   0x06,               /*!<  Year. 00-99                                           */
+    MLX90614_ALARM_1_SECONDS  =   0x07,               /*!<  Alarm 1 seconds. 00-59                                */
+    MLX90614_ALARM_1_MINUTES  =   0x08,               /*!<  Alarm 1 minutes. 00-59                                */
+    MLX90614_ALARM_1_HOURS    =   0x09,               /*!<  Alarm 1 hours. 1-12 + AM/PM 00-23                     */
+    MLX90614_ALARM_1_DAY_DATE =   0x0A,               /*!<  Alarm 1 day/date. 1-7/1-31                            */
+    MLX90614_ALARM_2_MINUTES  =   0x0B,               /*!<  Alarm 2 minutes. 00-59                                */
+    MLX90614_ALARM_2_HOURS    =   0x0C,               /*!<  Alarm 2 hours. 1-12 + AM/PM 00-23                     */
+    MLX90614_ALARM_2_DAY_DATE =   0x0D,               /*!<  Alarm 2 day/date. 1-7/1-31                            */
+    MLX90614_CONTROL          =   0x0E,               /*!<  Control                                               */
+    MLX90614_CONTROL_STATUS   =   0x0F,               /*!<  Control/Status                                        */
+    MLX90614_AGING_OFFSET     =   0x10,               /*!<  Aging offset                                          */
+    MLX90614_MSB_TEMPERATURE  =   0x11,               /*!<  MSB of Temp                                           */
+    MLX90614_LSB_TEMPERATURE  =   0x12                /*!<  LSB of Temp                                           */
+} MLX90614_registers_t;
 
 
 
@@ -67,7 +67,7 @@ typedef enum
     CONTROL_STATUS_ENABLE_OSCILLATOR_MASK       =   ( 1 << 7 ),     /*!<  #EOSC Mask                            */
     CONTROL_STATUS_ENABLE_OSCILLATOR_ENABLED    =   ( 1 << 7 ),     /*!<  Enable oscillator                     */
     CONTROL_STATUS_ENABLE_OSCILLATOR_DISABLED   =   ( 0 << 7 )      /*!<  Disable oscillator                    */
-} DS3231_control_status_enable_oscillator_t;
+} MLX90614_control_status_enable_oscillator_t;
 
 
 /**
@@ -78,7 +78,7 @@ typedef enum
     CONTROL_STATUS_BBSQW_MASK       =   ( 1 << 6 ),                 /*!<  BBSQW Mask                            */
     CONTROL_STATUS_BBSQW_ENABLED    =   ( 1 << 6 ),                 /*!<  Enable BBSQW                          */
     CONTROL_STATUS_BBSQW_DISABLED   =   ( 0 << 6 )                  /*!<  Disable BBSQW                         */
-} DS3231_control_status_bbsqw_t;
+} MLX90614_control_status_bbsqw_t;
 
 
 /**
@@ -89,7 +89,7 @@ typedef enum
     CONTROL_STATUS_CONVERT_TEMPERATURE_MASK       =   ( 1 << 5 ),   /*!<  CONVERT TEMPERATURE Mask              */
     CONTROL_STATUS_CONVERT_TEMPERATURE_ENABLED    =   ( 1 << 5 ),   /*!<  Enable CONVERT_TEMPERATURE            */
     CONTROL_STATUS_CONVERT_TEMPERATURE_DISABLED   =   ( 0 << 5 )    /*!<  Disable CONVERT_TEMPERATURE           */
-} DS3231_control_status_convert_temperature_t;
+} MLX90614_control_status_convert_temperature_t;
 
 
 /**
@@ -102,7 +102,7 @@ typedef enum
     CONTROL_STATUS_RATE_SELECT_1_024_KHZ    =   ( 1 << 3 ),         /*!<  Rate select 1.024 kHz                 */
     CONTROL_STATUS_RATE_SELECT_4_096_KHZ    =   ( 2 << 3 ),         /*!<  Rate select 4.096 kHz                 */
     CONTROL_STATUS_RATE_SELECT_8_192_KHZ    =   ( 3 << 3 )          /*!<  Rate select 8.192 kHz                 */
-} DS3231_control_status_rate_select_t;
+} MLX90614_control_status_rate_select_t;
 
 
 /**
@@ -113,7 +113,7 @@ typedef enum
     CONTROL_STATUS_INTERRUPT_CONTROL_MASK       =   ( 1 << 2 ),     /*!<  Interrupt control Mask              */
     CONTROL_STATUS_INTERRUPT_CONTROL_SQW        =   ( 0 << 2 ),     /*!<  Square wave is output               */
     CONTROL_STATUS_INTERRUPT_CONTROL_INT        =   ( 1 << 2 )      /*!<  Alarm activates the output          */
-} DS3231_control_status_interrupt_control_t;
+} MLX90614_control_status_interrupt_control_t;
 
 
 /**
@@ -124,7 +124,7 @@ typedef enum
     CONTROL_STATUS_ALARM2_MASK       =   ( 1 << 1 ),                /*!<  Alarm 2 Mask                        */
     CONTROL_STATUS_ALARM2_ENABLED    =   ( 1 << 1 ),                /*!<  Alarm 2 enabled                     */
     CONTROL_STATUS_ALARM2_DISABLED   =   ( 0 << 1 )                 /*!<  Alarm 2 disabled                    */
-} DS3231_control_status_alarm2_t;
+} MLX90614_control_status_alarm2_t;
 
 
 /**
@@ -135,7 +135,7 @@ typedef enum
     CONTROL_STATUS_ALARM1_MASK       =   ( 1 << 0 ),                /*!<  Alarm 1 Mask                        */
     CONTROL_STATUS_ALARM1_ENABLED    =   ( 1 << 0 ),                /*!<  Alarm 1 enabled                     */
     CONTROL_STATUS_ALARM1_DISABLED   =   ( 0 << 0 )                 /*!<  Alarm 1 disabled                    */
-} DS3231_control_status_alarm1_t;
+} MLX90614_control_status_alarm1_t;
 
 
 
@@ -149,7 +149,7 @@ typedef enum
     STATUS_OSCILLATOR_STOP_FLAG_ENABLED    =   ( 1 << 7 ),          /*!<  Flag ON                               */
     STATUS_OSCILLATOR_STOP_FLAG_DISABLED   =   ( 0 << 7 ),          /*!<  Flag OFF                              */
     STATUS_OSCILLATOR_STOP_FLAG_RESET      =   ( 0 << 7 )           /*!<  Reset flag                            */
-} DS3231_status_oscillator_stop_flag_t;
+} MLX90614_status_oscillator_stop_flag_t;
 
 
 /**
@@ -160,7 +160,7 @@ typedef enum
     STATUS_ENABLE_32KHZ_OUTPUT_MASK       =   ( 1 << 3 ),          /*!<  32kHz output mask                     */
     STATUS_ENABLE_32KHZ_OUTPUT_ENABLED    =   ( 1 << 3 ),          /*!<  32kHz output on 32kHz pin             */
     STATUS_ENABLE_32KHZ_OUTPUT_DISABLED   =   ( 0 << 3 )           /*!<  32kHz output disabled                 */
-} DS3231_status_enable_32khz_output_t;
+} MLX90614_status_enable_32khz_output_t;
 
 
 /**
@@ -171,7 +171,7 @@ typedef enum
     STATUS_BUSY_MASK        =   ( 1 << 2 ),                         /*!<  BSY mask                              */
     STATUS_BUSY_BUSY        =   ( 1 << 2 ),                         /*!<  device busy executing TCXO functions  */
     STATUS_BUSY_NOBUSY      =   ( 0 << 2 )                          /*!<  device IS NOT busy                    */
-} DS3231_status_busy_t;
+} MLX90614_status_busy_t;
 
 
 /**
@@ -183,7 +183,7 @@ typedef enum
     STATUS_ALARM2_FLAG_ENABLED     =   ( 1 << 1 ),                  /*!<  Alarm 2 flag enabled                  */
     STATUS_ALARM2_FLAG_DISABLED    =   ( 0 << 1 ),                  /*!<  Alarm 2 flag disabled                 */
     STATUS_ALARM2_FLAG_RESET       =   ( 0 << 1 ),                  /*!<  Alarm 2 flag reset flag               */
-} DS3231_status_alarm2_flag_t;
+} MLX90614_status_alarm2_flag_t;
 
 
 
@@ -196,7 +196,7 @@ typedef enum
     STATUS_ALARM1_FLAG_ENABLED     =   ( 1 << 0 ),                  /*!<  Alarm 1 flag enabled                  */
     STATUS_ALARM1_FLAG_DISABLED    =   ( 0 << 0 ),                  /*!<  Alarm 1 flag disabled                 */
     STATUS_ALARM1_FLAG_RESET       =   ( 0 << 0 ),                  /*!<  Alarm 1 flag reset flag               */
-} DS3231_status_alarm1_flag_t;
+} MLX90614_status_alarm1_flag_t;
 
 
 
@@ -212,7 +212,7 @@ typedef enum
     ALARM1_WHEN_HOURS_MINUTES_AND_SECONDS_MATCH         =   4,      /*!<  Alarm 1 when hours, minutes, and seconds match        */
     ALARM1_WHEN_DATE_HOURS_MINUTES_AND_SECONDS_MATCH    =   5,      /*!<  Alarm 1 when date, hours, minutes, and seconds match  */
     ALARM1_WHEN_DAY_HOURS_MINUTES_AND_SECONDS_MATCH     =   6       /*!<  Alarm 1 when day, hours, minutes, and seconds match   */
-} DS3231_alarm1_register_t;
+} MLX90614_alarm1_register_t;
 
 
 typedef enum
@@ -222,7 +222,7 @@ typedef enum
     ALARM2_WHEN_HOURS_MINUTES_MATCH                     =   3,      /*!<  Alarm 2 when hours and minutes match                  */
     ALARM2_WHEN_DATE_HOURS_AND_MINUTES_MATCH            =   4,      /*!<  Alarm 2 when date, hours and minutes match            */
     ALARM2_WHEN_DAY_HOURS_AND_MINUTES_MATCH             =   5       /*!<  Alarm 2 when day, hours and minutes match             */
-} DS3231_alarm2_register_t;
+} MLX90614_alarm2_register_t;
 
 
 // TIMEKEEPING REGISTERS
@@ -231,7 +231,7 @@ typedef enum
 {
     SECONDS_SECONDS_MASK                                =   0x0F,   /*!<  Seconds Seconds mask                                  */
     SECONDS_10SECONDS_MASK                              =   0x70    /*!<  Seconds 10Seconds mask                                */
-} DS3231_seconds_t;
+} MLX90614_seconds_t;
 
 
 // MINUTES
@@ -239,7 +239,7 @@ typedef enum
 {
     MINUTES_MINUTES_MASK                                =   0x0F,   /*!<  Minutes Minutes mask                                  */
     MINUTES_10MINUTES_MASK                              =   0x70    /*!<  Minutes 10Minutes mask                                */
-} DS3231_minutes_t;
+} MLX90614_minutes_t;
 
 
 // HOURS
@@ -247,14 +247,14 @@ typedef enum
 {
     HOURS_HOUR_MASK                                     =   0x0F,   /*!<  Hour Hour mask                                        */
     HOURS_10HOUR_MASK                                   =   0x10    /*!<  Hour 10Hour mask                                      */
-} DS3231_hours_t;
+} MLX90614_hours_t;
 
 
 // DAY
 typedef enum
 {
     DAY_DAY_MASK                                        =   0x07    /*!<  Day Day mask                                          */
-} DS3231_day_t;
+} MLX90614_day_t;
 
 
 // DATE
@@ -262,7 +262,7 @@ typedef enum
 {
     DATE_DATE_MASK                                       =   0x0F,   /*!<  Date Date mask                                       */
     DATE_10DATE_MASK                                     =   0x30    /*!<  Date 10Date mask                                     */
-} DS3231_date_t;
+} MLX90614_date_t;
 
 
 // MONTH/CENTURY
@@ -271,7 +271,7 @@ typedef enum
     MONTH_MONTH_MASK                                      =   0x0F,  /*!<  Month Month mask                                     */
     MONTH_10MONTH_MASK                                    =   0x10,  /*!<  Month 10Month mask                                   */
     MONTH_CENTURY_MASK                                    =   0x80   /*!<  Month Century mask                                   */
-} DS3231_month_t;
+} MLX90614_month_t;
 
 
 // YEAR
@@ -279,7 +279,7 @@ typedef enum
 {
     YEAR_YEAR_MASK                                        =   0x0F,   /*!<  Year Year mask                                       */
     YEAR_10YEAR_MASK                                      =   0xF0    /*!<  Year 10Year mask                                     */
-} DS3231_year_t;
+} MLX90614_year_t;
 
 
 // ALARM 1 SECONDS
@@ -288,7 +288,7 @@ typedef enum
     ALARM1_A1M1_MASK                                       =   0x80,   /*!<  Alarm1 A1M1 mask                                    */
     ALARM1_10SECONDS_MASK                                  =   0x70,   /*!<  Alarm1 10Seconds mask                               */
     ALARM1_SECONDS_MASK                                    =   0x0F    /*!<  Alarm1 Seconds mask                                 */
-} DS3231_alarm1_seconds_t;
+} MLX90614_alarm1_seconds_t;
 
 
 // ALARM 1 MINUTES
@@ -297,7 +297,7 @@ typedef enum
     ALARM1_A1M2_MASK                                       =   0x80,   /*!<  Alarm1 A1M2 mask                                    */
     ALARM1_10MINUTES_MASK                                  =   0x70,   /*!<  Alarm1 10Minutes mask                               */
     ALARM1_MINUTES_MASK                                    =   0x0F    /*!<  Alarm1 Minutes mask                                 */
-} DS3231_alarm1_minutes_t;
+} MLX90614_alarm1_minutes_t;
 
 
 // ALARM 1 HOURS
@@ -306,7 +306,7 @@ typedef enum
     ALARM1_A1M3_MASK                                       =   0x80,   /*!<  Alarm1 A1M3 mask                                    */
     ALARM1_10HOUR_MASK                                     =   0x10,   /*!<  Alarm1 10Hour mask                                  */
     ALARM1_HOUR_MASK                                       =   0x0F    /*!<  Alarm1 Hour mask                                    */
-} DS3231_alarm1_hours_t;
+} MLX90614_alarm1_hours_t;
 
 
 // ALARM 1 DAY/DATE
@@ -316,7 +316,7 @@ typedef enum
     ALARM1_DYDT_MASK                                       =   0x40,   /*!<  Alarm1 DY/DT mask                                   */
     ALARM1_10DATE_MASK                                     =   0x30,   /*!<  Alarm1 10Date mask                                  */
     ALARM1_DATE_DAY_MASK                                   =   0x0F    /*!<  Alarm1 Day/Date mask                                */
-} DS3231_alarm1_day_date_t;
+} MLX90614_alarm1_day_date_t;
 
 
 // ALARM 2 MINUTES
@@ -325,7 +325,7 @@ typedef enum
     ALARM2_A2M2_MASK                                       =   0x80,   /*!<  Alarm2 A2M2 mask                                    */
     ALARM2_10MINUTES_MASK                                  =   0x70,   /*!<  Alarm2 10Minutes mask                               */
     ALARM2_MINUTES_MASK                                    =   0x0F    /*!<  Alarm2 Minutes mask                                 */
-} DS3231_alarm2_minutes_t;
+} MLX90614_alarm2_minutes_t;
 
 
 // ALARM 2 HOURS
@@ -334,7 +334,7 @@ typedef enum
     ALARM2_A2M3_MASK                                       =   0x80,   /*!<  Alarm2 A1M3 mask                                    */
     ALARM2_10HOUR_MASK                                     =   0x10,   /*!<  Alarm2 10Hour mask                                  */
     ALARM2_HOUR_MASK                                       =   0x0F    /*!<  Alarm2 Hour mask                                    */
-} DS3231_alarm2_hours_t;
+} MLX90614_alarm2_hours_t;
 
 
 // ALARM 2 DAY/DATE
@@ -344,15 +344,15 @@ typedef enum
     ALARM2_DYDT_MASK                                       =   0x40,   /*!<  Alarm2 DY/DT mask                                   */
     ALARM2_10DATE_MASK                                     =   0x30,   /*!<  Alarm2 10Date mask                                  */
     ALARM2_DATE_DAY_MASK                                   =   0x0F    /*!<  Alarm2 Day/Date mask                                */
-} DS3231_alarm2_day_date_t;
+} MLX90614_alarm2_day_date_t;
 
 
 
 
 
 
-#ifndef DS3231_VECTOR_STRUCT_H
-#define DS3231_VECTOR_STRUCT_H
+#ifndef MLX90614_VECTOR_STRUCT_H
+#define MLX90614_VECTOR_STRUCT_H
 typedef struct
 {
     uint8_t AgingOffset;
@@ -361,7 +361,7 @@ typedef struct
     uint8_t RawAging;
 
     float   Temperature;
-} DS3231_vector_data_t;
+} MLX90614_vector_data_t;
 #endif
 
 
@@ -372,11 +372,11 @@ typedef struct
   */
 typedef enum
 {
-    DS3231_SUCCESS     =       0,
-    DS3231_FAILURE     =       1,
+    MLX90614_SUCCESS     =       0,
+    MLX90614_FAILURE     =       1,
 
-    DS3231_TIMEOUT     =       1000
-} DS3231_status_t;
+    MLX90614_TIMEOUT     =       1000
+} MLX90614_status_t;
 
 
 
@@ -386,32 +386,32 @@ typedef enum
   */
 /** It configures the SPI peripheral.
     */
-DS3231_status_t  DS3231_Init                        ( I2C_parameters_t myI2Cparameters );
+MLX90614_status_t  MLX90614_Init                        ( I2C_parameters_t myI2Cparameters );
 
 /** It reads the temperature data.
       */
-DS3231_status_t  DS3231_ReadTemperature             ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t*  myTemperature );
+MLX90614_status_t  MLX90614_ReadTemperature             ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myTemperature );
 
 /** It reads the raw temperature data.
       */
-DS3231_status_t  DS3231_ReadRawTemperature          ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t*  myRawTemperature );
+MLX90614_status_t  MLX90614_ReadRawTemperature          ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myRawTemperature );
 
 /** It triggers a new temperature measurement.
       */
-DS3231_status_t  DS3231_StartNewConvertTemperature  ( I2C_parameters_t myI2Cparameters );
+MLX90614_status_t  MLX90614_StartNewConvertTemperature  ( I2C_parameters_t myI2Cparameters );
 
 /** It reads the raw aging data.
       */
-DS3231_status_t  DS3231_ReadRawAging                ( I2C_parameters_t myI2Cparameters, DS3231_vector_data_t*  myRawAging );
+MLX90614_status_t  MLX90614_ReadRawAging                ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myRawAging );
 
 /** It sets the 32kHz pin output: Enabled/Disabled.
       */
-DS3231_status_t  DS3231_Status32kHzPin              ( I2C_parameters_t myI2Cparameters, DS3231_status_enable_32khz_output_t  my32kHzPin );
+MLX90614_status_t  MLX90614_Status32kHzPin              ( I2C_parameters_t myI2Cparameters, MLX90614_status_enable_32khz_output_t  my32kHzPin );
 
 /** It clears alarm flags.
       */
-DS3231_status_t  DS3231_ClearAlarmFlag              ( I2C_parameters_t myI2Cparameters, DS3231_status_alarm1_flag_t  myA1F, DS3231_status_alarm2_flag_t myA2F );
+MLX90614_status_t  MLX90614_ClearAlarmFlag              ( I2C_parameters_t myI2Cparameters, MLX90614_status_alarm1_flag_t  myA1F, MLX90614_status_alarm2_flag_t myA2F );
 
 /** It sets the alarm1.
       */
-DS3231_status_t  DS3231_SetAlarm1                   ( I2C_parameters_t myI2Cparameters, DS3231_alarm1_register_t myAlarm1 );
+MLX90614_status_t  MLX90614_SetAlarm1                   ( I2C_parameters_t myI2Cparameters, MLX90614_alarm1_register_t myAlarm1 );
