@@ -1,14 +1,14 @@
 /**
- * @brief       MLX90614.h
- * @details     Extremely Accurate I2C-Integrated RTC/TCXO/Crystal.
- *              Functions file.
+ * @brief       MLX90614.c
+ * @details     Single and Dual Zone Infra Red Thermometer.
+ *              Function file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        1/December/2017
- * @version     1/December/2017    The ORIGIN
+ * @date        23/December/2017
+ * @version     23/December/2017    The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -31,8 +31,8 @@
  *
  *
  * @author      Manuel Caballero
- * @date        1/December/2017
- * @version     1/December/2017   The ORIGIN
+ * @date        23/December/2017
+ * @version     23/December/2017   The ORIGIN
  * @pre         NaN
  * @warning     NaN.
  */
@@ -53,66 +53,60 @@ MLX90614_status_t  MLX90614_Init ( I2C_parameters_t myI2Cparameters )
 
 
 /**
- * @brief       MLX90614_ReadTemperature ( I2C_parameters_t , MLX90614_vector_data_t* )
+ * @brief       MLX90614_GetID_Numbers ( I2C_parameters_t , MLX90614_vector_data_t* )
  *
- * @details     It gets the temperature.
+ * @details     It gets the ID numbers.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
  *
- * @param[out]   myTemperature:     Temperature data.
+ * @param[out]   myID:              ID numbers.
  *
  *
- * @return       Status of MLX90614_ReadTemperature.
+ * @return       Status of MLX90614_GetID_Numbers.
  *
  *
  * @author      Manuel Caballero
- * @date        11/December/2017
- * @version     11/December/2017     The ORIGIN
- * @pre         The temperature registers are updated after each user-initiated conversion and on every 64-second conversion.
+ * @date        25/December/2017
+ * @version     25/December/2017     The ORIGIN
+ * @pre         NaN.
  * @warning     NaN.
  */
-MLX90614_status_t  MLX90614_ReadTemperature   ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myTemperature )
+MLX90614_status_t  MLX90614_GetID_Numbers ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myID )
 {
-    uint8_t      cmd[]       =   { MLX90614_MSB_TEMPERATURE, 0 };
+    uint8_t      cmd[]       =   { 0, 0, 0 };
     uint32_t     aux         =   0;
 
 
-    // It gets the temperature
-    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+    // It gets the ID 0
+    cmd[0]   =   MLX90614_ID_NUMBER_0;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    myID->ID[0]  =   ( ( cmd[1] << 8 ) | cmd[0] );
 
 
-    // Parse the data
-    // 1. Check if the Temperature is positive or negative
-    if ( ( cmd[0] & 0b10000000 ) == 0b00000000 )
-        myTemperature->Temperature   =   cmd[0];                           // Positive value
-    else
-        myTemperature->Temperature   =   -1.0 * ( ( ~cmd[0] ) + 1 );       // Negative value
+    // It gets the ID 1
+    cmd[0]   =   MLX90614_ID_NUMBER_1;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    myID->ID[1]  =   ( ( cmd[1] << 8 ) | cmd[0] );
 
 
-    // 2. Decimal part. 0.25°C resolution
-    switch( cmd[1] )
-    {
-        // x.00°C
-    default:
-    case 0b00000000:
-        break;
+    // It gets the ID 2
+    cmd[0]   =   MLX90614_ID_NUMBER_2;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
-        // x.25°C
-    case 0b01000000:
-        myTemperature->Temperature  +=    0.25;
-        break;
+    myID->ID[2]  =   ( ( cmd[1] << 8 ) | cmd[0] );
 
-        // x.50°C
-    case 0b10000000:
-        myTemperature->Temperature  +=    0.50;
-        break;
 
-        // x.75°C
-    case 0b11000000:
-        myTemperature->Temperature  +=    0.75;
-        break;
-    }
+    // It gets the ID 3
+    cmd[0]   =   MLX90614_ID_NUMBER_3;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    myID->ID[3]  =   ( ( cmd[1] << 8 ) | cmd[0] );
 
 
 
@@ -124,42 +118,42 @@ MLX90614_status_t  MLX90614_ReadTemperature   ( I2C_parameters_t myI2Cparameters
 }
 
 
-
 /**
- * @brief       MLX90614_ReadRawTemperature ( I2C_parameters_t , MLX90614_vector_data_t* )
+ * @brief       MLX90614_ReadRawTA ( I2C_parameters_t , MLX90614_vector_data_t* )
  *
- * @details     It gets the raw temperature.
+ * @details     It raw ambient temperature.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
  *
- * @param[out]   myRawTemperature:  Raw Temperature data.
+ * @param[out]   myRawTA:           Raw ambient temperature.
  *
  *
- * @return       Status of MLX90614_ReadTemperature.
+ * @return       Status of MLX90614_ReadRawTA.
  *
  *
  * @author      Manuel Caballero
- * @date        11/December/2017
- * @version     11/December/2017     The ORIGIN
- * @pre         The temperature registers are updated after each user-initiated conversion and on every 64-second conversion.
+ * @date        25/December/2017
+ * @version     25/December/2017     The ORIGIN
+ * @pre         NaN.
  * @warning     NaN.
  */
-MLX90614_status_t  MLX90614_ReadRawTemperature   ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myRawTemperature )
+MLX90614_status_t  MLX90614_ReadRawTA ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myRawTA )
 {
-    uint8_t      cmd[]       =   { MLX90614_MSB_TEMPERATURE, 0 };
+    uint8_t      cmd[]       =   { MLX90614_TA, 0, 0 };
     uint32_t     aux         =   0;
 
 
-    // It gets the temperature
-    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+    // It gets the raw ambient temperature
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
-    // Parse the data
-    myRawTemperature->MSBTemperature    =   cmd[0];
-    myRawTemperature->LSBTemperature    =   cmd[1];
+    myRawTA->RawTA  =   ( ( cmd[1] << 8 ) | cmd[0] );
+    myRawTA->PEC    =   cmd[2];
 
-
+    // Check if flag error is triggered ( faulty if so )
+    if ( ( myRawTA->RawTA & MLX90614_FLAG_ERROR ) == MLX90614_FLAG_ERROR )
+        return   MLX90614_FAILURE;
 
 
     if ( aux == I2C_SUCCESS )
@@ -167,76 +161,44 @@ MLX90614_status_t  MLX90614_ReadRawTemperature   ( I2C_parameters_t myI2Cparamet
     else
         return   MLX90614_FAILURE;
 }
-
 
 
 /**
- * @brief       MLX90614_StartNewConvertTemperature  ( I2C_parameters_t )
+ * @brief       MLX90614_ReadTA ( I2C_parameters_t , MLX90614_vector_data_t* )
  *
- * @details     It triggers a new temperature conversion.
+ * @details     It ambient temperature.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
  *
- * @param[out]   NaN.
+ * @param[out]   myTA:              Ambient temperature in Celsius.
  *
  *
- * @return       Status of MLX90614_StartNewConvertTemperature.
+ * @return       Status of MLX90614_ReadTA.
  *
  *
  * @author      Manuel Caballero
- * @date        18/December/2017
- * @version     18/December/2017     The ORIGIN
- * @pre         NaN
+ * @date        25/December/2017
+ * @version     25/December/2017     The ORIGIN
+ * @pre         NaN.
  * @warning     NaN.
  */
-MLX90614_status_t  MLX90614_StartNewConvertTemperature  ( I2C_parameters_t myI2Cparameters )
+MLX90614_status_t  MLX90614_ReadTA ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myTA )
 {
-    uint8_t      cmd[]  =   { MLX90614_CONTROL_STATUS, 0 };
-    uint32_t     aux    =   0;
-    uint32_t     ii     =   0;
+    uint8_t      cmd[]       =   { MLX90614_TA, 0, 0 };
+    uint32_t     aux         =   0;
 
 
-    // BSY MUST be checked before triggering a new temperature conversion
-    do
-    {
-        aux  =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-        aux  =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
-
-        ii++;
-    }
-    while ( ( ( cmd[1] & STATUS_BUSY_MASK ) != STATUS_BUSY_NOBUSY ) && ( ii < MLX90614_TIMEOUT ) );
+    // It gets the raw ambient temperature
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
-    // if something went wrong, there will not be a new temperature conversion
-    cmd[0]  =   MLX90614_CONTROL;
-    if ( ii < MLX90614_TIMEOUT )
-    {
-        // It triggers a new temperature conversion
-        // It reads CONTROL register
-        aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-        aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+    myTA->TA  =   ( MLX90614_KELVIN_CONVERSION * ( ( ( cmd[1] << 8 ) | cmd[0] ) ) ) - MLX90614_KELVIN_TO_CELSIUS;
+    myTA->PEC =   cmd[2];
 
-        // Start a new temperature conversion
-        cmd[1] |=   CONTROL_STATUS_CONVERT_TEMPERATURE_ENABLED;
-        aux     =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
-
-        // Wait until the temperature conversion is completed
-        ii   =   0;
-        do
-        {
-            aux  =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-            aux  =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
-
-            ii++;
-        }
-        while ( ( ( cmd[1] & CONTROL_STATUS_CONVERT_TEMPERATURE_MASK ) != CONTROL_STATUS_CONVERT_TEMPERATURE_DISABLED ) && ( ii < MLX90614_TIMEOUT ) );
-    }
-
-    // If TIMEOUT happens, something went wrong!
-    if ( ii >= MLX90614_TIMEOUT )
-        aux   =   I2C_FAILURE;
-
-
+    // Check if flag error is triggered ( faulty if so )
+    if ( ( cmd[1] & ( MLX90614_FLAG_ERROR >> 8 ) ) == ( MLX90614_FLAG_ERROR >> 8 ) )
+        return   MLX90614_FAILURE;
 
 
     if ( aux == I2C_SUCCESS )
@@ -244,38 +206,44 @@ MLX90614_status_t  MLX90614_StartNewConvertTemperature  ( I2C_parameters_t myI2C
     else
         return   MLX90614_FAILURE;
 }
-
 
 
 /**
- * @brief       MLX90614_ReadRawAging ( I2C_parameters_t , MLX90614_vector_data_t* )
+ * @brief       MLX90614_ReadRawTObj1 ( I2C_parameters_t , MLX90614_vector_data_t* )
  *
- * @details     It gets the raw aging.
+ * @details     It raw object 1 temperature.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
  *
- * @param[out]   myRawAging:        Raw Aging data.
+ * @param[out]   myRawTObj1:        Raw object 1 temperature.
  *
  *
- * @return       Status of MLX90614_ReadRawAging.
+ * @return       Status of MLX90614_ReadRawTObj1.
  *
  *
  * @author      Manuel Caballero
- * @date        12/December/2017
- * @version     12/December/2017     The ORIGIN
- * @pre         NaN
+ * @date        25/December/2017
+ * @version     25/December/2017     The ORIGIN
+ * @pre         NaN.
  * @warning     NaN.
  */
-MLX90614_status_t  MLX90614_ReadRawAging ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t* myRawAging )
+MLX90614_status_t  MLX90614_ReadRawTObj1 ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myRawTObj1 )
 {
-    uint8_t      cmd       =   MLX90614_AGING_OFFSET;
-    uint32_t     aux       =   0;
+    uint8_t      cmd[]       =   { MLX90614_TOBJ_1, 0, 0 };
+    uint32_t     aux         =   0;
 
 
-    // It gets the raw aging value
-    aux = i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myI2Cparameters, &myRawAging->RawAging, 1 );
+    // It gets the raw object 1 temperature
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
+
+    myRawTObj1->RawTObj1  =   ( ( cmd[1] << 8 ) | cmd[0] );
+    myRawTObj1->PEC       =   cmd[2];
+
+    // Check if flag error is triggered ( faulty if so )
+    if ( ( myRawTObj1->RawTObj1 & MLX90614_FLAG_ERROR ) == MLX90614_FLAG_ERROR )
+        return   MLX90614_FAILURE;
 
 
     if ( aux == I2C_SUCCESS )
@@ -283,46 +251,44 @@ MLX90614_status_t  MLX90614_ReadRawAging ( I2C_parameters_t myI2Cparameters, MLX
     else
         return   MLX90614_FAILURE;
 }
-
 
 
 /**
- * @brief       MLX90614_Status32kHzPin ( I2C_parameters_t , MLX90614_status_enable_32khz_output_t )
+ * @brief       MLX90614_ReadTObj1 ( I2C_parameters_t , MLX90614_vector_data_t* )
  *
- * @details     It enables/disables the 32kHz output pin.
+ * @details     It object 1 temperature.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    my32kHzPin:        32kHz pin enabled/disabled.
  *
- * @param[out]   NaN.
+ * @param[out]   myTObj1:           Object 1 temperature in Celsius.
  *
  *
- * @return       Status of MLX90614_Status32kHzPin.
+ * @return       Status of MLX90614_ReadTObj1.
  *
  *
  * @author      Manuel Caballero
- * @date        18/December/2017
- * @version     18/December/2017     The ORIGIN
- * @pre         NaN
+ * @date        25/December/2017
+ * @version     25/December/2017     The ORIGIN
+ * @pre         NaN.
  * @warning     NaN.
  */
-MLX90614_status_t  MLX90614_Status32kHzPin  ( I2C_parameters_t myI2Cparameters, MLX90614_status_enable_32khz_output_t  my32kHzPin )
+MLX90614_status_t  MLX90614_ReadTObj1 ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myTObj1 )
 {
-    uint8_t      cmd[]     =   { MLX90614_CONTROL_STATUS, 0 };
-    uint32_t     aux       =   0;
+    uint8_t      cmd[]       =   { MLX90614_TOBJ_1, 0, 0 };
+    uint32_t     aux         =   0;
 
 
-    // It reads the status register to parse the data
-    aux  =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux  =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
-
-    cmd[1] &=  ~STATUS_ENABLE_32KHZ_OUTPUT_MASK;
-    cmd[1] |=   my32kHzPin;
-
-    // Update the register
-    aux  =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+    // It gets the raw object 1 temperature
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
+    myTObj1->TObj1  =   ( MLX90614_KELVIN_CONVERSION * ( ( ( cmd[1] << 8 ) | cmd[0] ) ) ) - MLX90614_KELVIN_TO_CELSIUS;
+    myTObj1->PEC    =   cmd[2];
+
+    // Check if flag error is triggered ( faulty if so )
+    if ( ( cmd[1] & ( MLX90614_FLAG_ERROR >> 8 ) ) == ( MLX90614_FLAG_ERROR >> 8 ) )
+        return   MLX90614_FAILURE;
 
 
     if ( aux == I2C_SUCCESS )
@@ -330,47 +296,44 @@ MLX90614_status_t  MLX90614_Status32kHzPin  ( I2C_parameters_t myI2Cparameters, 
     else
         return   MLX90614_FAILURE;
 }
-
 
 
 /**
- * @brief       MLX90614_ClearAlarmFlag ( I2C_parameters_t , MLX90614_status_alarm1_flag_t , MLX90614_status_alarm2_flag_t )
+ * @brief       MLX90614_ReadRawTObj2 ( I2C_parameters_t , MLX90614_vector_data_t* )
  *
- * @details     It clears alarm flags.
+ * @details     It raw object 2 temperature.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myA1F:             Reset/Mask alarm 1 flag.
- * @param[in]    myA2F:             Reset/Mask alarm 2 flag.
  *
- * @param[out]   NaN.
+ * @param[out]   myRawTObj1:        Raw object 2 temperature.
  *
  *
- * @return       Status of MLX90614_ClearAlarmFlag.
+ * @return       Status of MLX90614_ReadRawTObj2.
  *
  *
  * @author      Manuel Caballero
- * @date        18/December/2017
- * @version     18/December/2017     The ORIGIN
- * @pre         NaN
+ * @date        25/December/2017
+ * @version     25/December/2017     The ORIGIN
+ * @pre         NaN.
  * @warning     NaN.
  */
-MLX90614_status_t  MLX90614_ClearAlarmFlag  ( I2C_parameters_t myI2Cparameters, MLX90614_status_alarm1_flag_t myA1F, MLX90614_status_alarm2_flag_t myA2F )
+MLX90614_status_t  MLX90614_ReadRawTObj2 ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myRawTObj2 )
 {
-    uint8_t      cmd[]     =   { MLX90614_CONTROL_STATUS, 0 };
-    uint32_t     aux       =   0;
+    uint8_t      cmd[]       =   { MLX90614_TOBJ_2, 0, 0 };
+    uint32_t     aux         =   0;
 
 
-    // It reads the status register to parse the data
-    aux  =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux  =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
-
-    cmd[1] &=  ~( STATUS_ALARM1_FLAG_MASK | STATUS_ALARM2_FLAG_MASK );
-    cmd[1] |=   ( myA1F | myA2F );
-
-    // Update the register
-    aux  =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+    // It gets the raw object 1 temperature
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
+    myRawTObj2->RawTObj2  =   ( ( cmd[1] << 8 ) | cmd[0] );
+    myRawTObj2->PEC       =   cmd[2];
+
+    // Check if flag error is triggered ( faulty if so )
+    if ( ( myRawTObj2->RawTObj2 & MLX90614_FLAG_ERROR ) == MLX90614_FLAG_ERROR )
+        return   MLX90614_FAILURE;
 
 
     if ( aux == I2C_SUCCESS )
@@ -378,96 +341,44 @@ MLX90614_status_t  MLX90614_ClearAlarmFlag  ( I2C_parameters_t myI2Cparameters, 
     else
         return   MLX90614_FAILURE;
 }
-
 
 
 /**
- * @brief       MLX90614_SetAlarm1 ( I2C_parameters_t , MLX90614_alarm1_register_t )
+ * @brief       MLX90614_ReadTObj2 ( I2C_parameters_t , MLX90614_vector_data_t* )
  *
- * @details     It sets the alarm 1.
+ * @details     It object 2 temperature.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myAlarm1:          Alarm 1 options.
  *
- * @param[out]   NaN.
+ * @param[out]   myTObj2:           Object 2 temperature in Celsius.
  *
  *
- * @return       Status of MLX90614_SetAlarm1.
+ * @return       Status of MLX90614_ReadTObj2.
  *
  *
  * @author      Manuel Caballero
- * @date        18/December/2017
- * @version     18/December/2017     The ORIGIN
- * @pre         NaN
+ * @date        25/December/2017
+ * @version     25/December/2017     The ORIGIN
+ * @pre         NaN.
  * @warning     NaN.
  */
-MLX90614_status_t  MLX90614_SetAlarm1   ( I2C_parameters_t myI2Cparameters, MLX90614_alarm1_register_t myAlarm1 )
+MLX90614_status_t  MLX90614_ReadTObj2 ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t*  myTObj2 )
 {
-    uint8_t      cmd                =   0;
-    uint32_t     aux                =   0;              // A1M1
-    uint32_t     Alarm1SecondAux    =   0;              // A1M2
-    uint32_t     Alarm1MinuteAux    =   0;              // A1M3
-    uint32_t     Alarm1HourAux      =   0;              // A1M4
-    uint32_t     Alarm1DayDateAux   =   0;              // DYDT
+    uint8_t      cmd[]       =   { MLX90614_TOBJ_2, 0, 0 };
+    uint32_t     aux         =   0;
 
 
-    // Read all the registers involved in the alarm1
-    // A1M1
-    cmd      =   MLX90614_ALARM_1_SECONDS;
-    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
-    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
-
-    Alarm1SecondAux  =  ( cmd & ~ALARM1_A1M1_MASK );
-
-    // A1M2
-    cmd      =   MLX90614_ALARM_1_MINUTES;
-    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
-    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
-
-    Alarm1MinuteAux  =  ( cmd & ~ALARM1_A1M2_MASK );
-
-    // A1M3
-    cmd      =   MLX90614_ALARM_1_HOURS;
-    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
-    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
-
-    Alarm1HourAux  =  ( cmd & ~ALARM1_A1M3_MASK );
-
-    // A1M4 & DY/DT
-    cmd      =   MLX90614_ALARM_1_DAY_DATE;
-    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
-    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
-
-    Alarm1DayDateAux  =  ( cmd & ~( ALARM1_A1M4_MASK | ALARM1_DYDT_MASK ) );
+    // It gets the raw object 2 temperature
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
-    // Set all ( A1M1, A1M2, A1M3 A1M4 and DY/DT ) to 0
- //   cmd[0]   =   MLX90614_ALARM_1_SECONDS;
- //   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_STOP_BIT );
+    myTObj2->TObj2  =   ( MLX90614_KELVIN_CONVERSION * ( ( ( cmd[1] << 8 ) | cmd[0] ) ) ) - MLX90614_KELVIN_TO_CELSIUS;
+    myTObj2->PEC    =   cmd[2];
 
-
-
-    switch ( myAlarm1 )
-    {
-    case ALARM1_ALARM_ONCE_PER_SECOND:
-
-
-    case ALARM1_WHEN_SECONDS_MATCH:
-
-    case ALARM1_WHEN_MINUTES_AND_SECONDS_MATCH:
-
-    case ALARM1_WHEN_HOURS_MINUTES_AND_SECONDS_MATCH:
-
-    case ALARM1_WHEN_DATE_HOURS_MINUTES_AND_SECONDS_MATCH:
-
-    case ALARM1_WHEN_DAY_HOURS_MINUTES_AND_SECONDS_MATCH:
-        break;
-    }
-
-
-
-
-
+    // Check if flag error is triggered ( faulty if so )
+    if ( ( cmd[1] & ( MLX90614_FLAG_ERROR >> 8 ) ) == ( MLX90614_FLAG_ERROR >> 8 ) )
+        return   MLX90614_FAILURE;
 
 
     if ( aux == I2C_SUCCESS )
@@ -475,3 +386,4 @@ MLX90614_status_t  MLX90614_SetAlarm1   ( I2C_parameters_t myI2Cparameters, MLX9
     else
         return   MLX90614_FAILURE;
 }
+
