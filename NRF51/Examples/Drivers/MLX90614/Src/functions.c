@@ -26,9 +26,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        5/May/2017
- * @version     23/May/2017     All the LEDs OFF at the beginning.
- *              5/May/2017      The ORIGIN
+ * @date        25/December/2017
+ * @version     25/December/2017      The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */
@@ -36,7 +35,7 @@ void conf_GPIO  ( void )
 {
     uint32_t i = 0;
 
-    for ( i = LED1; i < ( LED4 + 1 ); i++ ){
+    for ( i = LED1; i < ( LED2 + 1 ); i++ ){
             NRF_GPIO->OUTSET        =   ( 1 << i );
 
             NRF_GPIO->PIN_CNF[i]    =   GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos    |
