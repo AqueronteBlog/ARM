@@ -44,7 +44,7 @@ void TIMER0_IRQHandler()
  * @brief       void UART0_IRQHandler ()
  * @details     It sends the collected data from the external sensor through the UART.
  *
- *              One byte was just sent, so there are 9-Bytes left
+ *              One byte was just sent, so there are 13-Bytes left
  *              waiting to be transmitted.
  *
  *
@@ -65,8 +65,8 @@ void UART0_IRQHandler(void)
         // Clear UART TX event flag.
         NRF_UART0->EVENTS_TXDRDY = 0;
 
-        // Send only 11-Bytes
-        if ( dataToBeTX  < 10 )           // 10 - 1 = 9. NOTE: One byte was just transmitted previously.
+        // Send only 13-Bytes
+        if ( dataToBeTX  < 13 )           // 14 - 1 = 13. NOTE: One byte was just transmitted previously.
         {
         // Transmit data
             NRF_UART0->TXD   =   *myPtr++;
