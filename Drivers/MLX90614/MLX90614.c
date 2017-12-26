@@ -387,3 +387,392 @@ MLX90614_status_t  MLX90614_ReadTObj2 ( I2C_parameters_t myI2Cparameters, MLX906
         return   MLX90614_FAILURE;
 }
 
+
+/**
+ * @brief       MLX90614_GetEmissivity ( I2C_parameters_t , MLX90614_vector_data_t* )
+ *
+ * @details     It gets the Emissivity correction coefficient.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myEmissivity:      Emissivity correction coefficient.
+ *
+ *
+ * @return       Status of MLX90614_GetEmissivity.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        26/December/2017
+ * @version     26/December/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+MLX90614_status_t  MLX90614_GetEmissivity ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t* myEmissivity )
+{
+    uint8_t      cmd[]       =   { MLX90614_EMISSIVITY_CORRECTION_COEFFICIENT, 0, 0 };
+    uint32_t     aux         =   0;
+
+
+    // It gets the Emissivity correction coefficient
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+
+    myEmissivity->Emissivity  =   ( ( cmd[1] << 8 ) | cmd[0] );
+    myEmissivity->Emissivity /=   65535;
+    myEmissivity->PEC         =   cmd[2];
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MLX90614_SUCCESS;
+    else
+        return   MLX90614_FAILURE;
+}
+
+
+/**
+ * @brief       MLX90614_SetEmissivity ( I2C_parameters_t , MLX90614_vector_data_t* )
+ *
+ * @details     It sets the Emissivity correction coefficient.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myEmissivity:      Emissivity correction coefficient.
+ *
+ * @param[out]   NaN
+ *
+ *
+ * @return       Status of MLX90614_SetEmissivity.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        26/December/2017
+ * @version     26/December/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+MLX90614_status_t  MLX90614_SetEmissivity ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t myEmissivity )
+{
+    uint8_t      cmd[]       =   { MLX90614_EMISSIVITY_CORRECTION_COEFFICIENT, 0, 0 };
+    uint32_t     aux         =   0;
+    uint32_t     ii          =   0;
+
+
+    // Check Emissivity range
+    if ( ( myEmissivity.Emissivity >= 0.1 ) && ( myEmissivity.Emissivity <= 1) )
+    {
+        // Erase EEPROM
+        cmd[1]   =   0;
+        aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+
+        // It takes EEPROM about 5ms to write/read
+        do
+        {
+            cmd[0]   =   MLX90614_FLAGS;
+            aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+            aux      =   i2c_read  ( myI2Cparameters, &cmd[0], 3 );
+            ii++;                                                                                 // Increase the timeout
+        }
+        while ( ( ( cmd[0] & FLAG_EEBUSY_HIGH ) == FLAG_EEBUSY_HIGH ) && ( ii < MLX90614_TIMEOUT ) );
+
+
+        // If TIMEOUT, exit with failure.
+        if ( ii >= MLX90614_TIMEOUT )
+            return MLX90614_FAILURE;
+        else
+        {
+            // Update the new value
+            cmd[0]   =   MLX90614_EMISSIVITY_CORRECTION_COEFFICIENT;
+            cmd[1]   =   _MYROUND( 65535 * myEmissivity.Emissivity );
+            aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+        }
+    }
+    else
+        return MLX90614_FAILURE;
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MLX90614_SUCCESS;
+    else
+        return   MLX90614_FAILURE;
+}
+
+
+/**
+ * @brief       MLX90614_GetIIR ( I2C_parameters_t , MLX90614_vector_data_t* )
+ *
+ * @details     It gets the IIR.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myIIR:             IIR.
+ *
+ *
+ * @return       Status of MLX90614_GetIIR.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        26/December/2017
+ * @version     26/December/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+MLX90614_status_t  MLX90614_GetIIR ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t* myIIR )
+{
+    uint8_t      cmd[]       =   { MLX90614_CONFIG_REGISTER_1, 0, 0 };
+    uint32_t     aux         =   0;
+
+
+    // It gets the IIR
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+
+    myIIR->IIR   =   ( MLX90614_configregister1_iir_t )( cmd[0] & CONFIGREG1_IIR_MASK );
+    myIIR->PEC   =   cmd[2];
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MLX90614_SUCCESS;
+    else
+        return   MLX90614_FAILURE;
+}
+
+
+/**
+ * @brief       MLX90614_SetIIR ( I2C_parameters_t , MLX90614_configregister1_iir_t )
+ *
+ * @details     It sets the IIR.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myIIR:             IIR.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of MLX90614_SetIIR.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        26/December/2017
+ * @version     26/December/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+MLX90614_status_t  MLX90614_SetIIR ( I2C_parameters_t myI2Cparameters, MLX90614_configregister1_iir_t myIIR )
+{
+    uint8_t      cmd[]       =   { MLX90614_CONFIG_REGISTER_1, 0, 0 };
+    uint32_t     aux         =   0;
+    uint32_t     ii          =   0;
+
+
+    // It gets the IIR
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    // Erase EEPROM
+    cmd[2]   =   cmd[1];                                                       // MSB
+    cmd[1]   =   ( cmd[0] & ~CONFIGREG1_IIR_MASK );                            // LSB
+    cmd[0]   =   MLX90614_CONFIG_REGISTER_1;                                   // Command
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 3, I2C_STOP_BIT );
+
+    // It takes EEPROM about 5ms to write/read
+    do
+    {
+        cmd[0]   =   MLX90614_FLAGS;
+        aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+        aux      =   i2c_read  ( myI2Cparameters, &cmd[0], 3 );
+        ii++;                                                                                 // Increase the timeout
+    }
+    while ( ( ( cmd[0] & FLAG_EEBUSY_HIGH ) == FLAG_EEBUSY_HIGH ) && ( ii < MLX90614_TIMEOUT ) );
+
+
+    // If TIMEOUT, exit with failure.
+    if ( ii >= MLX90614_TIMEOUT )
+        return MLX90614_FAILURE;
+    else
+    {
+        // It gets the IIR
+        aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+        aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+        // Update the new value
+        cmd[2]   =   cmd[1];                                                       // MSB
+        cmd[1]   =   ( ( cmd[0] & ~CONFIGREG1_IIR_MASK ) | myIIR );                // LSB
+        cmd[0]   =   MLX90614_CONFIG_REGISTER_1;                                   // Command
+        aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+    }
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MLX90614_SUCCESS;
+    else
+        return   MLX90614_FAILURE;
+}
+
+
+/**
+ * @brief       MLX90614_GetTemperatureSource ( I2C_parameters_t , MLX90614_vector_data_t* )
+ *
+ * @details     It gets the temperature source.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myTempSource:      Temperature source.
+ *
+ *
+ * @return       Status of MLX90614_GetTemperatureSource.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        26/December/2017
+ * @version     26/December/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+MLX90614_status_t  MLX90614_GetTemperatureSource ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t* myTempSource )
+{
+    uint8_t      cmd[]       =   { MLX90614_CONFIG_REGISTER_1, 0, 0 };
+    uint32_t     aux         =   0;
+
+
+    // It gets the temperature source
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+
+    myTempSource->TempSource   =   ( MLX90614_configregister1_temp_t )( cmd[0] & CONFIGREG1_TEMP_MASK );
+    myTempSource->PEC          =   cmd[2];
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MLX90614_SUCCESS;
+    else
+        return   MLX90614_FAILURE;
+}
+
+
+/**
+ * @brief       MLX90614_SetTemperatureSource ( I2C_parameters_t , MLX90614_configregister1_temp_t )
+ *
+ * @details     It sets the temperature source.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myTempSource:      Temperature source.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ * @return       Status of MLX90614_SetTemperatureSource.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        26/December/2017
+ * @version     26/December/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+MLX90614_status_t  MLX90614_SetTemperatureSource ( I2C_parameters_t myI2Cparameters, MLX90614_configregister1_temp_t myTempSource )
+{
+    uint8_t      cmd[]       =   { MLX90614_CONFIG_REGISTER_1, 0, 0 };
+    uint32_t     aux         =   0;
+    uint32_t     ii          =   0;
+
+
+    // It gets the IIR
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    // Erase EEPROM
+    cmd[2]   =   cmd[1];                                                       // MSB
+    cmd[1]   =   ( cmd[0] & ~CONFIGREG1_TEMP_MASK );                           // LSB
+    cmd[0]   =   MLX90614_CONFIG_REGISTER_1;                                   // Command
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 3, I2C_STOP_BIT );
+
+    // It takes EEPROM about 5ms to write/read
+    do
+    {
+        cmd[0]   =   MLX90614_FLAGS;
+        aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+        aux      =   i2c_read  ( myI2Cparameters, &cmd[0], 3 );
+        ii++;                                                                                 // Increase the timeout
+    }
+    while ( ( ( cmd[0] & FLAG_EEBUSY_HIGH ) == FLAG_EEBUSY_HIGH ) && ( ii < MLX90614_TIMEOUT ) );
+
+
+    // If TIMEOUT, exit with failure.
+    if ( ii >= MLX90614_TIMEOUT )
+        return MLX90614_FAILURE;
+    else
+    {
+        // It gets the IIR
+        aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+        aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+        // Update the new value
+        cmd[2]   =   cmd[1];                                                       // MSB
+        cmd[1]   =   ( ( cmd[0] & ~CONFIGREG1_TEMP_MASK ) | myTempSource );        // LSB
+        cmd[0]   =   MLX90614_CONFIG_REGISTER_1;                                   // Command
+        aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
+    }
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MLX90614_SUCCESS;
+    else
+        return   MLX90614_FAILURE;
+}
+
+
+/**
+ * @brief       MLX90614_GetFLAGS ( I2C_parameters_t , MLX90614_vector_data_t* )
+ *
+ * @details     It gets the flags.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myFlags:           Flags.
+ *
+ *
+ * @return       Status of MLX90614_GetFLAGS.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        26/December/2017
+ * @version     26/December/2017     The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN.
+ */
+MLX90614_status_t  MLX90614_GetFLAGS ( I2C_parameters_t myI2Cparameters, MLX90614_vector_data_t* myFlags )
+{
+    uint8_t      cmd[]       =   { MLX90614_FLAGS, 0, 0 };
+    uint32_t     aux         =   0;
+
+
+    // It gets the flags
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+
+    myFlags->Flags =   ( MLX90614_flags_t )cmd[0];
+    myFlags->PEC   =   cmd[2];
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MLX90614_SUCCESS;
+    else
+        return   MLX90614_FAILURE;
+}
