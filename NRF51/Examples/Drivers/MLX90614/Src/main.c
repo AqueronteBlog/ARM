@@ -1,6 +1,10 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows how to work with the external sensor MLX90614 Single
+ *              and Dual Zone Infra Red Thermometer.
+ *
+ *              Every 1 second, it reads the ambient temperature ( raw ), object 1 and object 2
+ *              temperature ( raw)  as well as the IDs. All data is transmitted through the UART.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
@@ -26,7 +30,7 @@
 
 int main( void )
 {
-    uint8_t  myTX_buff[10]   =      { 0 };
+    uint8_t  myTX_buff[14]   =      { 0 };
 
 
     I2C_parameters_t            myMLX90614_I2C_parameters;
@@ -73,50 +77,60 @@ int main( void )
         __SEV();
         __WFE();
 
-        /*
-                NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
-                if ( mySTATE == 1 )
-                {
-                    NVIC_DisableIRQ ( TIMER0_IRQn );                                            // Timer Interrupt DISABLED
 
-                    // Get the data
-                    aux  =   MLX90614_ReadTemperature             ( myMLX90614_I2C_parameters, &myMLX90614_data );
-                    aux  =   MLX90614_GetDate                     ( myMLX90614_I2C_parameters, &myMLX90614_date_time );
-                    aux  =   MLX90614_GetTime                     ( myMLX90614_I2C_parameters, &myMLX90614_date_time );
+        NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
+        if ( mySTATE == 1 )
+        {
+            NVIC_DisableIRQ ( TIMER0_IRQn );                                            // Timer Interrupt DISABLED
 
-                    // Parse the data
-                    myTX_buff[0]                 =   myMLX90614_date_time.Century;
-                    myTX_buff[1]                 =   myMLX90614_date_time.Date;
-                    myTX_buff[2]                 =   myMLX90614_date_time.Month;
-                    myTX_buff[3]                 =   myMLX90614_date_time.Year;
-                    myTX_buff[4]                 =   myMLX90614_date_time.DayOfWeek;
-                    myTX_buff[5]                 =   myMLX90614_date_time.Hours;
-                    myTX_buff[6]                 =   myMLX90614_date_time.Minutes;
-                    myTX_buff[7]                 =   myMLX90614_date_time.Seconds;
-                    myTX_buff[8]                 =   myMLX90614_date_time.Mode_12_n24;
-                    myTX_buff[9]                 =   myMLX90614_date_time.Mode_nAM_PM;
+            // Get the data
+            aux  =   MLX90614_GetID_Numbers ( myMLX90614_I2C_parameters, &myMLX90614Data );
+            aux  =   MLX90614_ReadRawTA     ( myMLX90614_I2C_parameters, &myMLX90614Data );
+            aux  =   MLX90614_ReadRawTObj1  ( myMLX90614_I2C_parameters, &myMLX90614Data );
+            aux  =   MLX90614_ReadRawTObj2  ( myMLX90614_I2C_parameters, &myMLX90614Data );
 
+            // Parse the data
+            myTX_buff[0]                 =   ( myMLX90614Data.RawTA >> 8 ) & 0xFF;     // MSB Raw TA
+            myTX_buff[1]                 =   myMLX90614Data.RawTA & 0xFF;              // LSB Raw TA
 
-                    myPtr                        =   &myTX_buff[0];
-                    TX_inProgress                =   YES;
-                    NRF_UART0->TASKS_STARTTX     =   1;
-                    NRF_UART0->TXD               =   *myPtr++;                                   // Start transmission
+            myTX_buff[2]                 =   ( myMLX90614Data.RawTObj1 >> 8 ) & 0xFF;  // MSB Raw Tobj1
+            myTX_buff[3]                 =   myMLX90614Data.RawTObj1 & 0xFF;           // LSB Raw Tobj1
 
-                    // Wait until the message is transmitted
-                    while ( TX_inProgress == YES )
-                    {
-                        __WFE();
-                        // Make sure any pending events are cleared
-                        __SEV();
-                        __WFE();
-                    }
+            myTX_buff[4]                 =   ( myMLX90614Data.RawTObj2 >> 8 ) & 0xFF;  // MSB Raw Tobj2
+            myTX_buff[5]                 =   myMLX90614Data.RawTObj2 & 0xFF;           // LSB Raw Tobj2
+
+            myTX_buff[6]                 =   ( myMLX90614Data.ID[0] >> 8 ) & 0xFF;     // MSB ID[0]
+            myTX_buff[7]                 =   myMLX90614Data.ID[0] & 0xFF;              // LSB ID[0]
+
+            myTX_buff[8]                 =   ( myMLX90614Data.ID[1] >> 8 ) & 0xFF;     // MSB ID[1]
+            myTX_buff[9]                 =   myMLX90614Data.ID[1] & 0xFF;              // LSB ID[1]
+
+            myTX_buff[10]                =   ( myMLX90614Data.ID[2] >> 8 ) & 0xFF;     // MSB ID[2]
+            myTX_buff[11]                =   myMLX90614Data.ID[2] & 0xFF;              // LSB ID[2]
+
+            myTX_buff[12]                =   ( myMLX90614Data.ID[3] >> 8 ) & 0xFF;     // MSB ID[3]
+            myTX_buff[13]                =   myMLX90614Data.ID[3] & 0xFF;              // LSB ID[3]
 
 
-                    mySTATE             =   0;
-                    NVIC_EnableIRQ ( TIMER0_IRQn );                                              // Timer Interrupt ENABLED
-                }
-                NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
-                //__NOP();
-                */
+            myPtr                        =   &myTX_buff[0];
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   *myPtr++;                                   // Start transmission
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES )
+            {
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+            mySTATE             =   0;
+            NVIC_EnableIRQ ( TIMER0_IRQn );                                              // Timer Interrupt ENABLED
+        }
+        NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
+        //__NOP();
     }
 }
