@@ -15,10 +15,24 @@
 
 
 #include "stm32l1xx.h"
-			
+#include "board.h"
+#include "variables.h"
+#include "functions.h"
+#include "interrupts.h"
+
+
+extern void conf_GPIO( void );
+
 
 int main(void)
 {
+	conf_GPIO ();
 
-	for(;;);
+
+	while ( 1 )
+	{
+		GPIOA->BSRR	=	GPIO_BSRR_BS_5;
+
+		GPIOA->BRR	=	GPIO_BRR_BR_5;
+	}
 }
