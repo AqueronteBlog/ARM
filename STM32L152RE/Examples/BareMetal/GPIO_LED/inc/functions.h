@@ -18,6 +18,7 @@
 
 
 /* FUNCTION PROTOTYPES */
+void Conf_CLK  ( void );
 void Conf_GPIO ( void );
 
 
