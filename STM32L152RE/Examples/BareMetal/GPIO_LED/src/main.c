@@ -1,6 +1,9 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows how to configure the GPIO to turn on an LED as well
+ * 				as the MCO ( output SYSCLK frequency ).
+ *
+ * 				The SysTick is configured to generate an interrupt every ~1ms.
  *
  *
  * @return      NA
@@ -21,25 +24,29 @@
 #include "interrupts.h"
 
 
-extern void conf_GPIO( void );
-extern void conf_CLK ( void );
 
-
-int main(void)
+int main ( void )
 {
-	HAL_Init  ();
+	Conf_GPIO 	 ();
+	Conf_CLK  	 ();
 
-	conf_GPIO ();
-	conf_CLK  ();
+	mySystemCoreClock	 =	 2097000U;			// SYSCLK = 2.907 MHz
+	Conf_SYSTICK ( mySystemCoreClock/1000 );	// Milli seconds
 
 
 	while ( 1 )
 	{
-		if ( ( GPIOA->ODR & GPIO_ODR_ODR_5 ) == GPIO_ODR_ODR_5 )
-			GPIOA->BRR	=	GPIO_BRR_BR_5;
-		else
-			GPIOA->BSRR	=	GPIO_BSRR_BS_5;
+		// Change the state of the LED every ~0.5s
+		if ( myDelay > 500 )
+		{
+		// Reset Delay
+			myDelay	 =	 0;
 
-		HAL_Delay ( 500 );
+		// Blink LED
+			if ( ( GPIOA->ODR & GPIO_ODR_ODR_5 ) == GPIO_ODR_ODR_5 )
+				GPIOA->BRR	=	GPIO_BRR_BR_5;							// Turn it OFF
+			else
+				GPIOA->BSRR	=	GPIO_BSRR_BS_5;							// Turn it ON
+		}
 	}
 }
