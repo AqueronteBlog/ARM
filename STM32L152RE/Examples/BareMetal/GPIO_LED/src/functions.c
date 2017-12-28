@@ -16,7 +16,7 @@
 #include "functions.h"
 
 /**
- * @brief       void conf_CLK  ( void )
+ * @brief       void Conf_CLK  ( void )
  * @details     It configures MCO.
  *
  * 				- MCO ( SYSCLK/1 ):	PA_8
@@ -31,7 +31,7 @@
  * @pre         NaN
  * @warning     NaN
  */
-void conf_CLK  ( void )
+void Conf_CLK  ( void )
 {
 	RCC->CFGR	&=	 0xF8FFFFFF;											// MCO output disabled, no clock on MCO
 	RCC->CFGR	|=	 ( RCC_CFGR_MCOPRE_DIV1 | RCC_CFGR_MCOSEL_SYSCLK );		// MCO = SYSCLK/1 | MCO ENABLED
@@ -40,7 +40,44 @@ void conf_CLK  ( void )
 
 
 /**
- * @brief       void conf_GPIO  ( void )
+ * @brief       void Conf_SYSTICK  ( uint32_t )
+ * @details     It configures the SysTick at 1ms.
+ *
+ * @param[in]    myticks:	Value of the CLK to generate ticks every 1ms.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        28/December/2017
+ * @version     28/December/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN
+ */
+void Conf_SYSTICK  ( uint32_t myticks )
+{
+	SysTick->CTRL	&=	 ~SysTick_CTRL_ENABLE_Msk;										// SysTick DISABLED
+
+	SysTick->LOAD	 =	 (uint32_t)(myticks - 1UL);										// Load the value
+	SysTick->VAL	 =	 0UL;															// Reset current Counter value
+
+	/* Set the PRIGROUP[10:8] bits according to the PriorityGroup parameter value */
+	NVIC_SetPriorityGrouping	( NVIC_PRIORITYGROUP_4 );
+	NVIC_SetPriority 			( SysTick_IRQn, ( 1UL << __NVIC_PRIO_BITS ) - 1UL );	// Set Priority for Systick Interrupt
+	NVIC_EnableIRQ				( SysTick_IRQn );										// Enable interrupt
+
+	SysTick->CTRL  	 = 	( SysTick_CTRL_CLKSOURCE_Msk |
+	                   	  SysTick_CTRL_TICKINT_Msk   |
+						  SysTick_CTRL_ENABLE_Msk );                    				// Enable SysTick IRQ and SysTick Timer
+}
+
+
+
+/**
+ * @brief       void Conf_GPIO  ( void )
  * @details     It configures GPIO to work with the LEDs and
  * 				MCO ( SYSCLK/1 ).
  *
@@ -58,7 +95,7 @@ void conf_CLK  ( void )
  * @pre         NaN
  * @warning     NaN
  */
-void conf_GPIO  ( void )
+void Conf_GPIO  ( void )
 {
 	// GPIOC Periph clock enable
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
