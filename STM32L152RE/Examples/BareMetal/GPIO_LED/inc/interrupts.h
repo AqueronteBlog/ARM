@@ -11,10 +11,16 @@
  * @pre         NaN
  * @warning     NaN
  */
+#include "variables.h"
+
 
 #ifndef INTERRUPTS_H_
 #define INTERRUPTS_H_
 
 
+void SysTick_Handler (void);
+
+// VARIABLES
+extern uint32_t myDelay;
 
 #endif /* INTERRUPTS_H_ */

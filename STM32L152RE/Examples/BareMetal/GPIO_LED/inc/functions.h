@@ -18,8 +18,8 @@
 
 
 /* FUNCTION PROTOTYPES */
-void Conf_CLK  ( void );
-void Conf_GPIO ( void );
-
+void Conf_CLK  	   ( void );
+void Conf_GPIO 	   ( void );
+void Conf_SYSTICK  ( uint32_t myticks );
 
 #endif /* FUNCTIONS_H_ */
