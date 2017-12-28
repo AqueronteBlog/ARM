@@ -22,17 +22,24 @@
 
 
 extern void conf_GPIO( void );
+extern void conf_CLK ( void );
 
 
 int main(void)
 {
+	HAL_Init  ();
+
 	conf_GPIO ();
+	conf_CLK  ();
 
 
 	while ( 1 )
 	{
-		GPIOA->BSRR	=	GPIO_BSRR_BS_5;
+		if ( ( GPIOA->ODR & GPIO_ODR_ODR_5 ) == GPIO_ODR_ODR_5 )
+			GPIOA->BRR	=	GPIO_BRR_BR_5;
+		else
+			GPIOA->BSRR	=	GPIO_BSRR_BS_5;
 
-		GPIOA->BRR	=	GPIO_BRR_BR_5;
+		HAL_Delay ( 500 );
 	}
 }
