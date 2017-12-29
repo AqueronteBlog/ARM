@@ -4,3 +4,5 @@ STM32L152RE/Resources/
 STM32L152RE/Examples/BareMetal/.metadata/
 STM32L152RE/Examples/BareMetal/RemoteSystemsTempFiles/
 STM32L152RE/Examples/BareMetal/GPIO_LED/HAL_Driver/STM32L162xD_User_Manual.chm
+*.chm
+*.html
