@@ -12,7 +12,7 @@
  * @warning     NaN
  */
 #include "variables.h"
-
+#include "board.h"
 
 #ifndef INTERRUPTS_H_
 #define INTERRUPTS_H_
@@ -21,10 +21,11 @@
 extern "C" {
 #endif
 
-void SysTick_Handler (void);
+// PROTOTYPES
+void EXTI15_10_IRQHandler (void);
 
 // VARIABLES
-extern uint32_t myDelay;
+
 
 #ifdef __cplusplus
 }
