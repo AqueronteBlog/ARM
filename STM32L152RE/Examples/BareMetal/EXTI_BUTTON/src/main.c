@@ -1,8 +1,9 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This project shows how to work with the EXTI peripheral. Every time the button is
+ * 				pressed, the microcontroller will be waken up and change the state of the LED.
  *
- * 				The SysTick is configured to generate an interrupt every ~1ms.
+ * 				The rest of the time, the microcontroller is in stop mode ( low power ).
  *
  *
  * @return      NA
@@ -12,7 +13,7 @@
  * @version     29/December/2017   The ORIGIN
  * @pre         This firmware was tested on the NUCLEO-L152RE with System Workbench for STM32
  *              ( v1.15.0.201708311556 ).
- * @warning     Although HAL driver was generated, it was not used for this example.
+ * @warning     Although HAL driver was generated, just the Low Power functions are used.
  */
 
 
@@ -26,8 +27,6 @@
 
 int main ( void )
 {
-	NUCLEOL152_pin_name_t	myLED1 = LED_1;
-
 	Conf_GPIO 	 ();
 	Conf_CLK  	 ();
 
@@ -35,19 +34,9 @@ int main ( void )
 	Conf_SYSTICK ( mySystemCoreClock/1000 );	// Milli seconds, SysTick will be disabled although
 
 
+	HAL_PWR_DisableSleepOnExit ();
 	while ( 1 )
 	{
-		// Change the state of the LED every ~0.5s
-		if ( myDelay > 500 )
-		{
-		// Reset Delay
-			myDelay	 =	 0;
-
-		// Blink LED
-			if ( ( GPIOA->ODR & GPIO_ODR_ODR_5 ) == GPIO_ODR_ODR_5 )
-				GPIOA->BRR	=	( 1 << myLED1 );							// Turn it OFF
-			else
-				GPIOA->BSRR	=	( 1 << myLED1 );							// Turn it ON
-		}
+		HAL_PWR_EnterSTOPMode( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
 	}
 }
