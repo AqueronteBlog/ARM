@@ -1,7 +1,6 @@
 /**
  * @brief       main.c
- * @details     This project shows how to work with the EXTI peripheral. Every time the button is
- * 				pressed, the microcontroller will be waken up and change the state of the LED.
+ * @details     [todo].
  *
  * 				The rest of the time, the microcontroller is in stop mode ( low power ).
  *
@@ -9,8 +8,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        29/December/2017
- * @version     29/December/2017   The ORIGIN
+ * @date        2/January/2018
+ * @version     2/January/2018   The ORIGIN
  * @pre         This firmware was tested on the NUCLEO-L152RE with System Workbench for STM32
  *              ( v1.15.0.201708311556 ).
  * @warning     Although HAL driver was generated, just the Low Power functions are used.
@@ -30,7 +29,7 @@ int main ( void )
 	Conf_GPIO 	 ();
 	Conf_CLK  	 ();
 
-	mySystemCoreClock	 =	 2097000U;			// SYSCLK = 2.907 MHz
+	mySystemCoreClock	 =	 2097000U;			// SYSCLK = 2.097 MHz
 	Conf_SYSTICK ( mySystemCoreClock/1000 );	// Milli seconds, SysTick will be disabled although
 
 
