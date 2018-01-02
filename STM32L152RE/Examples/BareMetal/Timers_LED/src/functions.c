@@ -6,8 +6,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        29/December/2017
- * @version     29/December/2017   The ORIGIN
+ * @date        2/January/2018
+ * @version     2/January/2018   The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */
@@ -97,10 +97,10 @@ void Conf_SYSTICK  ( uint32_t myticks )
  */
 void Conf_GPIO  ( void )
 {
-	// GPIOA & GPIOC Periph clock enable
+	// GPIOA & GPIOC Peripheral clock enable
 	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN );
 
-	// SYSCFG Periph clock enable
+	// SYSCFG Peripheral clock enable
 	RCC->APB2ENR	|=	 RCC_APB2RSTR_SYSCFGRST;
 
 
@@ -123,4 +123,53 @@ void Conf_GPIO  ( void )
 
     NVIC_SetPriority ( EXTI15_10_IRQn, 1 ); 								// Set Priority to 1
     NVIC_EnableIRQ   ( EXTI15_10_IRQn );  									// Enable EXTI15_10_IRQn interrupt in NVIC
+}
+
+
+/**
+ * @brief       void Conf_TIMERS  ( uint32_t )
+ * @details     It configures the Timers.
+ *
+ * 				-TIM5:
+ * 					-- f_TIM5 = myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz
+ * 					-- Overflow: Every 1 second ( 2097 / f_TIM5 ) = ( 2097 / 2097 ) = 1
+ * 						--- Downcounter.
+ * 						--- Prescaler = 999.
+ * 						--- ARR = 2097.
+ *
+ * @param[in]    myCLK:	Internal Clock.
+ *
+ * @param[out]   NaN.
+ *
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        2/January/2018
+ * @version     2/January/2018   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN
+ */
+void Conf_TIMERS  ( uint32_t myCLK )
+{
+	// Timer5 Peripheral clock enable
+	RCC->APB1ENR	|=	 RCC_APB1ENR_TIM5EN;
+
+	// Disable TIM5 and configure it
+	TIM5->SMCR	&=	~( TIM_SMCR_SMS_0 | TIM_SMCR_SMS_1 | TIM_SMCR_SMS_2 );	// Slave mode disabled - if CEN = ‘1 then the prescaler is clocked directly by the internal clock.
+	TIM5->CR1	&=	~( TIM_CR1_CEN | TIM_CR1_CMS_1 | TIM_CR1_CMS_0 );		// Counter disabled ( Timer DISABLED ), Edge-aligned mode. The counter counts up or down depending on the direction bit (DIR)
+
+	TIM5->CNT	 =	 0;														// Reset counter
+	TIM5->PSC	 =	 ( 1000 - 1 );											// Prescaler = 999
+	TIM5->ARR	 =	 myCLK / ( TIM5->PSC + 1 );								// Overflow every ~ 1s: f_Timer5: myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz
+
+	// Enable Interrupt
+	NVIC_SetPriority ( TIM5_IRQn, 1 ); 										// Set Priority to 1
+	NVIC_EnableIRQ   ( TIM5_IRQn );  										// Enable TIM5_IRQn interrupt in NVIC
+
+	// Finish configuring TIM5 ( it will be enabled in the main )
+	TIM5->CR1	|=	 ( TIM_CR1_ARPE | TIM_CR1_DIR | TIM_CR1_URS );			// Auto-reload preload enable
+																			// Counter used as downcounter
+																			// Only counter overflow/underflow generates an update interrupt or DMA request if enabled
 }

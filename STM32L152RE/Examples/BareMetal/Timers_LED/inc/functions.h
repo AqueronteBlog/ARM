@@ -5,8 +5,8 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        29/December/2017
- * @version     29/December/2017   The ORIGIN
+ * @date        2/January/2018
+ * @version     2/January/2018   The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */
@@ -24,6 +24,8 @@ extern "C" {
 void Conf_CLK  	   ( void );
 void Conf_GPIO 	   ( void );
 void Conf_SYSTICK  ( uint32_t myticks );
+void Conf_TIMERS   ( uint32_t myCLK );
+
 
 #ifdef __cplusplus
 }
