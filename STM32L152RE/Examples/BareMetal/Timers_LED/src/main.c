@@ -1,6 +1,8 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows how to work with the internal Timer ( TIM5 in this case )
+ * 				as a download counter. Every 1 second, the timer will generate an interrupt
+ * 				which changes the state of the LED1.
  *
  * 				The rest of the time, the microcontroller is in stop mode ( low power ).
  *
@@ -30,12 +32,16 @@ int main ( void )
 	Conf_CLK  	 ();
 
 	mySystemCoreClock	 =	 2097000U;			// SYSCLK = 2.097 MHz
+	myTimerClock		 =	 2097000U;			// CK_INT = 2.097 MHz
 	Conf_SYSTICK ( mySystemCoreClock/1000 );	// Milli seconds, SysTick will be disabled although
+	Conf_TIMERS	 ( myTimerClock );
 
+
+	TIM5->CR1	|=	 TIM_CR1_CEN;				// Enable TIM5 counter
 
 	HAL_PWR_DisableSleepOnExit ();
 	while ( 1 )
 	{
-		HAL_PWR_EnterSTOPMode( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+		HAL_PWR_EnterSLEEPMode( PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI );
 	}
 }
