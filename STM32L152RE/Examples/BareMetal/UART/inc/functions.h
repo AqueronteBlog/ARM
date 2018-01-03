@@ -11,6 +11,7 @@
  * @warning     NaN
  */
 #include "stm32l1xx.h"
+#include "variables.h"
 
 
 #ifndef FUNCTIONS_H_
@@ -25,6 +26,7 @@ void Conf_CLK  	   ( void );
 void Conf_GPIO 	   ( void );
 void Conf_SYSTICK  ( uint32_t myticks );
 void Conf_TIMERS   ( uint32_t myCLK );
+void Conf_UART	   ( uint32_t myCK, uint32_t myBaudRate );
 
 
 #ifdef __cplusplus
