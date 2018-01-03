@@ -26,20 +26,22 @@
 
 int main ( void )
 {
+	mySystemCoreClock	 =	 16000000U;			// SYSCLK = 16 MHz
+	myTimerClock		 =	 16000000U;			// CK_INT = 16 MHz
+	myUARTClock	 		 =	 16000000U;			// f_CK = 16 MHz
+
 	Conf_GPIO 	 ();
 	Conf_CLK  	 ();
-
-	mySystemCoreClock	 =	 2097000U;			// SYSCLK = 2.097 MHz
-	myTimerClock		 =	 2097000U;			// CK_INT = 2.097 MHz
 	Conf_SYSTICK ( mySystemCoreClock/1000 );	// Milli seconds, SysTick will be disabled although
 	Conf_TIMERS	 ( myTimerClock );
+	Conf_UART 	 ( myUARTClock, 115200 );		// 115200 Baud Rate
 
 
 	TIM5->CR1	|=	 TIM_CR1_CEN;				// Enable TIM5 counter
 
-	HAL_PWR_DisableSleepOnExit ();
+	//HAL_PWR_DisableSleepOnExit ();
 	while ( 1 )
 	{
-		HAL_PWR_EnterSLEEPMode( PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI );
+		//HAL_PWR_EnterSLEEPMode( PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI );
 	}
 }
