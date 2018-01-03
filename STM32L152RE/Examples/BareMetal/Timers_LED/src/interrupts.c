@@ -13,27 +13,25 @@
 #include "interrupts.h"
 
 /**
- * @brief       void EXTI15_10_IRQHandler ()
- * @details     If EXTI13 happens, change the status of
+ * @brief       void TIM5_IRQHandler ()
+ * @details     If TIM5 happens, change the status of
  * 				the LED1 then.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        30/December/2017
- * @version     30/December/2017   The ORIGIN
+ * @date        3/January/2018
+ * @version     3/January/2018   The ORIGIN
  * @pre         NaN.
  * @warning     NaN
  */
-void EXTI15_10_IRQHandler(void)
+void TIM5_IRQHandler(void)
 {
-	NUCLEOL152_button_pinout_t myUserButton = BUTTON_1;
 	NUCLEOL152_led_pinout_t    myLED1		= LED_1;
 
 
-	// EXTI13
-    if( ( EXTI->IMR & ( 1 << myUserButton ) ) && ( EXTI->PR & ( 1 << myUserButton ) ) )
+    if ( ( TIM5->SR & TIM_SR_UIF ) == TIM_SR_UIF )
     {
     	// Check last status of the LED1
     	if ( ( GPIOA->ODR & ( 1 << myLED1 ) ) == ( 1 << myLED1 ) )
@@ -41,6 +39,6 @@ void EXTI15_10_IRQHandler(void)
     	else
     		GPIOA->BSRR	=	( 1 << myLED1 );							// Turn it ON
 
-    	EXTI->PR	|=	 EXTI_PR_PR13 ;
+    	TIM5->SR	&=	~TIM_SR_UIF;									// Clear flag
     }
 }
