@@ -78,11 +78,9 @@ void Conf_SYSTICK  ( uint32_t myticks )
 
 /**
  * @brief       void Conf_GPIO  ( void )
- * @details     It configures GPIO to work with the LEDs and
- * 				User Button.
+ * @details     It configures GPIO to work with the LEDs.
  *
  * 				- LED1:			PA_5
- * 				- User Button:  PC_13 ( Interrupt ENABLED )
  *
  *
  *
@@ -98,11 +96,7 @@ void Conf_SYSTICK  ( uint32_t myticks )
 void Conf_GPIO  ( void )
 {
 	// GPIOA & GPIOC Peripheral clock enable
-	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN );
-
-	// SYSCFG Peripheral clock enable
-	RCC->APB2ENR	|=	 RCC_APB2RSTR_SYSCFGRST;
-
+	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN );
 
 
     // Configure LED1
@@ -110,19 +104,6 @@ void Conf_GPIO  ( void )
     GPIOA->OTYPER	&=	~GPIO_OTYPER_OT_5; 				// Output push-pull
     GPIOA->OSPEEDR	&=	~GPIO_OSPEEDER_OSPEEDR5_Msk;	// Low speed
     GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5_Msk;			// No pull-up, pull-down
-
-    // Configure User Button
-    GPIOC->MODER	&=	~( GPIO_MODER_MODER13_1 | GPIO_MODER_MODER13_0 );	// Input mode
-    GPIOC->PUPDR	&=	~( GPIO_PUPDR_PUPDR13_1 | GPIO_PUPDR_PUPDR13_0 );	// Floating input
-
-    // User Button generates an interrupt
-    SYSCFG->EXTICR[3]	|=	 SYSCFG_EXTICR4_EXTI13_PC;						// Map EXTI13 ( PC_13 ) Line to NVIC
-    EXTI->IMR			|=	 EXTI_IMR_MR13;
-    EXTI->RTSR			&=	~EXTI_RTSR_TR13;								// Rising edge trigger disabled
-    EXTI->FTSR			|=	 EXTI_FTSR_TR13;								// Falling edge trigger enabled
-
-    NVIC_SetPriority ( EXTI15_10_IRQn, 1 ); 								// Set Priority to 1
-    NVIC_EnableIRQ   ( EXTI15_10_IRQn );  									// Enable EXTI15_10_IRQn interrupt in NVIC
 }
 
 
@@ -132,9 +113,10 @@ void Conf_GPIO  ( void )
  *
  * 				-TIM5:
  * 					-- f_TIM5 = myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz
- * 					-- Overflow: Every 1 second ( 2097 / f_TIM5 ) = ( 2097 / 2097 ) = 1
+ * 					-- Interrupt ENABLED.
+ * 					-- Overflow: Every 1 second ( ARR / f_TIM5 ) = ( 2097 / 2097 ) = 1
  * 						--- Downcounter.
- * 						--- Prescaler = 999.
+ * 						--- Prescaler = 1000 - 1 = 999.
  * 						--- ARR = 2097.
  *
  * @param[in]    myCLK:	Internal Clock.
@@ -162,13 +144,14 @@ void Conf_TIMERS  ( uint32_t myCLK )
 
 	TIM5->CNT	 =	 0;														// Reset counter
 	TIM5->PSC	 =	 ( 1000 - 1 );											// Prescaler = 999
-	TIM5->ARR	 =	 myCLK / ( TIM5->PSC + 1 );								// Overflow every ~ 1s: f_Timer5: myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz
+	TIM5->ARR	 =	 ( myCLK / ( TIM5->PSC + 1 ) ); 					    // Overflow every ~ 1s: f_Timer5: myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz
 
 	// Enable Interrupt
 	NVIC_SetPriority ( TIM5_IRQn, 1 ); 										// Set Priority to 1
 	NVIC_EnableIRQ   ( TIM5_IRQn );  										// Enable TIM5_IRQn interrupt in NVIC
 
 	// Finish configuring TIM5 ( it will be enabled in the main )
+	TIM5->DIER	|=	 TIM_DIER_UIE;											// Update interrupt enabled
 	TIM5->CR1	|=	 ( TIM_CR1_ARPE | TIM_CR1_DIR | TIM_CR1_URS );			// Auto-reload preload enable
 																			// Counter used as downcounter
 																			// Only counter overflow/underflow generates an update interrupt or DMA request if enabled
