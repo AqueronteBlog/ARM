@@ -257,4 +257,14 @@ void Conf_UART  ( uint32_t myCK, uint32_t myBaudRate )
 
 	// BaudRate: Update Fraction
 	UART5->BRR	|=	 ( ( ( uint32_t )( myCalculatedData ) << USART_BRR_DIV_FRACTION_Pos ) & USART_BRR_DIV_FRACTION_Msk );
+
+
+	// Enable Interrupt
+	NVIC_SetPriority ( UART5_IRQn, 1 ); 									// Set Priority to 1
+	NVIC_EnableIRQ   ( UART5_IRQn );  										// Enable UART5_IRQn interrupt in NVIC
+
+
+	// Activate interrupts, and UART
+	UART5->CR1	|=	 ( USART_CR1_UE | USART_CR1_TCIE | USART_CR1_RXNEIE |	// USART enabled, Transmission complete interrupt enabled, RXNE interrupt enable
+					   USART_CR1_TE | USART_CR1_RE );						// Transmitter enabled, Receiver enabled
 }
