@@ -37,7 +37,7 @@ int main ( void )
 	Conf_UART 	 ( myUARTClock, 115200 );		// 115200 Baud Rate
 
 
-	TIM5->CR1	|=	 TIM_CR1_CEN;				// Enable TIM5 counter
+	//TIM5->CR1	|=	 TIM_CR1_CEN;				// Enable TIM5 counter
 
 	//HAL_PWR_DisableSleepOnExit ();
 	while ( 1 )
