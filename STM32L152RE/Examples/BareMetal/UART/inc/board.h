@@ -36,6 +36,16 @@ typedef enum
 	BUTTON_1      =   13             /*!<  NUCLEO-L152RE USER BUTTON: 	PC_13	*/
 } NUCLEOL152_button_pinout_t;
 
+
+/**
+      * @brief   NUCLEO-L152RE UARTs PINOUT
+      */
+typedef enum
+{
+	UART5_RX      =   2,             /*!<  NUCLEO-L152RE BASIC UART5 RX: 	PD_2	*/
+	UART5_TX      =   12             /*!<  NUCLEO-L152RE BASIC UART5 TX: 	PC_12	*/
+} NUCLEOL152_uart_pinout_t;
+
 #ifdef __cplusplus
 }
 #endif
