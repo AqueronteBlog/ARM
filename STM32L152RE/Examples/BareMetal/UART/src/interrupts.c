@@ -42,3 +42,38 @@ void TIM5_IRQHandler(void)
     	TIM5->SR	&=	~TIM_SR_UIF;									// Clear flag
     }
 }
+
+
+/**
+ * @brief       void UART5_IRQHandler ()
+ * @details     UART5 subroutine.
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        4/January/2018
+ * @version     4/January/2018   The ORIGIN
+ * @pre         NaN.
+ * @warning     NaN
+ */
+void UART5_IRQHandler(void)
+{
+	NUCLEOL152_led_pinout_t    myLED1		= LED_1;
+
+	// RX: RECEIVE
+    if ( ( UART5->SR & USART_SR_RXNE ) == USART_SR_RXNE )
+    {
+    	// Change the state of the LED1 only if received data is 0x01
+    	if ( ( UART5->DR & 0x00FF ) == 0x01 )
+    	{
+    		// Check last status of the LED1
+    		if ( ( GPIOA->ODR & ( 1 << myLED1 ) ) == ( 1 << myLED1 ) )
+    			GPIOA->BRR	=	( 1 << myLED1 );						// Turn it OFF
+    		else
+    			GPIOA->BSRR	=	( 1 << myLED1 );						// Turn it ON
+    	}
+
+    	UART5->SR	&=	~USART_SR_RXNE;									// Clear flag
+    }
+}

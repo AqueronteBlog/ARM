@@ -22,7 +22,9 @@ extern "C" {
 #endif
 
 // PROTOTYPES
-void TIM5_IRQHandler (void);
+void TIM5_IRQHandler  (void);
+void UART5_IRQHandler (void);
+
 
 // VARIABLES
 
