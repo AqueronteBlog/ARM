@@ -104,6 +104,9 @@ void Conf_SYSTICK  ( uint32_t myticks )
  *
  * 				- LED1:		PA_5
  * 				- MCO:  	PA_8
+ * 				- UART5:
+ * 					-- TX:	PC_12
+ * 					-- RX:	PD_2
  *
  *
  *
@@ -111,27 +114,47 @@ void Conf_SYSTICK  ( uint32_t myticks )
  *
  * @author      Manuel Caballero
  * @date        3/January/2018
- * @version		3/January/2018   The ORIGIN
+ * @version		4/January/2018   UART5 pinout added
+ * 				3/January/2018   The ORIGIN
  * @pre         NaN
  * @warning     NaN
  */
 void Conf_GPIO  ( void )
 {
-	// GPIOA Peripheral clock enable
-	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN );
+	// GPIOA, GPIOC and GPIOD Peripheral clock enable
+	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIODEN );
 
 
     // Configure LED1
-    GPIOA->MODER	|=	 GPIO_MODER_MODER5_0;			// General purpose output mode
-    GPIOA->OTYPER	&=	~GPIO_OTYPER_OT_5; 				// Output push-pull
-    GPIOA->OSPEEDR	&=	~GPIO_OSPEEDER_OSPEEDR5_Msk;	// Low speed
-    GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5_Msk;			// No pull-up, pull-down
+    GPIOA->MODER	|=	 GPIO_MODER_MODER5_0;					// General purpose output mode
+    GPIOA->OTYPER	&=	~GPIO_OTYPER_OT_5; 						// Output push-pull
+    GPIOA->OSPEEDR	&=	~GPIO_OSPEEDER_OSPEEDR5_Msk;			// Low speed
+    GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5_Msk;					// No pull-up, pull-down
 
     // Configure MCO
-    GPIOA->MODER	|=	 GPIO_MODER_MODER8_1;			// Alternate function mode
-    GPIOA->OTYPER	&=	~GPIO_OTYPER_OT_8;				// Output push-pull
-    GPIOA->OSPEEDR	|=	 GPIO_OSPEEDER_OSPEEDR8_0;		// Medium speed
-    GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5_Msk;			// No pull-up, pull-down
+    GPIOA->MODER	|=	 GPIO_MODER_MODER8_1;					// Alternate function mode
+    GPIOA->OTYPER	&=	~GPIO_OTYPER_OT_8;						// Output push-pull
+    GPIOA->OSPEEDR	|=	 GPIO_OSPEEDER_OSPEEDR8_0;				// Medium speed
+    GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR8_Msk;					// No pull-up, pull-down
+    GPIOA->AFR[1]	&=	~GPIO_AFRH_AFSEL8;						// Mask Alternate function AFIO0 on PA8
+    GPIOA->AFR[1]	 =	 ( 0b0000 << GPIO_AFRH_AFSEL8_Pos );	// MCO: AF0 on PA8
+
+    // Configure UART5 pinout
+    // TX pin
+    GPIOC->MODER	|=	 GPIO_MODER_MODER12_1;					// Alternate function mode
+    GPIOC->OTYPER	&=	~GPIO_OTYPER_OT_12;						// Output push-pull
+    GPIOC->OSPEEDR	|=	 GPIO_OSPEEDER_OSPEEDR12_0;				// Medium speed
+    GPIOC->PUPDR	&=	~GPIO_PUPDR_PUPDR12_Msk;				// No pull-up, pull-down
+    GPIOC->AFR[1]	&=	~GPIO_AFRH_AFSEL12;						// Mask Alternate function AFIO8 on PC_12
+    GPIOC->AFR[1]	 =	 ( 0b1000 << GPIO_AFRH_AFSEL12_Pos );	// UART5_TX: AF8 on PC_12
+
+    // RX pin
+    GPIOD->MODER	|=	 GPIO_MODER_MODER2_1;					// Alternate function mode
+    GPIOD->OTYPER	&=	~GPIO_OTYPER_OT_2;						// Output push-pull
+    GPIOD->OSPEEDR	|=	 GPIO_OSPEEDER_OSPEEDR2_0;				// Medium speed
+    GPIOD->PUPDR	&=	~GPIO_PUPDR_PUPDR2_Msk;					// No pull-up, pull-down
+    GPIOD->AFR[0]	&=	~GPIO_AFRL_AFSEL2;						// Mask Alternate function AFIO8 on PD_2
+    GPIOD->AFR[0]	 =	 ( 0b1000 << GPIO_AFRL_AFSEL2_Pos );	// UART5_RX: AF8 on PD_2
 }
 
 
@@ -200,6 +223,8 @@ void Conf_TIMERS  ( uint32_t myCLK )
  * 							---- DIV_Fraction = 16·0.6806 = 10.8896 ~ 11
  * 								----- USART_BRR = DIV_Mantissa, DIV_Fraction = 0x08B
  *
+ * 				- Tx/Rx Interrupts ENABLED
+ *
  * @param[in]    myCK: 			UART Clock ( f_CK ).
  * @param[in]    myBaudRate: 	UART baud rate.
  *
@@ -211,7 +236,8 @@ void Conf_TIMERS  ( uint32_t myCLK )
  *
  * @author      Manuel Caballero
  * @date        3/January/2018
- * @version     3/January/2018   The ORIGIN
+ * @version     4/January/2018   Interrupts enabled
+ * 				3/January/2018   The ORIGIN
  * @pre         OVER8 is calculated automatically.
  * @warning     NaN
  */
@@ -265,6 +291,7 @@ void Conf_UART  ( uint32_t myCK, uint32_t myBaudRate )
 
 
 	// Activate interrupts, and UART
+	UART5->SR	&=	~( USART_SR_TXE | USART_SR_TC | USART_SR_RXNE );		// Clear flags
 	UART5->CR1	|=	 ( USART_CR1_UE | USART_CR1_TCIE | USART_CR1_RXNEIE |	// USART enabled, Transmission complete interrupt enabled, RXNE interrupt enable
 					   USART_CR1_TE | USART_CR1_RE );						// Transmitter enabled, Receiver enabled
 }
