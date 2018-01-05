@@ -1,8 +1,10 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows how to work with the next internal peripheral: UART5. Every
+ * 				time a '1' is received ( UART5_RX ), it sends the state of the port A ( GPIOA ) through
+ * 				the UART ( UART5_TX )
  *
- * 				The rest of the time, the microcontroller is in stop mode ( low power ).
+ * 				The rest of the time, the microcontroller is in sleep mode ( low power ).
  *
  *
  * @return      NA
@@ -27,21 +29,17 @@
 int main ( void )
 {
 	mySystemCoreClock	 =	 16000000U;			// SYSCLK = 16 MHz
-	myTimerClock		 =	 16000000U;			// CK_INT = 16 MHz
 	myUARTClock	 		 =	 16000000U;			// f_CK = 16 MHz
 
 	Conf_GPIO 	 ();
 	Conf_CLK  	 ();
 	Conf_SYSTICK ( mySystemCoreClock/1000 );	// Milli seconds, SysTick will be disabled although
-	Conf_TIMERS	 ( myTimerClock );
 	Conf_UART 	 ( myUARTClock, 115200 );		// 115200 Baud Rate
 
 
-	//TIM5->CR1	|=	 TIM_CR1_CEN;				// Enable TIM5 counter
-
-	//HAL_PWR_DisableSleepOnExit ();
+	HAL_PWR_DisableSleepOnExit ();
 	while ( 1 )
 	{
-		//HAL_PWR_EnterSLEEPMode( PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI );
+		HAL_PWR_EnterSLEEPMode( PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI );
 	}
 }
