@@ -22,11 +22,11 @@ extern "C" {
 #endif
 
 // PROTOTYPES
-void TIM5_IRQHandler  (void);
 void UART5_IRQHandler (void);
 
 
 // VARIABLES
+NUCLEOL152_led_pinout_t myLED1;
 
 
 #ifdef __cplusplus
