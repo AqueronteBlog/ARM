@@ -159,58 +159,6 @@ void Conf_GPIO  ( void )
 
 
 /**
- * @brief       void Conf_TIMERS  ( uint32_t )
- * @details     It configures the Timers.
- *
- * 				-TIM5:
- * 					-- f_TIM5 = myCLK / ( PSC + 1 ) = 16MHz / ( 999 + 1 ) = 16 kHz
- * 					-- Interrupt ENABLED.
- * 					-- Overflow: Every 1 second ( ARR / f_TIM5 ) = ( 16000 / 16000 ) = 1
- * 						--- Downcounter.
- * 						--- Prescaler = 1000 - 1 = 999.
- * 						--- ARR = 16000.
- *
- * @param[in]    myCLK:	Internal Clock.
- *
- * @param[out]   NaN.
- *
- *
- *
- * @return      NA
- *
- * @author      Manuel Caballero
- * @date        3/January/2018
- * @version     3/January/2018   The ORIGIN
- * @pre         NaN
- * @warning     NaN
- */
-void Conf_TIMERS  ( uint32_t myCLK )
-{
-	// Timer5 Peripheral clock enable
-	RCC->APB1ENR	|=	 RCC_APB1ENR_TIM5EN;
-
-	// Disable TIM5 and configure it
-	TIM5->SMCR	&=	~( TIM_SMCR_SMS_0 | TIM_SMCR_SMS_1 | TIM_SMCR_SMS_2 );	// Slave mode disabled - if CEN = ‘1 then the prescaler is clocked directly by the internal clock.
-	TIM5->CR1	&=	~( TIM_CR1_CEN | TIM_CR1_CMS_1 | TIM_CR1_CMS_0 );		// Counter disabled ( Timer DISABLED ), Edge-aligned mode. The counter counts up or down depending on the direction bit (DIR)
-
-	TIM5->CNT	 =	 0;														// Reset counter
-	TIM5->PSC	 =	 ( 1000 - 1 );											// Prescaler = 999
-	TIM5->ARR	 =	 ( myCLK / ( TIM5->PSC + 1 ) ); 					    // Overflow every ~ 1s: f_Timer5: myCLK / ( PSC + 1 ) = 16MHz / ( 999 + 1 ) = 16 kHz
-
-	// Enable Interrupt
-	NVIC_SetPriority ( TIM5_IRQn, 1 ); 										// Set Priority to 1
-	NVIC_EnableIRQ   ( TIM5_IRQn );  										// Enable TIM5_IRQn interrupt in NVIC
-
-	// Finish configuring TIM5 ( it will be enabled in the main )
-	TIM5->DIER	|=	 TIM_DIER_UIE;											// Update interrupt enabled
-	TIM5->CR1	|=	 ( TIM_CR1_ARPE | TIM_CR1_DIR | TIM_CR1_URS );			// Auto-reload preload enable
-																			// Counter used as downcounter
-																			// Only counter overflow/underflow generates an update interrupt or DMA request if enabled
-}
-
-
-
-/**
  * @brief       void Conf_UART  ( uint32_t myCK, uint32_t myBaudRate )
  * @details     It configures the UARTs.
  *
@@ -292,6 +240,12 @@ void Conf_UART  ( uint32_t myCK, uint32_t myBaudRate )
 
 	// Activate interrupts, and UART
 	UART5->SR	&=	~( USART_SR_TXE | USART_SR_TC | USART_SR_RXNE );		// Clear flags
-	UART5->CR1	|=	 ( USART_CR1_UE | USART_CR1_TCIE | USART_CR1_RXNEIE |	// USART enabled, Transmission complete interrupt enabled, RXNE interrupt enable
-					   USART_CR1_TE | USART_CR1_RE );						// Transmitter enabled, Receiver enabled
+	UART5->CR1	|=	 ( USART_CR1_UE | USART_CR1_RE | USART_CR1_TCIE | 		// USART enabled, Receiver enabled, Transmission complete interrupt enabled
+					   USART_CR1_RXNEIE );									// RXNE interrupt enable
+
+	while ( ( UART5->SR & USART_SR_TC ) != USART_SR_TC );					// Wait until Idle frame is sent
+																			// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
+	UART5->SR	&=	~( USART_SR_TC | USART_SR_RXNE );						// Clear flags
+
+	UART5->CR1	|=	 ( USART_CR1_TCIE | USART_CR1_RXNEIE );					// Transmission complete interrupt enabled, RXNE interrupt enable
 }

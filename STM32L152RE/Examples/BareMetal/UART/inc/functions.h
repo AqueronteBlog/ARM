@@ -25,7 +25,6 @@ extern "C" {
 void Conf_CLK  	   ( void );
 void Conf_GPIO 	   ( void );
 void Conf_SYSTICK  ( uint32_t myticks );
-void Conf_TIMERS   ( uint32_t myCLK );
 void Conf_UART	   ( uint32_t myCK, uint32_t myBaudRate );
 
 
