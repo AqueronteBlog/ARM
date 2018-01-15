@@ -13,7 +13,7 @@
  * @warning     This file is ONLY for STM32L152RE device.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
-
+#include "stm32l1xx.h"
 #include "stm32l152xe.h"
 
 
