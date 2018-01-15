@@ -1,30 +1,31 @@
 /**
  * @brief       i2c.h
- * @details     NRF51 I2C function libraries.
+ * @details     STM32L152RE I2C function libraries.
  *              Header file.
  *
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        6/July/2017
- * @version     6/July/2017    The ORIGIN
+ * @date        5/January/2018
+ * @version     5/January/2018    The ORIGIN
  * @pre         NaN
- * @warning     This file is ONLY for NRF51 device.
+ * @warning     This file is ONLY for STM32L152RE device.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "nrf.h"
-#include "nrf51_bitfields.h"
+#include "stm32l152xe.h"
 
 
 /**
   * @brief   INTERNAL CONSTANTS
   */
-#define I2C_STOP_BIT     0x00
-#define I2C_NO_STOP_BIT  0x01
-
-#define I2C_TIMEOUT      232323
+typedef enum
+{
+	I2C_STOP_BIT  	 =   0x00,
+	I2C_NO_STOP_BIT  =   0x01,
+	I2C_TIMEOUT		 =	 232323
+} i2c_internal_constants_t;
 
 
 /**
@@ -42,8 +43,8 @@ typedef enum
   */
 typedef struct{
     // Port for pins: SDA and SCL
-    NRF_GPIO_Type* SDAport;
-    NRF_GPIO_Type* SCLport;
+	GPIO_TypeDef* SDAport;
+	GPIO_TypeDef* SCLport;
 
     // Pin number
     uint32_t SDA;
@@ -57,7 +58,7 @@ typedef struct{
 
 
     // I2C/TWI instance
-    NRF_TWI_Type* TWIinstance;
+    I2C_TypeDef* I2Cinstance;
 } I2C_parameters_t;
 
 
