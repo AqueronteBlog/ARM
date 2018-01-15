@@ -25,4 +25,11 @@
 		<nature>fr.ac6.mcu.ide.core.MCUProjectNature</nature>
 		<nature>fr.ac6.mcu.ide.core.MCUSingleCoreProjectNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>I2C</name>
+			<type>2</type>
+			<location>E:/vsProjects/ARM/STM32L152RE/Examples/BareMetal_Basics/I2C</location>
+		</link>
+	</linkedResources>
 </projectDescription>

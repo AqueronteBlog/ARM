@@ -21,11 +21,13 @@
 #include "variables.h"
 #include "functions.h"
 #include "interrupts.h"
-
+#include "i2c.h"
 
 
 int main ( void )
 {
+	I2C_parameters_t myI2Cparameters;
+
 	mySystemCoreClock	 =	 16000000U;			// SYSCLK = 16 MHz
 	myUARTClock	 		 =	 16000000U;			// f_CK = 16 MHz
 
