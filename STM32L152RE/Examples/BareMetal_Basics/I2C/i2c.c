@@ -36,12 +36,24 @@
  */
 i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
 {
-	myI2Cparameters.SDAport->MODER	|=	 ( 0b10 << ( myI2Cparameters.SDA << 2 ) );					// Alternate function mode
+	uint32_t myRightPinAllocation	 =	 0;
+	uint32_t myRightAFRRegister		 =	 0;
 
-//	GPIOC->MODER	|=	 GPIO_MODER_MODER12_1;					// Alternate function mode
+
+	myI2Cparameters.SDAport->MODER		|=	 ( 0b10 << ( myI2Cparameters.SDA << 1 ) );				// Alternate function mode
+	myI2Cparameters.SDAport->OSPEEDR	|=	 ( 0b01 << ( myI2Cparameters.SDA << 1 ) );				// Medium speed
+	myI2Cparameters.SDAport->PUPDR	    &=	~( 0b11 << ( myI2Cparameters.SDA << 1 ) );				// No pull-up/pull-down
+
+	if ( myI2Cparameters.SDA > 7 )
+	{
+		myRightPinAllocation	 =	 8;
+		myRightAFRRegister		 =	 1;
+	}
+
+	myI2Cparameters.SDAport->AFR[myRightAFRRegister]	 =	 ( 0b0100 << ( ( myI2Cparameters.SDA - myRightPinAllocation ) << 2 ) );	// I2Cx_SDA: AF4
+
+
 //	GPIOC->OTYPER	&=	~GPIO_OTYPER_OT_12;						// Output push-pull
-//	GPIOC->OSPEEDR	|=	 GPIO_OSPEEDER_OSPEEDR12_0;				// Medium speed
-//	GPIOC->PUPDR	&=	~GPIO_PUPDR_PUPDR12_Msk;				// No pull-up, pull-down
 //	GPIOC->AFR[1]	&=	~GPIO_AFRH_AFSEL12;						// Mask Alternate function AFIO8 on PC_12
 //	GPIOC->AFR[1]	 =	 ( 0b1000 << GPIO_AFRH_AFSEL12_Pos );	// UART5_TX: AF8 on PC_12
 
