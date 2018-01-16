@@ -40,9 +40,25 @@ i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
 	uint32_t myRightAFRRegister		 =	 0;
 
 
-	myI2Cparameters.SDAport->MODER		|=	 ( 0b10 << ( myI2Cparameters.SDA << 1 ) );				// Alternate function mode
-	myI2Cparameters.SDAport->OSPEEDR	|=	 ( 0b01 << ( myI2Cparameters.SDA << 1 ) );				// Medium speed
-	myI2Cparameters.SDAport->PUPDR	    &=	~( 0b11 << ( myI2Cparameters.SDA << 1 ) );				// No pull-up/pull-down
+	/* Reset and Stop I2Cx */
+	// Enable the appropriate I2Cx Clock
+	if ( myI2Cparameters.I2Cinstance == I2C1 )
+		RCC->APB1ENR 					|= 	 RCC_APB1ENR_I2C1EN; 							// I2C1 Enabled
+	else
+		RCC->APB1ENR 					|= 	 RCC_APB1ENR_I2C2EN; 							// I2C2 Enabled
+
+	myI2Cparameters.I2Cinstance->CR1	|=	 I2C_CR1_SWRST;									// I2C is under reset state
+	myI2Cparameters.I2Cinstance->CR1	&=	~I2C_CR1_PE;									// I2C is disabled
+
+
+	/* Configure the pins */
+	// Enable the GPIO Clock
+	RCC->AHBENR 						|= 	 RCC_AHBENR_GPIOBEN;
+
+	// Set up the SDA pin
+	myI2Cparameters.SDAport->MODER		|=	 ( 0b10 << ( myI2Cparameters.SDA << 1 ) );		// Alternate function mode
+	myI2Cparameters.SDAport->OSPEEDR	|=	 ( 0b01 << ( myI2Cparameters.SDA << 1 ) );		// Medium speed
+	myI2Cparameters.SDAport->PUPDR	    &=	~( 0b11 << ( myI2Cparameters.SDA << 1 ) );		// No pull-up/pull-down
 
 	if ( myI2Cparameters.SDA > 7 )
 	{
@@ -52,68 +68,33 @@ i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
 
 	myI2Cparameters.SDAport->AFR[myRightAFRRegister]	 =	 ( 0b0100 << ( ( myI2Cparameters.SDA - myRightPinAllocation ) << 2 ) );	// I2Cx_SDA: AF4
 
+	// Set up the SCL pin
+	myI2Cparameters.SCLport->MODER		|=	 ( 0b10 << ( myI2Cparameters.SCL << 1 ) );		// Alternate function mode
+	myI2Cparameters.SCLport->OSPEEDR	|=	 ( 0b01 << ( myI2Cparameters.SCL << 1 ) );		// Medium speed
+	myI2Cparameters.SCLport->PUPDR	    &=	~( 0b11 << ( myI2Cparameters.SCL << 1 ) );		// No pull-up/pull-down
 
-//	GPIOC->OTYPER	&=	~GPIO_OTYPER_OT_12;						// Output push-pull
-//	GPIOC->AFR[1]	&=	~GPIO_AFRH_AFSEL12;						// Mask Alternate function AFIO8 on PC_12
-//	GPIOC->AFR[1]	 =	 ( 0b1000 << GPIO_AFRH_AFSEL12_Pos );	// UART5_TX: AF8 on PC_12
+	if ( myI2Cparameters.SCL > 7 )
+	{
+		myRightPinAllocation	 =	 8;
+		myRightAFRRegister		 =	 1;
+	}
+
+	myI2Cparameters.SCLport->AFR[myRightAFRRegister]	 =	 ( 0b0100 << ( ( myI2Cparameters.SCL - myRightPinAllocation ) << 2 ) );	// I2Cx_SCL: AF4
 
 
-    /* TWI0 pins. GPIO according to Table 258: GPIO configuration ( Reference Manual p.145 ) */
-//    myI2Cparameters.SCLport->PIN_CNF[myI2Cparameters.SCL]     =     GPIO_PIN_CNF_DIR_Input          <<  GPIO_PIN_CNF_DIR_Pos    |
-//                                                                    GPIO_PIN_CNF_INPUT_Connect      <<  GPIO_PIN_CNF_INPUT_Pos  |
-//                                                                    GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   |
-//                                                                    GPIO_PIN_CNF_DRIVE_S0D1         <<  GPIO_PIN_CNF_DRIVE_Pos  |
-//                                                                    GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos;
-//
-//    myI2Cparameters.SDAport->PIN_CNF[myI2Cparameters.SDA]     =     GPIO_PIN_CNF_DIR_Input          <<  GPIO_PIN_CNF_DIR_Pos    |
-//                                                                    GPIO_PIN_CNF_INPUT_Connect      <<  GPIO_PIN_CNF_INPUT_Pos  |
-//                                                                    GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   |
-//                                                                    GPIO_PIN_CNF_DRIVE_S0D1         <<  GPIO_PIN_CNF_DRIVE_Pos  |
-//                                                                    GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos;
-//
-//
-//
-//
-//    /* Stop TWIx */
-//    myI2Cparameters.TWIinstance->TASKS_STOP     =   1;
-//    myI2Cparameters.TWIinstance->ENABLE         =   ( TWI_ENABLE_ENABLE_Disabled  <<  TWI_ENABLE_ENABLE_Pos );
-//
-//
-//    /* Configure the pins */
-//    myI2Cparameters.TWIinstance->PSELSCL        =   myI2Cparameters.SCL;
-//    myI2Cparameters.TWIinstance->PSELSDA        =   myI2Cparameters.SDA;
-//
-//
-//    /* Configure the frequency */
+
+    /* Configure the frequency */
 //    myI2Cparameters.TWIinstance->FREQUENCY      =   ( myI2Cparameters.Freq << TWI_FREQUENCY_FREQUENCY_Pos );
 //
 //
-//    /* Disable Interrupts, clear events and all the errors */
-//    myI2Cparameters.TWIinstance->INTENCLR       =    ( TWI_INTENCLR_STOPPED_Clear  << TWI_INTENCLR_STOPPED_Pos  ) |
-//                                                     ( TWI_INTENCLR_RXDREADY_Clear << TWI_INTENCLR_RXDREADY_Pos ) |
-//                                                     ( TWI_INTENCLR_TXDSENT_Clear  << TWI_INTENCLR_TXDSENT_Pos  ) |
-//                                                     ( TWI_INTENCLR_ERROR_Clear    << TWI_INTENCLR_ERROR_Pos    ) |
-//                                                     ( TWI_INTENCLR_BB_Clear       << TWI_INTENCLR_BB_Pos       );
-//
-//    myI2Cparameters.TWIinstance->EVENTS_STOPPED    =   0;
-//    myI2Cparameters.TWIinstance->EVENTS_RXDREADY   =   0;
-//    myI2Cparameters.TWIinstance->EVENTS_TXDSENT    =   0;
-//    myI2Cparameters.TWIinstance->EVENTS_ERROR      =   0;
-//    myI2Cparameters.TWIinstance->EVENTS_BB         =   0;
-//
-//    myI2Cparameters.TWIinstance->ERRORSRC       =    ( TWI_ERRORSRC_OVERRUN_Clear << TWI_ERRORSRC_OVERRUN_Pos ) |
-//                                                     ( TWI_ERRORSRC_ANACK_Clear   << TWI_ERRORSRC_ANACK_Pos   ) |
-//                                                     ( TWI_ERRORSRC_DNACK_Clear   << TWI_ERRORSRC_DNACK_Pos   );
-//
-//    /* Configure shorts */
-//    /*
-//    NRF_TWI0->SHORTS         =   ( TWI_SHORTS_BB_SUSPEND_Enabled << TWI_SHORTS_BB_SUSPEND_Pos ) |
-//                                 ( TWI_SHORTS_BB_STOP_Enabled    << TWI_SHORTS_BB_STOP_Pos    );
-//    */
-//
-//    /* Enable TWI0 */
-//    myI2Cparameters.TWIinstance->ENABLE         =   ( TWI_ENABLE_ENABLE_Enabled  <<  TWI_ENABLE_ENABLE_Pos );
+    /* Disable ALL Interrupts and DMA request */
+	myI2Cparameters.I2Cinstance->CR2	&=	~( I2C_CR2_DMAEN | I2C_CR2_ITBUFEN | I2C_CR2_ITEVTEN | I2C_CR2_ITERREN );
 
+
+
+    /* Enable I2Cx */
+	myI2Cparameters.I2Cinstance->CR1	&=	~( I2C_CR1_SWRST | I2C_CR1_SMBUS );				// I2C is NOT under reset state, I2C mode
+	myI2Cparameters.I2Cinstance->CR1	|=	 I2C_CR1_PE;									// I2C is enabled
 
 
 
