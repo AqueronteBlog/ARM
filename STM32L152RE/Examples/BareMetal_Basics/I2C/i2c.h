@@ -28,14 +28,18 @@ typedef enum
 } i2c_internal_constants_t;
 
 
-/**
-  * @brief   INTERNAL CONSTANTS
-  */
 typedef enum
 {
     I2C_SUCCESS  =   0x00,
     I2C_FAILURE  =   0x01
 } i2c_status_t;
+
+
+typedef enum
+{
+    I2C_WRITE  =   0x01,
+    I2C_READ   =   0x00
+} i2c_write_read_t;
 
 
 /**
