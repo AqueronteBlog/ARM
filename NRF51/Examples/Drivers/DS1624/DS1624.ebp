@@ -64,6 +64,14 @@
 			<Add option="-eb_start_files" />
 			<Add option="-eb_lib=n" />
 		</Linker>
+		<Unit filename="..\..\..\..\Drivers\DS1624\DS1624.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\..\..\Drivers\DS1624\DS1624.h" />
+		<Unit filename="..\..\Basics\I2C\i2c.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\Basics\I2C\i2c.h" />
 		<Unit filename="gcc_nrf51_s130_xxaa.ld" />
 		<Unit filename="Inc\compiler_abstraction.h" />
 		<Unit filename="Inc\nrf.h" />
@@ -76,12 +84,22 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="softdevice\Include\ble.h" />
+		<Unit filename="Src\board.h" />
+		<Unit filename="Src\functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Src\functions.h" />
+		<Unit filename="Src\interrupts.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Src\interrupts.h" />
 		<Unit filename="Src\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Src\system_nrf51.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Src\variables.h" />
 		<Unit filename="startup_nrf51.s">
 			<Option compilerVar="ASM" />
 		</Unit>
