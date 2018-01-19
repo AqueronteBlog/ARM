@@ -24,7 +24,9 @@ typedef enum
 {
 	I2C_STOP_BIT  	 =   0x00,
 	I2C_NO_STOP_BIT  =   0x01,
-	I2C_TIMEOUT		 =	 232323
+	I2C_TIMEOUT		 =	 232323,
+	I2C_FREQ_MIN	 =	 2000000,
+	I2C_FREQ_MAX	 =	 50000000
 } i2c_internal_constants_t;
 
 
@@ -55,7 +57,10 @@ typedef struct{
     uint32_t SCL;
 
     // I2C frequency
-    uint32_t Freq;
+    uint32_t I2C_Freq;
+
+    // PCLK1 frequency ( APB clock frequency )
+    uint32_t PCLK1_Freq;
 
     // I2C Address
     uint32_t ADDR;
