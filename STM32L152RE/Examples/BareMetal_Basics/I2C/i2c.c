@@ -122,6 +122,8 @@ i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
  * @date        17/January/2018
  * @version     17/January/2018         The ORIGIN
  * @pre         I2C communication is by polling mode.
+ * @pre			AN2824 Application note ( en.CD00209826.pdf ) was followed ( flowchart )
+ * 				to design the Master transmitter.
  * @warning     NaN.
  */
 i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buff, uint32_t i2c_data_length, uint32_t i2c_generate_stop )
@@ -164,7 +166,7 @@ i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buf
     	myI2Cparameters.I2Cinstance->DR   =   *i2c_buff;
 
         i2c_timeout1               =   I2C_TIMEOUT;
-        while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_TXE_Msk ) != I2C_SR1_TXE ) && ( --i2c_timeout1 ) );	// [ EV8 ] Wait until the data is transmitted or timeout1
+        while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_BTF_Msk ) != I2C_SR1_BTF ) && ( --i2c_timeout1 ) );	// [ EV8 ] Wait until the LAST DATA is transmitted or timeout1
 
         if ( i2c_timeout1 < 1 )
         	return I2C_FAILURE;
@@ -216,15 +218,16 @@ i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buf
  * @date        17/January/2018
  * @version     17/January/2018         The ORIGIN
  * @pre         I2C communication is by polling mode.
+ * @pre			AN2824 Application note ( en.CD00209826.pdf ) was followed ( flowchart )
+ * 				to design the Master transmitter.
  * @warning     NaN.
  */
 i2c_status_t     i2c_read   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buff, uint32_t i2c_data_length )
 {
-    uint32_t    i                   =   0;
     uint32_t    i2c_timeout1        =   0;
 
 
-    // Generate the START condition
+    // Generate the RE-START condition
     myI2Cparameters.I2Cinstance->CR1	|=	 I2C_CR1_START;
     i2c_timeout1               			 =   I2C_TIMEOUT;
     while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_SB_Msk ) != I2C_SR1_SB ) && ( --i2c_timeout1 ) );       	// [ EV5 ] Wait until the START is transmitted or timeout1
@@ -243,33 +246,91 @@ i2c_status_t     i2c_read   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buf
 
 
  	// Clear ADDRESS: SR1 was read and now SR2 needs to be read
-  	i2c_timeout1               		 =   I2C_TIMEOUT;
-   	while( ( ( myI2Cparameters.I2Cinstance->SR2 & I2C_SR2_BUSY_Msk ) == I2C_SR2_BUSY ) && ( --i2c_timeout1 ) );		// [ EV6 ] Wait until the I2C is NOT busy or timeout1
+    i2c_timeout1               		 =   I2C_TIMEOUT;
+   	while( ( ( myI2Cparameters.I2Cinstance->SR2 & I2C_SR2_TRA_Msk ) == I2C_SR2_TRA ) && ( --i2c_timeout1 ) );		// [ EV6 ] Wait until Received mode or timeout1
 
 	if ( i2c_timeout1 < 1 )
 		return I2C_FAILURE;
 
 
     // Read data from i2c bus
-    for ( i = 0; i < i2c_data_length; i++ )
-    {
-    // Wait until the data arrives or timeout
-        i2c_timeout1               =   I2C_TIMEOUT;
-        while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_RXNE_Msk ) != I2C_SR1_RXNE ) && ( --i2c_timeout1 ) );	// [ EV7 ] Wait until the data is read or timeout1
+	if ( i2c_data_length > 2 )
+	{
+	// Read more than 2-bytes
+		while ( i2c_data_length > 2 )
+		{
+			i2c_timeout1               		 	 =   I2C_TIMEOUT;
+			while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_BTF_Msk ) != I2C_SR1_BTF ) && ( --i2c_timeout1 ) );		// Wait until Data Byte Transfer or timeout1
 
-        if ( i2c_timeout1 < 1 )
-        	return I2C_FAILURE;
+			if ( i2c_timeout1 < 1 )
+				return I2C_FAILURE;
 
-    // Read data and prepare the next one
-        *i2c_buff                  =   myI2Cparameters.I2Cinstance->DR;
-        i2c_buff++;
-    }
+			*i2c_buff++	 =	 ( uint8_t )myI2Cparameters.I2Cinstance->DR;												// Read data N-i2c_data_length
+			i2c_data_length--;
+		}
+
+		i2c_timeout1               		 	 =   I2C_TIMEOUT;
+		while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_BTF_Msk ) != I2C_SR1_BTF ) && ( --i2c_timeout1 ) );		// Wait until Data Byte Transfer or timeout1
+
+		if ( i2c_timeout1 < 1 )
+			return I2C_FAILURE;
+
+		myI2Cparameters.I2Cinstance->CR1	&=	~I2C_CR1_ACK;															// No ACK returned
+		myI2Cparameters.I2Cinstance->CR1	|=	 I2C_CR1_STOP;															// Generate STOP bit
+
+		*i2c_buff++	 =	 ( uint8_t )myI2Cparameters.I2Cinstance->DR;													// Read last data N-1
+
+		i2c_timeout1               		 	 =   I2C_TIMEOUT;
+		while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_RXNE_Msk ) != I2C_SR1_RXNE ) && ( --i2c_timeout1 ) );		//  Wait until Data is ready or timeout1
+
+		if ( i2c_timeout1 < 1 )
+			return I2C_FAILURE;
+
+		*i2c_buff	 =	 ( uint8_t )myI2Cparameters.I2Cinstance->DR;													// Read last data N
+	}
+	else if ( i2c_data_length == 2 )
+	{
+	// Read just 2-bytes
+		myI2Cparameters.I2Cinstance->CR1	&=	~I2C_CR1_ACK;															// No ACK returned
+		myI2Cparameters.I2Cinstance->CR1	|=	 I2C_CR1_POS;															// Control NACK
+		myI2Cparameters.I2Cinstance->SR1	&=	~I2C_SR1_ADDR;
+
+		i2c_timeout1               		 	 =   I2C_TIMEOUT;
+		while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_BTF_Msk ) != I2C_SR1_BTF ) && ( --i2c_timeout1 ) );		// Wait until Data Byte Transfer or timeout1
+
+		if ( i2c_timeout1 < 1 )
+			return I2C_FAILURE;
+
+		myI2Cparameters.I2Cinstance->CR1	|=	 I2C_CR1_STOP;															// Generate STOP bit
+
+		*i2c_buff++	 =	 ( uint8_t )myI2Cparameters.I2Cinstance->DR;													// Data N-1
+		*i2c_buff	 =	 ( uint8_t )myI2Cparameters.I2Cinstance->DR;													// Data N ( last data )
+	}
+	else
+	{
+	// Read just 1-byte
+		myI2Cparameters.I2Cinstance->CR1	&=	~I2C_CR1_ACK;															// No ACK returned
+		myI2Cparameters.I2Cinstance->SR1	&=	~I2C_SR1_ADDR;
+
+		myI2Cparameters.I2Cinstance->CR1	|=	 I2C_CR1_STOP;															// Generate STOP bit
+
+		i2c_timeout1               		 	 =   I2C_TIMEOUT;
+		while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_RXNE_Msk ) != I2C_SR1_RXNE ) && ( --i2c_timeout1 ) );		//  Wait until Data is ready or timeout1
+
+		if ( i2c_timeout1 < 1 )
+			return I2C_FAILURE;
+
+		*i2c_buff	 =	 ( uint8_t )myI2Cparameters.I2Cinstance->DR;													// Data N ( last data )
+	}
 
 
-    // Generate a STOP bit
-  	myI2Cparameters.I2Cinstance->CR1	|=	 I2C_CR1_STOP;
+
     i2c_timeout1               =   I2C_TIMEOUT;
-    while( ( ( myI2Cparameters.I2Cinstance->SR2 & I2C_SR2_MSL_Msk ) == I2C_SR2_MSL ) && ( --i2c_timeout1 ) );		// Wait until the STOP is generated or timeout1
+    while( ( ( myI2Cparameters.I2Cinstance->SR2 & I2C_SR2_MSL_Msk ) == I2C_SR2_MSL ) && ( --i2c_timeout1 ) );			// Wait until the STOP is generated or timeout1
+
+
+    myI2Cparameters.I2Cinstance->CR1	|=	 I2C_CR1_ACK;																// ACK returned ( to be ready for another reception )
+    myI2Cparameters.I2Cinstance->CR1	&=	~I2C_CR1_POS;																// Control NACK ( to be ready for another reception )
 
 
 
