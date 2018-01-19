@@ -39,6 +39,10 @@ i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
 	uint32_t myRightPinAllocation	 =	 0;
 	uint32_t myRightAFRRegister		 =	 0;
 
+	// The minimum allowed frequency is 2MHz, 50Mhz maximum limit
+	if ( myI2Cparameters.PCLK1_Freq < I2C_FREQ_MIN || myI2Cparameters.PCLK1_Freq > I2C_FREQ_MAX )
+		return I2C_FAILURE;
+
 
 	/* Reset and Stop I2Cx */
 	// Enable the appropriate I2Cx Clock
@@ -84,6 +88,8 @@ i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
 
 
     /* Configure the frequency */ // [TODO] It needs to be developded!!!
+	myI2Cparameters.I2Cinstance->CR2	&=	~I2C_CR2_FREQ_Msk;													// Clear the previous FREQ
+	myI2Cparameters.I2Cinstance->CR2	|=	 ( ( myI2Cparameters.PCLK1_Freq / 1000000 ) << I2C_CR2_FREQ_Pos );	// Update the new FREQ
 //    myI2Cparameters.TWIinstance->FREQUENCY      =   ( myI2Cparameters.Freq << TWI_FREQUENCY_FREQUENCY_Pos );
 //
 //
@@ -120,7 +126,8 @@ i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        17/January/2018
- * @version     17/January/2018         The ORIGIN
+ * @version     19/January/2018         AN2824 was followed
+ * 				17/January/2018         The ORIGIN
  * @pre         I2C communication is by polling mode.
  * @pre			AN2824 Application note ( en.CD00209826.pdf ) was followed ( flowchart )
  * 				to design the Master transmitter.
@@ -144,7 +151,7 @@ i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buf
 
 
     // Send the ADDRESS
-    myI2Cparameters.I2Cinstance->DR	 =	 ( myI2Cparameters.ADDR << 1 ) | I2C_WRITE;
+    myI2Cparameters.I2Cinstance->DR	 =	 ( uint8_t )( ( myI2Cparameters.ADDR << 1 ) | I2C_WRITE );
     i2c_timeout1               		 =   I2C_TIMEOUT;
     while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_ADDR_Msk ) != I2C_SR1_ADDR ) && ( --i2c_timeout1 ) );		// Wait until the ADDRESS is transmitted or timeout1
 
@@ -163,7 +170,7 @@ i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buf
     // Start transmitting data
     for ( i = 0; i < i2c_data_length; i++ )
     {
-    	myI2Cparameters.I2Cinstance->DR   =   *i2c_buff;
+    	myI2Cparameters.I2Cinstance->DR   =   ( uint8_t )*i2c_buff;
 
         i2c_timeout1               =   I2C_TIMEOUT;
         while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_BTF_Msk ) != I2C_SR1_BTF ) && ( --i2c_timeout1 ) );	// [ EV8 ] Wait until the LAST DATA is transmitted or timeout1
@@ -216,7 +223,8 @@ i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buf
  *
  * @author      Manuel Caballero
  * @date        17/January/2018
- * @version     17/January/2018         The ORIGIN
+ * @version     19/January/2018         AN2824 was followed
+ * 				17/January/2018         The ORIGIN
  * @pre         I2C communication is by polling mode.
  * @pre			AN2824 Application note ( en.CD00209826.pdf ) was followed ( flowchart )
  * 				to design the Master transmitter.
@@ -237,7 +245,7 @@ i2c_status_t     i2c_read   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buf
 
 
     // Send the ADDRESS
-    myI2Cparameters.I2Cinstance->DR	 =	 ( myI2Cparameters.ADDR << 1 ) | I2C_READ;
+    myI2Cparameters.I2Cinstance->DR	 =	 ( uint8_t )( ( myI2Cparameters.ADDR << 1 ) | I2C_READ );
     i2c_timeout1               		 =   I2C_TIMEOUT;
     while( ( ( myI2Cparameters.I2Cinstance->SR1 & I2C_SR1_ADDR_Msk ) != I2C_SR1_ADDR ) && ( --i2c_timeout1 ) );		// Wait until the ADDRESS is transmitted or timeout1
 
