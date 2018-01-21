@@ -125,19 +125,35 @@ typedef enum
   */
 /** It configures the SPI peripheral.
     */
-DS1624_status_t  DS1624_Init                        ( I2C_parameters_t myI2Cparameters );
-
-/** It reads the temperature data.
-      */
-DS1624_status_t  DS1624_ReadTemperature             ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t*  myTemperature );
-
-/** It reads the raw temperature data.
-      */
-DS1624_status_t  DS1624_ReadRawTemperature          ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t*  myRawTemperature );
+DS1624_status_t  DS1624_Init                    ( I2C_parameters_t myI2Cparameters );
 
 /** It triggers a new temperature measurement.
       */
-DS1624_status_t  DS1624_StartNewConvertTemperature  ( I2C_parameters_t myI2Cparameters );
+DS1624_status_t  DS1624_StartConvertTemperature ( I2C_parameters_t myI2Cparameters );
+
+/** It stops the current temperature conversion.
+      */
+DS1624_status_t  DS1624_StopConvertTemperature  ( I2C_parameters_t myI2Cparameters );
+
+/** It reads the last raw temperature conversion result.
+      */
+DS1624_status_t  DS1624_ReadRawTemperature      ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myRawTemperature );
+
+/** It reads the last temperature conversion result.
+      */
+DS1624_status_t  DS1624_ReadTemperature         ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myRawTemperature );
+
+/** It reads the CONFIGURATION/STATUS register.
+      */
+DS1624_status_t  DS1624_GetStatusRegister       ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myStatusRegister );
+
+/** It sets 1SHOT temperature conversion mode.
+      */
+DS1624_status_t  DS1624_Set1ShotMode            ( I2C_parameters_t myI2Cparameters );
+
+/** It sets continuous temperature conversion mode.
+      */
+DS1624_status_t  DS1624_SetContinuousMode       ( I2C_parameters_t myI2Cparameters );
 
 
 
