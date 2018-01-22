@@ -90,6 +90,19 @@ typedef enum
 
 
 
+// TEMPERATURE REGISTER
+/**
+  * @brief   MSB BIT15: SIGN
+  */
+typedef enum
+{
+    MSB_TEMPERATURE_SIGN_BIT_MASK               =   ( 1 << 7 ),                 /*!<  Temperature sign Mask                     */
+    MSB_TEMPERATURE_SIGN_BIT_POSITIVE           =   ( 0 << 7 ),                 /*!<  Temperature is POSITIVE                   */
+    MSB_TEMPERATURE_SIGN_BIT_NEGATIVE           =   ( 1 << 7 )                  /*!<  Temperature is NEGATIVE                   */
+} DS1624_msb_temperature_sign_bit_t;
+
+
+
 
 
 #ifndef DS1624_VECTOR_STRUCT_H
@@ -109,12 +122,14 @@ typedef struct
 /**
   * @brief   INTERNAL CONSTANTS
   */
+#define DS1624_TEMPERATURE_RESOLUTION   0.0625
+
 typedef enum
 {
-    DS1624_SUCCESS     =       0,
-    DS1624_FAILURE     =       1,
+    DS1624_SUCCESS                   =   0,
+    DS1624_FAILURE                   =   1,
 
-    DS1624_TIMEOUT     =       1000
+    DS1624_TIMEOUT                   =   1000
 } DS1624_status_t;
 
 
@@ -141,7 +156,7 @@ DS1624_status_t  DS1624_ReadRawTemperature      ( I2C_parameters_t myI2Cparamete
 
 /** It reads the last temperature conversion result.
       */
-DS1624_status_t  DS1624_ReadTemperature         ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myRawTemperature );
+DS1624_status_t  DS1624_ReadTemperature         ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myTemperature );
 
 /** It reads the CONFIGURATION/STATUS register.
       */
