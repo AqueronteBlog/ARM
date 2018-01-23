@@ -162,13 +162,10 @@ DS1624_status_t  DS1624_ReadTemperature         ( I2C_parameters_t myI2Cparamete
       */
 DS1624_status_t  DS1624_GetStatusRegister       ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myStatusRegister );
 
-/** It sets 1SHOT temperature conversion mode.
+/** It sets 1SHOT/Continuous temperature conversion mode.
       */
-DS1624_status_t  DS1624_Set1ShotMode            ( I2C_parameters_t myI2Cparameters );
+DS1624_status_t  DS1624_SetConversionMode       ( I2C_parameters_t myI2Cparameters, DS1624_access_config_1shot_t myConversionMode );
 
-/** It sets continuous temperature conversion mode.
-      */
-DS1624_status_t  DS1624_SetContinuousMode       ( I2C_parameters_t myI2Cparameters );
 
 
 
