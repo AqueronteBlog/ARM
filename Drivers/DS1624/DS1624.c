@@ -184,7 +184,7 @@ DS1624_status_t  DS1624_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, 
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
  *
- * @param[out]   myRawTemperature:  Current temperature.
+ * @param[out]   myTemperature:     Current temperature.
  *
  *
  * @return       Status of DS1624_ReadTemperature.
@@ -248,3 +248,109 @@ DS1624_status_t  DS1624_ReadTemperature  ( I2C_parameters_t myI2Cparameters, DS1
     else
         return   DS1624_FAILURE;
 }
+
+
+
+/**
+ * @brief       DS1624_GetStatusRegister ( I2C_parameters_t , DS1624_vector_data_t* )
+ *
+ * @details     It reads the CONFIGURATION/STATUS register.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myStatusRegister:  Current Status register value.
+ *
+ *
+ * @return       Status of DS1624_GetStatusRegister.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        23/January/2018
+ * @version     23/January/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+DS1624_status_t  DS1624_GetStatusRegister   ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myStatusRegister )
+{
+    uint8_t      cmd     =   DS1624_ACCESS_CONFIG;
+    i2c_status_t aux     =   0;
+
+
+    // It sends the command and gets the result
+    aux = i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &myStatusRegister->Control_Status_Register, 1 );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   DS1624_SUCCESS;
+    else
+        return   DS1624_FAILURE;
+}
+
+
+
+/**
+ * @brief       DS1624_SetConversionMode ( I2C_parameters_t , DS1624_access_config_1shot_t )
+ *
+ * @details     It sets 1SHOT/Continuous temperature conversion mode.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myConversionMode:  ACCESS_CONFIG_1SHOT_ONE_TEMPERATURE_CONVERSION:             1SHOT temperature conversion mode
+ *                                  ACCESS_CONFIG_1SHOT_CONTINUOUSLY_TEMPERATURE_CONVERSION:    Continuous temperature conversion mode.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of DS1624_SetConversionMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        23/January/2018
+ * @version     23/January/2018     The ORIGIN
+ * @pre         N/A
+ * @warning     Since the configuration register is implemented in
+ *              EEPROM, writes to the register require 10ms to complete.
+ *              After issuing a command to write to the configuration register,
+ *              no further accesses to the DS1624 should be made for at least 10ms.
+ */
+DS1624_status_t  DS1624_SetConversionMode   ( I2C_parameters_t myI2Cparameters, DS1624_access_config_1shot_t myConversionMode )
+{
+    uint8_t      cmd[]   =   { DS1624_ACCESS_CONFIG, 0 };
+    i2c_status_t aux     =   0;
+
+
+    // It sends the command and gets the result
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+
+    // Mask the bit and check which mode to use
+    cmd[1] &= ~ACCESS_CONFIG_1SHOT_MASK;
+
+    if ( myConversionMode == ACCESS_CONFIG_1SHOT_ONE_TEMPERATURE_CONVERSION )
+    {
+    // 1SHOT Mode
+        cmd[1] |=   ACCESS_CONFIG_1SHOT_ONE_TEMPERATURE_CONVERSION;
+    }
+    else
+    {
+    // Continuously Mode
+        cmd[1] &=  ~ACCESS_CONFIG_1SHOT_ONE_TEMPERATURE_CONVERSION;
+    }
+
+
+    // Update the CONFIGURATION/STATUS register
+    aux  =  i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   DS1624_SUCCESS;
+    else
+        return   DS1624_FAILURE;
+}
+
