@@ -4,13 +4,13 @@
  *              Header file.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        18/January/2018
  * @version     18/January/2018    The ORIGIN
- * @pre         NaN.
- * @warning     NaN
+ * @pre         N/A.
+ * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
@@ -129,7 +129,7 @@ typedef enum
     DS1624_SUCCESS                   =   0,
     DS1624_FAILURE                   =   1,
 
-    DS1624_TIMEOUT                   =   1000
+    DS1624_TIMEOUT                   =   23232323
 } DS1624_status_t;
 
 
@@ -140,32 +140,35 @@ typedef enum
   */
 /** It configures the SPI peripheral.
     */
-DS1624_status_t  DS1624_Init                    ( I2C_parameters_t myI2Cparameters );
+DS1624_status_t DS1624_Init                        ( I2C_parameters_t myI2Cparameters );
 
 /** It triggers a new temperature measurement.
       */
-DS1624_status_t  DS1624_StartConvertTemperature ( I2C_parameters_t myI2Cparameters );
+DS1624_status_t DS1624_StartConvertTemperature     ( I2C_parameters_t myI2Cparameters );
 
 /** It stops the current temperature conversion.
       */
-DS1624_status_t  DS1624_StopConvertTemperature  ( I2C_parameters_t myI2Cparameters );
+DS1624_status_t DS1624_StopConvertTemperature      ( I2C_parameters_t myI2Cparameters );
 
 /** It reads the last raw temperature conversion result.
       */
-DS1624_status_t  DS1624_ReadRawTemperature      ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myRawTemperature );
+DS1624_status_t DS1624_ReadRawTemperature          ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myRawTemperature );
 
 /** It reads the last temperature conversion result.
       */
-DS1624_status_t  DS1624_ReadTemperature         ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myTemperature );
+DS1624_status_t DS1624_ReadTemperature             ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myTemperature );
 
 /** It reads the CONFIGURATION/STATUS register.
       */
-DS1624_status_t  DS1624_GetStatusRegister       ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myStatusRegister );
+DS1624_status_t DS1624_GetStatusRegister           ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myStatusRegister );
 
 /** It sets 1SHOT/Continuous temperature conversion mode.
       */
-DS1624_status_t  DS1624_SetConversionMode       ( I2C_parameters_t myI2Cparameters, DS1624_access_config_1shot_t myConversionMode );
+DS1624_status_t DS1624_SetConversionMode           ( I2C_parameters_t myI2Cparameters, DS1624_access_config_1shot_t myConversionMode );
 
+/** It checks if a temperature conversion is done.
+      */
+DS1624_status_t DS1624_IsTemperatureConversionDone ( I2C_parameters_t myI2Cparameters, DS1624_access_config_done_t* myTemperatureConversionStatus );
 
 
 
