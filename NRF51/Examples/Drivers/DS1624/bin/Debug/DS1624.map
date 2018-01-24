@@ -426,11 +426,13 @@ Discarded input sections
                 0x00000000       0xa8 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .text.DS1624_SetConversionMode
                 0x00000000      0x120 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
- .debug_info    0x00000000      0x8ac obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
- .debug_abbrev  0x00000000      0x18d obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .text.DS1624_IsTemperatureConversionDone
+                0x00000000       0xbc obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .debug_info    0x00000000      0x939 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .debug_abbrev  0x00000000      0x173 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .debug_aranges
-                0x00000000       0x50 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
- .debug_ranges  0x00000000       0x40 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+                0x00000000       0x58 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .debug_ranges  0x00000000       0x48 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .debug_macro   0x00000000       0xeb obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .debug_macro   0x00000000      0x82c obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .debug_macro   0x00000000       0x22 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
@@ -449,10 +451,10 @@ Discarded input sections
  .debug_macro   0x00000000       0x10 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .debug_macro   0x00000000       0x16 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .debug_macro   0x00000000       0x16 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
- .debug_line    0x00000000      0x3f1 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
- .debug_str     0x00000000    0x2f4c0 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .debug_line    0x00000000      0x410 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .debug_str     0x00000000    0x2f586 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .comment       0x00000000       0x6f obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
- .debug_frame   0x00000000      0x128 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .debug_frame   0x00000000      0x150 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .ARM.attributes
                 0x00000000       0x31 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .text          0x00000000      0x2ec c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(addsf3.o)
