@@ -4,13 +4,13 @@
  *              Functions file.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        18/January/2018
  * @version     18/January/2018    The ORIGIN
- * @pre         NaN.
- * @warning     NaN
+ * @pre         N/A.
+ * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
@@ -24,7 +24,7 @@
  *
  * @param[in]    myI2Cparameters:       I2C parameters.
  *
- * @param[out]   NaN.
+ * @param[out]   N/A.
  *
  *
  * @return       Status of DS1624_Init.
@@ -33,8 +33,8 @@
  * @author      Manuel Caballero
  * @date        18/January/2018
  * @version     18/January/2018   The ORIGIN
- * @pre         NaN
- * @warning     NaN.
+ * @pre         N/A
+ * @warning     N/A.
  */
 DS1624_status_t  DS1624_Init ( I2C_parameters_t myI2Cparameters )
 {
@@ -59,7 +59,7 @@ DS1624_status_t  DS1624_Init ( I2C_parameters_t myI2Cparameters )
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
  *
- * @param[out]   NaN.
+ * @param[out]   N/A.
  *
  *
  * @return       Status of DS1624_StartConvertTemperature.
@@ -69,7 +69,7 @@ DS1624_status_t  DS1624_Init ( I2C_parameters_t myI2Cparameters )
  * @date        21/January/2018
  * @version     21/January/2018     The ORIGIN
  * @pre         Temperature Conversion Time ( t_TC ) 200ms maximum.
- * @warning     NaN.
+ * @warning     N/A.
  */
 DS1624_status_t  DS1624_StartConvertTemperature ( I2C_parameters_t myI2Cparameters )
 {
@@ -97,7 +97,7 @@ DS1624_status_t  DS1624_StartConvertTemperature ( I2C_parameters_t myI2Cparamete
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
  *
- * @param[out]   NaN.
+ * @param[out]   N/A.
  *
  *
  * @return       Status of DS1624_StopConvertTemperature.
@@ -110,7 +110,7 @@ DS1624_status_t  DS1624_StartConvertTemperature ( I2C_parameters_t myI2Cparamete
  *              a continuous conversion. To restart, the StartConvertT
  *              command must be issued. In one-shot mode, a StartConvertT command
  *              must be issued for every temperature reading desired.
- * @warning     NaN.
+ * @warning     N/A.
  */
 DS1624_status_t  DS1624_StopConvertTemperature ( I2C_parameters_t myI2Cparameters )
 {
@@ -148,8 +148,8 @@ DS1624_status_t  DS1624_StopConvertTemperature ( I2C_parameters_t myI2Cparameter
  * @author      Manuel Caballero
  * @date        22/January/2018
  * @version     22/January/2018     The ORIGIN
- * @pre         NaN.
- * @warning     NaN.
+ * @pre         DONE bit needs to be checked before calling this function.
+ * @warning     N/A.
  */
 DS1624_status_t  DS1624_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myRawTemperature )
 {
@@ -157,9 +157,10 @@ DS1624_status_t  DS1624_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, 
     i2c_status_t aux       =   0;
 
 
-    // It sends the command and gets the result
-    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    // It sends the command and gets the result otherwise
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
     // Parse the data
@@ -194,7 +195,8 @@ DS1624_status_t  DS1624_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, 
  * @date        22/January/2018
  * @version     22/January/2018     The ORIGIN
  * @pre         This function updates the raw temperature variables.
- * @warning     NaN.
+ * @pre         DONE bit needs to be checked before calling this function.
+ * @warning     N/A.
  */
 DS1624_status_t  DS1624_ReadTemperature  ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myTemperature )
 {
@@ -204,9 +206,9 @@ DS1624_status_t  DS1624_ReadTemperature  ( I2C_parameters_t myI2Cparameters, DS1
 
 
 
-    // It sends the command and gets the result
-    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+    // It sends the command and gets the result otherwise
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
     // Update the raw temperature value
@@ -345,6 +347,51 @@ DS1624_status_t  DS1624_SetConversionMode   ( I2C_parameters_t myI2Cparameters, 
     // Update the CONFIGURATION/STATUS register
     aux  =  i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   DS1624_SUCCESS;
+    else
+        return   DS1624_FAILURE;
+}
+
+
+
+/**
+ * @brief       DS1624_IsTemperatureConversionDone ( I2C_parameters_t , DS1624_vector_data_t* )
+ *
+ * @details     It checks if a temperature conversion is done.
+ *
+ * @param[in]    myI2Cparameters:                I2C parameters.
+ *
+ * @param[out]   myTemperatureConversionStatus:  Temperature conversion bit:
+ *                                                  ACCESS_CONFIG_DONE_CONVERSION_COMPLETE
+ *                                                  ACCESS_CONFIG_DONE_CONVERSION_IN_PROGRESS.
+ *
+ *
+ * @return       Status of DS1624_IsTemperatureConversionDone.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/January/2018
+ * @version     24/January/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+DS1624_status_t DS1624_IsTemperatureConversionDone ( I2C_parameters_t myI2Cparameters, DS1624_access_config_done_t* myTemperatureConversionStatus )
+{
+    uint8_t      cmd[]     =   { DS1624_ACCESS_CONFIG, 0 };
+    i2c_status_t aux       =   0;
+
+
+    // It sends the command and gets the result
+    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+
+    // Update the value
+    *myTemperatureConversionStatus   =   ( cmd[1] & ACCESS_CONFIG_DONE_MASK );
 
 
 
