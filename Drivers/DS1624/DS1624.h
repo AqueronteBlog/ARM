@@ -128,8 +128,6 @@ typedef enum
 {
     DS1624_SUCCESS                   =   0,
     DS1624_FAILURE                   =   1,
-
-    DS1624_TIMEOUT                   =   23232323
 } DS1624_status_t;
 
 
