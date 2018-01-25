@@ -1,6 +1,8 @@
 /**
  * @brief       main.c
- * @details     [TODO].
+ * @details     This example shows how to work with the external temperature sensor
+ *              DS1624. Every 1 second, a new temperature conversion is triggered and read.
+ *              the raw temperature result is transmitted through the UART.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
@@ -26,59 +28,43 @@
 
 int main( void )
 {
-    uint8_t  myTX_buff[10]   =      { 0 };
+    uint8_t  myTX_buff[2]   =   { 0 };
+    uint32_t myTimeoOut      =   0;
 
 
-    I2C_parameters_t            myDS3231_I2C_parameters;
-//    DS3231_status_t             aux;
-//    DS3231_vector_data_t        myDS3231_data;
-//    DS3231_vector_date_time_t   myDS3231_date_time;
-//
-//
-//    conf_GPIO   ();
-//    conf_UART   ();
-//    conf_TIMER0 ();
-//
-//
-//
-//    // I2C definition
-//    myDS3231_I2C_parameters.TWIinstance =    NRF_TWI0;
-//    myDS3231_I2C_parameters.SDA         =    TWI0_SDA;
-//    myDS3231_I2C_parameters.SCL         =    TWI0_SCL;
-//    myDS3231_I2C_parameters.ADDR        =    DS3231_ADDRESS;
-//    myDS3231_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-//    myDS3231_I2C_parameters.SDAport     =    NRF_GPIO;
-//    myDS3231_I2C_parameters.SCLport     =    NRF_GPIO;
-//
-//    // Configure I2C peripheral
-//    aux  =   DS3231_Init ( myDS3231_I2C_parameters );
-//
-//
-//    // Disable the 32kHz output pin
-//    aux  =   DS3231_Status32kHzPin      ( myDS3231_I2C_parameters, STATUS_ENABLE_32KHZ_OUTPUT_DISABLED );
-//
-//
-//    // DATE: 20/12/17  Century = 1  Wednesday ( = 3 )
-//    myDS3231_date_time.Date         =   20;
-//    myDS3231_date_time.Month        =   12;
-//    myDS3231_date_time.Year         =   17;
-//    myDS3231_date_time.Century      =   MONTH_CENTURY_MASK;
-//    myDS3231_date_time.DayOfWeek    =   3;
-//    aux  =   DS3231_SetDate ( myDS3231_I2C_parameters, myDS3231_date_time );
-//
-//
-//    // TIME: 11:22:33  12h PM
-//    myDS3231_date_time.Hours         =   11;
-//    myDS3231_date_time.Minutes       =   22;
-//    myDS3231_date_time.Seconds       =   33;
-//    myDS3231_date_time.Mode_12_n24   =   HOURS_12_ENABLED;
-//    myDS3231_date_time.Mode_nAM_PM   =   HOURS_PM_ENABLED;
-//    aux  =   DS3231_SetTime ( myDS3231_I2C_parameters, myDS3231_date_time );
+    I2C_parameters_t            myDS1624_I2C_parameters;
+    DS1624_status_t             aux;
+    DS1624_access_config_done_t myDS1624_TempConversionStatus;
+    DS1624_vector_data_t        myDS1624_data;
+
+
+    conf_GPIO   ();
+    conf_UART   ();
+    conf_TIMER0 ();
+
+
+
+    // I2C definition
+    myDS1624_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myDS1624_I2C_parameters.SDA         =    TWI0_SDA;
+    myDS1624_I2C_parameters.SCL         =    TWI0_SCL;
+    myDS1624_I2C_parameters.ADDR        =    DS1624_ADDRESS_0;
+    myDS1624_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myDS1624_I2C_parameters.SDAport     =    NRF_GPIO;
+    myDS1624_I2C_parameters.SCLport     =    NRF_GPIO;
+
+    // Configure I2C peripheral
+    aux  =   DS1624_Init ( myDS1624_I2C_parameters );
+
+
+    // Configure 1SHOT mode
+    aux  =   DS1624_SetConversionMode ( myDS1624_I2C_parameters, ACCESS_CONFIG_1SHOT_ONE_TEMPERATURE_CONVERSION );
+
 
 
     mySTATE  =   0;                                 // Reset the variable
 
-    //NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
+    NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
     while( 1 )
     {
@@ -92,29 +78,37 @@ int main( void )
         __WFE();
 
 
-//        NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
-//        if ( mySTATE == 1 )
-//        {
-//            NVIC_DisableIRQ ( TIMER0_IRQn );                                            // Timer Interrupt DISABLED
+        NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
+        if ( mySTATE == 1 )
+        {
+            NVIC_DisableIRQ ( TIMER0_IRQn );                                            // Timer Interrupt DISABLED
+
+            // Trigger a new temperature conversion
+            aux  =   DS1624_StartConvertTemperature ( myDS1624_I2C_parameters );
+
+            // Wait until the temperature conversion is completed or timeout
+            myTimeoOut   =   232323;
+            do{
+                aux  =   DS1624_IsTemperatureConversionDone ( myDS1624_I2C_parameters, &myDS1624_TempConversionStatus );
+                myTimeoOut--;
+            } while ( ( ( myDS1624_TempConversionStatus & ACCESS_CONFIG_DONE_MASK ) != ACCESS_CONFIG_DONE_CONVERSION_COMPLETE ) && ( myTimeoOut > 0 ) );
+
+            // Check if TimeOut, if so, there was an error ( send: NA ), send the data otherwise
+            if ( myTimeoOut <= 0 )
+            {
+                myTX_buff[0]                 =   'N';
+                myTX_buff[1]                 =   'A';
+            }
+            else
+            {
+                aux  =   DS1624_ReadTemperature    ( myDS1624_I2C_parameters, &myDS1624_data );
+//                aux  =   DS1624_ReadRawTemperature ( myDS1624_I2C_parameters, &myDS1624_data );
 //
-//            // Get the data
-//            aux  =   DS3231_ReadTemperature             ( myDS3231_I2C_parameters, &myDS3231_data );
-//            aux  =   DS3231_GetDate                     ( myDS3231_I2C_parameters, &myDS3231_date_time );
-//            aux  =   DS3231_GetTime                     ( myDS3231_I2C_parameters, &myDS3231_date_time );
-//
-//            // Parse the data
-//            myTX_buff[0]                 =   myDS3231_date_time.Century;
-//            myTX_buff[1]                 =   myDS3231_date_time.Date;
-//            myTX_buff[2]                 =   myDS3231_date_time.Month;
-//            myTX_buff[3]                 =   myDS3231_date_time.Year;
-//            myTX_buff[4]                 =   myDS3231_date_time.DayOfWeek;
-//            myTX_buff[5]                 =   myDS3231_date_time.Hours;
-//            myTX_buff[6]                 =   myDS3231_date_time.Minutes;
-//            myTX_buff[7]                 =   myDS3231_date_time.Seconds;
-//            myTX_buff[8]                 =   myDS3231_date_time.Mode_12_n24;
-//            myTX_buff[9]                 =   myDS3231_date_time.Mode_nAM_PM;
-//
-//
+//                myTX_buff[0]                 =   myDS1624_data.MSBTemperature;
+//                myTX_buff[1]                 =   myDS1624_data.LSBTemperature;
+            }
+
+
 //            myPtr                        =   &myTX_buff[0];
 //            TX_inProgress                =   YES;
 //            NRF_UART0->TASKS_STARTTX     =   1;
@@ -130,10 +124,10 @@ int main( void )
 //            }
 //
 //
-//            mySTATE             =   0;
-//            NVIC_EnableIRQ ( TIMER0_IRQn );                                              // Timer Interrupt ENABLED
-//        }
-//        NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
-//        //__NOP();
+            mySTATE             =   0;
+            NVIC_EnableIRQ ( TIMER0_IRQn );                                              // Timer Interrupt ENABLED
+        }
+        NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
+        //__NOP();
     }
 }
