@@ -168,6 +168,14 @@ DS1624_status_t DS1624_SetConversionMode           ( I2C_parameters_t myI2Cparam
       */
 DS1624_status_t DS1624_IsTemperatureConversionDone ( I2C_parameters_t myI2Cparameters, DS1624_access_config_done_t* myTemperatureConversionStatus );
 
+/** It reads a certain number of bytes from EEPROM memory.
+      */
+DS1624_status_t DS1624_ReadBytesEEPROM             ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t* myReadBytesEEPROM, uint8_t myLength );
+
+/** It writes a certain number of bytes to EEPROM memory.
+      */
+DS1624_status_t DS1624_WriteBytesEEPROM            ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t* myWriteBytesEEPROM, uint8_t myLength );
+
 
 
 #ifdef __cplusplus
