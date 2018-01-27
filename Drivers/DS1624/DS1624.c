@@ -401,3 +401,46 @@ DS1624_status_t DS1624_IsTemperatureConversionDone ( I2C_parameters_t myI2Cparam
         return   DS1624_FAILURE;
 }
 
+
+
+/**
+ * @brief       DS1624_ReadBytesEEPROM ( I2C_parameters_t , uint8_t , uint8_t* , uint8_t )
+ *
+ * @details     It reads a certain number of bytes from EEPROM memory.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ * @param[in]    myStartingAddress:     Starting address to read the EEPROM memory.
+ * @param[in]    myLength:              Amount of bytes to read.
+ *
+ * @param[out]   myReadBytesEEPROM:     Read values from EEPROM memory.
+ *
+ *
+ * @return       Status of DS1624_ReadBytesEEPROM.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        25/January/2018
+ * @version     25/January/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+DS1624_status_t DS1624_ReadBytesEEPROM ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t* myReadBytesEEPROM, uint8_t myLength )
+{
+    uint8_t      cmd[]     =   { DS1624_ACCESS_MEMORY, 0 };
+    i2c_status_t aux       =   0;
+
+
+//    // It sends the command and gets the result
+//    aux = i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+//    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   DS1624_SUCCESS;
+    else
+        return   DS1624_FAILURE;
+}
+
