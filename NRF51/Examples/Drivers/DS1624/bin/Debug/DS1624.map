@@ -373,6 +373,8 @@ Discarded input sections
                 0x00000000       0xbc obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .text.DS1624_GetStatusRegister
                 0x00000000       0xa8 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .text.DS1624_ReadBytesEEPROM
+                0x00000000       0x44 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .debug_macro   0x00000000      0x82c obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .debug_macro   0x00000000       0x22 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
  .debug_macro   0x00000000       0x87 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
@@ -755,7 +757,7 @@ OUTPUT(bin\Debug\DS1624.elf elf32-littlearm)
  .comment       0x0000006e       0x6f obj\debug\src\system_nrf51.o
  .comment       0x0000006e       0x6f obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
 
-.debug_info     0x00000000     0x4e41
+.debug_info     0x00000000     0x4ebc
  .debug_info    0x00000000      0x6b3 obj\debug\~#\~#\basics\i2c\i2c.o
  .debug_info    0x000006b3       0x5e obj\debug\s130.o
  .debug_info    0x00000711      0xa45 obj\debug\src\functions.o
@@ -763,9 +765,9 @@ OUTPUT(bin\Debug\DS1624.elf elf32-littlearm)
  .debug_info    0x0000179e     0x2b20 obj\debug\src\main.o
  .debug_info    0x000042be      0x1ec obj\debug\src\system_nrf51.o
  .debug_info    0x000044aa       0x67 obj\debug\startup_nrf51.o
- .debug_info    0x00004511      0x930 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .debug_info    0x00004511      0x9ab obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
 
-.debug_abbrev   0x00000000      0x92d
+.debug_abbrev   0x00000000      0x949
  .debug_abbrev  0x00000000      0x159 obj\debug\~#\~#\basics\i2c\i2c.o
  .debug_abbrev  0x00000159       0x48 obj\debug\s130.o
  .debug_abbrev  0x000001a1      0x169 obj\debug\src\functions.o
@@ -773,9 +775,9 @@ OUTPUT(bin\Debug\DS1624.elf elf32-littlearm)
  .debug_abbrev  0x000003e6      0x2d5 obj\debug\src\main.o
  .debug_abbrev  0x000006bb       0xf4 obj\debug\src\system_nrf51.o
  .debug_abbrev  0x000007af       0x14 obj\debug\startup_nrf51.o
- .debug_abbrev  0x000007c3      0x16a obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .debug_abbrev  0x000007c3      0x186 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
 
-.debug_aranges  0x00000000      0x378
+.debug_aranges  0x00000000      0x380
  .debug_aranges
                 0x00000000       0x30 obj\debug\~#\~#\basics\i2c\i2c.o
  .debug_aranges
@@ -791,15 +793,15 @@ OUTPUT(bin\Debug\DS1624.elf elf32-littlearm)
  .debug_aranges
                 0x00000300       0x20 obj\debug\startup_nrf51.o
  .debug_aranges
-                0x00000320       0x58 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+                0x00000320       0x60 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
 
-.debug_ranges   0x00000000      0x2e0
+.debug_ranges   0x00000000      0x2e8
  .debug_ranges  0x00000000       0x20 obj\debug\~#\~#\basics\i2c\i2c.o
  .debug_ranges  0x00000020       0x38 obj\debug\src\functions.o
  .debug_ranges  0x00000058       0x18 obj\debug\src\interrupts.o
  .debug_ranges  0x00000070      0x200 obj\debug\src\main.o
  .debug_ranges  0x00000270       0x28 obj\debug\src\system_nrf51.o
- .debug_ranges  0x00000298       0x48 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .debug_ranges  0x00000298       0x50 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
 
 .debug_macro    0x00000000     0xa01a
  .debug_macro   0x00000000       0xd9 obj\debug\~#\~#\basics\i2c\i2c.o
@@ -840,7 +842,7 @@ OUTPUT(bin\Debug\DS1624.elf elf32-littlearm)
  .debug_macro   0x00009e50       0xdf obj\debug\src\system_nrf51.o
  .debug_macro   0x00009f2f       0xeb obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
 
-.debug_line     0x00000000     0x1b4c
+.debug_line     0x00000000     0x1b68
  .debug_line    0x00000000      0x3bb obj\debug\~#\~#\basics\i2c\i2c.o
  .debug_line    0x000003bb       0x27 obj\debug\s130.o
  .debug_line    0x000003e2      0x391 obj\debug\src\functions.o
@@ -848,9 +850,9 @@ OUTPUT(bin\Debug\DS1624.elf elf32-littlearm)
  .debug_line    0x00000a98      0x8e8 obj\debug\src\main.o
  .debug_line    0x00001380      0x34e obj\debug\src\system_nrf51.o
  .debug_line    0x000016ce       0x6e obj\debug\startup_nrf51.o
- .debug_line    0x0000173c      0x410 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .debug_line    0x0000173c      0x42c obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
 
-.debug_str      0x00000000    0x34f9f
+.debug_str      0x00000000    0x34fe3
  .debug_str     0x00000000    0x2f026 obj\debug\~#\~#\basics\i2c\i2c.o
                               0x2f1a2 (size before relaxing)
  .debug_str     0x0002f026       0x75 obj\debug\s130.o
@@ -863,21 +865,21 @@ OUTPUT(bin\Debug\DS1624.elf elf32-littlearm)
                               0x34c6f (size before relaxing)
  .debug_str     0x00034c7b       0xe4 obj\debug\src\system_nrf51.o
                               0x2efe6 (size before relaxing)
- .debug_str     0x00034d5f      0x240 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
-                              0x2f577 (size before relaxing)
+ .debug_str     0x00034d5f      0x284 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+                              0x2f5bb (size before relaxing)
 
-.debug_frame    0x00000000      0x8d8
+.debug_frame    0x00000000      0x8fc
  .debug_frame   0x00000000       0x78 obj\debug\~#\~#\basics\i2c\i2c.o
  .debug_frame   0x00000078       0xcc obj\debug\src\functions.o
  .debug_frame   0x00000144       0x48 obj\debug\src\interrupts.o
  .debug_frame   0x0000018c      0x434 obj\debug\src\main.o
  .debug_frame   0x000005c0       0x80 obj\debug\src\system_nrf51.o
- .debug_frame   0x00000640      0x150 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
- .debug_frame   0x00000790       0x30 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(addsf3.o)
- .debug_frame   0x000007c0       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(floatunsisf.o)
- .debug_frame   0x000007ec       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(floatsidf.o)
- .debug_frame   0x00000818       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(truncdfsf2.o)
- .debug_frame   0x00000844       0x28 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
- .debug_frame   0x0000086c       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
- .debug_frame   0x00000898       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
- .debug_frame   0x000008b8       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
+ .debug_frame   0x00000640      0x174 obj\debug\~#\~#\~#\~#\drivers\ds1624\ds1624.o
+ .debug_frame   0x000007b4       0x30 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(addsf3.o)
+ .debug_frame   0x000007e4       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(floatunsisf.o)
+ .debug_frame   0x00000810       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(floatsidf.o)
+ .debug_frame   0x0000083c       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m\libgcc.a(truncdfsf2.o)
+ .debug_frame   0x00000868       0x28 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
+ .debug_frame   0x00000890       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
+ .debug_frame   0x000008bc       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
+ .debug_frame   0x000008dc       0x20 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
