@@ -174,7 +174,7 @@ DS1624_status_t DS1624_ReadBytesEEPROM             ( I2C_parameters_t myI2Cparam
 
 /** It writes a certain number of bytes to EEPROM memory.
       */
-DS1624_status_t DS1624_WriteBytesEEPROM            ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t* myWriteBytesEEPROM, uint8_t myLength );
+DS1624_status_t DS1624_WriteBytesEEPROM            ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t myWriteBytesEEPROM, uint8_t myLength );
 
 
 
