@@ -564,12 +564,12 @@ SI7021_status_t  SI7021_TriggerHumidity ( I2C_parameters_t myI2Cparameters, SI70
     // Check the mode if it is HOLD MASTER MODE, then not generate a stop bit
     if ( myMode == SI7021_HOLD_MASTER_MODE )
     {
-        cmd         =    SI7021_MEASURE_TEMPERATURE_HOLD_MASTER_MODE;
+        cmd         =    SI7021_MEASURE_RELATIVE_HUMIDITY_HOLD_MASTER_MODE;
         myI2C_stop  =    I2C_NO_STOP_BIT;
     }
     else
     {
-        cmd         =    SI7021_MEASURE_TEMPERATURE_NO_HOLD_MASTER_MODE;
+        cmd         =    SI7021_MEASURE_RELATIVE_HUMIDITY_NO_HOLD_MASTER_MODE;
         myI2C_stop  =    I2C_STOP_BIT;
     }
 
