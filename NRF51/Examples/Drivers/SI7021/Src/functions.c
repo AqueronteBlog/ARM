@@ -6,11 +6,11 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        22/September/2017
- * @version     22/September/2017   The ORIGIN
+ * @date        5/February/2018
+ * @version     5/February/2018   The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
- * @warning     NaN
+ * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
@@ -29,8 +29,8 @@
  * @date        5/May/2017
  * @version     23/May/2017     All the LEDs OFF at the beginning.
  *              5/May/2017      The ORIGIN
- * @pre         NaN
- * @warning     NaN
+ * @pre         N/A
+ * @warning     N/A
  */
 void conf_GPIO  ( void )
 {
@@ -53,20 +53,20 @@ void conf_GPIO  ( void )
  * @details     One channels will create an interrupt about every 0.5s.
  *
  *              Timer0:
- *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
+ *                  * Prescaler:            5   ( f_Timer0 = 500kHz ( PCLK1M ) ).
  *                  * 32-bits mode.
  *                  * Interrupt ENABLE.
  *
  *                 --- Channel 0:
- *                  * Overflow:             ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (1MHz)^(-1) ) ~ 0.5s.
+ *                  * Overflow:             ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500kHz)^(-1) ) ~ 0.5s.
  *
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        2/August/2017
- * @version     2/August/2017   The ORIGIN
- * @pre         NaN
- * @warning     NaN.
+ * @date        5/February/2018
+ * @version     5/February/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
  */
 void conf_TIMER0  ( void )
 {
@@ -76,7 +76,7 @@ void conf_TIMER0  ( void )
     NRF_TIMER0->BITMODE     =   TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos;                   // 32 bit mode.
     NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
-    NRF_TIMER0->CC[0]       =   500000;                                                                    // ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (1MHz)^(-1) ) ~ 0.5s
+    NRF_TIMER0->CC[0]       =   500000;                                                                    // ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500kHz)^(-1) ) ~ 0.5s
 
     NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos );
 
