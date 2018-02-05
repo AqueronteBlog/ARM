@@ -6,11 +6,11 @@
  * @return      NA
  *
  * @author      Manuel Caballero
- * @date        22/September/2017
- * @version     22/September/2017     The ORIGIN
+ * @date        5/February/2018
+ * @version     5/February/2018     The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
- * @warning     NaN
+ * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 

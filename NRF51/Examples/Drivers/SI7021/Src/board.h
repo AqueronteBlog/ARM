@@ -3,15 +3,15 @@
  * @details     It characterizes the board ( for this example ): nrf51-DK.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        5/May/2017
  * @version     30/June/2017    TWI0 pins added.
  *              2/June/2017     Uart0 pins added.
  *              5/May/2017      The ORIGIN
- * @pre         NaN
- * @warning     NaN
+ * @pre         N/A
+ * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
