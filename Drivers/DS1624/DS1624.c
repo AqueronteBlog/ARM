@@ -474,19 +474,24 @@ DS1624_status_t DS1624_ReadBytesEEPROM ( I2C_parameters_t myI2Cparameters, uint8
  * @warning     If the starting address is 00 and the incoming data is 00 11 22 33 44 55 66 77 88 99,
  *              the result is mem00=88 mem01=99 mem02=22 mem03=33 mem04=44 mem05=55 mem06=66 mem07=77.
  *              The data wraps around and overwrites itself.
+ * @warning     EEPROM Write Cycle Time: 50ms ( maximum ). The user must take care of this time!.
  */
 DS1624_status_t DS1624_WriteBytesEEPROM ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t myWriteBytesEEPROM[], uint8_t myLength )
 {
-    uint8_t      cmd[]     =   { DS1624_ACCESS_MEMORY, 0 };
-    i2c_status_t aux       =   0;
+    uint8_t      cmd[ myLength + 2 ];
+    uint32_t     i         =     0;
+    i2c_status_t aux       =     0;
 
-
-    // It sends the command, the address location
+    // Prepare COMMANDS
+    cmd[0]   =   DS1624_ACCESS_MEMORY;
     cmd[1]   =   myStartingAddress;
-    aux = i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_NO_STOP_BIT );
 
-    // Send all the data to be stored into the EEPROM
-    aux = i2c_write ( myI2Cparameters, &myWriteBytesEEPROM[0], myLength, I2C_STOP_BIT );
+    // Prepare the payload to be stored into the EEPROM memory
+    for ( i = 2 ; i < ( myLength + 2 ); i++ )
+        cmd[ i ]       =   myWriteBytesEEPROM[ i - 2 ];
+
+    // It sends the command, the address location as well as the payload
+    aux = i2c_write ( myI2Cparameters, &cmd[0], myLength + 2, I2C_STOP_BIT );
 
 
 
@@ -496,5 +501,3 @@ DS1624_status_t DS1624_WriteBytesEEPROM ( I2C_parameters_t myI2Cparameters, uint
     else
         return   DS1624_FAILURE;
 }
-
-
