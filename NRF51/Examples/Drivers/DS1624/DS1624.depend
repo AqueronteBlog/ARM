@@ -49,7 +49,7 @@
 1516357608 e:\vsprojects\arm\nrf51\examples\drivers\ds1624\src\interrupts.h
 	"variables.h"
 
-1517914582 source:e:\vsprojects\arm\nrf51\examples\drivers\ds1624\src\main.c
+1517916364 source:e:\vsprojects\arm\nrf51\examples\drivers\ds1624\src\main.c
 	"nrf.h"
 	"nrf_delay.h"
 	"ble.h"
@@ -123,6 +123,6 @@
 
 1516357608 source:e:\vsprojects\arm\nrf51\examples\drivers\ds1624\startup_nrf51.s
 
-1517913863 source:e:\vsprojects\arm\drivers\ds1624\ds1624.c
+1517914720 source:e:\vsprojects\arm\drivers\ds1624\ds1624.c
 	"DS1624.h"
 
