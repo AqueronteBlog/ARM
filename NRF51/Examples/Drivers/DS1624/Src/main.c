@@ -1,12 +1,14 @@
 /**
  * @brief       main.c
  * @details     This example shows how to work with the external temperature sensor
- *              DS1624. Every 1 second, a new temperature conversion is triggered and read.
- *              the raw temperature result is transmitted through the UART.
+ *              DS1624. First, it writes 3-bytes ( 0x23 0x23 0x23 ) into the EEPROM
+ *              memory ( address: 0x13 ), it checks that the data was stored well and
+ *              then, every 1 second, a new temperature conversion is triggered and read.
+ *              The raw temperature result is transmitted through the UART.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        18/January/2018
@@ -62,16 +64,16 @@ int main( void )
     aux  =   DS1624_SetConversionMode ( myDS1624_I2C_parameters, ACCESS_CONFIG_1SHOT_ONE_TEMPERATURE_CONVERSION );
     nrf_delay_ms ( 50 );
 
-    // Write myDataInEEPROM into EEPROM memory ( address: 0x15 )
-    aux  =   DS1624_WriteBytesEEPROM  ( myDS1624_I2C_parameters, 0x15, myDataInEEPROM, sizeof( myDataInEEPROM )/sizeof( myDataInEEPROM[0] ) );
+    // Write myDataInEEPROM into EEPROM memory ( address: 0x13 )
+    aux  =   DS1624_WriteBytesEEPROM  ( myDS1624_I2C_parameters, 0x13, myDataInEEPROM, sizeof( myDataInEEPROM )/sizeof( myDataInEEPROM[0] ) );
     nrf_delay_ms ( 50 );
 
-    // Read EEPROM memory ( address: 0x15 ), just to check if the data was stored correctly
+    // Read EEPROM memory ( address: 0x13 ), just to check if the data was stored correctly
     myDataInEEPROM[0]    =   0;
     myDataInEEPROM[1]    =   0;
     myDataInEEPROM[2]    =   0;
 
-    aux  =   DS1624_ReadBytesEEPROM   ( myDS1624_I2C_parameters, 0x15, &myDataInEEPROM[0], sizeof( myDataInEEPROM )/sizeof( myDataInEEPROM[0] ) );
+    aux  =   DS1624_ReadBytesEEPROM   ( myDS1624_I2C_parameters, 0x13, &myDataInEEPROM[0], sizeof( myDataInEEPROM )/sizeof( myDataInEEPROM[0] ) );
 
 
 
@@ -114,29 +116,29 @@ int main( void )
             }
             else
             {
-                aux  =   DS1624_ReadTemperature    ( myDS1624_I2C_parameters, &myDS1624_data );
-//                aux  =   DS1624_ReadRawTemperature ( myDS1624_I2C_parameters, &myDS1624_data );
-//
-//                myTX_buff[0]                 =   myDS1624_data.MSBTemperature;
-//                myTX_buff[1]                 =   myDS1624_data.LSBTemperature;
+                //aux  =   DS1624_ReadTemperature    ( myDS1624_I2C_parameters, &myDS1624_data );
+                aux  =   DS1624_ReadRawTemperature ( myDS1624_I2C_parameters, &myDS1624_data );
+
+                myTX_buff[0]                 =   myDS1624_data.MSBTemperature;
+                myTX_buff[1]                 =   myDS1624_data.LSBTemperature;
             }
 
 
-//            myPtr                        =   &myTX_buff[0];
-//            TX_inProgress                =   YES;
-//            NRF_UART0->TASKS_STARTTX     =   1;
-//            NRF_UART0->TXD               =   *myPtr++;                                   // Start transmission
-//
-//            // Wait until the message is transmitted
-//            while ( TX_inProgress == YES )
-//            {
-//                __WFE();
-//                // Make sure any pending events are cleared
-//                __SEV();
-//                __WFE();
-//            }
-//
-//
+            myPtr                        =   &myTX_buff[0];
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   *myPtr++;                                   // Start transmission
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES )
+            {
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
             mySTATE             =   0;
             NVIC_EnableIRQ ( TIMER0_IRQn );                                              // Timer Interrupt ENABLED
         }
