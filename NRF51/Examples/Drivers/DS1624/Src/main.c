@@ -28,8 +28,9 @@
 
 int main( void )
 {
-    uint8_t  myTX_buff[2]   =   { 0 };
-    uint32_t myTimeoOut      =   0;
+    uint8_t  myTX_buff[2]     =   { 0 };
+    uint8_t  myDataInEEPROM[] =   { 0x23, 0x23, 0x23 };
+    uint32_t myTimeoOut       =   0;
 
 
     I2C_parameters_t            myDS1624_I2C_parameters;
@@ -59,6 +60,18 @@ int main( void )
 
     // Configure 1SHOT mode
     aux  =   DS1624_SetConversionMode ( myDS1624_I2C_parameters, ACCESS_CONFIG_1SHOT_ONE_TEMPERATURE_CONVERSION );
+    nrf_delay_ms ( 50 );
+
+    // Write myDataInEEPROM into EEPROM memory ( address: 0x15 )
+    aux  =   DS1624_WriteBytesEEPROM  ( myDS1624_I2C_parameters, 0x15, myDataInEEPROM, sizeof( myDataInEEPROM )/sizeof( myDataInEEPROM[0] ) );
+    nrf_delay_ms ( 50 );
+
+    // Read EEPROM memory ( address: 0x15 ), just to check if the data was stored correctly
+    myDataInEEPROM[0]    =   0;
+    myDataInEEPROM[1]    =   0;
+    myDataInEEPROM[2]    =   0;
+
+    aux  =   DS1624_ReadBytesEEPROM   ( myDS1624_I2C_parameters, 0x15, &myDataInEEPROM[0], sizeof( myDataInEEPROM )/sizeof( myDataInEEPROM[0] ) );
 
 
 
