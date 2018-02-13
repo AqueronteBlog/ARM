@@ -36,13 +36,13 @@ void TIMER0_IRQHandler()
 	if ( changeLEDsSTATE == ON )
         {
         // Turn off all the LEDs
-            NRF_GPIO->OUTSET |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );
+            NRF_P0->OUTSET |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );
             changeLEDsSTATE   =  OFF;
         }
-		else
+	else
         {
         // Turn on all the LEDs
-            NRF_GPIO->OUTCLR |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );
+            NRF_P0->OUTCLR |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );
             changeLEDsSTATE   =  ON;
         }
 
