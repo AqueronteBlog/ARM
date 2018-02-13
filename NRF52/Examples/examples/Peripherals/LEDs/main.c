@@ -1,6 +1,10 @@
 /**
  * @brief       main.c
- * @details     [TODO] .
+ * @details     This project shows how to work with the internal peripherals GPIO and Timer0.
+ *              An interrupt will be generated every 0.5s by the TIMER0, the state of all the LEDs
+ *              will be changed then.
+ *
+ *              The microcontroller remains in low power the rest of the time.
  *
  * @return      N/A
  *
@@ -25,14 +29,28 @@
 
 
 
-
-
-
 /**@brief Function for application main entry.
  */
 int main(void)
 {
-    
+  conf_GPIO   ();
+  conf_TIMER0 ();
+  
+
+  NRF_TIMER0->TASKS_START  =   1;               // Start Timer0
+
+
+  while( 1 )
+  {
+    //NRF_POWER->SYSTEMOFF = 1;
+    NRF_POWER->TASKS_LOWPWR = 1;                // Sub power mode: Low power.
+
+    // Enter System ON sleep mode
+    __WFE();
+    // Make sure any pending events are cleared
+    __SEV();
+    __WFE();
+  }
 }
 
 
