@@ -25,7 +25,8 @@
  *
  * @author      Manuel Caballero
  * @date        12/February/2018
- * @version     12/February/2018   The ORIGIN
+ * @version     13/February/2018   All the LEDs OFF at the beginning.
+ *              12/February/2018   The ORIGIN   
  * @pre         N/A
  * @warning     N/A
  */
@@ -34,22 +35,26 @@ void conf_GPIO  ( void )
     uint32_t i = 0;
 
     for ( i = LED1; i < ( LED4 + 1 ); i++ )
-        NRF_GPIO->PIN_CNF[i]    =   GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos    |
-                                    GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos  |
-                                    GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   |
-                                    GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  |
-                                    GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos;
+    {
+      NRF_P0->OUTSET        =   ( 1 << i );
+
+      NRF_P0->PIN_CNF[i]    =   GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos    |
+                                GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos  |
+                                GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   |
+                                GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  |
+                                GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos;
+    }
 }
 
 
 /**
- * @brief       void conf_Timer0  ( void )
- * @details     It configures Timer0 to overflow every 0.125s and produces an interrupt.
+ * @brief       void conf_TIMER0  ( void )
+ * @details     It configures Timer0 to overflow every 0.5s and produces an interrupt.
  *
  *              Timer0:
- *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
+ *                  * Prescaler:            5   ( f_Timer0 = 500kHz ( PCLK1M ) ).
  *                  * 32-bits mode.
- *                  * Overflow:             ( 125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.125s.
+ *                  * Overflow:             ( 250000 * (f_Timer0)^(-1) ) = ( 250000 * ( 500kHz )^( -1 ) ) ~ 0.5s.
  *                  * Interrupt ENABLE.
  * @return      NA
  *
@@ -59,7 +64,7 @@ void conf_GPIO  ( void )
  * @pre         N/A
  * @warning     N/A
  */
-void conf_Timer0  ( void )
+void conf_TIMER0  ( void )
 {
     NRF_TIMER0->TASKS_STOP  =   1;
     NRF_TIMER0->MODE        =   TIMER_MODE_MODE_Timer;
@@ -67,7 +72,7 @@ void conf_Timer0  ( void )
     NRF_TIMER0->BITMODE     =   TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos;                   // 32 bit mode.
     NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
-    NRF_TIMER0->CC[0]       =   125000;                                                                     // ( 125000 * (f_Timer0)^(-1) ) = ( 125000 * (1MHz)^(-1) ) ~ 0.125s
+    NRF_TIMER0->CC[0]       =   250000;                                                                     // ( 250000 * (f_Timer0)^(-1) ) = ( 125000 * (500kHz)^(-1) ) ~ 0.5s
 
     NRF_TIMER0->INTENSET    =   TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos;
 
