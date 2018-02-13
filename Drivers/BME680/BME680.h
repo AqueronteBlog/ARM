@@ -1,14 +1,14 @@
 /**
- * @brief       SI7021.h
- * @details     I2C HUMIDITY AND TEMPERATURE SENSOR.
+ * @brief       BME680.h
+ * @details     Low power gas, pressure, temperature & humidity sensor.
  *              Header file.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018    The ORIGIN
+ * @date        13/February/2018
+ * @version     13/February/2018    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -19,39 +19,56 @@
 #include "stdbool.h"
 #include "i2c.h"
 
+#ifndef BME680_H_
+#define BME680_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
-  * @brief   DEFAULT ADDRESSES
+  * @brief   DEFAULT ADDRESSES. NOTE: The SDO pin cannot be left floating, if left floating, the
+  *                                   I2C address will be undefined.
   */
 typedef enum
 {
-    SI7021_ADDRESS     =   0x40                                                         /*!<   SI7021 I2C Address                                   */
-} SI7021_address_t;
+    BME680_ADDRESS_SDO_TO_GND     =   0x76,         /*!<   BME680 I2C Address: SDO connected to GND         */
+    BME680_ADDRESS_SDO_TO_VDD     =   0x77          /*!<   BME680 I2C Address: SDO connected to VDD         */
+} BME680_address_t;
 
 
 // REGISTERS
 /**
-  * @brief   COMMAND CODE
+  * @brief   REGISTERS: MEMORY MAP
   */
 typedef enum
 {
-    SI7021_MEASURE_RELATIVE_HUMIDITY_HOLD_MASTER_MODE           =   0xE5,               /*!<  Measure Relative Humidity, Hold Master Mode           */
-    SI7021_MEASURE_RELATIVE_HUMIDITY_NO_HOLD_MASTER_MODE        =   0xF5,               /*!<  Measure Relative Humidity, No Hold Master Mode        */
-    SI7021_MEASURE_TEMPERATURE_HOLD_MASTER_MODE                 =   0xE3,               /*!<  Measure Temperature, Hold Master Mode                 */
-    SI7021_MEASURE_TEMPERATURE_NO_HOLD_MASTER_MODE              =   0xF3,               /*!<  Measure Temperature, No Hold Master Mode              */
-    SI7021_READ_TEMPERATURE_VALUE_FROM_PREVIOUS_RH_MEASUREMENT  =   0xE0,               /*!<  Read Temperature Value from Previous RH Measurement   */
-    SI7021_RESET                                                =   0xFE,               /*!<  Reset                                                 */
-    SI7021_WRITE_RH_T_USER_REGISTER_1                           =   0xE6,               /*!<  Write RH/T User Register 1                            */
-    SI7021_READ_RH_T_USER_REGISTER_1                            =   0xE7,               /*!<  Read RH/T User Register 1                             */
-    SI7021_WRITE_HEATER_CONTROL_REGISTER                        =   0x51,               /*!<  Write Heater Control Register                         */
-    SI7021_READ_HEATER_CONTROL_REGISTER                         =   0x11,               /*!<  Read Heater Control Register                          */
-    SI7021_READ_ELECTRONIC_ID_FIRST_BYTE_CMD1                   =   0xFA,               /*!<  Read Electronic ID 1st Byte                           */
-    SI7021_READ_ELECTRONIC_ID_FIRST_BYTE_CMD2                   =   0x0F,               /*!<  Read Electronic ID 1st Byte                           */
-    SI7021_READ_ELECTRONIC_ID_SECOND_BYTE_CMD1                  =   0xFC,               /*!<  Read Electronic ID 2nd Byte                           */
-    SI7021_READ_ELECTRONIC_ID_SECOND_BYTE_CMD2                  =   0xC9,               /*!<  Read Electronic ID 2nd Byte                           */
-    SI7021_READ_FIRMWARE_VERSION_CMD1                           =   0x84,               /*!<  Read Firmware Revision                                */
-    SI7021_READ_FIRMWARE_VERSION_CMD2                           =   0xB8                /*!<  Read Firmware Revision                                */
-} SI7021_command_code_t;
+    BME680_STATUS           =   0x73,               /*!<  Selects memory map page in SPI mode               */
+    BME680_RESET            =   0xE0,               /*!<  Soft-reset register                               */
+    BME680_ID               =   0xD0,               /*!<  Chip ID                                           */
+    BME680_CONFIG           =   0x75,               /*!<  IIR filter control                                */
+    BME680_CTRL_MEAS        =   0x74,               /*!<  Oversampling setting for temperature and pressure */
+    BME680_CTRL_HUM         =   0x72,               /*!<  Humidity sensor over sampling control             */
+    BME680_CTRL_GAS_1       =   0x71,               /*!<  Heater  profile selection                         */
+    BME680_CTRL_GAS_0       =   0x70,               /*!<  Heater off                                        */
+    BME680_GAS_WAIT_9       =   0x6D,               /*!<  Gas sensor wait time                              */
+    BME680_GAS_WAIT_0       =   0x64,               /*!<  Gas sensor wait time                              */
+    BME680_RES_HEAT_9       =   0x63,               /*!<  Target heater resistance                          */
+    BME680_RES_HEAT_0       =   0x5A,               /*!<  Target heater resistance                          */
+    BME680_IDAC_HEAT_9      =   0x59,               /*!<  Heater current                                    */
+    BME680_IDAC_HEAT_0      =   0x50,               /*!<  Heater current                                    */
+    BME680_GAS_R_LSB        =   0x2B,               /*!<  Gas resistance data                               */
+    BME680_GAS_R_MSB        =   0x2A,               /*!<  Gas resistance data                               */
+    BME680_HUM_LSB          =   0x26,               /*!<  Humidity data                                     */
+    BME680_HUM_MSB          =   0x25,               /*!<  Humidity data                                     */
+    BME680_TEMP_XLSB        =   0x24,               /*!<  Temperature data                                  */
+    BME680_TEMP_LSB         =   0x23,               /*!<  Temperature data                                  */
+    BME680_TEMP_MSB         =   0x22,               /*!<  Temperature data                                  */
+    BME680_PRESS_XLSB       =   0x21,               /*!<  Pressure data                                     */
+    BME680_PRESS_LSB        =   0x20,               /*!<  Pressure data                                     */
+    BME680_PRESS_MSB        =   0x1F,               /*!<  Pressure data                                     */
+    BME680_MEAS_STATUS_0    =   0x1D,               /*!<  New data status                                   */
+} BME680_registers_t;
 
 
 
@@ -61,9 +78,9 @@ typedef enum
   */
 typedef enum
 {
-    SI7021_HOLD_MASTER_MODE                 =   0x01,           /*!<  SI7021 HOLD MASTER MODE enabled                       */
-    SI7021_NO_HOLD_MASTER_MODE              =   0x00            /*!<  SI7021 NO HOLD MASTER MODE enabled                    */
-} SI7021_master_mode_t;
+    BME680_HOLD_MASTER_MODE                 =   0x01,           /*!<  BME680 HOLD MASTER MODE enabled                       */
+    BME680_NO_HOLD_MASTER_MODE              =   0x00            /*!<  BME680 NO HOLD MASTER MODE enabled                    */
+} BME680_master_mode_t;
 
 
 
@@ -79,12 +96,12 @@ typedef enum
   */
 typedef enum
 {
-    SI7021_RESOLUTION_MASK                  =   0x81,           /*!<  SI7021 Measurement Resolution                         */
-    SI7021_RESOLUTION_RH_12_TEMP_14         =   0x00,           /*!<  SI7021 12b RH 14b Temp.                               */
-    SI7021_RESOLUTION_RH_8_TEMP_12          =   0x01,           /*!<  SI7021 9b  RH 12b Temp.                               */
-    SI7021_RESOLUTION_RH_10_TEMP_13         =   0x80,           /*!<  SI7021 10b RH 13b Temp.                               */
-    SI7021_RESOLUTION_RH_11_TEMP_11         =   0x81            /*!<  SI7021 11b RH 11b Temp.                               */
-} SI7021_measurement_resolution_t;
+    BME680_RESOLUTION_MASK                  =   0x81,           /*!<  BME680 Measurement Resolution                         */
+    BME680_RESOLUTION_RH_12_TEMP_14         =   0x00,           /*!<  BME680 12b RH 14b Temp.                               */
+    BME680_RESOLUTION_RH_8_TEMP_12          =   0x01,           /*!<  BME680 9b  RH 12b Temp.                               */
+    BME680_RESOLUTION_RH_10_TEMP_13         =   0x80,           /*!<  BME680 10b RH 13b Temp.                               */
+    BME680_RESOLUTION_RH_11_TEMP_11         =   0x81            /*!<  BME680 11b RH 11b Temp.                               */
+} BME680_measurement_resolution_t;
 
 
 
@@ -99,10 +116,10 @@ typedef enum
 */
 typedef enum
 {
-    SI7021_VDDS_STATUS_MASK                 =   0x40,           /*!<  SI7021 VDD mask.                                      */
-    SI7021_VDDS_STATUS_VDD_OK               =   ( 0 << 6 ),     /*!<  VDD OK.                                               */
-    SI7021_VDDS_STATUS_VDD_LOW              =   ( 1 << 6 )      /*!<  VDD Low.                                              */
-} SI7021_vdds_status_t;
+    BME680_VDDS_STATUS_MASK                 =   0x40,           /*!<  BME680 VDD mask.                                      */
+    BME680_VDDS_STATUS_VDD_OK               =   ( 0 << 6 ),     /*!<  VDD OK.                                               */
+    BME680_VDDS_STATUS_VDD_LOW              =   ( 1 << 6 )      /*!<  VDD Low.                                              */
+} BME680_vdds_status_t;
 
 
 
@@ -111,18 +128,18 @@ typedef enum
   */
 typedef enum
 {
-    SI7021_HTRE_MASK                        =   0x03,           /*!<  SI7021 HTRE Mask                                   */
-    SI7021_HTRE_ENABLED                     =   ( 1 << 2 ),     /*!<  SI7021 On-chip Heater Enable                          */
-    SI7021_HTRE_DISABLED                    =   ( 0 << 2 )      /*!<  SI7021 On-chip Heater Disable                         */
-} SI7021_heater_t;
+    BME680_HTRE_MASK                        =   0x03,           /*!<  BME680 HTRE Mask                                   */
+    BME680_HTRE_ENABLED                     =   ( 1 << 2 ),     /*!<  BME680 On-chip Heater Enable                          */
+    BME680_HTRE_DISABLED                    =   ( 0 << 2 )      /*!<  BME680 On-chip Heater Disable                         */
+} BME680_heater_t;
 
 
 
 
 
 
-#ifndef SI7021_VECTOR_STRUCT_H
-#define SI7021_VECTOR_STRUCT_H
+#ifndef BME680_VECTOR_STRUCT_H
+#define BME680_VECTOR_STRUCT_H
 typedef struct
 {
     float    RelativeHumidity;
@@ -133,7 +150,7 @@ typedef struct
 
     uint8_t  FirmwareRevision;
     uint8_t  BatteryStatus;
-} SI7021_vector_data_t;
+} BME680_vector_data_t;
 #endif
 
 
@@ -145,9 +162,9 @@ typedef struct
   */
 typedef enum
 {
-    SI7021_SUCCESS     =       0,
-    SI7021_FAILURE     =       1
-} SI7021_status_t;
+    BME680_SUCCESS     =       0,
+    BME680_FAILURE     =       1
+} BME680_status_t;
 
 
 
@@ -157,60 +174,67 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-SI7021_status_t  SI7021_Init                        ( I2C_parameters_t myI2Cparameters );
+BME680_status_t  BME680_Init                        ( I2C_parameters_t myI2Cparameters );
 
 /** It configures the device: resolution and heater.
   */
-SI7021_status_t  SI7021_Conf                        ( I2C_parameters_t myI2Cparameters, SI7021_measurement_resolution_t myResolution, SI7021_heater_t myHeater );
+BME680_status_t  BME680_Conf                        ( I2C_parameters_t myI2Cparameters, BME680_measurement_resolution_t myResolution, BME680_heater_t myHeater );
 
 /** It performs a software reset.
   */
-SI7021_status_t  SI7021_SoftReset                   ( I2C_parameters_t myI2Cparameters );
+BME680_status_t  BME680_SoftReset                   ( I2C_parameters_t myI2Cparameters );
 
 /** It gets the electronic serial number.
   */
-SI7021_status_t  SI7021_GetElectronicSerialNumber   ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* mySerialNumber );
+BME680_status_t  BME680_GetElectronicSerialNumber   ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* mySerialNumber );
 
 /** It gets the firmware revision.
   */
-SI7021_status_t  SI7021_GetFirmwareRevision         ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myFirmwareRevision );
+BME680_status_t  BME680_GetFirmwareRevision         ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myFirmwareRevision );
 
 /** It sets the heater current.
 */
-SI7021_status_t  SI7021_SetHeaterCurrent            ( I2C_parameters_t myI2Cparameters, uint8_t myHeaterCurrent );
+BME680_status_t  BME680_SetHeaterCurrent            ( I2C_parameters_t myI2Cparameters, uint8_t myHeaterCurrent );
 
 /** It performs a new temperature measurement.
   */
-SI7021_status_t  SI7021_TriggerTemperature          ( I2C_parameters_t myI2Cparameters, SI7021_master_mode_t myMode );
+BME680_status_t  BME680_TriggerTemperature          ( I2C_parameters_t myI2Cparameters, BME680_master_mode_t myMode );
 
 /** It read the temperature.
   */
-SI7021_status_t  SI7021_ReadTemperature             ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myTemperature );
+BME680_status_t  BME680_ReadTemperature             ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myTemperature );
 
 /** It reads the raw data from temperature.
   */
-SI7021_status_t  SI7021_ReadRawTemperature          ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myTemperature );
+BME680_status_t  BME680_ReadRawTemperature          ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myTemperature );
 
 /** It reads the raw temperature data after a relative humidity measurement was done.
   */
-SI7021_status_t  SI7021_ReadRawTemperatureFromRH    ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myTemperature );
+BME680_status_t  BME680_ReadRawTemperatureFromRH    ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myTemperature );
 
 /** It reads the temperature after a relative humidity measurement was done.
   */
-SI7021_status_t  SI7021_ReadTemperatureFromRH       ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myTemperature );
+BME680_status_t  BME680_ReadTemperatureFromRH       ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myTemperature );
 
 /** It performs a new relative humidity measurement.
   */
-SI7021_status_t  SI7021_TriggerHumidity             ( I2C_parameters_t myI2Cparameters, SI7021_master_mode_t myMode );
+BME680_status_t  BME680_TriggerHumidity             ( I2C_parameters_t myI2Cparameters, BME680_master_mode_t myMode );
 
 /** It reads the relative humidity.
   */
-SI7021_status_t  SI7021_ReadHumidity                ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myHumidity );
+BME680_status_t  BME680_ReadHumidity                ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myHumidity );
 
 /** It reads the raw data from relative humidity.
   */
-SI7021_status_t  SI7021_ReadRawHumidity             ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myHumidity );
+BME680_status_t  BME680_ReadRawHumidity             ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myHumidity );
 
 /** It gets the battery status.
   */
-SI7021_status_t  SI7021_GetBatteryStatus            ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myBatteryStatus );
+BME680_status_t  BME680_GetBatteryStatus            ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myBatteryStatus );
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* BME680_H */
