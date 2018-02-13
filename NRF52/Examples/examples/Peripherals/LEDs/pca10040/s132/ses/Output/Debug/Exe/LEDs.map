@@ -5138,25 +5138,8 @@ Discarded input sections
  .text          0x0000000000000000        0x0 Output/LEDs Debug/Obj/functions.o
  .data          0x0000000000000000        0x0 Output/LEDs Debug/Obj/functions.o
  .bss           0x0000000000000000        0x0 Output/LEDs Debug/Obj/functions.o
- .text.NVIC_EnableIRQ
-                0x0000000000000000       0x2c Output/LEDs Debug/Obj/functions.o
  .bss.changeLEDsSTATE
                 0x0000000000000000        0x4 Output/LEDs Debug/Obj/functions.o
- .text.conf_GPIO
-                0x0000000000000000       0x2e Output/LEDs Debug/Obj/functions.o
- .text.conf_Timer0
-                0x0000000000000000       0x54 Output/LEDs Debug/Obj/functions.o
- .debug_frame   0x0000000000000000       0x6c Output/LEDs Debug/Obj/functions.o
- .debug_info    0x0000000000000000      0x66c Output/LEDs Debug/Obj/functions.o
- .debug_abbrev  0x0000000000000000      0x165 Output/LEDs Debug/Obj/functions.o
- .debug_pubnames
-                0x0000000000000000      0x3da Output/LEDs Debug/Obj/functions.o
- .debug_pubtypes
-                0x0000000000000000      0x112 Output/LEDs Debug/Obj/functions.o
- .debug_aranges
-                0x0000000000000000       0x30 Output/LEDs Debug/Obj/functions.o
- .debug_ranges  0x0000000000000000       0x20 Output/LEDs Debug/Obj/functions.o
- .debug_macro   0x0000000000000000       0xc0 Output/LEDs Debug/Obj/functions.o
  .debug_macro   0x0000000000000000      0x904 Output/LEDs Debug/Obj/functions.o
  .debug_macro   0x0000000000000000       0x22 Output/LEDs Debug/Obj/functions.o
  .debug_macro   0x0000000000000000       0x2d Output/LEDs Debug/Obj/functions.o
@@ -5170,11 +5153,6 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x82 Output/LEDs Debug/Obj/functions.o
  .debug_macro   0x0000000000000000       0x22 Output/LEDs Debug/Obj/functions.o
  .debug_macro   0x0000000000000000       0x16 Output/LEDs Debug/Obj/functions.o
- .debug_line    0x0000000000000000      0x282 Output/LEDs Debug/Obj/functions.o
- .debug_str     0x0000000000000000    0x5b234 Output/LEDs Debug/Obj/functions.o
- .comment       0x0000000000000000       0x4d Output/LEDs Debug/Obj/functions.o
- .ARM.attributes
-                0x0000000000000000       0x39 Output/LEDs Debug/Obj/functions.o
  .group         0x0000000000000000        0x8 Output/LEDs Debug/Obj/interrupts.o
  .group         0x0000000000000000        0x8 Output/LEDs Debug/Obj/interrupts.o
  .group         0x0000000000000000        0x8 Output/LEDs Debug/Obj/interrupts.o
@@ -13551,7 +13529,7 @@ Linker script and memory map
                 0x0000000000000001                . = ASSERT (((__init_rodata_start__ == __init_rodata_end__) || ((__init_rodata_end__ >= __FLASH_segment_start__) && (__init_rodata_end__ <= __FLASH_segment_end__))), error: .init_rodata is too large to fit in FLASH memory segment)
                 0x00000000000232f4                __text_load_start__ = ALIGN (__init_rodata_end__, 0x4)
 
-.text           0x00000000000232f4     0xa63c
+.text           0x00000000000232f4     0xa718
                 0x00000000000232f4                __text_start__ = .
  *(.text .text.* .glue_7t .glue_7 .gnu.linkonce.t.* .gcc_except_table .ARM.extab* .gnu.linkonce.armextab.*)
  .glue_7        0x00000000000232f4        0x0 linker stubs
@@ -14102,596 +14080,604 @@ Linker script and memory map
                 0x00000000000281c6       0x62 Output/LEDs Debug/Obj/bsp_btn_ble.o
  .text.ble_evt_handler
                 0x0000000000028228       0x88 Output/LEDs Debug/Obj/bsp_btn_ble.o
- .text.main     0x00000000000282b0        0x6 Output/LEDs Debug/Obj/main.o
+ .text.main     0x00000000000282b0       0x24 Output/LEDs Debug/Obj/main.o
                 0x00000000000282b0                main
- *fill*         0x00000000000282b6        0x2 
- .text.TIMER0_IRQHandler
-                0x00000000000282b8       0x6c Output/LEDs Debug/Obj/interrupts.o
-                0x00000000000282b8                TIMER0_IRQHandler
- .text.instance_get
-                0x0000000000028324       0x50 Output/LEDs Debug/Obj/ble_conn_params.o
- .text.instance_claim
-                0x0000000000028374       0x34 Output/LEDs Debug/Obj/ble_conn_params.o
- .text.instance_free
-                0x00000000000283a8       0x12 Output/LEDs Debug/Obj/ble_conn_params.o
- .text.is_conn_params_ok
-                0x00000000000283ba       0xca Output/LEDs Debug/Obj/ble_conn_params.o
- .text.send_error_evt
-                0x0000000000028484       0x24 Output/LEDs Debug/Obj/ble_conn_params.o
- .text.conn_params_negotiation
-                0x00000000000284a8       0x7c Output/LEDs Debug/Obj/ble_conn_params.o
- .text.on_connect
-                0x0000000000028524       0x84 Output/LEDs Debug/Obj/ble_conn_params.o
- .text.on_disconnect
-                0x00000000000285a8       0x46 Output/LEDs Debug/Obj/ble_conn_params.o
- *fill*         0x00000000000285ee        0x2 
- .text.on_write
-                0x00000000000285f0       0x7c Output/LEDs Debug/Obj/ble_conn_params.o
- .text.on_conn_params_update
-                0x000000000002866c       0x54 Output/LEDs Debug/Obj/ble_conn_params.o
- .text.ble_evt_handler
-                0x00000000000286c0       0x4c Output/LEDs Debug/Obj/ble_conn_params.o
- .text.record_activate
-                0x000000000002870c       0x74 Output/LEDs Debug/Obj/ble_conn_state.o
- .text.record_invalidate
-                0x0000000000028780       0x30 Output/LEDs Debug/Obj/ble_conn_state.o
- .text.record_set_disconnected
-                0x00000000000287b0       0x28 Output/LEDs Debug/Obj/ble_conn_state.o
- .text.record_purge_disconnected
-                0x00000000000287d8       0x5c Output/LEDs Debug/Obj/ble_conn_state.o
- .text.user_flag_is_acquired
-                0x0000000000028834       0x2c Output/LEDs Debug/Obj/ble_conn_state.o
- .text.ble_evt_handler
-                0x0000000000028860       0xcc Output/LEDs Debug/Obj/ble_conn_state.o
- .text.ble_conn_state_role
-                0x000000000002892c       0x64 Output/LEDs Debug/Obj/ble_conn_state.o
-                0x000000000002892c                ble_conn_state_role
- .text.ble_conn_state_encrypted
-                0x0000000000028990       0x2c Output/LEDs Debug/Obj/ble_conn_state.o
-                0x0000000000028990                ble_conn_state_encrypted
- .text.ble_conn_state_conn_handles
-                0x00000000000289bc       0x24 Output/LEDs Debug/Obj/ble_conn_state.o
-                0x00000000000289bc                ble_conn_state_conn_handles
- .text.ble_conn_state_user_flag_get
-                0x00000000000289e0       0x54 Output/LEDs Debug/Obj/ble_conn_state.o
-                0x00000000000289e0                ble_conn_state_user_flag_get
- .text.ble_conn_state_user_flag_set
-                0x0000000000028a34       0x54 Output/LEDs Debug/Obj/ble_conn_state.o
-                0x0000000000028a34                ble_conn_state_user_flag_set
- .text.ble_conn_state_user_flag_collection
-                0x0000000000028a88       0x38 Output/LEDs Debug/Obj/ble_conn_state.o
-                0x0000000000028a88                ble_conn_state_user_flag_collection
- .text.uint16_decode
-                0x0000000000028ac0       0x20 Output/LEDs Debug/Obj/ble_srv_common.o
- .text.ble_srv_is_notification_enabled
-                0x0000000000028ae0       0x2c Output/LEDs Debug/Obj/ble_srv_common.o
-                0x0000000000028ae0                ble_srv_is_notification_enabled
- .text.sdk_mapped_flags_any_set
-                0x0000000000028b0c       0x16 Output/LEDs Debug/Obj/gatt_cache_manager.o
- *fill*         0x0000000000028b22        0x2 
- .text.evt_send
-                0x0000000000028b24       0x44 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .text.cccd_written
-                0x0000000000028b68       0x32 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .text.send_unexpected_error
-                0x0000000000028b9a       0x3c Output/LEDs Debug/Obj/gatt_cache_manager.o
- *fill*         0x0000000000028bd6        0x2 
- .text.local_db_apply_in_evt
-                0x0000000000028bd8       0xb4 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .text.local_db_update
-                0x0000000000028c8c       0x30 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .text.local_db_update_in_evt
-                0x0000000000028cbc       0xa4 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .text.service_changed_send_in_evt
-                0x0000000000028d60       0xe8 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .text.pending_flags_check
-                0x0000000000028e48      0x100 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .text.apply_pending_flags_check
-                0x0000000000028f48       0x14 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .text.update_pending_flags_check
-                0x0000000000028f5c       0x14 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .text.service_changed_pending_flags_check
-                0x0000000000028f70       0x14 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .text.gcm_im_evt_handler
-                0x0000000000028f84       0x48 Output/LEDs Debug/Obj/gatt_cache_manager.o
-                0x0000000000028f84                gcm_im_evt_handler
- .text.gcm_pdb_evt_handler
-                0x0000000000028fcc       0xc8 Output/LEDs Debug/Obj/gatt_cache_manager.o
-                0x0000000000028fcc                gcm_pdb_evt_handler
- .text.gcm_ble_evt_handler
-                0x0000000000029094       0xc8 Output/LEDs Debug/Obj/gatt_cache_manager.o
-                0x0000000000029094                gcm_ble_evt_handler
- .text.sd_ble_gatts_service_changed
-                0x000000000002915c        0x8 Output/LEDs Debug/Obj/gatts_cache_manager.o
- .text.sd_ble_gatts_sys_attr_set
-                0x0000000000029164        0x8 Output/LEDs Debug/Obj/gatts_cache_manager.o
- .text.sd_ble_gatts_sys_attr_get
-                0x000000000002916c        0x8 Output/LEDs Debug/Obj/gatts_cache_manager.o
- .text.sd_ble_gatts_initial_user_handle_get
-                0x0000000000029174        0x8 Output/LEDs Debug/Obj/gatts_cache_manager.o
- .text.service_changed_pending_set
-                0x000000000002917c       0x68 Output/LEDs Debug/Obj/gatts_cache_manager.o
- .text.gscm_pdb_evt_handler
-                0x00000000000291e4       0x24 Output/LEDs Debug/Obj/gatts_cache_manager.o
-                0x00000000000291e4                gscm_pdb_evt_handler
- .text.gscm_local_db_cache_update
-                0x0000000000029208       0xe6 Output/LEDs Debug/Obj/gatts_cache_manager.o
-                0x0000000000029208                gscm_local_db_cache_update
- .text.gscm_local_db_cache_apply
-                0x00000000000292ee       0xf2 Output/LEDs Debug/Obj/gatts_cache_manager.o
-                0x00000000000292ee                gscm_local_db_cache_apply
- .text.gscm_service_changed_ind_needed
-                0x00000000000293e0       0x46 Output/LEDs Debug/Obj/gatts_cache_manager.o
-                0x00000000000293e0                gscm_service_changed_ind_needed
- *fill*         0x0000000000029426        0x2 
- .text.gscm_service_changed_ind_send
-                0x0000000000029428       0x68 Output/LEDs Debug/Obj/gatts_cache_manager.o
-                0x0000000000029428                gscm_service_changed_ind_send
- .text.gscm_db_change_notification_done
-                0x0000000000029490       0x30 Output/LEDs Debug/Obj/gatts_cache_manager.o
-                0x0000000000029490                gscm_db_change_notification_done
- .text.sd_ecb_block_encrypt
-                0x00000000000294c0        0x8 Output/LEDs Debug/Obj/id_manager.o
- .text.evt_send
-                0x00000000000294c8       0x30 Output/LEDs Debug/Obj/id_manager.o
- .text.get_free_connection
-                0x00000000000294f8       0x58 Output/LEDs Debug/Obj/id_manager.o
-                0x00000000000294f8                get_free_connection
- .text.get_connection_by_conn_handle
-                0x0000000000029550       0x64 Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029550                get_connection_by_conn_handle
- .text.new_connection
-                0x00000000000295b4       0xc0 Output/LEDs Debug/Obj/id_manager.o
-                0x00000000000295b4                new_connection
- .text.is_valid_irk
-                0x0000000000029674       0x2e Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029674                is_valid_irk
- .text.addr_compare
-                0x00000000000296a2       0x58 Output/LEDs Debug/Obj/id_manager.o
-                0x00000000000296a2                addr_compare
- .text.im_ble_evt_handler
-                0x00000000000296fa      0x124 Output/LEDs Debug/Obj/id_manager.o
-                0x00000000000296fa                im_ble_evt_handler
- .text.im_is_duplicate_bonding_data
-                0x000000000002981e       0xf6 Output/LEDs Debug/Obj/id_manager.o
-                0x000000000002981e                im_is_duplicate_bonding_data
- .text.im_find_duplicate_bonding_data
-                0x0000000000029914       0x54 Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029914                im_find_duplicate_bonding_data
- .text.im_peer_id_get_by_conn_handle
-                0x0000000000029968       0x48 Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029968                im_peer_id_get_by_conn_handle
- .text.im_ble_addr_get
-                0x00000000000299b0       0x58 Output/LEDs Debug/Obj/id_manager.o
-                0x00000000000299b0                im_ble_addr_get
- .text.im_master_ids_compare
-                0x0000000000029a08       0x52 Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029a08                im_master_ids_compare
- .text.im_peer_id_get_by_master_id
-                0x0000000000029a5a       0x56 Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029a5a                im_peer_id_get_by_master_id
- .text.im_conn_handle_get
-                0x0000000000029ab0       0x54 Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029ab0                im_conn_handle_get
- .text.im_master_id_is_valid
-                0x0000000000029b04       0x3c Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029b04                im_master_id_is_valid
- .text.peer_id_set
-                0x0000000000029b40       0x4c Output/LEDs Debug/Obj/id_manager.o
- .text.im_new_peer_id
-                0x0000000000029b8c       0x2a Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029b8c                im_new_peer_id
- .text.im_peer_free
-                0x0000000000029bb6       0x50 Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029bb6                im_peer_free
- .text.ah       0x0000000000029c06       0xa0 Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029c06                ah
- .text.im_address_resolve
-                0x0000000000029ca6       0x62 Output/LEDs Debug/Obj/id_manager.o
-                0x0000000000029ca6                im_address_resolve
- .text.pds_evt_send
-                0x0000000000029d08       0x34 Output/LEDs Debug/Obj/peer_data_storage.o
- .text.peer_id_to_file_id
-                0x0000000000029d3c       0x18 Output/LEDs Debug/Obj/peer_data_storage.o
- .text.file_id_to_peer_id
-                0x0000000000029d54       0x18 Output/LEDs Debug/Obj/peer_data_storage.o
- .text.peer_data_id_to_record_key
-                0x0000000000029d6c       0x1a Output/LEDs Debug/Obj/peer_data_storage.o
- .text.peer_data_id_is_valid
-                0x0000000000029d86       0x4a Output/LEDs Debug/Obj/peer_data_storage.o
- .text.send_unexpected_error
-                0x0000000000029dd0       0x3c Output/LEDs Debug/Obj/peer_data_storage.o
- .text.peer_data_delete
-                0x0000000000029e0c       0xd8 Output/LEDs Debug/Obj/peer_data_storage.o
- .text.peer_data_find
-                0x0000000000029ee4       0x6e Output/LEDs Debug/Obj/peer_data_storage.o
- .text.pds_peer_data_read
-                0x0000000000029f52       0xc4 Output/LEDs Debug/Obj/peer_data_storage.o
-                0x0000000000029f52                pds_peer_data_read
- *fill*         0x000000000002a016        0x2 
- .text.pds_peer_data_iterate_prepare
-                0x000000000002a018       0x14 Output/LEDs Debug/Obj/peer_data_storage.o
-                0x000000000002a018                pds_peer_data_iterate_prepare
- .text.pds_peer_data_iterate
-                0x000000000002a02c       0xa8 Output/LEDs Debug/Obj/peer_data_storage.o
-                0x000000000002a02c                pds_peer_data_iterate
- .text.pds_space_reserve
-                0x000000000002a0d4       0x54 Output/LEDs Debug/Obj/peer_data_storage.o
-                0x000000000002a0d4                pds_space_reserve
- .text.pds_space_reserve_cancel
-                0x000000000002a128       0x24 Output/LEDs Debug/Obj/peer_data_storage.o
-                0x000000000002a128                pds_space_reserve_cancel
- .text.pds_peer_data_store
-                0x000000000002a14c      0x12c Output/LEDs Debug/Obj/peer_data_storage.o
-                0x000000000002a14c                pds_peer_data_store
- .text.pds_peer_id_allocate
-                0x000000000002a278       0x10 Output/LEDs Debug/Obj/peer_data_storage.o
-                0x000000000002a278                pds_peer_id_allocate
- .text.pds_peer_id_free
-                0x000000000002a288       0x2e Output/LEDs Debug/Obj/peer_data_storage.o
-                0x000000000002a288                pds_peer_id_free
- .text.pds_peer_id_is_allocated
-                0x000000000002a2b6       0x1e Output/LEDs Debug/Obj/peer_data_storage.o
-                0x000000000002a2b6                pds_peer_id_is_allocated
- .text.pds_next_peer_id_get
-                0x000000000002a2d4       0x1e Output/LEDs Debug/Obj/peer_data_storage.o
-                0x000000000002a2d4                pds_next_peer_id_get
- .text.pds_next_deleted_peer_id_get
-                0x000000000002a2f2       0x1e Output/LEDs Debug/Obj/peer_data_storage.o
-                0x000000000002a2f2                pds_next_deleted_peer_id_get
- .text.write_buffer_record_invalidate
-                0x000000000002a310       0x44 Output/LEDs Debug/Obj/peer_database.o
- .text.write_buffer_record_find_next
-                0x000000000002a354       0x4c Output/LEDs Debug/Obj/peer_database.o
- .text.write_buffer_record_find
-                0x000000000002a3a0       0x7e Output/LEDs Debug/Obj/peer_database.o
- *fill*         0x000000000002a41e        0x2 
- .text.write_buffer_record_find_stored
-                0x000000000002a420       0x40 Output/LEDs Debug/Obj/peer_database.o
- .text.write_buffer_record_find_unused
-                0x000000000002a460       0x12 Output/LEDs Debug/Obj/peer_database.o
- *fill*         0x000000000002a472        0x2 
- .text.write_buffer_record_release
-                0x000000000002a474       0x44 Output/LEDs Debug/Obj/peer_database.o
- .text.write_buffer_record_acquire
-                0x000000000002a4b8       0x4c Output/LEDs Debug/Obj/peer_database.o
- .text.pdb_evt_send
-                0x000000000002a504       0x30 Output/LEDs Debug/Obj/peer_database.o
- .text.peer_data_point_to_buffer
-                0x000000000002a534       0x46 Output/LEDs Debug/Obj/peer_database.o
- .text.peer_data_const_point_to_buffer
-                0x000000000002a57a       0x28 Output/LEDs Debug/Obj/peer_database.o
- *fill*         0x000000000002a5a2        0x2 
- .text.write_buf_length_words_set
-                0x000000000002a5a4       0x68 Output/LEDs Debug/Obj/peer_database.o
- .text.write_buf_store
-                0x000000000002a60c      0x114 Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002a60c                write_buf_store
- .text.write_buf_store_in_event
-                0x000000000002a720       0x52 Output/LEDs Debug/Obj/peer_database.o
- *fill*         0x000000000002a772        0x2 
- .text.reattempt_previous_operations
-                0x000000000002a774       0x90 Output/LEDs Debug/Obj/peer_database.o
- .text.pdb_pds_evt_handler
-                0x000000000002a804       0xa8 Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002a804                pdb_pds_evt_handler
- .text.pdb_peer_allocate
-                0x000000000002a8ac        0xc Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002a8ac                pdb_peer_allocate
- .text.pdb_peer_free
-                0x000000000002a8b8       0x98 Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002a8b8                pdb_peer_free
- .text.pdb_peer_data_ptr_get
-                0x000000000002a950       0x2c Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002a950                pdb_peer_data_ptr_get
- .text.pdb_write_buf_get
-                0x000000000002a97c      0x1c4 Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002a97c                pdb_write_buf_get
- .text.pdb_write_buf_release
-                0x000000000002ab40       0x60 Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002ab40                pdb_write_buf_release
- .text.pdb_write_buf_store_prepare
-                0x000000000002aba0       0xb8 Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002aba0                pdb_write_buf_store_prepare
- .text.pdb_write_buf_store
-                0x000000000002ac58       0x66 Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002ac58                pdb_write_buf_store
- .text.pdb_next_peer_id_get
-                0x000000000002acbe       0x1e Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002acbe                pdb_next_peer_id_get
- .text.pdb_next_deleted_peer_id_get
-                0x000000000002acdc       0x1e Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002acdc                pdb_next_deleted_peer_id_get
- .text.pdb_peer_data_load
-                0x000000000002acfa       0x34 Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002acfa                pdb_peer_data_load
- .text.pdb_raw_store
-                0x000000000002ad2e       0x26 Output/LEDs Debug/Obj/peer_database.o
-                0x000000000002ad2e                pdb_raw_store
- .text.claim    0x000000000002ad54       0x80 Output/LEDs Debug/Obj/peer_id.o
- .text.release  0x000000000002add4       0x28 Output/LEDs Debug/Obj/peer_id.o
- .text.peer_id_allocate
-                0x000000000002adfc       0x24 Output/LEDs Debug/Obj/peer_id.o
-                0x000000000002adfc                peer_id_allocate
- .text.peer_id_delete
-                0x000000000002ae20       0x4c Output/LEDs Debug/Obj/peer_id.o
-                0x000000000002ae20                peer_id_delete
- .text.peer_id_free
-                0x000000000002ae6c       0x34 Output/LEDs Debug/Obj/peer_id.o
-                0x000000000002ae6c                peer_id_free
- .text.peer_id_is_allocated
-                0x000000000002aea0       0x30 Output/LEDs Debug/Obj/peer_id.o
-                0x000000000002aea0                peer_id_is_allocated
- .text.peer_id_is_deleted
-                0x000000000002aed0       0x30 Output/LEDs Debug/Obj/peer_id.o
-                0x000000000002aed0                peer_id_is_deleted
- .text.next_id_get
-                0x000000000002af00       0x60 Output/LEDs Debug/Obj/peer_id.o
-                0x000000000002af00                next_id_get
- .text.peer_id_get_next_used
-                0x000000000002af60       0x68 Output/LEDs Debug/Obj/peer_id.o
-                0x000000000002af60                peer_id_get_next_used
- .text.peer_id_get_next_deleted
-                0x000000000002afc8       0x24 Output/LEDs Debug/Obj/peer_id.o
-                0x000000000002afc8                peer_id_get_next_deleted
- .text.evt_send
-                0x000000000002afec       0x3c Output/LEDs Debug/Obj/peer_manager.o
- .text.rank_vars_update
-                0x000000000002b028       0x44 Output/LEDs Debug/Obj/peer_manager.o
- .text.pm_pdb_evt_handler
-                0x000000000002b06c      0x210 Output/LEDs Debug/Obj/peer_manager.o
-                0x000000000002b06c                pm_pdb_evt_handler
- .text.pm_sm_evt_handler
-                0x000000000002b27c       0x50 Output/LEDs Debug/Obj/peer_manager.o
-                0x000000000002b27c                pm_sm_evt_handler
- .text.pm_gcm_evt_handler
-                0x000000000002b2cc       0x14 Output/LEDs Debug/Obj/peer_manager.o
-                0x000000000002b2cc                pm_gcm_evt_handler
- .text.pm_im_evt_handler
-                0x000000000002b2e0       0x34 Output/LEDs Debug/Obj/peer_manager.o
-                0x000000000002b2e0                pm_im_evt_handler
- .text.ble_evt_handler
-                0x000000000002b314       0x38 Output/LEDs Debug/Obj/peer_manager.o
- .text.pm_peer_ranks_get
-                0x000000000002b34c      0x12c Output/LEDs Debug/Obj/peer_manager.o
-                0x000000000002b34c                pm_peer_ranks_get
- .text.pm_buffer_block_acquire
-                0x000000000002b478       0xcc Output/LEDs Debug/Obj/pm_buffer.o
-                0x000000000002b478                pm_buffer_block_acquire
- .text.pm_buffer_ptr_get
-                0x000000000002b544       0x64 Output/LEDs Debug/Obj/pm_buffer.o
-                0x000000000002b544                pm_buffer_ptr_get
- .text.pm_buffer_release
-                0x000000000002b5a8       0x5c Output/LEDs Debug/Obj/pm_buffer.o
-                0x000000000002b5a8                pm_buffer_release
- .text.lock_by_mask
-                0x000000000002b604       0x6e Output/LEDs Debug/Obj/pm_mutex.o
- .text.pm_mutex_lock
-                0x000000000002b672       0x44 Output/LEDs Debug/Obj/pm_mutex.o
-                0x000000000002b672                pm_mutex_lock
- .text.pm_mutex_unlock
-                0x000000000002b6b6       0x8c Output/LEDs Debug/Obj/pm_mutex.o
-                0x000000000002b6b6                pm_mutex_unlock
- .text.pm_mutex_lock_first_available
-                0x000000000002b742       0x6c Output/LEDs Debug/Obj/pm_mutex.o
-                0x000000000002b742                pm_mutex_lock_first_available
- .text.pm_mutex_lock_status_get
-                0x000000000002b7ae       0x46 Output/LEDs Debug/Obj/pm_mutex.o
-                0x000000000002b7ae                pm_mutex_lock_status_get
- .text.sd_ble_gap_authenticate
-                0x000000000002b7f4        0x8 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.sd_ble_gap_sec_params_reply
-                0x000000000002b7fc        0x8 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.sd_ble_gap_sec_info_reply
-                0x000000000002b804        0x8 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.sec_procedure
-                0x000000000002b80c       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.pairing  0x000000000002b834       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.bonding  0x000000000002b85c       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.peer_created
-                0x000000000002b884       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.allow_repairing
-                0x000000000002b8ac       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.evt_send
-                0x000000000002b8d4       0x3c Output/LEDs Debug/Obj/security_dispatcher.o
- .text.sec_start_send
-                0x000000000002b910       0x46 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.send_unexpected_error
-                0x000000000002b956       0x3c Output/LEDs Debug/Obj/security_dispatcher.o
- *fill*         0x000000000002b992        0x2 
- .text.conn_sec_failure
-                0x000000000002b994       0x7c Output/LEDs Debug/Obj/security_dispatcher.o
- .text.pairing_failure
-                0x000000000002ba10       0xb0 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.encryption_failure
-                0x000000000002bac0       0x30 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.link_secure_failure
-                0x000000000002baf0       0x64 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.sec_proc_start
-                0x000000000002bb54       0xa0 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.sec_proc_housekeeping
-                0x000000000002bbf4       0x74 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.sec_info_request_process
-                0x000000000002bc68      0x10c Output/LEDs Debug/Obj/security_dispatcher.o
- .text.send_config_req
-                0x000000000002bd74       0x34 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.disconnect_process
-                0x000000000002bda8       0x34 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.send_params_req
-                0x000000000002bddc       0x3c Output/LEDs Debug/Obj/security_dispatcher.o
- .text.sec_params_request_process
-                0x000000000002be18       0x4e Output/LEDs Debug/Obj/security_dispatcher.o
- *fill*         0x000000000002be66        0x2 
- .text.auth_status_success_process
-                0x000000000002be68      0x1d4 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.auth_status_failure_process
-                0x000000000002c03c       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.auth_status_process
-                0x000000000002c064       0x26 Output/LEDs Debug/Obj/security_dispatcher.o
- *fill*         0x000000000002c08a        0x2 
- .text.conn_sec_update_process
-                0x000000000002c08c       0x84 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.sec_keyset_fill
-                0x000000000002c110       0xc4 Output/LEDs Debug/Obj/security_dispatcher.o
- .text.smd_params_reply
-                0x000000000002c1d4      0x1b4 Output/LEDs Debug/Obj/security_dispatcher.o
-                0x000000000002c1d4                smd_params_reply
- .text.link_secure_peripheral
-                0x000000000002c388       0x2e Output/LEDs Debug/Obj/security_dispatcher.o
- .text.smd_link_secure
-                0x000000000002c3b6       0x46 Output/LEDs Debug/Obj/security_dispatcher.o
-                0x000000000002c3b6                smd_link_secure
- .text.smd_ble_evt_handler
-                0x000000000002c3fc       0x84 Output/LEDs Debug/Obj/security_dispatcher.o
-                0x000000000002c3fc                smd_ble_evt_handler
- .text.sdk_mapped_flags_any_set
-                0x000000000002c480       0x16 Output/LEDs Debug/Obj/security_manager.o
- *fill*         0x000000000002c496        0x2 
- .text.evt_send
-                0x000000000002c498       0x2c Output/LEDs Debug/Obj/security_manager.o
- .text.flags_set_from_err_code
-                0x000000000002c4c4       0xdc Output/LEDs Debug/Obj/security_manager.o
- .text.events_send_from_err_code
-                0x000000000002c5a0       0xa8 Output/LEDs Debug/Obj/security_manager.o
- .text.params_req_send
-                0x000000000002c648       0x44 Output/LEDs Debug/Obj/security_manager.o
- .text.new_context_get
-                0x000000000002c68c       0x34 Output/LEDs Debug/Obj/security_manager.o
- .text.link_secure
-                0x000000000002c6c0      0x134 Output/LEDs Debug/Obj/security_manager.o
- .text.smd_params_reply_perform
-                0x000000000002c7f4       0x5c Output/LEDs Debug/Obj/security_manager.o
- .text.params_req_process
-                0x000000000002c850       0x1e Output/LEDs Debug/Obj/security_manager.o
- *fill*         0x000000000002c86e        0x2 
- .text.sec_req_process
-                0x000000000002c870       0x88 Output/LEDs Debug/Obj/security_manager.o
- .text.evt_forward
-                0x000000000002c8f8       0x14 Output/LEDs Debug/Obj/security_manager.o
- .text.sm_smd_evt_handler
-                0x000000000002c90c       0x32 Output/LEDs Debug/Obj/security_manager.o
-                0x000000000002c90c                sm_smd_evt_handler
- *fill*         0x000000000002c93e        0x2 
- .text.link_secure_pending_process
-                0x000000000002c940       0xcc Output/LEDs Debug/Obj/security_manager.o
- .text.params_reply_pending_process
-                0x000000000002ca0c       0x80 Output/LEDs Debug/Obj/security_manager.o
- .text.sm_pdb_evt_handler
-                0x000000000002ca8c       0x5c Output/LEDs Debug/Obj/security_manager.o
-                0x000000000002ca8c                sm_pdb_evt_handler
- .text.sm_ble_evt_handler
-                0x000000000002cae8       0x24 Output/LEDs Debug/Obj/security_manager.o
-                0x000000000002cae8                sm_ble_evt_handler
- .text.NVIC_SystemReset
-                0x000000000002cb0c       0x24 Output/LEDs Debug/Obj/system_nrf52.o
- .text.SystemCoreClockUpdate
-                0x000000000002cb30       0x14 Output/LEDs Debug/Obj/system_nrf52.o
-                0x000000000002cb30                SystemCoreClockUpdate
- .text.SystemInit
-                0x000000000002cb44      0x2bc Output/LEDs Debug/Obj/system_nrf52.o
-                0x000000000002cb44                SystemInit
- .text.errata_12
-                0x000000000002ce00       0x58 Output/LEDs Debug/Obj/system_nrf52.o
- .text.errata_16
-                0x000000000002ce58       0x38 Output/LEDs Debug/Obj/system_nrf52.o
- .text.errata_31
-                0x000000000002ce90       0x58 Output/LEDs Debug/Obj/system_nrf52.o
- .text.errata_32
-                0x000000000002cee8       0x38 Output/LEDs Debug/Obj/system_nrf52.o
- .text.errata_36
-                0x000000000002cf20       0x58 Output/LEDs Debug/Obj/system_nrf52.o
- .text.errata_37
-                0x000000000002cf78       0x38 Output/LEDs Debug/Obj/system_nrf52.o
- .text.errata_57
-                0x000000000002cfb0       0x38 Output/LEDs Debug/Obj/system_nrf52.o
- .text.errata_66
-                0x000000000002cfe8       0x38 Output/LEDs Debug/Obj/system_nrf52.o
- .text.errata_108
-                0x000000000002d020       0x58 Output/LEDs Debug/Obj/system_nrf52.o
- .text.errata_136
-                0x000000000002d078       0x58 Output/LEDs Debug/Obj/system_nrf52.o
  .text.NVIC_EnableIRQ
-                0x000000000002d0d0       0x2c Output/LEDs Debug/Obj/nrf_sdh.o
+                0x00000000000282d4       0x2c Output/LEDs Debug/Obj/functions.o
+ .text.conf_GPIO
+                0x0000000000028300       0x3e Output/LEDs Debug/Obj/functions.o
+                0x0000000000028300                conf_GPIO
+ *fill*         0x000000000002833e        0x2 
+ .text.conf_TIMER0
+                0x0000000000028340       0x54 Output/LEDs Debug/Obj/functions.o
+                0x0000000000028340                conf_TIMER0
+ .text.TIMER0_IRQHandler
+                0x0000000000028394       0x6c Output/LEDs Debug/Obj/interrupts.o
+                0x0000000000028394                TIMER0_IRQHandler
+ .text.instance_get
+                0x0000000000028400       0x50 Output/LEDs Debug/Obj/ble_conn_params.o
+ .text.instance_claim
+                0x0000000000028450       0x34 Output/LEDs Debug/Obj/ble_conn_params.o
+ .text.instance_free
+                0x0000000000028484       0x12 Output/LEDs Debug/Obj/ble_conn_params.o
+ .text.is_conn_params_ok
+                0x0000000000028496       0xca Output/LEDs Debug/Obj/ble_conn_params.o
+ .text.send_error_evt
+                0x0000000000028560       0x24 Output/LEDs Debug/Obj/ble_conn_params.o
+ .text.conn_params_negotiation
+                0x0000000000028584       0x7c Output/LEDs Debug/Obj/ble_conn_params.o
+ .text.on_connect
+                0x0000000000028600       0x84 Output/LEDs Debug/Obj/ble_conn_params.o
+ .text.on_disconnect
+                0x0000000000028684       0x46 Output/LEDs Debug/Obj/ble_conn_params.o
+ *fill*         0x00000000000286ca        0x2 
+ .text.on_write
+                0x00000000000286cc       0x7c Output/LEDs Debug/Obj/ble_conn_params.o
+ .text.on_conn_params_update
+                0x0000000000028748       0x54 Output/LEDs Debug/Obj/ble_conn_params.o
+ .text.ble_evt_handler
+                0x000000000002879c       0x4c Output/LEDs Debug/Obj/ble_conn_params.o
+ .text.record_activate
+                0x00000000000287e8       0x74 Output/LEDs Debug/Obj/ble_conn_state.o
+ .text.record_invalidate
+                0x000000000002885c       0x30 Output/LEDs Debug/Obj/ble_conn_state.o
+ .text.record_set_disconnected
+                0x000000000002888c       0x28 Output/LEDs Debug/Obj/ble_conn_state.o
+ .text.record_purge_disconnected
+                0x00000000000288b4       0x5c Output/LEDs Debug/Obj/ble_conn_state.o
+ .text.user_flag_is_acquired
+                0x0000000000028910       0x2c Output/LEDs Debug/Obj/ble_conn_state.o
+ .text.ble_evt_handler
+                0x000000000002893c       0xcc Output/LEDs Debug/Obj/ble_conn_state.o
+ .text.ble_conn_state_role
+                0x0000000000028a08       0x64 Output/LEDs Debug/Obj/ble_conn_state.o
+                0x0000000000028a08                ble_conn_state_role
+ .text.ble_conn_state_encrypted
+                0x0000000000028a6c       0x2c Output/LEDs Debug/Obj/ble_conn_state.o
+                0x0000000000028a6c                ble_conn_state_encrypted
+ .text.ble_conn_state_conn_handles
+                0x0000000000028a98       0x24 Output/LEDs Debug/Obj/ble_conn_state.o
+                0x0000000000028a98                ble_conn_state_conn_handles
+ .text.ble_conn_state_user_flag_get
+                0x0000000000028abc       0x54 Output/LEDs Debug/Obj/ble_conn_state.o
+                0x0000000000028abc                ble_conn_state_user_flag_get
+ .text.ble_conn_state_user_flag_set
+                0x0000000000028b10       0x54 Output/LEDs Debug/Obj/ble_conn_state.o
+                0x0000000000028b10                ble_conn_state_user_flag_set
+ .text.ble_conn_state_user_flag_collection
+                0x0000000000028b64       0x38 Output/LEDs Debug/Obj/ble_conn_state.o
+                0x0000000000028b64                ble_conn_state_user_flag_collection
+ .text.uint16_decode
+                0x0000000000028b9c       0x20 Output/LEDs Debug/Obj/ble_srv_common.o
+ .text.ble_srv_is_notification_enabled
+                0x0000000000028bbc       0x2c Output/LEDs Debug/Obj/ble_srv_common.o
+                0x0000000000028bbc                ble_srv_is_notification_enabled
+ .text.sdk_mapped_flags_any_set
+                0x0000000000028be8       0x16 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ *fill*         0x0000000000028bfe        0x2 
+ .text.evt_send
+                0x0000000000028c00       0x44 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .text.cccd_written
+                0x0000000000028c44       0x32 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .text.send_unexpected_error
+                0x0000000000028c76       0x3c Output/LEDs Debug/Obj/gatt_cache_manager.o
+ *fill*         0x0000000000028cb2        0x2 
+ .text.local_db_apply_in_evt
+                0x0000000000028cb4       0xb4 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .text.local_db_update
+                0x0000000000028d68       0x30 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .text.local_db_update_in_evt
+                0x0000000000028d98       0xa4 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .text.service_changed_send_in_evt
+                0x0000000000028e3c       0xe8 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .text.pending_flags_check
+                0x0000000000028f24      0x100 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .text.apply_pending_flags_check
+                0x0000000000029024       0x14 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .text.update_pending_flags_check
+                0x0000000000029038       0x14 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .text.service_changed_pending_flags_check
+                0x000000000002904c       0x14 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .text.gcm_im_evt_handler
+                0x0000000000029060       0x48 Output/LEDs Debug/Obj/gatt_cache_manager.o
+                0x0000000000029060                gcm_im_evt_handler
+ .text.gcm_pdb_evt_handler
+                0x00000000000290a8       0xc8 Output/LEDs Debug/Obj/gatt_cache_manager.o
+                0x00000000000290a8                gcm_pdb_evt_handler
+ .text.gcm_ble_evt_handler
+                0x0000000000029170       0xc8 Output/LEDs Debug/Obj/gatt_cache_manager.o
+                0x0000000000029170                gcm_ble_evt_handler
+ .text.sd_ble_gatts_service_changed
+                0x0000000000029238        0x8 Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .text.sd_ble_gatts_sys_attr_set
+                0x0000000000029240        0x8 Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .text.sd_ble_gatts_sys_attr_get
+                0x0000000000029248        0x8 Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .text.sd_ble_gatts_initial_user_handle_get
+                0x0000000000029250        0x8 Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .text.service_changed_pending_set
+                0x0000000000029258       0x68 Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .text.gscm_pdb_evt_handler
+                0x00000000000292c0       0x24 Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x00000000000292c0                gscm_pdb_evt_handler
+ .text.gscm_local_db_cache_update
+                0x00000000000292e4       0xe6 Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x00000000000292e4                gscm_local_db_cache_update
+ .text.gscm_local_db_cache_apply
+                0x00000000000293ca       0xf2 Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x00000000000293ca                gscm_local_db_cache_apply
+ .text.gscm_service_changed_ind_needed
+                0x00000000000294bc       0x46 Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x00000000000294bc                gscm_service_changed_ind_needed
+ *fill*         0x0000000000029502        0x2 
+ .text.gscm_service_changed_ind_send
+                0x0000000000029504       0x68 Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x0000000000029504                gscm_service_changed_ind_send
+ .text.gscm_db_change_notification_done
+                0x000000000002956c       0x30 Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x000000000002956c                gscm_db_change_notification_done
+ .text.sd_ecb_block_encrypt
+                0x000000000002959c        0x8 Output/LEDs Debug/Obj/id_manager.o
+ .text.evt_send
+                0x00000000000295a4       0x30 Output/LEDs Debug/Obj/id_manager.o
+ .text.get_free_connection
+                0x00000000000295d4       0x58 Output/LEDs Debug/Obj/id_manager.o
+                0x00000000000295d4                get_free_connection
+ .text.get_connection_by_conn_handle
+                0x000000000002962c       0x64 Output/LEDs Debug/Obj/id_manager.o
+                0x000000000002962c                get_connection_by_conn_handle
+ .text.new_connection
+                0x0000000000029690       0xc0 Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029690                new_connection
+ .text.is_valid_irk
+                0x0000000000029750       0x2e Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029750                is_valid_irk
+ .text.addr_compare
+                0x000000000002977e       0x58 Output/LEDs Debug/Obj/id_manager.o
+                0x000000000002977e                addr_compare
+ .text.im_ble_evt_handler
+                0x00000000000297d6      0x124 Output/LEDs Debug/Obj/id_manager.o
+                0x00000000000297d6                im_ble_evt_handler
+ .text.im_is_duplicate_bonding_data
+                0x00000000000298fa       0xf6 Output/LEDs Debug/Obj/id_manager.o
+                0x00000000000298fa                im_is_duplicate_bonding_data
+ .text.im_find_duplicate_bonding_data
+                0x00000000000299f0       0x54 Output/LEDs Debug/Obj/id_manager.o
+                0x00000000000299f0                im_find_duplicate_bonding_data
+ .text.im_peer_id_get_by_conn_handle
+                0x0000000000029a44       0x48 Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029a44                im_peer_id_get_by_conn_handle
+ .text.im_ble_addr_get
+                0x0000000000029a8c       0x58 Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029a8c                im_ble_addr_get
+ .text.im_master_ids_compare
+                0x0000000000029ae4       0x52 Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029ae4                im_master_ids_compare
+ .text.im_peer_id_get_by_master_id
+                0x0000000000029b36       0x56 Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029b36                im_peer_id_get_by_master_id
+ .text.im_conn_handle_get
+                0x0000000000029b8c       0x54 Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029b8c                im_conn_handle_get
+ .text.im_master_id_is_valid
+                0x0000000000029be0       0x3c Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029be0                im_master_id_is_valid
+ .text.peer_id_set
+                0x0000000000029c1c       0x4c Output/LEDs Debug/Obj/id_manager.o
+ .text.im_new_peer_id
+                0x0000000000029c68       0x2a Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029c68                im_new_peer_id
+ .text.im_peer_free
+                0x0000000000029c92       0x50 Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029c92                im_peer_free
+ .text.ah       0x0000000000029ce2       0xa0 Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029ce2                ah
+ .text.im_address_resolve
+                0x0000000000029d82       0x62 Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000029d82                im_address_resolve
+ .text.pds_evt_send
+                0x0000000000029de4       0x34 Output/LEDs Debug/Obj/peer_data_storage.o
+ .text.peer_id_to_file_id
+                0x0000000000029e18       0x18 Output/LEDs Debug/Obj/peer_data_storage.o
+ .text.file_id_to_peer_id
+                0x0000000000029e30       0x18 Output/LEDs Debug/Obj/peer_data_storage.o
+ .text.peer_data_id_to_record_key
+                0x0000000000029e48       0x1a Output/LEDs Debug/Obj/peer_data_storage.o
+ .text.peer_data_id_is_valid
+                0x0000000000029e62       0x4a Output/LEDs Debug/Obj/peer_data_storage.o
+ .text.send_unexpected_error
+                0x0000000000029eac       0x3c Output/LEDs Debug/Obj/peer_data_storage.o
+ .text.peer_data_delete
+                0x0000000000029ee8       0xd8 Output/LEDs Debug/Obj/peer_data_storage.o
+ .text.peer_data_find
+                0x0000000000029fc0       0x6e Output/LEDs Debug/Obj/peer_data_storage.o
+ .text.pds_peer_data_read
+                0x000000000002a02e       0xc4 Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000002a02e                pds_peer_data_read
+ *fill*         0x000000000002a0f2        0x2 
+ .text.pds_peer_data_iterate_prepare
+                0x000000000002a0f4       0x14 Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000002a0f4                pds_peer_data_iterate_prepare
+ .text.pds_peer_data_iterate
+                0x000000000002a108       0xa8 Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000002a108                pds_peer_data_iterate
+ .text.pds_space_reserve
+                0x000000000002a1b0       0x54 Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000002a1b0                pds_space_reserve
+ .text.pds_space_reserve_cancel
+                0x000000000002a204       0x24 Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000002a204                pds_space_reserve_cancel
+ .text.pds_peer_data_store
+                0x000000000002a228      0x12c Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000002a228                pds_peer_data_store
+ .text.pds_peer_id_allocate
+                0x000000000002a354       0x10 Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000002a354                pds_peer_id_allocate
+ .text.pds_peer_id_free
+                0x000000000002a364       0x2e Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000002a364                pds_peer_id_free
+ .text.pds_peer_id_is_allocated
+                0x000000000002a392       0x1e Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000002a392                pds_peer_id_is_allocated
+ .text.pds_next_peer_id_get
+                0x000000000002a3b0       0x1e Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000002a3b0                pds_next_peer_id_get
+ .text.pds_next_deleted_peer_id_get
+                0x000000000002a3ce       0x1e Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000002a3ce                pds_next_deleted_peer_id_get
+ .text.write_buffer_record_invalidate
+                0x000000000002a3ec       0x44 Output/LEDs Debug/Obj/peer_database.o
+ .text.write_buffer_record_find_next
+                0x000000000002a430       0x4c Output/LEDs Debug/Obj/peer_database.o
+ .text.write_buffer_record_find
+                0x000000000002a47c       0x7e Output/LEDs Debug/Obj/peer_database.o
+ *fill*         0x000000000002a4fa        0x2 
+ .text.write_buffer_record_find_stored
+                0x000000000002a4fc       0x40 Output/LEDs Debug/Obj/peer_database.o
+ .text.write_buffer_record_find_unused
+                0x000000000002a53c       0x12 Output/LEDs Debug/Obj/peer_database.o
+ *fill*         0x000000000002a54e        0x2 
+ .text.write_buffer_record_release
+                0x000000000002a550       0x44 Output/LEDs Debug/Obj/peer_database.o
+ .text.write_buffer_record_acquire
+                0x000000000002a594       0x4c Output/LEDs Debug/Obj/peer_database.o
+ .text.pdb_evt_send
+                0x000000000002a5e0       0x30 Output/LEDs Debug/Obj/peer_database.o
+ .text.peer_data_point_to_buffer
+                0x000000000002a610       0x46 Output/LEDs Debug/Obj/peer_database.o
+ .text.peer_data_const_point_to_buffer
+                0x000000000002a656       0x28 Output/LEDs Debug/Obj/peer_database.o
+ *fill*         0x000000000002a67e        0x2 
+ .text.write_buf_length_words_set
+                0x000000000002a680       0x68 Output/LEDs Debug/Obj/peer_database.o
+ .text.write_buf_store
+                0x000000000002a6e8      0x114 Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002a6e8                write_buf_store
+ .text.write_buf_store_in_event
+                0x000000000002a7fc       0x52 Output/LEDs Debug/Obj/peer_database.o
+ *fill*         0x000000000002a84e        0x2 
+ .text.reattempt_previous_operations
+                0x000000000002a850       0x90 Output/LEDs Debug/Obj/peer_database.o
+ .text.pdb_pds_evt_handler
+                0x000000000002a8e0       0xa8 Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002a8e0                pdb_pds_evt_handler
+ .text.pdb_peer_allocate
+                0x000000000002a988        0xc Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002a988                pdb_peer_allocate
+ .text.pdb_peer_free
+                0x000000000002a994       0x98 Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002a994                pdb_peer_free
+ .text.pdb_peer_data_ptr_get
+                0x000000000002aa2c       0x2c Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002aa2c                pdb_peer_data_ptr_get
+ .text.pdb_write_buf_get
+                0x000000000002aa58      0x1c4 Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002aa58                pdb_write_buf_get
+ .text.pdb_write_buf_release
+                0x000000000002ac1c       0x60 Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002ac1c                pdb_write_buf_release
+ .text.pdb_write_buf_store_prepare
+                0x000000000002ac7c       0xb8 Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002ac7c                pdb_write_buf_store_prepare
+ .text.pdb_write_buf_store
+                0x000000000002ad34       0x66 Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002ad34                pdb_write_buf_store
+ .text.pdb_next_peer_id_get
+                0x000000000002ad9a       0x1e Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002ad9a                pdb_next_peer_id_get
+ .text.pdb_next_deleted_peer_id_get
+                0x000000000002adb8       0x1e Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002adb8                pdb_next_deleted_peer_id_get
+ .text.pdb_peer_data_load
+                0x000000000002add6       0x34 Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002add6                pdb_peer_data_load
+ .text.pdb_raw_store
+                0x000000000002ae0a       0x26 Output/LEDs Debug/Obj/peer_database.o
+                0x000000000002ae0a                pdb_raw_store
+ .text.claim    0x000000000002ae30       0x80 Output/LEDs Debug/Obj/peer_id.o
+ .text.release  0x000000000002aeb0       0x28 Output/LEDs Debug/Obj/peer_id.o
+ .text.peer_id_allocate
+                0x000000000002aed8       0x24 Output/LEDs Debug/Obj/peer_id.o
+                0x000000000002aed8                peer_id_allocate
+ .text.peer_id_delete
+                0x000000000002aefc       0x4c Output/LEDs Debug/Obj/peer_id.o
+                0x000000000002aefc                peer_id_delete
+ .text.peer_id_free
+                0x000000000002af48       0x34 Output/LEDs Debug/Obj/peer_id.o
+                0x000000000002af48                peer_id_free
+ .text.peer_id_is_allocated
+                0x000000000002af7c       0x30 Output/LEDs Debug/Obj/peer_id.o
+                0x000000000002af7c                peer_id_is_allocated
+ .text.peer_id_is_deleted
+                0x000000000002afac       0x30 Output/LEDs Debug/Obj/peer_id.o
+                0x000000000002afac                peer_id_is_deleted
+ .text.next_id_get
+                0x000000000002afdc       0x60 Output/LEDs Debug/Obj/peer_id.o
+                0x000000000002afdc                next_id_get
+ .text.peer_id_get_next_used
+                0x000000000002b03c       0x68 Output/LEDs Debug/Obj/peer_id.o
+                0x000000000002b03c                peer_id_get_next_used
+ .text.peer_id_get_next_deleted
+                0x000000000002b0a4       0x24 Output/LEDs Debug/Obj/peer_id.o
+                0x000000000002b0a4                peer_id_get_next_deleted
+ .text.evt_send
+                0x000000000002b0c8       0x3c Output/LEDs Debug/Obj/peer_manager.o
+ .text.rank_vars_update
+                0x000000000002b104       0x44 Output/LEDs Debug/Obj/peer_manager.o
+ .text.pm_pdb_evt_handler
+                0x000000000002b148      0x210 Output/LEDs Debug/Obj/peer_manager.o
+                0x000000000002b148                pm_pdb_evt_handler
+ .text.pm_sm_evt_handler
+                0x000000000002b358       0x50 Output/LEDs Debug/Obj/peer_manager.o
+                0x000000000002b358                pm_sm_evt_handler
+ .text.pm_gcm_evt_handler
+                0x000000000002b3a8       0x14 Output/LEDs Debug/Obj/peer_manager.o
+                0x000000000002b3a8                pm_gcm_evt_handler
+ .text.pm_im_evt_handler
+                0x000000000002b3bc       0x34 Output/LEDs Debug/Obj/peer_manager.o
+                0x000000000002b3bc                pm_im_evt_handler
+ .text.ble_evt_handler
+                0x000000000002b3f0       0x38 Output/LEDs Debug/Obj/peer_manager.o
+ .text.pm_peer_ranks_get
+                0x000000000002b428      0x12c Output/LEDs Debug/Obj/peer_manager.o
+                0x000000000002b428                pm_peer_ranks_get
+ .text.pm_buffer_block_acquire
+                0x000000000002b554       0xcc Output/LEDs Debug/Obj/pm_buffer.o
+                0x000000000002b554                pm_buffer_block_acquire
+ .text.pm_buffer_ptr_get
+                0x000000000002b620       0x64 Output/LEDs Debug/Obj/pm_buffer.o
+                0x000000000002b620                pm_buffer_ptr_get
+ .text.pm_buffer_release
+                0x000000000002b684       0x5c Output/LEDs Debug/Obj/pm_buffer.o
+                0x000000000002b684                pm_buffer_release
+ .text.lock_by_mask
+                0x000000000002b6e0       0x6e Output/LEDs Debug/Obj/pm_mutex.o
+ .text.pm_mutex_lock
+                0x000000000002b74e       0x44 Output/LEDs Debug/Obj/pm_mutex.o
+                0x000000000002b74e                pm_mutex_lock
+ .text.pm_mutex_unlock
+                0x000000000002b792       0x8c Output/LEDs Debug/Obj/pm_mutex.o
+                0x000000000002b792                pm_mutex_unlock
+ .text.pm_mutex_lock_first_available
+                0x000000000002b81e       0x6c Output/LEDs Debug/Obj/pm_mutex.o
+                0x000000000002b81e                pm_mutex_lock_first_available
+ .text.pm_mutex_lock_status_get
+                0x000000000002b88a       0x46 Output/LEDs Debug/Obj/pm_mutex.o
+                0x000000000002b88a                pm_mutex_lock_status_get
+ .text.sd_ble_gap_authenticate
+                0x000000000002b8d0        0x8 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.sd_ble_gap_sec_params_reply
+                0x000000000002b8d8        0x8 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.sd_ble_gap_sec_info_reply
+                0x000000000002b8e0        0x8 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.sec_procedure
+                0x000000000002b8e8       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.pairing  0x000000000002b910       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.bonding  0x000000000002b938       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.peer_created
+                0x000000000002b960       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.allow_repairing
+                0x000000000002b988       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.evt_send
+                0x000000000002b9b0       0x3c Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.sec_start_send
+                0x000000000002b9ec       0x46 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.send_unexpected_error
+                0x000000000002ba32       0x3c Output/LEDs Debug/Obj/security_dispatcher.o
+ *fill*         0x000000000002ba6e        0x2 
+ .text.conn_sec_failure
+                0x000000000002ba70       0x7c Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.pairing_failure
+                0x000000000002baec       0xb0 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.encryption_failure
+                0x000000000002bb9c       0x30 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.link_secure_failure
+                0x000000000002bbcc       0x64 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.sec_proc_start
+                0x000000000002bc30       0xa0 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.sec_proc_housekeeping
+                0x000000000002bcd0       0x74 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.sec_info_request_process
+                0x000000000002bd44      0x10c Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.send_config_req
+                0x000000000002be50       0x34 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.disconnect_process
+                0x000000000002be84       0x34 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.send_params_req
+                0x000000000002beb8       0x3c Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.sec_params_request_process
+                0x000000000002bef4       0x4e Output/LEDs Debug/Obj/security_dispatcher.o
+ *fill*         0x000000000002bf42        0x2 
+ .text.auth_status_success_process
+                0x000000000002bf44      0x1d4 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.auth_status_failure_process
+                0x000000000002c118       0x28 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.auth_status_process
+                0x000000000002c140       0x26 Output/LEDs Debug/Obj/security_dispatcher.o
+ *fill*         0x000000000002c166        0x2 
+ .text.conn_sec_update_process
+                0x000000000002c168       0x84 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.sec_keyset_fill
+                0x000000000002c1ec       0xc4 Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.smd_params_reply
+                0x000000000002c2b0      0x1b4 Output/LEDs Debug/Obj/security_dispatcher.o
+                0x000000000002c2b0                smd_params_reply
+ .text.link_secure_peripheral
+                0x000000000002c464       0x2e Output/LEDs Debug/Obj/security_dispatcher.o
+ .text.smd_link_secure
+                0x000000000002c492       0x46 Output/LEDs Debug/Obj/security_dispatcher.o
+                0x000000000002c492                smd_link_secure
+ .text.smd_ble_evt_handler
+                0x000000000002c4d8       0x84 Output/LEDs Debug/Obj/security_dispatcher.o
+                0x000000000002c4d8                smd_ble_evt_handler
+ .text.sdk_mapped_flags_any_set
+                0x000000000002c55c       0x16 Output/LEDs Debug/Obj/security_manager.o
+ *fill*         0x000000000002c572        0x2 
+ .text.evt_send
+                0x000000000002c574       0x2c Output/LEDs Debug/Obj/security_manager.o
+ .text.flags_set_from_err_code
+                0x000000000002c5a0       0xdc Output/LEDs Debug/Obj/security_manager.o
+ .text.events_send_from_err_code
+                0x000000000002c67c       0xa8 Output/LEDs Debug/Obj/security_manager.o
+ .text.params_req_send
+                0x000000000002c724       0x44 Output/LEDs Debug/Obj/security_manager.o
+ .text.new_context_get
+                0x000000000002c768       0x34 Output/LEDs Debug/Obj/security_manager.o
+ .text.link_secure
+                0x000000000002c79c      0x134 Output/LEDs Debug/Obj/security_manager.o
+ .text.smd_params_reply_perform
+                0x000000000002c8d0       0x5c Output/LEDs Debug/Obj/security_manager.o
+ .text.params_req_process
+                0x000000000002c92c       0x1e Output/LEDs Debug/Obj/security_manager.o
+ *fill*         0x000000000002c94a        0x2 
+ .text.sec_req_process
+                0x000000000002c94c       0x88 Output/LEDs Debug/Obj/security_manager.o
+ .text.evt_forward
+                0x000000000002c9d4       0x14 Output/LEDs Debug/Obj/security_manager.o
+ .text.sm_smd_evt_handler
+                0x000000000002c9e8       0x32 Output/LEDs Debug/Obj/security_manager.o
+                0x000000000002c9e8                sm_smd_evt_handler
+ *fill*         0x000000000002ca1a        0x2 
+ .text.link_secure_pending_process
+                0x000000000002ca1c       0xcc Output/LEDs Debug/Obj/security_manager.o
+ .text.params_reply_pending_process
+                0x000000000002cae8       0x80 Output/LEDs Debug/Obj/security_manager.o
+ .text.sm_pdb_evt_handler
+                0x000000000002cb68       0x5c Output/LEDs Debug/Obj/security_manager.o
+                0x000000000002cb68                sm_pdb_evt_handler
+ .text.sm_ble_evt_handler
+                0x000000000002cbc4       0x24 Output/LEDs Debug/Obj/security_manager.o
+                0x000000000002cbc4                sm_ble_evt_handler
+ .text.NVIC_SystemReset
+                0x000000000002cbe8       0x24 Output/LEDs Debug/Obj/system_nrf52.o
+ .text.SystemCoreClockUpdate
+                0x000000000002cc0c       0x14 Output/LEDs Debug/Obj/system_nrf52.o
+                0x000000000002cc0c                SystemCoreClockUpdate
+ .text.SystemInit
+                0x000000000002cc20      0x2bc Output/LEDs Debug/Obj/system_nrf52.o
+                0x000000000002cc20                SystemInit
+ .text.errata_12
+                0x000000000002cedc       0x58 Output/LEDs Debug/Obj/system_nrf52.o
+ .text.errata_16
+                0x000000000002cf34       0x38 Output/LEDs Debug/Obj/system_nrf52.o
+ .text.errata_31
+                0x000000000002cf6c       0x58 Output/LEDs Debug/Obj/system_nrf52.o
+ .text.errata_32
+                0x000000000002cfc4       0x38 Output/LEDs Debug/Obj/system_nrf52.o
+ .text.errata_36
+                0x000000000002cffc       0x58 Output/LEDs Debug/Obj/system_nrf52.o
+ .text.errata_37
+                0x000000000002d054       0x38 Output/LEDs Debug/Obj/system_nrf52.o
+ .text.errata_57
+                0x000000000002d08c       0x38 Output/LEDs Debug/Obj/system_nrf52.o
+ .text.errata_66
+                0x000000000002d0c4       0x38 Output/LEDs Debug/Obj/system_nrf52.o
+ .text.errata_108
+                0x000000000002d0fc       0x58 Output/LEDs Debug/Obj/system_nrf52.o
+ .text.errata_136
+                0x000000000002d154       0x58 Output/LEDs Debug/Obj/system_nrf52.o
+ .text.NVIC_EnableIRQ
+                0x000000000002d1ac       0x2c Output/LEDs Debug/Obj/nrf_sdh.o
  .text.NVIC_DisableIRQ
-                0x000000000002d0fc       0x30 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d1d8       0x30 Output/LEDs Debug/Obj/nrf_sdh.o
  .text.NVIC_SetPriority
-                0x000000000002d12c       0x50 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d208       0x50 Output/LEDs Debug/Obj/nrf_sdh.o
  .text.NVIC_GetPriority
-                0x000000000002d17c       0x48 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d258       0x48 Output/LEDs Debug/Obj/nrf_sdh.o
  .text.nrf_section_iter_get
-                0x000000000002d1c4       0x24 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d2a0       0x24 Output/LEDs Debug/Obj/nrf_sdh.o
  .text.sd_softdevice_enable
-                0x000000000002d1e8        0x8 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d2c4        0x8 Output/LEDs Debug/Obj/nrf_sdh.o
  .text.sd_softdevice_disable
-                0x000000000002d1f0        0x8 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d2cc        0x8 Output/LEDs Debug/Obj/nrf_sdh.o
  .text.__sd_nvic_app_accessible_irq
-                0x000000000002d1f8       0x58 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d2d4       0x58 Output/LEDs Debug/Obj/nrf_sdh.o
  .text.__sd_nvic_is_app_accessible_priority
-                0x000000000002d250       0x2c Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d32c       0x2c Output/LEDs Debug/Obj/nrf_sdh.o
  .text.sd_nvic_EnableIRQ
-                0x000000000002d27c       0x88 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d358       0x88 Output/LEDs Debug/Obj/nrf_sdh.o
  .text.sd_nvic_DisableIRQ
-                0x000000000002d304       0x6c Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d3e0       0x6c Output/LEDs Debug/Obj/nrf_sdh.o
  .text.sd_nvic_SetPriority
-                0x000000000002d370       0x4a Output/LEDs Debug/Obj/nrf_sdh.o
- *fill*         0x000000000002d3ba        0x2 
+                0x000000000002d44c       0x4a Output/LEDs Debug/Obj/nrf_sdh.o
+ *fill*         0x000000000002d496        0x2 
  .text.sdh_request_observer_notify
-                0x000000000002d3bc       0x64 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d498       0x64 Output/LEDs Debug/Obj/nrf_sdh.o
  .text.sdh_state_observer_notify
-                0x000000000002d420       0x58 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d4fc       0x58 Output/LEDs Debug/Obj/nrf_sdh.o
  .text.softdevices_evt_irq_enable
-                0x000000000002d478       0x2c Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d554       0x2c Output/LEDs Debug/Obj/nrf_sdh.o
  .text.softdevice_evt_irq_disable
-                0x000000000002d4a4       0x2c Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d580       0x2c Output/LEDs Debug/Obj/nrf_sdh.o
  .text.swi_interrupt_priority_workaround
-                0x000000000002d4d0       0x4c Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d5ac       0x4c Output/LEDs Debug/Obj/nrf_sdh.o
  .text.nrf_sdh_enable_request
-                0x000000000002d51c       0x88 Output/LEDs Debug/Obj/nrf_sdh.o
-                0x000000000002d51c                nrf_sdh_enable_request
+                0x000000000002d5f8       0x88 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d5f8                nrf_sdh_enable_request
  .text.nrf_sdh_disable_request
-                0x000000000002d5a4       0x6c Output/LEDs Debug/Obj/nrf_sdh.o
-                0x000000000002d5a4                nrf_sdh_disable_request
+                0x000000000002d680       0x6c Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d680                nrf_sdh_disable_request
  .text.nrf_sdh_request_continue
-                0x000000000002d610       0x38 Output/LEDs Debug/Obj/nrf_sdh.o
-                0x000000000002d610                nrf_sdh_request_continue
+                0x000000000002d6ec       0x38 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d6ec                nrf_sdh_request_continue
  .text.nrf_sdh_is_enabled
-                0x000000000002d648        0xc Output/LEDs Debug/Obj/nrf_sdh.o
-                0x000000000002d648                nrf_sdh_is_enabled
+                0x000000000002d724        0xc Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d724                nrf_sdh_is_enabled
  .text.nrf_sdh_evts_poll
-                0x000000000002d654       0x4c Output/LEDs Debug/Obj/nrf_sdh.o
-                0x000000000002d654                nrf_sdh_evts_poll
+                0x000000000002d730       0x4c Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d730                nrf_sdh_evts_poll
  .text.SWI2_EGU2_IRQHandler
-                0x000000000002d6a0        0xa Output/LEDs Debug/Obj/nrf_sdh.o
-                0x000000000002d6a0                SWI2_EGU2_IRQHandler
+                0x000000000002d77c        0xa Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002d77c                SWI2_EGU2_IRQHandler
  .text.sd_ble_evt_get
-                0x000000000002d6aa        0x8 Output/LEDs Debug/Obj/nrf_sdh_ble.o
- *fill*         0x000000000002d6b2        0x2 
+                0x000000000002d786        0x8 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ *fill*         0x000000000002d78e        0x2 
  .text.nrf_section_iter_get
-                0x000000000002d6b4       0x24 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+                0x000000000002d790       0x24 Output/LEDs Debug/Obj/nrf_sdh_ble.o
  .text.nrf_sdh_ble_evts_poll
-                0x000000000002d6d8       0x8c Output/LEDs Debug/Obj/nrf_sdh_ble.o
+                0x000000000002d7b4       0x8c Output/LEDs Debug/Obj/nrf_sdh_ble.o
  .text.nrf_section_iter_get
-                0x000000000002d764       0x24 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+                0x000000000002d840       0x24 Output/LEDs Debug/Obj/nrf_sdh_soc.o
  .text.sd_evt_get
-                0x000000000002d788        0x8 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+                0x000000000002d864        0x8 Output/LEDs Debug/Obj/nrf_sdh_soc.o
  .text.nrf_sdh_soc_evts_poll
-                0x000000000002d790       0x78 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+                0x000000000002d86c       0x78 Output/LEDs Debug/Obj/nrf_sdh_soc.o
  .text.libc.memcmp
-                0x000000000002d808       0x6a C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
-                0x000000000002d808                memcmp
- *fill*         0x000000000002d872        0x2 
+                0x000000000002d8e4       0x6a C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
+                0x000000000002d8e4                memcmp
+ *fill*         0x000000000002d94e        0x2 
  .text.libc.memcpy
-                0x000000000002d874       0x54 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2_asm.o)
-                0x000000000002d874                __aeabi_memcpy
-                0x000000000002d874                memcpy
-                0x000000000002d880                __aeabi_memcpy8
-                0x000000000002d880                __aeabi_memcpy4
+                0x000000000002d950       0x54 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2_asm.o)
+                0x000000000002d950                __aeabi_memcpy
+                0x000000000002d950                memcpy
+                0x000000000002d95c                __aeabi_memcpy8
+                0x000000000002d95c                __aeabi_memcpy4
  .text.libc.memset
-                0x000000000002d8c8       0x68 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2_asm.o)
-                0x000000000002d8c8                memset
-                0x000000000002d930                __text_end__ = (__text_start__ + SIZEOF (.text))
-                0x000000000000a63c                __text_size__ = SIZEOF (.text)
-                0x000000000002d930                __text_load_end__ = __text_end__
+                0x000000000002d9a4       0x68 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2_asm.o)
+                0x000000000002d9a4                memset
+                0x000000000002da0c                __text_end__ = (__text_start__ + SIZEOF (.text))
+                0x000000000000a718                __text_size__ = SIZEOF (.text)
+                0x000000000002da0c                __text_load_end__ = __text_end__
 
 .vfp11_veneer   0x0000000100000000        0x0
  .vfp11_veneer  0x0000000100000000        0x0 linker stubs
@@ -14702,167 +14688,167 @@ Linker script and memory map
 .iplt           0x0000000100000000        0x0
  .iplt          0x0000000100000000        0x0 Output/LEDs Debug/Obj/thumb_crt0.o
                 0x0000000000000001                . = ASSERT (((__text_start__ == __text_end__) || ((__text_end__ >= __FLASH_segment_start__) && (__text_end__ <= __FLASH_segment_end__))), error: .text is too large to fit in FLASH memory segment)
-                0x000000000002d930                __sdh_soc_observers_load_start__ = ALIGN (__text_end__, 0x4)
+                0x000000000002da0c                __sdh_soc_observers_load_start__ = ALIGN (__text_end__, 0x4)
 
 .sdh_soc_observers
-                0x000000000002d930       0x10
-                0x000000000002d930                __sdh_soc_observers_start__ = .
-                0x000000000002d930                __start_sdh_soc_observers = __sdh_soc_observers_start__
+                0x000000000002da0c       0x10
+                0x000000000002da0c                __sdh_soc_observers_start__ = .
+                0x000000000002da0c                __start_sdh_soc_observers = __sdh_soc_observers_start__
  *(SORT(.sdh_soc_observers*))
  .sdh_soc_observers0
-                0x000000000002d930        0x8 Output/LEDs Debug/Obj/nrf_fstorage_sd.o
+                0x000000000002da0c        0x8 Output/LEDs Debug/Obj/nrf_fstorage_sd.o
  .sdh_soc_observers0
-                0x000000000002d938        0x8 Output/LEDs Debug/Obj/nrf_drv_clock.o
-                0x000000000002d940                __sdh_soc_observers_end__ = (__sdh_soc_observers_start__ + SIZEOF (.sdh_soc_observers))
+                0x000000000002da14        0x8 Output/LEDs Debug/Obj/nrf_drv_clock.o
+                0x000000000002da1c                __sdh_soc_observers_end__ = (__sdh_soc_observers_start__ + SIZEOF (.sdh_soc_observers))
                 0x0000000000000010                __sdh_soc_observers_size__ = SIZEOF (.sdh_soc_observers)
-                0x000000000002d940                __stop_sdh_soc_observers = __sdh_soc_observers_end__
-                0x000000000002d940                __sdh_soc_observers_load_end__ = __sdh_soc_observers_end__
+                0x000000000002da1c                __stop_sdh_soc_observers = __sdh_soc_observers_end__
+                0x000000000002da1c                __sdh_soc_observers_load_end__ = __sdh_soc_observers_end__
                 0x0000000000000001                . = ASSERT (((__sdh_soc_observers_start__ == __sdh_soc_observers_end__) || ((__sdh_soc_observers_end__ >= __FLASH_segment_start__) && (__sdh_soc_observers_end__ <= __FLASH_segment_end__))), error: .sdh_soc_observers is too large to fit in FLASH memory segment)
-                0x000000000002d940                __pwr_mgmt_data_load_start__ = ALIGN (__sdh_soc_observers_end__, 0x4)
+                0x000000000002da1c                __pwr_mgmt_data_load_start__ = ALIGN (__sdh_soc_observers_end__, 0x4)
 
-.pwr_mgmt_data  0x000000000002d940        0x0
-                0x000000000002d940                __pwr_mgmt_data_start__ = .
-                0x000000000002d940                __start_pwr_mgmt_data = __pwr_mgmt_data_start__
+.pwr_mgmt_data  0x000000000002da1c        0x0
+                0x000000000002da1c                __pwr_mgmt_data_start__ = .
+                0x000000000002da1c                __start_pwr_mgmt_data = __pwr_mgmt_data_start__
  *(SORT(.pwr_mgmt_data*))
-                0x000000000002d940                __pwr_mgmt_data_end__ = (__pwr_mgmt_data_start__ + SIZEOF (.pwr_mgmt_data))
+                0x000000000002da1c                __pwr_mgmt_data_end__ = (__pwr_mgmt_data_start__ + SIZEOF (.pwr_mgmt_data))
                 0x0000000000000000                __pwr_mgmt_data_size__ = SIZEOF (.pwr_mgmt_data)
-                0x000000000002d940                __stop_pwr_mgmt_data = __pwr_mgmt_data_end__
-                0x000000000002d940                __pwr_mgmt_data_load_end__ = __pwr_mgmt_data_end__
+                0x000000000002da1c                __stop_pwr_mgmt_data = __pwr_mgmt_data_end__
+                0x000000000002da1c                __pwr_mgmt_data_load_end__ = __pwr_mgmt_data_end__
                 0x0000000000000001                . = ASSERT (((__pwr_mgmt_data_start__ == __pwr_mgmt_data_end__) || ((__pwr_mgmt_data_end__ >= __FLASH_segment_start__) && (__pwr_mgmt_data_end__ <= __FLASH_segment_end__))), error: .pwr_mgmt_data is too large to fit in FLASH memory segment)
-                0x000000000002d940                __sdh_ble_observers_load_start__ = ALIGN (__pwr_mgmt_data_end__, 0x4)
+                0x000000000002da1c                __sdh_ble_observers_load_start__ = ALIGN (__pwr_mgmt_data_end__, 0x4)
 
 .sdh_ble_observers
-                0x000000000002d940       0x20
-                0x000000000002d940                __sdh_ble_observers_start__ = .
-                0x000000000002d940                __start_sdh_ble_observers = __sdh_ble_observers_start__
+                0x000000000002da1c       0x20
+                0x000000000002da1c                __sdh_ble_observers_start__ = .
+                0x000000000002da1c                __start_sdh_ble_observers = __sdh_ble_observers_start__
  *(SORT(.sdh_ble_observers*))
  .sdh_ble_observers0
-                0x000000000002d940        0x8 Output/LEDs Debug/Obj/ble_conn_state.o
+                0x000000000002da1c        0x8 Output/LEDs Debug/Obj/ble_conn_state.o
  .sdh_ble_observers1
-                0x000000000002d948        0x8 Output/LEDs Debug/Obj/bsp_btn_ble.o
+                0x000000000002da24        0x8 Output/LEDs Debug/Obj/bsp_btn_ble.o
  .sdh_ble_observers1
-                0x000000000002d950        0x8 Output/LEDs Debug/Obj/ble_conn_params.o
+                0x000000000002da2c        0x8 Output/LEDs Debug/Obj/ble_conn_params.o
  .sdh_ble_observers1
-                0x000000000002d958        0x8 Output/LEDs Debug/Obj/peer_manager.o
-                0x000000000002d960                __sdh_ble_observers_end__ = (__sdh_ble_observers_start__ + SIZEOF (.sdh_ble_observers))
+                0x000000000002da34        0x8 Output/LEDs Debug/Obj/peer_manager.o
+                0x000000000002da3c                __sdh_ble_observers_end__ = (__sdh_ble_observers_start__ + SIZEOF (.sdh_ble_observers))
                 0x0000000000000020                __sdh_ble_observers_size__ = SIZEOF (.sdh_ble_observers)
-                0x000000000002d960                __stop_sdh_ble_observers = __sdh_ble_observers_end__
-                0x000000000002d960                __sdh_ble_observers_load_end__ = __sdh_ble_observers_end__
+                0x000000000002da3c                __stop_sdh_ble_observers = __sdh_ble_observers_end__
+                0x000000000002da3c                __sdh_ble_observers_load_end__ = __sdh_ble_observers_end__
                 0x0000000000000001                . = ASSERT (((__sdh_ble_observers_start__ == __sdh_ble_observers_end__) || ((__sdh_ble_observers_end__ >= __FLASH_segment_start__) && (__sdh_ble_observers_end__ <= __FLASH_segment_end__))), error: .sdh_ble_observers is too large to fit in FLASH memory segment)
-                0x000000000002d960                __log_const_data_load_start__ = ALIGN (__sdh_ble_observers_end__, 0x4)
+                0x000000000002da3c                __log_const_data_load_start__ = ALIGN (__sdh_ble_observers_end__, 0x4)
 
 .log_const_data
-                0x000000000002d960       0x50
-                0x000000000002d960                __log_const_data_start__ = .
-                0x000000000002d960                __start_log_const_data = __log_const_data_start__
+                0x000000000002da3c       0x50
+                0x000000000002da3c                __log_const_data_start__ = .
+                0x000000000002da3c                __start_log_const_data = __log_const_data_start__
  *(SORT(.log_const_data*))
  .log_const_data_app
-                0x000000000002d960        0x8 Output/LEDs Debug/Obj/nrf_log_frontend.o
-                0x000000000002d960                m_nrf_log_app_logs_data_const
+                0x000000000002da3c        0x8 Output/LEDs Debug/Obj/nrf_log_frontend.o
+                0x000000000002da3c                m_nrf_log_app_logs_data_const
  .log_const_data_balloc
-                0x000000000002d968        0x8 Output/LEDs Debug/Obj/nrf_balloc.o
-                0x000000000002d968                m_nrf_log_balloc_logs_data_const
+                0x000000000002da44        0x8 Output/LEDs Debug/Obj/nrf_balloc.o
+                0x000000000002da44                m_nrf_log_balloc_logs_data_const
  .log_const_data_ble_gatt
-                0x000000000002d970        0x8 Output/LEDs Debug/Obj/nrf_ble_gatt.o
-                0x000000000002d970                m_nrf_log_ble_gatt_logs_data_const
+                0x000000000002da4c        0x8 Output/LEDs Debug/Obj/nrf_ble_gatt.o
+                0x000000000002da4c                m_nrf_log_ble_gatt_logs_data_const
  .log_const_data_clock
-                0x000000000002d978        0x8 Output/LEDs Debug/Obj/nrf_drv_clock.o
-                0x000000000002d978                m_nrf_log_clock_logs_data_const
+                0x000000000002da54        0x8 Output/LEDs Debug/Obj/nrf_drv_clock.o
+                0x000000000002da54                m_nrf_log_clock_logs_data_const
  .log_const_data_gpiote
-                0x000000000002d980        0x8 Output/LEDs Debug/Obj/nrf_drv_gpiote.o
-                0x000000000002d980                m_nrf_log_gpiote_logs_data_const
+                0x000000000002da5c        0x8 Output/LEDs Debug/Obj/nrf_drv_gpiote.o
+                0x000000000002da5c                m_nrf_log_gpiote_logs_data_const
  .log_const_data_nrf_sdh
-                0x000000000002d988        0x8 Output/LEDs Debug/Obj/nrf_sdh.o
-                0x000000000002d988                m_nrf_log_nrf_sdh_logs_data_const
+                0x000000000002da64        0x8 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002da64                m_nrf_log_nrf_sdh_logs_data_const
  .log_const_data_nrf_sdh_ble
-                0x000000000002d990        0x8 Output/LEDs Debug/Obj/nrf_sdh_ble.o
-                0x000000000002d990                m_nrf_log_nrf_sdh_ble_logs_data_const
+                0x000000000002da6c        0x8 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+                0x000000000002da6c                m_nrf_log_nrf_sdh_ble_logs_data_const
  .log_const_data_nrf_sdh_soc
-                0x000000000002d998        0x8 Output/LEDs Debug/Obj/nrf_sdh_soc.o
-                0x000000000002d998                m_nrf_log_nrf_sdh_soc_logs_data_const
+                0x000000000002da74        0x8 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+                0x000000000002da74                m_nrf_log_nrf_sdh_soc_logs_data_const
  .log_const_data_pwr_mgmt
-                0x000000000002d9a0        0x8 Output/LEDs Debug/Obj/nrf_pwr_mgmt.o
-                0x000000000002d9a0                m_nrf_log_pwr_mgmt_logs_data_const
+                0x000000000002da7c        0x8 Output/LEDs Debug/Obj/nrf_pwr_mgmt.o
+                0x000000000002da7c                m_nrf_log_pwr_mgmt_logs_data_const
  .log_const_data_uart
-                0x000000000002d9a8        0x8 Output/LEDs Debug/Obj/nrf_drv_uart.o
-                0x000000000002d9a8                m_nrf_log_uart_logs_data_const
-                0x000000000002d9b0                __log_const_data_end__ = (__log_const_data_start__ + SIZEOF (.log_const_data))
+                0x000000000002da84        0x8 Output/LEDs Debug/Obj/nrf_drv_uart.o
+                0x000000000002da84                m_nrf_log_uart_logs_data_const
+                0x000000000002da8c                __log_const_data_end__ = (__log_const_data_start__ + SIZEOF (.log_const_data))
                 0x0000000000000050                __log_const_data_size__ = SIZEOF (.log_const_data)
-                0x000000000002d9b0                __stop_log_const_data = __log_const_data_end__
-                0x000000000002d9b0                __log_const_data_load_end__ = __log_const_data_end__
+                0x000000000002da8c                __stop_log_const_data = __log_const_data_end__
+                0x000000000002da8c                __log_const_data_load_end__ = __log_const_data_end__
                 0x0000000000000001                . = ASSERT (((__log_const_data_start__ == __log_const_data_end__) || ((__log_const_data_end__ >= __FLASH_segment_start__) && (__log_const_data_end__ <= __FLASH_segment_end__))), error: .log_const_data is too large to fit in FLASH memory segment)
-                0x000000000002d9b0                __sdh_req_observers_load_start__ = ALIGN (__log_const_data_end__, 0x4)
+                0x000000000002da8c                __sdh_req_observers_load_start__ = ALIGN (__log_const_data_end__, 0x4)
 
 .sdh_req_observers
-                0x000000000002d9b0        0x8
-                0x000000000002d9b0                __sdh_req_observers_start__ = .
-                0x000000000002d9b0                __start_sdh_req_observers = __sdh_req_observers_start__
+                0x000000000002da8c        0x8
+                0x000000000002da8c                __sdh_req_observers_start__ = .
+                0x000000000002da8c                __start_sdh_req_observers = __sdh_req_observers_start__
  *(SORT(.sdh_req_observers*))
  .sdh_req_observers0
-                0x000000000002d9b0        0x8 Output/LEDs Debug/Obj/nrf_fstorage_sd.o
-                0x000000000002d9b0                m_req_obs
-                0x000000000002d9b8                __sdh_req_observers_end__ = (__sdh_req_observers_start__ + SIZEOF (.sdh_req_observers))
+                0x000000000002da8c        0x8 Output/LEDs Debug/Obj/nrf_fstorage_sd.o
+                0x000000000002da8c                m_req_obs
+                0x000000000002da94                __sdh_req_observers_end__ = (__sdh_req_observers_start__ + SIZEOF (.sdh_req_observers))
                 0x0000000000000008                __sdh_req_observers_size__ = SIZEOF (.sdh_req_observers)
-                0x000000000002d9b8                __stop_sdh_req_observers = __sdh_req_observers_end__
-                0x000000000002d9b8                __sdh_req_observers_load_end__ = __sdh_req_observers_end__
+                0x000000000002da94                __stop_sdh_req_observers = __sdh_req_observers_end__
+                0x000000000002da94                __sdh_req_observers_load_end__ = __sdh_req_observers_end__
                 0x0000000000000001                . = ASSERT (((__sdh_req_observers_start__ == __sdh_req_observers_end__) || ((__sdh_req_observers_end__ >= __FLASH_segment_start__) && (__sdh_req_observers_end__ <= __FLASH_segment_end__))), error: .sdh_req_observers is too large to fit in FLASH memory segment)
-                0x000000000002d9b8                __sdh_state_observers_load_start__ = ALIGN (__sdh_req_observers_end__, 0x4)
+                0x000000000002da94                __sdh_state_observers_load_start__ = ALIGN (__sdh_req_observers_end__, 0x4)
 
 .sdh_state_observers
-                0x000000000002d9b8       0x10
-                0x000000000002d9b8                __sdh_state_observers_start__ = .
-                0x000000000002d9b8                __start_sdh_state_observers = __sdh_state_observers_start__
+                0x000000000002da94       0x10
+                0x000000000002da94                __sdh_state_observers_start__ = .
+                0x000000000002da94                __start_sdh_state_observers = __sdh_state_observers_start__
  *(SORT(.sdh_state_observers*))
  .sdh_state_observers0
-                0x000000000002d9b8        0x8 Output/LEDs Debug/Obj/nrf_fstorage_sd.o
+                0x000000000002da94        0x8 Output/LEDs Debug/Obj/nrf_fstorage_sd.o
  .sdh_state_observers0
-                0x000000000002d9c0        0x8 Output/LEDs Debug/Obj/nrf_drv_clock.o
-                0x000000000002d9c8                __sdh_state_observers_end__ = (__sdh_state_observers_start__ + SIZEOF (.sdh_state_observers))
+                0x000000000002da9c        0x8 Output/LEDs Debug/Obj/nrf_drv_clock.o
+                0x000000000002daa4                __sdh_state_observers_end__ = (__sdh_state_observers_start__ + SIZEOF (.sdh_state_observers))
                 0x0000000000000010                __sdh_state_observers_size__ = SIZEOF (.sdh_state_observers)
-                0x000000000002d9c8                __stop_sdh_state_observers = __sdh_state_observers_end__
-                0x000000000002d9c8                __sdh_state_observers_load_end__ = __sdh_state_observers_end__
+                0x000000000002daa4                __stop_sdh_state_observers = __sdh_state_observers_end__
+                0x000000000002daa4                __sdh_state_observers_load_end__ = __sdh_state_observers_end__
                 0x0000000000000001                . = ASSERT (((__sdh_state_observers_start__ == __sdh_state_observers_end__) || ((__sdh_state_observers_end__ >= __FLASH_segment_start__) && (__sdh_state_observers_end__ <= __FLASH_segment_end__))), error: .sdh_state_observers is too large to fit in FLASH memory segment)
-                0x000000000002d9c8                __sdh_stack_observers_load_start__ = ALIGN (__sdh_state_observers_end__, 0x4)
+                0x000000000002daa4                __sdh_stack_observers_load_start__ = ALIGN (__sdh_state_observers_end__, 0x4)
 
 .sdh_stack_observers
-                0x000000000002d9c8       0x10
-                0x000000000002d9c8                __sdh_stack_observers_start__ = .
-                0x000000000002d9c8                __start_sdh_stack_observers = __sdh_stack_observers_start__
+                0x000000000002daa4       0x10
+                0x000000000002daa4                __sdh_stack_observers_start__ = .
+                0x000000000002daa4                __start_sdh_stack_observers = __sdh_stack_observers_start__
  *(SORT(.sdh_stack_observers*))
  .sdh_stack_observers0
-                0x000000000002d9c8        0x8 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+                0x000000000002daa4        0x8 Output/LEDs Debug/Obj/nrf_sdh_ble.o
  .sdh_stack_observers0
-                0x000000000002d9d0        0x8 Output/LEDs Debug/Obj/nrf_sdh_soc.o
-                0x000000000002d9d8                __sdh_stack_observers_end__ = (__sdh_stack_observers_start__ + SIZEOF (.sdh_stack_observers))
+                0x000000000002daac        0x8 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+                0x000000000002dab4                __sdh_stack_observers_end__ = (__sdh_stack_observers_start__ + SIZEOF (.sdh_stack_observers))
                 0x0000000000000010                __sdh_stack_observers_size__ = SIZEOF (.sdh_stack_observers)
-                0x000000000002d9d8                __stop_sdh_stack_observers = __sdh_stack_observers_end__
-                0x000000000002d9d8                __sdh_stack_observers_load_end__ = __sdh_stack_observers_end__
+                0x000000000002dab4                __stop_sdh_stack_observers = __sdh_stack_observers_end__
+                0x000000000002dab4                __sdh_stack_observers_load_end__ = __sdh_stack_observers_end__
                 0x0000000000000001                . = ASSERT (((__sdh_stack_observers_start__ == __sdh_stack_observers_end__) || ((__sdh_stack_observers_end__ >= __FLASH_segment_start__) && (__sdh_stack_observers_end__ <= __FLASH_segment_end__))), error: .sdh_stack_observers is too large to fit in FLASH memory segment)
-                0x000000000002d9d8                __cli_command_load_start__ = ALIGN (__sdh_stack_observers_end__, 0x4)
+                0x000000000002dab4                __cli_command_load_start__ = ALIGN (__sdh_stack_observers_end__, 0x4)
 
-.cli_command    0x000000000002d9d8        0x0
-                0x000000000002d9d8                __cli_command_start__ = .
-                0x000000000002d9d8                __start_cli_command = __cli_command_start__
+.cli_command    0x000000000002dab4        0x0
+                0x000000000002dab4                __cli_command_start__ = .
+                0x000000000002dab4                __start_cli_command = __cli_command_start__
  *(.cli_command*)
-                0x000000000002d9d8                __cli_command_end__ = (__cli_command_start__ + SIZEOF (.cli_command))
+                0x000000000002dab4                __cli_command_end__ = (__cli_command_start__ + SIZEOF (.cli_command))
                 0x0000000000000000                __cli_command_size__ = SIZEOF (.cli_command)
-                0x000000000002d9d8                __stop_cli_command = __cli_command_end__
-                0x000000000002d9d8                __cli_command_load_end__ = __cli_command_end__
+                0x000000000002dab4                __stop_cli_command = __cli_command_end__
+                0x000000000002dab4                __cli_command_load_end__ = __cli_command_end__
                 0x0000000000000001                . = ASSERT (((__cli_command_start__ == __cli_command_end__) || ((__cli_command_end__ >= __FLASH_segment_start__) && (__cli_command_end__ <= __FLASH_segment_end__))), error: .cli_command is too large to fit in FLASH memory segment)
-                0x000000000002d9d8                __nrf_sections_load_start__ = ALIGN (__cli_command_end__, 0x4)
+                0x000000000002dab4                __nrf_sections_load_start__ = ALIGN (__cli_command_end__, 0x4)
 
-.nrf_sections   0x000000000002d9d8        0x0
-                0x000000000002d9d8                __nrf_sections_start__ = .
-                0x000000000002d9d8                __start_nrf_sections = __nrf_sections_start__
+.nrf_sections   0x000000000002dab4        0x0
+                0x000000000002dab4                __nrf_sections_start__ = .
+                0x000000000002dab4                __start_nrf_sections = __nrf_sections_start__
  *(.nrf_sections .nrf_sections.*)
-                0x000000000002d9d8                __nrf_sections_end__ = (__nrf_sections_start__ + SIZEOF (.nrf_sections))
+                0x000000000002dab4                __nrf_sections_end__ = (__nrf_sections_start__ + SIZEOF (.nrf_sections))
                 0x0000000000000000                __nrf_sections_size__ = SIZEOF (.nrf_sections)
-                0x000000000002d9d8                __nrf_sections_load_end__ = __nrf_sections_end__
+                0x000000000002dab4                __nrf_sections_load_end__ = __nrf_sections_end__
                 0x0000000000000001                . = ASSERT (((__nrf_sections_start__ == __nrf_sections_end__) || ((__nrf_sections_end__ >= __FLASH_segment_start__) && (__nrf_sections_end__ <= __FLASH_segment_end__))), error: .nrf_sections is too large to fit in FLASH memory segment)
-                0x000000000002d9d8                __log_dynamic_data_load_start__ = ALIGN (__nrf_sections_end__, 0x4)
+                0x000000000002dab4                __log_dynamic_data_load_start__ = ALIGN (__nrf_sections_end__, 0x4)
 
 .log_dynamic_data
-                0x00000000200020e0       0x78 load address 0x000000000002d9d8
+                0x00000000200020e0       0x78 load address 0x000000000002dab4
                 0x00000000200020e0                __log_dynamic_data_start__ = .
  *(SORT(.log_dynamic_data*))
  .log_dynamic_data_app
@@ -14897,11 +14883,11 @@ Linker script and memory map
                 0x000000002000214c                m_nrf_log_uart_logs_data_dynamic
                 0x0000000020002158                __log_dynamic_data_end__ = (__log_dynamic_data_start__ + SIZEOF (.log_dynamic_data))
                 0x0000000000000078                __log_dynamic_data_size__ = SIZEOF (.log_dynamic_data)
-                0x000000000002da50                __log_dynamic_data_load_end__ = (__log_dynamic_data_load_start__ + SIZEOF (.log_dynamic_data))
+                0x000000000002db2c                __log_dynamic_data_load_end__ = (__log_dynamic_data_load_start__ + SIZEOF (.log_dynamic_data))
                 0x0000000000000001                . = ASSERT (((__log_dynamic_data_load_start__ == __log_dynamic_data_load_end__) || ((__log_dynamic_data_load_end__ >= __FLASH_segment_start__) && (__log_dynamic_data_load_end__ <= __FLASH_segment_end__))), error: .log_dynamic_data is too large to fit in FLASH memory segment)
 
 .log_dynamic_data_run
-                0x00000000200020e0       0x78 load address 0x000000000002d9d8
+                0x00000000200020e0       0x78 load address 0x000000000002dab4
                 0x00000000200020e0                __log_dynamic_data_run_start__ = .
                 0x00000000200020e0                __start_log_dynamic_data = __log_dynamic_data_run_start__
                 0x0000000020002158                . = MAX ((__log_dynamic_data_run_start__ + SIZEOF (.log_dynamic_data)), .)
@@ -14911,19 +14897,19 @@ Linker script and memory map
                 0x0000000020002158                __stop_log_dynamic_data = __log_dynamic_data_run_end__
                 0x0000000020002158                __log_dynamic_data_run_load_end__ = __log_dynamic_data_run_end__
                 0x0000000000000001                . = ASSERT (((__log_dynamic_data_run_start__ == __log_dynamic_data_run_end__) || ((__log_dynamic_data_run_end__ >= __RAM_segment_start__) && (__log_dynamic_data_run_end__ <= __RAM_segment_end__))), error: .log_dynamic_data_run is too large to fit in RAM memory segment)
-                0x000000000002da50                __fs_data_load_start__ = ALIGN ((__log_dynamic_data_load_start__ + SIZEOF (.log_dynamic_data)), 0x4)
+                0x000000000002db2c                __fs_data_load_start__ = ALIGN ((__log_dynamic_data_load_start__ + SIZEOF (.log_dynamic_data)), 0x4)
 
-.fs_data        0x0000000020002158       0x14 load address 0x000000000002da50
+.fs_data        0x0000000020002158       0x14 load address 0x000000000002db2c
                 0x0000000020002158                __fs_data_start__ = .
  *(.fs_data*)
  .fs_data       0x0000000020002158       0x14 Output/LEDs Debug/Obj/fds.o
                 0x0000000020002158                m_fs
                 0x000000002000216c                __fs_data_end__ = (__fs_data_start__ + SIZEOF (.fs_data))
                 0x0000000000000014                __fs_data_size__ = SIZEOF (.fs_data)
-                0x000000000002da64                __fs_data_load_end__ = (__fs_data_load_start__ + SIZEOF (.fs_data))
+                0x000000000002db40                __fs_data_load_end__ = (__fs_data_load_start__ + SIZEOF (.fs_data))
                 0x0000000000000001                . = ASSERT (((__fs_data_load_start__ == __fs_data_load_end__) || ((__fs_data_load_end__ >= __FLASH_segment_start__) && (__fs_data_load_end__ <= __FLASH_segment_end__))), error: .fs_data is too large to fit in FLASH memory segment)
 
-.fs_data_run    0x0000000020002158       0x14 load address 0x000000000002da50
+.fs_data_run    0x0000000020002158       0x14 load address 0x000000000002db2c
                 0x0000000020002158                __fs_data_run_start__ = .
                 0x0000000020002158                __start_fs_data = __fs_data_run_start__
                 0x000000002000216c                . = MAX ((__fs_data_run_start__ + SIZEOF (.fs_data)), .)
@@ -14933,15 +14919,15 @@ Linker script and memory map
                 0x000000002000216c                __stop_fs_data = __fs_data_run_end__
                 0x000000002000216c                __fs_data_run_load_end__ = __fs_data_run_end__
                 0x0000000000000001                . = ASSERT (((__fs_data_run_start__ == __fs_data_run_end__) || ((__fs_data_run_end__ >= __RAM_segment_start__) && (__fs_data_run_end__ <= __RAM_segment_end__))), error: .fs_data_run is too large to fit in RAM memory segment)
-                0x000000000002da64                __cli_sorted_cmd_ptrs_load_start__ = ALIGN ((__fs_data_load_start__ + SIZEOF (.fs_data)), 0x4)
+                0x000000000002db40                __cli_sorted_cmd_ptrs_load_start__ = ALIGN ((__fs_data_load_start__ + SIZEOF (.fs_data)), 0x4)
 
 .cli_sorted_cmd_ptrs
-                0x000000002000216c        0x0 load address 0x000000000002da64
+                0x000000002000216c        0x0 load address 0x000000000002db40
                 0x000000002000216c                __cli_sorted_cmd_ptrs_start__ = .
  *(.cli_sorted_cmd_ptrs*)
                 0x000000002000216c                __cli_sorted_cmd_ptrs_end__ = (__cli_sorted_cmd_ptrs_start__ + SIZEOF (.cli_sorted_cmd_ptrs))
                 0x0000000000000000                __cli_sorted_cmd_ptrs_size__ = SIZEOF (.cli_sorted_cmd_ptrs)
-                0x000000000002da64                __cli_sorted_cmd_ptrs_load_end__ = (__cli_sorted_cmd_ptrs_load_start__ + SIZEOF (.cli_sorted_cmd_ptrs))
+                0x000000000002db40                __cli_sorted_cmd_ptrs_load_end__ = (__cli_sorted_cmd_ptrs_load_start__ + SIZEOF (.cli_sorted_cmd_ptrs))
                 0x0000000000000001                . = ASSERT (((__cli_sorted_cmd_ptrs_load_start__ == __cli_sorted_cmd_ptrs_load_end__) || ((__cli_sorted_cmd_ptrs_load_end__ >= __FLASH_segment_start__) && (__cli_sorted_cmd_ptrs_load_end__ <= __FLASH_segment_end__))), error: .cli_sorted_cmd_ptrs is too large to fit in FLASH memory segment)
 
 .cli_sorted_cmd_ptrs_run
@@ -14965,125 +14951,125 @@ Linker script and memory map
                 0x0000000000000000                __nrf_sections_run_end_size__ = SIZEOF (.nrf_sections_run_end)
                 0x000000002000216c                __nrf_sections_run_end_load_end__ = __nrf_sections_run_end_end__
                 0x0000000000000001                . = ASSERT (((__nrf_sections_run_end_start__ == __nrf_sections_run_end_end__) || ((__nrf_sections_run_end_end__ >= __RAM_segment_start__) && (__nrf_sections_run_end_end__ <= __RAM_segment_end__))), error: .nrf_sections_run_end is too large to fit in RAM memory segment)
-                0x000000000002da64                __dtors_load_start__ = ALIGN ((__cli_sorted_cmd_ptrs_load_start__ + SIZEOF (.cli_sorted_cmd_ptrs)), 0x4)
+                0x000000000002db40                __dtors_load_start__ = ALIGN ((__cli_sorted_cmd_ptrs_load_start__ + SIZEOF (.cli_sorted_cmd_ptrs)), 0x4)
 
-.dtors          0x000000000002da64        0x0
-                0x000000000002da64                __dtors_start__ = .
+.dtors          0x000000000002db40        0x0
+                0x000000000002db40                __dtors_start__ = .
  *(SORT(.dtors.*))
  *(.dtors)
  *(.fini_array)
  *(SORT(.fini_array.*))
-                0x000000000002da64                __dtors_end__ = (__dtors_start__ + SIZEOF (.dtors))
+                0x000000000002db40                __dtors_end__ = (__dtors_start__ + SIZEOF (.dtors))
                 0x0000000000000000                __dtors_size__ = SIZEOF (.dtors)
-                0x000000000002da64                __dtors_load_end__ = __dtors_end__
+                0x000000000002db40                __dtors_load_end__ = __dtors_end__
                 0x0000000000000001                . = ASSERT (((__dtors_start__ == __dtors_end__) || ((__dtors_end__ >= __FLASH_segment_start__) && (__dtors_end__ <= __FLASH_segment_end__))), error: .dtors is too large to fit in FLASH memory segment)
-                0x000000000002da64                __ctors_load_start__ = ALIGN (__dtors_end__, 0x4)
+                0x000000000002db40                __ctors_load_start__ = ALIGN (__dtors_end__, 0x4)
 
-.ctors          0x000000000002da64        0x0
-                0x000000000002da64                __ctors_start__ = .
+.ctors          0x000000000002db40        0x0
+                0x000000000002db40                __ctors_start__ = .
  *(SORT(.ctors.*))
  *(.ctors)
  *(.init_array)
  *(SORT(.init_array.*))
-                0x000000000002da64                __ctors_end__ = (__ctors_start__ + SIZEOF (.ctors))
+                0x000000000002db40                __ctors_end__ = (__ctors_start__ + SIZEOF (.ctors))
                 0x0000000000000000                __ctors_size__ = SIZEOF (.ctors)
-                0x000000000002da64                __ctors_load_end__ = __ctors_end__
+                0x000000000002db40                __ctors_load_end__ = __ctors_end__
                 0x0000000000000001                . = ASSERT (((__ctors_start__ == __ctors_end__) || ((__ctors_end__ >= __FLASH_segment_start__) && (__ctors_end__ <= __FLASH_segment_end__))), error: .ctors is too large to fit in FLASH memory segment)
-                0x000000000002da64                __rodata_load_start__ = ALIGN (__ctors_end__, 0x4)
+                0x000000000002db40                __rodata_load_start__ = ALIGN (__ctors_end__, 0x4)
 
-.rodata         0x000000000002da64      0xf6c
-                0x000000000002da64                __rodata_start__ = .
+.rodata         0x000000000002db40      0xf6c
+                0x000000000002db40                __rodata_start__ = .
  *(.rodata .rodata.* .gnu.linkonce.r.*)
  .rodata.mempool
-                0x000000000002da64       0x14 Output/LEDs Debug/Obj/nrf_log_frontend.o
- .rodata        0x000000000002da78       0x6d Output/LEDs Debug/Obj/nrf_log_frontend.o
- *fill*         0x000000000002dae5        0x3 
- .rodata        0x000000000002dae8       0x90 Output/LEDs Debug/Obj/app_error_weak.o
- .rodata        0x000000000002db78       0x4e Output/LEDs Debug/Obj/app_util_platform.o
- *fill*         0x000000000002dbc6        0x2 
- .rodata        0x000000000002dbc8       0x3f Output/LEDs Debug/Obj/fds.o
- *fill*         0x000000000002dc07        0x1 
+                0x000000000002db40       0x14 Output/LEDs Debug/Obj/nrf_log_frontend.o
+ .rodata        0x000000000002db54       0x6d Output/LEDs Debug/Obj/nrf_log_frontend.o
+ *fill*         0x000000000002dbc1        0x3 
+ .rodata        0x000000000002dbc4       0x90 Output/LEDs Debug/Obj/app_error_weak.o
+ .rodata        0x000000000002dc54       0x4e Output/LEDs Debug/Obj/app_util_platform.o
+ *fill*         0x000000000002dca2        0x2 
+ .rodata        0x000000000002dca4       0x3f Output/LEDs Debug/Obj/fds.o
+ *fill*         0x000000000002dce3        0x1 
  .rodata.page_tag_swap.8380
-                0x000000000002dc08        0x8 Output/LEDs Debug/Obj/fds.o
+                0x000000000002dce4        0x8 Output/LEDs Debug/Obj/fds.o
  .rodata.page_tag_data.8384
-                0x000000000002dc10        0x8 Output/LEDs Debug/Obj/fds.o
+                0x000000000002dcec        0x8 Output/LEDs Debug/Obj/fds.o
  .rodata.dirty_header.8511
-                0x000000000002dc18        0x4 Output/LEDs Debug/Obj/fds.o
- .rodata        0x000000000002dc1c       0x51 Output/LEDs Debug/Obj/nrf_balloc.o
- *fill*         0x000000000002dc6d        0x3 
- .rodata        0x000000000002dc70       0x56 Output/LEDs Debug/Obj/nrf_memobj.o
- *fill*         0x000000000002dcc6        0x2 
- .rodata        0x000000000002dcc8       0xe5 Output/LEDs Debug/Obj/nrf_pwr_mgmt.o
- *fill*         0x000000000002ddad        0x3 
- .rodata        0x000000000002ddb0       0x62 Output/LEDs Debug/Obj/nrf_section_iter.o
- *fill*         0x000000000002de12        0x2 
+                0x000000000002dcf4        0x4 Output/LEDs Debug/Obj/fds.o
+ .rodata        0x000000000002dcf8       0x51 Output/LEDs Debug/Obj/nrf_balloc.o
+ *fill*         0x000000000002dd49        0x3 
+ .rodata        0x000000000002dd4c       0x56 Output/LEDs Debug/Obj/nrf_memobj.o
+ *fill*         0x000000000002dda2        0x2 
+ .rodata        0x000000000002dda4       0xe5 Output/LEDs Debug/Obj/nrf_pwr_mgmt.o
+ *fill*         0x000000000002de89        0x3 
+ .rodata        0x000000000002de8c       0x62 Output/LEDs Debug/Obj/nrf_section_iter.o
+ *fill*         0x000000000002deee        0x2 
  .rodata.m_unknown_str
-                0x000000000002de14       0x13 Output/LEDs Debug/Obj/nrf_strerror.o
- *fill*         0x000000000002de27        0x1 
- .rodata        0x000000000002de28      0x308 Output/LEDs Debug/Obj/nrf_strerror.o
+                0x000000000002def0       0x13 Output/LEDs Debug/Obj/nrf_strerror.o
+ *fill*         0x000000000002df03        0x1 
+ .rodata        0x000000000002df04      0x308 Output/LEDs Debug/Obj/nrf_strerror.o
  .rodata.nrf_strerror_array
-                0x000000000002e130       0xf0 Output/LEDs Debug/Obj/nrf_strerror.o
- .rodata        0x000000000002e220       0x55 Output/LEDs Debug/Obj/nrf_drv_clock.o
- *fill*         0x000000000002e275        0x3 
- .rodata        0x000000000002e278       0x4f Output/LEDs Debug/Obj/nrf_drv_common.o
- *fill*         0x000000000002e2c7        0x1 
- .rodata        0x000000000002e2c8       0x8f Output/LEDs Debug/Obj/nrf_drv_gpiote.o
- *fill*         0x000000000002e357        0x1 
- .rodata        0x000000000002e358       0x8b Output/LEDs Debug/Obj/nrf_drv_uart.o
- *fill*         0x000000000002e3e3        0x1 
- .rodata        0x000000000002e3e4       0x47 Output/LEDs Debug/Obj/ble_conn_state.o
- *fill*         0x000000000002e42b        0x1 
- .rodata        0x000000000002e42c       0x10 Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x000000000002e20c       0xf0 Output/LEDs Debug/Obj/nrf_strerror.o
+ .rodata        0x000000000002e2fc       0x55 Output/LEDs Debug/Obj/nrf_drv_clock.o
+ *fill*         0x000000000002e351        0x3 
+ .rodata        0x000000000002e354       0x4f Output/LEDs Debug/Obj/nrf_drv_common.o
+ *fill*         0x000000000002e3a3        0x1 
+ .rodata        0x000000000002e3a4       0x8f Output/LEDs Debug/Obj/nrf_drv_gpiote.o
+ *fill*         0x000000000002e433        0x1 
+ .rodata        0x000000000002e434       0x8b Output/LEDs Debug/Obj/nrf_drv_uart.o
+ *fill*         0x000000000002e4bf        0x1 
+ .rodata        0x000000000002e4c0       0x47 Output/LEDs Debug/Obj/ble_conn_state.o
+ *fill*         0x000000000002e507        0x1 
+ .rodata        0x000000000002e508       0x10 Output/LEDs Debug/Obj/gatts_cache_manager.o
  .rodata.service_changed_pending.9325
-                0x000000000002e43c        0x4 Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x000000000002e518        0x4 Output/LEDs Debug/Obj/gatts_cache_manager.o
  .rodata.service_changed_pending.9381
-                0x000000000002e440        0x4 Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x000000000002e51c        0x4 Output/LEDs Debug/Obj/gatts_cache_manager.o
  .rodata.m_evt_handlers
-                0x000000000002e444        0x8 Output/LEDs Debug/Obj/id_manager.o
- .rodata        0x000000000002e44c      0x13c Output/LEDs Debug/Obj/nrf_ble_gatt.o
+                0x000000000002e520        0x8 Output/LEDs Debug/Obj/id_manager.o
+ .rodata        0x000000000002e528      0x13c Output/LEDs Debug/Obj/nrf_ble_gatt.o
  .rodata.m_evt_handlers
-                0x000000000002e588       0x10 Output/LEDs Debug/Obj/peer_database.o
- .rodata        0x000000000002e598       0xa8 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002e664       0x10 Output/LEDs Debug/Obj/peer_database.o
+ .rodata        0x000000000002e674       0xa8 Output/LEDs Debug/Obj/nrf_sdh.o
  .rodata.sdh_req_observers
-                0x000000000002e640        0xc Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002e71c        0xc Output/LEDs Debug/Obj/nrf_sdh.o
  .rodata.sdh_state_observers
-                0x000000000002e64c        0xc Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002e728        0xc Output/LEDs Debug/Obj/nrf_sdh.o
  .rodata.sdh_stack_observers
-                0x000000000002e658        0xc Output/LEDs Debug/Obj/nrf_sdh.o
- .rodata        0x000000000002e664      0x2a7 Output/LEDs Debug/Obj/nrf_sdh_ble.o
- *fill*         0x000000000002e90b        0x1 
+                0x000000000002e734        0xc Output/LEDs Debug/Obj/nrf_sdh.o
+ .rodata        0x000000000002e740      0x2a7 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ *fill*         0x000000000002e9e7        0x1 
  .rodata.sdh_ble_observers
-                0x000000000002e90c        0xc Output/LEDs Debug/Obj/nrf_sdh_ble.o
- .rodata        0x000000000002e918       0xab Output/LEDs Debug/Obj/nrf_sdh_soc.o
- *fill*         0x000000000002e9c3        0x1 
+                0x000000000002e9e8        0xc Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ .rodata        0x000000000002e9f4       0xab Output/LEDs Debug/Obj/nrf_sdh_soc.o
+ *fill*         0x000000000002ea9f        0x1 
  .rodata.sdh_soc_observers
-                0x000000000002e9c4        0xc Output/LEDs Debug/Obj/nrf_sdh_soc.o
-                0x000000000002e9d0                __rodata_end__ = (__rodata_start__ + SIZEOF (.rodata))
+                0x000000000002eaa0        0xc Output/LEDs Debug/Obj/nrf_sdh_soc.o
+                0x000000000002eaac                __rodata_end__ = (__rodata_start__ + SIZEOF (.rodata))
                 0x0000000000000f6c                __rodata_size__ = SIZEOF (.rodata)
-                0x000000000002e9d0                __rodata_load_end__ = __rodata_end__
+                0x000000000002eaac                __rodata_load_end__ = __rodata_end__
 
-.rel.dyn        0x000000000002e9d0        0x0
- .rel.iplt      0x000000000002e9d0        0x0 Output/LEDs Debug/Obj/thumb_crt0.o
+.rel.dyn        0x000000000002eaac        0x0
+ .rel.iplt      0x000000000002eaac        0x0 Output/LEDs Debug/Obj/thumb_crt0.o
                 0x0000000000000001                . = ASSERT (((__rodata_start__ == __rodata_end__) || ((__rodata_end__ >= __FLASH_segment_start__) && (__rodata_end__ <= __FLASH_segment_end__))), error: .rodata is too large to fit in FLASH memory segment)
-                0x000000000002e9d0                __ARM.exidx_load_start__ = ALIGN (__rodata_end__, 0x4)
+                0x000000000002eaac                __ARM.exidx_load_start__ = ALIGN (__rodata_end__, 0x4)
 
-.ARM.exidx      0x000000000002e9d0        0x0
-                0x000000000002e9d0                __ARM.exidx_start__ = .
-                0x000000000002e9d0                __exidx_start = __ARM.exidx_start__
+.ARM.exidx      0x000000000002eaac        0x0
+                0x000000000002eaac                __ARM.exidx_start__ = .
+                0x000000000002eaac                __exidx_start = __ARM.exidx_start__
  *(.ARM.exidx .ARM.exidx.*)
-                0x000000000002e9d0                __ARM.exidx_end__ = (__ARM.exidx_start__ + SIZEOF (.ARM.exidx))
+                0x000000000002eaac                __ARM.exidx_end__ = (__ARM.exidx_start__ + SIZEOF (.ARM.exidx))
                 0x0000000000000000                __ARM.exidx_size__ = SIZEOF (.ARM.exidx)
-                0x000000000002e9d0                __exidx_end = __ARM.exidx_end__
-                0x000000000002e9d0                __ARM.exidx_load_end__ = __ARM.exidx_end__
+                0x000000000002eaac                __exidx_end = __ARM.exidx_end__
+                0x000000000002eaac                __ARM.exidx_load_end__ = __ARM.exidx_end__
                 0x0000000000000001                . = ASSERT (((__ARM.exidx_start__ == __ARM.exidx_end__) || ((__ARM.exidx_end__ >= __FLASH_segment_start__) && (__ARM.exidx_end__ <= __FLASH_segment_end__))), error: .ARM.exidx is too large to fit in FLASH memory segment)
-                0x000000000002e9d0                __fast_load_start__ = ALIGN (__ARM.exidx_end__, 0x4)
+                0x000000000002eaac                __fast_load_start__ = ALIGN (__ARM.exidx_end__, 0x4)
 
-.fast           0x000000002000216c        0x0 load address 0x000000000002e9d0
+.fast           0x000000002000216c        0x0 load address 0x000000000002eaac
                 0x000000002000216c                __fast_start__ = .
  *(.fast .fast.*)
                 0x000000002000216c                __fast_end__ = (__fast_start__ + SIZEOF (.fast))
                 0x0000000000000000                __fast_size__ = SIZEOF (.fast)
-                0x000000000002e9d0                __fast_load_end__ = (__fast_load_start__ + SIZEOF (.fast))
+                0x000000000002eaac                __fast_load_end__ = (__fast_load_start__ + SIZEOF (.fast))
                 0x0000000000000001                . = ASSERT (((__fast_load_start__ == __fast_load_end__) || ((__fast_load_end__ >= __FLASH_segment_start__) && (__fast_load_end__ <= __FLASH_segment_end__))), error: .fast is too large to fit in FLASH memory segment)
 
 .fast_run       0x000000002000216c        0x0
@@ -15093,9 +15079,9 @@ Linker script and memory map
                 0x0000000000000000                __fast_run_size__ = SIZEOF (.fast_run)
                 0x000000002000216c                __fast_run_load_end__ = __fast_run_end__
                 0x0000000000000001                . = ASSERT (((__fast_run_start__ == __fast_run_end__) || ((__fast_run_end__ >= __RAM_segment_start__) && (__fast_run_end__ <= __RAM_segment_end__))), error: .fast_run is too large to fit in RAM memory segment)
-                0x000000000002e9d0                __data_load_start__ = ALIGN ((__fast_load_start__ + SIZEOF (.fast)), 0x4)
+                0x000000000002eaac                __data_load_start__ = ALIGN ((__fast_load_start__ + SIZEOF (.fast)), 0x4)
 
-.data           0x000000002000216c       0x14 load address 0x000000000002e9d0
+.data           0x000000002000216c       0x14 load address 0x000000000002eaac
                 0x000000002000216c                __data_start__ = .
  *(.data .data.* .gnu.linkonce.d.*)
  .data.m_evt_handlers
@@ -15128,13 +15114,13 @@ Linker script and memory map
                 0x000000002000217c                SystemCoreClock
                 0x0000000020002180                __data_end__ = (__data_start__ + SIZEOF (.data))
                 0x0000000000000014                __data_size__ = SIZEOF (.data)
-                0x000000000002e9e4                __data_load_end__ = (__data_load_start__ + SIZEOF (.data))
+                0x000000000002eac0                __data_load_end__ = (__data_load_start__ + SIZEOF (.data))
 
 .igot.plt       0x0000000100000000        0x0
  .igot.plt      0x0000000100000000        0x0 Output/LEDs Debug/Obj/thumb_crt0.o
                 0x0000000000000001                . = ASSERT (((__data_load_start__ == __data_load_end__) || ((__data_load_end__ >= __FLASH_segment_start__) && (__data_load_end__ <= __FLASH_segment_end__))), error: .data is too large to fit in FLASH memory segment)
 
-.data_run       0x000000002000216c       0x14 load address 0x000000000002e9d0
+.data_run       0x000000002000216c       0x14 load address 0x000000000002eaac
                 0x000000002000216c                __data_run_start__ = .
                 0x0000000020002180                . = MAX ((__data_run_start__ + SIZEOF (.data)), .)
  *fill*         0x000000002000216c       0x14 
@@ -15142,16 +15128,16 @@ Linker script and memory map
                 0x0000000000000014                __data_run_size__ = SIZEOF (.data_run)
                 0x0000000020002180                __data_run_load_end__ = __data_run_end__
                 0x0000000000000001                . = ASSERT (((__data_run_start__ == __data_run_end__) || ((__data_run_end__ >= __RAM_segment_start__) && (__data_run_end__ <= __RAM_segment_end__))), error: .data_run is too large to fit in RAM memory segment)
-                0x000000000002e9e4                __tdata_load_start__ = ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4)
+                0x000000000002eac0                __tdata_load_start__ = ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4)
 
-.tdata          0x0000000020002180        0x0 load address 0x000000000002e9e4
+.tdata          0x0000000020002180        0x0 load address 0x000000000002eac0
                 0x0000000020002180                __tdata_start__ = .
  *(.tdata .tdata.*)
                 0x0000000020002180                __tdata_end__ = (__tdata_start__ + SIZEOF (.tdata))
                 0x0000000000000000                __tdata_size__ = SIZEOF (.tdata)
-                0x000000000002e9e4                __tdata_load_end__ = (__tdata_load_start__ + SIZEOF (.tdata))
-                0x000000000002e9e4                __FLASH_segment_used_end__ = (ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4) + SIZEOF (.tdata))
-                0x000000000002e9e4                __FLASH_segment_used_size__ = (__FLASH_segment_used_end__ - __FLASH_segment_start__)
+                0x000000000002eac0                __tdata_load_end__ = (__tdata_load_start__ + SIZEOF (.tdata))
+                0x000000000002eac0                __FLASH_segment_used_end__ = (ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4) + SIZEOF (.tdata))
+                0x000000000002eac0                __FLASH_segment_used_size__ = (__FLASH_segment_used_end__ - __FLASH_segment_start__)
                 0x0000000000000001                . = ASSERT (((__tdata_load_start__ == __tdata_load_end__) || ((__tdata_load_end__ >= __FLASH_segment_start__) && (__tdata_load_end__ <= __FLASH_segment_end__))), error: .tdata is too large to fit in FLASH memory segment)
 
 .tdata_run      0x0000000020002180        0x0
@@ -15505,53 +15491,55 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .ARM.attributes
                 0x000000000000050b       0x39 Output/LEDs Debug/Obj/main.o
  .ARM.attributes
-                0x0000000000000544       0x39 Output/LEDs Debug/Obj/interrupts.o
+                0x0000000000000544       0x39 Output/LEDs Debug/Obj/functions.o
  .ARM.attributes
-                0x000000000000057d       0x39 Output/LEDs Debug/Obj/ble_conn_params.o
+                0x000000000000057d       0x39 Output/LEDs Debug/Obj/interrupts.o
  .ARM.attributes
-                0x00000000000005b6       0x39 Output/LEDs Debug/Obj/ble_conn_state.o
+                0x00000000000005b6       0x39 Output/LEDs Debug/Obj/ble_conn_params.o
  .ARM.attributes
-                0x00000000000005ef       0x39 Output/LEDs Debug/Obj/ble_srv_common.o
+                0x00000000000005ef       0x39 Output/LEDs Debug/Obj/ble_conn_state.o
  .ARM.attributes
-                0x0000000000000628       0x39 Output/LEDs Debug/Obj/gatt_cache_manager.o
+                0x0000000000000628       0x39 Output/LEDs Debug/Obj/ble_srv_common.o
  .ARM.attributes
-                0x0000000000000661       0x39 Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x0000000000000661       0x39 Output/LEDs Debug/Obj/gatt_cache_manager.o
  .ARM.attributes
-                0x000000000000069a       0x39 Output/LEDs Debug/Obj/id_manager.o
+                0x000000000000069a       0x39 Output/LEDs Debug/Obj/gatts_cache_manager.o
  .ARM.attributes
-                0x00000000000006d3       0x39 Output/LEDs Debug/Obj/nrf_ble_gatt.o
+                0x00000000000006d3       0x39 Output/LEDs Debug/Obj/id_manager.o
  .ARM.attributes
-                0x000000000000070c       0x39 Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000000070c       0x39 Output/LEDs Debug/Obj/nrf_ble_gatt.o
  .ARM.attributes
-                0x0000000000000745       0x39 Output/LEDs Debug/Obj/peer_database.o
+                0x0000000000000745       0x39 Output/LEDs Debug/Obj/peer_data_storage.o
  .ARM.attributes
-                0x000000000000077e       0x39 Output/LEDs Debug/Obj/peer_id.o
+                0x000000000000077e       0x39 Output/LEDs Debug/Obj/peer_database.o
  .ARM.attributes
-                0x00000000000007b7       0x39 Output/LEDs Debug/Obj/peer_manager.o
+                0x00000000000007b7       0x39 Output/LEDs Debug/Obj/peer_id.o
  .ARM.attributes
-                0x00000000000007f0       0x39 Output/LEDs Debug/Obj/pm_buffer.o
+                0x00000000000007f0       0x39 Output/LEDs Debug/Obj/peer_manager.o
  .ARM.attributes
-                0x0000000000000829       0x39 Output/LEDs Debug/Obj/pm_mutex.o
+                0x0000000000000829       0x39 Output/LEDs Debug/Obj/pm_buffer.o
  .ARM.attributes
-                0x0000000000000862       0x39 Output/LEDs Debug/Obj/security_dispatcher.o
+                0x0000000000000862       0x39 Output/LEDs Debug/Obj/pm_mutex.o
  .ARM.attributes
-                0x000000000000089b       0x39 Output/LEDs Debug/Obj/security_manager.o
+                0x000000000000089b       0x39 Output/LEDs Debug/Obj/security_dispatcher.o
  .ARM.attributes
-                0x00000000000008d4       0x25 Output/LEDs Debug/Obj/ses_nRF_Startup.o
+                0x00000000000008d4       0x39 Output/LEDs Debug/Obj/security_manager.o
  .ARM.attributes
-                0x00000000000008f9       0x25 Output/LEDs Debug/Obj/ses_nrf52_Vectors.o
+                0x000000000000090d       0x25 Output/LEDs Debug/Obj/ses_nRF_Startup.o
  .ARM.attributes
-                0x000000000000091e       0x39 Output/LEDs Debug/Obj/system_nrf52.o
+                0x0000000000000932       0x25 Output/LEDs Debug/Obj/ses_nrf52_Vectors.o
  .ARM.attributes
-                0x0000000000000957       0x39 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x0000000000000957       0x39 Output/LEDs Debug/Obj/system_nrf52.o
  .ARM.attributes
-                0x0000000000000990       0x39 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+                0x0000000000000990       0x39 Output/LEDs Debug/Obj/nrf_sdh.o
  .ARM.attributes
-                0x00000000000009c9       0x39 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+                0x00000000000009c9       0x39 Output/LEDs Debug/Obj/nrf_sdh_ble.o
  .ARM.attributes
-                0x0000000000000a02       0x34 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
+                0x0000000000000a02       0x39 Output/LEDs Debug/Obj/nrf_sdh_soc.o
  .ARM.attributes
-                0x0000000000000a36       0x20 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2_asm.o)
+                0x0000000000000a3b       0x34 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
+ .ARM.attributes
+                0x0000000000000a6f       0x20 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2_asm.o)
 
 .comment        0x0000000000000000       0x4c
  .comment       0x0000000000000000       0x4c Output/LEDs Debug/Obj/nrf_log_frontend.o
@@ -15578,6 +15566,7 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .comment       0x000000000000004c       0x4d Output/LEDs Debug/Obj/bsp.o
  .comment       0x000000000000004c       0x4d Output/LEDs Debug/Obj/bsp_btn_ble.o
  .comment       0x000000000000004c       0x4d Output/LEDs Debug/Obj/main.o
+ .comment       0x000000000000004c       0x4d Output/LEDs Debug/Obj/functions.o
  .comment       0x000000000000004c       0x4d Output/LEDs Debug/Obj/interrupts.o
  .comment       0x000000000000004c       0x4d Output/LEDs Debug/Obj/ble_conn_params.o
  .comment       0x000000000000004c       0x4d Output/LEDs Debug/Obj/ble_conn_state.o
@@ -15600,7 +15589,7 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .comment       0x000000000000004c       0x4d Output/LEDs Debug/Obj/nrf_sdh_soc.o
  .comment       0x000000000000004c       0x4d C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
 
-.debug_line     0x0000000000000000    0x1ce89
+.debug_line     0x0000000000000000    0x1d13c
  .debug_line    0x0000000000000000      0x2b4 Output/LEDs Debug/Obj/thumb_crt0.o
  .debug_line    0x00000000000002b4      0xe27 Output/LEDs Debug/Obj/nrf_log_frontend.o
  .debug_line    0x00000000000010db      0x33a Output/LEDs Debug/Obj/app_error.o
@@ -15624,31 +15613,32 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .debug_line    0x000000000000a940     0x12b4 Output/LEDs Debug/Obj/nrf_drv_uart.o
  .debug_line    0x000000000000bbf4      0x6f0 Output/LEDs Debug/Obj/bsp.o
  .debug_line    0x000000000000c2e4      0xbf6 Output/LEDs Debug/Obj/bsp_btn_ble.o
- .debug_line    0x000000000000ceda      0x2b5 Output/LEDs Debug/Obj/main.o
- .debug_line    0x000000000000d18f      0x250 Output/LEDs Debug/Obj/interrupts.o
- .debug_line    0x000000000000d3df      0xcf0 Output/LEDs Debug/Obj/ble_conn_params.o
- .debug_line    0x000000000000e0cf      0xc6d Output/LEDs Debug/Obj/ble_conn_state.o
- .debug_line    0x000000000000ed3c      0xad0 Output/LEDs Debug/Obj/ble_srv_common.o
- .debug_line    0x000000000000f80c     0x1036 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .debug_line    0x0000000000010842      0xea6 Output/LEDs Debug/Obj/gatts_cache_manager.o
- .debug_line    0x00000000000116e8     0x1286 Output/LEDs Debug/Obj/id_manager.o
- .debug_line    0x000000000001296e      0xc95 Output/LEDs Debug/Obj/nrf_ble_gatt.o
- .debug_line    0x0000000000013603     0x111b Output/LEDs Debug/Obj/peer_data_storage.o
- .debug_line    0x000000000001471e     0x1185 Output/LEDs Debug/Obj/peer_database.o
- .debug_line    0x00000000000158a3      0xe9b Output/LEDs Debug/Obj/peer_id.o
- .debug_line    0x000000000001673e     0x14e0 Output/LEDs Debug/Obj/peer_manager.o
- .debug_line    0x0000000000017c1e      0x3f1 Output/LEDs Debug/Obj/pm_buffer.o
- .debug_line    0x000000000001800f      0x72d Output/LEDs Debug/Obj/pm_mutex.o
- .debug_line    0x000000000001873c     0x1194 Output/LEDs Debug/Obj/security_dispatcher.o
- .debug_line    0x00000000000198d0     0x10ba Output/LEDs Debug/Obj/security_manager.o
- .debug_line    0x000000000001a98a       0xa4 Output/LEDs Debug/Obj/ses_nRF_Startup.o
- .debug_line    0x000000000001aa2e       0xad Output/LEDs Debug/Obj/ses_nrf52_Vectors.o
- .debug_line    0x000000000001aadb      0x42a Output/LEDs Debug/Obj/system_nrf52.o
- .debug_line    0x000000000001af05      0xb71 Output/LEDs Debug/Obj/nrf_sdh.o
- .debug_line    0x000000000001ba76      0xbb3 Output/LEDs Debug/Obj/nrf_sdh_ble.o
- .debug_line    0x000000000001c629      0x860 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+ .debug_line    0x000000000000ceda      0x2de Output/LEDs Debug/Obj/main.o
+ .debug_line    0x000000000000d1b8      0x28a Output/LEDs Debug/Obj/functions.o
+ .debug_line    0x000000000000d442      0x250 Output/LEDs Debug/Obj/interrupts.o
+ .debug_line    0x000000000000d692      0xcf0 Output/LEDs Debug/Obj/ble_conn_params.o
+ .debug_line    0x000000000000e382      0xc6d Output/LEDs Debug/Obj/ble_conn_state.o
+ .debug_line    0x000000000000efef      0xad0 Output/LEDs Debug/Obj/ble_srv_common.o
+ .debug_line    0x000000000000fabf     0x1036 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .debug_line    0x0000000000010af5      0xea6 Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .debug_line    0x000000000001199b     0x1286 Output/LEDs Debug/Obj/id_manager.o
+ .debug_line    0x0000000000012c21      0xc95 Output/LEDs Debug/Obj/nrf_ble_gatt.o
+ .debug_line    0x00000000000138b6     0x111b Output/LEDs Debug/Obj/peer_data_storage.o
+ .debug_line    0x00000000000149d1     0x1185 Output/LEDs Debug/Obj/peer_database.o
+ .debug_line    0x0000000000015b56      0xe9b Output/LEDs Debug/Obj/peer_id.o
+ .debug_line    0x00000000000169f1     0x14e0 Output/LEDs Debug/Obj/peer_manager.o
+ .debug_line    0x0000000000017ed1      0x3f1 Output/LEDs Debug/Obj/pm_buffer.o
+ .debug_line    0x00000000000182c2      0x72d Output/LEDs Debug/Obj/pm_mutex.o
+ .debug_line    0x00000000000189ef     0x1194 Output/LEDs Debug/Obj/security_dispatcher.o
+ .debug_line    0x0000000000019b83     0x10ba Output/LEDs Debug/Obj/security_manager.o
+ .debug_line    0x000000000001ac3d       0xa4 Output/LEDs Debug/Obj/ses_nRF_Startup.o
+ .debug_line    0x000000000001ace1       0xad Output/LEDs Debug/Obj/ses_nrf52_Vectors.o
+ .debug_line    0x000000000001ad8e      0x42a Output/LEDs Debug/Obj/system_nrf52.o
+ .debug_line    0x000000000001b1b8      0xb71 Output/LEDs Debug/Obj/nrf_sdh.o
+ .debug_line    0x000000000001bd29      0xbb3 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ .debug_line    0x000000000001c8dc      0x860 Output/LEDs Debug/Obj/nrf_sdh_soc.o
 
-.debug_info     0x0000000000000000    0x6d131
+.debug_info     0x0000000000000000    0x6dcc6
  .debug_info    0x0000000000000000       0xc0 Output/LEDs Debug/Obj/thumb_crt0.o
  .debug_info    0x00000000000000c0     0x2758 Output/LEDs Debug/Obj/nrf_log_frontend.o
  .debug_info    0x0000000000002818      0x805 Output/LEDs Debug/Obj/app_error.o
@@ -15672,31 +15662,32 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .debug_info    0x000000000001ba39     0x3747 Output/LEDs Debug/Obj/nrf_drv_uart.o
  .debug_info    0x000000000001f180      0xe8f Output/LEDs Debug/Obj/bsp.o
  .debug_info    0x000000000002000f     0x41c7 Output/LEDs Debug/Obj/bsp_btn_ble.o
- .debug_info    0x00000000000241d6      0x5d0 Output/LEDs Debug/Obj/main.o
- .debug_info    0x00000000000247a6      0x3c3 Output/LEDs Debug/Obj/interrupts.o
- .debug_info    0x0000000000024b69     0x4764 Output/LEDs Debug/Obj/ble_conn_params.o
- .debug_info    0x00000000000292cd     0x45fe Output/LEDs Debug/Obj/ble_conn_state.o
- .debug_info    0x000000000002d8cb     0x336e Output/LEDs Debug/Obj/ble_srv_common.o
- .debug_info    0x0000000000030c39     0x55ff Output/LEDs Debug/Obj/gatt_cache_manager.o
- .debug_info    0x0000000000036238     0x432f Output/LEDs Debug/Obj/gatts_cache_manager.o
- .debug_info    0x000000000003a567     0x5d01 Output/LEDs Debug/Obj/id_manager.o
- .debug_info    0x0000000000040268     0x472e Output/LEDs Debug/Obj/nrf_ble_gatt.o
- .debug_info    0x0000000000044996     0x4a78 Output/LEDs Debug/Obj/peer_data_storage.o
- .debug_info    0x000000000004940e     0x4a21 Output/LEDs Debug/Obj/peer_database.o
- .debug_info    0x000000000004de2f     0x3c0f Output/LEDs Debug/Obj/peer_id.o
- .debug_info    0x0000000000051a3e     0x5e32 Output/LEDs Debug/Obj/peer_manager.o
- .debug_info    0x0000000000057870      0x774 Output/LEDs Debug/Obj/pm_buffer.o
- .debug_info    0x0000000000057fe4     0x1325 Output/LEDs Debug/Obj/pm_mutex.o
- .debug_info    0x0000000000059309     0x5b65 Output/LEDs Debug/Obj/security_dispatcher.o
- .debug_info    0x000000000005ee6e     0x56a8 Output/LEDs Debug/Obj/security_manager.o
- .debug_info    0x0000000000064516       0xbf Output/LEDs Debug/Obj/ses_nRF_Startup.o
- .debug_info    0x00000000000645d5       0xc1 Output/LEDs Debug/Obj/ses_nrf52_Vectors.o
- .debug_info    0x0000000000064696     0x1083 Output/LEDs Debug/Obj/system_nrf52.o
- .debug_info    0x0000000000065719     0x1f36 Output/LEDs Debug/Obj/nrf_sdh.o
- .debug_info    0x000000000006764f     0x46c2 Output/LEDs Debug/Obj/nrf_sdh_ble.o
- .debug_info    0x000000000006bd11     0x1420 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+ .debug_info    0x00000000000241d6      0xaf9 Output/LEDs Debug/Obj/main.o
+ .debug_info    0x0000000000024ccf      0x66c Output/LEDs Debug/Obj/functions.o
+ .debug_info    0x000000000002533b      0x3c3 Output/LEDs Debug/Obj/interrupts.o
+ .debug_info    0x00000000000256fe     0x4764 Output/LEDs Debug/Obj/ble_conn_params.o
+ .debug_info    0x0000000000029e62     0x45fe Output/LEDs Debug/Obj/ble_conn_state.o
+ .debug_info    0x000000000002e460     0x336e Output/LEDs Debug/Obj/ble_srv_common.o
+ .debug_info    0x00000000000317ce     0x55ff Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .debug_info    0x0000000000036dcd     0x432f Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .debug_info    0x000000000003b0fc     0x5d01 Output/LEDs Debug/Obj/id_manager.o
+ .debug_info    0x0000000000040dfd     0x472e Output/LEDs Debug/Obj/nrf_ble_gatt.o
+ .debug_info    0x000000000004552b     0x4a78 Output/LEDs Debug/Obj/peer_data_storage.o
+ .debug_info    0x0000000000049fa3     0x4a21 Output/LEDs Debug/Obj/peer_database.o
+ .debug_info    0x000000000004e9c4     0x3c0f Output/LEDs Debug/Obj/peer_id.o
+ .debug_info    0x00000000000525d3     0x5e32 Output/LEDs Debug/Obj/peer_manager.o
+ .debug_info    0x0000000000058405      0x774 Output/LEDs Debug/Obj/pm_buffer.o
+ .debug_info    0x0000000000058b79     0x1325 Output/LEDs Debug/Obj/pm_mutex.o
+ .debug_info    0x0000000000059e9e     0x5b65 Output/LEDs Debug/Obj/security_dispatcher.o
+ .debug_info    0x000000000005fa03     0x56a8 Output/LEDs Debug/Obj/security_manager.o
+ .debug_info    0x00000000000650ab       0xbf Output/LEDs Debug/Obj/ses_nRF_Startup.o
+ .debug_info    0x000000000006516a       0xc1 Output/LEDs Debug/Obj/ses_nrf52_Vectors.o
+ .debug_info    0x000000000006522b     0x1083 Output/LEDs Debug/Obj/system_nrf52.o
+ .debug_info    0x00000000000662ae     0x1f36 Output/LEDs Debug/Obj/nrf_sdh.o
+ .debug_info    0x00000000000681e4     0x46c2 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ .debug_info    0x000000000006c8a6     0x1420 Output/LEDs Debug/Obj/nrf_sdh_soc.o
 
-.debug_abbrev   0x0000000000000000     0x7972
+.debug_abbrev   0x0000000000000000     0x7b22
  .debug_abbrev  0x0000000000000000       0x12 Output/LEDs Debug/Obj/thumb_crt0.o
  .debug_abbrev  0x0000000000000012      0x45f Output/LEDs Debug/Obj/nrf_log_frontend.o
  .debug_abbrev  0x0000000000000471      0x18c Output/LEDs Debug/Obj/app_error.o
@@ -15720,31 +15711,32 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .debug_abbrev  0x00000000000032aa      0x39e Output/LEDs Debug/Obj/nrf_drv_uart.o
  .debug_abbrev  0x0000000000003648      0x28f Output/LEDs Debug/Obj/bsp.o
  .debug_abbrev  0x00000000000038d7      0x2b4 Output/LEDs Debug/Obj/bsp_btn_ble.o
- .debug_abbrev  0x0000000000003b8b      0x127 Output/LEDs Debug/Obj/main.o
- .debug_abbrev  0x0000000000003cb2      0x10e Output/LEDs Debug/Obj/interrupts.o
- .debug_abbrev  0x0000000000003dc0      0x364 Output/LEDs Debug/Obj/ble_conn_params.o
- .debug_abbrev  0x0000000000004124      0x389 Output/LEDs Debug/Obj/ble_conn_state.o
- .debug_abbrev  0x00000000000044ad      0x297 Output/LEDs Debug/Obj/ble_srv_common.o
- .debug_abbrev  0x0000000000004744      0x3a7 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .debug_abbrev  0x0000000000004aeb      0x356 Output/LEDs Debug/Obj/gatts_cache_manager.o
- .debug_abbrev  0x0000000000004e41      0x41d Output/LEDs Debug/Obj/id_manager.o
- .debug_abbrev  0x000000000000525e      0x35f Output/LEDs Debug/Obj/nrf_ble_gatt.o
- .debug_abbrev  0x00000000000055bd      0x388 Output/LEDs Debug/Obj/peer_data_storage.o
- .debug_abbrev  0x0000000000005945      0x3f1 Output/LEDs Debug/Obj/peer_database.o
- .debug_abbrev  0x0000000000005d36      0x2bf Output/LEDs Debug/Obj/peer_id.o
- .debug_abbrev  0x0000000000005ff5      0x3b4 Output/LEDs Debug/Obj/peer_manager.o
- .debug_abbrev  0x00000000000063a9      0x193 Output/LEDs Debug/Obj/pm_buffer.o
- .debug_abbrev  0x000000000000653c      0x24e Output/LEDs Debug/Obj/pm_mutex.o
- .debug_abbrev  0x000000000000678a      0x37f Output/LEDs Debug/Obj/security_dispatcher.o
- .debug_abbrev  0x0000000000006b09      0x380 Output/LEDs Debug/Obj/security_manager.o
- .debug_abbrev  0x0000000000006e89       0x14 Output/LEDs Debug/Obj/ses_nRF_Startup.o
- .debug_abbrev  0x0000000000006e9d       0x14 Output/LEDs Debug/Obj/ses_nrf52_Vectors.o
- .debug_abbrev  0x0000000000006eb1      0x1e4 Output/LEDs Debug/Obj/system_nrf52.o
- .debug_abbrev  0x0000000000007095      0x376 Output/LEDs Debug/Obj/nrf_sdh.o
- .debug_abbrev  0x000000000000740b      0x345 Output/LEDs Debug/Obj/nrf_sdh_ble.o
- .debug_abbrev  0x0000000000007750      0x222 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+ .debug_abbrev  0x0000000000003b8b      0x172 Output/LEDs Debug/Obj/main.o
+ .debug_abbrev  0x0000000000003cfd      0x165 Output/LEDs Debug/Obj/functions.o
+ .debug_abbrev  0x0000000000003e62      0x10e Output/LEDs Debug/Obj/interrupts.o
+ .debug_abbrev  0x0000000000003f70      0x364 Output/LEDs Debug/Obj/ble_conn_params.o
+ .debug_abbrev  0x00000000000042d4      0x389 Output/LEDs Debug/Obj/ble_conn_state.o
+ .debug_abbrev  0x000000000000465d      0x297 Output/LEDs Debug/Obj/ble_srv_common.o
+ .debug_abbrev  0x00000000000048f4      0x3a7 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .debug_abbrev  0x0000000000004c9b      0x356 Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .debug_abbrev  0x0000000000004ff1      0x41d Output/LEDs Debug/Obj/id_manager.o
+ .debug_abbrev  0x000000000000540e      0x35f Output/LEDs Debug/Obj/nrf_ble_gatt.o
+ .debug_abbrev  0x000000000000576d      0x388 Output/LEDs Debug/Obj/peer_data_storage.o
+ .debug_abbrev  0x0000000000005af5      0x3f1 Output/LEDs Debug/Obj/peer_database.o
+ .debug_abbrev  0x0000000000005ee6      0x2bf Output/LEDs Debug/Obj/peer_id.o
+ .debug_abbrev  0x00000000000061a5      0x3b4 Output/LEDs Debug/Obj/peer_manager.o
+ .debug_abbrev  0x0000000000006559      0x193 Output/LEDs Debug/Obj/pm_buffer.o
+ .debug_abbrev  0x00000000000066ec      0x24e Output/LEDs Debug/Obj/pm_mutex.o
+ .debug_abbrev  0x000000000000693a      0x37f Output/LEDs Debug/Obj/security_dispatcher.o
+ .debug_abbrev  0x0000000000006cb9      0x380 Output/LEDs Debug/Obj/security_manager.o
+ .debug_abbrev  0x0000000000007039       0x14 Output/LEDs Debug/Obj/ses_nRF_Startup.o
+ .debug_abbrev  0x000000000000704d       0x14 Output/LEDs Debug/Obj/ses_nrf52_Vectors.o
+ .debug_abbrev  0x0000000000007061      0x1e4 Output/LEDs Debug/Obj/system_nrf52.o
+ .debug_abbrev  0x0000000000007245      0x376 Output/LEDs Debug/Obj/nrf_sdh.o
+ .debug_abbrev  0x00000000000075bb      0x345 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ .debug_abbrev  0x0000000000007900      0x222 Output/LEDs Debug/Obj/nrf_sdh_soc.o
 
-.debug_aranges  0x0000000000000000     0x6460
+.debug_aranges  0x0000000000000000     0x6490
  .debug_aranges
                 0x0000000000000000       0xe0 Output/LEDs Debug/Obj/thumb_crt0.o
  .debug_aranges
@@ -15794,51 +15786,53 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .debug_aranges
                 0x00000000000025a0       0x20 Output/LEDs Debug/Obj/main.o
  .debug_aranges
-                0x00000000000025c0       0x20 Output/LEDs Debug/Obj/interrupts.o
+                0x00000000000025c0       0x30 Output/LEDs Debug/Obj/functions.o
  .debug_aranges
-                0x00000000000025e0      0x300 Output/LEDs Debug/Obj/ble_conn_params.o
+                0x00000000000025f0       0x20 Output/LEDs Debug/Obj/interrupts.o
  .debug_aranges
-                0x00000000000028e0      0x348 Output/LEDs Debug/Obj/ble_conn_state.o
+                0x0000000000002610      0x300 Output/LEDs Debug/Obj/ble_conn_params.o
  .debug_aranges
-                0x0000000000002c28      0x2c0 Output/LEDs Debug/Obj/ble_srv_common.o
+                0x0000000000002910      0x348 Output/LEDs Debug/Obj/ble_conn_state.o
  .debug_aranges
-                0x0000000000002ee8      0x468 Output/LEDs Debug/Obj/gatt_cache_manager.o
+                0x0000000000002c58      0x2c0 Output/LEDs Debug/Obj/ble_srv_common.o
  .debug_aranges
-                0x0000000000003350      0x420 Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x0000000000002f18      0x468 Output/LEDs Debug/Obj/gatt_cache_manager.o
  .debug_aranges
-                0x0000000000003770      0x4c0 Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000003380      0x420 Output/LEDs Debug/Obj/gatts_cache_manager.o
  .debug_aranges
-                0x0000000000003c30      0x2f8 Output/LEDs Debug/Obj/nrf_ble_gatt.o
+                0x00000000000037a0      0x4c0 Output/LEDs Debug/Obj/id_manager.o
  .debug_aranges
-                0x0000000000003f28      0x4a8 Output/LEDs Debug/Obj/peer_data_storage.o
+                0x0000000000003c60      0x2f8 Output/LEDs Debug/Obj/nrf_ble_gatt.o
  .debug_aranges
-                0x00000000000043d0      0x4c0 Output/LEDs Debug/Obj/peer_database.o
+                0x0000000000003f58      0x4a8 Output/LEDs Debug/Obj/peer_data_storage.o
  .debug_aranges
-                0x0000000000004890      0x438 Output/LEDs Debug/Obj/peer_id.o
+                0x0000000000004400      0x4c0 Output/LEDs Debug/Obj/peer_database.o
  .debug_aranges
-                0x0000000000004cc8      0x530 Output/LEDs Debug/Obj/peer_manager.o
+                0x00000000000048c0      0x438 Output/LEDs Debug/Obj/peer_id.o
  .debug_aranges
-                0x00000000000051f8       0x38 Output/LEDs Debug/Obj/pm_buffer.o
+                0x0000000000004cf8      0x530 Output/LEDs Debug/Obj/peer_manager.o
  .debug_aranges
-                0x0000000000005230      0x198 Output/LEDs Debug/Obj/pm_mutex.o
+                0x0000000000005228       0x38 Output/LEDs Debug/Obj/pm_buffer.o
  .debug_aranges
-                0x00000000000053c8      0x4c8 Output/LEDs Debug/Obj/security_dispatcher.o
+                0x0000000000005260      0x198 Output/LEDs Debug/Obj/pm_mutex.o
  .debug_aranges
-                0x0000000000005890      0x490 Output/LEDs Debug/Obj/security_manager.o
+                0x00000000000053f8      0x4c8 Output/LEDs Debug/Obj/security_dispatcher.o
  .debug_aranges
-                0x0000000000005d20       0x20 Output/LEDs Debug/Obj/ses_nRF_Startup.o
+                0x00000000000058c0      0x490 Output/LEDs Debug/Obj/security_manager.o
  .debug_aranges
-                0x0000000000005d40       0x20 Output/LEDs Debug/Obj/ses_nrf52_Vectors.o
+                0x0000000000005d50       0x20 Output/LEDs Debug/Obj/ses_nRF_Startup.o
  .debug_aranges
-                0x0000000000005d60       0x80 Output/LEDs Debug/Obj/system_nrf52.o
+                0x0000000000005d70       0x20 Output/LEDs Debug/Obj/ses_nrf52_Vectors.o
  .debug_aranges
-                0x0000000000005de0      0x258 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x0000000000005d90       0x80 Output/LEDs Debug/Obj/system_nrf52.o
  .debug_aranges
-                0x0000000000006038      0x2b0 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+                0x0000000000005e10      0x258 Output/LEDs Debug/Obj/nrf_sdh.o
  .debug_aranges
-                0x00000000000062e8      0x178 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+                0x0000000000006068      0x2b0 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ .debug_aranges
+                0x0000000000006318      0x178 Output/LEDs Debug/Obj/nrf_sdh_soc.o
 
-.debug_ranges   0x0000000000000000     0x6270
+.debug_ranges   0x0000000000000000     0x6290
  .debug_ranges  0x0000000000000000       0xd8 Output/LEDs Debug/Obj/thumb_crt0.o
  .debug_ranges  0x00000000000000d8      0x288 Output/LEDs Debug/Obj/nrf_log_frontend.o
  .debug_ranges  0x0000000000000360       0x20 Output/LEDs Debug/Obj/app_error.o
@@ -15863,28 +15857,29 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .debug_ranges  0x0000000000002158       0x88 Output/LEDs Debug/Obj/bsp.o
  .debug_ranges  0x00000000000021e0      0x2a0 Output/LEDs Debug/Obj/bsp_btn_ble.o
  .debug_ranges  0x0000000000002480       0x10 Output/LEDs Debug/Obj/main.o
- .debug_ranges  0x0000000000002490       0x10 Output/LEDs Debug/Obj/interrupts.o
- .debug_ranges  0x00000000000024a0      0x308 Output/LEDs Debug/Obj/ble_conn_params.o
- .debug_ranges  0x00000000000027a8      0x338 Output/LEDs Debug/Obj/ble_conn_state.o
- .debug_ranges  0x0000000000002ae0      0x2b0 Output/LEDs Debug/Obj/ble_srv_common.o
- .debug_ranges  0x0000000000002d90      0x4a0 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .debug_ranges  0x0000000000003230      0x410 Output/LEDs Debug/Obj/gatts_cache_manager.o
- .debug_ranges  0x0000000000003640      0x4b0 Output/LEDs Debug/Obj/id_manager.o
- .debug_ranges  0x0000000000003af0      0x2e8 Output/LEDs Debug/Obj/nrf_ble_gatt.o
- .debug_ranges  0x0000000000003dd8      0x498 Output/LEDs Debug/Obj/peer_data_storage.o
- .debug_ranges  0x0000000000004270      0x4e0 Output/LEDs Debug/Obj/peer_database.o
- .debug_ranges  0x0000000000004750      0x428 Output/LEDs Debug/Obj/peer_id.o
- .debug_ranges  0x0000000000004b78      0x520 Output/LEDs Debug/Obj/peer_manager.o
- .debug_ranges  0x0000000000005098       0x28 Output/LEDs Debug/Obj/pm_buffer.o
- .debug_ranges  0x00000000000050c0      0x188 Output/LEDs Debug/Obj/pm_mutex.o
- .debug_ranges  0x0000000000005248      0x4b8 Output/LEDs Debug/Obj/security_dispatcher.o
- .debug_ranges  0x0000000000005700      0x480 Output/LEDs Debug/Obj/security_manager.o
- .debug_ranges  0x0000000000005b80       0x70 Output/LEDs Debug/Obj/system_nrf52.o
- .debug_ranges  0x0000000000005bf0      0x248 Output/LEDs Debug/Obj/nrf_sdh.o
- .debug_ranges  0x0000000000005e38      0x2b8 Output/LEDs Debug/Obj/nrf_sdh_ble.o
- .debug_ranges  0x00000000000060f0      0x180 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+ .debug_ranges  0x0000000000002490       0x20 Output/LEDs Debug/Obj/functions.o
+ .debug_ranges  0x00000000000024b0       0x10 Output/LEDs Debug/Obj/interrupts.o
+ .debug_ranges  0x00000000000024c0      0x308 Output/LEDs Debug/Obj/ble_conn_params.o
+ .debug_ranges  0x00000000000027c8      0x338 Output/LEDs Debug/Obj/ble_conn_state.o
+ .debug_ranges  0x0000000000002b00      0x2b0 Output/LEDs Debug/Obj/ble_srv_common.o
+ .debug_ranges  0x0000000000002db0      0x4a0 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .debug_ranges  0x0000000000003250      0x410 Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .debug_ranges  0x0000000000003660      0x4b0 Output/LEDs Debug/Obj/id_manager.o
+ .debug_ranges  0x0000000000003b10      0x2e8 Output/LEDs Debug/Obj/nrf_ble_gatt.o
+ .debug_ranges  0x0000000000003df8      0x498 Output/LEDs Debug/Obj/peer_data_storage.o
+ .debug_ranges  0x0000000000004290      0x4e0 Output/LEDs Debug/Obj/peer_database.o
+ .debug_ranges  0x0000000000004770      0x428 Output/LEDs Debug/Obj/peer_id.o
+ .debug_ranges  0x0000000000004b98      0x520 Output/LEDs Debug/Obj/peer_manager.o
+ .debug_ranges  0x00000000000050b8       0x28 Output/LEDs Debug/Obj/pm_buffer.o
+ .debug_ranges  0x00000000000050e0      0x188 Output/LEDs Debug/Obj/pm_mutex.o
+ .debug_ranges  0x0000000000005268      0x4b8 Output/LEDs Debug/Obj/security_dispatcher.o
+ .debug_ranges  0x0000000000005720      0x480 Output/LEDs Debug/Obj/security_manager.o
+ .debug_ranges  0x0000000000005ba0       0x70 Output/LEDs Debug/Obj/system_nrf52.o
+ .debug_ranges  0x0000000000005c10      0x248 Output/LEDs Debug/Obj/nrf_sdh.o
+ .debug_ranges  0x0000000000005e58      0x2b8 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ .debug_ranges  0x0000000000006110      0x180 Output/LEDs Debug/Obj/nrf_sdh_soc.o
 
-.debug_frame    0x0000000000000000    0x103b0
+.debug_frame    0x0000000000000000    0x10428
  .debug_frame   0x0000000000000000      0x844 Output/LEDs Debug/Obj/nrf_log_frontend.o
  .debug_frame   0x0000000000000844       0x80 Output/LEDs Debug/Obj/app_error.o
  .debug_frame   0x00000000000008c4      0x31c Output/LEDs Debug/Obj/app_error_weak.o
@@ -15907,30 +15902,31 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .debug_frame   0x00000000000055ec      0xe80 Output/LEDs Debug/Obj/nrf_drv_uart.o
  .debug_frame   0x000000000000646c      0x280 Output/LEDs Debug/Obj/bsp.o
  .debug_frame   0x00000000000066ec      0x5d0 Output/LEDs Debug/Obj/bsp_btn_ble.o
- .debug_frame   0x0000000000006cbc       0x20 Output/LEDs Debug/Obj/main.o
- .debug_frame   0x0000000000006cdc       0x20 Output/LEDs Debug/Obj/interrupts.o
- .debug_frame   0x0000000000006cfc      0x744 Output/LEDs Debug/Obj/ble_conn_params.o
- .debug_frame   0x0000000000007440      0x87c Output/LEDs Debug/Obj/ble_conn_state.o
- .debug_frame   0x0000000000007cbc      0x610 Output/LEDs Debug/Obj/ble_srv_common.o
- .debug_frame   0x00000000000082cc      0xa20 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .debug_frame   0x0000000000008cec      0x8e0 Output/LEDs Debug/Obj/gatts_cache_manager.o
- .debug_frame   0x00000000000095cc      0xc08 Output/LEDs Debug/Obj/id_manager.o
- .debug_frame   0x000000000000a1d4      0x714 Output/LEDs Debug/Obj/nrf_ble_gatt.o
- .debug_frame   0x000000000000a8e8      0xb5c Output/LEDs Debug/Obj/peer_data_storage.o
- .debug_frame   0x000000000000b444      0xbe8 Output/LEDs Debug/Obj/peer_database.o
- .debug_frame   0x000000000000c02c      0x97c Output/LEDs Debug/Obj/peer_id.o
- .debug_frame   0x000000000000c9a8      0xe1c Output/LEDs Debug/Obj/peer_manager.o
- .debug_frame   0x000000000000d7c4       0xb0 Output/LEDs Debug/Obj/pm_buffer.o
- .debug_frame   0x000000000000d874      0x398 Output/LEDs Debug/Obj/pm_mutex.o
- .debug_frame   0x000000000000dc0c      0xc54 Output/LEDs Debug/Obj/security_dispatcher.o
- .debug_frame   0x000000000000e860      0xb28 Output/LEDs Debug/Obj/security_manager.o
- .debug_frame   0x000000000000f388       0xec Output/LEDs Debug/Obj/system_nrf52.o
- .debug_frame   0x000000000000f474      0x674 Output/LEDs Debug/Obj/nrf_sdh.o
- .debug_frame   0x000000000000fae8      0x5c8 Output/LEDs Debug/Obj/nrf_sdh_ble.o
- .debug_frame   0x00000000000100b0      0x300 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+ .debug_frame   0x0000000000006cbc       0x2c Output/LEDs Debug/Obj/main.o
+ .debug_frame   0x0000000000006ce8       0x6c Output/LEDs Debug/Obj/functions.o
+ .debug_frame   0x0000000000006d54       0x20 Output/LEDs Debug/Obj/interrupts.o
+ .debug_frame   0x0000000000006d74      0x744 Output/LEDs Debug/Obj/ble_conn_params.o
+ .debug_frame   0x00000000000074b8      0x87c Output/LEDs Debug/Obj/ble_conn_state.o
+ .debug_frame   0x0000000000007d34      0x610 Output/LEDs Debug/Obj/ble_srv_common.o
+ .debug_frame   0x0000000000008344      0xa20 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .debug_frame   0x0000000000008d64      0x8e0 Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .debug_frame   0x0000000000009644      0xc08 Output/LEDs Debug/Obj/id_manager.o
+ .debug_frame   0x000000000000a24c      0x714 Output/LEDs Debug/Obj/nrf_ble_gatt.o
+ .debug_frame   0x000000000000a960      0xb5c Output/LEDs Debug/Obj/peer_data_storage.o
+ .debug_frame   0x000000000000b4bc      0xbe8 Output/LEDs Debug/Obj/peer_database.o
+ .debug_frame   0x000000000000c0a4      0x97c Output/LEDs Debug/Obj/peer_id.o
+ .debug_frame   0x000000000000ca20      0xe1c Output/LEDs Debug/Obj/peer_manager.o
+ .debug_frame   0x000000000000d83c       0xb0 Output/LEDs Debug/Obj/pm_buffer.o
+ .debug_frame   0x000000000000d8ec      0x398 Output/LEDs Debug/Obj/pm_mutex.o
+ .debug_frame   0x000000000000dc84      0xc54 Output/LEDs Debug/Obj/security_dispatcher.o
+ .debug_frame   0x000000000000e8d8      0xb28 Output/LEDs Debug/Obj/security_manager.o
+ .debug_frame   0x000000000000f400       0xec Output/LEDs Debug/Obj/system_nrf52.o
+ .debug_frame   0x000000000000f4ec      0x674 Output/LEDs Debug/Obj/nrf_sdh.o
+ .debug_frame   0x000000000000fb60      0x5c8 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ .debug_frame   0x0000000000010128      0x300 Output/LEDs Debug/Obj/nrf_sdh_soc.o
 
 .debug_pubnames
-                0x0000000000000000    0x2d288
+                0x0000000000000000    0x2d676
  .debug_pubnames
                 0x0000000000000000      0xe52 Output/LEDs Debug/Obj/nrf_log_frontend.o
  .debug_pubnames
@@ -15976,50 +15972,52 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .debug_pubnames
                 0x000000000000e875     0x16d4 Output/LEDs Debug/Obj/bsp_btn_ble.o
  .debug_pubnames
-                0x000000000000ff49       0x57 Output/LEDs Debug/Obj/main.o
+                0x000000000000ff49       0x6b Output/LEDs Debug/Obj/main.o
  .debug_pubnames
-                0x000000000000ffa0       0x88 Output/LEDs Debug/Obj/interrupts.o
+                0x000000000000ffb4      0x3da Output/LEDs Debug/Obj/functions.o
  .debug_pubnames
-                0x0000000000010028     0x1766 Output/LEDs Debug/Obj/ble_conn_params.o
+                0x000000000001038e       0x88 Output/LEDs Debug/Obj/interrupts.o
  .debug_pubnames
-                0x000000000001178e     0x1a3b Output/LEDs Debug/Obj/ble_conn_state.o
+                0x0000000000010416     0x1766 Output/LEDs Debug/Obj/ble_conn_params.o
  .debug_pubnames
-                0x00000000000131c9     0x127b Output/LEDs Debug/Obj/ble_srv_common.o
+                0x0000000000011b7c     0x1a3b Output/LEDs Debug/Obj/ble_conn_state.o
  .debug_pubnames
-                0x0000000000014444     0x254a Output/LEDs Debug/Obj/gatt_cache_manager.o
+                0x00000000000135b7     0x127b Output/LEDs Debug/Obj/ble_srv_common.o
  .debug_pubnames
-                0x000000000001698e     0x1cad Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x0000000000014832     0x254a Output/LEDs Debug/Obj/gatt_cache_manager.o
  .debug_pubnames
-                0x000000000001863b     0x26cd Output/LEDs Debug/Obj/id_manager.o
+                0x0000000000016d7c     0x1cad Output/LEDs Debug/Obj/gatts_cache_manager.o
  .debug_pubnames
-                0x000000000001ad08     0x18fc Output/LEDs Debug/Obj/nrf_ble_gatt.o
+                0x0000000000018a29     0x26cd Output/LEDs Debug/Obj/id_manager.o
  .debug_pubnames
-                0x000000000001c604     0x22ea Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000001b0f6     0x18fc Output/LEDs Debug/Obj/nrf_ble_gatt.o
  .debug_pubnames
-                0x000000000001e8ee     0x21b4 Output/LEDs Debug/Obj/peer_database.o
+                0x000000000001c9f2     0x22ea Output/LEDs Debug/Obj/peer_data_storage.o
  .debug_pubnames
-                0x0000000000020aa2     0x1b08 Output/LEDs Debug/Obj/peer_id.o
+                0x000000000001ecdc     0x21b4 Output/LEDs Debug/Obj/peer_database.o
  .debug_pubnames
-                0x00000000000225aa     0x2758 Output/LEDs Debug/Obj/peer_manager.o
+                0x0000000000020e90     0x1b08 Output/LEDs Debug/Obj/peer_id.o
  .debug_pubnames
-                0x0000000000024d02       0x6d Output/LEDs Debug/Obj/pm_buffer.o
+                0x0000000000022998     0x2758 Output/LEDs Debug/Obj/peer_manager.o
  .debug_pubnames
-                0x0000000000024d6f      0x94d Output/LEDs Debug/Obj/pm_mutex.o
+                0x00000000000250f0       0x6d Output/LEDs Debug/Obj/pm_buffer.o
  .debug_pubnames
-                0x00000000000256bc     0x2738 Output/LEDs Debug/Obj/security_dispatcher.o
+                0x000000000002515d      0x94d Output/LEDs Debug/Obj/pm_mutex.o
  .debug_pubnames
-                0x0000000000027df4     0x23bd Output/LEDs Debug/Obj/security_manager.o
+                0x0000000000025aaa     0x2738 Output/LEDs Debug/Obj/security_dispatcher.o
  .debug_pubnames
-                0x000000000002a1b1      0x110 Output/LEDs Debug/Obj/system_nrf52.o
+                0x00000000000281e2     0x23bd Output/LEDs Debug/Obj/security_manager.o
  .debug_pubnames
-                0x000000000002a2c1     0x1265 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000002a59f      0x110 Output/LEDs Debug/Obj/system_nrf52.o
  .debug_pubnames
-                0x000000000002b526     0x13b6 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+                0x000000000002a6af     0x1265 Output/LEDs Debug/Obj/nrf_sdh.o
  .debug_pubnames
-                0x000000000002c8dc      0x9ac Output/LEDs Debug/Obj/nrf_sdh_soc.o
+                0x000000000002b914     0x13b6 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ .debug_pubnames
+                0x000000000002ccca      0x9ac Output/LEDs Debug/Obj/nrf_sdh_soc.o
 
 .debug_pubtypes
-                0x0000000000000000    0x164db
+                0x0000000000000000    0x16626
  .debug_pubtypes
                 0x0000000000000000      0x4ed Output/LEDs Debug/Obj/nrf_log_frontend.o
  .debug_pubtypes
@@ -16065,49 +16063,51 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .debug_pubtypes
                 0x0000000000004e08     0x11cf Output/LEDs Debug/Obj/bsp_btn_ble.o
  .debug_pubtypes
-                0x0000000000005fd7      0x191 Output/LEDs Debug/Obj/main.o
+                0x0000000000005fd7      0x1ca Output/LEDs Debug/Obj/main.o
  .debug_pubtypes
-                0x0000000000006168       0xea Output/LEDs Debug/Obj/interrupts.o
+                0x00000000000061a1      0x112 Output/LEDs Debug/Obj/functions.o
  .debug_pubtypes
-                0x0000000000006252     0x12af Output/LEDs Debug/Obj/ble_conn_params.o
+                0x00000000000062b3       0xea Output/LEDs Debug/Obj/interrupts.o
  .debug_pubtypes
-                0x0000000000007501     0x1259 Output/LEDs Debug/Obj/ble_conn_state.o
+                0x000000000000639d     0x12af Output/LEDs Debug/Obj/ble_conn_params.o
  .debug_pubtypes
-                0x000000000000875a      0x9f8 Output/LEDs Debug/Obj/ble_srv_common.o
+                0x000000000000764c     0x1259 Output/LEDs Debug/Obj/ble_conn_state.o
  .debug_pubtypes
-                0x0000000000009152     0x1579 Output/LEDs Debug/Obj/gatt_cache_manager.o
+                0x00000000000088a5      0x9f8 Output/LEDs Debug/Obj/ble_srv_common.o
  .debug_pubtypes
-                0x000000000000a6cb      0xd1f Output/LEDs Debug/Obj/gatts_cache_manager.o
+                0x000000000000929d     0x1579 Output/LEDs Debug/Obj/gatt_cache_manager.o
  .debug_pubtypes
-                0x000000000000b3ea     0x157f Output/LEDs Debug/Obj/id_manager.o
+                0x000000000000a816      0xd1f Output/LEDs Debug/Obj/gatts_cache_manager.o
  .debug_pubtypes
-                0x000000000000c969     0x1268 Output/LEDs Debug/Obj/nrf_ble_gatt.o
+                0x000000000000b535     0x157f Output/LEDs Debug/Obj/id_manager.o
  .debug_pubtypes
-                0x000000000000dbd1      0xdef Output/LEDs Debug/Obj/peer_data_storage.o
+                0x000000000000cab4     0x1268 Output/LEDs Debug/Obj/nrf_ble_gatt.o
  .debug_pubtypes
-                0x000000000000e9c0      0xd7c Output/LEDs Debug/Obj/peer_database.o
+                0x000000000000dd1c      0xdef Output/LEDs Debug/Obj/peer_data_storage.o
  .debug_pubtypes
-                0x000000000000f73c      0xacf Output/LEDs Debug/Obj/peer_id.o
+                0x000000000000eb0b      0xd7c Output/LEDs Debug/Obj/peer_database.o
  .debug_pubtypes
-                0x000000000001020b     0x15dc Output/LEDs Debug/Obj/peer_manager.o
+                0x000000000000f887      0xacf Output/LEDs Debug/Obj/peer_id.o
  .debug_pubtypes
-                0x00000000000117e7      0x1bc Output/LEDs Debug/Obj/pm_buffer.o
+                0x0000000000010356     0x15dc Output/LEDs Debug/Obj/peer_manager.o
  .debug_pubtypes
-                0x00000000000119a3      0x30f Output/LEDs Debug/Obj/pm_mutex.o
+                0x0000000000011932      0x1bc Output/LEDs Debug/Obj/pm_buffer.o
  .debug_pubtypes
-                0x0000000000011cb2     0x156c Output/LEDs Debug/Obj/security_dispatcher.o
+                0x0000000000011aee      0x30f Output/LEDs Debug/Obj/pm_mutex.o
  .debug_pubtypes
-                0x000000000001321e     0x1503 Output/LEDs Debug/Obj/security_manager.o
+                0x0000000000011dfd     0x156c Output/LEDs Debug/Obj/security_dispatcher.o
  .debug_pubtypes
-                0x0000000000014721      0x1b4 Output/LEDs Debug/Obj/system_nrf52.o
+                0x0000000000013369     0x1503 Output/LEDs Debug/Obj/security_manager.o
  .debug_pubtypes
-                0x00000000000148d5      0x4f3 Output/LEDs Debug/Obj/nrf_sdh.o
+                0x000000000001486c      0x1b4 Output/LEDs Debug/Obj/system_nrf52.o
  .debug_pubtypes
-                0x0000000000014dc8     0x1304 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+                0x0000000000014a20      0x4f3 Output/LEDs Debug/Obj/nrf_sdh.o
  .debug_pubtypes
-                0x00000000000160cc      0x40f Output/LEDs Debug/Obj/nrf_sdh_soc.o
+                0x0000000000014f13     0x1304 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ .debug_pubtypes
+                0x0000000000016217      0x40f Output/LEDs Debug/Obj/nrf_sdh_soc.o
 
-.debug_macro    0x0000000000000000     0x72d1
+.debug_macro    0x0000000000000000     0x7391
  .debug_macro   0x0000000000000000      0x261 Output/LEDs Debug/Obj/nrf_log_frontend.o
  .debug_macro   0x0000000000000261       0x31 Output/LEDs Debug/Obj/nrf_log_frontend.o
  .debug_macro   0x0000000000000292       0x10 Output/LEDs Debug/Obj/nrf_log_frontend.o
@@ -16183,43 +16183,44 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
  .debug_macro   0x0000000000004415       0x1c Output/LEDs Debug/Obj/bsp_btn_ble.o
  .debug_macro   0x0000000000004431       0xf6 Output/LEDs Debug/Obj/main.o
  .debug_macro   0x0000000000004527       0x16 Output/LEDs Debug/Obj/main.o
- .debug_macro   0x000000000000453d       0xc0 Output/LEDs Debug/Obj/interrupts.o
- .debug_macro   0x00000000000045fd      0x268 Output/LEDs Debug/Obj/ble_conn_params.o
- .debug_macro   0x0000000000004865       0xb2 Output/LEDs Debug/Obj/ble_conn_params.o
- .debug_macro   0x0000000000004917       0x1c Output/LEDs Debug/Obj/ble_conn_params.o
- .debug_macro   0x0000000000004933       0x10 Output/LEDs Debug/Obj/ble_conn_params.o
- .debug_macro   0x0000000000004943      0x215 Output/LEDs Debug/Obj/ble_conn_state.o
- .debug_macro   0x0000000000004b58      0x1b8 Output/LEDs Debug/Obj/ble_srv_common.o
- .debug_macro   0x0000000000004d10      0x286 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .debug_macro   0x0000000000004f96       0x82 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .debug_macro   0x0000000000005018       0x42 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .debug_macro   0x000000000000505a       0x10 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .debug_macro   0x000000000000506a       0x10 Output/LEDs Debug/Obj/gatt_cache_manager.o
- .debug_macro   0x000000000000507a      0x267 Output/LEDs Debug/Obj/gatts_cache_manager.o
- .debug_macro   0x00000000000052e1      0x28a Output/LEDs Debug/Obj/id_manager.o
- .debug_macro   0x000000000000556b       0x40 Output/LEDs Debug/Obj/id_manager.o
- .debug_macro   0x00000000000055ab      0x1f3 Output/LEDs Debug/Obj/nrf_ble_gatt.o
- .debug_macro   0x000000000000579e       0x10 Output/LEDs Debug/Obj/nrf_ble_gatt.o
- .debug_macro   0x00000000000057ae      0x268 Output/LEDs Debug/Obj/peer_data_storage.o
- .debug_macro   0x0000000000005a16       0x3a Output/LEDs Debug/Obj/peer_data_storage.o
- .debug_macro   0x0000000000005a50       0x16 Output/LEDs Debug/Obj/peer_data_storage.o
- .debug_macro   0x0000000000005a66      0x277 Output/LEDs Debug/Obj/peer_database.o
- .debug_macro   0x0000000000005cdd       0x3c Output/LEDs Debug/Obj/peer_database.o
- .debug_macro   0x0000000000005d19       0x10 Output/LEDs Debug/Obj/peer_database.o
- .debug_macro   0x0000000000005d29      0x23e Output/LEDs Debug/Obj/peer_id.o
- .debug_macro   0x0000000000005f67      0x2e6 Output/LEDs Debug/Obj/peer_manager.o
- .debug_macro   0x000000000000624d      0x13e Output/LEDs Debug/Obj/pm_buffer.o
- .debug_macro   0x000000000000638b      0x199 Output/LEDs Debug/Obj/pm_mutex.o
- .debug_macro   0x0000000000006524      0x27a Output/LEDs Debug/Obj/security_dispatcher.o
- .debug_macro   0x000000000000679e      0x284 Output/LEDs Debug/Obj/security_manager.o
- .debug_macro   0x0000000000006a22       0xac Output/LEDs Debug/Obj/system_nrf52.o
- .debug_macro   0x0000000000006ace      0x231 Output/LEDs Debug/Obj/nrf_sdh.o
- .debug_macro   0x0000000000006cff      0x15b Output/LEDs Debug/Obj/nrf_sdh.o
- .debug_macro   0x0000000000006e5a      0x259 Output/LEDs Debug/Obj/nrf_sdh_ble.o
- .debug_macro   0x00000000000070b3      0x208 Output/LEDs Debug/Obj/nrf_sdh_soc.o
- .debug_macro   0x00000000000072bb       0x16 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+ .debug_macro   0x000000000000453d       0xc0 Output/LEDs Debug/Obj/functions.o
+ .debug_macro   0x00000000000045fd       0xc0 Output/LEDs Debug/Obj/interrupts.o
+ .debug_macro   0x00000000000046bd      0x268 Output/LEDs Debug/Obj/ble_conn_params.o
+ .debug_macro   0x0000000000004925       0xb2 Output/LEDs Debug/Obj/ble_conn_params.o
+ .debug_macro   0x00000000000049d7       0x1c Output/LEDs Debug/Obj/ble_conn_params.o
+ .debug_macro   0x00000000000049f3       0x10 Output/LEDs Debug/Obj/ble_conn_params.o
+ .debug_macro   0x0000000000004a03      0x215 Output/LEDs Debug/Obj/ble_conn_state.o
+ .debug_macro   0x0000000000004c18      0x1b8 Output/LEDs Debug/Obj/ble_srv_common.o
+ .debug_macro   0x0000000000004dd0      0x286 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .debug_macro   0x0000000000005056       0x82 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .debug_macro   0x00000000000050d8       0x42 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .debug_macro   0x000000000000511a       0x10 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .debug_macro   0x000000000000512a       0x10 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .debug_macro   0x000000000000513a      0x267 Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .debug_macro   0x00000000000053a1      0x28a Output/LEDs Debug/Obj/id_manager.o
+ .debug_macro   0x000000000000562b       0x40 Output/LEDs Debug/Obj/id_manager.o
+ .debug_macro   0x000000000000566b      0x1f3 Output/LEDs Debug/Obj/nrf_ble_gatt.o
+ .debug_macro   0x000000000000585e       0x10 Output/LEDs Debug/Obj/nrf_ble_gatt.o
+ .debug_macro   0x000000000000586e      0x268 Output/LEDs Debug/Obj/peer_data_storage.o
+ .debug_macro   0x0000000000005ad6       0x3a Output/LEDs Debug/Obj/peer_data_storage.o
+ .debug_macro   0x0000000000005b10       0x16 Output/LEDs Debug/Obj/peer_data_storage.o
+ .debug_macro   0x0000000000005b26      0x277 Output/LEDs Debug/Obj/peer_database.o
+ .debug_macro   0x0000000000005d9d       0x3c Output/LEDs Debug/Obj/peer_database.o
+ .debug_macro   0x0000000000005dd9       0x10 Output/LEDs Debug/Obj/peer_database.o
+ .debug_macro   0x0000000000005de9      0x23e Output/LEDs Debug/Obj/peer_id.o
+ .debug_macro   0x0000000000006027      0x2e6 Output/LEDs Debug/Obj/peer_manager.o
+ .debug_macro   0x000000000000630d      0x13e Output/LEDs Debug/Obj/pm_buffer.o
+ .debug_macro   0x000000000000644b      0x199 Output/LEDs Debug/Obj/pm_mutex.o
+ .debug_macro   0x00000000000065e4      0x27a Output/LEDs Debug/Obj/security_dispatcher.o
+ .debug_macro   0x000000000000685e      0x284 Output/LEDs Debug/Obj/security_manager.o
+ .debug_macro   0x0000000000006ae2       0xac Output/LEDs Debug/Obj/system_nrf52.o
+ .debug_macro   0x0000000000006b8e      0x231 Output/LEDs Debug/Obj/nrf_sdh.o
+ .debug_macro   0x0000000000006dbf      0x15b Output/LEDs Debug/Obj/nrf_sdh.o
+ .debug_macro   0x0000000000006f1a      0x259 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ .debug_macro   0x0000000000007173      0x208 Output/LEDs Debug/Obj/nrf_sdh_soc.o
+ .debug_macro   0x000000000000737b       0x16 Output/LEDs Debug/Obj/nrf_sdh_soc.o
 
-.debug_str      0x0000000000000000    0x839a1
+.debug_str      0x0000000000000000    0x839fd
  .debug_str     0x0000000000000000    0x69243 Output/LEDs Debug/Obj/nrf_log_frontend.o
                                       0x69fde (size before relaxing)
  .debug_str     0x0000000000069243      0x113 Output/LEDs Debug/Obj/app_error.o
@@ -16264,45 +16265,47 @@ OUTPUT(Output/Debug/Exe/LEDs.elf elf32-littlearm)
                                       0x674cd (size before relaxing)
  .debug_str     0x000000000007540d     0x7770 Output/LEDs Debug/Obj/bsp_btn_ble.o
                                       0x6e669 (size before relaxing)
- .debug_str     0x000000000007cb7d       0x90 Output/LEDs Debug/Obj/main.o
-                                      0x5ba71 (size before relaxing)
- .debug_str     0x000000000007cc0d       0xad Output/LEDs Debug/Obj/interrupts.o
+ .debug_str     0x000000000007cb7d       0xd0 Output/LEDs Debug/Obj/main.o
+                                      0x5bc61 (size before relaxing)
+ .debug_str     0x000000000007cc4d       0x70 Output/LEDs Debug/Obj/functions.o
+                                      0x5b234 (size before relaxing)
+ .debug_str     0x000000000007ccbd       0x59 Output/LEDs Debug/Obj/interrupts.o
                                       0x5af4d (size before relaxing)
- .debug_str     0x000000000007ccba     0x1d03 Output/LEDs Debug/Obj/ble_conn_params.o
+ .debug_str     0x000000000007cd16     0x1d03 Output/LEDs Debug/Obj/ble_conn_params.o
                                       0x6e7c2 (size before relaxing)
- .debug_str     0x000000000007e9bd      0x72d Output/LEDs Debug/Obj/ble_conn_state.o
+ .debug_str     0x000000000007ea19      0x72d Output/LEDs Debug/Obj/ble_conn_state.o
                                       0x6cc60 (size before relaxing)
- .debug_str     0x000000000007f0ea      0x2fe Output/LEDs Debug/Obj/ble_srv_common.o
+ .debug_str     0x000000000007f146      0x2fe Output/LEDs Debug/Obj/ble_srv_common.o
                                       0x6c34c (size before relaxing)
- .debug_str     0x000000000007f3e8     0x1183 Output/LEDs Debug/Obj/gatt_cache_manager.o
+ .debug_str     0x000000000007f444     0x1183 Output/LEDs Debug/Obj/gatt_cache_manager.o
                                       0x6eda1 (size before relaxing)
- .debug_str     0x000000000008056b      0x273 Output/LEDs Debug/Obj/gatts_cache_manager.o
+ .debug_str     0x00000000000805c7      0x273 Output/LEDs Debug/Obj/gatts_cache_manager.o
                                       0x6dc64 (size before relaxing)
- .debug_str     0x00000000000807de      0x679 Output/LEDs Debug/Obj/id_manager.o
+ .debug_str     0x000000000008083a      0x679 Output/LEDs Debug/Obj/id_manager.o
                                       0x6f1e2 (size before relaxing)
- .debug_str     0x0000000000080e57      0x66c Output/LEDs Debug/Obj/nrf_ble_gatt.o
+ .debug_str     0x0000000000080eb3      0x66c Output/LEDs Debug/Obj/nrf_ble_gatt.o
                                       0x6e135 (size before relaxing)
- .debug_str     0x00000000000814c3      0x453 Output/LEDs Debug/Obj/peer_data_storage.o
+ .debug_str     0x000000000008151f      0x453 Output/LEDs Debug/Obj/peer_data_storage.o
                                       0x6e2a4 (size before relaxing)
- .debug_str     0x0000000000081916      0x649 Output/LEDs Debug/Obj/peer_database.o
+ .debug_str     0x0000000000081972      0x649 Output/LEDs Debug/Obj/peer_database.o
                                       0x6e309 (size before relaxing)
- .debug_str     0x0000000000081f5f      0x122 Output/LEDs Debug/Obj/peer_id.o
+ .debug_str     0x0000000000081fbb      0x122 Output/LEDs Debug/Obj/peer_id.o
                                       0x6d09e (size before relaxing)
- .debug_str     0x0000000000082081      0x579 Output/LEDs Debug/Obj/peer_manager.o
+ .debug_str     0x00000000000820dd      0x579 Output/LEDs Debug/Obj/peer_manager.o
                                       0x6f9d6 (size before relaxing)
- .debug_str     0x00000000000825fa      0x148 Output/LEDs Debug/Obj/pm_buffer.o
+ .debug_str     0x0000000000082656      0x148 Output/LEDs Debug/Obj/pm_buffer.o
                                       0x64a4f (size before relaxing)
- .debug_str     0x0000000000082742       0xe1 Output/LEDs Debug/Obj/pm_mutex.o
+ .debug_str     0x000000000008279e       0xe1 Output/LEDs Debug/Obj/pm_mutex.o
                                       0x662a6 (size before relaxing)
- .debug_str     0x0000000000082823      0x357 Output/LEDs Debug/Obj/security_dispatcher.o
+ .debug_str     0x000000000008287f      0x357 Output/LEDs Debug/Obj/security_dispatcher.o
                                       0x6ef38 (size before relaxing)
- .debug_str     0x0000000000082b7a      0x3c6 Output/LEDs Debug/Obj/security_manager.o
+ .debug_str     0x0000000000082bd6      0x3c6 Output/LEDs Debug/Obj/security_manager.o
                                       0x6ec44 (size before relaxing)
- .debug_str     0x0000000000082f40      0x15e Output/LEDs Debug/Obj/system_nrf52.o
+ .debug_str     0x0000000000082f9c      0x15e Output/LEDs Debug/Obj/system_nrf52.o
                                       0x5b370 (size before relaxing)
- .debug_str     0x000000000008309e      0x400 Output/LEDs Debug/Obj/nrf_sdh.o
+ .debug_str     0x00000000000830fa      0x400 Output/LEDs Debug/Obj/nrf_sdh.o
                                       0x69a18 (size before relaxing)
- .debug_str     0x000000000008349e      0x385 Output/LEDs Debug/Obj/nrf_sdh_ble.o
+ .debug_str     0x00000000000834fa      0x385 Output/LEDs Debug/Obj/nrf_sdh_ble.o
                                       0x6e9a0 (size before relaxing)
- .debug_str     0x0000000000083823      0x17e Output/LEDs Debug/Obj/nrf_sdh_soc.o
+ .debug_str     0x000000000008387f      0x17e Output/LEDs Debug/Obj/nrf_sdh_soc.o
                                       0x6867f (size before relaxing)
