@@ -26,6 +26,9 @@ extern "C" {
 /* FUNCTION PROTOTYPES */
 void conf_GPIO      ( void );
 void conf_TIMER0    ( void );
+void conf_TIMER1    ( void );
+void conf_TIMER2    ( void );
+void delay          ( void );
 
 
 #ifdef __cplusplus
