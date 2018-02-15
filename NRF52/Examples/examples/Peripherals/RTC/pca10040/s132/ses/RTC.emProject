@@ -1,6 +1,6 @@
 <!DOCTYPE CrossStudio_Project_File>
-<solution Name="TIMER" target="8" version="2">
-  <project Name="TIMER">
+<solution Name="RTC" target="8" version="2">
+  <project Name="RTC">
     <configuration
       Name="Common"
       arm_architecture="v7EM"
@@ -47,7 +47,9 @@
       <file file_name="../../../../../../components/libraries/util/app_error.c" />
       <file file_name="../../../../../../components/libraries/util/app_error_weak.c" />
       <file file_name="../../../../../../components/libraries/scheduler/app_scheduler.c" />
-      <file file_name="../../../../../../components/libraries/timer/app_timer.c" />
+      <file file_name="../../../../../../components/libraries/timer/app_timer.c">
+        <configuration Name="Debug" build_exclude_from_build="No" />
+      </file>
       <file file_name="../../../../../../components/libraries/util/app_util_platform.c" />
       <file file_name="../../../../../../components/libraries/crc16/crc16.c" />
       <file file_name="../../../../../../components/libraries/fds/fds.c" />
