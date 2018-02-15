@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        14/February/2018
- * @version     14/February/2018   The ORIGIN
+ * @date        15/February/2018
+ * @version     15/February/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -23,13 +23,12 @@ extern "C" {
 
 
 /* INTERRUPT PRTOTYPES */
-void TIMER0_IRQHandler ( void );
-void TIMER2_IRQHandler ( void );
+void RTC0_IRQHandler ( void );
+void RTC1_IRQHandler ( void );
 
 
 /* VARIABLES */
 extern uint32_t changeLEDsSTATE;
-extern uint32_t my375msDelay;
 
 
 #ifdef __cplusplus
