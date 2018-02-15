@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        14/February/2018
- * @version     14/February/2018   The ORIGIN
+ * @date        15/February/2018
+ * @version     15/February/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -31,11 +31,8 @@ extern "C" {
 
 /* VARIABLES */
 /* VARIABLES */
-static uint32_t changeLEDsSTATE;       /*!<   changeLEDsSTATE = ON:     [todo].
-                                              changeLEDsSTATE = OFF:    [todo]         */
-
-static uint32_t my375msDelay;          /*!<   counter for the Timer2 to generate a
-                                              delay of 0.375s                         */
+static uint32_t changeLEDsSTATE;       /*!<   changeLEDsSTATE = ON     
+                                              changeLEDsSTATE = OFF      */
 
 
 #ifdef __cplusplus
