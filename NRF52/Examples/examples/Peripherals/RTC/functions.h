@@ -5,8 +5,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        14/February/2018
- * @version     14/February/2018   The ORIGIN
+ * @date        15/February/2018
+ * @version     15/February/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -24,11 +24,11 @@ extern "C" {
 
 
 /* FUNCTION PROTOTYPES */
-void conf_GPIO      ( void );
-void conf_TIMER0    ( void );
-void conf_TIMER1    ( void );
-void conf_TIMER2    ( void );
-void delay          ( void );
+void conf_LFCLK   ( void );
+void conf_GPIO    ( void );
+void conf_RTC0    ( void );
+void conf_RTC2    ( void );
+
 
 
 #ifdef __cplusplus
