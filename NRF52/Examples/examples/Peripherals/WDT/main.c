@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [TODO].
+ * @details     This example changes the state of the LEDs every 1.5s by the WDT.
  *
  *
  * @return      N/A
@@ -30,30 +30,22 @@
  */
 int main(void)
 {
-  conf_GPIO   ();
-  conf_TIMER0 ();
-  conf_TIMER1 ();
-  conf_TIMER2 ();
+  conf_GPIO  ();
+  conf_WDT   ();
+  
 
-  NRF_TIMER0->TASKS_START = 1;    // Start Timer0
-  NRF_TIMER2->TASKS_START = 1;    // Start Timer2
+  NRF_WDT->TASKS_START = 1;               // Start watchdog ( WDT )
 
   while( 1 )
   {
-      NRF_P0->OUTSET        =   ( 1 << LED2 );
-      delay();
-      NRF_P0->OUTCLR        =   ( 1 << LED2 );
-      delay();
-
-      /*
       //NRF_POWER->SYSTEMOFF = 1;
       NRF_POWER->TASKS_LOWPWR = 1;        // Sub power mode: Low power.
+
       // Enter System ON sleep mode
       __WFE();
       // Make sure any pending events are cleared
       __SEV();
       __WFE();
-      */
     }
 }
 
