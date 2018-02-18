@@ -30,12 +30,6 @@ extern "C" {
 
 
 /* VARIABLES */
-/* VARIABLES */
-static uint32_t changeLEDsSTATE;       /*!<   changeLEDsSTATE = ON:     [todo].
-                                              changeLEDsSTATE = OFF:    [todo]         */
-
-static uint32_t my375msDelay;          /*!<   counter for the Timer2 to generate a
-                                              delay of 0.375s                         */
 
 
 #ifdef __cplusplus
