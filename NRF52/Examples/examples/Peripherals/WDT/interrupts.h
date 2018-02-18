@@ -23,13 +23,10 @@ extern "C" {
 
 
 /* INTERRUPT PRTOTYPES */
-void TIMER0_IRQHandler ( void );
-void TIMER2_IRQHandler ( void );
+void WDT_IRQHandler ( void );
 
 
 /* VARIABLES */
-extern uint32_t changeLEDsSTATE;
-extern uint32_t my375msDelay;
 
 
 #ifdef __cplusplus
