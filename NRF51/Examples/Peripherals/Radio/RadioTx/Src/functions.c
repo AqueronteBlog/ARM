@@ -36,14 +36,15 @@ void conf_GPIO  ( void )
 {
     uint32_t i = 0;
 
-    for ( i = LED1; i < ( LED4 + 1 ); i++ ){
-            NRF_GPIO->OUTSET        =   ( 1 << i );
+    for ( i = LED1; i < ( LED4 + 1 ); i++ )
+    {
+        NRF_GPIO->OUTSET        =   ( 1 << i );
 
-            NRF_GPIO->PIN_CNF[i]    =   GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos    |
-                                        GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos  |
-                                        GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   |
-                                        GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  |
-                                        GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos;
+        NRF_GPIO->PIN_CNF[i]    =   GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos    |
+                                    GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos  |
+                                    GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   |
+                                    GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  |
+                                    GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos;
     }
 }
 
@@ -102,5 +103,52 @@ void conf_TIMER0  ( void )
  */
 void conf_RADIO  ( void )
 {
+    /* Reset to its initial state */
+    NRF_RADIO->POWER     =   ( RADIO_POWER_POWER_Disabled << RADIO_POWER_POWER_Pos );
+    NRF_RADIO->POWER     =   ( RADIO_POWER_POWER_Enabled  << RADIO_POWER_POWER_Pos );
+
+
+    NRF_RADIO->MODE      =   ( RADIO_MODE_MODE_Nrf_2Mbit << RADIO_MODE_MODE_Pos );              // Radio with 2Mbit/s Nordic proprietary
+
+    NRF_RADIO->PCNF0     =   ( 0 << RADIO_PCNF0_LFLEN_Pos ) |                                   // LENGTH:  0bits
+                             ( 0 << RADIO_PCNF0_S0LEN_Pos ) |                                   // S0:      0bits
+                             ( 0 << RADIO_PCNF0_S1LEN_Pos );                                    // S1:      0bits
+
+    NRF_RADIO->PCNF1     =   ( 10                           << RADIO_PCNF1_MAXLEN_Pos  ) |      // Maximum length of packet payload: 10bytes
+                             ( 10                           << RADIO_PCNF1_STATLEN_Pos ) |      // Static length in number of bytes: 10bytes
+                             ( 2                            << RADIO_PCNF1_BALEN_Pos   ) |      // Total address of 3 bytes
+                             ( RADIO_PCNF1_ENDIAN_Little    << RADIO_PCNF1_ENDIAN_Pos  ) |      // Little endian
+                             ( RADIO_PCNF1_WHITEEN_Enabled  << RADIO_PCNF1_WHITEEN_Pos );       // Packet whitening enabled
+
+    NRF_RADIO->DATAWHITEIV = ( ( 0x55 & RADIO_DATAWHITEIV_DATAWHITEIV_Msk ) << RADIO_DATAWHITEIV_DATAWHITEIV_Pos );  // Initialize whitening value
+
+
+    NRF_RADIO->BASE0     =   ( 0x0000BEEF );                                                     // Base0: 0x00000BEEF
+    NRF_RADIO->PREFIX0   =   ( ( 0x22 & RADIO_PREFIX0_AP0_Msk ) << RADIO_PREFIX0_AP0_Pos );      // 0x22 --> Prefix0 AP0
+
+
+
+    // Use logical address 0 (BASE0 + PREFIX0 byte 0)
+    NRF_RADIO->TXADDRESS =   ( ( 0 & RADIO_TXADDRESS_TXADDRESS_Msk ) << RADIO_TXADDRESS_TXADDRESS_Pos );
+
+    // Initialize CRC (two bytes)
+    NRF_RADIO->CRCCNF    =   ( RADIO_CRCCNF_LEN_One       << RADIO_CRCCNF_LEN_Pos      ) |
+                             ( RADIO_CRCCNF_SKIPADDR_Skip << RADIO_CRCCNF_SKIPADDR_Pos );
+
+
+    NRF_RADIO->CRCPOLY = 0x0000AAAA;
+    NRF_RADIO->CRCINIT = 0x12345678;
+
+
+    // 0dBm output power, sending packets at 2400MHz
+    NRF_RADIO->TXPOWER = RADIO_TXPOWER_TXPOWER_0dBm << RADIO_TXPOWER_TXPOWER_Pos;
+    NRF_RADIO->FREQUENCY = 0 << RADIO_FREQUENCY_FREQUENCY_Pos;
+
+    // Configure address of the packet and logic address to use
+    NRF_RADIO->PACKETPTR = (uint32_t)&packet[0];
+
+    // Configure shortcuts to start as soon as READY event is received, and disable radio as soon as packet is sent.
+    NRF_RADIO->SHORTS = (RADIO_SHORTS_READY_START_Enabled << RADIO_SHORTS_READY_START_Pos) |
+                        (RADIO_SHORTS_END_DISABLE_Enabled << RADIO_SHORTS_END_DISABLE_Pos);
 
 }
