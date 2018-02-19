@@ -72,66 +72,239 @@ typedef enum
 
 
 
-// MASTER MODE
+// GENERAL CONTROL REGISTERS
 /**
-  * @brief   MEASUREMENT RESOLUTION
+  * @brief   MODE SELECTION
   */
 typedef enum
 {
-    BME680_HOLD_MASTER_MODE                 =   0x01,           /*!<  BME680 HOLD MASTER MODE enabled                       */
-    BME680_NO_HOLD_MASTER_MODE              =   0x00            /*!<  BME680 NO HOLD MASTER MODE enabled                    */
-} BME680_master_mode_t;
-
-
-
-// USER REGISTER 1
-/*
-    NOTE:   Reset Settings = 0011_1010.
-            Except where noted, reserved register bits will always read back as '1' and are not affected by write operations. For
-            future compatibility, it is recommended that prior to a write operation, registers should be read. Then the values read
-            from the RSVD bits should be written back unchanged during the write operation.
-*/
-/**
-  * @brief   MEASUREMENT RESOLUTION
-  */
-typedef enum
-{
-    BME680_RESOLUTION_MASK                  =   0x81,           /*!<  BME680 Measurement Resolution                         */
-    BME680_RESOLUTION_RH_12_TEMP_14         =   0x00,           /*!<  BME680 12b RH 14b Temp.                               */
-    BME680_RESOLUTION_RH_8_TEMP_12          =   0x01,           /*!<  BME680 9b  RH 12b Temp.                               */
-    BME680_RESOLUTION_RH_10_TEMP_13         =   0x80,           /*!<  BME680 10b RH 13b Temp.                               */
-    BME680_RESOLUTION_RH_11_TEMP_11         =   0x81            /*!<  BME680 11b RH 11b Temp.                               */
-} BME680_measurement_resolution_t;
-
+    BME680_MODE_MASK        =   ( 0x03 << 0 ),      /*!<  BME680 Mode Selection Mask                        */
+    BME680_MODE_SLEEP_MODE  =   ( 0x00 << 0 ),      /*!<  BME680 Sleep Mode                                 */
+    BME680_MODE_FORCED_MODE =   ( 0x01 << 0 )       /*!<  BME680 Forced Mode                                */
+} BME680_ctrl_meas_mode_selection_t;
 
 
 /**
-  * @brief   VDDS
+  * @brief   RESET
   */
-/*
-    NOTE:   The minimum recommended operating voltage is 1.9 V. A transition
-            of the VDD status bit from 0 to 1 indicates that VDD is
-            between 1.8 V and 1.9 V. If the VDD drops below 1.8 V, the
-            device will no longer operate correctly.
-*/
 typedef enum
 {
-    BME680_VDDS_STATUS_MASK                 =   0x40,           /*!<  BME680 VDD mask.                                      */
-    BME680_VDDS_STATUS_VDD_OK               =   ( 0 << 6 ),     /*!<  VDD OK.                                               */
-    BME680_VDDS_STATUS_VDD_LOW              =   ( 1 << 6 )      /*!<  VDD Low.                                              */
-} BME680_vdds_status_t;
+    BME680_RESET_MASK   =   ( 0xFF << 0 ),          /*!<  BME680 Mode Selection Mask                        */
+    BME680_RESET        =   ( 0xB6 << 0 )           /*!<  BME680 Command to initiate a soft-reset procedure */
+} BME680_reset_t;
+
+
+/**
+  * @brief   ID
+  */
+typedef enum
+{
+    BME680_ID_MASK   =   ( 0xFF << 0 )              /*!<  BME680 ID Mask                                    */
+} BME680_id_t;
+
+
+// TEMPERATURE, PRESSURE AND RELATIVE HUMIDITY CONTRO, REGISTERS
+/**
+  * @brief   HUMIDITY SENSOR OVER SAMPLING CONTROL. Controls over sampling setting of humidity sensor.
+  */
+typedef enum
+{
+    BME680_OSRS_H_HUMIDITY_OVERSAMPLING_MASK    =   ( 0x07 << 0 ),          /*!<  BME680 Humidity Oversampling Mask                             */
+    BME680_OSRS_H_HUMIDITY_OVERSAMPLING_SKIPPED =   ( 0x00 << 0 ),          /*!<  BME680 Humidity Oversampling skipped ( output set to 0x8000 ) */
+    BME680_OSRS_H_HUMIDITY_OVERSAMPLING_X1      =   ( 0x01 << 0 ),          /*!<  BME680 Humidity Oversampling x1                               */
+    BME680_OSRS_H_HUMIDITY_OVERSAMPLING_X2      =   ( 0x02 << 0 ),          /*!<  BME680 Humidity Oversampling x2                               */
+    BME680_OSRS_H_HUMIDITY_OVERSAMPLING_X4      =   ( 0x03 << 0 ),          /*!<  BME680 Humidity Oversampling x4                               */
+    BME680_OSRS_H_HUMIDITY_OVERSAMPLING_X8      =   ( 0x04 << 0 ),          /*!<  BME680 Humidity Oversampling x8                               */
+    BME680_OSRS_H_HUMIDITY_OVERSAMPLING_X16     =   ( 0x05 << 0 )           /*!<  BME680 Humidity Oversampling x16                              */
+} BME680_ctrl_hum_humidity_oversampling_t;
+
+
+/**
+  * @brief   OVER SAMPLING SETTING. TEMPERATURE DATA. Temperature oversampling settings.
+  */
+typedef enum
+{
+    BME680_OSRS_T_TEMPERATURE_OVERSAMPLING_MASK    =   ( 0xE0 << 5 ),          /*!<  BME680 Temperature Oversampling Mask                             */
+    BME680_OSRS_T_TEMPERATURE_OVERSAMPLING_SKIPPED =   ( 0x00 << 5 ),          /*!<  BME680 Temperature Oversampling skipped ( output set to 0x8000 ) */
+    BME680_OSRS_T_TEMPERATURE_OVERSAMPLING_X1      =   ( 0x01 << 5 ),          /*!<  BME680 Temperature Oversampling x1                               */
+    BME680_OSRS_T_TEMPERATURE_OVERSAMPLING_X2      =   ( 0x02 << 5 ),          /*!<  BME680 Temperature Oversampling x2                               */
+    BME680_OSRS_T_TEMPERATURE_OVERSAMPLING_X4      =   ( 0x03 << 5 ),          /*!<  BME680 Temperature Oversampling x4                               */
+    BME680_OSRS_T_TEMPERATURE_OVERSAMPLING_X8      =   ( 0x04 << 5 ),          /*!<  BME680 Temperature Oversampling x8                               */
+    BME680_OSRS_T_TEMPERATURE_OVERSAMPLING_X16     =   ( 0x05 << 5 )           /*!<  BME680 Temperature Oversampling x16                              */
+} BME680_ctrl_meas_temperature_oversampling_t;
+
+
+/**
+  * @brief   OVER SAMPLING SETTING. PRESSURE DATA. Pressure oversampling settings.
+  */
+typedef enum
+{
+    BME680_OSRS_P_PRESSURE_OVERSAMPLING_MASK    =   ( 0x1C << 2 ),          /*!<  BME680 Pressure Oversampling Mask                             */
+    BME680_OSRS_P_PRESSURE_OVERSAMPLING_SKIPPED =   ( 0x00 << 2 ),          /*!<  BME680 Pressure Oversampling skipped ( output set to 0x8000 ) */
+    BME680_OSRS_P_PRESSURE_OVERSAMPLING_X1      =   ( 0x01 << 2 ),          /*!<  BME680 Pressure Oversampling x1                               */
+    BME680_OSRS_P_PRESSURE_OVERSAMPLING_X2      =   ( 0x02 << 2 ),          /*!<  BME680 Pressure Oversampling x2                               */
+    BME680_OSRS_P_PRESSURE_OVERSAMPLING_X4      =   ( 0x03 << 2 ),          /*!<  BME680 Pressure Oversampling x4                               */
+    BME680_OSRS_P_PRESSURE_OVERSAMPLING_X8      =   ( 0x04 << 2 ),          /*!<  BME680 Pressure Oversampling x8                               */
+    BME680_OSRS_P_PRESSURE_OVERSAMPLING_X16     =   ( 0x05 << 2 )           /*!<  BME680 Pressure Oversampling x16                              */
+} BME680_ctrl_meas_pressure_oversampling_t;
+
+
+// IIR FILTER CONTROL
+/**
+  * @brief   FILTER COEFFICIENT. IIR filter settings.
+  */
+typedef enum
+{
+    BME680_FILTER_COEFFICIENT_MASK              =   ( 0x07 << 2 ),          /*!<  BME680 Filter Coefficient Mask                                */
+    BME680_FILTER_COEFFICIENT_0                 =   ( 0x00 << 2 ),          /*!<  BME680 Filter Coefficient 0                                   */
+    BME680_FILTER_COEFFICIENT_1                 =   ( 0x01 << 2 ),          /*!<  BME680 Filter Coefficient 1                                   */
+    BME680_FILTER_COEFFICIENT_3                 =   ( 0x02 << 2 ),          /*!<  BME680 Filter Coefficient 3                                   */
+    BME680_FILTER_COEFFICIENT_7                 =   ( 0x03 << 2 ),          /*!<  BME680 Filter Coefficient 7                                   */
+    BME680_FILTER_COEFFICIENT_15                =   ( 0x04 << 2 ),          /*!<  BME680 Filter Coefficient 15                                  */
+    BME680_FILTER_COEFFICIENT_31                =   ( 0x05 << 2 ),          /*!<  BME680 Filter Coefficient 31                                  */
+    BME680_FILTER_COEFFICIENT_63                =   ( 0x06 << 2 ),          /*!<  BME680 Filter Coefficient 63                                  */
+    BME680_FILTER_COEFFICIENT_127               =   ( 0x07 << 2 )           /*!<  BME680 Filter Coefficient 127                                 */
+} BME680_config_filter_t;
+
+
+// GAS CONTROL REGISTERS
+/**
+  * @brief   GAS SENSOR WAIT TIME. Multiplication factor.
+  */
+typedef enum
+{
+    BME680_GAS_WAIT_MULTIPLICATION_FACTOR_MASK  =   ( 0x03 << 6 ),          /*!<  BME680 Gas wait Multiplication factor Mask                    */
+    BME680_GAS_WAIT_MULTIPLICATION_FACTOR_1     =   ( 0x00 << 6 ),          /*!<  BME680 Gas wait Multiplication factor 1                       */
+    BME680_GAS_WAIT_MULTIPLICATION_FACTOR_4     =   ( 0x01 << 6 ),          /*!<  BME680 Gas wait Multiplication factor 4                       */
+    BME680_GAS_WAIT_MULTIPLICATION_FACTOR_16    =   ( 0x02 << 6 ),          /*!<  BME680 Gas wait Multiplication factor 16                      */
+    BME680_GAS_WAIT_MULTIPLICATION_FACTOR_64    =   ( 0x03 << 6 )           /*!<  BME680 Gas wait Multiplication factor 64                      */
+} BME680_gas_wait_multiplication_factor_t;
 
 
 
 /**
-  * @brief   HTRE
+  * @brief   HEATER OFF.
   */
 typedef enum
 {
-    BME680_HTRE_MASK                        =   0x03,           /*!<  BME680 HTRE Mask                                   */
-    BME680_HTRE_ENABLED                     =   ( 1 << 2 ),     /*!<  BME680 On-chip Heater Enable                          */
-    BME680_HTRE_DISABLED                    =   ( 0 << 2 )      /*!<  BME680 On-chip Heater Disable                         */
-} BME680_heater_t;
+    BME680_HEAT_OFF_MASK                        =   ( 0x01 << 3 ),          /*!<  BME680 Heat off Mask                                          */
+    BME680_HEAT_OFF_ENABLED                     =   ( 0x00 << 3 ),          /*!<  BME680 Turn on current injected to heater                     */
+    BME680_HEAT_OFF_DISABLED                    =   ( 0x01 << 3 ),          /*!<  BME680 Turn off current injected to heater                    */
+} BME680_ctrl_gas_0_heater_off_t;
+
+
+
+/**
+  * @brief   HEATER PROFILE SELECTION. Indicates index of heater set point that will be used in forced mode.
+  */
+typedef enum
+{
+    BME680_NB_CONV_HEATER_PROFILE_SETPOINT_MASK =   ( 0x0F << 0 ),          /*!<  BME680 Heater profile set-point Mask                          */
+    BME680_NB_CONV_HEATER_PROFILE_SETPOINT_0    =   ( 0x00 << 0 ),          /*!<  BME680 Heater profile set-point 0                             */
+    BME680_NB_CONV_HEATER_PROFILE_SETPOINT_1    =   ( 0x01 << 0 ),          /*!<  BME680 Heater profile set-point 1                             */
+    BME680_NB_CONV_HEATER_PROFILE_SETPOINT_2    =   ( 0x02 << 0 ),          /*!<  BME680 Heater profile set-point 2                             */
+    BME680_NB_CONV_HEATER_PROFILE_SETPOINT_3    =   ( 0x03 << 0 ),          /*!<  BME680 Heater profile set-point 3                             */
+    BME680_NB_CONV_HEATER_PROFILE_SETPOINT_4    =   ( 0x04 << 0 ),          /*!<  BME680 Heater profile set-point 4                             */
+    BME680_NB_CONV_HEATER_PROFILE_SETPOINT_5    =   ( 0x05 << 0 ),          /*!<  BME680 Heater profile set-point 5                             */
+    BME680_NB_CONV_HEATER_PROFILE_SETPOINT_6    =   ( 0x06 << 0 ),          /*!<  BME680 Heater profile set-point 6                             */
+    BME680_NB_CONV_HEATER_PROFILE_SETPOINT_7    =   ( 0x07 << 0 ),          /*!<  BME680 Heater profile set-point 7                             */
+    BME680_NB_CONV_HEATER_PROFILE_SETPOINT_8    =   ( 0x08 << 0 ),          /*!<  BME680 Heater profile set-point 8                             */
+    BME680_NB_CONV_HEATER_PROFILE_SETPOINT_9    =   ( 0x09 << 0 )           /*!<  BME680 Heater profile set-point 9                             */
+} BME680_ctrl_gas_1_nb_conv_t;
+
+
+/**
+  * @brief   RUN GAS.
+  */
+typedef enum
+{
+    BME680_RUN_GAS_MASK                         =   ( 0x01 << 4 ),          /*!<  BME680 Run gas Mask                                           */
+    BME680_RUN_GAS_ENABLED                      =   ( 0x01 << 4 ),          /*!<  BME680 Run gas ENABLED                                        */
+    BME680_RUN_GAS_DISABLED                     =   ( 0x00 << 4 )           /*!<  BME680 Run gas DISABLED                                       */
+} BME680_ctrl_gas_1_run_gas_t;
+
+
+// STATUS REGISTERS
+/**
+  * @brief   NEW DATA STATUS. The measured data are stored into the output data register at the end of each TPHG conversion phase
+  *                           along with status flags and index of measurement.
+  */
+typedef enum
+{
+    BME680_NEW_DATA_MASK                        =   ( 0x01 << 7 ),          /*!<  BME680 New data Mask                                          */
+    BME680_NEW_DATA_NEW                         =   ( 0x01 << 7 ),          /*!<  BME680 New data conversion                                    */
+    BME680_NEW_DATA_OLD                         =   ( 0x00 << 7 )           /*!<  BME680 No New data conversion                                 */
+} BME680_meas_status_0_new_data_t;
+
+
+/**
+  * @brief   GAS MEASURING STATUS. Measuring bit is set to '1' only during gas measurements, goes to '0' as soon as the measurement is completed
+  *                                and data transfered to data registers.
+  */
+typedef enum
+{
+    BME680_GAS_MEASURING_MASK                   =   ( 0x01 << 6 ),          /*!<  BME680 Gas measuring Mask                                     */
+    BME680_GAS_MEASURING_MEASURING              =   ( 0x01 << 6 ),          /*!<  BME680 Gas measuring in process                               */
+    BME680_GAS_MEASURING_COMPLETED              =   ( 0x00 << 6 )           /*!<  BME680 Gas measuring is completed                             */
+} BME680_meas_status_0_gas_measuring_t;
+
+
+/**
+  * @brief   MEASURING STATUS. Measuring bit is set to '1' whenever a conversion TPHG is running and back to '0' when the results have been transfered
+  *                            to data registers.
+  */
+typedef enum
+{
+    BME680_MEASURING_MASK                       =   ( 0x01 << 5 ),          /*!<  BME680 Measuring Mask                                         */
+    BME680_MEASURING_MEASURING                  =   ( 0x01 << 5 ),          /*!<  BME680 Measuring in process                                   */
+    BME680_MEASURING_COMPLETED                  =   ( 0x00 << 5 )           /*!<  BME680 Measuring is completed                                 */
+} BME680_meas_status_0_measuring_t;
+
+
+/**
+  * @brief   GAS MEASUREMENT INDEX.
+  */
+typedef enum
+{
+    BME680_GAS_MEASUREMENT_INDEX_MASK               =   ( 0x07 << 0 ),      /*!<  BME680 Gas measurement index Mask                             */
+    BME680_GAS_MEASUREMENT_INDEX_PROFILE_SETPOINT_0 =   ( 0x00 << 0 ),      /*!<  BME680 Gas measurement index profile set-point 0              */
+    BME680_GAS_MEASUREMENT_INDEX_PROFILE_SETPOINT_1 =   ( 0x01 << 0 ),      /*!<  BME680 Gas measurement index profile set-point 1              */
+    BME680_GAS_MEASUREMENT_INDEX_PROFILE_SETPOINT_2 =   ( 0x02 << 0 ),      /*!<  BME680 Gas measurement index profile set-point 2              */
+    BME680_GAS_MEASUREMENT_INDEX_PROFILE_SETPOINT_3 =   ( 0x03 << 0 ),      /*!<  BME680 Gas measurement index profile set-point 3              */
+    BME680_GAS_MEASUREMENT_INDEX_PROFILE_SETPOINT_4 =   ( 0x04 << 0 ),      /*!<  BME680 Gas measurement index profile set-point 4              */
+    BME680_GAS_MEASUREMENT_INDEX_PROFILE_SETPOINT_5 =   ( 0x05 << 0 ),      /*!<  BME680 Gas measurement index profile set-point 5              */
+    BME680_GAS_MEASUREMENT_INDEX_PROFILE_SETPOINT_6 =   ( 0x06 << 0 ),      /*!<  BME680 Gas measurement index profile set-point 6              */
+    BME680_GAS_MEASUREMENT_INDEX_PROFILE_SETPOINT_7 =   ( 0x07 << 0 ),      /*!<  BME680 Gas measurement index profile set-point 7              */
+    BME680_GAS_MEASUREMENT_INDEX_PROFILE_SETPOINT_8 =   ( 0x08 << 0 ),      /*!<  BME680 Gas measurement index profile set-point 8              */
+    BME680_GAS_MEASUREMENT_INDEX_PROFILE_SETPOINT_9 =   ( 0x09 << 0 )       /*!<  BME680 Gas measurement index profile set-point 9              */
+} BME680_meas_status_0_gas_measurement_index_t;
+
+
+/**
+  * @brief   GAS VALID STATUS. In each TPHG sequence contains a gas measurement slot, either a real one which result is used or a dummy one to keep
+  *                            a constant sampling rate and predictable device timing. A real gas conversion is indicated by the gas_valid_r status
+  *                            register.
+  */
+typedef enum
+{
+    BME680_GAS_VALID_R_MASK                         =   ( 0x01 << 5 ),      /*!<  BME680 Gas valid Mask                                        */
+    BME680_GAS_VALID_R_MEASURING                    =   ( 0x01 << 5 ),      /*!<  BME680 Gas valid in process                                  */
+    BME680_GAS_VALID_R_COMPLETED                    =   ( 0x00 << 5 )       /*!<  BME680 Gas valid is completed                                */
+} BME680_gas_r_lsb_gas_valid_r_t;
+
+
+
+/**
+  * @brief   HEATER STABILITY STATUS. Heater temperature stability for target heater resistance.
+  */
+typedef enum
+{
+    BME680_HEATER_STAB_R_MASK                       =   ( 0x01 << 4 ),      /*!<  BME680 Heater temperature stability Mask                     */
+    BME680_HEATER_STAB_R_IN_PROGRESS                =   ( 0x01 << 4 ),      /*!<  BME680 Heater temperature stability in process               */
+    BME680_HEATER_STAB_R_COMPLETED                  =   ( 0x00 << 4 )       /*!<  BME680 Heater temperature stability is completed             */
+} BME680_gas_r_lsb_heater_stab_r_t;
+
+
 
 
 
@@ -142,14 +315,29 @@ typedef enum
 #define BME680_VECTOR_STRUCT_H
 typedef struct
 {
-    float    RelativeHumidity;
-    float    Temperature;
+    // Pressure data
+    uint8_t  press_msb;                 /*!<  Contains the MSB part  [ 19:12 ] of the raw pressure measurement output data     */
+    uint8_t  press_lsb;                 /*!<  Contains the LSB part  [ 11:4  ] of the raw pressure measurement output data     */
+    uint8_t  press_xlsb;                /*!<  Contains the XLSB part [  3:0  ] of the raw pressure measurement output data.
+                                              Contents depend on pressure resolution controlled by oversampling setting.       */
+    // Temperature data
+    uint8_t  temp_msb;                  /*!<  Contains the MSB part  [ 19:12 ] of the raw temperature measurement output data  */
+    uint8_t  temp_lsb;                  /*!<  Contains the LSB part  [ 11:4  ] of the raw temperature measurement output data  */
+    uint8_t  temp_xlsb;                 /*!<  Contains the XLSB part [  3:0  ] of the raw temperature measurement output data.
+                                              Contents depend on temperature resolution controlled by oversampling setting.    */
+    // Humidity data
+    uint8_t  hum_msb;                   /*!<  Contains the MSB part  [ 15:8 ] of the raw humidity measurement output data      */
+    uint8_t  hum_lsb;                   /*!<  Contains the LSB part  [  7:0 ] of the raw humidity measurement output data      */
 
-    uint32_t ElectronicSerialNumber_LSB;
-    uint32_t ElectronicSerialNumber_MSB;
+    // Gas resistance data
+    uint8_t  gas_r_msb;                 /*!<  Contains the MSB part gas resistance [ 9:2 ] of the raw gas resistance           */
+    uint8_t  gas_r_lsb;                 /*!<  Contains the LSB part gas resistance [ 1:0 ] of the raw gas resistance           */
+    uint16_t gas_r;                     /*!<  Gas resistance data                                                              */
 
-    uint8_t  FirmwareRevision;
-    uint8_t  BatteryStatus;
+    // Gas resistance range
+    uint8_t  gas_range_r;               /*!<  Contains ADC range of measured gas resistance                                    */
+
+
 } BME680_vector_data_t;
 #endif
 
