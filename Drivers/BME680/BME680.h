@@ -72,6 +72,22 @@ typedef enum
 
 
 
+/**
+  * @brief   REGISTERS: CALIBRATION PARAMETERS
+  */
+typedef enum
+{
+    BME680_PAR_G1           =   0xED,               /*!<  Register address par_g1                           */
+    BME680_PAR_G2_LSB       =   0xEB,               /*!<  LSB Register address par_g2                       */
+    BME680_PAR_G2_MSB       =   0xEC,               /*!<  MSB Register address par_g2                       */
+    BME680_PAR_G3           =   0xEE,               /*!<  Register address par_g3                           */
+    BME680_RES_HEAT_RANGE   =   0x02,               /*!<  Register address res_heat_range                   */
+    BME680_RES_HEAT_VAL     =   0x00                /*!<  Register address res_heat_val                     */
+} BME680_calibration_parameters_t;
+
+
+
+
 // GENERAL CONTROL REGISTERS
 /**
   * @brief   MODE SELECTION
