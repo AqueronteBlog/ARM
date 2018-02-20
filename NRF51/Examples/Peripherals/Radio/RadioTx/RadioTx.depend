@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1519144607 source:e:\vsprojects\arm\nrf51\examples\peripherals\radio\radiotx\src\functions.c
+1519145799 source:e:\vsprojects\arm\nrf51\examples\peripherals\radio\radiotx\src\functions.c
 	"functions.h"
 
-1519144595 e:\vsprojects\arm\nrf51\examples\peripherals\radio\radiotx\src\functions.h
+1519145799 e:\vsprojects\arm\nrf51\examples\peripherals\radio\radiotx\src\functions.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"variables.h"
@@ -40,7 +40,7 @@
 1519122230 e:\vsprojects\arm\nrf51\examples\peripherals\radio\radiotx\src\interrupts.h
 	"variables.h"
 
-1519145164 source:e:\vsprojects\arm\nrf51\examples\peripherals\radio\radiotx\src\main.c
+1519145921 source:e:\vsprojects\arm\nrf51\examples\peripherals\radio\radiotx\src\main.c
 	"nrf.h"
 	"nrf_delay.h"
 	"ble.h"
