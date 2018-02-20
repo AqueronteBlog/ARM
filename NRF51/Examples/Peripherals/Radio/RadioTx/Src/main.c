@@ -26,24 +26,39 @@
 
 int main( void )
 {
+    uint8_t myPacket[16] = "TontoElQueLoLea!";
+
+
     conf_GPIO   ();
-    conf_RADIO  ();
+    conf_RADIO  ( &myPacket[0] );
     conf_TIMER0 ();
 
 
 
-    NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
+    //NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
     while( 1 )
     {
-        //NRF_POWER->SYSTEMOFF = 1;
-        NRF_POWER->TASKS_LOWPWR = 1;                // Sub power mode: Low power.
+        NRF_GPIO->OUTCLR     =   ( 1 << LED1 );
 
-        // Enter System ON sleep mode
-        __WFE();
-        // Make sure any pending events are cleared
-        __SEV();
-        __WFE();
+
+        NRF_RADIO->TASKS_TXEN       =    1;
+        while ( ( NRF_RADIO->EVENTS_DISABLED ) == 0 );
+        NRF_RADIO->EVENTS_DISABLED  =    0;
+
+       NRF_GPIO->OUTSET     =   ( 1 << LED1 );
+
+        nrf_delay_ms ( 1000 );
+
+
+//        //NRF_POWER->SYSTEMOFF = 1;
+//        NRF_POWER->TASKS_LOWPWR = 1;                // Sub power mode: Low power.
+//
+//        // Enter System ON sleep mode
+//        __WFE();
+//        // Make sure any pending events are cleared
+//        __SEV();
+//        __WFE();
 
 
         //__NOP();
