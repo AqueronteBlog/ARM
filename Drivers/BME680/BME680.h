@@ -106,7 +106,7 @@ typedef enum
 typedef enum
 {
     BME680_RESET_MASK   =   ( 0xFF << 0 ),          /*!<  BME680 Mode Selection Mask                        */
-    BME680_RESET        =   ( 0xB6 << 0 )           /*!<  BME680 Command to initiate a soft-reset procedure */
+    BME680_RESET_CMD    =   ( 0xB6 << 0 )           /*!<  BME680 Command to initiate a soft-reset procedure */
 } BME680_reset_t;
 
 
@@ -352,9 +352,18 @@ typedef struct
 
     // Gas resistance range
     uint8_t  gas_range_r;               /*!<  Contains ADC range of measured gas resistance                                    */
-
-
 } BME680_vector_data_t;
+
+
+// Variable names for res_heat_x calculation
+typedef struct
+{
+    uint8_t  par_g1;
+    uint16_t par_g2;
+    uint8_t  par_g3;
+    uint8_t  res_heat_range;
+    uint8_t  res_heat_val;
+} BME680_calibration_data_t;
 #endif
 
 
@@ -382,59 +391,7 @@ BME680_status_t  BME680_Init                        ( I2C_parameters_t myI2Cpara
 
 /** It configures the device: resolution and heater.
   */
-BME680_status_t  BME680_Conf                        ( I2C_parameters_t myI2Cparameters, BME680_measurement_resolution_t myResolution, BME680_heater_t myHeater );
-
-/** It performs a software reset.
-  */
-BME680_status_t  BME680_SoftReset                   ( I2C_parameters_t myI2Cparameters );
-
-/** It gets the electronic serial number.
-  */
-BME680_status_t  BME680_GetElectronicSerialNumber   ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* mySerialNumber );
-
-/** It gets the firmware revision.
-  */
-BME680_status_t  BME680_GetFirmwareRevision         ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myFirmwareRevision );
-
-/** It sets the heater current.
-*/
-BME680_status_t  BME680_SetHeaterCurrent            ( I2C_parameters_t myI2Cparameters, uint8_t myHeaterCurrent );
-
-/** It performs a new temperature measurement.
-  */
-BME680_status_t  BME680_TriggerTemperature          ( I2C_parameters_t myI2Cparameters, BME680_master_mode_t myMode );
-
-/** It read the temperature.
-  */
-BME680_status_t  BME680_ReadTemperature             ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myTemperature );
-
-/** It reads the raw data from temperature.
-  */
-BME680_status_t  BME680_ReadRawTemperature          ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myTemperature );
-
-/** It reads the raw temperature data after a relative humidity measurement was done.
-  */
-BME680_status_t  BME680_ReadRawTemperatureFromRH    ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myTemperature );
-
-/** It reads the temperature after a relative humidity measurement was done.
-  */
-BME680_status_t  BME680_ReadTemperatureFromRH       ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myTemperature );
-
-/** It performs a new relative humidity measurement.
-  */
-BME680_status_t  BME680_TriggerHumidity             ( I2C_parameters_t myI2Cparameters, BME680_master_mode_t myMode );
-
-/** It reads the relative humidity.
-  */
-BME680_status_t  BME680_ReadHumidity                ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myHumidity );
-
-/** It reads the raw data from relative humidity.
-  */
-BME680_status_t  BME680_ReadRawHumidity             ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myHumidity );
-
-/** It gets the battery status.
-  */
-BME680_status_t  BME680_GetBatteryStatus            ( I2C_parameters_t myI2Cparameters, BME680_vector_data_t* myBatteryStatus );
+BME680_status_t  BME680_GetCalibrationData          ( I2C_parameters_t myI2Cparameters, BME680_calibration_data_t* myCalibrationData );
 
 
 #ifdef __cplusplus
