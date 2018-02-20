@@ -21,7 +21,7 @@
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
-#include "DS1624.h"
+#include "BME680.h"
 
 
 int main( void )
