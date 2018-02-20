@@ -29,6 +29,7 @@ int main( void )
     uint8_t myPacket[16] = "TontoElQueLoLea!";
 
 
+    conf_CLK    ();
     conf_GPIO   ();
     conf_RADIO  ( &myPacket[0] );
     conf_TIMER0 ();
@@ -43,10 +44,11 @@ int main( void )
 
 
         NRF_RADIO->TASKS_TXEN       =    1;
-        while ( ( NRF_RADIO->EVENTS_DISABLED ) == 0 );
+        while ( ( NRF_RADIO->EVENTS_DISABLED ) == 0 );  // [TODO]       This is DANGEROUS, if something goes wrong, the uC will get stuck here!!!.
+                                                        // [WORKAROUND] Insert a counter.
         NRF_RADIO->EVENTS_DISABLED  =    0;
 
-       NRF_GPIO->OUTSET     =   ( 1 << LED1 );
+        NRF_GPIO->OUTSET     =   ( 1 << LED1 );
 
         nrf_delay_ms ( 1000 );
 
