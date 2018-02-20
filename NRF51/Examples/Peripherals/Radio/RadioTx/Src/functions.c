@@ -19,6 +19,31 @@
 
 
 /**
+ * @brief       void conf_CLK  ( void )
+ * @details     It activates the external HFCLK crystal oscillator ( 16MHz ).
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        21/June/2017
+ * @version     21/June/2017      The ORIGIN
+ * @pre         NaN
+ * @warning     In case to use a 32MHz crystal oscillator, it also has to be configured
+ *              in system_nrf51.c file ( #define __SYSTEM_CLOCK (16000000UL) )
+ */
+void conf_CLK  ( void )
+{
+    NRF_CLOCK->XTALFREQ             =   ( CLOCK_XTALFREQ_XTALFREQ_16MHz << CLOCK_XTALFREQ_XTALFREQ_Pos );
+    NRF_CLOCK->EVENTS_HFCLKSTARTED  =   0;                      // Reset flag
+    NRF_CLOCK->TASKS_HFCLKSTART     =   1;                      // Start External crystal CLK
+
+    while ( NRF_CLOCK->EVENTS_HFCLKSTARTED  !=   1 );           // [TODO]       This is DANGEROUS, if something goes wrong, the uC will get stuck here!!!.
+                                                                // [WORKAROUND] Insert a counter.
+}
+
+
+/**
  * @brief       void conf_GPIO  ( void )
  * @details     It configures GPIO to work with the LEDs.
  *
