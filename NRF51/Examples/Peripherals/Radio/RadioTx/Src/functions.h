@@ -19,5 +19,5 @@
 /* FUNCTION PROTOTYPES */
 void conf_GPIO      ( void );
 void conf_TIMER0    ( void );
-void conf_RADIO     ( void );
+void conf_RADIO     ( uint8_t* myPacketPointer );
 

@@ -101,7 +101,7 @@ void conf_TIMER0  ( void )
  * @pre         N/A.
  * @warning     N/A.
  */
-void conf_RADIO  ( void )
+void conf_RADIO  ( uint8_t* myPacketPointer )
 {
     /* Reset to its initial state */
     NRF_RADIO->POWER     =   ( RADIO_POWER_POWER_Disabled << RADIO_POWER_POWER_Pos );
@@ -131,24 +131,26 @@ void conf_RADIO  ( void )
     // Use logical address 0 (BASE0 + PREFIX0 byte 0)
     NRF_RADIO->TXADDRESS =   ( ( 0 & RADIO_TXADDRESS_TXADDRESS_Msk ) << RADIO_TXADDRESS_TXADDRESS_Pos );
 
-    // Initialize CRC (two bytes)
+
+    // Initialize CRC (one bytes)
     NRF_RADIO->CRCCNF    =   ( RADIO_CRCCNF_LEN_One       << RADIO_CRCCNF_LEN_Pos      ) |
                              ( RADIO_CRCCNF_SKIPADDR_Skip << RADIO_CRCCNF_SKIPADDR_Pos );
 
 
-    NRF_RADIO->CRCPOLY = 0x0000AAAA;
-    NRF_RADIO->CRCINIT = 0x12345678;
+    NRF_RADIO->CRCPOLY   =   ( 0x0000AAAA << RADIO_CRCPOLY_CRCPOLY_Pos );
+    NRF_RADIO->CRCINIT   =   ( 0x12345678 << RADIO_CRCINIT_CRCINIT_Pos );
 
 
-    // 0dBm output power, sending packets at 2400MHz
-    NRF_RADIO->TXPOWER = RADIO_TXPOWER_TXPOWER_0dBm << RADIO_TXPOWER_TXPOWER_Pos;
-    NRF_RADIO->FREQUENCY = 0 << RADIO_FREQUENCY_FREQUENCY_Pos;
+    // 0dBm Output Power @2400MHz
+    NRF_RADIO->TXPOWER   =   ( RADIO_TXPOWER_TXPOWER_0dBm << RADIO_TXPOWER_TXPOWER_Pos );
+    NRF_RADIO->FREQUENCY =   ( ( 0 & RADIO_FREQUENCY_FREQUENCY_Msk ) << RADIO_FREQUENCY_FREQUENCY_Pos );                            // Frequency = 2400 + FREQUENCY (MHz).
 
-    // Configure address of the packet and logic address to use
-    NRF_RADIO->PACKETPTR = (uint32_t)&packet[0];
 
-    // Configure shortcuts to start as soon as READY event is received, and disable radio as soon as packet is sent.
-    NRF_RADIO->SHORTS = (RADIO_SHORTS_READY_START_Enabled << RADIO_SHORTS_READY_START_Pos) |
-                        (RADIO_SHORTS_END_DISABLE_Enabled << RADIO_SHORTS_END_DISABLE_Pos);
+    // Configure Packet address
+    NRF_RADIO->PACKETPTR =   ( uint32_t )&myPacketPointer[0];
 
+
+    // Configure shortcuts.
+    NRF_RADIO->SHORTS    =   ( RADIO_SHORTS_READY_START_Enabled << RADIO_SHORTS_READY_START_Pos ) |
+                             ( RADIO_SHORTS_END_DISABLE_Enabled << RADIO_SHORTS_END_DISABLE_Pos );
 }
