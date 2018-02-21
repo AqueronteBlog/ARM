@@ -21,4 +21,5 @@ Output/RADIO_TX\ Debug/Obj/main.o: \
  E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_TX\variables.h \
  E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_TX\board.h \
  E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_TX\interrupts.h \
- ../../../../../../components/libraries/util/nordic_common.h
+ ../../../../../../components/libraries/util/nordic_common.h \
+ ../../../../../../components/drivers_nrf/delay/nrf_delay.h

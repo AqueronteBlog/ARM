@@ -5101,6 +5101,7 @@ Discarded input sections
  .group         0x0000000000000000        0x8 Output/RADIO_TX Debug/Obj/main.o
  .group         0x0000000000000000        0x8 Output/RADIO_TX Debug/Obj/main.o
  .group         0x0000000000000000        0x8 Output/RADIO_TX Debug/Obj/main.o
+ .group         0x0000000000000000        0x8 Output/RADIO_TX Debug/Obj/main.o
  .text          0x0000000000000000        0x0 Output/RADIO_TX Debug/Obj/main.o
  .data          0x0000000000000000        0x0 Output/RADIO_TX Debug/Obj/main.o
  .bss           0x0000000000000000        0x0 Output/RADIO_TX Debug/Obj/main.o
@@ -5120,6 +5121,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x82 Output/RADIO_TX Debug/Obj/main.o
  .debug_macro   0x0000000000000000       0x22 Output/RADIO_TX Debug/Obj/main.o
  .debug_macro   0x0000000000000000      0x16d Output/RADIO_TX Debug/Obj/main.o
+ .debug_macro   0x0000000000000000       0x16 Output/RADIO_TX Debug/Obj/main.o
  .group         0x0000000000000000        0x8 Output/RADIO_TX Debug/Obj/functions.o
  .group         0x0000000000000000        0x8 Output/RADIO_TX Debug/Obj/functions.o
  .group         0x0000000000000000        0x8 Output/RADIO_TX Debug/Obj/functions.o
@@ -13540,7 +13542,7 @@ Linker script and memory map
                 0x0000000000000001                . = ASSERT (((__init_rodata_start__ == __init_rodata_end__) || ((__init_rodata_end__ >= __FLASH_segment_start__) && (__init_rodata_end__ <= __FLASH_segment_end__))), error: .init_rodata is too large to fit in FLASH memory segment)
                 0x00000000000232f4                __text_load_start__ = ALIGN (__init_rodata_end__, 0x4)
 
-.text           0x00000000000232f4     0xa754
+.text           0x00000000000232f4     0xa82c
                 0x00000000000232f4                __text_start__ = .
  *(.text .text.* .glue_7t .glue_7 .gnu.linkonce.t.* .gcc_except_table .ARM.extab* .gnu.linkonce.armextab.*)
  .glue_7        0x00000000000232f4        0x0 linker stubs
@@ -14091,602 +14093,607 @@ Linker script and memory map
                 0x00000000000281c6       0x62 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
  .text.ble_evt_handler
                 0x0000000000028228       0x88 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
- .text.main     0x00000000000282b0       0x88 Output/RADIO_TX Debug/Obj/main.o
-                0x00000000000282b0                main
+ .text.nrf_delay_us
+                0x00000000000282b0       0xa0 Output/RADIO_TX Debug/Obj/main.o
+ .text.nrf_delay_ms
+                0x0000000000028350       0x1e Output/RADIO_TX Debug/Obj/main.o
+ *fill*         0x000000000002836e        0x2 
+ .text.main     0x0000000000028370       0x98 Output/RADIO_TX Debug/Obj/main.o
+                0x0000000000028370                main
  .text.conf_CLK
-                0x0000000000028338       0x24 Output/RADIO_TX Debug/Obj/functions.o
-                0x0000000000028338                conf_CLK
+                0x0000000000028408       0x24 Output/RADIO_TX Debug/Obj/functions.o
+                0x0000000000028408                conf_CLK
  .text.conf_GPIO
-                0x000000000002835c       0x3e Output/RADIO_TX Debug/Obj/functions.o
-                0x000000000002835c                conf_GPIO
- *fill*         0x000000000002839a        0x2 
+                0x000000000002842c       0x3e Output/RADIO_TX Debug/Obj/functions.o
+                0x000000000002842c                conf_GPIO
+ *fill*         0x000000000002846a        0x2 
  .text.conf_RADIO
-                0x000000000002839c       0xa0 Output/RADIO_TX Debug/Obj/functions.o
-                0x000000000002839c                conf_RADIO
+                0x000000000002846c       0xa8 Output/RADIO_TX Debug/Obj/functions.o
+                0x000000000002846c                conf_RADIO
  .text.instance_get
-                0x000000000002843c       0x50 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x0000000000028514       0x50 Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .text.instance_claim
-                0x000000000002848c       0x34 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x0000000000028564       0x34 Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .text.instance_free
-                0x00000000000284c0       0x12 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x0000000000028598       0x12 Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .text.is_conn_params_ok
-                0x00000000000284d2       0xca Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x00000000000285aa       0xca Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .text.send_error_evt
-                0x000000000002859c       0x24 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x0000000000028674       0x24 Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .text.conn_params_negotiation
-                0x00000000000285c0       0x7c Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x0000000000028698       0x7c Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .text.on_connect
-                0x000000000002863c       0x84 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x0000000000028714       0x84 Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .text.on_disconnect
-                0x00000000000286c0       0x46 Output/RADIO_TX Debug/Obj/ble_conn_params.o
- *fill*         0x0000000000028706        0x2 
+                0x0000000000028798       0x46 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+ *fill*         0x00000000000287de        0x2 
  .text.on_write
-                0x0000000000028708       0x7c Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x00000000000287e0       0x7c Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .text.on_conn_params_update
-                0x0000000000028784       0x54 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x000000000002885c       0x54 Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .text.ble_evt_handler
-                0x00000000000287d8       0x4c Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x00000000000288b0       0x4c Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .text.record_activate
-                0x0000000000028824       0x74 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x00000000000288fc       0x74 Output/RADIO_TX Debug/Obj/ble_conn_state.o
  .text.record_invalidate
-                0x0000000000028898       0x30 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x0000000000028970       0x30 Output/RADIO_TX Debug/Obj/ble_conn_state.o
  .text.record_set_disconnected
-                0x00000000000288c8       0x28 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x00000000000289a0       0x28 Output/RADIO_TX Debug/Obj/ble_conn_state.o
  .text.record_purge_disconnected
-                0x00000000000288f0       0x5c Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x00000000000289c8       0x5c Output/RADIO_TX Debug/Obj/ble_conn_state.o
  .text.user_flag_is_acquired
-                0x000000000002894c       0x2c Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x0000000000028a24       0x2c Output/RADIO_TX Debug/Obj/ble_conn_state.o
  .text.ble_evt_handler
-                0x0000000000028978       0xcc Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x0000000000028a50       0xcc Output/RADIO_TX Debug/Obj/ble_conn_state.o
  .text.ble_conn_state_role
-                0x0000000000028a44       0x64 Output/RADIO_TX Debug/Obj/ble_conn_state.o
-                0x0000000000028a44                ble_conn_state_role
+                0x0000000000028b1c       0x64 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x0000000000028b1c                ble_conn_state_role
  .text.ble_conn_state_encrypted
-                0x0000000000028aa8       0x2c Output/RADIO_TX Debug/Obj/ble_conn_state.o
-                0x0000000000028aa8                ble_conn_state_encrypted
+                0x0000000000028b80       0x2c Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x0000000000028b80                ble_conn_state_encrypted
  .text.ble_conn_state_conn_handles
-                0x0000000000028ad4       0x24 Output/RADIO_TX Debug/Obj/ble_conn_state.o
-                0x0000000000028ad4                ble_conn_state_conn_handles
+                0x0000000000028bac       0x24 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x0000000000028bac                ble_conn_state_conn_handles
  .text.ble_conn_state_user_flag_get
-                0x0000000000028af8       0x54 Output/RADIO_TX Debug/Obj/ble_conn_state.o
-                0x0000000000028af8                ble_conn_state_user_flag_get
+                0x0000000000028bd0       0x54 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x0000000000028bd0                ble_conn_state_user_flag_get
  .text.ble_conn_state_user_flag_set
-                0x0000000000028b4c       0x54 Output/RADIO_TX Debug/Obj/ble_conn_state.o
-                0x0000000000028b4c                ble_conn_state_user_flag_set
+                0x0000000000028c24       0x54 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x0000000000028c24                ble_conn_state_user_flag_set
  .text.ble_conn_state_user_flag_collection
-                0x0000000000028ba0       0x38 Output/RADIO_TX Debug/Obj/ble_conn_state.o
-                0x0000000000028ba0                ble_conn_state_user_flag_collection
+                0x0000000000028c78       0x38 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x0000000000028c78                ble_conn_state_user_flag_collection
  .text.uint16_decode
-                0x0000000000028bd8       0x20 Output/RADIO_TX Debug/Obj/ble_srv_common.o
+                0x0000000000028cb0       0x20 Output/RADIO_TX Debug/Obj/ble_srv_common.o
  .text.ble_srv_is_notification_enabled
-                0x0000000000028bf8       0x2c Output/RADIO_TX Debug/Obj/ble_srv_common.o
-                0x0000000000028bf8                ble_srv_is_notification_enabled
+                0x0000000000028cd0       0x2c Output/RADIO_TX Debug/Obj/ble_srv_common.o
+                0x0000000000028cd0                ble_srv_is_notification_enabled
  .text.sdk_mapped_flags_any_set
-                0x0000000000028c24       0x16 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- *fill*         0x0000000000028c3a        0x2 
+                0x0000000000028cfc       0x16 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ *fill*         0x0000000000028d12        0x2 
  .text.evt_send
-                0x0000000000028c3c       0x44 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000028d14       0x44 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .text.cccd_written
-                0x0000000000028c80       0x32 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000028d58       0x32 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .text.send_unexpected_error
-                0x0000000000028cb2       0x3c Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- *fill*         0x0000000000028cee        0x2 
+                0x0000000000028d8a       0x3c Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ *fill*         0x0000000000028dc6        0x2 
  .text.local_db_apply_in_evt
-                0x0000000000028cf0       0xb4 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000028dc8       0xb4 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .text.local_db_update
-                0x0000000000028da4       0x30 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000028e7c       0x30 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .text.local_db_update_in_evt
-                0x0000000000028dd4       0xa4 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000028eac       0xa4 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .text.service_changed_send_in_evt
-                0x0000000000028e78       0xe8 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000028f50       0xe8 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .text.pending_flags_check
-                0x0000000000028f60      0x100 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000029038      0x100 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .text.apply_pending_flags_check
-                0x0000000000029060       0x14 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000029138       0x14 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .text.update_pending_flags_check
-                0x0000000000029074       0x14 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x000000000002914c       0x14 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .text.service_changed_pending_flags_check
-                0x0000000000029088       0x14 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000029160       0x14 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .text.gcm_im_evt_handler
-                0x000000000002909c       0x48 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
-                0x000000000002909c                gcm_im_evt_handler
+                0x0000000000029174       0x48 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000029174                gcm_im_evt_handler
  .text.gcm_pdb_evt_handler
-                0x00000000000290e4       0xc8 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
-                0x00000000000290e4                gcm_pdb_evt_handler
+                0x00000000000291bc       0xc8 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x00000000000291bc                gcm_pdb_evt_handler
  .text.gcm_ble_evt_handler
-                0x00000000000291ac       0xc8 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
-                0x00000000000291ac                gcm_ble_evt_handler
+                0x0000000000029284       0xc8 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000029284                gcm_ble_evt_handler
  .text.sd_ble_gatts_service_changed
-                0x0000000000029274        0x8 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x000000000002934c        0x8 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
  .text.sd_ble_gatts_sys_attr_set
-                0x000000000002927c        0x8 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x0000000000029354        0x8 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
  .text.sd_ble_gatts_sys_attr_get
-                0x0000000000029284        0x8 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x000000000002935c        0x8 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
  .text.sd_ble_gatts_initial_user_handle_get
-                0x000000000002928c        0x8 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x0000000000029364        0x8 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
  .text.service_changed_pending_set
-                0x0000000000029294       0x68 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x000000000002936c       0x68 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
  .text.gscm_pdb_evt_handler
-                0x00000000000292fc       0x24 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
-                0x00000000000292fc                gscm_pdb_evt_handler
+                0x00000000000293d4       0x24 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x00000000000293d4                gscm_pdb_evt_handler
  .text.gscm_local_db_cache_update
-                0x0000000000029320       0xe6 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
-                0x0000000000029320                gscm_local_db_cache_update
+                0x00000000000293f8       0xe6 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x00000000000293f8                gscm_local_db_cache_update
  .text.gscm_local_db_cache_apply
-                0x0000000000029406       0xf2 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
-                0x0000000000029406                gscm_local_db_cache_apply
+                0x00000000000294de       0xf2 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x00000000000294de                gscm_local_db_cache_apply
  .text.gscm_service_changed_ind_needed
-                0x00000000000294f8       0x46 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
-                0x00000000000294f8                gscm_service_changed_ind_needed
- *fill*         0x000000000002953e        0x2 
+                0x00000000000295d0       0x46 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x00000000000295d0                gscm_service_changed_ind_needed
+ *fill*         0x0000000000029616        0x2 
  .text.gscm_service_changed_ind_send
-                0x0000000000029540       0x68 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
-                0x0000000000029540                gscm_service_changed_ind_send
+                0x0000000000029618       0x68 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x0000000000029618                gscm_service_changed_ind_send
  .text.gscm_db_change_notification_done
-                0x00000000000295a8       0x30 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
-                0x00000000000295a8                gscm_db_change_notification_done
+                0x0000000000029680       0x30 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x0000000000029680                gscm_db_change_notification_done
  .text.sd_ecb_block_encrypt
-                0x00000000000295d8        0x8 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x00000000000296b0        0x8 Output/RADIO_TX Debug/Obj/id_manager.o
  .text.evt_send
-                0x00000000000295e0       0x30 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x00000000000296b8       0x30 Output/RADIO_TX Debug/Obj/id_manager.o
  .text.get_free_connection
-                0x0000000000029610       0x58 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029610                get_free_connection
+                0x00000000000296e8       0x58 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x00000000000296e8                get_free_connection
  .text.get_connection_by_conn_handle
-                0x0000000000029668       0x64 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029668                get_connection_by_conn_handle
+                0x0000000000029740       0x64 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029740                get_connection_by_conn_handle
  .text.new_connection
-                0x00000000000296cc       0xc0 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x00000000000296cc                new_connection
+                0x00000000000297a4       0xc0 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x00000000000297a4                new_connection
  .text.is_valid_irk
-                0x000000000002978c       0x2e Output/RADIO_TX Debug/Obj/id_manager.o
-                0x000000000002978c                is_valid_irk
+                0x0000000000029864       0x2e Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029864                is_valid_irk
  .text.addr_compare
-                0x00000000000297ba       0x58 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x00000000000297ba                addr_compare
+                0x0000000000029892       0x58 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029892                addr_compare
  .text.im_ble_evt_handler
-                0x0000000000029812      0x124 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029812                im_ble_evt_handler
+                0x00000000000298ea      0x124 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x00000000000298ea                im_ble_evt_handler
  .text.im_is_duplicate_bonding_data
-                0x0000000000029936       0xf6 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029936                im_is_duplicate_bonding_data
+                0x0000000000029a0e       0xf6 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029a0e                im_is_duplicate_bonding_data
  .text.im_find_duplicate_bonding_data
-                0x0000000000029a2c       0x54 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029a2c                im_find_duplicate_bonding_data
+                0x0000000000029b04       0x54 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029b04                im_find_duplicate_bonding_data
  .text.im_peer_id_get_by_conn_handle
-                0x0000000000029a80       0x48 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029a80                im_peer_id_get_by_conn_handle
+                0x0000000000029b58       0x48 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029b58                im_peer_id_get_by_conn_handle
  .text.im_ble_addr_get
-                0x0000000000029ac8       0x58 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029ac8                im_ble_addr_get
+                0x0000000000029ba0       0x58 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029ba0                im_ble_addr_get
  .text.im_master_ids_compare
-                0x0000000000029b20       0x52 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029b20                im_master_ids_compare
+                0x0000000000029bf8       0x52 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029bf8                im_master_ids_compare
  .text.im_peer_id_get_by_master_id
-                0x0000000000029b72       0x56 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029b72                im_peer_id_get_by_master_id
+                0x0000000000029c4a       0x56 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029c4a                im_peer_id_get_by_master_id
  .text.im_conn_handle_get
-                0x0000000000029bc8       0x54 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029bc8                im_conn_handle_get
+                0x0000000000029ca0       0x54 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029ca0                im_conn_handle_get
  .text.im_master_id_is_valid
-                0x0000000000029c1c       0x3c Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029c1c                im_master_id_is_valid
+                0x0000000000029cf4       0x3c Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029cf4                im_master_id_is_valid
  .text.peer_id_set
-                0x0000000000029c58       0x4c Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029d30       0x4c Output/RADIO_TX Debug/Obj/id_manager.o
  .text.im_new_peer_id
-                0x0000000000029ca4       0x2a Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029ca4                im_new_peer_id
+                0x0000000000029d7c       0x2a Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029d7c                im_new_peer_id
  .text.im_peer_free
-                0x0000000000029cce       0x50 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029cce                im_peer_free
- .text.ah       0x0000000000029d1e       0xa0 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029d1e                ah
+                0x0000000000029da6       0x50 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029da6                im_peer_free
+ .text.ah       0x0000000000029df6       0xa0 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029df6                ah
  .text.im_address_resolve
-                0x0000000000029dbe       0x62 Output/RADIO_TX Debug/Obj/id_manager.o
-                0x0000000000029dbe                im_address_resolve
+                0x0000000000029e96       0x62 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000029e96                im_address_resolve
  .text.pds_evt_send
-                0x0000000000029e20       0x34 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x0000000000029ef8       0x34 Output/RADIO_TX Debug/Obj/peer_data_storage.o
  .text.peer_id_to_file_id
-                0x0000000000029e54       0x18 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x0000000000029f2c       0x18 Output/RADIO_TX Debug/Obj/peer_data_storage.o
  .text.file_id_to_peer_id
-                0x0000000000029e6c       0x18 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x0000000000029f44       0x18 Output/RADIO_TX Debug/Obj/peer_data_storage.o
  .text.peer_data_id_to_record_key
-                0x0000000000029e84       0x1a Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x0000000000029f5c       0x1a Output/RADIO_TX Debug/Obj/peer_data_storage.o
  .text.peer_data_id_is_valid
-                0x0000000000029e9e       0x4a Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x0000000000029f76       0x4a Output/RADIO_TX Debug/Obj/peer_data_storage.o
  .text.send_unexpected_error
-                0x0000000000029ee8       0x3c Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x0000000000029fc0       0x3c Output/RADIO_TX Debug/Obj/peer_data_storage.o
  .text.peer_data_delete
-                0x0000000000029f24       0xd8 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x0000000000029ffc       0xd8 Output/RADIO_TX Debug/Obj/peer_data_storage.o
  .text.peer_data_find
-                0x0000000000029ffc       0x6e Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a0d4       0x6e Output/RADIO_TX Debug/Obj/peer_data_storage.o
  .text.pds_peer_data_read
-                0x000000000002a06a       0xc4 Output/RADIO_TX Debug/Obj/peer_data_storage.o
-                0x000000000002a06a                pds_peer_data_read
- *fill*         0x000000000002a12e        0x2 
+                0x000000000002a142       0xc4 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a142                pds_peer_data_read
+ *fill*         0x000000000002a206        0x2 
  .text.pds_peer_data_iterate_prepare
-                0x000000000002a130       0x14 Output/RADIO_TX Debug/Obj/peer_data_storage.o
-                0x000000000002a130                pds_peer_data_iterate_prepare
+                0x000000000002a208       0x14 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a208                pds_peer_data_iterate_prepare
  .text.pds_peer_data_iterate
-                0x000000000002a144       0xa8 Output/RADIO_TX Debug/Obj/peer_data_storage.o
-                0x000000000002a144                pds_peer_data_iterate
+                0x000000000002a21c       0xa8 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a21c                pds_peer_data_iterate
  .text.pds_space_reserve
-                0x000000000002a1ec       0x54 Output/RADIO_TX Debug/Obj/peer_data_storage.o
-                0x000000000002a1ec                pds_space_reserve
+                0x000000000002a2c4       0x54 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a2c4                pds_space_reserve
  .text.pds_space_reserve_cancel
-                0x000000000002a240       0x24 Output/RADIO_TX Debug/Obj/peer_data_storage.o
-                0x000000000002a240                pds_space_reserve_cancel
+                0x000000000002a318       0x24 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a318                pds_space_reserve_cancel
  .text.pds_peer_data_store
-                0x000000000002a264      0x12c Output/RADIO_TX Debug/Obj/peer_data_storage.o
-                0x000000000002a264                pds_peer_data_store
+                0x000000000002a33c      0x12c Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a33c                pds_peer_data_store
  .text.pds_peer_id_allocate
-                0x000000000002a390       0x10 Output/RADIO_TX Debug/Obj/peer_data_storage.o
-                0x000000000002a390                pds_peer_id_allocate
+                0x000000000002a468       0x10 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a468                pds_peer_id_allocate
  .text.pds_peer_id_free
-                0x000000000002a3a0       0x2e Output/RADIO_TX Debug/Obj/peer_data_storage.o
-                0x000000000002a3a0                pds_peer_id_free
+                0x000000000002a478       0x2e Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a478                pds_peer_id_free
  .text.pds_peer_id_is_allocated
-                0x000000000002a3ce       0x1e Output/RADIO_TX Debug/Obj/peer_data_storage.o
-                0x000000000002a3ce                pds_peer_id_is_allocated
+                0x000000000002a4a6       0x1e Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a4a6                pds_peer_id_is_allocated
  .text.pds_next_peer_id_get
-                0x000000000002a3ec       0x1e Output/RADIO_TX Debug/Obj/peer_data_storage.o
-                0x000000000002a3ec                pds_next_peer_id_get
+                0x000000000002a4c4       0x1e Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a4c4                pds_next_peer_id_get
  .text.pds_next_deleted_peer_id_get
-                0x000000000002a40a       0x1e Output/RADIO_TX Debug/Obj/peer_data_storage.o
-                0x000000000002a40a                pds_next_deleted_peer_id_get
+                0x000000000002a4e2       0x1e Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000002a4e2                pds_next_deleted_peer_id_get
  .text.write_buffer_record_invalidate
-                0x000000000002a428       0x44 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002a500       0x44 Output/RADIO_TX Debug/Obj/peer_database.o
  .text.write_buffer_record_find_next
-                0x000000000002a46c       0x4c Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002a544       0x4c Output/RADIO_TX Debug/Obj/peer_database.o
  .text.write_buffer_record_find
-                0x000000000002a4b8       0x7e Output/RADIO_TX Debug/Obj/peer_database.o
- *fill*         0x000000000002a536        0x2 
+                0x000000000002a590       0x7e Output/RADIO_TX Debug/Obj/peer_database.o
+ *fill*         0x000000000002a60e        0x2 
  .text.write_buffer_record_find_stored
-                0x000000000002a538       0x40 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002a610       0x40 Output/RADIO_TX Debug/Obj/peer_database.o
  .text.write_buffer_record_find_unused
-                0x000000000002a578       0x12 Output/RADIO_TX Debug/Obj/peer_database.o
- *fill*         0x000000000002a58a        0x2 
+                0x000000000002a650       0x12 Output/RADIO_TX Debug/Obj/peer_database.o
+ *fill*         0x000000000002a662        0x2 
  .text.write_buffer_record_release
-                0x000000000002a58c       0x44 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002a664       0x44 Output/RADIO_TX Debug/Obj/peer_database.o
  .text.write_buffer_record_acquire
-                0x000000000002a5d0       0x4c Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002a6a8       0x4c Output/RADIO_TX Debug/Obj/peer_database.o
  .text.pdb_evt_send
-                0x000000000002a61c       0x30 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002a6f4       0x30 Output/RADIO_TX Debug/Obj/peer_database.o
  .text.peer_data_point_to_buffer
-                0x000000000002a64c       0x46 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002a724       0x46 Output/RADIO_TX Debug/Obj/peer_database.o
  .text.peer_data_const_point_to_buffer
-                0x000000000002a692       0x28 Output/RADIO_TX Debug/Obj/peer_database.o
- *fill*         0x000000000002a6ba        0x2 
+                0x000000000002a76a       0x28 Output/RADIO_TX Debug/Obj/peer_database.o
+ *fill*         0x000000000002a792        0x2 
  .text.write_buf_length_words_set
-                0x000000000002a6bc       0x68 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002a794       0x68 Output/RADIO_TX Debug/Obj/peer_database.o
  .text.write_buf_store
-                0x000000000002a724      0x114 Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002a724                write_buf_store
+                0x000000000002a7fc      0x114 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002a7fc                write_buf_store
  .text.write_buf_store_in_event
-                0x000000000002a838       0x52 Output/RADIO_TX Debug/Obj/peer_database.o
- *fill*         0x000000000002a88a        0x2 
+                0x000000000002a910       0x52 Output/RADIO_TX Debug/Obj/peer_database.o
+ *fill*         0x000000000002a962        0x2 
  .text.reattempt_previous_operations
-                0x000000000002a88c       0x90 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002a964       0x90 Output/RADIO_TX Debug/Obj/peer_database.o
  .text.pdb_pds_evt_handler
-                0x000000000002a91c       0xa8 Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002a91c                pdb_pds_evt_handler
+                0x000000000002a9f4       0xa8 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002a9f4                pdb_pds_evt_handler
  .text.pdb_peer_allocate
-                0x000000000002a9c4        0xc Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002a9c4                pdb_peer_allocate
+                0x000000000002aa9c        0xc Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002aa9c                pdb_peer_allocate
  .text.pdb_peer_free
-                0x000000000002a9d0       0x98 Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002a9d0                pdb_peer_free
+                0x000000000002aaa8       0x98 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002aaa8                pdb_peer_free
  .text.pdb_peer_data_ptr_get
-                0x000000000002aa68       0x2c Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002aa68                pdb_peer_data_ptr_get
+                0x000000000002ab40       0x2c Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002ab40                pdb_peer_data_ptr_get
  .text.pdb_write_buf_get
-                0x000000000002aa94      0x1c4 Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002aa94                pdb_write_buf_get
+                0x000000000002ab6c      0x1c4 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002ab6c                pdb_write_buf_get
  .text.pdb_write_buf_release
-                0x000000000002ac58       0x60 Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002ac58                pdb_write_buf_release
+                0x000000000002ad30       0x60 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002ad30                pdb_write_buf_release
  .text.pdb_write_buf_store_prepare
-                0x000000000002acb8       0xb8 Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002acb8                pdb_write_buf_store_prepare
+                0x000000000002ad90       0xb8 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002ad90                pdb_write_buf_store_prepare
  .text.pdb_write_buf_store
-                0x000000000002ad70       0x66 Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002ad70                pdb_write_buf_store
+                0x000000000002ae48       0x66 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002ae48                pdb_write_buf_store
  .text.pdb_next_peer_id_get
-                0x000000000002add6       0x1e Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002add6                pdb_next_peer_id_get
+                0x000000000002aeae       0x1e Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002aeae                pdb_next_peer_id_get
  .text.pdb_next_deleted_peer_id_get
-                0x000000000002adf4       0x1e Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002adf4                pdb_next_deleted_peer_id_get
+                0x000000000002aecc       0x1e Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002aecc                pdb_next_deleted_peer_id_get
  .text.pdb_peer_data_load
-                0x000000000002ae12       0x34 Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002ae12                pdb_peer_data_load
+                0x000000000002aeea       0x34 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002aeea                pdb_peer_data_load
  .text.pdb_raw_store
-                0x000000000002ae46       0x26 Output/RADIO_TX Debug/Obj/peer_database.o
-                0x000000000002ae46                pdb_raw_store
- .text.claim    0x000000000002ae6c       0x80 Output/RADIO_TX Debug/Obj/peer_id.o
- .text.release  0x000000000002aeec       0x28 Output/RADIO_TX Debug/Obj/peer_id.o
+                0x000000000002af1e       0x26 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000002af1e                pdb_raw_store
+ .text.claim    0x000000000002af44       0x80 Output/RADIO_TX Debug/Obj/peer_id.o
+ .text.release  0x000000000002afc4       0x28 Output/RADIO_TX Debug/Obj/peer_id.o
  .text.peer_id_allocate
-                0x000000000002af14       0x24 Output/RADIO_TX Debug/Obj/peer_id.o
-                0x000000000002af14                peer_id_allocate
+                0x000000000002afec       0x24 Output/RADIO_TX Debug/Obj/peer_id.o
+                0x000000000002afec                peer_id_allocate
  .text.peer_id_delete
-                0x000000000002af38       0x4c Output/RADIO_TX Debug/Obj/peer_id.o
-                0x000000000002af38                peer_id_delete
+                0x000000000002b010       0x4c Output/RADIO_TX Debug/Obj/peer_id.o
+                0x000000000002b010                peer_id_delete
  .text.peer_id_free
-                0x000000000002af84       0x34 Output/RADIO_TX Debug/Obj/peer_id.o
-                0x000000000002af84                peer_id_free
+                0x000000000002b05c       0x34 Output/RADIO_TX Debug/Obj/peer_id.o
+                0x000000000002b05c                peer_id_free
  .text.peer_id_is_allocated
-                0x000000000002afb8       0x30 Output/RADIO_TX Debug/Obj/peer_id.o
-                0x000000000002afb8                peer_id_is_allocated
+                0x000000000002b090       0x30 Output/RADIO_TX Debug/Obj/peer_id.o
+                0x000000000002b090                peer_id_is_allocated
  .text.peer_id_is_deleted
-                0x000000000002afe8       0x30 Output/RADIO_TX Debug/Obj/peer_id.o
-                0x000000000002afe8                peer_id_is_deleted
+                0x000000000002b0c0       0x30 Output/RADIO_TX Debug/Obj/peer_id.o
+                0x000000000002b0c0                peer_id_is_deleted
  .text.next_id_get
-                0x000000000002b018       0x60 Output/RADIO_TX Debug/Obj/peer_id.o
-                0x000000000002b018                next_id_get
+                0x000000000002b0f0       0x60 Output/RADIO_TX Debug/Obj/peer_id.o
+                0x000000000002b0f0                next_id_get
  .text.peer_id_get_next_used
-                0x000000000002b078       0x68 Output/RADIO_TX Debug/Obj/peer_id.o
-                0x000000000002b078                peer_id_get_next_used
+                0x000000000002b150       0x68 Output/RADIO_TX Debug/Obj/peer_id.o
+                0x000000000002b150                peer_id_get_next_used
  .text.peer_id_get_next_deleted
-                0x000000000002b0e0       0x24 Output/RADIO_TX Debug/Obj/peer_id.o
-                0x000000000002b0e0                peer_id_get_next_deleted
+                0x000000000002b1b8       0x24 Output/RADIO_TX Debug/Obj/peer_id.o
+                0x000000000002b1b8                peer_id_get_next_deleted
  .text.evt_send
-                0x000000000002b104       0x3c Output/RADIO_TX Debug/Obj/peer_manager.o
+                0x000000000002b1dc       0x3c Output/RADIO_TX Debug/Obj/peer_manager.o
  .text.rank_vars_update
-                0x000000000002b140       0x44 Output/RADIO_TX Debug/Obj/peer_manager.o
+                0x000000000002b218       0x44 Output/RADIO_TX Debug/Obj/peer_manager.o
  .text.pm_pdb_evt_handler
-                0x000000000002b184      0x210 Output/RADIO_TX Debug/Obj/peer_manager.o
-                0x000000000002b184                pm_pdb_evt_handler
+                0x000000000002b25c      0x210 Output/RADIO_TX Debug/Obj/peer_manager.o
+                0x000000000002b25c                pm_pdb_evt_handler
  .text.pm_sm_evt_handler
-                0x000000000002b394       0x50 Output/RADIO_TX Debug/Obj/peer_manager.o
-                0x000000000002b394                pm_sm_evt_handler
+                0x000000000002b46c       0x50 Output/RADIO_TX Debug/Obj/peer_manager.o
+                0x000000000002b46c                pm_sm_evt_handler
  .text.pm_gcm_evt_handler
-                0x000000000002b3e4       0x14 Output/RADIO_TX Debug/Obj/peer_manager.o
-                0x000000000002b3e4                pm_gcm_evt_handler
+                0x000000000002b4bc       0x14 Output/RADIO_TX Debug/Obj/peer_manager.o
+                0x000000000002b4bc                pm_gcm_evt_handler
  .text.pm_im_evt_handler
-                0x000000000002b3f8       0x34 Output/RADIO_TX Debug/Obj/peer_manager.o
-                0x000000000002b3f8                pm_im_evt_handler
+                0x000000000002b4d0       0x34 Output/RADIO_TX Debug/Obj/peer_manager.o
+                0x000000000002b4d0                pm_im_evt_handler
  .text.ble_evt_handler
-                0x000000000002b42c       0x38 Output/RADIO_TX Debug/Obj/peer_manager.o
+                0x000000000002b504       0x38 Output/RADIO_TX Debug/Obj/peer_manager.o
  .text.pm_peer_ranks_get
-                0x000000000002b464      0x12c Output/RADIO_TX Debug/Obj/peer_manager.o
-                0x000000000002b464                pm_peer_ranks_get
+                0x000000000002b53c      0x12c Output/RADIO_TX Debug/Obj/peer_manager.o
+                0x000000000002b53c                pm_peer_ranks_get
  .text.pm_buffer_block_acquire
-                0x000000000002b590       0xcc Output/RADIO_TX Debug/Obj/pm_buffer.o
-                0x000000000002b590                pm_buffer_block_acquire
+                0x000000000002b668       0xcc Output/RADIO_TX Debug/Obj/pm_buffer.o
+                0x000000000002b668                pm_buffer_block_acquire
  .text.pm_buffer_ptr_get
-                0x000000000002b65c       0x64 Output/RADIO_TX Debug/Obj/pm_buffer.o
-                0x000000000002b65c                pm_buffer_ptr_get
+                0x000000000002b734       0x64 Output/RADIO_TX Debug/Obj/pm_buffer.o
+                0x000000000002b734                pm_buffer_ptr_get
  .text.pm_buffer_release
-                0x000000000002b6c0       0x5c Output/RADIO_TX Debug/Obj/pm_buffer.o
-                0x000000000002b6c0                pm_buffer_release
+                0x000000000002b798       0x5c Output/RADIO_TX Debug/Obj/pm_buffer.o
+                0x000000000002b798                pm_buffer_release
  .text.lock_by_mask
-                0x000000000002b71c       0x6e Output/RADIO_TX Debug/Obj/pm_mutex.o
+                0x000000000002b7f4       0x6e Output/RADIO_TX Debug/Obj/pm_mutex.o
  .text.pm_mutex_lock
-                0x000000000002b78a       0x44 Output/RADIO_TX Debug/Obj/pm_mutex.o
-                0x000000000002b78a                pm_mutex_lock
+                0x000000000002b862       0x44 Output/RADIO_TX Debug/Obj/pm_mutex.o
+                0x000000000002b862                pm_mutex_lock
  .text.pm_mutex_unlock
-                0x000000000002b7ce       0x8c Output/RADIO_TX Debug/Obj/pm_mutex.o
-                0x000000000002b7ce                pm_mutex_unlock
+                0x000000000002b8a6       0x8c Output/RADIO_TX Debug/Obj/pm_mutex.o
+                0x000000000002b8a6                pm_mutex_unlock
  .text.pm_mutex_lock_first_available
-                0x000000000002b85a       0x6c Output/RADIO_TX Debug/Obj/pm_mutex.o
-                0x000000000002b85a                pm_mutex_lock_first_available
+                0x000000000002b932       0x6c Output/RADIO_TX Debug/Obj/pm_mutex.o
+                0x000000000002b932                pm_mutex_lock_first_available
  .text.pm_mutex_lock_status_get
-                0x000000000002b8c6       0x46 Output/RADIO_TX Debug/Obj/pm_mutex.o
-                0x000000000002b8c6                pm_mutex_lock_status_get
+                0x000000000002b99e       0x46 Output/RADIO_TX Debug/Obj/pm_mutex.o
+                0x000000000002b99e                pm_mutex_lock_status_get
  .text.sd_ble_gap_authenticate
-                0x000000000002b90c        0x8 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002b9e4        0x8 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.sd_ble_gap_sec_params_reply
-                0x000000000002b914        0x8 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002b9ec        0x8 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.sd_ble_gap_sec_info_reply
-                0x000000000002b91c        0x8 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002b9f4        0x8 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.sec_procedure
-                0x000000000002b924       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
- .text.pairing  0x000000000002b94c       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
- .text.bonding  0x000000000002b974       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002b9fc       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ .text.pairing  0x000000000002ba24       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ .text.bonding  0x000000000002ba4c       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.peer_created
-                0x000000000002b99c       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002ba74       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.allow_repairing
-                0x000000000002b9c4       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002ba9c       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.evt_send
-                0x000000000002b9ec       0x3c Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002bac4       0x3c Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.sec_start_send
-                0x000000000002ba28       0x46 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002bb00       0x46 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.send_unexpected_error
-                0x000000000002ba6e       0x3c Output/RADIO_TX Debug/Obj/security_dispatcher.o
- *fill*         0x000000000002baaa        0x2 
+                0x000000000002bb46       0x3c Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ *fill*         0x000000000002bb82        0x2 
  .text.conn_sec_failure
-                0x000000000002baac       0x7c Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002bb84       0x7c Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.pairing_failure
-                0x000000000002bb28       0xb0 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002bc00       0xb0 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.encryption_failure
-                0x000000000002bbd8       0x30 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002bcb0       0x30 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.link_secure_failure
-                0x000000000002bc08       0x64 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002bce0       0x64 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.sec_proc_start
-                0x000000000002bc6c       0xa0 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002bd44       0xa0 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.sec_proc_housekeeping
-                0x000000000002bd0c       0x74 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002bde4       0x74 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.sec_info_request_process
-                0x000000000002bd80      0x10c Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002be58      0x10c Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.send_config_req
-                0x000000000002be8c       0x34 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002bf64       0x34 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.disconnect_process
-                0x000000000002bec0       0x34 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002bf98       0x34 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.send_params_req
-                0x000000000002bef4       0x3c Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002bfcc       0x3c Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.sec_params_request_process
-                0x000000000002bf30       0x4e Output/RADIO_TX Debug/Obj/security_dispatcher.o
- *fill*         0x000000000002bf7e        0x2 
+                0x000000000002c008       0x4e Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ *fill*         0x000000000002c056        0x2 
  .text.auth_status_success_process
-                0x000000000002bf80      0x1d4 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002c058      0x1d4 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.auth_status_failure_process
-                0x000000000002c154       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002c22c       0x28 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.auth_status_process
-                0x000000000002c17c       0x26 Output/RADIO_TX Debug/Obj/security_dispatcher.o
- *fill*         0x000000000002c1a2        0x2 
+                0x000000000002c254       0x26 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ *fill*         0x000000000002c27a        0x2 
  .text.conn_sec_update_process
-                0x000000000002c1a4       0x84 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002c27c       0x84 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.sec_keyset_fill
-                0x000000000002c228       0xc4 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002c300       0xc4 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.smd_params_reply
-                0x000000000002c2ec      0x1b4 Output/RADIO_TX Debug/Obj/security_dispatcher.o
-                0x000000000002c2ec                smd_params_reply
+                0x000000000002c3c4      0x1b4 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002c3c4                smd_params_reply
  .text.link_secure_peripheral
-                0x000000000002c4a0       0x2e Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002c578       0x2e Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .text.smd_link_secure
-                0x000000000002c4ce       0x46 Output/RADIO_TX Debug/Obj/security_dispatcher.o
-                0x000000000002c4ce                smd_link_secure
+                0x000000000002c5a6       0x46 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002c5a6                smd_link_secure
  .text.smd_ble_evt_handler
-                0x000000000002c514       0x84 Output/RADIO_TX Debug/Obj/security_dispatcher.o
-                0x000000000002c514                smd_ble_evt_handler
+                0x000000000002c5ec       0x84 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002c5ec                smd_ble_evt_handler
  .text.sdk_mapped_flags_any_set
-                0x000000000002c598       0x16 Output/RADIO_TX Debug/Obj/security_manager.o
- *fill*         0x000000000002c5ae        0x2 
+                0x000000000002c670       0x16 Output/RADIO_TX Debug/Obj/security_manager.o
+ *fill*         0x000000000002c686        0x2 
  .text.evt_send
-                0x000000000002c5b0       0x2c Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002c688       0x2c Output/RADIO_TX Debug/Obj/security_manager.o
  .text.flags_set_from_err_code
-                0x000000000002c5dc       0xdc Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002c6b4       0xdc Output/RADIO_TX Debug/Obj/security_manager.o
  .text.events_send_from_err_code
-                0x000000000002c6b8       0xa8 Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002c790       0xa8 Output/RADIO_TX Debug/Obj/security_manager.o
  .text.params_req_send
-                0x000000000002c760       0x44 Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002c838       0x44 Output/RADIO_TX Debug/Obj/security_manager.o
  .text.new_context_get
-                0x000000000002c7a4       0x34 Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002c87c       0x34 Output/RADIO_TX Debug/Obj/security_manager.o
  .text.link_secure
-                0x000000000002c7d8      0x134 Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002c8b0      0x134 Output/RADIO_TX Debug/Obj/security_manager.o
  .text.smd_params_reply_perform
-                0x000000000002c90c       0x5c Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002c9e4       0x5c Output/RADIO_TX Debug/Obj/security_manager.o
  .text.params_req_process
-                0x000000000002c968       0x1e Output/RADIO_TX Debug/Obj/security_manager.o
- *fill*         0x000000000002c986        0x2 
+                0x000000000002ca40       0x1e Output/RADIO_TX Debug/Obj/security_manager.o
+ *fill*         0x000000000002ca5e        0x2 
  .text.sec_req_process
-                0x000000000002c988       0x88 Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002ca60       0x88 Output/RADIO_TX Debug/Obj/security_manager.o
  .text.evt_forward
-                0x000000000002ca10       0x14 Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002cae8       0x14 Output/RADIO_TX Debug/Obj/security_manager.o
  .text.sm_smd_evt_handler
-                0x000000000002ca24       0x32 Output/RADIO_TX Debug/Obj/security_manager.o
-                0x000000000002ca24                sm_smd_evt_handler
- *fill*         0x000000000002ca56        0x2 
+                0x000000000002cafc       0x32 Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002cafc                sm_smd_evt_handler
+ *fill*         0x000000000002cb2e        0x2 
  .text.link_secure_pending_process
-                0x000000000002ca58       0xcc Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002cb30       0xcc Output/RADIO_TX Debug/Obj/security_manager.o
  .text.params_reply_pending_process
-                0x000000000002cb24       0x80 Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002cbfc       0x80 Output/RADIO_TX Debug/Obj/security_manager.o
  .text.sm_pdb_evt_handler
-                0x000000000002cba4       0x5c Output/RADIO_TX Debug/Obj/security_manager.o
-                0x000000000002cba4                sm_pdb_evt_handler
+                0x000000000002cc7c       0x5c Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002cc7c                sm_pdb_evt_handler
  .text.sm_ble_evt_handler
-                0x000000000002cc00       0x24 Output/RADIO_TX Debug/Obj/security_manager.o
-                0x000000000002cc00                sm_ble_evt_handler
+                0x000000000002ccd8       0x24 Output/RADIO_TX Debug/Obj/security_manager.o
+                0x000000000002ccd8                sm_ble_evt_handler
  .text.NVIC_SystemReset
-                0x000000000002cc24       0x24 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002ccfc       0x24 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .text.SystemCoreClockUpdate
-                0x000000000002cc48       0x14 Output/RADIO_TX Debug/Obj/system_nrf52.o
-                0x000000000002cc48                SystemCoreClockUpdate
+                0x000000000002cd20       0x14 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002cd20                SystemCoreClockUpdate
  .text.SystemInit
-                0x000000000002cc5c      0x2bc Output/RADIO_TX Debug/Obj/system_nrf52.o
-                0x000000000002cc5c                SystemInit
+                0x000000000002cd34      0x2bc Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002cd34                SystemInit
  .text.errata_12
-                0x000000000002cf18       0x58 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002cff0       0x58 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .text.errata_16
-                0x000000000002cf70       0x38 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002d048       0x38 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .text.errata_31
-                0x000000000002cfa8       0x58 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002d080       0x58 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .text.errata_32
-                0x000000000002d000       0x38 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002d0d8       0x38 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .text.errata_36
-                0x000000000002d038       0x58 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002d110       0x58 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .text.errata_37
-                0x000000000002d090       0x38 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002d168       0x38 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .text.errata_57
-                0x000000000002d0c8       0x38 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002d1a0       0x38 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .text.errata_66
-                0x000000000002d100       0x38 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002d1d8       0x38 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .text.errata_108
-                0x000000000002d138       0x58 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002d210       0x58 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .text.errata_136
-                0x000000000002d190       0x58 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002d268       0x58 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .text.NVIC_EnableIRQ
-                0x000000000002d1e8       0x2c Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d2c0       0x2c Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.NVIC_DisableIRQ
-                0x000000000002d214       0x30 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d2ec       0x30 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.NVIC_SetPriority
-                0x000000000002d244       0x50 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d31c       0x50 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.NVIC_GetPriority
-                0x000000000002d294       0x48 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d36c       0x48 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.nrf_section_iter_get
-                0x000000000002d2dc       0x24 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d3b4       0x24 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.sd_softdevice_enable
-                0x000000000002d300        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d3d8        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.sd_softdevice_disable
-                0x000000000002d308        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d3e0        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.__sd_nvic_app_accessible_irq
-                0x000000000002d310       0x58 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d3e8       0x58 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.__sd_nvic_is_app_accessible_priority
-                0x000000000002d368       0x2c Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d440       0x2c Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.sd_nvic_EnableIRQ
-                0x000000000002d394       0x88 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d46c       0x88 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.sd_nvic_DisableIRQ
-                0x000000000002d41c       0x6c Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d4f4       0x6c Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.sd_nvic_SetPriority
-                0x000000000002d488       0x4a Output/RADIO_TX Debug/Obj/nrf_sdh.o
- *fill*         0x000000000002d4d2        0x2 
+                0x000000000002d560       0x4a Output/RADIO_TX Debug/Obj/nrf_sdh.o
+ *fill*         0x000000000002d5aa        0x2 
  .text.sdh_request_observer_notify
-                0x000000000002d4d4       0x64 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d5ac       0x64 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.sdh_state_observer_notify
-                0x000000000002d538       0x58 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d610       0x58 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.softdevices_evt_irq_enable
-                0x000000000002d590       0x2c Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d668       0x2c Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.softdevice_evt_irq_disable
-                0x000000000002d5bc       0x2c Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d694       0x2c Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.swi_interrupt_priority_workaround
-                0x000000000002d5e8       0x4c Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d6c0       0x4c Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .text.nrf_sdh_enable_request
-                0x000000000002d634       0x88 Output/RADIO_TX Debug/Obj/nrf_sdh.o
-                0x000000000002d634                nrf_sdh_enable_request
+                0x000000000002d70c       0x88 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d70c                nrf_sdh_enable_request
  .text.nrf_sdh_disable_request
-                0x000000000002d6bc       0x6c Output/RADIO_TX Debug/Obj/nrf_sdh.o
-                0x000000000002d6bc                nrf_sdh_disable_request
+                0x000000000002d794       0x6c Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d794                nrf_sdh_disable_request
  .text.nrf_sdh_request_continue
-                0x000000000002d728       0x38 Output/RADIO_TX Debug/Obj/nrf_sdh.o
-                0x000000000002d728                nrf_sdh_request_continue
+                0x000000000002d800       0x38 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d800                nrf_sdh_request_continue
  .text.nrf_sdh_is_enabled
-                0x000000000002d760        0xc Output/RADIO_TX Debug/Obj/nrf_sdh.o
-                0x000000000002d760                nrf_sdh_is_enabled
+                0x000000000002d838        0xc Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d838                nrf_sdh_is_enabled
  .text.nrf_sdh_evts_poll
-                0x000000000002d76c       0x4c Output/RADIO_TX Debug/Obj/nrf_sdh.o
-                0x000000000002d76c                nrf_sdh_evts_poll
+                0x000000000002d844       0x4c Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d844                nrf_sdh_evts_poll
  .text.SWI2_EGU2_IRQHandler
-                0x000000000002d7b8        0xa Output/RADIO_TX Debug/Obj/nrf_sdh.o
-                0x000000000002d7b8                SWI2_EGU2_IRQHandler
+                0x000000000002d890        0xa Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002d890                SWI2_EGU2_IRQHandler
  .text.sd_ble_evt_get
-                0x000000000002d7c2        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
- *fill*         0x000000000002d7ca        0x2 
+                0x000000000002d89a        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+ *fill*         0x000000000002d8a2        0x2 
  .text.nrf_section_iter_get
-                0x000000000002d7cc       0x24 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+                0x000000000002d8a4       0x24 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
  .text.nrf_sdh_ble_evts_poll
-                0x000000000002d7f0       0x8c Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+                0x000000000002d8c8       0x8c Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
  .text.nrf_section_iter_get
-                0x000000000002d87c       0x24 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+                0x000000000002d954       0x24 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
  .text.sd_evt_get
-                0x000000000002d8a0        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+                0x000000000002d978        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
  .text.nrf_sdh_soc_evts_poll
-                0x000000000002d8a8       0x78 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+                0x000000000002d980       0x78 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
  .text.libc.memcmp
-                0x000000000002d920       0x6a C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
-                0x000000000002d920                memcmp
- *fill*         0x000000000002d98a        0x2 
+                0x000000000002d9f8       0x6a C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
+                0x000000000002d9f8                memcmp
+ *fill*         0x000000000002da62        0x2 
  .text.libc.memcpy
-                0x000000000002d98c       0x54 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2_asm.o)
-                0x000000000002d98c                __aeabi_memcpy
-                0x000000000002d98c                memcpy
-                0x000000000002d998                __aeabi_memcpy8
-                0x000000000002d998                __aeabi_memcpy4
+                0x000000000002da64       0x54 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2_asm.o)
+                0x000000000002da64                __aeabi_memcpy
+                0x000000000002da64                memcpy
+                0x000000000002da70                __aeabi_memcpy8
+                0x000000000002da70                __aeabi_memcpy4
  .text.libc.memset
-                0x000000000002d9e0       0x68 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2_asm.o)
-                0x000000000002d9e0                memset
-                0x000000000002da48                __text_end__ = (__text_start__ + SIZEOF (.text))
-                0x000000000000a754                __text_size__ = SIZEOF (.text)
-                0x000000000002da48                __text_load_end__ = __text_end__
+                0x000000000002dab8       0x68 C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2_asm.o)
+                0x000000000002dab8                memset
+                0x000000000002db20                __text_end__ = (__text_start__ + SIZEOF (.text))
+                0x000000000000a82c                __text_size__ = SIZEOF (.text)
+                0x000000000002db20                __text_load_end__ = __text_end__
 
 .vfp11_veneer   0x0000000100000000        0x0
  .vfp11_veneer  0x0000000100000000        0x0 linker stubs
@@ -14697,167 +14704,167 @@ Linker script and memory map
 .iplt           0x0000000100000000        0x0
  .iplt          0x0000000100000000        0x0 Output/RADIO_TX Debug/Obj/thumb_crt0.o
                 0x0000000000000001                . = ASSERT (((__text_start__ == __text_end__) || ((__text_end__ >= __FLASH_segment_start__) && (__text_end__ <= __FLASH_segment_end__))), error: .text is too large to fit in FLASH memory segment)
-                0x000000000002da48                __sdh_soc_observers_load_start__ = ALIGN (__text_end__, 0x4)
+                0x000000000002db20                __sdh_soc_observers_load_start__ = ALIGN (__text_end__, 0x4)
 
 .sdh_soc_observers
-                0x000000000002da48       0x10
-                0x000000000002da48                __sdh_soc_observers_start__ = .
-                0x000000000002da48                __start_sdh_soc_observers = __sdh_soc_observers_start__
+                0x000000000002db20       0x10
+                0x000000000002db20                __sdh_soc_observers_start__ = .
+                0x000000000002db20                __start_sdh_soc_observers = __sdh_soc_observers_start__
  *(SORT(.sdh_soc_observers*))
  .sdh_soc_observers0
-                0x000000000002da48        0x8 Output/RADIO_TX Debug/Obj/nrf_fstorage_sd.o
+                0x000000000002db20        0x8 Output/RADIO_TX Debug/Obj/nrf_fstorage_sd.o
  .sdh_soc_observers0
-                0x000000000002da50        0x8 Output/RADIO_TX Debug/Obj/nrf_drv_clock.o
-                0x000000000002da58                __sdh_soc_observers_end__ = (__sdh_soc_observers_start__ + SIZEOF (.sdh_soc_observers))
+                0x000000000002db28        0x8 Output/RADIO_TX Debug/Obj/nrf_drv_clock.o
+                0x000000000002db30                __sdh_soc_observers_end__ = (__sdh_soc_observers_start__ + SIZEOF (.sdh_soc_observers))
                 0x0000000000000010                __sdh_soc_observers_size__ = SIZEOF (.sdh_soc_observers)
-                0x000000000002da58                __stop_sdh_soc_observers = __sdh_soc_observers_end__
-                0x000000000002da58                __sdh_soc_observers_load_end__ = __sdh_soc_observers_end__
+                0x000000000002db30                __stop_sdh_soc_observers = __sdh_soc_observers_end__
+                0x000000000002db30                __sdh_soc_observers_load_end__ = __sdh_soc_observers_end__
                 0x0000000000000001                . = ASSERT (((__sdh_soc_observers_start__ == __sdh_soc_observers_end__) || ((__sdh_soc_observers_end__ >= __FLASH_segment_start__) && (__sdh_soc_observers_end__ <= __FLASH_segment_end__))), error: .sdh_soc_observers is too large to fit in FLASH memory segment)
-                0x000000000002da58                __pwr_mgmt_data_load_start__ = ALIGN (__sdh_soc_observers_end__, 0x4)
+                0x000000000002db30                __pwr_mgmt_data_load_start__ = ALIGN (__sdh_soc_observers_end__, 0x4)
 
-.pwr_mgmt_data  0x000000000002da58        0x0
-                0x000000000002da58                __pwr_mgmt_data_start__ = .
-                0x000000000002da58                __start_pwr_mgmt_data = __pwr_mgmt_data_start__
+.pwr_mgmt_data  0x000000000002db30        0x0
+                0x000000000002db30                __pwr_mgmt_data_start__ = .
+                0x000000000002db30                __start_pwr_mgmt_data = __pwr_mgmt_data_start__
  *(SORT(.pwr_mgmt_data*))
-                0x000000000002da58                __pwr_mgmt_data_end__ = (__pwr_mgmt_data_start__ + SIZEOF (.pwr_mgmt_data))
+                0x000000000002db30                __pwr_mgmt_data_end__ = (__pwr_mgmt_data_start__ + SIZEOF (.pwr_mgmt_data))
                 0x0000000000000000                __pwr_mgmt_data_size__ = SIZEOF (.pwr_mgmt_data)
-                0x000000000002da58                __stop_pwr_mgmt_data = __pwr_mgmt_data_end__
-                0x000000000002da58                __pwr_mgmt_data_load_end__ = __pwr_mgmt_data_end__
+                0x000000000002db30                __stop_pwr_mgmt_data = __pwr_mgmt_data_end__
+                0x000000000002db30                __pwr_mgmt_data_load_end__ = __pwr_mgmt_data_end__
                 0x0000000000000001                . = ASSERT (((__pwr_mgmt_data_start__ == __pwr_mgmt_data_end__) || ((__pwr_mgmt_data_end__ >= __FLASH_segment_start__) && (__pwr_mgmt_data_end__ <= __FLASH_segment_end__))), error: .pwr_mgmt_data is too large to fit in FLASH memory segment)
-                0x000000000002da58                __sdh_ble_observers_load_start__ = ALIGN (__pwr_mgmt_data_end__, 0x4)
+                0x000000000002db30                __sdh_ble_observers_load_start__ = ALIGN (__pwr_mgmt_data_end__, 0x4)
 
 .sdh_ble_observers
-                0x000000000002da58       0x20
-                0x000000000002da58                __sdh_ble_observers_start__ = .
-                0x000000000002da58                __start_sdh_ble_observers = __sdh_ble_observers_start__
+                0x000000000002db30       0x20
+                0x000000000002db30                __sdh_ble_observers_start__ = .
+                0x000000000002db30                __start_sdh_ble_observers = __sdh_ble_observers_start__
  *(SORT(.sdh_ble_observers*))
  .sdh_ble_observers0
-                0x000000000002da58        0x8 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x000000000002db30        0x8 Output/RADIO_TX Debug/Obj/ble_conn_state.o
  .sdh_ble_observers1
-                0x000000000002da60        0x8 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
+                0x000000000002db38        0x8 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
  .sdh_ble_observers1
-                0x000000000002da68        0x8 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x000000000002db40        0x8 Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .sdh_ble_observers1
-                0x000000000002da70        0x8 Output/RADIO_TX Debug/Obj/peer_manager.o
-                0x000000000002da78                __sdh_ble_observers_end__ = (__sdh_ble_observers_start__ + SIZEOF (.sdh_ble_observers))
+                0x000000000002db48        0x8 Output/RADIO_TX Debug/Obj/peer_manager.o
+                0x000000000002db50                __sdh_ble_observers_end__ = (__sdh_ble_observers_start__ + SIZEOF (.sdh_ble_observers))
                 0x0000000000000020                __sdh_ble_observers_size__ = SIZEOF (.sdh_ble_observers)
-                0x000000000002da78                __stop_sdh_ble_observers = __sdh_ble_observers_end__
-                0x000000000002da78                __sdh_ble_observers_load_end__ = __sdh_ble_observers_end__
+                0x000000000002db50                __stop_sdh_ble_observers = __sdh_ble_observers_end__
+                0x000000000002db50                __sdh_ble_observers_load_end__ = __sdh_ble_observers_end__
                 0x0000000000000001                . = ASSERT (((__sdh_ble_observers_start__ == __sdh_ble_observers_end__) || ((__sdh_ble_observers_end__ >= __FLASH_segment_start__) && (__sdh_ble_observers_end__ <= __FLASH_segment_end__))), error: .sdh_ble_observers is too large to fit in FLASH memory segment)
-                0x000000000002da78                __log_const_data_load_start__ = ALIGN (__sdh_ble_observers_end__, 0x4)
+                0x000000000002db50                __log_const_data_load_start__ = ALIGN (__sdh_ble_observers_end__, 0x4)
 
 .log_const_data
-                0x000000000002da78       0x50
-                0x000000000002da78                __log_const_data_start__ = .
-                0x000000000002da78                __start_log_const_data = __log_const_data_start__
+                0x000000000002db50       0x50
+                0x000000000002db50                __log_const_data_start__ = .
+                0x000000000002db50                __start_log_const_data = __log_const_data_start__
  *(SORT(.log_const_data*))
  .log_const_data_app
-                0x000000000002da78        0x8 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
-                0x000000000002da78                m_nrf_log_app_logs_data_const
+                0x000000000002db50        0x8 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
+                0x000000000002db50                m_nrf_log_app_logs_data_const
  .log_const_data_balloc
-                0x000000000002da80        0x8 Output/RADIO_TX Debug/Obj/nrf_balloc.o
-                0x000000000002da80                m_nrf_log_balloc_logs_data_const
+                0x000000000002db58        0x8 Output/RADIO_TX Debug/Obj/nrf_balloc.o
+                0x000000000002db58                m_nrf_log_balloc_logs_data_const
  .log_const_data_ble_gatt
-                0x000000000002da88        0x8 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
-                0x000000000002da88                m_nrf_log_ble_gatt_logs_data_const
+                0x000000000002db60        0x8 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+                0x000000000002db60                m_nrf_log_ble_gatt_logs_data_const
  .log_const_data_clock
-                0x000000000002da90        0x8 Output/RADIO_TX Debug/Obj/nrf_drv_clock.o
-                0x000000000002da90                m_nrf_log_clock_logs_data_const
+                0x000000000002db68        0x8 Output/RADIO_TX Debug/Obj/nrf_drv_clock.o
+                0x000000000002db68                m_nrf_log_clock_logs_data_const
  .log_const_data_gpiote
-                0x000000000002da98        0x8 Output/RADIO_TX Debug/Obj/nrf_drv_gpiote.o
-                0x000000000002da98                m_nrf_log_gpiote_logs_data_const
+                0x000000000002db70        0x8 Output/RADIO_TX Debug/Obj/nrf_drv_gpiote.o
+                0x000000000002db70                m_nrf_log_gpiote_logs_data_const
  .log_const_data_nrf_sdh
-                0x000000000002daa0        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh.o
-                0x000000000002daa0                m_nrf_log_nrf_sdh_logs_data_const
+                0x000000000002db78        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002db78                m_nrf_log_nrf_sdh_logs_data_const
  .log_const_data_nrf_sdh_ble
-                0x000000000002daa8        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
-                0x000000000002daa8                m_nrf_log_nrf_sdh_ble_logs_data_const
+                0x000000000002db80        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+                0x000000000002db80                m_nrf_log_nrf_sdh_ble_logs_data_const
  .log_const_data_nrf_sdh_soc
-                0x000000000002dab0        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
-                0x000000000002dab0                m_nrf_log_nrf_sdh_soc_logs_data_const
+                0x000000000002db88        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+                0x000000000002db88                m_nrf_log_nrf_sdh_soc_logs_data_const
  .log_const_data_pwr_mgmt
-                0x000000000002dab8        0x8 Output/RADIO_TX Debug/Obj/nrf_pwr_mgmt.o
-                0x000000000002dab8                m_nrf_log_pwr_mgmt_logs_data_const
+                0x000000000002db90        0x8 Output/RADIO_TX Debug/Obj/nrf_pwr_mgmt.o
+                0x000000000002db90                m_nrf_log_pwr_mgmt_logs_data_const
  .log_const_data_uart
-                0x000000000002dac0        0x8 Output/RADIO_TX Debug/Obj/nrf_drv_uart.o
-                0x000000000002dac0                m_nrf_log_uart_logs_data_const
-                0x000000000002dac8                __log_const_data_end__ = (__log_const_data_start__ + SIZEOF (.log_const_data))
+                0x000000000002db98        0x8 Output/RADIO_TX Debug/Obj/nrf_drv_uart.o
+                0x000000000002db98                m_nrf_log_uart_logs_data_const
+                0x000000000002dba0                __log_const_data_end__ = (__log_const_data_start__ + SIZEOF (.log_const_data))
                 0x0000000000000050                __log_const_data_size__ = SIZEOF (.log_const_data)
-                0x000000000002dac8                __stop_log_const_data = __log_const_data_end__
-                0x000000000002dac8                __log_const_data_load_end__ = __log_const_data_end__
+                0x000000000002dba0                __stop_log_const_data = __log_const_data_end__
+                0x000000000002dba0                __log_const_data_load_end__ = __log_const_data_end__
                 0x0000000000000001                . = ASSERT (((__log_const_data_start__ == __log_const_data_end__) || ((__log_const_data_end__ >= __FLASH_segment_start__) && (__log_const_data_end__ <= __FLASH_segment_end__))), error: .log_const_data is too large to fit in FLASH memory segment)
-                0x000000000002dac8                __sdh_req_observers_load_start__ = ALIGN (__log_const_data_end__, 0x4)
+                0x000000000002dba0                __sdh_req_observers_load_start__ = ALIGN (__log_const_data_end__, 0x4)
 
 .sdh_req_observers
-                0x000000000002dac8        0x8
-                0x000000000002dac8                __sdh_req_observers_start__ = .
-                0x000000000002dac8                __start_sdh_req_observers = __sdh_req_observers_start__
+                0x000000000002dba0        0x8
+                0x000000000002dba0                __sdh_req_observers_start__ = .
+                0x000000000002dba0                __start_sdh_req_observers = __sdh_req_observers_start__
  *(SORT(.sdh_req_observers*))
  .sdh_req_observers0
-                0x000000000002dac8        0x8 Output/RADIO_TX Debug/Obj/nrf_fstorage_sd.o
-                0x000000000002dac8                m_req_obs
-                0x000000000002dad0                __sdh_req_observers_end__ = (__sdh_req_observers_start__ + SIZEOF (.sdh_req_observers))
+                0x000000000002dba0        0x8 Output/RADIO_TX Debug/Obj/nrf_fstorage_sd.o
+                0x000000000002dba0                m_req_obs
+                0x000000000002dba8                __sdh_req_observers_end__ = (__sdh_req_observers_start__ + SIZEOF (.sdh_req_observers))
                 0x0000000000000008                __sdh_req_observers_size__ = SIZEOF (.sdh_req_observers)
-                0x000000000002dad0                __stop_sdh_req_observers = __sdh_req_observers_end__
-                0x000000000002dad0                __sdh_req_observers_load_end__ = __sdh_req_observers_end__
+                0x000000000002dba8                __stop_sdh_req_observers = __sdh_req_observers_end__
+                0x000000000002dba8                __sdh_req_observers_load_end__ = __sdh_req_observers_end__
                 0x0000000000000001                . = ASSERT (((__sdh_req_observers_start__ == __sdh_req_observers_end__) || ((__sdh_req_observers_end__ >= __FLASH_segment_start__) && (__sdh_req_observers_end__ <= __FLASH_segment_end__))), error: .sdh_req_observers is too large to fit in FLASH memory segment)
-                0x000000000002dad0                __sdh_state_observers_load_start__ = ALIGN (__sdh_req_observers_end__, 0x4)
+                0x000000000002dba8                __sdh_state_observers_load_start__ = ALIGN (__sdh_req_observers_end__, 0x4)
 
 .sdh_state_observers
-                0x000000000002dad0       0x10
-                0x000000000002dad0                __sdh_state_observers_start__ = .
-                0x000000000002dad0                __start_sdh_state_observers = __sdh_state_observers_start__
+                0x000000000002dba8       0x10
+                0x000000000002dba8                __sdh_state_observers_start__ = .
+                0x000000000002dba8                __start_sdh_state_observers = __sdh_state_observers_start__
  *(SORT(.sdh_state_observers*))
  .sdh_state_observers0
-                0x000000000002dad0        0x8 Output/RADIO_TX Debug/Obj/nrf_fstorage_sd.o
+                0x000000000002dba8        0x8 Output/RADIO_TX Debug/Obj/nrf_fstorage_sd.o
  .sdh_state_observers0
-                0x000000000002dad8        0x8 Output/RADIO_TX Debug/Obj/nrf_drv_clock.o
-                0x000000000002dae0                __sdh_state_observers_end__ = (__sdh_state_observers_start__ + SIZEOF (.sdh_state_observers))
+                0x000000000002dbb0        0x8 Output/RADIO_TX Debug/Obj/nrf_drv_clock.o
+                0x000000000002dbb8                __sdh_state_observers_end__ = (__sdh_state_observers_start__ + SIZEOF (.sdh_state_observers))
                 0x0000000000000010                __sdh_state_observers_size__ = SIZEOF (.sdh_state_observers)
-                0x000000000002dae0                __stop_sdh_state_observers = __sdh_state_observers_end__
-                0x000000000002dae0                __sdh_state_observers_load_end__ = __sdh_state_observers_end__
+                0x000000000002dbb8                __stop_sdh_state_observers = __sdh_state_observers_end__
+                0x000000000002dbb8                __sdh_state_observers_load_end__ = __sdh_state_observers_end__
                 0x0000000000000001                . = ASSERT (((__sdh_state_observers_start__ == __sdh_state_observers_end__) || ((__sdh_state_observers_end__ >= __FLASH_segment_start__) && (__sdh_state_observers_end__ <= __FLASH_segment_end__))), error: .sdh_state_observers is too large to fit in FLASH memory segment)
-                0x000000000002dae0                __sdh_stack_observers_load_start__ = ALIGN (__sdh_state_observers_end__, 0x4)
+                0x000000000002dbb8                __sdh_stack_observers_load_start__ = ALIGN (__sdh_state_observers_end__, 0x4)
 
 .sdh_stack_observers
-                0x000000000002dae0       0x10
-                0x000000000002dae0                __sdh_stack_observers_start__ = .
-                0x000000000002dae0                __start_sdh_stack_observers = __sdh_stack_observers_start__
+                0x000000000002dbb8       0x10
+                0x000000000002dbb8                __sdh_stack_observers_start__ = .
+                0x000000000002dbb8                __start_sdh_stack_observers = __sdh_stack_observers_start__
  *(SORT(.sdh_stack_observers*))
  .sdh_stack_observers0
-                0x000000000002dae0        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+                0x000000000002dbb8        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
  .sdh_stack_observers0
-                0x000000000002dae8        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
-                0x000000000002daf0                __sdh_stack_observers_end__ = (__sdh_stack_observers_start__ + SIZEOF (.sdh_stack_observers))
+                0x000000000002dbc0        0x8 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+                0x000000000002dbc8                __sdh_stack_observers_end__ = (__sdh_stack_observers_start__ + SIZEOF (.sdh_stack_observers))
                 0x0000000000000010                __sdh_stack_observers_size__ = SIZEOF (.sdh_stack_observers)
-                0x000000000002daf0                __stop_sdh_stack_observers = __sdh_stack_observers_end__
-                0x000000000002daf0                __sdh_stack_observers_load_end__ = __sdh_stack_observers_end__
+                0x000000000002dbc8                __stop_sdh_stack_observers = __sdh_stack_observers_end__
+                0x000000000002dbc8                __sdh_stack_observers_load_end__ = __sdh_stack_observers_end__
                 0x0000000000000001                . = ASSERT (((__sdh_stack_observers_start__ == __sdh_stack_observers_end__) || ((__sdh_stack_observers_end__ >= __FLASH_segment_start__) && (__sdh_stack_observers_end__ <= __FLASH_segment_end__))), error: .sdh_stack_observers is too large to fit in FLASH memory segment)
-                0x000000000002daf0                __cli_command_load_start__ = ALIGN (__sdh_stack_observers_end__, 0x4)
+                0x000000000002dbc8                __cli_command_load_start__ = ALIGN (__sdh_stack_observers_end__, 0x4)
 
-.cli_command    0x000000000002daf0        0x0
-                0x000000000002daf0                __cli_command_start__ = .
-                0x000000000002daf0                __start_cli_command = __cli_command_start__
+.cli_command    0x000000000002dbc8        0x0
+                0x000000000002dbc8                __cli_command_start__ = .
+                0x000000000002dbc8                __start_cli_command = __cli_command_start__
  *(.cli_command*)
-                0x000000000002daf0                __cli_command_end__ = (__cli_command_start__ + SIZEOF (.cli_command))
+                0x000000000002dbc8                __cli_command_end__ = (__cli_command_start__ + SIZEOF (.cli_command))
                 0x0000000000000000                __cli_command_size__ = SIZEOF (.cli_command)
-                0x000000000002daf0                __stop_cli_command = __cli_command_end__
-                0x000000000002daf0                __cli_command_load_end__ = __cli_command_end__
+                0x000000000002dbc8                __stop_cli_command = __cli_command_end__
+                0x000000000002dbc8                __cli_command_load_end__ = __cli_command_end__
                 0x0000000000000001                . = ASSERT (((__cli_command_start__ == __cli_command_end__) || ((__cli_command_end__ >= __FLASH_segment_start__) && (__cli_command_end__ <= __FLASH_segment_end__))), error: .cli_command is too large to fit in FLASH memory segment)
-                0x000000000002daf0                __nrf_sections_load_start__ = ALIGN (__cli_command_end__, 0x4)
+                0x000000000002dbc8                __nrf_sections_load_start__ = ALIGN (__cli_command_end__, 0x4)
 
-.nrf_sections   0x000000000002daf0        0x0
-                0x000000000002daf0                __nrf_sections_start__ = .
-                0x000000000002daf0                __start_nrf_sections = __nrf_sections_start__
+.nrf_sections   0x000000000002dbc8        0x0
+                0x000000000002dbc8                __nrf_sections_start__ = .
+                0x000000000002dbc8                __start_nrf_sections = __nrf_sections_start__
  *(.nrf_sections .nrf_sections.*)
-                0x000000000002daf0                __nrf_sections_end__ = (__nrf_sections_start__ + SIZEOF (.nrf_sections))
+                0x000000000002dbc8                __nrf_sections_end__ = (__nrf_sections_start__ + SIZEOF (.nrf_sections))
                 0x0000000000000000                __nrf_sections_size__ = SIZEOF (.nrf_sections)
-                0x000000000002daf0                __nrf_sections_load_end__ = __nrf_sections_end__
+                0x000000000002dbc8                __nrf_sections_load_end__ = __nrf_sections_end__
                 0x0000000000000001                . = ASSERT (((__nrf_sections_start__ == __nrf_sections_end__) || ((__nrf_sections_end__ >= __FLASH_segment_start__) && (__nrf_sections_end__ <= __FLASH_segment_end__))), error: .nrf_sections is too large to fit in FLASH memory segment)
-                0x000000000002daf0                __log_dynamic_data_load_start__ = ALIGN (__nrf_sections_end__, 0x4)
+                0x000000000002dbc8                __log_dynamic_data_load_start__ = ALIGN (__nrf_sections_end__, 0x4)
 
 .log_dynamic_data
-                0x00000000200020e0       0x78 load address 0x000000000002daf0
+                0x00000000200020e0       0x78 load address 0x000000000002dbc8
                 0x00000000200020e0                __log_dynamic_data_start__ = .
  *(SORT(.log_dynamic_data*))
  .log_dynamic_data_app
@@ -14892,11 +14899,11 @@ Linker script and memory map
                 0x000000002000214c                m_nrf_log_uart_logs_data_dynamic
                 0x0000000020002158                __log_dynamic_data_end__ = (__log_dynamic_data_start__ + SIZEOF (.log_dynamic_data))
                 0x0000000000000078                __log_dynamic_data_size__ = SIZEOF (.log_dynamic_data)
-                0x000000000002db68                __log_dynamic_data_load_end__ = (__log_dynamic_data_load_start__ + SIZEOF (.log_dynamic_data))
+                0x000000000002dc40                __log_dynamic_data_load_end__ = (__log_dynamic_data_load_start__ + SIZEOF (.log_dynamic_data))
                 0x0000000000000001                . = ASSERT (((__log_dynamic_data_load_start__ == __log_dynamic_data_load_end__) || ((__log_dynamic_data_load_end__ >= __FLASH_segment_start__) && (__log_dynamic_data_load_end__ <= __FLASH_segment_end__))), error: .log_dynamic_data is too large to fit in FLASH memory segment)
 
 .log_dynamic_data_run
-                0x00000000200020e0       0x78 load address 0x000000000002daf0
+                0x00000000200020e0       0x78 load address 0x000000000002dbc8
                 0x00000000200020e0                __log_dynamic_data_run_start__ = .
                 0x00000000200020e0                __start_log_dynamic_data = __log_dynamic_data_run_start__
                 0x0000000020002158                . = MAX ((__log_dynamic_data_run_start__ + SIZEOF (.log_dynamic_data)), .)
@@ -14906,19 +14913,19 @@ Linker script and memory map
                 0x0000000020002158                __stop_log_dynamic_data = __log_dynamic_data_run_end__
                 0x0000000020002158                __log_dynamic_data_run_load_end__ = __log_dynamic_data_run_end__
                 0x0000000000000001                . = ASSERT (((__log_dynamic_data_run_start__ == __log_dynamic_data_run_end__) || ((__log_dynamic_data_run_end__ >= __RAM_segment_start__) && (__log_dynamic_data_run_end__ <= __RAM_segment_end__))), error: .log_dynamic_data_run is too large to fit in RAM memory segment)
-                0x000000000002db68                __fs_data_load_start__ = ALIGN ((__log_dynamic_data_load_start__ + SIZEOF (.log_dynamic_data)), 0x4)
+                0x000000000002dc40                __fs_data_load_start__ = ALIGN ((__log_dynamic_data_load_start__ + SIZEOF (.log_dynamic_data)), 0x4)
 
-.fs_data        0x0000000020002158       0x14 load address 0x000000000002db68
+.fs_data        0x0000000020002158       0x14 load address 0x000000000002dc40
                 0x0000000020002158                __fs_data_start__ = .
  *(.fs_data*)
  .fs_data       0x0000000020002158       0x14 Output/RADIO_TX Debug/Obj/fds.o
                 0x0000000020002158                m_fs
                 0x000000002000216c                __fs_data_end__ = (__fs_data_start__ + SIZEOF (.fs_data))
                 0x0000000000000014                __fs_data_size__ = SIZEOF (.fs_data)
-                0x000000000002db7c                __fs_data_load_end__ = (__fs_data_load_start__ + SIZEOF (.fs_data))
+                0x000000000002dc54                __fs_data_load_end__ = (__fs_data_load_start__ + SIZEOF (.fs_data))
                 0x0000000000000001                . = ASSERT (((__fs_data_load_start__ == __fs_data_load_end__) || ((__fs_data_load_end__ >= __FLASH_segment_start__) && (__fs_data_load_end__ <= __FLASH_segment_end__))), error: .fs_data is too large to fit in FLASH memory segment)
 
-.fs_data_run    0x0000000020002158       0x14 load address 0x000000000002db68
+.fs_data_run    0x0000000020002158       0x14 load address 0x000000000002dc40
                 0x0000000020002158                __fs_data_run_start__ = .
                 0x0000000020002158                __start_fs_data = __fs_data_run_start__
                 0x000000002000216c                . = MAX ((__fs_data_run_start__ + SIZEOF (.fs_data)), .)
@@ -14928,15 +14935,15 @@ Linker script and memory map
                 0x000000002000216c                __stop_fs_data = __fs_data_run_end__
                 0x000000002000216c                __fs_data_run_load_end__ = __fs_data_run_end__
                 0x0000000000000001                . = ASSERT (((__fs_data_run_start__ == __fs_data_run_end__) || ((__fs_data_run_end__ >= __RAM_segment_start__) && (__fs_data_run_end__ <= __RAM_segment_end__))), error: .fs_data_run is too large to fit in RAM memory segment)
-                0x000000000002db7c                __cli_sorted_cmd_ptrs_load_start__ = ALIGN ((__fs_data_load_start__ + SIZEOF (.fs_data)), 0x4)
+                0x000000000002dc54                __cli_sorted_cmd_ptrs_load_start__ = ALIGN ((__fs_data_load_start__ + SIZEOF (.fs_data)), 0x4)
 
 .cli_sorted_cmd_ptrs
-                0x000000002000216c        0x0 load address 0x000000000002db7c
+                0x000000002000216c        0x0 load address 0x000000000002dc54
                 0x000000002000216c                __cli_sorted_cmd_ptrs_start__ = .
  *(.cli_sorted_cmd_ptrs*)
                 0x000000002000216c                __cli_sorted_cmd_ptrs_end__ = (__cli_sorted_cmd_ptrs_start__ + SIZEOF (.cli_sorted_cmd_ptrs))
                 0x0000000000000000                __cli_sorted_cmd_ptrs_size__ = SIZEOF (.cli_sorted_cmd_ptrs)
-                0x000000000002db7c                __cli_sorted_cmd_ptrs_load_end__ = (__cli_sorted_cmd_ptrs_load_start__ + SIZEOF (.cli_sorted_cmd_ptrs))
+                0x000000000002dc54                __cli_sorted_cmd_ptrs_load_end__ = (__cli_sorted_cmd_ptrs_load_start__ + SIZEOF (.cli_sorted_cmd_ptrs))
                 0x0000000000000001                . = ASSERT (((__cli_sorted_cmd_ptrs_load_start__ == __cli_sorted_cmd_ptrs_load_end__) || ((__cli_sorted_cmd_ptrs_load_end__ >= __FLASH_segment_start__) && (__cli_sorted_cmd_ptrs_load_end__ <= __FLASH_segment_end__))), error: .cli_sorted_cmd_ptrs is too large to fit in FLASH memory segment)
 
 .cli_sorted_cmd_ptrs_run
@@ -14960,118 +14967,119 @@ Linker script and memory map
                 0x0000000000000000                __nrf_sections_run_end_size__ = SIZEOF (.nrf_sections_run_end)
                 0x000000002000216c                __nrf_sections_run_end_load_end__ = __nrf_sections_run_end_end__
                 0x0000000000000001                . = ASSERT (((__nrf_sections_run_end_start__ == __nrf_sections_run_end_end__) || ((__nrf_sections_run_end_end__ >= __RAM_segment_start__) && (__nrf_sections_run_end_end__ <= __RAM_segment_end__))), error: .nrf_sections_run_end is too large to fit in RAM memory segment)
-                0x000000000002db7c                __dtors_load_start__ = ALIGN ((__cli_sorted_cmd_ptrs_load_start__ + SIZEOF (.cli_sorted_cmd_ptrs)), 0x4)
+                0x000000000002dc54                __dtors_load_start__ = ALIGN ((__cli_sorted_cmd_ptrs_load_start__ + SIZEOF (.cli_sorted_cmd_ptrs)), 0x4)
 
-.dtors          0x000000000002db7c        0x0
-                0x000000000002db7c                __dtors_start__ = .
+.dtors          0x000000000002dc54        0x0
+                0x000000000002dc54                __dtors_start__ = .
  *(SORT(.dtors.*))
  *(.dtors)
  *(.fini_array)
  *(SORT(.fini_array.*))
-                0x000000000002db7c                __dtors_end__ = (__dtors_start__ + SIZEOF (.dtors))
+                0x000000000002dc54                __dtors_end__ = (__dtors_start__ + SIZEOF (.dtors))
                 0x0000000000000000                __dtors_size__ = SIZEOF (.dtors)
-                0x000000000002db7c                __dtors_load_end__ = __dtors_end__
+                0x000000000002dc54                __dtors_load_end__ = __dtors_end__
                 0x0000000000000001                . = ASSERT (((__dtors_start__ == __dtors_end__) || ((__dtors_end__ >= __FLASH_segment_start__) && (__dtors_end__ <= __FLASH_segment_end__))), error: .dtors is too large to fit in FLASH memory segment)
-                0x000000000002db7c                __ctors_load_start__ = ALIGN (__dtors_end__, 0x4)
+                0x000000000002dc54                __ctors_load_start__ = ALIGN (__dtors_end__, 0x4)
 
-.ctors          0x000000000002db7c        0x0
-                0x000000000002db7c                __ctors_start__ = .
+.ctors          0x000000000002dc54        0x0
+                0x000000000002dc54                __ctors_start__ = .
  *(SORT(.ctors.*))
  *(.ctors)
  *(.init_array)
  *(SORT(.init_array.*))
-                0x000000000002db7c                __ctors_end__ = (__ctors_start__ + SIZEOF (.ctors))
+                0x000000000002dc54                __ctors_end__ = (__ctors_start__ + SIZEOF (.ctors))
                 0x0000000000000000                __ctors_size__ = SIZEOF (.ctors)
-                0x000000000002db7c                __ctors_load_end__ = __ctors_end__
+                0x000000000002dc54                __ctors_load_end__ = __ctors_end__
                 0x0000000000000001                . = ASSERT (((__ctors_start__ == __ctors_end__) || ((__ctors_end__ >= __FLASH_segment_start__) && (__ctors_end__ <= __FLASH_segment_end__))), error: .ctors is too large to fit in FLASH memory segment)
-                0x000000000002db7c                __rodata_load_start__ = ALIGN (__ctors_end__, 0x4)
+                0x000000000002dc54                __rodata_load_start__ = ALIGN (__ctors_end__, 0x4)
 
-.rodata         0x000000000002db7c      0xf6c
-                0x000000000002db7c                __rodata_start__ = .
+.rodata         0x000000000002dc54      0xf80
+                0x000000000002dc54                __rodata_start__ = .
  *(.rodata .rodata.* .gnu.linkonce.r.*)
  .rodata.mempool
-                0x000000000002db7c       0x14 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
- .rodata        0x000000000002db90       0x6e Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
- *fill*         0x000000000002dbfe        0x2 
- .rodata        0x000000000002dc00       0x90 Output/RADIO_TX Debug/Obj/app_error_weak.o
- .rodata        0x000000000002dc90       0x4f Output/RADIO_TX Debug/Obj/app_util_platform.o
- *fill*         0x000000000002dcdf        0x1 
- .rodata        0x000000000002dce0       0x40 Output/RADIO_TX Debug/Obj/fds.o
+                0x000000000002dc54       0x14 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
+ .rodata        0x000000000002dc68       0x6e Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
+ *fill*         0x000000000002dcd6        0x2 
+ .rodata        0x000000000002dcd8       0x90 Output/RADIO_TX Debug/Obj/app_error_weak.o
+ .rodata        0x000000000002dd68       0x4f Output/RADIO_TX Debug/Obj/app_util_platform.o
+ *fill*         0x000000000002ddb7        0x1 
+ .rodata        0x000000000002ddb8       0x40 Output/RADIO_TX Debug/Obj/fds.o
  .rodata.page_tag_swap.8380
-                0x000000000002dd20        0x8 Output/RADIO_TX Debug/Obj/fds.o
+                0x000000000002ddf8        0x8 Output/RADIO_TX Debug/Obj/fds.o
  .rodata.page_tag_data.8384
-                0x000000000002dd28        0x8 Output/RADIO_TX Debug/Obj/fds.o
+                0x000000000002de00        0x8 Output/RADIO_TX Debug/Obj/fds.o
  .rodata.dirty_header.8511
-                0x000000000002dd30        0x4 Output/RADIO_TX Debug/Obj/fds.o
- .rodata        0x000000000002dd34       0x52 Output/RADIO_TX Debug/Obj/nrf_balloc.o
- *fill*         0x000000000002dd86        0x2 
- .rodata        0x000000000002dd88       0x57 Output/RADIO_TX Debug/Obj/nrf_memobj.o
- *fill*         0x000000000002dddf        0x1 
- .rodata        0x000000000002dde0       0xe6 Output/RADIO_TX Debug/Obj/nrf_pwr_mgmt.o
- *fill*         0x000000000002dec6        0x2 
- .rodata        0x000000000002dec8       0x63 Output/RADIO_TX Debug/Obj/nrf_section_iter.o
- *fill*         0x000000000002df2b        0x1 
+                0x000000000002de08        0x4 Output/RADIO_TX Debug/Obj/fds.o
+ .rodata        0x000000000002de0c       0x52 Output/RADIO_TX Debug/Obj/nrf_balloc.o
+ *fill*         0x000000000002de5e        0x2 
+ .rodata        0x000000000002de60       0x57 Output/RADIO_TX Debug/Obj/nrf_memobj.o
+ *fill*         0x000000000002deb7        0x1 
+ .rodata        0x000000000002deb8       0xe6 Output/RADIO_TX Debug/Obj/nrf_pwr_mgmt.o
+ *fill*         0x000000000002df9e        0x2 
+ .rodata        0x000000000002dfa0       0x63 Output/RADIO_TX Debug/Obj/nrf_section_iter.o
+ *fill*         0x000000000002e003        0x1 
  .rodata.m_unknown_str
-                0x000000000002df2c       0x13 Output/RADIO_TX Debug/Obj/nrf_strerror.o
- *fill*         0x000000000002df3f        0x1 
- .rodata        0x000000000002df40      0x308 Output/RADIO_TX Debug/Obj/nrf_strerror.o
+                0x000000000002e004       0x13 Output/RADIO_TX Debug/Obj/nrf_strerror.o
+ *fill*         0x000000000002e017        0x1 
+ .rodata        0x000000000002e018      0x308 Output/RADIO_TX Debug/Obj/nrf_strerror.o
  .rodata.nrf_strerror_array
-                0x000000000002e248       0xf0 Output/RADIO_TX Debug/Obj/nrf_strerror.o
- .rodata        0x000000000002e338       0x56 Output/RADIO_TX Debug/Obj/nrf_drv_clock.o
- *fill*         0x000000000002e38e        0x2 
- .rodata        0x000000000002e390       0x50 Output/RADIO_TX Debug/Obj/nrf_drv_common.o
- .rodata        0x000000000002e3e0       0x90 Output/RADIO_TX Debug/Obj/nrf_drv_gpiote.o
- .rodata        0x000000000002e470       0x8c Output/RADIO_TX Debug/Obj/nrf_drv_uart.o
- .rodata        0x000000000002e4fc       0x48 Output/RADIO_TX Debug/Obj/ble_conn_state.o
- .rodata        0x000000000002e544       0x10 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x000000000002e320       0xf0 Output/RADIO_TX Debug/Obj/nrf_strerror.o
+ .rodata        0x000000000002e410       0x56 Output/RADIO_TX Debug/Obj/nrf_drv_clock.o
+ *fill*         0x000000000002e466        0x2 
+ .rodata        0x000000000002e468       0x50 Output/RADIO_TX Debug/Obj/nrf_drv_common.o
+ .rodata        0x000000000002e4b8       0x90 Output/RADIO_TX Debug/Obj/nrf_drv_gpiote.o
+ .rodata        0x000000000002e548       0x8c Output/RADIO_TX Debug/Obj/nrf_drv_uart.o
+ .rodata        0x000000000002e5d4       0x14 Output/RADIO_TX Debug/Obj/main.o
+ .rodata        0x000000000002e5e8       0x48 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+ .rodata        0x000000000002e630       0x10 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
  .rodata.service_changed_pending.9325
-                0x000000000002e554        0x4 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x000000000002e640        0x4 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
  .rodata.service_changed_pending.9381
-                0x000000000002e558        0x4 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x000000000002e644        0x4 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
  .rodata.m_evt_handlers
-                0x000000000002e55c        0x8 Output/RADIO_TX Debug/Obj/id_manager.o
- .rodata        0x000000000002e564      0x13c Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+                0x000000000002e648        0x8 Output/RADIO_TX Debug/Obj/id_manager.o
+ .rodata        0x000000000002e650      0x13c Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
  .rodata.m_evt_handlers
-                0x000000000002e6a0       0x10 Output/RADIO_TX Debug/Obj/peer_database.o
- .rodata        0x000000000002e6b0       0xa8 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002e78c       0x10 Output/RADIO_TX Debug/Obj/peer_database.o
+ .rodata        0x000000000002e79c       0xa8 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .rodata.sdh_req_observers
-                0x000000000002e758        0xc Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002e844        0xc Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .rodata.sdh_state_observers
-                0x000000000002e764        0xc Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002e850        0xc Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .rodata.sdh_stack_observers
-                0x000000000002e770        0xc Output/RADIO_TX Debug/Obj/nrf_sdh.o
- .rodata        0x000000000002e77c      0x2a8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+                0x000000000002e85c        0xc Output/RADIO_TX Debug/Obj/nrf_sdh.o
+ .rodata        0x000000000002e868      0x2a8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
  .rodata.sdh_ble_observers
-                0x000000000002ea24        0xc Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
- .rodata        0x000000000002ea30       0xac Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+                0x000000000002eb10        0xc Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+ .rodata        0x000000000002eb1c       0xac Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
  .rodata.sdh_soc_observers
-                0x000000000002eadc        0xc Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
-                0x000000000002eae8                __rodata_end__ = (__rodata_start__ + SIZEOF (.rodata))
-                0x0000000000000f6c                __rodata_size__ = SIZEOF (.rodata)
-                0x000000000002eae8                __rodata_load_end__ = __rodata_end__
+                0x000000000002ebc8        0xc Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+                0x000000000002ebd4                __rodata_end__ = (__rodata_start__ + SIZEOF (.rodata))
+                0x0000000000000f80                __rodata_size__ = SIZEOF (.rodata)
+                0x000000000002ebd4                __rodata_load_end__ = __rodata_end__
 
-.rel.dyn        0x000000000002eae8        0x0
- .rel.iplt      0x000000000002eae8        0x0 Output/RADIO_TX Debug/Obj/thumb_crt0.o
+.rel.dyn        0x000000000002ebd4        0x0
+ .rel.iplt      0x000000000002ebd4        0x0 Output/RADIO_TX Debug/Obj/thumb_crt0.o
                 0x0000000000000001                . = ASSERT (((__rodata_start__ == __rodata_end__) || ((__rodata_end__ >= __FLASH_segment_start__) && (__rodata_end__ <= __FLASH_segment_end__))), error: .rodata is too large to fit in FLASH memory segment)
-                0x000000000002eae8                __ARM.exidx_load_start__ = ALIGN (__rodata_end__, 0x4)
+                0x000000000002ebd4                __ARM.exidx_load_start__ = ALIGN (__rodata_end__, 0x4)
 
-.ARM.exidx      0x000000000002eae8        0x0
-                0x000000000002eae8                __ARM.exidx_start__ = .
-                0x000000000002eae8                __exidx_start = __ARM.exidx_start__
+.ARM.exidx      0x000000000002ebd4        0x0
+                0x000000000002ebd4                __ARM.exidx_start__ = .
+                0x000000000002ebd4                __exidx_start = __ARM.exidx_start__
  *(.ARM.exidx .ARM.exidx.*)
-                0x000000000002eae8                __ARM.exidx_end__ = (__ARM.exidx_start__ + SIZEOF (.ARM.exidx))
+                0x000000000002ebd4                __ARM.exidx_end__ = (__ARM.exidx_start__ + SIZEOF (.ARM.exidx))
                 0x0000000000000000                __ARM.exidx_size__ = SIZEOF (.ARM.exidx)
-                0x000000000002eae8                __exidx_end = __ARM.exidx_end__
-                0x000000000002eae8                __ARM.exidx_load_end__ = __ARM.exidx_end__
+                0x000000000002ebd4                __exidx_end = __ARM.exidx_end__
+                0x000000000002ebd4                __ARM.exidx_load_end__ = __ARM.exidx_end__
                 0x0000000000000001                . = ASSERT (((__ARM.exidx_start__ == __ARM.exidx_end__) || ((__ARM.exidx_end__ >= __FLASH_segment_start__) && (__ARM.exidx_end__ <= __FLASH_segment_end__))), error: .ARM.exidx is too large to fit in FLASH memory segment)
-                0x000000000002eae8                __fast_load_start__ = ALIGN (__ARM.exidx_end__, 0x4)
+                0x000000000002ebd4                __fast_load_start__ = ALIGN (__ARM.exidx_end__, 0x4)
 
-.fast           0x000000002000216c        0x0 load address 0x000000000002eae8
+.fast           0x000000002000216c        0x0 load address 0x000000000002ebd4
                 0x000000002000216c                __fast_start__ = .
  *(.fast .fast.*)
                 0x000000002000216c                __fast_end__ = (__fast_start__ + SIZEOF (.fast))
                 0x0000000000000000                __fast_size__ = SIZEOF (.fast)
-                0x000000000002eae8                __fast_load_end__ = (__fast_load_start__ + SIZEOF (.fast))
+                0x000000000002ebd4                __fast_load_end__ = (__fast_load_start__ + SIZEOF (.fast))
                 0x0000000000000001                . = ASSERT (((__fast_load_start__ == __fast_load_end__) || ((__fast_load_end__ >= __FLASH_segment_start__) && (__fast_load_end__ <= __FLASH_segment_end__))), error: .fast is too large to fit in FLASH memory segment)
 
 .fast_run       0x000000002000216c        0x0
@@ -15081,9 +15089,9 @@ Linker script and memory map
                 0x0000000000000000                __fast_run_size__ = SIZEOF (.fast_run)
                 0x000000002000216c                __fast_run_load_end__ = __fast_run_end__
                 0x0000000000000001                . = ASSERT (((__fast_run_start__ == __fast_run_end__) || ((__fast_run_end__ >= __RAM_segment_start__) && (__fast_run_end__ <= __RAM_segment_end__))), error: .fast_run is too large to fit in RAM memory segment)
-                0x000000000002eae8                __data_load_start__ = ALIGN ((__fast_load_start__ + SIZEOF (.fast)), 0x4)
+                0x000000000002ebd4                __data_load_start__ = ALIGN ((__fast_load_start__ + SIZEOF (.fast)), 0x4)
 
-.data           0x000000002000216c       0x14 load address 0x000000000002eae8
+.data           0x000000002000216c       0x14 load address 0x000000000002ebd4
                 0x000000002000216c                __data_start__ = .
  *(.data .data.* .gnu.linkonce.d.*)
  .data.m_evt_handlers
@@ -15116,13 +15124,13 @@ Linker script and memory map
                 0x000000002000217c                SystemCoreClock
                 0x0000000020002180                __data_end__ = (__data_start__ + SIZEOF (.data))
                 0x0000000000000014                __data_size__ = SIZEOF (.data)
-                0x000000000002eafc                __data_load_end__ = (__data_load_start__ + SIZEOF (.data))
+                0x000000000002ebe8                __data_load_end__ = (__data_load_start__ + SIZEOF (.data))
 
 .igot.plt       0x0000000100000000        0x0
  .igot.plt      0x0000000100000000        0x0 Output/RADIO_TX Debug/Obj/thumb_crt0.o
                 0x0000000000000001                . = ASSERT (((__data_load_start__ == __data_load_end__) || ((__data_load_end__ >= __FLASH_segment_start__) && (__data_load_end__ <= __FLASH_segment_end__))), error: .data is too large to fit in FLASH memory segment)
 
-.data_run       0x000000002000216c       0x14 load address 0x000000000002eae8
+.data_run       0x000000002000216c       0x14 load address 0x000000000002ebd4
                 0x000000002000216c                __data_run_start__ = .
                 0x0000000020002180                . = MAX ((__data_run_start__ + SIZEOF (.data)), .)
  *fill*         0x000000002000216c       0x14 
@@ -15130,16 +15138,16 @@ Linker script and memory map
                 0x0000000000000014                __data_run_size__ = SIZEOF (.data_run)
                 0x0000000020002180                __data_run_load_end__ = __data_run_end__
                 0x0000000000000001                . = ASSERT (((__data_run_start__ == __data_run_end__) || ((__data_run_end__ >= __RAM_segment_start__) && (__data_run_end__ <= __RAM_segment_end__))), error: .data_run is too large to fit in RAM memory segment)
-                0x000000000002eafc                __tdata_load_start__ = ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4)
+                0x000000000002ebe8                __tdata_load_start__ = ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4)
 
-.tdata          0x0000000020002180        0x0 load address 0x000000000002eafc
+.tdata          0x0000000020002180        0x0 load address 0x000000000002ebe8
                 0x0000000020002180                __tdata_start__ = .
  *(.tdata .tdata.*)
                 0x0000000020002180                __tdata_end__ = (__tdata_start__ + SIZEOF (.tdata))
                 0x0000000000000000                __tdata_size__ = SIZEOF (.tdata)
-                0x000000000002eafc                __tdata_load_end__ = (__tdata_load_start__ + SIZEOF (.tdata))
-                0x000000000002eafc                __FLASH_segment_used_end__ = (ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4) + SIZEOF (.tdata))
-                0x000000000002eafc                __FLASH_segment_used_size__ = (__FLASH_segment_used_end__ - __FLASH_segment_start__)
+                0x000000000002ebe8                __tdata_load_end__ = (__tdata_load_start__ + SIZEOF (.tdata))
+                0x000000000002ebe8                __FLASH_segment_used_end__ = (ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4) + SIZEOF (.tdata))
+                0x000000000002ebe8                __FLASH_segment_used_size__ = (__FLASH_segment_used_end__ - __FLASH_segment_start__)
                 0x0000000000000001                . = ASSERT (((__tdata_load_start__ == __tdata_load_end__) || ((__tdata_load_end__ >= __FLASH_segment_start__) && (__tdata_load_end__ <= __FLASH_segment_end__))), error: .tdata is too large to fit in FLASH memory segment)
 
 .tdata_run      0x0000000020002180        0x0
@@ -15586,7 +15594,7 @@ OUTPUT(Output/Debug/Exe/RADIO_TX.elf elf32-littlearm)
  .comment       0x000000000000004c       0x4d Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
  .comment       0x000000000000004c       0x4d C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
 
-.debug_line     0x0000000000000000    0x1cf1b
+.debug_line     0x0000000000000000    0x1cf88
  .debug_line    0x0000000000000000      0x2b4 Output/RADIO_TX Debug/Obj/thumb_crt0.o
  .debug_line    0x00000000000002b4      0xe28 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
  .debug_line    0x00000000000010dc      0x33b Output/RADIO_TX Debug/Obj/app_error.o
@@ -15610,31 +15618,31 @@ OUTPUT(Output/Debug/Exe/RADIO_TX.elf elf32-littlearm)
  .debug_line    0x000000000000a953     0x12b5 Output/RADIO_TX Debug/Obj/nrf_drv_uart.o
  .debug_line    0x000000000000bc08      0x6f1 Output/RADIO_TX Debug/Obj/bsp.o
  .debug_line    0x000000000000c2f9      0xbf7 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
- .debug_line    0x000000000000cef0      0x2d2 Output/RADIO_TX Debug/Obj/main.o
- .debug_line    0x000000000000d1c2      0x29a Output/RADIO_TX Debug/Obj/functions.o
- .debug_line    0x000000000000d45c      0xcf1 Output/RADIO_TX Debug/Obj/ble_conn_params.o
- .debug_line    0x000000000000e14d      0xc6e Output/RADIO_TX Debug/Obj/ble_conn_state.o
- .debug_line    0x000000000000edbb      0xad1 Output/RADIO_TX Debug/Obj/ble_srv_common.o
- .debug_line    0x000000000000f88c     0x1037 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- .debug_line    0x00000000000108c3      0xea7 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
- .debug_line    0x000000000001176a     0x1287 Output/RADIO_TX Debug/Obj/id_manager.o
- .debug_line    0x00000000000129f1      0xc96 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
- .debug_line    0x0000000000013687     0x111c Output/RADIO_TX Debug/Obj/peer_data_storage.o
- .debug_line    0x00000000000147a3     0x1186 Output/RADIO_TX Debug/Obj/peer_database.o
- .debug_line    0x0000000000015929      0xe9c Output/RADIO_TX Debug/Obj/peer_id.o
- .debug_line    0x00000000000167c5     0x14e1 Output/RADIO_TX Debug/Obj/peer_manager.o
- .debug_line    0x0000000000017ca6      0x3f2 Output/RADIO_TX Debug/Obj/pm_buffer.o
- .debug_line    0x0000000000018098      0x72e Output/RADIO_TX Debug/Obj/pm_mutex.o
- .debug_line    0x00000000000187c6     0x1195 Output/RADIO_TX Debug/Obj/security_dispatcher.o
- .debug_line    0x000000000001995b     0x10bb Output/RADIO_TX Debug/Obj/security_manager.o
- .debug_line    0x000000000001aa16       0xa5 Output/RADIO_TX Debug/Obj/ses_nRF_Startup.o
- .debug_line    0x000000000001aabb       0xae Output/RADIO_TX Debug/Obj/ses_nrf52_Vectors.o
- .debug_line    0x000000000001ab69      0x42b Output/RADIO_TX Debug/Obj/system_nrf52.o
- .debug_line    0x000000000001af94      0xb72 Output/RADIO_TX Debug/Obj/nrf_sdh.o
- .debug_line    0x000000000001bb06      0xbb4 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
- .debug_line    0x000000000001c6ba      0x861 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+ .debug_line    0x000000000000cef0      0x33e Output/RADIO_TX Debug/Obj/main.o
+ .debug_line    0x000000000000d22e      0x29b Output/RADIO_TX Debug/Obj/functions.o
+ .debug_line    0x000000000000d4c9      0xcf1 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+ .debug_line    0x000000000000e1ba      0xc6e Output/RADIO_TX Debug/Obj/ble_conn_state.o
+ .debug_line    0x000000000000ee28      0xad1 Output/RADIO_TX Debug/Obj/ble_srv_common.o
+ .debug_line    0x000000000000f8f9     0x1037 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ .debug_line    0x0000000000010930      0xea7 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+ .debug_line    0x00000000000117d7     0x1287 Output/RADIO_TX Debug/Obj/id_manager.o
+ .debug_line    0x0000000000012a5e      0xc96 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+ .debug_line    0x00000000000136f4     0x111c Output/RADIO_TX Debug/Obj/peer_data_storage.o
+ .debug_line    0x0000000000014810     0x1186 Output/RADIO_TX Debug/Obj/peer_database.o
+ .debug_line    0x0000000000015996      0xe9c Output/RADIO_TX Debug/Obj/peer_id.o
+ .debug_line    0x0000000000016832     0x14e1 Output/RADIO_TX Debug/Obj/peer_manager.o
+ .debug_line    0x0000000000017d13      0x3f2 Output/RADIO_TX Debug/Obj/pm_buffer.o
+ .debug_line    0x0000000000018105      0x72e Output/RADIO_TX Debug/Obj/pm_mutex.o
+ .debug_line    0x0000000000018833     0x1195 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ .debug_line    0x00000000000199c8     0x10bb Output/RADIO_TX Debug/Obj/security_manager.o
+ .debug_line    0x000000000001aa83       0xa5 Output/RADIO_TX Debug/Obj/ses_nRF_Startup.o
+ .debug_line    0x000000000001ab28       0xae Output/RADIO_TX Debug/Obj/ses_nrf52_Vectors.o
+ .debug_line    0x000000000001abd6      0x42b Output/RADIO_TX Debug/Obj/system_nrf52.o
+ .debug_line    0x000000000001b001      0xb72 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+ .debug_line    0x000000000001bb73      0xbb4 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+ .debug_line    0x000000000001c727      0x861 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
 
-.debug_info     0x0000000000000000    0x6dcb2
+.debug_info     0x0000000000000000    0x6dd0f
  .debug_info    0x0000000000000000       0xc5 Output/RADIO_TX Debug/Obj/thumb_crt0.o
  .debug_info    0x00000000000000c5     0x2758 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
  .debug_info    0x000000000000281d      0x805 Output/RADIO_TX Debug/Obj/app_error.o
@@ -15658,31 +15666,31 @@ OUTPUT(Output/Debug/Exe/RADIO_TX.elf elf32-littlearm)
  .debug_info    0x000000000001ba3e     0x3747 Output/RADIO_TX Debug/Obj/nrf_drv_uart.o
  .debug_info    0x000000000001f185      0xe8f Output/RADIO_TX Debug/Obj/bsp.o
  .debug_info    0x0000000000020014     0x41c7 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
- .debug_info    0x00000000000241db      0xbdb Output/RADIO_TX Debug/Obj/main.o
- .debug_info    0x0000000000024db6      0x928 Output/RADIO_TX Debug/Obj/functions.o
- .debug_info    0x00000000000256de     0x4764 Output/RADIO_TX Debug/Obj/ble_conn_params.o
- .debug_info    0x0000000000029e42     0x45fe Output/RADIO_TX Debug/Obj/ble_conn_state.o
- .debug_info    0x000000000002e440     0x336e Output/RADIO_TX Debug/Obj/ble_srv_common.o
- .debug_info    0x00000000000317ae     0x55ff Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- .debug_info    0x0000000000036dad     0x432f Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
- .debug_info    0x000000000003b0dc     0x5d01 Output/RADIO_TX Debug/Obj/id_manager.o
- .debug_info    0x0000000000040ddd     0x472e Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
- .debug_info    0x000000000004550b     0x4a78 Output/RADIO_TX Debug/Obj/peer_data_storage.o
- .debug_info    0x0000000000049f83     0x4a21 Output/RADIO_TX Debug/Obj/peer_database.o
- .debug_info    0x000000000004e9a4     0x3c0f Output/RADIO_TX Debug/Obj/peer_id.o
- .debug_info    0x00000000000525b3     0x5e32 Output/RADIO_TX Debug/Obj/peer_manager.o
- .debug_info    0x00000000000583e5      0x774 Output/RADIO_TX Debug/Obj/pm_buffer.o
- .debug_info    0x0000000000058b59     0x1325 Output/RADIO_TX Debug/Obj/pm_mutex.o
- .debug_info    0x0000000000059e7e     0x5b65 Output/RADIO_TX Debug/Obj/security_dispatcher.o
- .debug_info    0x000000000005f9e3     0x56a8 Output/RADIO_TX Debug/Obj/security_manager.o
- .debug_info    0x000000000006508b       0xc5 Output/RADIO_TX Debug/Obj/ses_nRF_Startup.o
- .debug_info    0x0000000000065150       0xc7 Output/RADIO_TX Debug/Obj/ses_nrf52_Vectors.o
- .debug_info    0x0000000000065217     0x1083 Output/RADIO_TX Debug/Obj/system_nrf52.o
- .debug_info    0x000000000006629a     0x1f36 Output/RADIO_TX Debug/Obj/nrf_sdh.o
- .debug_info    0x00000000000681d0     0x46c2 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
- .debug_info    0x000000000006c892     0x1420 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+ .debug_info    0x00000000000241db      0xc38 Output/RADIO_TX Debug/Obj/main.o
+ .debug_info    0x0000000000024e13      0x928 Output/RADIO_TX Debug/Obj/functions.o
+ .debug_info    0x000000000002573b     0x4764 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+ .debug_info    0x0000000000029e9f     0x45fe Output/RADIO_TX Debug/Obj/ble_conn_state.o
+ .debug_info    0x000000000002e49d     0x336e Output/RADIO_TX Debug/Obj/ble_srv_common.o
+ .debug_info    0x000000000003180b     0x55ff Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ .debug_info    0x0000000000036e0a     0x432f Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+ .debug_info    0x000000000003b139     0x5d01 Output/RADIO_TX Debug/Obj/id_manager.o
+ .debug_info    0x0000000000040e3a     0x472e Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+ .debug_info    0x0000000000045568     0x4a78 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+ .debug_info    0x0000000000049fe0     0x4a21 Output/RADIO_TX Debug/Obj/peer_database.o
+ .debug_info    0x000000000004ea01     0x3c0f Output/RADIO_TX Debug/Obj/peer_id.o
+ .debug_info    0x0000000000052610     0x5e32 Output/RADIO_TX Debug/Obj/peer_manager.o
+ .debug_info    0x0000000000058442      0x774 Output/RADIO_TX Debug/Obj/pm_buffer.o
+ .debug_info    0x0000000000058bb6     0x1325 Output/RADIO_TX Debug/Obj/pm_mutex.o
+ .debug_info    0x0000000000059edb     0x5b65 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ .debug_info    0x000000000005fa40     0x56a8 Output/RADIO_TX Debug/Obj/security_manager.o
+ .debug_info    0x00000000000650e8       0xc5 Output/RADIO_TX Debug/Obj/ses_nRF_Startup.o
+ .debug_info    0x00000000000651ad       0xc7 Output/RADIO_TX Debug/Obj/ses_nrf52_Vectors.o
+ .debug_info    0x0000000000065274     0x1083 Output/RADIO_TX Debug/Obj/system_nrf52.o
+ .debug_info    0x00000000000662f7     0x1f36 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+ .debug_info    0x000000000006822d     0x46c2 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+ .debug_info    0x000000000006c8ef     0x1420 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
 
-.debug_abbrev   0x0000000000000000     0x79f9
+.debug_abbrev   0x0000000000000000     0x7a3e
  .debug_abbrev  0x0000000000000000       0x12 Output/RADIO_TX Debug/Obj/thumb_crt0.o
  .debug_abbrev  0x0000000000000012      0x45f Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
  .debug_abbrev  0x0000000000000471      0x18c Output/RADIO_TX Debug/Obj/app_error.o
@@ -15706,31 +15714,31 @@ OUTPUT(Output/Debug/Exe/RADIO_TX.elf elf32-littlearm)
  .debug_abbrev  0x00000000000032aa      0x39e Output/RADIO_TX Debug/Obj/nrf_drv_uart.o
  .debug_abbrev  0x0000000000003648      0x28f Output/RADIO_TX Debug/Obj/bsp.o
  .debug_abbrev  0x00000000000038d7      0x2b4 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
- .debug_abbrev  0x0000000000003b8b      0x17c Output/RADIO_TX Debug/Obj/main.o
- .debug_abbrev  0x0000000000003d07      0x140 Output/RADIO_TX Debug/Obj/functions.o
- .debug_abbrev  0x0000000000003e47      0x364 Output/RADIO_TX Debug/Obj/ble_conn_params.o
- .debug_abbrev  0x00000000000041ab      0x389 Output/RADIO_TX Debug/Obj/ble_conn_state.o
- .debug_abbrev  0x0000000000004534      0x297 Output/RADIO_TX Debug/Obj/ble_srv_common.o
- .debug_abbrev  0x00000000000047cb      0x3a7 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- .debug_abbrev  0x0000000000004b72      0x356 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
- .debug_abbrev  0x0000000000004ec8      0x41d Output/RADIO_TX Debug/Obj/id_manager.o
- .debug_abbrev  0x00000000000052e5      0x35f Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
- .debug_abbrev  0x0000000000005644      0x388 Output/RADIO_TX Debug/Obj/peer_data_storage.o
- .debug_abbrev  0x00000000000059cc      0x3f1 Output/RADIO_TX Debug/Obj/peer_database.o
- .debug_abbrev  0x0000000000005dbd      0x2bf Output/RADIO_TX Debug/Obj/peer_id.o
- .debug_abbrev  0x000000000000607c      0x3b4 Output/RADIO_TX Debug/Obj/peer_manager.o
- .debug_abbrev  0x0000000000006430      0x193 Output/RADIO_TX Debug/Obj/pm_buffer.o
- .debug_abbrev  0x00000000000065c3      0x24e Output/RADIO_TX Debug/Obj/pm_mutex.o
- .debug_abbrev  0x0000000000006811      0x37f Output/RADIO_TX Debug/Obj/security_dispatcher.o
- .debug_abbrev  0x0000000000006b90      0x380 Output/RADIO_TX Debug/Obj/security_manager.o
- .debug_abbrev  0x0000000000006f10       0x14 Output/RADIO_TX Debug/Obj/ses_nRF_Startup.o
- .debug_abbrev  0x0000000000006f24       0x14 Output/RADIO_TX Debug/Obj/ses_nrf52_Vectors.o
- .debug_abbrev  0x0000000000006f38      0x1e4 Output/RADIO_TX Debug/Obj/system_nrf52.o
- .debug_abbrev  0x000000000000711c      0x376 Output/RADIO_TX Debug/Obj/nrf_sdh.o
- .debug_abbrev  0x0000000000007492      0x345 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
- .debug_abbrev  0x00000000000077d7      0x222 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+ .debug_abbrev  0x0000000000003b8b      0x1c1 Output/RADIO_TX Debug/Obj/main.o
+ .debug_abbrev  0x0000000000003d4c      0x140 Output/RADIO_TX Debug/Obj/functions.o
+ .debug_abbrev  0x0000000000003e8c      0x364 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+ .debug_abbrev  0x00000000000041f0      0x389 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+ .debug_abbrev  0x0000000000004579      0x297 Output/RADIO_TX Debug/Obj/ble_srv_common.o
+ .debug_abbrev  0x0000000000004810      0x3a7 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ .debug_abbrev  0x0000000000004bb7      0x356 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+ .debug_abbrev  0x0000000000004f0d      0x41d Output/RADIO_TX Debug/Obj/id_manager.o
+ .debug_abbrev  0x000000000000532a      0x35f Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+ .debug_abbrev  0x0000000000005689      0x388 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+ .debug_abbrev  0x0000000000005a11      0x3f1 Output/RADIO_TX Debug/Obj/peer_database.o
+ .debug_abbrev  0x0000000000005e02      0x2bf Output/RADIO_TX Debug/Obj/peer_id.o
+ .debug_abbrev  0x00000000000060c1      0x3b4 Output/RADIO_TX Debug/Obj/peer_manager.o
+ .debug_abbrev  0x0000000000006475      0x193 Output/RADIO_TX Debug/Obj/pm_buffer.o
+ .debug_abbrev  0x0000000000006608      0x24e Output/RADIO_TX Debug/Obj/pm_mutex.o
+ .debug_abbrev  0x0000000000006856      0x37f Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ .debug_abbrev  0x0000000000006bd5      0x380 Output/RADIO_TX Debug/Obj/security_manager.o
+ .debug_abbrev  0x0000000000006f55       0x14 Output/RADIO_TX Debug/Obj/ses_nRF_Startup.o
+ .debug_abbrev  0x0000000000006f69       0x14 Output/RADIO_TX Debug/Obj/ses_nrf52_Vectors.o
+ .debug_abbrev  0x0000000000006f7d      0x1e4 Output/RADIO_TX Debug/Obj/system_nrf52.o
+ .debug_abbrev  0x0000000000007161      0x376 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+ .debug_abbrev  0x00000000000074d7      0x345 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+ .debug_abbrev  0x000000000000781c      0x222 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
 
-.debug_aranges  0x0000000000000000     0x6470
+.debug_aranges  0x0000000000000000     0x6480
  .debug_aranges
                 0x0000000000000000       0xe0 Output/RADIO_TX Debug/Obj/thumb_crt0.o
  .debug_aranges
@@ -15778,53 +15786,53 @@ OUTPUT(Output/Debug/Exe/RADIO_TX.elf elf32-littlearm)
  .debug_aranges
                 0x00000000000022f0      0x2b0 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
  .debug_aranges
-                0x00000000000025a0       0x20 Output/RADIO_TX Debug/Obj/main.o
+                0x00000000000025a0       0x30 Output/RADIO_TX Debug/Obj/main.o
  .debug_aranges
-                0x00000000000025c0       0x30 Output/RADIO_TX Debug/Obj/functions.o
+                0x00000000000025d0       0x30 Output/RADIO_TX Debug/Obj/functions.o
  .debug_aranges
-                0x00000000000025f0      0x300 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x0000000000002600      0x300 Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .debug_aranges
-                0x00000000000028f0      0x348 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x0000000000002900      0x348 Output/RADIO_TX Debug/Obj/ble_conn_state.o
  .debug_aranges
-                0x0000000000002c38      0x2c0 Output/RADIO_TX Debug/Obj/ble_srv_common.o
+                0x0000000000002c48      0x2c0 Output/RADIO_TX Debug/Obj/ble_srv_common.o
  .debug_aranges
-                0x0000000000002ef8      0x468 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000002f08      0x468 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .debug_aranges
-                0x0000000000003360      0x420 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x0000000000003370      0x420 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
  .debug_aranges
-                0x0000000000003780      0x4c0 Output/RADIO_TX Debug/Obj/id_manager.o
+                0x0000000000003790      0x4c0 Output/RADIO_TX Debug/Obj/id_manager.o
  .debug_aranges
-                0x0000000000003c40      0x2f8 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+                0x0000000000003c50      0x2f8 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
  .debug_aranges
-                0x0000000000003f38      0x4a8 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x0000000000003f48      0x4a8 Output/RADIO_TX Debug/Obj/peer_data_storage.o
  .debug_aranges
-                0x00000000000043e0      0x4c0 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x00000000000043f0      0x4c0 Output/RADIO_TX Debug/Obj/peer_database.o
  .debug_aranges
-                0x00000000000048a0      0x438 Output/RADIO_TX Debug/Obj/peer_id.o
+                0x00000000000048b0      0x438 Output/RADIO_TX Debug/Obj/peer_id.o
  .debug_aranges
-                0x0000000000004cd8      0x530 Output/RADIO_TX Debug/Obj/peer_manager.o
+                0x0000000000004ce8      0x530 Output/RADIO_TX Debug/Obj/peer_manager.o
  .debug_aranges
-                0x0000000000005208       0x38 Output/RADIO_TX Debug/Obj/pm_buffer.o
+                0x0000000000005218       0x38 Output/RADIO_TX Debug/Obj/pm_buffer.o
  .debug_aranges
-                0x0000000000005240      0x198 Output/RADIO_TX Debug/Obj/pm_mutex.o
+                0x0000000000005250      0x198 Output/RADIO_TX Debug/Obj/pm_mutex.o
  .debug_aranges
-                0x00000000000053d8      0x4c8 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x00000000000053e8      0x4c8 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .debug_aranges
-                0x00000000000058a0      0x490 Output/RADIO_TX Debug/Obj/security_manager.o
+                0x00000000000058b0      0x490 Output/RADIO_TX Debug/Obj/security_manager.o
  .debug_aranges
-                0x0000000000005d30       0x20 Output/RADIO_TX Debug/Obj/ses_nRF_Startup.o
+                0x0000000000005d40       0x20 Output/RADIO_TX Debug/Obj/ses_nRF_Startup.o
  .debug_aranges
-                0x0000000000005d50       0x20 Output/RADIO_TX Debug/Obj/ses_nrf52_Vectors.o
+                0x0000000000005d60       0x20 Output/RADIO_TX Debug/Obj/ses_nrf52_Vectors.o
  .debug_aranges
-                0x0000000000005d70       0x80 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x0000000000005d80       0x80 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .debug_aranges
-                0x0000000000005df0      0x258 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x0000000000005e00      0x258 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .debug_aranges
-                0x0000000000006048      0x2b0 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+                0x0000000000006058      0x2b0 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
  .debug_aranges
-                0x00000000000062f8      0x178 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+                0x0000000000006308      0x178 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
 
-.debug_ranges   0x0000000000000000     0x6280
+.debug_ranges   0x0000000000000000     0x6290
  .debug_ranges  0x0000000000000000       0xd8 Output/RADIO_TX Debug/Obj/thumb_crt0.o
  .debug_ranges  0x00000000000000d8      0x288 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
  .debug_ranges  0x0000000000000360       0x20 Output/RADIO_TX Debug/Obj/app_error.o
@@ -15848,29 +15856,29 @@ OUTPUT(Output/Debug/Exe/RADIO_TX.elf elf32-littlearm)
  .debug_ranges  0x0000000000001d58      0x400 Output/RADIO_TX Debug/Obj/nrf_drv_uart.o
  .debug_ranges  0x0000000000002158       0x88 Output/RADIO_TX Debug/Obj/bsp.o
  .debug_ranges  0x00000000000021e0      0x2a0 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
- .debug_ranges  0x0000000000002480       0x10 Output/RADIO_TX Debug/Obj/main.o
- .debug_ranges  0x0000000000002490       0x20 Output/RADIO_TX Debug/Obj/functions.o
- .debug_ranges  0x00000000000024b0      0x308 Output/RADIO_TX Debug/Obj/ble_conn_params.o
- .debug_ranges  0x00000000000027b8      0x338 Output/RADIO_TX Debug/Obj/ble_conn_state.o
- .debug_ranges  0x0000000000002af0      0x2b0 Output/RADIO_TX Debug/Obj/ble_srv_common.o
- .debug_ranges  0x0000000000002da0      0x4a0 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- .debug_ranges  0x0000000000003240      0x410 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
- .debug_ranges  0x0000000000003650      0x4b0 Output/RADIO_TX Debug/Obj/id_manager.o
- .debug_ranges  0x0000000000003b00      0x2e8 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
- .debug_ranges  0x0000000000003de8      0x498 Output/RADIO_TX Debug/Obj/peer_data_storage.o
- .debug_ranges  0x0000000000004280      0x4e0 Output/RADIO_TX Debug/Obj/peer_database.o
- .debug_ranges  0x0000000000004760      0x428 Output/RADIO_TX Debug/Obj/peer_id.o
- .debug_ranges  0x0000000000004b88      0x520 Output/RADIO_TX Debug/Obj/peer_manager.o
- .debug_ranges  0x00000000000050a8       0x28 Output/RADIO_TX Debug/Obj/pm_buffer.o
- .debug_ranges  0x00000000000050d0      0x188 Output/RADIO_TX Debug/Obj/pm_mutex.o
- .debug_ranges  0x0000000000005258      0x4b8 Output/RADIO_TX Debug/Obj/security_dispatcher.o
- .debug_ranges  0x0000000000005710      0x480 Output/RADIO_TX Debug/Obj/security_manager.o
- .debug_ranges  0x0000000000005b90       0x70 Output/RADIO_TX Debug/Obj/system_nrf52.o
- .debug_ranges  0x0000000000005c00      0x248 Output/RADIO_TX Debug/Obj/nrf_sdh.o
- .debug_ranges  0x0000000000005e48      0x2b8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
- .debug_ranges  0x0000000000006100      0x180 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+ .debug_ranges  0x0000000000002480       0x20 Output/RADIO_TX Debug/Obj/main.o
+ .debug_ranges  0x00000000000024a0       0x20 Output/RADIO_TX Debug/Obj/functions.o
+ .debug_ranges  0x00000000000024c0      0x308 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+ .debug_ranges  0x00000000000027c8      0x338 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+ .debug_ranges  0x0000000000002b00      0x2b0 Output/RADIO_TX Debug/Obj/ble_srv_common.o
+ .debug_ranges  0x0000000000002db0      0x4a0 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ .debug_ranges  0x0000000000003250      0x410 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+ .debug_ranges  0x0000000000003660      0x4b0 Output/RADIO_TX Debug/Obj/id_manager.o
+ .debug_ranges  0x0000000000003b10      0x2e8 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+ .debug_ranges  0x0000000000003df8      0x498 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+ .debug_ranges  0x0000000000004290      0x4e0 Output/RADIO_TX Debug/Obj/peer_database.o
+ .debug_ranges  0x0000000000004770      0x428 Output/RADIO_TX Debug/Obj/peer_id.o
+ .debug_ranges  0x0000000000004b98      0x520 Output/RADIO_TX Debug/Obj/peer_manager.o
+ .debug_ranges  0x00000000000050b8       0x28 Output/RADIO_TX Debug/Obj/pm_buffer.o
+ .debug_ranges  0x00000000000050e0      0x188 Output/RADIO_TX Debug/Obj/pm_mutex.o
+ .debug_ranges  0x0000000000005268      0x4b8 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ .debug_ranges  0x0000000000005720      0x480 Output/RADIO_TX Debug/Obj/security_manager.o
+ .debug_ranges  0x0000000000005ba0       0x70 Output/RADIO_TX Debug/Obj/system_nrf52.o
+ .debug_ranges  0x0000000000005c10      0x248 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+ .debug_ranges  0x0000000000005e58      0x2b8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+ .debug_ranges  0x0000000000006110      0x180 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
 
-.debug_frame    0x0000000000000000    0x10400
+.debug_frame    0x0000000000000000    0x1044c
  .debug_frame   0x0000000000000000      0x844 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
  .debug_frame   0x0000000000000844       0x80 Output/RADIO_TX Debug/Obj/app_error.o
  .debug_frame   0x00000000000008c4      0x31c Output/RADIO_TX Debug/Obj/app_error_weak.o
@@ -15893,30 +15901,30 @@ OUTPUT(Output/Debug/Exe/RADIO_TX.elf elf32-littlearm)
  .debug_frame   0x00000000000055ec      0xe80 Output/RADIO_TX Debug/Obj/nrf_drv_uart.o
  .debug_frame   0x000000000000646c      0x280 Output/RADIO_TX Debug/Obj/bsp.o
  .debug_frame   0x00000000000066ec      0x5d0 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
- .debug_frame   0x0000000000006cbc       0x30 Output/RADIO_TX Debug/Obj/main.o
- .debug_frame   0x0000000000006cec       0x60 Output/RADIO_TX Debug/Obj/functions.o
- .debug_frame   0x0000000000006d4c      0x744 Output/RADIO_TX Debug/Obj/ble_conn_params.o
- .debug_frame   0x0000000000007490      0x87c Output/RADIO_TX Debug/Obj/ble_conn_state.o
- .debug_frame   0x0000000000007d0c      0x610 Output/RADIO_TX Debug/Obj/ble_srv_common.o
- .debug_frame   0x000000000000831c      0xa20 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- .debug_frame   0x0000000000008d3c      0x8e0 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
- .debug_frame   0x000000000000961c      0xc08 Output/RADIO_TX Debug/Obj/id_manager.o
- .debug_frame   0x000000000000a224      0x714 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
- .debug_frame   0x000000000000a938      0xb5c Output/RADIO_TX Debug/Obj/peer_data_storage.o
- .debug_frame   0x000000000000b494      0xbe8 Output/RADIO_TX Debug/Obj/peer_database.o
- .debug_frame   0x000000000000c07c      0x97c Output/RADIO_TX Debug/Obj/peer_id.o
- .debug_frame   0x000000000000c9f8      0xe1c Output/RADIO_TX Debug/Obj/peer_manager.o
- .debug_frame   0x000000000000d814       0xb0 Output/RADIO_TX Debug/Obj/pm_buffer.o
- .debug_frame   0x000000000000d8c4      0x398 Output/RADIO_TX Debug/Obj/pm_mutex.o
- .debug_frame   0x000000000000dc5c      0xc54 Output/RADIO_TX Debug/Obj/security_dispatcher.o
- .debug_frame   0x000000000000e8b0      0xb28 Output/RADIO_TX Debug/Obj/security_manager.o
- .debug_frame   0x000000000000f3d8       0xec Output/RADIO_TX Debug/Obj/system_nrf52.o
- .debug_frame   0x000000000000f4c4      0x674 Output/RADIO_TX Debug/Obj/nrf_sdh.o
- .debug_frame   0x000000000000fb38      0x5c8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
- .debug_frame   0x0000000000010100      0x300 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+ .debug_frame   0x0000000000006cbc       0x7c Output/RADIO_TX Debug/Obj/main.o
+ .debug_frame   0x0000000000006d38       0x60 Output/RADIO_TX Debug/Obj/functions.o
+ .debug_frame   0x0000000000006d98      0x744 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+ .debug_frame   0x00000000000074dc      0x87c Output/RADIO_TX Debug/Obj/ble_conn_state.o
+ .debug_frame   0x0000000000007d58      0x610 Output/RADIO_TX Debug/Obj/ble_srv_common.o
+ .debug_frame   0x0000000000008368      0xa20 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ .debug_frame   0x0000000000008d88      0x8e0 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+ .debug_frame   0x0000000000009668      0xc08 Output/RADIO_TX Debug/Obj/id_manager.o
+ .debug_frame   0x000000000000a270      0x714 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+ .debug_frame   0x000000000000a984      0xb5c Output/RADIO_TX Debug/Obj/peer_data_storage.o
+ .debug_frame   0x000000000000b4e0      0xbe8 Output/RADIO_TX Debug/Obj/peer_database.o
+ .debug_frame   0x000000000000c0c8      0x97c Output/RADIO_TX Debug/Obj/peer_id.o
+ .debug_frame   0x000000000000ca44      0xe1c Output/RADIO_TX Debug/Obj/peer_manager.o
+ .debug_frame   0x000000000000d860       0xb0 Output/RADIO_TX Debug/Obj/pm_buffer.o
+ .debug_frame   0x000000000000d910      0x398 Output/RADIO_TX Debug/Obj/pm_mutex.o
+ .debug_frame   0x000000000000dca8      0xc54 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ .debug_frame   0x000000000000e8fc      0xb28 Output/RADIO_TX Debug/Obj/security_manager.o
+ .debug_frame   0x000000000000f424       0xec Output/RADIO_TX Debug/Obj/system_nrf52.o
+ .debug_frame   0x000000000000f510      0x674 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+ .debug_frame   0x000000000000fb84      0x5c8 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+ .debug_frame   0x000000000001014c      0x300 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
 
 .debug_pubnames
-                0x0000000000000000    0x2d248
+                0x0000000000000000    0x2d26a
  .debug_pubnames
                 0x0000000000000000      0xe52 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
  .debug_pubnames
@@ -15962,47 +15970,47 @@ OUTPUT(Output/Debug/Exe/RADIO_TX.elf elf32-littlearm)
  .debug_pubnames
                 0x000000000000e875     0x16d4 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
  .debug_pubnames
-                0x000000000000ff49       0x3f Output/RADIO_TX Debug/Obj/main.o
+                0x000000000000ff49       0x61 Output/RADIO_TX Debug/Obj/main.o
  .debug_pubnames
-                0x000000000000ff88       0x60 Output/RADIO_TX Debug/Obj/functions.o
+                0x000000000000ffaa       0x60 Output/RADIO_TX Debug/Obj/functions.o
  .debug_pubnames
-                0x000000000000ffe8     0x1766 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+                0x000000000001000a     0x1766 Output/RADIO_TX Debug/Obj/ble_conn_params.o
  .debug_pubnames
-                0x000000000001174e     0x1a3b Output/RADIO_TX Debug/Obj/ble_conn_state.o
+                0x0000000000011770     0x1a3b Output/RADIO_TX Debug/Obj/ble_conn_state.o
  .debug_pubnames
-                0x0000000000013189     0x127b Output/RADIO_TX Debug/Obj/ble_srv_common.o
+                0x00000000000131ab     0x127b Output/RADIO_TX Debug/Obj/ble_srv_common.o
  .debug_pubnames
-                0x0000000000014404     0x254a Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+                0x0000000000014426     0x254a Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
  .debug_pubnames
-                0x000000000001694e     0x1cad Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+                0x0000000000016970     0x1cad Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
  .debug_pubnames
-                0x00000000000185fb     0x26cd Output/RADIO_TX Debug/Obj/id_manager.o
+                0x000000000001861d     0x26cd Output/RADIO_TX Debug/Obj/id_manager.o
  .debug_pubnames
-                0x000000000001acc8     0x18fc Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+                0x000000000001acea     0x18fc Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
  .debug_pubnames
-                0x000000000001c5c4     0x22ea Output/RADIO_TX Debug/Obj/peer_data_storage.o
+                0x000000000001c5e6     0x22ea Output/RADIO_TX Debug/Obj/peer_data_storage.o
  .debug_pubnames
-                0x000000000001e8ae     0x21b4 Output/RADIO_TX Debug/Obj/peer_database.o
+                0x000000000001e8d0     0x21b4 Output/RADIO_TX Debug/Obj/peer_database.o
  .debug_pubnames
-                0x0000000000020a62     0x1b08 Output/RADIO_TX Debug/Obj/peer_id.o
+                0x0000000000020a84     0x1b08 Output/RADIO_TX Debug/Obj/peer_id.o
  .debug_pubnames
-                0x000000000002256a     0x2758 Output/RADIO_TX Debug/Obj/peer_manager.o
+                0x000000000002258c     0x2758 Output/RADIO_TX Debug/Obj/peer_manager.o
  .debug_pubnames
-                0x0000000000024cc2       0x6d Output/RADIO_TX Debug/Obj/pm_buffer.o
+                0x0000000000024ce4       0x6d Output/RADIO_TX Debug/Obj/pm_buffer.o
  .debug_pubnames
-                0x0000000000024d2f      0x94d Output/RADIO_TX Debug/Obj/pm_mutex.o
+                0x0000000000024d51      0x94d Output/RADIO_TX Debug/Obj/pm_mutex.o
  .debug_pubnames
-                0x000000000002567c     0x2738 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+                0x000000000002569e     0x2738 Output/RADIO_TX Debug/Obj/security_dispatcher.o
  .debug_pubnames
-                0x0000000000027db4     0x23bd Output/RADIO_TX Debug/Obj/security_manager.o
+                0x0000000000027dd6     0x23bd Output/RADIO_TX Debug/Obj/security_manager.o
  .debug_pubnames
-                0x000000000002a171      0x110 Output/RADIO_TX Debug/Obj/system_nrf52.o
+                0x000000000002a193      0x110 Output/RADIO_TX Debug/Obj/system_nrf52.o
  .debug_pubnames
-                0x000000000002a281     0x1265 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+                0x000000000002a2a3     0x1265 Output/RADIO_TX Debug/Obj/nrf_sdh.o
  .debug_pubnames
-                0x000000000002b4e6     0x13b6 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+                0x000000000002b508     0x13b6 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
  .debug_pubnames
-                0x000000000002c89c      0x9ac Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+                0x000000000002c8be      0x9ac Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
 
 .debug_pubtypes
                 0x0000000000000000    0x1652b
@@ -16093,7 +16101,7 @@ OUTPUT(Output/Debug/Exe/RADIO_TX.elf elf32-littlearm)
  .debug_pubtypes
                 0x000000000001611c      0x40f Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
 
-.debug_macro    0x0000000000000000     0x72d1
+.debug_macro    0x0000000000000000     0x72da
  .debug_macro   0x0000000000000000      0x261 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
  .debug_macro   0x0000000000000261       0x31 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
  .debug_macro   0x0000000000000292       0x10 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
@@ -16167,45 +16175,45 @@ OUTPUT(Output/Debug/Exe/RADIO_TX.elf elf32-littlearm)
  .debug_macro   0x00000000000042e6       0xf3 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
  .debug_macro   0x00000000000043d9       0x3c Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
  .debug_macro   0x0000000000004415       0x1c Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
- .debug_macro   0x0000000000004431       0xf6 Output/RADIO_TX Debug/Obj/main.o
- .debug_macro   0x0000000000004527       0x16 Output/RADIO_TX Debug/Obj/main.o
- .debug_macro   0x000000000000453d       0xc0 Output/RADIO_TX Debug/Obj/functions.o
- .debug_macro   0x00000000000045fd      0x268 Output/RADIO_TX Debug/Obj/ble_conn_params.o
- .debug_macro   0x0000000000004865       0xb2 Output/RADIO_TX Debug/Obj/ble_conn_params.o
- .debug_macro   0x0000000000004917       0x1c Output/RADIO_TX Debug/Obj/ble_conn_params.o
- .debug_macro   0x0000000000004933       0x10 Output/RADIO_TX Debug/Obj/ble_conn_params.o
- .debug_macro   0x0000000000004943      0x215 Output/RADIO_TX Debug/Obj/ble_conn_state.o
- .debug_macro   0x0000000000004b58      0x1b8 Output/RADIO_TX Debug/Obj/ble_srv_common.o
- .debug_macro   0x0000000000004d10      0x286 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- .debug_macro   0x0000000000004f96       0x82 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- .debug_macro   0x0000000000005018       0x42 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- .debug_macro   0x000000000000505a       0x10 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- .debug_macro   0x000000000000506a       0x10 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
- .debug_macro   0x000000000000507a      0x267 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
- .debug_macro   0x00000000000052e1      0x28a Output/RADIO_TX Debug/Obj/id_manager.o
- .debug_macro   0x000000000000556b       0x40 Output/RADIO_TX Debug/Obj/id_manager.o
- .debug_macro   0x00000000000055ab      0x1f3 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
- .debug_macro   0x000000000000579e       0x10 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
- .debug_macro   0x00000000000057ae      0x268 Output/RADIO_TX Debug/Obj/peer_data_storage.o
- .debug_macro   0x0000000000005a16       0x3a Output/RADIO_TX Debug/Obj/peer_data_storage.o
- .debug_macro   0x0000000000005a50       0x16 Output/RADIO_TX Debug/Obj/peer_data_storage.o
- .debug_macro   0x0000000000005a66      0x277 Output/RADIO_TX Debug/Obj/peer_database.o
- .debug_macro   0x0000000000005cdd       0x3c Output/RADIO_TX Debug/Obj/peer_database.o
- .debug_macro   0x0000000000005d19       0x10 Output/RADIO_TX Debug/Obj/peer_database.o
- .debug_macro   0x0000000000005d29      0x23e Output/RADIO_TX Debug/Obj/peer_id.o
- .debug_macro   0x0000000000005f67      0x2e6 Output/RADIO_TX Debug/Obj/peer_manager.o
- .debug_macro   0x000000000000624d      0x13e Output/RADIO_TX Debug/Obj/pm_buffer.o
- .debug_macro   0x000000000000638b      0x199 Output/RADIO_TX Debug/Obj/pm_mutex.o
- .debug_macro   0x0000000000006524      0x27a Output/RADIO_TX Debug/Obj/security_dispatcher.o
- .debug_macro   0x000000000000679e      0x284 Output/RADIO_TX Debug/Obj/security_manager.o
- .debug_macro   0x0000000000006a22       0xac Output/RADIO_TX Debug/Obj/system_nrf52.o
- .debug_macro   0x0000000000006ace      0x231 Output/RADIO_TX Debug/Obj/nrf_sdh.o
- .debug_macro   0x0000000000006cff      0x15b Output/RADIO_TX Debug/Obj/nrf_sdh.o
- .debug_macro   0x0000000000006e5a      0x259 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
- .debug_macro   0x00000000000070b3      0x208 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
- .debug_macro   0x00000000000072bb       0x16 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+ .debug_macro   0x0000000000004431       0xff Output/RADIO_TX Debug/Obj/main.o
+ .debug_macro   0x0000000000004530       0x16 Output/RADIO_TX Debug/Obj/main.o
+ .debug_macro   0x0000000000004546       0xc0 Output/RADIO_TX Debug/Obj/functions.o
+ .debug_macro   0x0000000000004606      0x268 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+ .debug_macro   0x000000000000486e       0xb2 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+ .debug_macro   0x0000000000004920       0x1c Output/RADIO_TX Debug/Obj/ble_conn_params.o
+ .debug_macro   0x000000000000493c       0x10 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+ .debug_macro   0x000000000000494c      0x215 Output/RADIO_TX Debug/Obj/ble_conn_state.o
+ .debug_macro   0x0000000000004b61      0x1b8 Output/RADIO_TX Debug/Obj/ble_srv_common.o
+ .debug_macro   0x0000000000004d19      0x286 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ .debug_macro   0x0000000000004f9f       0x82 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ .debug_macro   0x0000000000005021       0x42 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ .debug_macro   0x0000000000005063       0x10 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ .debug_macro   0x0000000000005073       0x10 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ .debug_macro   0x0000000000005083      0x267 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+ .debug_macro   0x00000000000052ea      0x28a Output/RADIO_TX Debug/Obj/id_manager.o
+ .debug_macro   0x0000000000005574       0x40 Output/RADIO_TX Debug/Obj/id_manager.o
+ .debug_macro   0x00000000000055b4      0x1f3 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+ .debug_macro   0x00000000000057a7       0x10 Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+ .debug_macro   0x00000000000057b7      0x268 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+ .debug_macro   0x0000000000005a1f       0x3a Output/RADIO_TX Debug/Obj/peer_data_storage.o
+ .debug_macro   0x0000000000005a59       0x16 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+ .debug_macro   0x0000000000005a6f      0x277 Output/RADIO_TX Debug/Obj/peer_database.o
+ .debug_macro   0x0000000000005ce6       0x3c Output/RADIO_TX Debug/Obj/peer_database.o
+ .debug_macro   0x0000000000005d22       0x10 Output/RADIO_TX Debug/Obj/peer_database.o
+ .debug_macro   0x0000000000005d32      0x23e Output/RADIO_TX Debug/Obj/peer_id.o
+ .debug_macro   0x0000000000005f70      0x2e6 Output/RADIO_TX Debug/Obj/peer_manager.o
+ .debug_macro   0x0000000000006256      0x13e Output/RADIO_TX Debug/Obj/pm_buffer.o
+ .debug_macro   0x0000000000006394      0x199 Output/RADIO_TX Debug/Obj/pm_mutex.o
+ .debug_macro   0x000000000000652d      0x27a Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ .debug_macro   0x00000000000067a7      0x284 Output/RADIO_TX Debug/Obj/security_manager.o
+ .debug_macro   0x0000000000006a2b       0xac Output/RADIO_TX Debug/Obj/system_nrf52.o
+ .debug_macro   0x0000000000006ad7      0x231 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+ .debug_macro   0x0000000000006d08      0x15b Output/RADIO_TX Debug/Obj/nrf_sdh.o
+ .debug_macro   0x0000000000006e63      0x259 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+ .debug_macro   0x00000000000070bc      0x208 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+ .debug_macro   0x00000000000072c4       0x16 Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
 
-.debug_str      0x0000000000000000    0x83b7b
+.debug_str      0x0000000000000000    0x83b98
  .debug_str     0x0000000000000000    0x69249 Output/RADIO_TX Debug/Obj/nrf_log_frontend.o
                                       0x69fe4 (size before relaxing)
  .debug_str     0x0000000000069249      0x114 Output/RADIO_TX Debug/Obj/app_error.o
@@ -16250,45 +16258,45 @@ OUTPUT(Output/Debug/Exe/RADIO_TX.elf elf32-littlearm)
                                       0x674d3 (size before relaxing)
  .debug_str     0x0000000000075427     0x7771 Output/RADIO_TX Debug/Obj/bsp_btn_ble.o
                                       0x6e66f (size before relaxing)
- .debug_str     0x000000000007cb98      0x276 Output/RADIO_TX Debug/Obj/main.o
-                                      0x5bd6f (size before relaxing)
- .debug_str     0x000000000007ce0e       0x79 Output/RADIO_TX Debug/Obj/functions.o
+ .debug_str     0x000000000007cb98      0x293 Output/RADIO_TX Debug/Obj/main.o
+                                      0x5bded (size before relaxing)
+ .debug_str     0x000000000007ce2b       0x79 Output/RADIO_TX Debug/Obj/functions.o
                                       0x5b21a (size before relaxing)
- .debug_str     0x000000000007ce87     0x1d04 Output/RADIO_TX Debug/Obj/ble_conn_params.o
+ .debug_str     0x000000000007cea4     0x1d04 Output/RADIO_TX Debug/Obj/ble_conn_params.o
                                       0x6e7c8 (size before relaxing)
- .debug_str     0x000000000007eb8b      0x72e Output/RADIO_TX Debug/Obj/ble_conn_state.o
+ .debug_str     0x000000000007eba8      0x72e Output/RADIO_TX Debug/Obj/ble_conn_state.o
                                       0x6cc66 (size before relaxing)
- .debug_str     0x000000000007f2b9      0x2ff Output/RADIO_TX Debug/Obj/ble_srv_common.o
+ .debug_str     0x000000000007f2d6      0x2ff Output/RADIO_TX Debug/Obj/ble_srv_common.o
                                       0x6c352 (size before relaxing)
- .debug_str     0x000000000007f5b8     0x1184 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
+ .debug_str     0x000000000007f5d5     0x1184 Output/RADIO_TX Debug/Obj/gatt_cache_manager.o
                                       0x6eda7 (size before relaxing)
- .debug_str     0x000000000008073c      0x274 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
+ .debug_str     0x0000000000080759      0x274 Output/RADIO_TX Debug/Obj/gatts_cache_manager.o
                                       0x6dc6a (size before relaxing)
- .debug_str     0x00000000000809b0      0x67a Output/RADIO_TX Debug/Obj/id_manager.o
+ .debug_str     0x00000000000809cd      0x67a Output/RADIO_TX Debug/Obj/id_manager.o
                                       0x6f1e8 (size before relaxing)
- .debug_str     0x000000000008102a      0x66d Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
+ .debug_str     0x0000000000081047      0x66d Output/RADIO_TX Debug/Obj/nrf_ble_gatt.o
                                       0x6e13b (size before relaxing)
- .debug_str     0x0000000000081697      0x454 Output/RADIO_TX Debug/Obj/peer_data_storage.o
+ .debug_str     0x00000000000816b4      0x454 Output/RADIO_TX Debug/Obj/peer_data_storage.o
                                       0x6e2aa (size before relaxing)
- .debug_str     0x0000000000081aeb      0x64a Output/RADIO_TX Debug/Obj/peer_database.o
+ .debug_str     0x0000000000081b08      0x64a Output/RADIO_TX Debug/Obj/peer_database.o
                                       0x6e30f (size before relaxing)
- .debug_str     0x0000000000082135      0x123 Output/RADIO_TX Debug/Obj/peer_id.o
+ .debug_str     0x0000000000082152      0x123 Output/RADIO_TX Debug/Obj/peer_id.o
                                       0x6d0a4 (size before relaxing)
- .debug_str     0x0000000000082258      0x57a Output/RADIO_TX Debug/Obj/peer_manager.o
+ .debug_str     0x0000000000082275      0x57a Output/RADIO_TX Debug/Obj/peer_manager.o
                                       0x6f9dc (size before relaxing)
- .debug_str     0x00000000000827d2      0x149 Output/RADIO_TX Debug/Obj/pm_buffer.o
+ .debug_str     0x00000000000827ef      0x149 Output/RADIO_TX Debug/Obj/pm_buffer.o
                                       0x64a55 (size before relaxing)
- .debug_str     0x000000000008291b       0xe2 Output/RADIO_TX Debug/Obj/pm_mutex.o
+ .debug_str     0x0000000000082938       0xe2 Output/RADIO_TX Debug/Obj/pm_mutex.o
                                       0x662ac (size before relaxing)
- .debug_str     0x00000000000829fd      0x358 Output/RADIO_TX Debug/Obj/security_dispatcher.o
+ .debug_str     0x0000000000082a1a      0x358 Output/RADIO_TX Debug/Obj/security_dispatcher.o
                                       0x6ef3e (size before relaxing)
- .debug_str     0x0000000000082d55      0x3c7 Output/RADIO_TX Debug/Obj/security_manager.o
+ .debug_str     0x0000000000082d72      0x3c7 Output/RADIO_TX Debug/Obj/security_manager.o
                                       0x6ec4a (size before relaxing)
- .debug_str     0x000000000008311c      0x159 Output/RADIO_TX Debug/Obj/system_nrf52.o
+ .debug_str     0x0000000000083139      0x159 Output/RADIO_TX Debug/Obj/system_nrf52.o
                                       0x5b376 (size before relaxing)
- .debug_str     0x0000000000083275      0x401 Output/RADIO_TX Debug/Obj/nrf_sdh.o
+ .debug_str     0x0000000000083292      0x401 Output/RADIO_TX Debug/Obj/nrf_sdh.o
                                       0x69a1e (size before relaxing)
- .debug_str     0x0000000000083676      0x386 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
+ .debug_str     0x0000000000083693      0x386 Output/RADIO_TX Debug/Obj/nrf_sdh_ble.o
                                       0x6e9a6 (size before relaxing)
- .debug_str     0x00000000000839fc      0x17f Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
+ .debug_str     0x0000000000083a19      0x17f Output/RADIO_TX Debug/Obj/nrf_sdh_soc.o
                                       0x68685 (size before relaxing)
