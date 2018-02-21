@@ -1,10 +1,10 @@
 Output/RADIO_RX\ Debug/Obj/main.o: \
- D:\Workspace\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\main.c \
+ E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\main.c \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/string.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/__crossworks.h \
- D:\Workspace\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\functions.h \
+ E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\functions.h \
  ../../../../../../components/device/nrf.h \
  ../../../../../../components/device/nrf52.h \
  ../../../../../../components/toolchain/cmsis/include/core_cm4.h \
@@ -18,7 +18,7 @@ Output/RADIO_RX\ Debug/Obj/main.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/device/nrf52_bitfields.h \
- D:\Workspace\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\variables.h \
- D:\Workspace\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\board.h \
- D:\Workspace\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\interrupts.h \
+ E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\variables.h \
+ E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\board.h \
+ E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\interrupts.h \
  ../../../../../../components/libraries/util/nordic_common.h

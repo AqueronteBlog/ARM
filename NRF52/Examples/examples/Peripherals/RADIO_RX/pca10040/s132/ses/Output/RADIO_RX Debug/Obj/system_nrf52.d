@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/system_nrf52.o: \
- D:\Workspace\ARM\NRF52\Examples\components\toolchain\system_nrf52.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\toolchain\system_nrf52.c \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
  ../../../../../../components/device/nrf.h \
@@ -14,4 +14,4 @@ Output/RADIO_RX\ Debug/Obj/system_nrf52.o: \
  ../../../../../../components/device/nrf51_to_nrf52.h \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
- D:\Workspace\ARM\NRF52\Examples\components\toolchain\system_nrf52.h
+ E:\vsProjects\ARM\NRF52\Examples\components\toolchain\system_nrf52.h

@@ -1,6 +1,6 @@
 Output/RADIO_RX\ Debug/Obj/ble_conn_state.o: \
- D:\Workspace\ARM\NRF52\Examples\components\ble\common\ble_conn_state.c \
- D:\Workspace\ARM\NRF52\Examples\components\ble\common\ble_conn_state.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\common\ble_conn_state.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\common\ble_conn_state.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \

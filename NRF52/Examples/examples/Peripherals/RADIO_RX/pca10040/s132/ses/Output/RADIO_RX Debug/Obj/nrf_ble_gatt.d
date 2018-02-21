@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_ble_gatt.o: \
- D:\Workspace\ARM\NRF52\Examples\components\ble\nrf_ble_gatt\nrf_ble_gatt.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\nrf_ble_gatt\nrf_ble_gatt.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,7 +26,7 @@ Output/RADIO_RX\ Debug/Obj/nrf_ble_gatt.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\ble\nrf_ble_gatt\nrf_ble_gatt.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\nrf_ble_gatt\nrf_ble_gatt.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \
  ../../../../../../components/softdevice/s132/headers/ble_ranges.h \
  ../../../../../../components/softdevice/s132/headers/ble_types.h \

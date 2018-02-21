@@ -1,7 +1,7 @@
 Output/RADIO_RX\ Debug/Obj/SEGGER_RTT_printf.o: \
- D:\Workspace\ARM\NRF52\Examples\external\segger_rtt\SEGGER_RTT_printf.c \
- D:\Workspace\ARM\NRF52\Examples\external\segger_rtt\SEGGER_RTT.h \
- D:\Workspace\ARM\NRF52\Examples\external\segger_rtt\SEGGER_RTT_Conf.h \
+ E:\vsProjects\ARM\NRF52\Examples\external\segger_rtt\SEGGER_RTT_printf.c \
+ E:\vsProjects\ARM\NRF52\Examples\external\segger_rtt\SEGGER_RTT.h \
+ E:\vsProjects\ARM\NRF52\Examples\external\segger_rtt\SEGGER_RTT_Conf.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/libraries/util/app_util_platform.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \

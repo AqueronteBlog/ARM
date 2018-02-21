@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_fstorage_sd.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\fstorage\nrf_fstorage_sd.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\fstorage\nrf_fstorage_sd.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,8 +26,8 @@ Output/RADIO_RX\ Debug/Obj/nrf_fstorage_sd.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\fstorage\nrf_fstorage_sd.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\fstorage\nrf_fstorage.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\fstorage\nrf_fstorage_sd.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\fstorage\nrf_fstorage.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/libraries/experimental_section_vars/nrf_section.h \
  ../../../../../../components/libraries/util/nordic_common.h \

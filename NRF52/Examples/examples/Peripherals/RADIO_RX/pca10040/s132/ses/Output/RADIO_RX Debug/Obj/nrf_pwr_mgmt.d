@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_pwr_mgmt.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\pwr_mgmt\nrf_pwr_mgmt.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\pwr_mgmt\nrf_pwr_mgmt.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,7 +26,7 @@ Output/RADIO_RX\ Debug/Obj/nrf_pwr_mgmt.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\pwr_mgmt\nrf_pwr_mgmt.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\pwr_mgmt\nrf_pwr_mgmt.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/libraries/experimental_section_vars/nrf_section_iter.h \
  ../../../../../../components/libraries/experimental_section_vars/nrf_section.h \

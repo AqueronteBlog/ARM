@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_balloc.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\balloc\nrf_balloc.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\balloc\nrf_balloc.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,7 +26,7 @@ Output/RADIO_RX\ Debug/Obj/nrf_balloc.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\balloc\nrf_balloc.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\balloc\nrf_balloc.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/libraries/util/app_util_platform.h \
  ../../../../../../components/softdevice/s132/headers/nrf_soc.h \

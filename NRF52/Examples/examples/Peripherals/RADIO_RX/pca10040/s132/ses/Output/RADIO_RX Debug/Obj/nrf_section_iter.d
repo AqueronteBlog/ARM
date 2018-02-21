@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_section_iter.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_section_vars\nrf_section_iter.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_section_vars\nrf_section_iter.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,8 +26,8 @@ Output/RADIO_RX\ Debug/Obj/nrf_section_iter.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_section_vars\nrf_section_iter.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_section_vars\nrf_section.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_section_vars\nrf_section_iter.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_section_vars\nrf_section.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
  ../../../../../../components/libraries/util/app_error.h \

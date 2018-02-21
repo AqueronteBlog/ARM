@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_drv_clock.o: \
- D:\Workspace\ARM\NRF52\Examples\components\drivers_nrf\clock\nrf_drv_clock.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\drivers_nrf\clock\nrf_drv_clock.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,7 +26,7 @@ Output/RADIO_RX\ Debug/Obj/nrf_drv_clock.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\drivers_nrf\clock\nrf_drv_clock.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\drivers_nrf\clock\nrf_drv_clock.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
  ../../../../../../components/libraries/util/app_error.h \

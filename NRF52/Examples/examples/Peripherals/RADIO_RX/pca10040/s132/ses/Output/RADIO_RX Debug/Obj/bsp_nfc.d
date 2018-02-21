@@ -1,11 +1,11 @@
 Output/RADIO_RX\ Debug/Obj/bsp_nfc.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\bsp\bsp_nfc.c \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\bsp\bsp_nfc.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\bsp\bsp_nfc.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\bsp\bsp_nfc.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../config/sdk_config.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\bsp\bsp.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\bsp\bsp.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
  ../../../../../../components/boards/boards.h \
  ../../../../../../components/drivers_nrf/hal/nrf_gpio.h \

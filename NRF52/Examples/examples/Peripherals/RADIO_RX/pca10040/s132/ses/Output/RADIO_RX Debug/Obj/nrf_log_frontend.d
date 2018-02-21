@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_log_frontend.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_frontend.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_frontend.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -43,7 +43,7 @@ Output/RADIO_RX\ Debug/Obj/nrf_log_frontend.o: \
  ../../../../../../components/libraries/strerror/nrf_strerror.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/libraries/experimental_log/src/nrf_log_internal.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_internal.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_internal.h \
  ../../../../../../components/libraries/experimental_log/nrf_log_ctrl.h \
  ../../../../../../components/libraries/experimental_log/src/nrf_log_ctrl_internal.h \
  ../../../../../../components/libraries/experimental_log/nrf_log_backend_interface.h \

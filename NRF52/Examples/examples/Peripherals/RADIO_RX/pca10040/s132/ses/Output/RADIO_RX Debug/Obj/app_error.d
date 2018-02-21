@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/app_error.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\app_error.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\app_error.c \
  ../../../../../../components/device/nrf.h \
  ../../../../../../components/device/nrf52.h \
  ../../../../../../components/toolchain/cmsis/include/core_cm4.h \
@@ -15,10 +15,10 @@ Output/RADIO_RX\ Debug/Obj/app_error.o: \
  ../../../../../../components/device/compiler_abstraction.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdio.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/__crossworks.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\app_error.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\app_error.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\sdk_errors.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../config/sdk_config.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\nordic_common.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\app_error_weak.h
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\nordic_common.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\app_error_weak.h

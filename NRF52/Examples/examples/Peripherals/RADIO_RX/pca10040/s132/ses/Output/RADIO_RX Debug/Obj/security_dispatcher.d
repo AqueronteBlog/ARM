@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/security_dispatcher.o: \
- D:\Workspace\ARM\NRF52\Examples\components\ble\peer_manager\security_dispatcher.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\peer_manager\security_dispatcher.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,7 +26,7 @@ Output/RADIO_RX\ Debug/Obj/security_dispatcher.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\ble\peer_manager\security_dispatcher.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\peer_manager\security_dispatcher.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \
  ../../../../../../components/softdevice/s132/headers/ble_ranges.h \
@@ -40,7 +40,7 @@ Output/RADIO_RX\ Debug/Obj/security_dispatcher.o: \
  ../../../../../../components/softdevice/s132/headers/ble_gattc.h \
  ../../../../../../components/softdevice/s132/headers/ble_gatts.h \
  ../../../../../../components/softdevice/s132/headers/ble_gap.h \
- D:\Workspace\ARM\NRF52\Examples\components\ble\peer_manager\peer_manager_types.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\peer_manager\peer_manager_types.h \
  ../../../../../../components/softdevice/s132/headers/ble_hci.h \
  ../../../../../../components/ble/common/ble_gatt_db.h \
  ../../../../../../components/softdevice/s132/headers/ble_gattc.h \
@@ -56,6 +56,6 @@ Output/RADIO_RX\ Debug/Obj/security_dispatcher.o: \
  ../../../../../../components/softdevice/s132/headers/ble_err.h \
  ../../../../../../components/ble/common/ble_conn_state.h \
  ../../../../../../components/libraries/util/sdk_mapped_flags.h \
- D:\Workspace\ARM\NRF52\Examples\components\ble\peer_manager\peer_database.h \
- D:\Workspace\ARM\NRF52\Examples\components\ble\peer_manager\peer_manager_internal.h \
- D:\Workspace\ARM\NRF52\Examples\components\ble\peer_manager\id_manager.h
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\peer_manager\peer_database.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\peer_manager\peer_manager_internal.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\peer_manager\id_manager.h

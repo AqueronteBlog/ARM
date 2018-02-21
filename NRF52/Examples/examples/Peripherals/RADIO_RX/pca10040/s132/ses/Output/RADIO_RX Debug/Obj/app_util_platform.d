@@ -1,6 +1,6 @@
 Output/RADIO_RX\ Debug/Obj/app_util_platform.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\app_util_platform.c \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\app_util_platform.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\app_util_platform.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\app_util_platform.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/device/nrf.h \
@@ -21,12 +21,12 @@ Output/RADIO_RX\ Debug/Obj/app_util_platform.o: \
  ../../../../../../components/softdevice/s132/headers/nrf_error_soc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\nrf_assert.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\app_error.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\nrf_assert.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\app_error.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdio.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/__crossworks.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\sdk_errors.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../config/sdk_config.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\nordic_common.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\app_error_weak.h
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\nordic_common.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\app_error_weak.h

@@ -1,6 +1,6 @@
 Output/RADIO_RX\ Debug/Obj/ble_srv_common.o: \
- D:\Workspace\ARM\NRF52\Examples\components\ble\common\ble_srv_common.c \
- D:\Workspace\ARM\NRF52\Examples\components\ble\common\ble_srv_common.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\common\ble_srv_common.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\common\ble_srv_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
  ../../../../../../components/softdevice/s132/headers/ble_types.h \

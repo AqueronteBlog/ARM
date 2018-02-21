@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_atfifo.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\atomic_fifo\nrf_atfifo.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\atomic_fifo\nrf_atfifo.c \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/string.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/__crossworks.h \
  ../../../../../../components/libraries/util/app_util.h \
@@ -20,7 +20,7 @@ Output/RADIO_RX\ Debug/Obj/nrf_atfifo.o: \
  ../../../../../../components/device/nrf51_to_nrf52.h \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\atomic_fifo\nrf_atfifo.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\atomic_fifo\nrf_atfifo.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
  ../../../../../../components/libraries/util/app_error.h \
@@ -29,4 +29,4 @@ Output/RADIO_RX\ Debug/Obj/nrf_atfifo.o: \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../config/sdk_config.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\atomic_fifo\nrf_atfifo_internal.h
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\atomic_fifo\nrf_atfifo_internal.h

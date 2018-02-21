@@ -1,7 +1,7 @@
 Output/RADIO_RX\ Debug/Obj/nrf_fstorage.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\fstorage\nrf_fstorage.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\fstorage\nrf_fstorage.c \
  ../config/sdk_config.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\fstorage\nrf_fstorage.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\fstorage\nrf_fstorage.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
  ../../../../../../components/libraries/util/sdk_errors.h \

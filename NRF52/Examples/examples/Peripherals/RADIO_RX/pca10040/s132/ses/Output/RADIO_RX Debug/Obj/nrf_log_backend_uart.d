@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_log_backend_uart.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_backend_uart.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_backend_uart.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -43,10 +43,10 @@ Output/RADIO_RX\ Debug/Obj/nrf_log_backend_uart.o: \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdio.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
  ../../../../../../components/libraries/util/app_util.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_backend_serial.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_backend_serial.h \
  ../../../../../../components/libraries/experimental_log/nrf_log_backend_interface.h \
  ../../../../../../external/fprintf/nrf_fprintf.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_internal.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_internal.h \
  ../../../../../../components/drivers_nrf/uart/nrf_drv_uart.h \
  ../../../../../../components/drivers_nrf/hal/nrf_peripherals.h \
  ../../../../../../components/device/nrf52832_peripherals.h \

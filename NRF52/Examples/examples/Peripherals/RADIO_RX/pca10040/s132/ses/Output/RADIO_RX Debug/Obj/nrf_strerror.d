@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_strerror.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\strerror\nrf_strerror.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\strerror\nrf_strerror.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,5 +26,5 @@ Output/RADIO_RX\ Debug/Obj/nrf_strerror.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\strerror\nrf_strerror.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\strerror\nrf_strerror.h \
  ../../../../../../components/libraries/util/sdk_errors.h

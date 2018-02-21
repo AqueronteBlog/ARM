@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_sdh_ble.o: \
- D:\Workspace\ARM\NRF52\Examples\components\softdevice\common\nrf_sdh_ble.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\softdevice\common\nrf_sdh_ble.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,7 +26,7 @@ Output/RADIO_RX\ Debug/Obj/nrf_sdh_ble.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\softdevice\common\nrf_sdh_ble.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\softdevice\common\nrf_sdh_ble.h \
  ../../../../../../components/libraries/util/app_util.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \
  ../../../../../../components/softdevice/s132/headers/ble_ranges.h \
@@ -47,7 +47,7 @@ Output/RADIO_RX\ Debug/Obj/nrf_sdh_ble.o: \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdio.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
- D:\Workspace\ARM\NRF52\Examples\components\softdevice\common\nrf_sdh.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\softdevice\common\nrf_sdh.h \
  ../../../../../../components/libraries/util/app_error.h \
  ../../../../../../components/libraries/strerror/nrf_strerror.h \
  ../../../../../../components/libraries/experimental_log/nrf_log.h \

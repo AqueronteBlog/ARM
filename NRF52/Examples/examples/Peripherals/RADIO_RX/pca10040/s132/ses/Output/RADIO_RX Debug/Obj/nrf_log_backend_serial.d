@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_log_backend_serial.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_backend_serial.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_backend_serial.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,7 +26,7 @@ Output/RADIO_RX\ Debug/Obj/nrf_log_backend_serial.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_backend_serial.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_backend_serial.h \
  ../../../../../../components/libraries/experimental_log/nrf_log_backend_interface.h \
  ../../../../../../components/libraries/experimental_memobj/nrf_memobj.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdlib.h \
@@ -48,4 +48,4 @@ Output/RADIO_RX\ Debug/Obj/nrf_log_backend_serial.o: \
  ../../../../../../components/libraries/experimental_log/nrf_log_ctrl.h \
  ../../../../../../components/libraries/experimental_log/src/nrf_log_ctrl_internal.h \
  ../../../../../../components/libraries/experimental_log/nrf_log_backend_interface.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_internal.h
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_log\src\nrf_log_internal.h

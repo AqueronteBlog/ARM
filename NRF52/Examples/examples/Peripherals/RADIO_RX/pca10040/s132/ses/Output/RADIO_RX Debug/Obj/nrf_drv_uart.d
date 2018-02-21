@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_drv_uart.o: \
- D:\Workspace\ARM\NRF52\Examples\components\drivers_nrf\uart\nrf_drv_uart.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\drivers_nrf\uart\nrf_drv_uart.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,7 +26,7 @@ Output/RADIO_RX\ Debug/Obj/nrf_drv_uart.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\drivers_nrf\uart\nrf_drv_uart.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\drivers_nrf\uart\nrf_drv_uart.h \
  ../../../../../../components/drivers_nrf/hal/nrf_peripherals.h \
  ../../../../../../components/device/nrf52832_peripherals.h \
  ../../../../../../components/drivers_nrf/hal/nrf_uart.h \

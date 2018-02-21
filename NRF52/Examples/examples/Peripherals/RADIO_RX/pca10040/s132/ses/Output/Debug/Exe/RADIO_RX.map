@@ -311,8 +311,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x22 Output/RADIO_RX Debug/Obj/nrf_log_backend_serial.o
  .debug_macro   0x0000000000000000       0x1c Output/RADIO_RX Debug/Obj/nrf_log_backend_serial.o
  .debug_macro   0x0000000000000000      0x16d Output/RADIO_RX Debug/Obj/nrf_log_backend_serial.o
- .debug_line    0x0000000000000000      0x8b9 Output/RADIO_RX Debug/Obj/nrf_log_backend_serial.o
- .debug_str     0x0000000000000000    0x68a35 Output/RADIO_RX Debug/Obj/nrf_log_backend_serial.o
+ .debug_line    0x0000000000000000      0x8ba Output/RADIO_RX Debug/Obj/nrf_log_backend_serial.o
+ .debug_str     0x0000000000000000    0x68a37 Output/RADIO_RX Debug/Obj/nrf_log_backend_serial.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/nrf_log_backend_serial.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/nrf_log_backend_serial.o
@@ -518,8 +518,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 Output/RADIO_RX Debug/Obj/nrf_log_backend_uart.o
  .debug_macro   0x0000000000000000       0x10 Output/RADIO_RX Debug/Obj/nrf_log_backend_uart.o
  .debug_macro   0x0000000000000000       0x43 Output/RADIO_RX Debug/Obj/nrf_log_backend_uart.o
- .debug_line    0x0000000000000000      0x985 Output/RADIO_RX Debug/Obj/nrf_log_backend_uart.o
- .debug_str     0x0000000000000000    0x69a95 Output/RADIO_RX Debug/Obj/nrf_log_backend_uart.o
+ .debug_line    0x0000000000000000      0x986 Output/RADIO_RX Debug/Obj/nrf_log_backend_uart.o
+ .debug_str     0x0000000000000000    0x69a97 Output/RADIO_RX Debug/Obj/nrf_log_backend_uart.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/nrf_log_backend_uart.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/nrf_log_backend_uart.o
@@ -652,7 +652,7 @@ Discarded input sections
                 0x0000000000000000       0x10 Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
  .data.uart_log_backend
                 0x0000000000000000        0xc Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
- .rodata        0x0000000000000000       0x65 Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
+ .rodata        0x0000000000000000       0x66 Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
  .text.nrf_log_default_backends_init
                 0x0000000000000000       0x3c Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
  .debug_frame   0x0000000000000000      0x2f8 Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
@@ -704,8 +704,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x1c Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
  .debug_macro   0x0000000000000000      0x16d Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
  .debug_macro   0x0000000000000000       0x10 Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
- .debug_line    0x0000000000000000      0x875 Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
- .debug_str     0x0000000000000000    0x68847 Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
+ .debug_line    0x0000000000000000      0x876 Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
+ .debug_str     0x0000000000000000    0x68849 Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/nrf_log_default_backends.o
@@ -1099,8 +1099,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 Output/RADIO_RX Debug/Obj/nrf_log_str_formatter.o
  .debug_macro   0x0000000000000000       0x1c Output/RADIO_RX Debug/Obj/nrf_log_str_formatter.o
  .debug_macro   0x0000000000000000      0x16d Output/RADIO_RX Debug/Obj/nrf_log_str_formatter.o
- .debug_line    0x0000000000000000      0x91c Output/RADIO_RX Debug/Obj/nrf_log_str_formatter.o
- .debug_str     0x0000000000000000    0x68a9a Output/RADIO_RX Debug/Obj/nrf_log_str_formatter.o
+ .debug_line    0x0000000000000000      0x91d Output/RADIO_RX Debug/Obj/nrf_log_str_formatter.o
+ .debug_str     0x0000000000000000    0x68a9c Output/RADIO_RX Debug/Obj/nrf_log_str_formatter.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/nrf_log_str_formatter.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/nrf_log_str_formatter.o
@@ -1160,7 +1160,7 @@ Discarded input sections
                 0x0000000000000000       0xa0 Output/RADIO_RX Debug/Obj/app_button.o
  .text.app_button_init
                 0x0000000000000000       0xe4 Output/RADIO_RX Debug/Obj/app_button.o
- .rodata        0x0000000000000000       0x49 Output/RADIO_RX Debug/Obj/app_button.o
+ .rodata        0x0000000000000000       0x4a Output/RADIO_RX Debug/Obj/app_button.o
  .text.app_button_enable
                 0x0000000000000000       0x58 Output/RADIO_RX Debug/Obj/app_button.o
  .text.app_button_disable
@@ -1211,8 +1211,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x28 Output/RADIO_RX Debug/Obj/app_button.o
  .debug_macro   0x0000000000000000       0x25 Output/RADIO_RX Debug/Obj/app_button.o
  .debug_macro   0x0000000000000000       0x30 Output/RADIO_RX Debug/Obj/app_button.o
- .debug_line    0x0000000000000000      0x57e Output/RADIO_RX Debug/Obj/app_button.o
- .debug_str     0x0000000000000000    0x66090 Output/RADIO_RX Debug/Obj/app_button.o
+ .debug_line    0x0000000000000000      0x57f Output/RADIO_RX Debug/Obj/app_button.o
+ .debug_str     0x0000000000000000    0x66092 Output/RADIO_RX Debug/Obj/app_button.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/app_button.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/app_button.o
@@ -1626,8 +1626,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x10 Output/RADIO_RX Debug/Obj/app_scheduler.o
  .debug_macro   0x0000000000000000       0x2e Output/RADIO_RX Debug/Obj/app_scheduler.o
  .debug_macro   0x0000000000000000       0x7e Output/RADIO_RX Debug/Obj/app_scheduler.o
- .debug_line    0x0000000000000000      0x815 Output/RADIO_RX Debug/Obj/app_scheduler.o
- .debug_str     0x0000000000000000    0x66608 Output/RADIO_RX Debug/Obj/app_scheduler.o
+ .debug_line    0x0000000000000000      0x816 Output/RADIO_RX Debug/Obj/app_scheduler.o
+ .debug_str     0x0000000000000000    0x6660a Output/RADIO_RX Debug/Obj/app_scheduler.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/app_scheduler.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/app_scheduler.o
@@ -2016,8 +2016,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x4a9 Output/RADIO_RX Debug/Obj/crc16.o
  .debug_macro   0x0000000000000000       0x4b Output/RADIO_RX Debug/Obj/crc16.o
  .debug_macro   0x0000000000000000       0x22 Output/RADIO_RX Debug/Obj/crc16.o
- .debug_line    0x0000000000000000      0x38a Output/RADIO_RX Debug/Obj/crc16.o
- .debug_str     0x0000000000000000    0x647bf Output/RADIO_RX Debug/Obj/crc16.o
+ .debug_line    0x0000000000000000      0x38b Output/RADIO_RX Debug/Obj/crc16.o
+ .debug_str     0x0000000000000000    0x647c1 Output/RADIO_RX Debug/Obj/crc16.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/crc16.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/crc16.o
@@ -2579,7 +2579,7 @@ Discarded input sections
  .text          0x0000000000000000        0x0 Output/RADIO_RX Debug/Obj/nrf_fprintf.o
  .data          0x0000000000000000        0x0 Output/RADIO_RX Debug/Obj/nrf_fprintf.o
  .bss           0x0000000000000000        0x0 Output/RADIO_RX Debug/Obj/nrf_fprintf.o
- .rodata        0x0000000000000000       0x3f Output/RADIO_RX Debug/Obj/nrf_fprintf.o
+ .rodata        0x0000000000000000       0x40 Output/RADIO_RX Debug/Obj/nrf_fprintf.o
  .text.nrf_fprintf_buffer_flush
                 0x0000000000000000       0x44 Output/RADIO_RX Debug/Obj/nrf_fprintf.o
  .text.nrf_fprintf
@@ -2623,8 +2623,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x2a Output/RADIO_RX Debug/Obj/nrf_fprintf.o
  .debug_macro   0x0000000000000000       0x10 Output/RADIO_RX Debug/Obj/nrf_fprintf.o
  .debug_macro   0x0000000000000000       0x10 Output/RADIO_RX Debug/Obj/nrf_fprintf.o
- .debug_line    0x0000000000000000      0x405 Output/RADIO_RX Debug/Obj/nrf_fprintf.o
- .debug_str     0x0000000000000000    0x64db8 Output/RADIO_RX Debug/Obj/nrf_fprintf.o
+ .debug_line    0x0000000000000000      0x406 Output/RADIO_RX Debug/Obj/nrf_fprintf.o
+ .debug_str     0x0000000000000000    0x64dba Output/RADIO_RX Debug/Obj/nrf_fprintf.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/nrf_fprintf.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/nrf_fprintf.o
@@ -2667,7 +2667,7 @@ Discarded input sections
                 0x0000000000000000      0x130 Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
  .text.int_print
                 0x0000000000000000      0x11c Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
- .rodata        0x0000000000000000       0x46 Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
+ .rodata        0x0000000000000000       0x47 Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
  .text.nrf_fprintf_fmt
                 0x0000000000000000      0x43c Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
  .rodata._aV2C.7446
@@ -2711,8 +2711,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x2a Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
  .debug_macro   0x0000000000000000       0x10 Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
  .debug_macro   0x0000000000000000       0x10 Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
- .debug_line    0x0000000000000000      0x580 Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
- .debug_str     0x0000000000000000    0x64e9d Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
+ .debug_line    0x0000000000000000      0x581 Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
+ .debug_str     0x0000000000000000    0x64e9f Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/nrf_fprintf_format.o
@@ -3481,8 +3481,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x904 Output/RADIO_RX Debug/Obj/sensorsim.o
  .debug_macro   0x0000000000000000      0x189 Output/RADIO_RX Debug/Obj/sensorsim.o
  .debug_macro   0x0000000000000000       0x22 Output/RADIO_RX Debug/Obj/sensorsim.o
- .debug_line    0x0000000000000000      0x12d Output/RADIO_RX Debug/Obj/sensorsim.o
- .debug_str     0x0000000000000000     0x2ccb Output/RADIO_RX Debug/Obj/sensorsim.o
+ .debug_line    0x0000000000000000      0x12e Output/RADIO_RX Debug/Obj/sensorsim.o
+ .debug_str     0x0000000000000000     0x2ccc Output/RADIO_RX Debug/Obj/sensorsim.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/sensorsim.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/sensorsim.o
@@ -3515,7 +3515,7 @@ Discarded input sections
  .text          0x0000000000000000        0x0 Output/RADIO_RX Debug/Obj/boards.o
  .data          0x0000000000000000        0x0 Output/RADIO_RX Debug/Obj/boards.o
  .bss           0x0000000000000000        0x0 Output/RADIO_RX Debug/Obj/boards.o
- .rodata        0x0000000000000000       0x73 Output/RADIO_RX Debug/Obj/boards.o
+ .rodata        0x0000000000000000       0x74 Output/RADIO_RX Debug/Obj/boards.o
  .text.nrf_gpio_pin_port_decode
                 0x0000000000000000       0x28 Output/RADIO_RX Debug/Obj/boards.o
  .text.nrf_gpio_cfg
@@ -3611,8 +3611,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x16 Output/RADIO_RX Debug/Obj/boards.o
  .debug_macro   0x0000000000000000      0x261 Output/RADIO_RX Debug/Obj/boards.o
  .debug_macro   0x0000000000000000      0x115 Output/RADIO_RX Debug/Obj/boards.o
- .debug_line    0x0000000000000000      0x64f Output/RADIO_RX Debug/Obj/boards.o
- .debug_str     0x0000000000000000    0x622e4 Output/RADIO_RX Debug/Obj/boards.o
+ .debug_line    0x0000000000000000      0x650 Output/RADIO_RX Debug/Obj/boards.o
+ .debug_str     0x0000000000000000    0x622e6 Output/RADIO_RX Debug/Obj/boards.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/boards.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/boards.o
@@ -5079,8 +5079,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x70 Output/RADIO_RX Debug/Obj/bsp_nfc.o
  .debug_macro   0x0000000000000000       0x2e Output/RADIO_RX Debug/Obj/bsp_nfc.o
  .debug_macro   0x0000000000000000       0x7e Output/RADIO_RX Debug/Obj/bsp_nfc.o
- .debug_line    0x0000000000000000      0x772 Output/RADIO_RX Debug/Obj/bsp_nfc.o
- .debug_str     0x0000000000000000    0x63d96 Output/RADIO_RX Debug/Obj/bsp_nfc.o
+ .debug_line    0x0000000000000000      0x773 Output/RADIO_RX Debug/Obj/bsp_nfc.o
+ .debug_str     0x0000000000000000    0x63d98 Output/RADIO_RX Debug/Obj/bsp_nfc.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/bsp_nfc.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/bsp_nfc.o
@@ -5187,8 +5187,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x82 Output/RADIO_RX Debug/Obj/interrupts.o
  .debug_macro   0x0000000000000000       0x22 Output/RADIO_RX Debug/Obj/interrupts.o
  .debug_macro   0x0000000000000000       0x16 Output/RADIO_RX Debug/Obj/interrupts.o
- .debug_line    0x0000000000000000      0x236 Output/RADIO_RX Debug/Obj/interrupts.o
- .debug_str     0x0000000000000000    0x5adfc Output/RADIO_RX Debug/Obj/interrupts.o
+ .debug_line    0x0000000000000000      0x237 Output/RADIO_RX Debug/Obj/interrupts.o
+ .debug_str     0x0000000000000000    0x5adfe Output/RADIO_RX Debug/Obj/interrupts.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/interrupts.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/interrupts.o
@@ -5416,8 +5416,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x7e Output/RADIO_RX Debug/Obj/SEGGER_RTT.o
  .debug_macro   0x0000000000000000       0x47 Output/RADIO_RX Debug/Obj/SEGGER_RTT.o
  .debug_macro   0x0000000000000000      0x115 Output/RADIO_RX Debug/Obj/SEGGER_RTT.o
- .debug_line    0x0000000000000000      0xa96 Output/RADIO_RX Debug/Obj/SEGGER_RTT.o
- .debug_str     0x0000000000000000    0x6285e Output/RADIO_RX Debug/Obj/SEGGER_RTT.o
+ .debug_line    0x0000000000000000      0xa97 Output/RADIO_RX Debug/Obj/SEGGER_RTT.o
+ .debug_str     0x0000000000000000    0x62860 Output/RADIO_RX Debug/Obj/SEGGER_RTT.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/SEGGER_RTT.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/SEGGER_RTT.o
@@ -5589,8 +5589,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x83 Output/RADIO_RX Debug/Obj/SEGGER_RTT_Syscalls_SES.o
  .debug_macro   0x0000000000000000       0xa6 Output/RADIO_RX Debug/Obj/SEGGER_RTT_Syscalls_SES.o
  .debug_macro   0x0000000000000000       0xbe Output/RADIO_RX Debug/Obj/SEGGER_RTT_Syscalls_SES.o
- .debug_line    0x0000000000000000      0x702 Output/RADIO_RX Debug/Obj/SEGGER_RTT_Syscalls_SES.o
- .debug_str     0x0000000000000000    0x62f9a Output/RADIO_RX Debug/Obj/SEGGER_RTT_Syscalls_SES.o
+ .debug_line    0x0000000000000000      0x703 Output/RADIO_RX Debug/Obj/SEGGER_RTT_Syscalls_SES.o
+ .debug_str     0x0000000000000000    0x62f9c Output/RADIO_RX Debug/Obj/SEGGER_RTT_Syscalls_SES.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/SEGGER_RTT_Syscalls_SES.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/SEGGER_RTT_Syscalls_SES.o
@@ -5764,8 +5764,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x115 Output/RADIO_RX Debug/Obj/SEGGER_RTT_printf.o
  .debug_macro   0x0000000000000000       0x28 Output/RADIO_RX Debug/Obj/SEGGER_RTT_printf.o
  .debug_macro   0x0000000000000000       0x22 Output/RADIO_RX Debug/Obj/SEGGER_RTT_printf.o
- .debug_line    0x0000000000000000      0x806 Output/RADIO_RX Debug/Obj/SEGGER_RTT_printf.o
- .debug_str     0x0000000000000000    0x625ee Output/RADIO_RX Debug/Obj/SEGGER_RTT_printf.o
+ .debug_line    0x0000000000000000      0x807 Output/RADIO_RX Debug/Obj/SEGGER_RTT_printf.o
+ .debug_str     0x0000000000000000    0x625f0 Output/RADIO_RX Debug/Obj/SEGGER_RTT_printf.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/SEGGER_RTT_printf.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/SEGGER_RTT_printf.o
@@ -6039,8 +6039,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x22 Output/RADIO_RX Debug/Obj/ble_advdata.o
  .debug_macro   0x0000000000000000       0x9b Output/RADIO_RX Debug/Obj/ble_advdata.o
  .debug_macro   0x0000000000000000       0x4b Output/RADIO_RX Debug/Obj/ble_advdata.o
- .debug_line    0x0000000000000000      0xc72 Output/RADIO_RX Debug/Obj/ble_advdata.o
- .debug_str     0x0000000000000000    0x6c942 Output/RADIO_RX Debug/Obj/ble_advdata.o
+ .debug_line    0x0000000000000000      0xc73 Output/RADIO_RX Debug/Obj/ble_advdata.o
+ .debug_str     0x0000000000000000    0x6c944 Output/RADIO_RX Debug/Obj/ble_advdata.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/ble_advdata.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/ble_advdata.o
@@ -6432,8 +6432,8 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x11 Output/RADIO_RX Debug/Obj/ble_advertising.o
  .debug_macro   0x0000000000000000       0x1c Output/RADIO_RX Debug/Obj/ble_advertising.o
  .debug_macro   0x0000000000000000       0x1c Output/RADIO_RX Debug/Obj/ble_advertising.o
- .debug_line    0x0000000000000000     0x11ec Output/RADIO_RX Debug/Obj/ble_advertising.o
- .debug_str     0x0000000000000000    0x706d0 Output/RADIO_RX Debug/Obj/ble_advertising.o
+ .debug_line    0x0000000000000000     0x11ed Output/RADIO_RX Debug/Obj/ble_advertising.o
+ .debug_str     0x0000000000000000    0x706d2 Output/RADIO_RX Debug/Obj/ble_advertising.o
  .comment       0x0000000000000000       0x4d Output/RADIO_RX Debug/Obj/ble_advertising.o
  .ARM.attributes
                 0x0000000000000000       0x39 Output/RADIO_RX Debug/Obj/ble_advertising.o
@@ -7144,7 +7144,7 @@ Discarded input sections
                 0x0000000000000000        0x8 Output/RADIO_RX Debug/Obj/ble_srv_common.o
  .text.ble_srv_is_indication_enabled
                 0x0000000000000000       0x2c Output/RADIO_RX Debug/Obj/ble_srv_common.o
- .rodata        0x0000000000000000       0x47 Output/RADIO_RX Debug/Obj/ble_srv_common.o
+ .rodata        0x0000000000000000       0x48 Output/RADIO_RX Debug/Obj/ble_srv_common.o
  .text.ble_srv_report_ref_encode
                 0x0000000000000000       0x6c Output/RADIO_RX Debug/Obj/ble_srv_common.o
  .text.ble_srv_ascii_to_utf8
@@ -14991,43 +14991,38 @@ Linker script and memory map
  *(.rodata .rodata.* .gnu.linkonce.r.*)
  .rodata.mempool
                 0x000000000002db7c       0x14 Output/RADIO_RX Debug/Obj/nrf_log_frontend.o
- .rodata        0x000000000002db90       0x6d Output/RADIO_RX Debug/Obj/nrf_log_frontend.o
- *fill*         0x000000000002dbfd        0x3 
+ .rodata        0x000000000002db90       0x6e Output/RADIO_RX Debug/Obj/nrf_log_frontend.o
+ *fill*         0x000000000002dbfe        0x2 
  .rodata        0x000000000002dc00       0x90 Output/RADIO_RX Debug/Obj/app_error_weak.o
- .rodata        0x000000000002dc90       0x4e Output/RADIO_RX Debug/Obj/app_util_platform.o
- *fill*         0x000000000002dcde        0x2 
- .rodata        0x000000000002dce0       0x3f Output/RADIO_RX Debug/Obj/fds.o
- *fill*         0x000000000002dd1f        0x1 
+ .rodata        0x000000000002dc90       0x4f Output/RADIO_RX Debug/Obj/app_util_platform.o
+ *fill*         0x000000000002dcdf        0x1 
+ .rodata        0x000000000002dce0       0x40 Output/RADIO_RX Debug/Obj/fds.o
  .rodata.page_tag_swap.8380
                 0x000000000002dd20        0x8 Output/RADIO_RX Debug/Obj/fds.o
  .rodata.page_tag_data.8384
                 0x000000000002dd28        0x8 Output/RADIO_RX Debug/Obj/fds.o
  .rodata.dirty_header.8511
                 0x000000000002dd30        0x4 Output/RADIO_RX Debug/Obj/fds.o
- .rodata        0x000000000002dd34       0x51 Output/RADIO_RX Debug/Obj/nrf_balloc.o
- *fill*         0x000000000002dd85        0x3 
- .rodata        0x000000000002dd88       0x56 Output/RADIO_RX Debug/Obj/nrf_memobj.o
- *fill*         0x000000000002ddde        0x2 
- .rodata        0x000000000002dde0       0xe5 Output/RADIO_RX Debug/Obj/nrf_pwr_mgmt.o
- *fill*         0x000000000002dec5        0x3 
- .rodata        0x000000000002dec8       0x62 Output/RADIO_RX Debug/Obj/nrf_section_iter.o
- *fill*         0x000000000002df2a        0x2 
+ .rodata        0x000000000002dd34       0x52 Output/RADIO_RX Debug/Obj/nrf_balloc.o
+ *fill*         0x000000000002dd86        0x2 
+ .rodata        0x000000000002dd88       0x57 Output/RADIO_RX Debug/Obj/nrf_memobj.o
+ *fill*         0x000000000002dddf        0x1 
+ .rodata        0x000000000002dde0       0xe6 Output/RADIO_RX Debug/Obj/nrf_pwr_mgmt.o
+ *fill*         0x000000000002dec6        0x2 
+ .rodata        0x000000000002dec8       0x63 Output/RADIO_RX Debug/Obj/nrf_section_iter.o
+ *fill*         0x000000000002df2b        0x1 
  .rodata.m_unknown_str
                 0x000000000002df2c       0x13 Output/RADIO_RX Debug/Obj/nrf_strerror.o
  *fill*         0x000000000002df3f        0x1 
  .rodata        0x000000000002df40      0x308 Output/RADIO_RX Debug/Obj/nrf_strerror.o
  .rodata.nrf_strerror_array
                 0x000000000002e248       0xf0 Output/RADIO_RX Debug/Obj/nrf_strerror.o
- .rodata        0x000000000002e338       0x55 Output/RADIO_RX Debug/Obj/nrf_drv_clock.o
- *fill*         0x000000000002e38d        0x3 
- .rodata        0x000000000002e390       0x4f Output/RADIO_RX Debug/Obj/nrf_drv_common.o
- *fill*         0x000000000002e3df        0x1 
- .rodata        0x000000000002e3e0       0x8f Output/RADIO_RX Debug/Obj/nrf_drv_gpiote.o
- *fill*         0x000000000002e46f        0x1 
- .rodata        0x000000000002e470       0x8b Output/RADIO_RX Debug/Obj/nrf_drv_uart.o
- *fill*         0x000000000002e4fb        0x1 
- .rodata        0x000000000002e4fc       0x47 Output/RADIO_RX Debug/Obj/ble_conn_state.o
- *fill*         0x000000000002e543        0x1 
+ .rodata        0x000000000002e338       0x56 Output/RADIO_RX Debug/Obj/nrf_drv_clock.o
+ *fill*         0x000000000002e38e        0x2 
+ .rodata        0x000000000002e390       0x50 Output/RADIO_RX Debug/Obj/nrf_drv_common.o
+ .rodata        0x000000000002e3e0       0x90 Output/RADIO_RX Debug/Obj/nrf_drv_gpiote.o
+ .rodata        0x000000000002e470       0x8c Output/RADIO_RX Debug/Obj/nrf_drv_uart.o
+ .rodata        0x000000000002e4fc       0x48 Output/RADIO_RX Debug/Obj/ble_conn_state.o
  .rodata        0x000000000002e544       0x10 Output/RADIO_RX Debug/Obj/gatts_cache_manager.o
  .rodata.service_changed_pending.9325
                 0x000000000002e554        0x4 Output/RADIO_RX Debug/Obj/gatts_cache_manager.o
@@ -15045,12 +15040,10 @@ Linker script and memory map
                 0x000000000002e764        0xc Output/RADIO_RX Debug/Obj/nrf_sdh.o
  .rodata.sdh_stack_observers
                 0x000000000002e770        0xc Output/RADIO_RX Debug/Obj/nrf_sdh.o
- .rodata        0x000000000002e77c      0x2a7 Output/RADIO_RX Debug/Obj/nrf_sdh_ble.o
- *fill*         0x000000000002ea23        0x1 
+ .rodata        0x000000000002e77c      0x2a8 Output/RADIO_RX Debug/Obj/nrf_sdh_ble.o
  .rodata.sdh_ble_observers
                 0x000000000002ea24        0xc Output/RADIO_RX Debug/Obj/nrf_sdh_ble.o
- .rodata        0x000000000002ea30       0xab Output/RADIO_RX Debug/Obj/nrf_sdh_soc.o
- *fill*         0x000000000002eadb        0x1 
+ .rodata        0x000000000002ea30       0xac Output/RADIO_RX Debug/Obj/nrf_sdh_soc.o
  .rodata.sdh_soc_observers
                 0x000000000002eadc        0xc Output/RADIO_RX Debug/Obj/nrf_sdh_soc.o
                 0x000000000002eae8                __rodata_end__ = (__rodata_start__ + SIZEOF (.rodata))
@@ -15593,53 +15586,53 @@ OUTPUT(Output/Debug/Exe/RADIO_RX.elf elf32-littlearm)
  .comment       0x000000000000004c       0x4d Output/RADIO_RX Debug/Obj/nrf_sdh_soc.o
  .comment       0x000000000000004c       0x4d C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 3.34/lib/libc_v7em_fpv4_sp_d16_hard_t_le_eabi.a(libc2.o)
 
-.debug_line     0x0000000000000000    0x1ceee
+.debug_line     0x0000000000000000    0x1cf19
  .debug_line    0x0000000000000000      0x2b4 Output/RADIO_RX Debug/Obj/thumb_crt0.o
- .debug_line    0x00000000000002b4      0xe27 Output/RADIO_RX Debug/Obj/nrf_log_frontend.o
- .debug_line    0x00000000000010db      0x33a Output/RADIO_RX Debug/Obj/app_error.o
- .debug_line    0x0000000000001415      0x95f Output/RADIO_RX Debug/Obj/app_error_weak.o
- .debug_line    0x0000000000001d74      0xba4 Output/RADIO_RX Debug/Obj/app_timer.o
- .debug_line    0x0000000000002918      0x7b5 Output/RADIO_RX Debug/Obj/app_util_platform.o
- .debug_line    0x00000000000030cd     0x133d Output/RADIO_RX Debug/Obj/fds.o
- .debug_line    0x000000000000440a      0x2f8 Output/RADIO_RX Debug/Obj/nrf_assert.o
- .debug_line    0x0000000000004702      0x4ad Output/RADIO_RX Debug/Obj/nrf_atfifo.o
- .debug_line    0x0000000000004baf      0x8aa Output/RADIO_RX Debug/Obj/nrf_balloc.o
- .debug_line    0x0000000000005459      0x330 Output/RADIO_RX Debug/Obj/nrf_fstorage.o
- .debug_line    0x0000000000005789      0xa84 Output/RADIO_RX Debug/Obj/nrf_fstorage_sd.o
- .debug_line    0x000000000000620d      0x88c Output/RADIO_RX Debug/Obj/nrf_memobj.o
- .debug_line    0x0000000000006a99      0xc47 Output/RADIO_RX Debug/Obj/nrf_pwr_mgmt.o
- .debug_line    0x00000000000076e0      0x3fd Output/RADIO_RX Debug/Obj/nrf_section_iter.o
- .debug_line    0x0000000000007add      0x382 Output/RADIO_RX Debug/Obj/nrf_strerror.o
- .debug_line    0x0000000000007e5f      0x3b0 Output/RADIO_RX Debug/Obj/sdk_mapped_flags.o
- .debug_line    0x000000000000820f      0xca7 Output/RADIO_RX Debug/Obj/nrf_drv_clock.o
- .debug_line    0x0000000000008eb6      0x7ec Output/RADIO_RX Debug/Obj/nrf_drv_common.o
- .debug_line    0x00000000000096a2     0x129e Output/RADIO_RX Debug/Obj/nrf_drv_gpiote.o
- .debug_line    0x000000000000a940     0x12b4 Output/RADIO_RX Debug/Obj/nrf_drv_uart.o
- .debug_line    0x000000000000bbf4      0x6f0 Output/RADIO_RX Debug/Obj/bsp.o
- .debug_line    0x000000000000c2e4      0xbf6 Output/RADIO_RX Debug/Obj/bsp_btn_ble.o
- .debug_line    0x000000000000ceda      0x2d1 Output/RADIO_RX Debug/Obj/main.o
- .debug_line    0x000000000000d1ab      0x299 Output/RADIO_RX Debug/Obj/functions.o
- .debug_line    0x000000000000d444      0xcf0 Output/RADIO_RX Debug/Obj/ble_conn_params.o
- .debug_line    0x000000000000e134      0xc6d Output/RADIO_RX Debug/Obj/ble_conn_state.o
- .debug_line    0x000000000000eda1      0xad0 Output/RADIO_RX Debug/Obj/ble_srv_common.o
- .debug_line    0x000000000000f871     0x1036 Output/RADIO_RX Debug/Obj/gatt_cache_manager.o
- .debug_line    0x00000000000108a7      0xea6 Output/RADIO_RX Debug/Obj/gatts_cache_manager.o
- .debug_line    0x000000000001174d     0x1286 Output/RADIO_RX Debug/Obj/id_manager.o
- .debug_line    0x00000000000129d3      0xc95 Output/RADIO_RX Debug/Obj/nrf_ble_gatt.o
- .debug_line    0x0000000000013668     0x111b Output/RADIO_RX Debug/Obj/peer_data_storage.o
- .debug_line    0x0000000000014783     0x1185 Output/RADIO_RX Debug/Obj/peer_database.o
- .debug_line    0x0000000000015908      0xe9b Output/RADIO_RX Debug/Obj/peer_id.o
- .debug_line    0x00000000000167a3     0x14e0 Output/RADIO_RX Debug/Obj/peer_manager.o
- .debug_line    0x0000000000017c83      0x3f1 Output/RADIO_RX Debug/Obj/pm_buffer.o
- .debug_line    0x0000000000018074      0x72d Output/RADIO_RX Debug/Obj/pm_mutex.o
- .debug_line    0x00000000000187a1     0x1194 Output/RADIO_RX Debug/Obj/security_dispatcher.o
- .debug_line    0x0000000000019935     0x10ba Output/RADIO_RX Debug/Obj/security_manager.o
- .debug_line    0x000000000001a9ef       0xa4 Output/RADIO_RX Debug/Obj/ses_nRF_Startup.o
- .debug_line    0x000000000001aa93       0xad Output/RADIO_RX Debug/Obj/ses_nrf52_Vectors.o
- .debug_line    0x000000000001ab40      0x42a Output/RADIO_RX Debug/Obj/system_nrf52.o
- .debug_line    0x000000000001af6a      0xb71 Output/RADIO_RX Debug/Obj/nrf_sdh.o
- .debug_line    0x000000000001badb      0xbb3 Output/RADIO_RX Debug/Obj/nrf_sdh_ble.o
- .debug_line    0x000000000001c68e      0x860 Output/RADIO_RX Debug/Obj/nrf_sdh_soc.o
+ .debug_line    0x00000000000002b4      0xe28 Output/RADIO_RX Debug/Obj/nrf_log_frontend.o
+ .debug_line    0x00000000000010dc      0x33b Output/RADIO_RX Debug/Obj/app_error.o
+ .debug_line    0x0000000000001417      0x960 Output/RADIO_RX Debug/Obj/app_error_weak.o
+ .debug_line    0x0000000000001d77      0xba5 Output/RADIO_RX Debug/Obj/app_timer.o
+ .debug_line    0x000000000000291c      0x7b6 Output/RADIO_RX Debug/Obj/app_util_platform.o
+ .debug_line    0x00000000000030d2     0x133e Output/RADIO_RX Debug/Obj/fds.o
+ .debug_line    0x0000000000004410      0x2f9 Output/RADIO_RX Debug/Obj/nrf_assert.o
+ .debug_line    0x0000000000004709      0x4ae Output/RADIO_RX Debug/Obj/nrf_atfifo.o
+ .debug_line    0x0000000000004bb7      0x8ab Output/RADIO_RX Debug/Obj/nrf_balloc.o
+ .debug_line    0x0000000000005462      0x331 Output/RADIO_RX Debug/Obj/nrf_fstorage.o
+ .debug_line    0x0000000000005793      0xa85 Output/RADIO_RX Debug/Obj/nrf_fstorage_sd.o
+ .debug_line    0x0000000000006218      0x88d Output/RADIO_RX Debug/Obj/nrf_memobj.o
+ .debug_line    0x0000000000006aa5      0xc48 Output/RADIO_RX Debug/Obj/nrf_pwr_mgmt.o
+ .debug_line    0x00000000000076ed      0x3fe Output/RADIO_RX Debug/Obj/nrf_section_iter.o
+ .debug_line    0x0000000000007aeb      0x383 Output/RADIO_RX Debug/Obj/nrf_strerror.o
+ .debug_line    0x0000000000007e6e      0x3b1 Output/RADIO_RX Debug/Obj/sdk_mapped_flags.o
+ .debug_line    0x000000000000821f      0xca8 Output/RADIO_RX Debug/Obj/nrf_drv_clock.o
+ .debug_line    0x0000000000008ec7      0x7ed Output/RADIO_RX Debug/Obj/nrf_drv_common.o
+ .debug_line    0x00000000000096b4     0x129f Output/RADIO_RX Debug/Obj/nrf_drv_gpiote.o
+ .debug_line    0x000000000000a953     0x12b5 Output/RADIO_RX Debug/Obj/nrf_drv_uart.o
+ .debug_line    0x000000000000bc08      0x6f1 Output/RADIO_RX Debug/Obj/bsp.o
+ .debug_line    0x000000000000c2f9      0xbf7 Output/RADIO_RX Debug/Obj/bsp_btn_ble.o
+ .debug_line    0x000000000000cef0      0x2d2 Output/RADIO_RX Debug/Obj/main.o
+ .debug_line    0x000000000000d1c2      0x29a Output/RADIO_RX Debug/Obj/functions.o
+ .debug_line    0x000000000000d45c      0xcf1 Output/RADIO_RX Debug/Obj/ble_conn_params.o
+ .debug_line    0x000000000000e14d      0xc6e Output/RADIO_RX Debug/Obj/ble_conn_state.o
+ .debug_line    0x000000000000edbb      0xad1 Output/RADIO_RX Debug/Obj/ble_srv_common.o
+ .debug_line    0x000000000000f88c     0x1037 Output/RADIO_RX Debug/Obj/gatt_cache_manager.o
+ .debug_line    0x00000000000108c3      0xea7 Output/RADIO_RX Debug/Obj/gatts_cache_manager.o
+ .debug_line    0x000000000001176a     0x1287 Output/RADIO_RX Debug/Obj/id_manager.o
+ .debug_line    0x00000000000129f1      0xc96 Output/RADIO_RX Debug/Obj/nrf_ble_gatt.o
+ .debug_line    0x0000000000013687     0x111c Output/RADIO_RX Debug/Obj/peer_data_storage.o
+ .debug_line    0x00000000000147a3     0x1186 Output/RADIO_RX Debug/Obj/peer_database.o
+ .debug_line    0x0000000000015929      0xe9c Output/RADIO_RX Debug/Obj/peer_id.o
+ .debug_line    0x00000000000167c5     0x14e1 Output/RADIO_RX Debug/Obj/peer_manager.o
+ .debug_line    0x0000000000017ca6      0x3f2 Output/RADIO_RX Debug/Obj/pm_buffer.o
+ .debug_line    0x0000000000018098      0x72e Output/RADIO_RX Debug/Obj/pm_mutex.o
+ .debug_line    0x00000000000187c6     0x1195 Output/RADIO_RX Debug/Obj/security_dispatcher.o
+ .debug_line    0x000000000001995b     0x10bb Output/RADIO_RX Debug/Obj/security_manager.o
+ .debug_line    0x000000000001aa16       0xa4 Output/RADIO_RX Debug/Obj/ses_nRF_Startup.o
+ .debug_line    0x000000000001aaba       0xad Output/RADIO_RX Debug/Obj/ses_nrf52_Vectors.o
+ .debug_line    0x000000000001ab67      0x42b Output/RADIO_RX Debug/Obj/system_nrf52.o
+ .debug_line    0x000000000001af92      0xb72 Output/RADIO_RX Debug/Obj/nrf_sdh.o
+ .debug_line    0x000000000001bb04      0xbb4 Output/RADIO_RX Debug/Obj/nrf_sdh_ble.o
+ .debug_line    0x000000000001c6b8      0x861 Output/RADIO_RX Debug/Obj/nrf_sdh_soc.o
 
 .debug_info     0x0000000000000000    0x6dcad
  .debug_info    0x0000000000000000       0xc4 Output/RADIO_RX Debug/Obj/thumb_crt0.o
@@ -16212,90 +16205,90 @@ OUTPUT(Output/Debug/Exe/RADIO_RX.elf elf32-littlearm)
  .debug_macro   0x00000000000070b3      0x208 Output/RADIO_RX Debug/Obj/nrf_sdh_soc.o
  .debug_macro   0x00000000000072bb       0x16 Output/RADIO_RX Debug/Obj/nrf_sdh_soc.o
 
-.debug_str      0x0000000000000000    0x83b4f
- .debug_str     0x0000000000000000    0x69247 Output/RADIO_RX Debug/Obj/nrf_log_frontend.o
-                                      0x69fe2 (size before relaxing)
- .debug_str     0x0000000000069247      0x113 Output/RADIO_RX Debug/Obj/app_error.o
-                                      0x6052e (size before relaxing)
- .debug_str     0x000000000006935a      0xb32 Output/RADIO_RX Debug/Obj/app_error_weak.o
-                                      0x69a51 (size before relaxing)
- .debug_str     0x0000000000069e8c      0xd12 Output/RADIO_RX Debug/Obj/app_timer.o
-                                      0x67039 (size before relaxing)
- .debug_str     0x000000000006ab9e      0x298 Output/RADIO_RX Debug/Obj/app_util_platform.o
-                                      0x6214d (size before relaxing)
- .debug_str     0x000000000006ae36     0x188d Output/RADIO_RX Debug/Obj/fds.o
-                                      0x68344 (size before relaxing)
- .debug_str     0x000000000006c6c3       0x5b Output/RADIO_RX Debug/Obj/nrf_assert.o
-                                      0x60527 (size before relaxing)
- .debug_str     0x000000000006c71e      0x1b6 Output/RADIO_RX Debug/Obj/nrf_atfifo.o
-                                      0x64c93 (size before relaxing)
- .debug_str     0x000000000006c8d4      0x1ac Output/RADIO_RX Debug/Obj/nrf_balloc.o
-                                      0x68dab (size before relaxing)
- .debug_str     0x000000000006ca80      0x12d Output/RADIO_RX Debug/Obj/nrf_fstorage.o
-                                       0x860b (size before relaxing)
- .debug_str     0x000000000006cbad      0xdcd Output/RADIO_RX Debug/Obj/nrf_fstorage_sd.o
-                                      0x67d2c (size before relaxing)
- .debug_str     0x000000000006d97a      0x216 Output/RADIO_RX Debug/Obj/nrf_memobj.o
-                                      0x67574 (size before relaxing)
- .debug_str     0x000000000006db90      0xd90 Output/RADIO_RX Debug/Obj/nrf_pwr_mgmt.o
-                                      0x6a9fe (size before relaxing)
- .debug_str     0x000000000006e920       0x8e Output/RADIO_RX Debug/Obj/nrf_section_iter.o
-                                      0x65041 (size before relaxing)
- .debug_str     0x000000000006e9ae       0xfb Output/RADIO_RX Debug/Obj/nrf_strerror.o
-                                      0x64804 (size before relaxing)
- .debug_str     0x000000000006eaa9      0x270 Output/RADIO_RX Debug/Obj/sdk_mapped_flags.o
-                                      0x5ff49 (size before relaxing)
- .debug_str     0x000000000006ed19      0xb1d Output/RADIO_RX Debug/Obj/nrf_drv_clock.o
-                                      0x699a1 (size before relaxing)
- .debug_str     0x000000000006f836      0x9d7 Output/RADIO_RX Debug/Obj/nrf_drv_common.o
-                                      0x67078 (size before relaxing)
- .debug_str     0x000000000007020d     0x19f3 Output/RADIO_RX Debug/Obj/nrf_drv_gpiote.o
-                                      0x6a8b8 (size before relaxing)
- .debug_str     0x0000000000071c00     0x1860 Output/RADIO_RX Debug/Obj/nrf_drv_uart.o
-                                      0x6abd6 (size before relaxing)
- .debug_str     0x0000000000073460     0x1fb1 Output/RADIO_RX Debug/Obj/bsp.o
-                                      0x674d1 (size before relaxing)
- .debug_str     0x0000000000075411     0x7770 Output/RADIO_RX Debug/Obj/bsp_btn_ble.o
-                                      0x6e66d (size before relaxing)
- .debug_str     0x000000000007cb81      0x275 Output/RADIO_RX Debug/Obj/main.o
-                                      0x5bd6d (size before relaxing)
- .debug_str     0x000000000007cdf6       0x78 Output/RADIO_RX Debug/Obj/functions.o
-                                      0x5b218 (size before relaxing)
- .debug_str     0x000000000007ce6e     0x1d03 Output/RADIO_RX Debug/Obj/ble_conn_params.o
-                                      0x6e7c6 (size before relaxing)
- .debug_str     0x000000000007eb71      0x72d Output/RADIO_RX Debug/Obj/ble_conn_state.o
-                                      0x6cc64 (size before relaxing)
- .debug_str     0x000000000007f29e      0x2fe Output/RADIO_RX Debug/Obj/ble_srv_common.o
-                                      0x6c350 (size before relaxing)
- .debug_str     0x000000000007f59c     0x1183 Output/RADIO_RX Debug/Obj/gatt_cache_manager.o
-                                      0x6eda5 (size before relaxing)
- .debug_str     0x000000000008071f      0x273 Output/RADIO_RX Debug/Obj/gatts_cache_manager.o
-                                      0x6dc68 (size before relaxing)
- .debug_str     0x0000000000080992      0x679 Output/RADIO_RX Debug/Obj/id_manager.o
-                                      0x6f1e6 (size before relaxing)
- .debug_str     0x000000000008100b      0x66c Output/RADIO_RX Debug/Obj/nrf_ble_gatt.o
-                                      0x6e139 (size before relaxing)
- .debug_str     0x0000000000081677      0x453 Output/RADIO_RX Debug/Obj/peer_data_storage.o
-                                      0x6e2a8 (size before relaxing)
- .debug_str     0x0000000000081aca      0x649 Output/RADIO_RX Debug/Obj/peer_database.o
-                                      0x6e30d (size before relaxing)
- .debug_str     0x0000000000082113      0x122 Output/RADIO_RX Debug/Obj/peer_id.o
-                                      0x6d0a2 (size before relaxing)
- .debug_str     0x0000000000082235      0x579 Output/RADIO_RX Debug/Obj/peer_manager.o
-                                      0x6f9da (size before relaxing)
- .debug_str     0x00000000000827ae      0x148 Output/RADIO_RX Debug/Obj/pm_buffer.o
-                                      0x64a53 (size before relaxing)
- .debug_str     0x00000000000828f6       0xe1 Output/RADIO_RX Debug/Obj/pm_mutex.o
-                                      0x662aa (size before relaxing)
- .debug_str     0x00000000000829d7      0x357 Output/RADIO_RX Debug/Obj/security_dispatcher.o
-                                      0x6ef3c (size before relaxing)
- .debug_str     0x0000000000082d2e      0x3c6 Output/RADIO_RX Debug/Obj/security_manager.o
-                                      0x6ec48 (size before relaxing)
- .debug_str     0x00000000000830f4      0x158 Output/RADIO_RX Debug/Obj/system_nrf52.o
-                                      0x5b374 (size before relaxing)
- .debug_str     0x000000000008324c      0x400 Output/RADIO_RX Debug/Obj/nrf_sdh.o
-                                      0x69a1c (size before relaxing)
- .debug_str     0x000000000008364c      0x385 Output/RADIO_RX Debug/Obj/nrf_sdh_ble.o
-                                      0x6e9a4 (size before relaxing)
- .debug_str     0x00000000000839d1      0x17e Output/RADIO_RX Debug/Obj/nrf_sdh_soc.o
-                                      0x68683 (size before relaxing)
+.debug_str      0x0000000000000000    0x83b7b
+ .debug_str     0x0000000000000000    0x69249 Output/RADIO_RX Debug/Obj/nrf_log_frontend.o
+                                      0x69fe4 (size before relaxing)
+ .debug_str     0x0000000000069249      0x114 Output/RADIO_RX Debug/Obj/app_error.o
+                                      0x60530 (size before relaxing)
+ .debug_str     0x000000000006935d      0xb33 Output/RADIO_RX Debug/Obj/app_error_weak.o
+                                      0x69a53 (size before relaxing)
+ .debug_str     0x0000000000069e90      0xd13 Output/RADIO_RX Debug/Obj/app_timer.o
+                                      0x6703b (size before relaxing)
+ .debug_str     0x000000000006aba3      0x299 Output/RADIO_RX Debug/Obj/app_util_platform.o
+                                      0x6214f (size before relaxing)
+ .debug_str     0x000000000006ae3c     0x188e Output/RADIO_RX Debug/Obj/fds.o
+                                      0x68346 (size before relaxing)
+ .debug_str     0x000000000006c6ca       0x5c Output/RADIO_RX Debug/Obj/nrf_assert.o
+                                      0x60529 (size before relaxing)
+ .debug_str     0x000000000006c726      0x1b7 Output/RADIO_RX Debug/Obj/nrf_atfifo.o
+                                      0x64c95 (size before relaxing)
+ .debug_str     0x000000000006c8dd      0x1ad Output/RADIO_RX Debug/Obj/nrf_balloc.o
+                                      0x68dad (size before relaxing)
+ .debug_str     0x000000000006ca8a      0x12e Output/RADIO_RX Debug/Obj/nrf_fstorage.o
+                                       0x860d (size before relaxing)
+ .debug_str     0x000000000006cbb8      0xdce Output/RADIO_RX Debug/Obj/nrf_fstorage_sd.o
+                                      0x67d2e (size before relaxing)
+ .debug_str     0x000000000006d986      0x217 Output/RADIO_RX Debug/Obj/nrf_memobj.o
+                                      0x67576 (size before relaxing)
+ .debug_str     0x000000000006db9d      0xd91 Output/RADIO_RX Debug/Obj/nrf_pwr_mgmt.o
+                                      0x6aa00 (size before relaxing)
+ .debug_str     0x000000000006e92e       0x8f Output/RADIO_RX Debug/Obj/nrf_section_iter.o
+                                      0x65043 (size before relaxing)
+ .debug_str     0x000000000006e9bd       0xfc Output/RADIO_RX Debug/Obj/nrf_strerror.o
+                                      0x64806 (size before relaxing)
+ .debug_str     0x000000000006eab9      0x271 Output/RADIO_RX Debug/Obj/sdk_mapped_flags.o
+                                      0x5ff4b (size before relaxing)
+ .debug_str     0x000000000006ed2a      0xb1e Output/RADIO_RX Debug/Obj/nrf_drv_clock.o
+                                      0x699a3 (size before relaxing)
+ .debug_str     0x000000000006f848      0x9d8 Output/RADIO_RX Debug/Obj/nrf_drv_common.o
+                                      0x6707a (size before relaxing)
+ .debug_str     0x0000000000070220     0x19f4 Output/RADIO_RX Debug/Obj/nrf_drv_gpiote.o
+                                      0x6a8ba (size before relaxing)
+ .debug_str     0x0000000000071c14     0x1861 Output/RADIO_RX Debug/Obj/nrf_drv_uart.o
+                                      0x6abd8 (size before relaxing)
+ .debug_str     0x0000000000073475     0x1fb2 Output/RADIO_RX Debug/Obj/bsp.o
+                                      0x674d3 (size before relaxing)
+ .debug_str     0x0000000000075427     0x7771 Output/RADIO_RX Debug/Obj/bsp_btn_ble.o
+                                      0x6e66f (size before relaxing)
+ .debug_str     0x000000000007cb98      0x276 Output/RADIO_RX Debug/Obj/main.o
+                                      0x5bd6f (size before relaxing)
+ .debug_str     0x000000000007ce0e       0x79 Output/RADIO_RX Debug/Obj/functions.o
+                                      0x5b21a (size before relaxing)
+ .debug_str     0x000000000007ce87     0x1d04 Output/RADIO_RX Debug/Obj/ble_conn_params.o
+                                      0x6e7c8 (size before relaxing)
+ .debug_str     0x000000000007eb8b      0x72e Output/RADIO_RX Debug/Obj/ble_conn_state.o
+                                      0x6cc66 (size before relaxing)
+ .debug_str     0x000000000007f2b9      0x2ff Output/RADIO_RX Debug/Obj/ble_srv_common.o
+                                      0x6c352 (size before relaxing)
+ .debug_str     0x000000000007f5b8     0x1184 Output/RADIO_RX Debug/Obj/gatt_cache_manager.o
+                                      0x6eda7 (size before relaxing)
+ .debug_str     0x000000000008073c      0x274 Output/RADIO_RX Debug/Obj/gatts_cache_manager.o
+                                      0x6dc6a (size before relaxing)
+ .debug_str     0x00000000000809b0      0x67a Output/RADIO_RX Debug/Obj/id_manager.o
+                                      0x6f1e8 (size before relaxing)
+ .debug_str     0x000000000008102a      0x66d Output/RADIO_RX Debug/Obj/nrf_ble_gatt.o
+                                      0x6e13b (size before relaxing)
+ .debug_str     0x0000000000081697      0x454 Output/RADIO_RX Debug/Obj/peer_data_storage.o
+                                      0x6e2aa (size before relaxing)
+ .debug_str     0x0000000000081aeb      0x64a Output/RADIO_RX Debug/Obj/peer_database.o
+                                      0x6e30f (size before relaxing)
+ .debug_str     0x0000000000082135      0x123 Output/RADIO_RX Debug/Obj/peer_id.o
+                                      0x6d0a4 (size before relaxing)
+ .debug_str     0x0000000000082258      0x57a Output/RADIO_RX Debug/Obj/peer_manager.o
+                                      0x6f9dc (size before relaxing)
+ .debug_str     0x00000000000827d2      0x149 Output/RADIO_RX Debug/Obj/pm_buffer.o
+                                      0x64a55 (size before relaxing)
+ .debug_str     0x000000000008291b       0xe2 Output/RADIO_RX Debug/Obj/pm_mutex.o
+                                      0x662ac (size before relaxing)
+ .debug_str     0x00000000000829fd      0x358 Output/RADIO_RX Debug/Obj/security_dispatcher.o
+                                      0x6ef3e (size before relaxing)
+ .debug_str     0x0000000000082d55      0x3c7 Output/RADIO_RX Debug/Obj/security_manager.o
+                                      0x6ec4a (size before relaxing)
+ .debug_str     0x000000000008311c      0x159 Output/RADIO_RX Debug/Obj/system_nrf52.o
+                                      0x5b376 (size before relaxing)
+ .debug_str     0x0000000000083275      0x401 Output/RADIO_RX Debug/Obj/nrf_sdh.o
+                                      0x69a1e (size before relaxing)
+ .debug_str     0x0000000000083676      0x386 Output/RADIO_RX Debug/Obj/nrf_sdh_ble.o
+                                      0x6e9a6 (size before relaxing)
+ .debug_str     0x00000000000839fc      0x17f Output/RADIO_RX Debug/Obj/nrf_sdh_soc.o
+                                      0x68685 (size before relaxing)

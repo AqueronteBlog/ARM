@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/app_timer.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\timer\app_timer.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\timer\app_timer.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,7 +26,7 @@ Output/RADIO_RX\ Debug/Obj/app_timer.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\timer\app_timer.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\timer\app_timer.h \
  ../../../../../../components/libraries/util/app_error.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdio.h \
  ../../../../../../components/libraries/util/app_error_weak.h \

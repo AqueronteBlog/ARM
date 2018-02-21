@@ -1,6 +1,6 @@
 Output/RADIO_RX\ Debug/Obj/bsp_btn_ble.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\bsp\bsp_btn_ble.c \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\bsp\bsp_btn_ble.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\bsp\bsp_btn_ble.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\bsp\bsp_btn_ble.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \
  ../../../../../../components/softdevice/s132/headers/ble_ranges.h \
@@ -25,7 +25,7 @@ Output/RADIO_RX\ Debug/Obj/bsp_btn_ble.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/softdevice/s132/headers/ble_gatts.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\bsp\bsp.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\bsp\bsp.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
  ../../../../../../components/boards/boards.h \
  ../../../../../../components/drivers_nrf/hal/nrf_gpio.h \

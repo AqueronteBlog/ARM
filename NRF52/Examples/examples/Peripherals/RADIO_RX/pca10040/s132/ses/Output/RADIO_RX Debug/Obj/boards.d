@@ -1,6 +1,6 @@
 Output/RADIO_RX\ Debug/Obj/boards.o: \
- D:\Workspace\ARM\NRF52\Examples\components\boards\boards.c \
- D:\Workspace\ARM\NRF52\Examples\components\boards\boards.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\boards\boards.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\boards\boards.h \
  ../../../../../../components/drivers_nrf/hal/nrf_gpio.h \
  ../../../../../../components/device/nrf.h \
  ../../../../../../components/device/nrf52.h \
@@ -28,4 +28,4 @@ Output/RADIO_RX\ Debug/Obj/boards.o: \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdlib.h \
- D:\Workspace\ARM\NRF52\Examples\components\boards\pca10040.h
+ E:\vsProjects\ARM\NRF52\Examples\components\boards\pca10040.h

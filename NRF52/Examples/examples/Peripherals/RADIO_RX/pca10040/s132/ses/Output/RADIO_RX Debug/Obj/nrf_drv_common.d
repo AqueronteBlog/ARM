@@ -1,8 +1,8 @@
 Output/RADIO_RX\ Debug/Obj/nrf_drv_common.o: \
- D:\Workspace\ARM\NRF52\Examples\components\drivers_nrf\common\nrf_drv_common.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\drivers_nrf\common\nrf_drv_common.c \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stddef.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/__crossworks.h \
- D:\Workspace\ARM\NRF52\Examples\components\drivers_nrf\common\nrf_drv_common.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\drivers_nrf\common\nrf_drv_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
  ../../../../../../components/device/nrf.h \

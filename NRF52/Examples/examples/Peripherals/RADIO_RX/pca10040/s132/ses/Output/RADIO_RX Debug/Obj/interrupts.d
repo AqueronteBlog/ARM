@@ -1,7 +1,7 @@
 Output/RADIO_RX\ Debug/Obj/interrupts.o: \
- D:\Workspace\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\interrupts.c \
- D:\Workspace\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\interrupts.h \
- D:\Workspace\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\variables.h \
+ E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\interrupts.c \
+ E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\interrupts.h \
+ E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\variables.h \
  ../../../../../../components/device/nrf.h \
  ../../../../../../components/device/nrf52.h \
  ../../../../../../components/toolchain/cmsis/include/core_cm4.h \
@@ -16,4 +16,4 @@ Output/RADIO_RX\ Debug/Obj/interrupts.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/device/nrf52_bitfields.h \
- D:\Workspace\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\board.h
+ E:\vsProjects\ARM\NRF52\Examples\examples\Peripherals\RADIO_RX\board.h

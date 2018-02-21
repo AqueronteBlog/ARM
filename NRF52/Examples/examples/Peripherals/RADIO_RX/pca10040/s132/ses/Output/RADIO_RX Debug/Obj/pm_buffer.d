@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/pm_buffer.o: \
- D:\Workspace\ARM\NRF52\Examples\components\ble\peer_manager\pm_buffer.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\peer_manager\pm_buffer.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,6 +26,6 @@ Output/RADIO_RX\ Debug/Obj/pm_buffer.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\ble\peer_manager\pm_buffer.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\peer_manager\pm_buffer.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
- D:\Workspace\ARM\NRF52\Examples\components\ble\peer_manager\pm_mutex.h
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\peer_manager\pm_mutex.h

@@ -1,6 +1,6 @@
 Output/RADIO_RX\ Debug/Obj/bsp.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\bsp\bsp.c \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\bsp\bsp.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\bsp\bsp.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\bsp\bsp.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
  ../../../../../../components/boards/boards.h \
@@ -34,7 +34,7 @@ Output/RADIO_RX\ Debug/Obj/bsp.o: \
  ../../../../../../components/libraries/util/app_error.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stddef.h \
  ../../../../../../components/libraries/util/nordic_common.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\bsp\bsp_config.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\bsp\bsp_config.h \
  ../../../../../../components/libraries/timer/app_timer.h \
  ../../../../../../components/libraries/util/app_util.h \
  ../../../../../../components/device/compiler_abstraction.h

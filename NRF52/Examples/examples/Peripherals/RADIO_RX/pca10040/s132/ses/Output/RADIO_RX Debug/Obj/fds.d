@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/fds.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\fds\fds.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\fds\fds.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,7 +26,7 @@ Output/RADIO_RX\ Debug/Obj/fds.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\fds\fds.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\fds\fds.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/libraries/util/app_util_platform.h \
  ../../../../../../components/softdevice/s132/headers/nrf_soc.h \
@@ -38,7 +38,7 @@ Output/RADIO_RX\ Debug/Obj/fds.o: \
  ../../../../../../components/libraries/util/app_error.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdio.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\fds\fds_internal_defs.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\fds\fds_internal_defs.h \
  ../../../../../../components/libraries/atomic/nrf_atomic.h \
  ../../../../../../components/libraries/atomic/nrf_atomic_internal.h \
  ../../../../../../components/libraries/atomic_fifo/nrf_atfifo.h \

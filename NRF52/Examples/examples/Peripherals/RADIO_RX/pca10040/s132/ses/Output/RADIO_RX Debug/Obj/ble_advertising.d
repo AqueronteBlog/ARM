@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/ble_advertising.o: \
- D:\Workspace\ARM\NRF52\Examples\components\ble\ble_advertising\ble_advertising.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\ble_advertising\ble_advertising.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -39,7 +39,7 @@ Output/RADIO_RX\ Debug/Obj/ble_advertising.o: \
  ../../../../../../components/softdevice/s132/headers/ble_gattc.h \
  ../../../../../../components/softdevice/s132/headers/ble_gatts.h \
  ../../../../../../components/libraries/util/app_util.h \
- D:\Workspace\ARM\NRF52\Examples\components\ble\ble_advertising\ble_advertising.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\ble\ble_advertising\ble_advertising.h \
  ../../../../../../components/softdevice/s132/headers/ble_gattc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_soc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error_soc.h \

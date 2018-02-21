@@ -1,13 +1,13 @@
 Output/RADIO_RX\ Debug/Obj/sdk_mapped_flags.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\sdk_mapped_flags.c \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\sdk_mapped_flags.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\sdk_mapped_flags.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\sdk_mapped_flags.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\app_util.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\app_util.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stddef.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/__crossworks.h \
  ../../../../../../components/device/compiler_abstraction.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\util\nordic_common.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\util\nordic_common.h \
  ../../../../../../components/device/nrf.h \
  ../../../../../../components/device/nrf52.h \
  ../../../../../../components/toolchain/cmsis/include/core_cm4.h \

@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/app_scheduler.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\scheduler\app_scheduler.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\scheduler\app_scheduler.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -26,7 +26,7 @@ Output/RADIO_RX\ Debug/Obj/app_scheduler.o: \
  ../../../../../../components/device/nrf52_name_change.h \
  ../../../../../../components/device/compiler_abstraction.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\scheduler\app_scheduler.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\scheduler\app_scheduler.h \
  ../../../../../../components/libraries/util/app_error.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdio.h \
  ../../../../../../components/libraries/util/app_error_weak.h \

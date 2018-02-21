@@ -1,5 +1,5 @@
 Output/RADIO_RX\ Debug/Obj/nrf_fprintf.o: \
- D:\Workspace\ARM\NRF52\Examples\external\fprintf\nrf_fprintf.c \
+ E:\vsProjects\ARM\NRF52\Examples\external\fprintf\nrf_fprintf.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdbool.h \
@@ -31,5 +31,5 @@ Output/RADIO_RX\ Debug/Obj/nrf_fprintf.o: \
  ../../../../../../components/libraries/util/app_error.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdio.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
- D:\Workspace\ARM\NRF52\Examples\external\fprintf\nrf_fprintf_format.h \
- D:\Workspace\ARM\NRF52\Examples\external\fprintf\nrf_fprintf.h
+ E:\vsProjects\ARM\NRF52\Examples\external\fprintf\nrf_fprintf_format.h \
+ E:\vsProjects\ARM\NRF52\Examples\external\fprintf\nrf_fprintf.h

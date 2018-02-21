@@ -1,6 +1,6 @@
 Output/RADIO_RX\ Debug/Obj/nrf_memobj.o: \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_memobj\nrf_memobj.c \
- D:\Workspace\ARM\NRF52\Examples\components\libraries\experimental_memobj\nrf_memobj.h \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_memobj\nrf_memobj.c \
+ E:\vsProjects\ARM\NRF52\Examples\components\libraries\experimental_memobj\nrf_memobj.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdint.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/stdlib.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 3.34/include/__crossworks.h \
