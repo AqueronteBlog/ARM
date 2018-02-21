@@ -27,6 +27,13 @@ typedef enum{
   LED4  = 20                /*!<   LED4: P0.20   */
 } NRF52DK_board_LEDS_t;
 
+//typedef enum{
+//  LED1  = 13,               /*!<   LED1: P0.13   */
+//  LED2  = 14,               /*!<   LED2: P0.14   */
+//  LED3  = 15,               /*!<   LED3: P0.15   */
+//  LED4  = 16                /*!<   LED4: P0.16   */
+//} NRF52DKPreview_board_LEDS_t;
+
 
 #ifdef __cplusplus
 }
