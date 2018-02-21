@@ -27,22 +27,21 @@
 /**@brief Function for application main entry.
  */
 int main(void) {
-  uint8_t myPacket[16] = {0};
+  uint8_t myPacket[20] = { 0 };
   uint8_t myLEDS_state = 0;
 
-  conf_CLK();
-  conf_GPIO();
-  conf_RADIO(&myPacket[0]);
+  conf_CLK    ();
+  conf_GPIO   ();
+  conf_RADIO  ( &myPacket[0] );
 
   while (1) {
     NRF_RADIO->TASKS_RXEN = 1;
-    while (NRF_RADIO->EVENTS_DISABLED == 0)
-      ;
+    while ( NRF_RADIO->EVENTS_DISABLED == 0 );
     NRF_RADIO->EVENTS_DISABLED = 0;
 
 
 
-    if (NRF_RADIO->EVENTS_CRCOK == 1) {
+    if ( NRF_RADIO->EVENTS_CRCOK == 1 ) {
       if ( myLEDS_state == 0 )
       {
         NRF_P0->OUTCLR  = ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );
