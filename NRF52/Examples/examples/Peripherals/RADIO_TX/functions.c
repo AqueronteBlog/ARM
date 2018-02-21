@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        17/February/2018
- * @version     17/February/2018   The ORIGIN
+ * @date        21/February/2018
+ * @version     21/February/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -30,7 +30,6 @@
  */
 void conf_CLK  ( void )
 {
-    //NRF_CLOCK->HFCLKSTAT            =   ( CLOCK_HFCLKSTAT_SRC_Xtal << CLOCK_HFCLKSTAT_SRC_Pos );
     NRF_CLOCK->EVENTS_HFCLKSTARTED  =   0;                      // Reset flag
     NRF_CLOCK->TASKS_HFCLKSTART     =   1;                      // Start External crystal CLK
 
@@ -55,14 +54,14 @@ void conf_CLK  ( void )
 void conf_GPIO(void) {
   uint32_t i = 0;
 
-  for (i = LED1; i < (LED4 + 1); i++) {
-    NRF_P0->OUTSET = (1 << i);
+  for ( i = LED1; i < ( LED4 + 1 ); i++ ) {
+    NRF_P0->OUTSET     = ( 1 <<  i);
 
-    NRF_P0->PIN_CNF[i] = GPIO_PIN_CNF_DIR_Output << GPIO_PIN_CNF_DIR_Pos |
-                         GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos |
-                         GPIO_PIN_CNF_PULL_Disabled << GPIO_PIN_CNF_PULL_Pos |
-                         GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos |
-                         GPIO_PIN_CNF_SENSE_Disabled << GPIO_PIN_CNF_SENSE_Pos;
+    NRF_P0->PIN_CNF[i] = ( GPIO_PIN_CNF_DIR_Output        << GPIO_PIN_CNF_DIR_Pos   ) |
+                         ( GPIO_PIN_CNF_INPUT_Disconnect  << GPIO_PIN_CNF_INPUT_Pos ) |
+                         ( GPIO_PIN_CNF_PULL_Disabled     << GPIO_PIN_CNF_PULL_Pos  ) |
+                         ( GPIO_PIN_CNF_DRIVE_S0S1        << GPIO_PIN_CNF_DRIVE_Pos ) |
+                         ( GPIO_PIN_CNF_SENSE_Disabled    << GPIO_PIN_CNF_SENSE_Pos );
   }
 }
 
@@ -74,62 +73,63 @@ void conf_GPIO(void) {
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        20/February/2018
- * @version     20/February/2018   The ORIGIN
+ * @date        21/February/2018
+ * @version     21/February/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
 void conf_RADIO(uint8_t *myPacketPointer) {
   /* Reset to its initial state */
-  NRF_RADIO->POWER = (RADIO_POWER_POWER_Disabled << RADIO_POWER_POWER_Pos);
-  NRF_RADIO->POWER = (RADIO_POWER_POWER_Enabled << RADIO_POWER_POWER_Pos);
+  NRF_RADIO->POWER = ( RADIO_POWER_POWER_Disabled << RADIO_POWER_POWER_Pos );
+  NRF_RADIO->POWER = ( RADIO_POWER_POWER_Enabled  << RADIO_POWER_POWER_Pos );     // A little delay may be inserted!
 
   // Configure radio with 2Mbit Nordic proprietary mode
-  NRF_RADIO->MODE = (RADIO_MODE_MODE_Nrf_2Mbit << RADIO_MODE_MODE_Pos);
+  NRF_RADIO->MODE  = ( RADIO_MODE_MODE_Nrf_2Mbit << RADIO_MODE_MODE_Pos );
 
-  // Configure packet with no S0,S1 or Length fields and 8-bit preamble.
-  NRF_RADIO->PCNF0 = (0 << RADIO_PCNF0_LFLEN_Pos) |
-                     (0 << RADIO_PCNF0_S0LEN_Pos) |
-                     (0 << RADIO_PCNF0_S1LEN_Pos) |
-                     (RADIO_PCNF0_S1INCL_Automatic << RADIO_PCNF0_S1INCL_Pos) |
-                     (RADIO_PCNF0_PLEN_8bit << RADIO_PCNF0_PLEN_Pos);
+  // Configure packet: NO S0,S1 or Length fields & 8-bit preamble.
+  NRF_RADIO->PCNF0 = ( 0                            << RADIO_PCNF0_LFLEN_Pos  ) |
+                     ( 0                            << RADIO_PCNF0_S0LEN_Pos  ) |
+                     ( 0                            << RADIO_PCNF0_S1LEN_Pos  ) |
+                     ( RADIO_PCNF0_S1INCL_Automatic << RADIO_PCNF0_S1INCL_Pos ) |
+                     ( RADIO_PCNF0_PLEN_8bit        << RADIO_PCNF0_PLEN_Pos   );
 
-  // Configure static payload length of 16 bytes. 3 bytes address, little endian with whitening enabled.
-  NRF_RADIO->PCNF1 = (10 << RADIO_PCNF1_MAXLEN_Pos) |
-                     (10 << RADIO_PCNF1_STATLEN_Pos) |
-                     (2 << RADIO_PCNF1_BALEN_Pos) |
-                     (RADIO_PCNF1_ENDIAN_Little << RADIO_PCNF1_ENDIAN_Pos) |
-                     (RADIO_PCNF1_WHITEEN_Enabled << RADIO_PCNF1_WHITEEN_Pos);
+  // Configure static payload length of 20bytes. 3 bytes address, little endian with whitening enabled.
+  NRF_RADIO->PCNF1 = ( 20                           << RADIO_PCNF1_MAXLEN_Pos) |
+                     ( 20                           << RADIO_PCNF1_STATLEN_Pos) |
+                     ( 2                            << RADIO_PCNF1_BALEN_Pos) |
+                     ( RADIO_PCNF1_ENDIAN_Little    << RADIO_PCNF1_ENDIAN_Pos) |
+                     ( RADIO_PCNF1_WHITEEN_Enabled  << RADIO_PCNF1_WHITEEN_Pos);
 
-  // initialize whitening value
+  // Whitening value
   NRF_RADIO->DATAWHITEIV = ( ( 0x55 & RADIO_DATAWHITEIV_DATAWHITEIV_Msk ) << RADIO_DATAWHITEIV_DATAWHITEIV_Pos );
 
-  // Configure address Prefix0 + Base0
-  NRF_RADIO->BASE0 = ( 0x0000BEEF );
+  // Configure address Prefix0 and Base0
+  NRF_RADIO->BASE0   = ( 0x0000BEEF );
   NRF_RADIO->PREFIX0 = ( ( 0x22 & RADIO_PREFIX0_AP0_Msk ) << RADIO_PREFIX0_AP0_Pos );
 
-  // Use logical address 0 (BASE0 + PREFIX0 byte 0)
-  NRF_RADIO->RXADDRESSES = ( RADIO_RXADDRESSES_ADDR0_Enabled << RADIO_RXADDRESSES_ADDR0_Pos );
+  // Use logical address 0 ( BASE0 and PREFIX0 byte 0 )
+  NRF_RADIO->RXADDRESSES = ( RADIO_RXADDRESSES_ADDR0_Disabled << RADIO_RXADDRESSES_ADDR0_Pos );
 
-  // Initialize CRC (one bytes)
-  NRF_RADIO->CRCCNF = (RADIO_CRCCNF_LEN_One << RADIO_CRCCNF_LEN_Pos) |
-                      (RADIO_CRCCNF_SKIPADDR_Skip << RADIO_CRCCNF_SKIPADDR_Pos);
+  // Initialize CRC ( two bytes )
+  NRF_RADIO->CRCCNF    =   (RADIO_CRCCNF_LEN_Two << RADIO_CRCCNF_LEN_Pos) |
+                           (RADIO_CRCCNF_SKIPADDR_Skip << RADIO_CRCCNF_SKIPADDR_Pos);
 
   NRF_RADIO->CRCPOLY   =   ( 0x0000AAAA << RADIO_CRCPOLY_CRCPOLY_Pos );
   NRF_RADIO->CRCINIT   =   ( 0x12345678 << RADIO_CRCINIT_CRCINIT_Pos );
 
   // Enable fast rampup, new in nRF52
-  NRF_RADIO->MODECNF0 = (RADIO_MODECNF0_DTX_B0 << RADIO_MODECNF0_DTX_Pos) |
-                        (RADIO_MODECNF0_RU_Fast << RADIO_MODECNF0_RU_Pos);
+  NRF_RADIO->MODECNF0  =   ( RADIO_MODECNF0_DTX_B0  << RADIO_MODECNF0_DTX_Pos ) |
+                           ( RADIO_MODECNF0_RU_Fast << RADIO_MODECNF0_RU_Pos  );
 
-  // receiving packets at 2400MHz
-  NRF_RADIO->FREQUENCY =   ( ( 0 & RADIO_FREQUENCY_FREQUENCY_Msk ) << RADIO_FREQUENCY_FREQUENCY_Pos );                            // Frequency = 2400 + FREQUENCY (MHz).
+  // Output Power: 0dBm  @2400MHz
+  NRF_RADIO->TXPOWER   =   ( RADIO_TXPOWER_TXPOWER_0dBm << RADIO_TXPOWER_TXPOWER_Pos );
+  NRF_RADIO->FREQUENCY =   ( ( 0 & RADIO_FREQUENCY_FREQUENCY_Msk ) << RADIO_FREQUENCY_FREQUENCY_Pos );      // Frequency = 2400 + FREQUENCY (MHz).
 
 
   // Configure address of the packet and logic address to use
-  NRF_RADIO->PACKETPTR = ( uint32_t )&myPacketPointer[0];
+  NRF_RADIO->PACKETPTR =   ( uint32_t )&myPacketPointer[0];
 
-  // Configure shortcuts to start as soon as READY event is received, and disable radio as soon as packet is received.
-  NRF_RADIO->SHORTS = (RADIO_SHORTS_READY_START_Enabled << RADIO_SHORTS_READY_START_Pos) |
-                      (RADIO_SHORTS_END_DISABLE_Enabled << RADIO_SHORTS_END_DISABLE_Pos);
+  // Configure shortcuts.
+  NRF_RADIO->SHORTS    =   ( RADIO_SHORTS_READY_START_Enabled << RADIO_SHORTS_READY_START_Pos ) |
+                           ( RADIO_SHORTS_END_DISABLE_Enabled << RADIO_SHORTS_END_DISABLE_Pos );
 }
