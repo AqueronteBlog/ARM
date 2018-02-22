@@ -1,15 +1,15 @@
 /**
- * @brief       DS1624.h
- * @details     Digital Thermometer and Memory.
+ * @brief       AS3933.h
+ * @details     3D Low Frequency Wakeup Receiver.
  *              Header file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        18/January/2018
- * @version     18/January/2018    The ORIGIN
- * @pre         N/A.
+ * @date        22/February/2018
+ * @version     22/February/2018    The ORIGIN
+ * @pre         N/A
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
@@ -17,104 +17,78 @@
 
 #include "stdint.h"
 #include "stdbool.h"
-#include "i2c.h"
+#include "spi.h"
 
-#ifndef DS1624_H_
-#define DS1624_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+/* SPI COMMAND STRUCTURE */
 /**
-  * @brief   DEFAULT ADDRESSES. [ 0 : GND | 1 : VDD ]
+  * @brief   MODE. ( B15:B14 )
   */
 typedef enum
 {
-    DS1624_ADDRESS_0     =   ( 0b1001 << 3 ) | 0b000,              /*!<   Address A2 A1 A0: 000                */
-    DS1624_ADDRESS_1     =   ( 0b1001 << 3 ) | 0b001,              /*!<   Address A2 A1 A0: 001                */
-    DS1624_ADDRESS_2     =   ( 0b1001 << 3 ) | 0b010,              /*!<   Address A2 A1 A0: 010                */
-    DS1624_ADDRESS_3     =   ( 0b1001 << 3 ) | 0b011,              /*!<   Address A2 A1 A0: 011                */
-    DS1624_ADDRESS_4     =   ( 0b1001 << 3 ) | 0b100,              /*!<   Address A2 A1 A0: 100                */
-    DS1624_ADDRESS_5     =   ( 0b1001 << 3 ) | 0b101,              /*!<   Address A2 A1 A0: 101                */
-    DS1624_ADDRESS_6     =   ( 0b1001 << 3 ) | 0b110,              /*!<   Address A2 A1 A0: 110                */
-    DS1624_ADDRESS_7     =   ( 0b1001 << 3 ) | 0b111               /*!<   Address A2 A1 A0: 111                */
-} DS1624_address_t;
-
-
-// DS1624 Command Set
-/**
-  * @brief   TEMPERATURE CONVERSION COMMANDS
-  */
-typedef enum
-{
-    DS1624_READ_TEMPERATURE     =   0xAA,               /*!<  Reads last converted temperature value from temperature register  */
-    DS1624_START_CONVERT_T      =   0xEE,               /*!<  Initiates temperature conversion                                  */
-    DS1624_STOP_CONVERT_T       =   0x22                /*!<  Halts temperature conversion                                      */
-} DS1624_temperature_conversion_commands_t;
+    AS3933_WRITE            =   0x00,           /*!<  WRITE                 */
+    AS3933_READ             =   0x01,           /*!<  READ                  */
+    AS3933_DIRECT_COMMAND   =   0x03            /*!<  DIRECT COMMAND        */
+} AS3933_spi_command_structure_mode_t;
 
 
 /**
-  * @brief   THERMOSTAT COMMANDS. NOTE: Writing to the EEPROM typically requires 10ms at room temperature. After issuing a write
-  *                                     command, no further reads or writes should be requested for at least 10ms.
+  * @brief   READ/WRITE REGISTER ( B13:B8 )
   */
 typedef enum
 {
-    DS1624_ACCESS_MEMORY        =   0x17,               /*!<  Reads or writes to 256-byte EEPROM memory                         */
-    DS1624_ACCESS_CONFIG        =   0xAC                /*!<  Reads or writes configuration data to configuration register      */
-} DS1624_thermostat_commands_t;
+    AS3933_R0               =   0x00,           /*!<  R0  register          */
+    AS3933_R1               =   0x01,           /*!<  R1  register          */
+    AS3933_R2               =   0x02,           /*!<  R3  register          */
+    AS3933_R3               =   0x03,           /*!<  R4  register          */
+    AS3933_R4               =   0x04,           /*!<  R5  register          */
+    AS3933_R5               =   0x05,           /*!<  R6  register          */
+    AS3933_R6               =   0x06,           /*!<  R7  register          */
+    AS3933_R7               =   0x07,           /*!<  R8  register          */
+    AS3933_R8               =   0x08,           /*!<  R9  register          */
+    AS3933_R9               =   0x09,           /*!<  R10 register          */
+    AS3933_R10              =   0x0A,           /*!<  R11 register          */
+    AS3933_R11              =   0x0B,           /*!<  R11 register          */
+    AS3933_R12              =   0x0C,           /*!<  R12 register          */
+    AS3933_R13              =   0x0D,           /*!<  R13 register          */
+    AS3933_R14              =   0x0E,           /*!<  R14 register          */
+    AS3933_R15              =   0x0F,           /*!<  R15 register          */
+    AS3933_R16              =   0x10,           /*!<  R16 register          */
+    AS3933_R17              =   0x11,           /*!<  R17 register          */
+    AS3933_R18              =   0x12,           /*!<  R18 register          */
+    AS3933_R19              =   0x13            /*!<  R19 register          */
+} AS3933_spi_command_structure_registers_t;
 
 
-
-// ACCESS CONFIG ( CONFIGURATION/STATUS REGISTER )
+/* SPI DIRECT COMMANDS */
 /**
-  * @brief   BIT7: DONE
+  * @brief   DIRECT COMMANDS. ( B13:B8 )
   */
 typedef enum
 {
-    ACCESS_CONFIG_DONE_MASK                     =   ( 1 << 7 ),                 /*!<  DONE Mask                                 */
-    ACCESS_CONFIG_DONE_CONVERSION_COMPLETE      =   ( 1 << 7 ),                 /*!<  Conversion complete                       */
-    ACCESS_CONFIG_DONE_CONVERSION_IN_PROGRESS   =   ( 0 << 7 )                  /*!<  Conversion in progress                    */
-} DS1624_access_config_done_t;
-
-
-/**
-  * @brief   BIT0: 1SHOT
-  */
-typedef enum
-{
-    ACCESS_CONFIG_1SHOT_MASK                                =   ( 1 << 0 ),     /*!<  1SHOT Mask                                                                        */
-    ACCESS_CONFIG_1SHOT_ONE_TEMPERATURE_CONVERSION          =   ( 1 << 0 ),     /*!<  Perform one temperature conversion upon receipt of the Start Convert T protocol   */
-    ACCESS_CONFIG_1SHOT_CONTINUOUSLY_TEMPERATURE_CONVERSION =   ( 0 << 0 )      /*!<  Perform continuously temperature conversions                                      */
-} DS1624_access_config_1shot_t;
-
-
-
-// TEMPERATURE REGISTER
-/**
-  * @brief   MSB BIT15: SIGN
-  */
-typedef enum
-{
-    MSB_TEMPERATURE_SIGN_BIT_MASK               =   ( 1 << 7 ),                 /*!<  Temperature sign Mask                     */
-    MSB_TEMPERATURE_SIGN_BIT_POSITIVE           =   ( 0 << 7 ),                 /*!<  Temperature is POSITIVE                   */
-    MSB_TEMPERATURE_SIGN_BIT_NEGATIVE           =   ( 1 << 7 )                  /*!<  Temperature is NEGATIVE                   */
-} DS1624_msb_temperature_sign_bit_t;
+    CLEAR_WAKE              =   0x00,           /*!<  Clears the wake state of the chip. In case the chip has woken up (WAKE pin is high) the chip is set back to listening mode    */
+    RESET_RSSI              =   0x01,           /*!<  Resets the RSSI measurement                                                                                                   */
+    CALIB_RC_OSC            =   0x02,           /*!<  Starts the trimming procedure of the internal RC oscillator                                                                   */
+    CLEAR_FALSE             =   0x03,           /*!<  Resets the false wakeup register ( R13 = 00 )                                                                                 */
+    PRESET_DEFAULT          =   0x04,           /*!<  Sets all register in the default mode                                                                                         */
+    CALIB_RCO_LC            =   0x05            /*!<  Calibration of the RC-oscillator with the external LC tank                                                                    */
+} AS3933_spi_direct_commands_t;
 
 
 
 
 
-#ifndef DS1624_VECTOR_STRUCT_H
-#define DS1624_VECTOR_STRUCT_H
+
+
+
+
+#ifndef AS3933_VECTOR_STRUCT_H
+#define AS3933_VECTOR_STRUCT_H
+/* No-Decode Mode Data Bits */
 typedef struct
 {
-    uint8_t MSBTemperature;
-    uint8_t LSBTemperature;
-    uint8_t Control_Status_Register;
-
-    float   Temperature;
-} DS1624_vector_data_t;
+    uint8_t mySEG;                  /*!<  D7: DP | D6: A | D5: B | D4: C | D3: D | D2: E | D1: F | D0: G   */
+} AS3933_no_decode_b_t;
 #endif
 
 
@@ -122,13 +96,12 @@ typedef struct
 /**
   * @brief   INTERNAL CONSTANTS
   */
-#define DS1624_TEMPERATURE_RESOLUTION   0.0625
-
 typedef enum
 {
-    DS1624_SUCCESS                   =   0,
-    DS1624_FAILURE                   =   1,
-} DS1624_status_t;
+    AS3933_SUCCESS     =       0,
+    AS3933_FAILURE     =       1
+} AS3933_status_t;
+
 
 
 
@@ -136,50 +109,4 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-/** It configures the SPI peripheral.
-    */
-DS1624_status_t DS1624_Init                        ( I2C_parameters_t myI2Cparameters );
-
-/** It triggers a new temperature measurement.
-      */
-DS1624_status_t DS1624_StartConvertTemperature     ( I2C_parameters_t myI2Cparameters );
-
-/** It stops the current temperature conversion.
-      */
-DS1624_status_t DS1624_StopConvertTemperature      ( I2C_parameters_t myI2Cparameters );
-
-/** It reads the last raw temperature conversion result.
-      */
-DS1624_status_t DS1624_ReadRawTemperature          ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myRawTemperature );
-
-/** It reads the last temperature conversion result.
-      */
-DS1624_status_t DS1624_ReadTemperature             ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myTemperature );
-
-/** It reads the CONFIGURATION/STATUS register.
-      */
-DS1624_status_t DS1624_GetStatusRegister           ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myStatusRegister );
-
-/** It sets 1SHOT/Continuous temperature conversion mode.
-      */
-DS1624_status_t DS1624_SetConversionMode           ( I2C_parameters_t myI2Cparameters, DS1624_access_config_1shot_t myConversionMode );
-
-/** It checks if a temperature conversion is done.
-      */
-DS1624_status_t DS1624_IsTemperatureConversionDone ( I2C_parameters_t myI2Cparameters, DS1624_access_config_done_t* myTemperatureConversionStatus );
-
-/** It reads a certain number of bytes from EEPROM memory.
-      */
-DS1624_status_t DS1624_ReadBytesEEPROM             ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t* myReadBytesEEPROM, uint8_t myLength );
-
-/** It writes a certain number of bytes to EEPROM memory.
-      */
-DS1624_status_t DS1624_WriteBytesEEPROM            ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t myWriteBytesEEPROM[], uint8_t myLength );
-
-
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* DS1624_H */
+AS3933_status_t  AS3933_Init              ( SPI_parameters_t mySPI_parameters                                                         );
