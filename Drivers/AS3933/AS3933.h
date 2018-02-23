@@ -78,6 +78,8 @@ typedef enum
 /* R0 REGISTER. COMMANDS */
 /**
   * @brief   PATT32 ( R0<7> ). Pattern extended to 32 bits
+  *
+  *          NOTE: Default value: PATT32_16_BITS
   */
 typedef enum
 {
@@ -89,6 +91,8 @@ typedef enum
 
 /**
   * @brief   DAT_MASK ( R0<6> ). Masks data on DAT pin before wakeup happens
+  *
+  *          NOTE: Default value: DAT_MASK_DISABLED
   */
 typedef enum
 {
@@ -100,6 +104,8 @@ typedef enum
 
 /**
   * @brief   ON_OFF ( R0<5> ). On/Off operation mode. ( Duty-cycle defined in the register R4<7:6> )
+  *
+  *          NOTE: Default value: ON_OFF_DISABLED
   */
 typedef enum
 {
@@ -111,6 +117,8 @@ typedef enum
 
 /**
   * @brief   MUX_123 ( R0<4> ). Scan mode enable
+  *
+  *          NOTE: Default value: MUX_123_DISABLED
   */
 typedef enum
 {
@@ -122,6 +130,8 @@ typedef enum
 
 /**
   * @brief   EN_A2 ( R0<3> ). Channel 2 enable
+  *
+  *          NOTE: Default value: EN_A2_ENABLED
   */
 typedef enum
 {
@@ -133,6 +143,8 @@ typedef enum
 
 /**
   * @brief   EN_A3 ( R0<2> ). Channel 3 enable
+  *
+  *          NOTE: Default value: EN_A3_ENABLED
   */
 typedef enum
 {
@@ -144,6 +156,8 @@ typedef enum
 
 /**
   * @brief   EN_A1 ( R0<1> ). Channel 1 enable
+  *
+  *          NOTE: Default value: EN_A1_ENABLED
   */
 typedef enum
 {
@@ -156,6 +170,8 @@ typedef enum
 /* R1 REGISTER. COMMANDS */
 /**
   * @brief   ABS_HY ( R1<7> ). Enable Data slicer absolute reference
+  *
+  *          NOTE: Default value: ABS_HY_DISABLED
   */
 typedef enum
 {
@@ -167,6 +183,8 @@ typedef enum
 
 /**
   * @brief   AGC_TLIM ( R1<6> ). AGC acting only on the first carrier burst
+  *
+  *          NOTE: Default value: AGC_TLIM_DISABLED
   */
 typedef enum
 {
@@ -178,6 +196,8 @@ typedef enum
 
 /**
   * @brief   AGC_UD ( R1<5> ). AGC operating in both direction (up-down)
+  *
+  *          NOTE: Default value: AGC_UD_UP_DOWN_MODE
   */
 typedef enum
 {
@@ -189,6 +209,8 @@ typedef enum
 
 /**
   * @brief   ATT_ON ( R1<4> ). Antenna damper enable
+  *
+  *          NOTE: Default value: ATT_ON_DISABLED
   */
 typedef enum
 {
@@ -200,6 +222,8 @@ typedef enum
 
 /**
   * @brief   EN_MANCH ( R1<3> ). Manchester decoder enable
+  *
+  *          NOTE: Default value: EN_MANCH_DISABLED
   */
 typedef enum
 {
@@ -211,6 +235,8 @@ typedef enum
 
 /**
   * @brief   EN_PAT2 ( R1<2> ). Double wakeup pattern correlation
+  *
+  *          NOTE: Default value: EN_PAT2_DISABLED
   */
 typedef enum
 {
@@ -222,6 +248,8 @@ typedef enum
 
 /**
   * @brief   EN_WPAT ( R1<1> ). Correlator enable
+  *
+  *          NOTE: Default value: EN_WPAT_ENABLED
   */
 typedef enum
 {
@@ -233,6 +261,8 @@ typedef enum
 
 /**
   * @brief   EN_XTAL ( R1<0> ). Crystal oscillator enable
+  *
+  *          NOTE: Default value: EN_XTAL_ENABLED
   */
 typedef enum
 {
@@ -245,6 +275,8 @@ typedef enum
 /* R2 REGISTER. COMMANDS */
 /**
   * @brief   S_ABSH ( R2<7> ). Data slicer absolute threshold reduction
+  *
+  *          NOTE: Default value: S_ABSH_DISABLED
   */
 typedef enum
 {
@@ -256,6 +288,8 @@ typedef enum
 
 /**
   * @brief   EN_EXT_CLK ( R2<6> ). Enables external clock generator
+  *
+  *          NOTE: Default value: EN_EXT_CLK_DISABLED
   */
 typedef enum
 {
@@ -267,6 +301,8 @@ typedef enum
 
 /**
   * @brief   G_BOOST ( R2<5> ). +3dB Amplifier Gain Boost
+  *
+  *          NOTE: Default value: G_BOOST_DISABLED
   */
 typedef enum
 {
@@ -278,6 +314,8 @@ typedef enum
 
 /**
   * @brief   S_WU1 ( R2<1:0> ). Tolerance setting for the stage wakeup ( 20 to 150 kHz )
+  *
+  *          NOTE: Default value: S_WU1_20_150_KHZ_TOLERANCE_16_3
   */
 typedef enum
 {
@@ -291,6 +329,8 @@ typedef enum
 
 /**
   * @brief   S_WU1 ( R2<1:0> ). Tolerance setting for the stage wakeup ( 15 to 20 kHz )
+  *
+  *          NOTE: Default value: S_WU1_15_20_KHZ_TOLERANCE_8_3
   */
 typedef enum
 {
@@ -304,6 +344,8 @@ typedef enum
 /* R3 REGISTER. COMMANDS */
 /**
   * @brief   HY_20m ( R3<7> ). Data slicer hysteresis
+  *
+  *          NOTE: Default value: HY_20M_COMPARATOR_HYSTERESIS_40MV
   */
 typedef enum
 {
@@ -315,6 +357,8 @@ typedef enum
 
 /**
   * @brief   HY_POS ( R3<6> ). Data slicer hysteresis
+  *
+  *          NOTE: Default value: HY_POS_HYSTERESIS_POSITIVE_EDGES
   */
 typedef enum
 {
