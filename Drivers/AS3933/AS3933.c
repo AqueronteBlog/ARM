@@ -11,7 +11,7 @@
  * @version     22/February/2018    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
+ * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ).
  */
 
 #include "AS3933.h"
