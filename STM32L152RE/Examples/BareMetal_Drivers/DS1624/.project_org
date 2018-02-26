@@ -29,7 +29,7 @@
 		<link>
 			<name>I2C</name>
 			<type>2</type>
-			<location>D:/Workspace/ARM/STM32L152RE/Examples/BareMetal_Basics/I2C</location>
+			<location>E:/vsProjects/ARM/STM32L152RE/Examples/BareMetal_Basics/I2C</location>
 		</link>
 	</linkedResources>
 </projectDescription>
