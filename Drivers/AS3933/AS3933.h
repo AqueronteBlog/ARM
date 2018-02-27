@@ -66,7 +66,7 @@ typedef enum
   */
 typedef enum
 {
-    CLEAR_WAKE              =   0x00,           /*!<  Clears the wake state of the chip. In case the chip has woken up (WAKE pin is high) the chip is set back to listening mode    */
+    CLEAR_WAKE              =   0x00,           /*!<  Clears the wake state of the chip. In case the chip has woken up ( WAKE pin is high ) the chip is set back to listening mode  */
     RESET_RSSI              =   0x01,           /*!<  Resets the RSSI measurement                                                                                                   */
     CALIB_RC_OSC            =   0x02,           /*!<  Starts the trimming procedure of the internal RC oscillator                                                                   */
     CLEAR_FALSE             =   0x03,           /*!<  Resets the false wakeup register ( R13 = 00 )                                                                                 */
@@ -835,6 +835,52 @@ typedef enum
 
 
 
+/* LIBRARY IN PROGRESS */
+/**
+  * @brief   CHANNEL ENABLED
+  *
+  *          NOTE: p.14 8.1.1 Listening Mode
+  */
+typedef enum
+{
+    AS3933_THREE_CHANNELS_ENABLED   =   0,              /*!<  All channels enabled                          */
+    AS3933_TWO_CHANNELS_ENABLED     =   1,              /*!<  Channels 1 and 2 enabled                      */
+    AS3933_ONE_CHANNELS_ENABLED     =   2,              /*!<  Channel 1 enabled                             */
+    AS3933_ALL_CHANNELS_DISABLED    =   3               /*!<  All channels disabled                         */
+} AS3933_channels_enable_t;
+
+
+/**
+  * @brief   LISTENING MODE ( LOW POWER MODE )
+  *
+  *          NOTE: p.14 8.1.1 Listening Mode
+  */
+typedef enum
+{
+    AS3933_STANDARD_LISTENING_MODE  =   0,              /*!<  All channels are active at the same time      */
+    AS3933_SCANNING_MODE            =   1,              /*!<  Low Power mode 1                              */
+    AS3933_ON_OFF_MODE              =   2               /*!<  Low Power mode 2                              */
+} AS3933_scanning_mode_t;
+
+
+/**
+  * @brief   TOLERANCE SETTINGS
+  *
+  *          NOTE: p.23 8.3.1 Frequency Detector / RSSI / Channel Selector
+  *                The tolerance depends on the frequency detection band.
+  */
+typedef enum
+{
+    AS3933_TOLERANCE_TIGHT  =   0,
+    AS3933_TOLERANCE_MEDIUM =   1,
+    AS3933_TOLERANCE_RELAX  =   2
+} AS3933_tolerance_settings_t;
+
+
+
+
+
+
 
 
 
@@ -842,11 +888,11 @@ typedef enum
 
 #ifndef AS3933_VECTOR_STRUCT_H
 #define AS3933_VECTOR_STRUCT_H
-/* No-Decode Mode Data Bits */
+/* AS3933 DATA */
 typedef struct
 {
-    uint8_t mySEG;                  /*!<  D7: DP | D6: A | D5: B | D4: C | D3: D | D2: E | D1: F | D0: G   */
-} AS3933_no_decode_b_t;
+    int8_t f_wake;                  /*!<  False wakeup register   */
+} AS3933_data_t;
 #endif
 
 
@@ -867,4 +913,70 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-AS3933_status_t  AS3933_Init              ( SPI_parameters_t mySPI_parameters                                                         );
+/** It configures the SPI peripheral.
+    */
+AS3933_status_t  AS3933_Init                            ( SPI_parameters_t mySPI_parameters                                                                                                                   );
+
+/** It configures the low power mode.
+    */
+AS3933_status_t  AS3933_SetLowPowerMode                 ( SPI_parameters_t mySPI_parameters, AS3933_channels_enable_t myEnabledChannels, AS3933_scanning_mode_t myLowPowerMode, AS3933_r4_t_off_value_t myT   );
+
+/** It configures the artificial wakeup.
+    */
+AS3933_status_t  AS3933_SetArtificialWakeUp             ( SPI_parameters_t mySPI_parameters, AS3933_r8_t_auto_value_t myArtificialWakeUp                                                                      );
+
+/** It gets feedback on the surrounding environment reading the false wakeup register.
+    */
+AS3933_status_t  AS3933_ReadFalseWakeUpRegister         ( SPI_parameters_t mySPI_parameters, AS3933_data_t* myF_WAKE                                                                                          );
+
+/** It configures the clock generator.
+    */
+AS3933_status_t  AS3933_SetClockGenerator               ( SPI_parameters_t mySPI_parameters, AS3933_r1_en_xtal_value_t myClockGenerator, AS3933_r16_clock_gen_dis_value_t myClockGeneratorOutputMode          );
+
+/** It calibrates RC oscillator ( Self Calibration only ).
+    */
+AS3933_status_t  AS3933_CalibrateRC_Oscillator          ( SPI_parameters_t mySPI_parameters                                                                                                                   );
+
+/** It configures the antenna damper.
+    */
+AS3933_status_t  AS3933_SetAntennaDamper                ( SPI_parameters_t mySPI_parameters, AS3933_r1_att_on_value_t myAntennaDamperMode, AS3933_r4_d_res_value_t myShuntResistor                            );
+
+/** It configures the envelop detector for different symbol rates.
+    */
+AS3933_status_t  AS3933_SetEnvelopDetector              ( SPI_parameters_t mySPI_parameters, AS3933_r3_fs_env_value_t mySymbolRates                                                                           );
+
+/** It configures the data slicer for different preamble length.
+    */
+AS3933_status_t  AS3933_SetDataSlicer                   ( SPI_parameters_t mySPI_parameters, AS3933_r1_abs_hy_value_t myAbsoluteThresholdMode, AS3933_r3_fs_scl_value_t myMinimumPreableLength                );
+
+/** It configures the hysteresis on the data slicer comparator.
+    */
+AS3933_status_t  AS3933_SetComparatorHysteresis         ( SPI_parameters_t mySPI_parameters, AS3933_r3_hy_pos_value_t myHysteresisMode, AS3933_r3_hy_20m_value_t myHysteresisRange                            );
+
+/** It configures the gain reduction.
+    */
+AS3933_status_t  AS3933_SetGainReduction                ( SPI_parameters_t mySPI_parameters, AS3933_r4_gr_value_t myGainReductionValue                                                                        );
+
+/** It configures the operating frequency range.
+    */
+AS3933_status_t  AS3933_SetOperatingFrequencyRange      ( SPI_parameters_t mySPI_parameters, AS3933_r8_band_sel_value_t myOperatingFrequencyRange                                                             );
+
+/** It configures the frequency detection tolerance.
+    */
+AS3933_status_t  AS3933_SetFrequencyDetectionTolerance  ( SPI_parameters_t mySPI_parameters, AS3933_tolerance_settings_t myTolerance                                                                          );
+
+/** It configures the +3dB gain boost.
+    */
+AS3933_status_t  AS3933_SetGainBoost                    ( SPI_parameters_t mySPI_parameters, AS3933_r2_g_boost_value_t myGainBoostMode                                                                        );
+
+/** It configures the Automatic Gain Control ( AGC ).
+    */
+AS3933_status_t  AS3933_SetAGC                          ( SPI_parameters_t mySPI_parameters, AS3933_r1_agc_tlim_value_t myAGC_CarrierBurstMode, AS3933_r1_agc_ud_value_t myAGC_OperatingDirection             );
+
+/** It configures the Automatic Gain Control ( AGC ).
+    */
+AS3933_status_t  AS3933_SetAGC                          ( SPI_parameters_t mySPI_parameters, AS3933_r1_agc_tlim_value_t myAGC_CarrierBurstMode, AS3933_r1_agc_ud_value_t myAGC_OperatingDirection             );
+
+/** It configures the mask data before wakeup.
+    */
+AS3933_status_t  AS3933_SetDataMask                     ( SPI_parameters_t mySPI_parameters, AS3933_r0_dat_mask_value_t myDataMaskMode                                                                        );
