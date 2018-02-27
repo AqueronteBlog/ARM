@@ -26,9 +26,9 @@
   */
 typedef enum
 {
-    AS3933_WRITE            =   0x00,           /*!<  WRITE                 */
-    AS3933_READ             =   0x01,           /*!<  READ                  */
-    AS3933_DIRECT_COMMAND   =   0x03            /*!<  DIRECT COMMAND        */
+    AS3933_WRITE            =   ( 0x00 << 6 ),  /*!<  WRITE                 */
+    AS3933_READ             =   ( 0x01 << 6 ),  /*!<  READ                  */
+    AS3933_DIRECT_COMMAND   =   ( 0x03 << 6 )   /*!<  DIRECT COMMAND        */
 } AS3933_spi_command_structure_mode_t;
 
 
@@ -843,10 +843,14 @@ typedef enum
   */
 typedef enum
 {
-    AS3933_THREE_CHANNELS_ENABLED   =   0,              /*!<  All channels enabled                          */
-    AS3933_TWO_CHANNELS_ENABLED     =   1,              /*!<  Channels 1 and 2 enabled                      */
-    AS3933_ONE_CHANNELS_ENABLED     =   2,              /*!<  Channel 1 enabled                             */
-    AS3933_ALL_CHANNELS_DISABLED    =   3               /*!<  All channels disabled                         */
+    AS3933_CH1_OFF_CH2_OFF_CH3_OFF  =   0,              /*!<  All channels disabled                         */
+    AS3933_CH1_ON_CH2_OFF_CH3_OFF   =   1,              /*!<  Channels 1 enabled                            */
+    AS3933_CH1_OFF_CH2_ON_CH3_OFF   =   2,              /*!<  Channel 2 enabled                             */
+    AS3933_CH1_ON_CH2_ON_CH3_OFF    =   3,              /*!<  Channels 1 and 2 enabled                      */
+    AS3933_CH1_OFF_CH2_OFF_CH3_ON   =   4,              /*!<  Channel 3 enabled                             */
+    AS3933_CH1_ON_CH2_OFF_CH3_ON    =   5,              /*!<  Channels 1 and 3 enabled                      */
+    AS3933_CH1_OFF_CH2_ON_CH3_ON    =   6,              /*!<  Channels 2 and 3 enabled                      */
+    AS3933_CH1_ON_CH2_ON_CH3_ON     =   7               /*!<  All channels enabled                          */
 } AS3933_channels_enable_t;
 
 
@@ -946,7 +950,7 @@ AS3933_status_t  AS3933_Init                            ( SPI_parameters_t mySPI
 
 /** It configures the low power mode.
     */
-AS3933_status_t  AS3933_SetLowPowerMode                 ( SPI_parameters_t mySPI_parameters, AS3933_channels_enable_t myEnabledChannels, AS3933_scanning_mode_t myLowPowerMode, AS3933_r4_t_off_value_t myT         );
+AS3933_status_t  AS3933_SetLowPowerMode                 ( SPI_parameters_t mySPI_parameters, AS3933_channels_enable_t myEnabledChannels, AS3933_scanning_mode_t myLowPowerMode, AS3933_r4_t_off_value_t myT_Off     );
 
 /** It configures the artificial wakeup.
     */
