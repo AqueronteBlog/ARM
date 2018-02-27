@@ -463,8 +463,8 @@ typedef enum
   */
 typedef enum
 {
-    TS2_MASK                =   ( 0xFF          << 0 ),         /*!<  TS2 mask                       */
-    TS2_WAKEUP_PATTERN_MSB  =   ( 0b01101001    << 0 )          /*!<  Default value                  */
+    TS2_PATT2B_MASK             =   ( 0xFF          << 0 ),     /*!<  TS2 mask                       */
+    TS2_WAKEUP_PATTERN_PATT2B   =   ( 0b01101001    << 0 )      /*!<  Default value                  */
 } AS3933_r5_ts2_value_t;
 
 
@@ -476,8 +476,8 @@ typedef enum
   */
 typedef enum
 {
-    TS1_MASK                =   ( 0xFF          << 0 ),         /*!<  TS1 mask                       */
-    TS1_WAKEUP_PATTERN_LSB  =   ( 0b10010110    << 0 )          /*!<  Default value                  */
+    TS1_PATT1B_MASK             =   ( 0xFF          << 0 ),     /*!<  TS1 mask                       */
+    TS1_WAKEUP_PATTERN_PATT1B   =   ( 0b10010110    << 0 )      /*!<  Default value                  */
 } AS3933_r6_ts2_value_t;
 
 
@@ -835,7 +835,7 @@ typedef enum
 
 
 
-/* LIBRARY IN PROGRESS */
+/* DRIVER COMMANDS */
 /**
   * @brief   CHANNEL ENABLED
   *
@@ -877,7 +877,30 @@ typedef enum
 } AS3933_tolerance_settings_t;
 
 
+/**
+  * @brief   CHANNELS ( Parallel Tuning Capacitance )
+  *
+  */
+typedef enum
+{
+    AS3933_CHANNEL_LF1P  =   0,                 /*!<  Channel 1         */
+    AS3933_CHANNEL_LF2P  =   1,                 /*!<  Channel 2         */
+    AS3933_CHANNEL_LF3P  =   2                  /*!<  Channel 3         */
+} AS3933_parallel_tuning_channels_t;
 
+
+/**
+  * @brief   CAPACITANCE ( Parallel Tuning Capacitance )
+  *
+  */
+typedef enum
+{
+    AS3933_CAPACITANCE_ADD_1PF   =   0,         /*!<  Capacitance 1pF   */
+    AS3933_CAPACITANCE_ADD_2PF   =   1,         /*!<  Capacitance 2pF   */
+    AS3933_CAPACITANCE_ADD_4PF   =   2,         /*!<  Capacitance 4pF   */
+    AS3933_CAPACITANCE_ADD_8PF   =   3,         /*!<  Capacitance 8pF   */
+    AS3933_CAPACITANCE_ADD_16PF  =   4          /*!<  Capacitance 16pF  */
+} AS3933_parallel_tuning_capacitance_t;
 
 
 
@@ -891,7 +914,11 @@ typedef enum
 /* AS3933 DATA */
 typedef struct
 {
-    int8_t f_wake;                  /*!<  False wakeup register   */
+    int8_t      f_wake;                  /*!<  False wakeup register                */
+    uint8_t     patt2b;                  /*!<  Wakeup pattern PATT2B ( Manchester ) */
+    uint8_t     patt1b;                  /*!<  Wakeup pattern PATT1B ( Manchester ) */
+
+    uint32_t    data;                    /*!<  Data                                 */
 } AS3933_data_t;
 #endif
 
@@ -915,68 +942,85 @@ typedef enum
   */
 /** It configures the SPI peripheral.
     */
-AS3933_status_t  AS3933_Init                            ( SPI_parameters_t mySPI_parameters                                                                                                                   );
+AS3933_status_t  AS3933_Init                            ( SPI_parameters_t mySPI_parameters                                                                                                                         );
 
 /** It configures the low power mode.
     */
-AS3933_status_t  AS3933_SetLowPowerMode                 ( SPI_parameters_t mySPI_parameters, AS3933_channels_enable_t myEnabledChannels, AS3933_scanning_mode_t myLowPowerMode, AS3933_r4_t_off_value_t myT   );
+AS3933_status_t  AS3933_SetLowPowerMode                 ( SPI_parameters_t mySPI_parameters, AS3933_channels_enable_t myEnabledChannels, AS3933_scanning_mode_t myLowPowerMode, AS3933_r4_t_off_value_t myT         );
 
 /** It configures the artificial wakeup.
     */
-AS3933_status_t  AS3933_SetArtificialWakeUp             ( SPI_parameters_t mySPI_parameters, AS3933_r8_t_auto_value_t myArtificialWakeUp                                                                      );
+AS3933_status_t  AS3933_SetArtificialWakeUp             ( SPI_parameters_t mySPI_parameters, AS3933_r8_t_auto_value_t myArtificialWakeUp                                                                            );
 
 /** It gets feedback on the surrounding environment reading the false wakeup register.
     */
-AS3933_status_t  AS3933_ReadFalseWakeUpRegister         ( SPI_parameters_t mySPI_parameters, AS3933_data_t* myF_WAKE                                                                                          );
+AS3933_status_t  AS3933_ReadFalseWakeUpRegister         ( SPI_parameters_t mySPI_parameters, AS3933_data_t* myF_WAKE                                                                                                );
 
 /** It configures the clock generator.
     */
-AS3933_status_t  AS3933_SetClockGenerator               ( SPI_parameters_t mySPI_parameters, AS3933_r1_en_xtal_value_t myClockGenerator, AS3933_r16_clock_gen_dis_value_t myClockGeneratorOutputMode          );
+AS3933_status_t  AS3933_SetClockGenerator               ( SPI_parameters_t mySPI_parameters, AS3933_r1_en_xtal_value_t myClockGenerator, AS3933_r16_clock_gen_dis_value_t myClockGeneratorOutputMode                );
 
 /** It calibrates RC oscillator ( Self Calibration only ).
     */
-AS3933_status_t  AS3933_CalibrateRC_Oscillator          ( SPI_parameters_t mySPI_parameters                                                                                                                   );
+AS3933_status_t  AS3933_CalibrateRC_Oscillator          ( SPI_parameters_t mySPI_parameters                                                                                                                         );
 
 /** It configures the antenna damper.
     */
-AS3933_status_t  AS3933_SetAntennaDamper                ( SPI_parameters_t mySPI_parameters, AS3933_r1_att_on_value_t myAntennaDamperMode, AS3933_r4_d_res_value_t myShuntResistor                            );
+AS3933_status_t  AS3933_SetAntennaDamper                ( SPI_parameters_t mySPI_parameters, AS3933_r1_att_on_value_t myAntennaDamperMode, AS3933_r4_d_res_value_t myShuntResistor                                  );
 
 /** It configures the envelop detector for different symbol rates.
     */
-AS3933_status_t  AS3933_SetEnvelopDetector              ( SPI_parameters_t mySPI_parameters, AS3933_r3_fs_env_value_t mySymbolRates                                                                           );
+AS3933_status_t  AS3933_SetEnvelopDetector              ( SPI_parameters_t mySPI_parameters, AS3933_r3_fs_env_value_t mySymbolRates                                                                                 );
 
 /** It configures the data slicer for different preamble length.
     */
-AS3933_status_t  AS3933_SetDataSlicer                   ( SPI_parameters_t mySPI_parameters, AS3933_r1_abs_hy_value_t myAbsoluteThresholdMode, AS3933_r3_fs_scl_value_t myMinimumPreableLength                );
+AS3933_status_t  AS3933_SetDataSlicer                   ( SPI_parameters_t mySPI_parameters, AS3933_r1_abs_hy_value_t myAbsoluteThresholdMode, AS3933_r3_fs_scl_value_t myMinimumPreableLength                      );
 
 /** It configures the hysteresis on the data slicer comparator.
     */
-AS3933_status_t  AS3933_SetComparatorHysteresis         ( SPI_parameters_t mySPI_parameters, AS3933_r3_hy_pos_value_t myHysteresisMode, AS3933_r3_hy_20m_value_t myHysteresisRange                            );
+AS3933_status_t  AS3933_SetComparatorHysteresis         ( SPI_parameters_t mySPI_parameters, AS3933_r3_hy_pos_value_t myHysteresisMode, AS3933_r3_hy_20m_value_t myHysteresisRange                                  );
 
 /** It configures the gain reduction.
     */
-AS3933_status_t  AS3933_SetGainReduction                ( SPI_parameters_t mySPI_parameters, AS3933_r4_gr_value_t myGainReductionValue                                                                        );
+AS3933_status_t  AS3933_SetGainReduction                ( SPI_parameters_t mySPI_parameters, AS3933_r4_gr_value_t myGainReductionValue                                                                              );
 
 /** It configures the operating frequency range.
     */
-AS3933_status_t  AS3933_SetOperatingFrequencyRange      ( SPI_parameters_t mySPI_parameters, AS3933_r8_band_sel_value_t myOperatingFrequencyRange                                                             );
+AS3933_status_t  AS3933_SetOperatingFrequencyRange      ( SPI_parameters_t mySPI_parameters, AS3933_r8_band_sel_value_t myOperatingFrequencyRange                                                                   );
 
 /** It configures the frequency detection tolerance.
     */
-AS3933_status_t  AS3933_SetFrequencyDetectionTolerance  ( SPI_parameters_t mySPI_parameters, AS3933_tolerance_settings_t myTolerance                                                                          );
+AS3933_status_t  AS3933_SetFrequencyDetectionTolerance  ( SPI_parameters_t mySPI_parameters, AS3933_tolerance_settings_t myTolerance                                                                                );
 
 /** It configures the +3dB gain boost.
     */
-AS3933_status_t  AS3933_SetGainBoost                    ( SPI_parameters_t mySPI_parameters, AS3933_r2_g_boost_value_t myGainBoostMode                                                                        );
+AS3933_status_t  AS3933_SetGainBoost                    ( SPI_parameters_t mySPI_parameters, AS3933_r2_g_boost_value_t myGainBoostMode                                                                              );
 
 /** It configures the Automatic Gain Control ( AGC ).
     */
-AS3933_status_t  AS3933_SetAGC                          ( SPI_parameters_t mySPI_parameters, AS3933_r1_agc_tlim_value_t myAGC_CarrierBurstMode, AS3933_r1_agc_ud_value_t myAGC_OperatingDirection             );
+AS3933_status_t  AS3933_SetAGC                          ( SPI_parameters_t mySPI_parameters, AS3933_r1_agc_tlim_value_t myAGC_CarrierBurstMode, AS3933_r1_agc_ud_value_t myAGC_OperatingDirection                   );
 
 /** It configures the Automatic Gain Control ( AGC ).
     */
-AS3933_status_t  AS3933_SetAGC                          ( SPI_parameters_t mySPI_parameters, AS3933_r1_agc_tlim_value_t myAGC_CarrierBurstMode, AS3933_r1_agc_ud_value_t myAGC_OperatingDirection             );
+AS3933_status_t  AS3933_SetAGC                          ( SPI_parameters_t mySPI_parameters, AS3933_r1_agc_tlim_value_t myAGC_CarrierBurstMode, AS3933_r1_agc_ud_value_t myAGC_OperatingDirection                   );
 
 /** It configures the mask data before wakeup.
     */
-AS3933_status_t  AS3933_SetDataMask                     ( SPI_parameters_t mySPI_parameters, AS3933_r0_dat_mask_value_t myDataMaskMode                                                                        );
+AS3933_status_t  AS3933_SetDataMask                     ( SPI_parameters_t mySPI_parameters, AS3933_r0_dat_mask_value_t myDataMaskMode                                                                              );
+
+/** It configures the correlator and the Manchester Decoder.
+    */
+AS3933_status_t  AS3933_SetCorrelator                   ( SPI_parameters_t mySPI_parameters, AS3933_r1_en_wpat_value_t myCorrelatorMode, AS3933_r0_patt32_value_t mySymbolPattern, AS3933_r7_t_hbit_value_t myRate,
+                                                          AS3933_r1_en_manch_value_t myManchesterDecoderMode                                                                                                        );
+
+/** It sets the wakeup pattern ( Manchester ).
+    */
+AS3933_status_t  AS3933_SetWakeUpPattern                ( SPI_parameters_t mySPI_parameters, AS3933_data_t myWakeUpPattern                                                                                          );
+
+/** It sets the automatic time-out setup.
+    */
+AS3933_status_t  AS3933_SetAutomaticTimeOut             ( SPI_parameters_t mySPI_parameters, AS3933_r7_t_out_value_t myAutomaticTimeOut                                                                             );
+
+/** It sets the parallel tuning capacitance on the chosen channel.
+    */
+AS3933_status_t  AS3933_SetParallelTuningCapacitance    ( SPI_parameters_t mySPI_parameters, AS3933_parallel_tuning_channels_t myChannel, AS3933_parallel_tuning_capacitance_t myAddedCapacitance                   );
