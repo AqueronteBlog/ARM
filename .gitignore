@@ -8,3 +8,5 @@ STM32L152RE/Examples/BareMetal/GPIO_LED/HAL_Driver/STM32L162xD_User_Manual.chm
 *.html
 *.emSession
 *.elay
+STM32L152RE/Examples/BareMetal/IWDG/Drivers/CMSIS/CMSIS_END_USER_LICENCE_AGREEMENT.pdf
+STM32L152RE/Examples/BareMetal/IWDG/Drivers/MCD-ST Liberty SW License Agreement V2.pdf
