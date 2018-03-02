@@ -18,13 +18,13 @@
  * 				the LED1 then.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        30/December/2017
  * @version     30/December/2017   The ORIGIN
- * @pre         NaN.
- * @warning     NaN
+ * @pre         N/A.
+ * @warning     N/A
  */
 void EXTI15_10_IRQHandler(void)
 {

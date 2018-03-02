@@ -11,6 +11,7 @@
  * @pre         N/A
  * @warning     N/A
  */
+#include "stm32l1xx.h"
 #include "variables.h"
 #include "board.h"
 
