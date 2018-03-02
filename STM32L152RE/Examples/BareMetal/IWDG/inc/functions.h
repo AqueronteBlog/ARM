@@ -23,6 +23,7 @@ extern "C" {
 /* FUNCTION PROTOTYPES */
 void Conf_CLK  	   ( void );
 void Conf_GPIO 	   ( void );
+void Conf_IWDG 	   ( void );
 void Conf_SYSTICK  ( uint32_t myticks );
 
 #ifdef __cplusplus

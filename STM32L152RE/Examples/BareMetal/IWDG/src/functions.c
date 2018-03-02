@@ -17,22 +17,29 @@
 
 /**
  * @brief       void Conf_CLK  ( void )
- * @details     It disabled MCO.
+ * @details     It disabled MCO ans enables the LSI for IWDG
  *
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/December/2017
- * @version     30/December/2017   The ORIGIN
- * @pre         NaN
- * @warning     NaN
+ * @date        2/March/2018
+ * @version     2/March/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
  */
 void Conf_CLK  ( void )
 {
 	RCC->CFGR	&=	 0xF8FFFFFF;											// MCO output disabled, no clock on MCO
 //	RCC->CFGR	|=	 ( RCC_CFGR_MCOPRE_DIV1 | RCC_CFGR_MCOSEL_SYSCLK );		// MCO = SYSCLK/1 | MCO ENABLED
+
+	PWR->CR		|=	 ( PWR_CR_DBP );										// Unlock registers ( As these bits are write protected after reset )
+	RCC->CSR	|=	 ( RCC_CSR_LSION );
+	while ( ( RCC->CSR & RCC_CSR_LSIRDY_Msk ) != RCC_CSR_LSIRDY );			// Wait until LSI is ready
+																			// [TODO] 		This is dangerous! the uC may get stuck here
+																			// [WORKAROUND] Insert a counter.
+	PWR->CR		&=  ~( PWR_CR_DBP );										// Lock registers ( As these bits are write protected after reset )
 }
 
 
@@ -123,4 +130,27 @@ void Conf_GPIO  ( void )
 
     NVIC_SetPriority ( EXTI15_10_IRQn, 1 ); 								// Set Priority to 1
     NVIC_EnableIRQ   ( EXTI15_10_IRQn );  									// Enable EXTI15_10_IRQn interrupt in NVIC
+}
+
+
+/**
+ * @brief       void Conf_IWDG  ( void )
+ * @details     It configures IWDG.
+ *
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        2/March/2018
+ * @version		2/March/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void Conf_IWDG  ( void )
+{
+	// GPIOA & GPIOC Periph clock enable
+	// RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN );
+
+
 }
