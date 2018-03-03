@@ -23,7 +23,6 @@ extern "C" {
 #endif
 
 // PROTOTYPES
-void EXTI15_10_IRQHandler (void);
 
 // VARIABLES
 
