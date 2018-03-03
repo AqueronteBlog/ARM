@@ -23,8 +23,6 @@ extern "C" {
 /**
       * @brief   GENERAL VARIABLES
       */
-uint32_t myDelay;              				/*!<  Delay                        */
-uint32_t mySystemCoreClock;					/*!<  System CLK in MHz  		   */
 
 
 #ifdef __cplusplus
