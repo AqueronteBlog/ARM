@@ -50,17 +50,17 @@ void Conf_CLK  ( void )
  *
  * @param[in]    myticks:	Value of the SYSCLK..
  *
- * @param[out]   NaN.
+ * @param[out]   N/A.
  *
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        29/December/2017
  * @version     29/December/2017   The ORIGIN
- * @pre         NaN
- * @warning     NaN
+ * @pre         N/A
+ * @warning     N/A
  */
 void Conf_SYSTICK  ( uint32_t myticks )
 {
@@ -85,51 +85,31 @@ void Conf_SYSTICK  ( uint32_t myticks )
 
 /**
  * @brief       void Conf_GPIO  ( void )
- * @details     It configures GPIO to work with the LEDs and
- * 				User Button.
+ * @details     It configures GPIO to work with the LEDs
  *
  * 				- LED1:			PA_5
- * 				- User Button:  PC_13 ( Interrupt ENABLED )
  *
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        29/December/2017
- * @version		30/December/2017   User Button added.
- * 				29/December/2017   The ORIGIN
- * @pre         NaN
- * @warning     NaN
+ * @date        3/March/2018
+ * @version		3/March/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
  */
 void Conf_GPIO  ( void )
 {
-	// GPIOA & GPIOC Periph clock enable
-	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN );
-
-	// SYSCFG Periph clock enable
-	RCC->APB2ENR	|=	 RCC_APB2RSTR_SYSCFGRST;
-
+	// GPIOA Periph clock enable
+	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN );
 
 
     // Configure LED1
     GPIOA->MODER	|=	 GPIO_MODER_MODER5_0;			// General purpose output mode
     GPIOA->OTYPER	&=	~GPIO_OTYPER_OT_5; 				// Output push-pull
-    GPIOA->OSPEEDR	&=	~GPIO_OSPEEDER_OSPEEDR5_Msk;	// Low speed
-    GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5_Msk;			// No pull-up, pull-down
-
-    // Configure User Button
-    GPIOC->MODER	&=	~( GPIO_MODER_MODER13_1 | GPIO_MODER_MODER13_0 );	// Input mode
-    GPIOC->PUPDR	&=	~( GPIO_PUPDR_PUPDR13_1 | GPIO_PUPDR_PUPDR13_0 );	// Floating input
-
-    // User Button generates an interrupt
-    SYSCFG->EXTICR[3]	|=	 SYSCFG_EXTICR4_EXTI13_PC;						// Map EXTI13 ( PC_13 ) Line to NVIC
-    EXTI->IMR			|=	 EXTI_IMR_MR13;
-    EXTI->RTSR			&=	~EXTI_RTSR_TR13;								// Rising edge trigger disabled
-    EXTI->FTSR			|=	 EXTI_FTSR_TR13;								// Falling edge trigger enabled
-
-    NVIC_SetPriority ( EXTI15_10_IRQn, 1 ); 								// Set Priority to 1
-    NVIC_EnableIRQ   ( EXTI15_10_IRQn );  									// Enable EXTI15_10_IRQn interrupt in NVIC
+    GPIOA->OSPEEDR	&=	~GPIO_OSPEEDER_OSPEEDR5;		// Low speed
+    GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5;				// No pull-up, pull-down
 }
 
 
@@ -137,6 +117,8 @@ void Conf_GPIO  ( void )
  * @brief       void Conf_IWDG  ( void )
  * @details     It configures IWDG.
  *
+ *				IWDG_Time = IWDG_RLR / ( IDWG_CLK / Prescaler ) = ( 2313 ) / ( 37kHz / 16 ) ~ 1s
+ *				IDWG_CLK = 37kHz ( LSI )
  *
  *
  * @return      N/A
@@ -149,8 +131,20 @@ void Conf_GPIO  ( void )
  */
 void Conf_IWDG  ( void )
 {
-	// GPIOA & GPIOC Periph clock enable
-	// RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN );
+	IWDG->KR	 =	 ( 0x5555 & IWDG_KR_KEY );					// Key to modify the prescaler divider
+
+	/*  PVU bit of IWDG_SR must be reset in order to be able to change the prescaler divider */
+	while ( ( IWDG->SR & IWDG_SR_PVU_Msk ) == IWDG_SR_PVU );	// [TODO] 		This is dangerous! the uC may get stuck here
+																// [WORKAROUND] Insert a counter.
+	IWDG->PR	 =	 ( IWDG_PR_PR_1 );							// Prescaler divider:  /16
 
 
+	/*  The RVU bit in the IWDG_SR register must be reset in order to be able to change the reload value */
+	while ( ( IWDG->SR & IWDG_SR_RVU_Msk ) == IWDG_SR_RVU );	// [TODO] 		This is dangerous! the uC may get stuck here
+																// [WORKAROUND] Insert a counter.
+
+	IWDG->RLR	 =	 ( 2313 & IWDG_RLR_RL_Msk );				// IWDG_Time = IWDG_RLR / ( IDWG_CLK / Prescaler ): IWDG_RLR = ( 1s * 37kHz ) / 16 = 2312.5 ~ 2313
+
+
+	IWDG->KR	 =	 ( 0xCCCC & IWDG_KR_KEY );					// Key to start the Independent WatchDog
 }
