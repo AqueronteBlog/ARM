@@ -1,8 +1,12 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows how to work with the internal peripheral: Independent
+ * 				Watch Dog ( IWDG ). Every one second, the IWDG will generate a reset.
  *
- * 				The rest of the time, the microcontroller is in stop mode ( low power ).
+ * 				At the beginning of the firmware, the LED1 is OFF for a short period of time,
+ * 				then it is turned ON.
+ *
+ * 				The rest of the time, the microcontroller is in standby mode ( low power ).
  *
  *
  * @return      N/A
@@ -29,14 +33,17 @@ int main ( void )
 {
 	Conf_GPIO 	 ();
 	Conf_CLK  	 ();
+	Conf_IWDG  	 ();
 
-	mySystemCoreClock	 =	 2097000U;			// SYSCLK = 2.907 MHz
-	Conf_SYSTICK ( mySystemCoreClock/1000 );	// Milli seconds, SysTick will be disabled although
+	GPIOA->BRR		 =	( 1 << LED_1 );			// LED1 OFF
+
+	for ( uint32_t i = 0; i < 23232; i++ );		// Small delay to see the changes when the IWDG resets the uC
+
+	GPIOA->BSRR		=	( 1 << LED_1 );			// LED1 ON
 
 
-	HAL_PWR_DisableSleepOnExit ();
 	while ( 1 )
 	{
-		HAL_PWR_EnterSTOPMode( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+		HAL_PWR_EnterSTANDBYMode ();
 	}
 }
