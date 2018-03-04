@@ -1038,3 +1038,7 @@ AS3933_status_t  AS3933_SetParallelTuningCapacitance    ( SPI_parameters_t mySPI
 /** It gets the RSSI for all channels.
     */
 AS3933_status_t  AS3933_GetRSSI                         ( SPI_parameters_t mySPI_parameters, AS3933_data_t* myChannelRSSI                                                                                           );
+
+/** It sends a direct command
+    */
+AS3933_status_t  AS3933_Send_DirectCommand              ( SPI_parameters_t mySPI_parameters, AS3933_spi_direct_commands_t myDirectCommand                                                                           );
