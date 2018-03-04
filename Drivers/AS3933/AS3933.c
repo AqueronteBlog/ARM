@@ -1263,3 +1263,44 @@ AS3933_status_t  AS3933_GetRSSI ( SPI_parameters_t mySPI_parameters, AS3933_data
     else
         return   AS3933_FAILURE;
 }
+
+
+
+/**
+ * @brief       AS3933_Send_DirectCommand   ( SPI_parameters_t , AS3933_spi_direct_commands_t )
+ *
+ * @details     It sends a direct command.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myDirectCommand:   Direct command to be sent.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of AS3933_Send_DirectCommand.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        4/March/2018
+ * @version     4/March/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS3933_status_t  AS3933_Send_DirectCommand ( SPI_parameters_t mySPI_parameters, AS3933_spi_direct_commands_t myDirectCommand )
+{
+    uint8_t             cmd         =    0;
+    spi_status_t        mySPI_status;
+
+
+    // Send a direct command
+    cmd              =   ( AS3933_DIRECT_COMMAND | myDirectCommand );
+    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd, 1, &cmd, 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+        return   AS3933_SUCCESS;
+    else
+        return   AS3933_FAILURE;
+}
