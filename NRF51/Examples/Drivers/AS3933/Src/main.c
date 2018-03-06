@@ -26,51 +26,41 @@
 
 int main( void )
 {
-    uint8_t  myTX_buff[2]     =   { 0 };
-    uint8_t  myDataInEEPROM[] =   { 0x23, 0x23, 0x23 };
-    uint32_t myTimeoOut       =   0;
-
-
-//    I2C_parameters_t            myDS1624_I2C_parameters;
-//    DS1624_status_t             aux;
-//    DS1624_access_config_done_t myDS1624_TempConversionStatus;
-//    DS1624_vector_data_t        myDS1624_data;
+    SPI_parameters_t    myAS3933_SPI_parameters;
+    AS3933_status_t     aux;
+    AS3933_data_t       myAS3933_data;
 
 
     conf_GPIO   ();
-    conf_UART   ();
-    conf_TIMER0 ();
+    //conf_UART   ();
+    //conf_TIMER0 ();
 
 
-//
-//    // I2C definition
-//    myDS1624_I2C_parameters.TWIinstance =    NRF_TWI0;
-//    myDS1624_I2C_parameters.SDA         =    TWI0_SDA;
-//    myDS1624_I2C_parameters.SCL         =    TWI0_SCL;
-//    myDS1624_I2C_parameters.ADDR        =    DS1624_ADDRESS_0;
-//    myDS1624_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-//    myDS1624_I2C_parameters.SDAport     =    NRF_GPIO;
-//    myDS1624_I2C_parameters.SCLport     =    NRF_GPIO;
-//
-//    // Configure I2C peripheral
-//    aux  =   DS1624_Init ( myDS1624_I2C_parameters );
-//
-//
-//    // Configure 1SHOT mode
-//    aux  =   DS1624_SetConversionMode ( myDS1624_I2C_parameters, ACCESS_CONFIG_1SHOT_ONE_TEMPERATURE_CONVERSION );
-//    nrf_delay_ms ( 50 );
-//
-//    // Write myDataInEEPROM into EEPROM memory ( address: 0x13 )
-//    aux  =   DS1624_WriteBytesEEPROM  ( myDS1624_I2C_parameters, 0x13, myDataInEEPROM, sizeof( myDataInEEPROM )/sizeof( myDataInEEPROM[0] ) );
-//    nrf_delay_ms ( 50 );
-//
-//    // Read EEPROM memory ( address: 0x13 ), just to check if the data was stored correctly
-//    myDataInEEPROM[0]    =   0;
-//    myDataInEEPROM[1]    =   0;
-//    myDataInEEPROM[2]    =   0;
-//
-//    aux  =   DS1624_ReadBytesEEPROM   ( myDS1624_I2C_parameters, 0x13, &myDataInEEPROM[0], sizeof( myDataInEEPROM )/sizeof( myDataInEEPROM[0] ) );
-//
+    // SPI definition
+    myAS3933_SPI_parameters.SPIinstance         =    NRF_SPI0;
+    myAS3933_SPI_parameters.MOSI                =    SPI0_MOSI;
+    myAS3933_SPI_parameters.MISO                =    SPI0_MISO;
+    myAS3933_SPI_parameters.SCLK                =    SPI0_SCK;
+    myAS3933_SPI_parameters.CS                  =    SPI0_CS;
+    myAS3933_SPI_parameters.Freq                =    SPI_FREQUENCY_FREQUENCY_M1;
+    myAS3933_SPI_parameters.MISOport            =    NRF_GPIO;
+    myAS3933_SPI_parameters.MOSIport            =    NRF_GPIO;
+    myAS3933_SPI_parameters.SCLKport            =    NRF_GPIO;
+    myAS3933_SPI_parameters.CSport              =    NRF_GPIO;
+    myAS3933_SPI_parameters.SPIbyte_order       =    SPI_ORDER_MSB_FIRST;
+    myAS3933_SPI_parameters.SPImode             =    SPI_MODE_1;
+    myAS3933_SPI_parameters.SPIenable_line_mode =    SPI_ENABLE_LINE_HIGH;
+
+
+
+    // Configure SPI peripheral
+    aux  =   AS3933_Init ( myAS3933_SPI_parameters );
+
+    myAS3933_data.patt1b     =   TS1_WAKEUP_PATTERN_PATT1B;
+    myAS3933_data.patt2b     =   TS2_WAKEUP_PATTERN_PATT2B;
+    aux  =   AS3933_SetWakeUpPattern    ( myAS3933_SPI_parameters, myAS3933_data );
+    aux  =   AS3933_GetWakeUpPattern    ( myAS3933_SPI_parameters, &myAS3933_data );
+
 
 
     mySTATE  =   0;                                 // Reset the variable
@@ -95,14 +85,14 @@ int main( void )
 //            NVIC_DisableIRQ ( TIMER0_IRQn );                                            // Timer Interrupt DISABLED
 //
 //            // Trigger a new temperature conversion
-//            aux  =   DS1624_StartConvertTemperature ( myDS1624_I2C_parameters );
+//            aux  =   AS3933_StartConvertTemperature ( myAS3933_I2C_parameters );
 //
 //            // Wait until the temperature conversion is completed or timeout
 //            myTimeoOut   =   232323;
 //            do{
-//                aux  =   DS1624_IsTemperatureConversionDone ( myDS1624_I2C_parameters, &myDS1624_TempConversionStatus );
+//                aux  =   AS3933_IsTemperatureConversionDone ( myAS3933_I2C_parameters, &myAS3933_TempConversionStatus );
 //                myTimeoOut--;
-//            } while ( ( ( myDS1624_TempConversionStatus & ACCESS_CONFIG_DONE_MASK ) != ACCESS_CONFIG_DONE_CONVERSION_COMPLETE ) && ( myTimeoOut > 0 ) );
+//            } while ( ( ( myAS3933_TempConversionStatus & ACCESS_CONFIG_DONE_MASK ) != ACCESS_CONFIG_DONE_CONVERSION_COMPLETE ) && ( myTimeoOut > 0 ) );
 //
 //            // Check if TimeOut, if so, there was an error ( send: NA ), send the data otherwise
 //            if ( myTimeoOut <= 0 )
@@ -112,11 +102,11 @@ int main( void )
 //            }
 //            else
 //            {
-//                //aux  =   DS1624_ReadTemperature    ( myDS1624_I2C_parameters, &myDS1624_data );
-//                aux  =   DS1624_ReadRawTemperature ( myDS1624_I2C_parameters, &myDS1624_data );
+//                //aux  =   AS3933_ReadTemperature    ( myAS3933_I2C_parameters, &myAS3933_data );
+//                aux  =   AS3933_ReadRawTemperature ( myAS3933_I2C_parameters, &myAS3933_data );
 //
-//                myTX_buff[0]                 =   myDS1624_data.MSBTemperature;
-//                myTX_buff[1]                 =   myDS1624_data.LSBTemperature;
+//                myTX_buff[0]                 =   myAS3933_data.MSBTemperature;
+//                myTX_buff[1]                 =   myAS3933_data.LSBTemperature;
 //            }
 //
 //
