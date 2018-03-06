@@ -47,13 +47,13 @@ AS3933_status_t  AS3933_Init ( SPI_parameters_t mySPI_parameters )
     mySPI_status     =   spi_init ( mySPI_parameters );
 
 
-    // Sets all register in the default mode
-    cmd              =   ( AS3933_DIRECT_COMMAND | PRESET_DEFAULT );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd, 1, &cmd, 0, mySPI_parameters.CS, mySPI_parameters.CSport );
-
     // Set the device in listening mode
     cmd              =   ( AS3933_DIRECT_COMMAND | CLEAR_WAKE );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd, 1, &cmd, 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd, 1, &cmd, 0 );
+
+    // Sets all register in the default mode
+    cmd              =   ( AS3933_DIRECT_COMMAND | PRESET_DEFAULT );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd, 1, &cmd, 0 );
 
 
 
@@ -105,7 +105,7 @@ AS3933_status_t  AS3933_SetLowPowerMode ( SPI_parameters_t mySPI_parameters, AS3
 
     // Read R0 register
     cmd[0]           =   ( AS3933_READ | AS3933_R0 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Channels 1:3
     cmd[1] &=   ~( EN_A1_MASK | EN_A2_MASK | EN_A3_MASK );
@@ -162,7 +162,7 @@ AS3933_status_t  AS3933_SetLowPowerMode ( SPI_parameters_t mySPI_parameters, AS3
 
     case AS3933_SCANNING_MODE:
         if ( ( myEnabledChannels == AS3933_CH1_ON_CH2_OFF_CH3_ON )  || ( myEnabledChannels == AS3933_CH1_ON_CH2_ON_CH3_ON )  || ( myEnabledChannels == AS3933_CH1_ON_CH2_OFF_CH3_OFF ) ||
-                ( myEnabledChannels == AS3933_CH1_OFF_CH2_ON_CH3_OFF ) || ( myEnabledChannels == AS3933_CH1_OFF_CH2_OFF_CH3_ON ) )
+             ( myEnabledChannels == AS3933_CH1_OFF_CH2_ON_CH3_OFF ) || ( myEnabledChannels == AS3933_CH1_OFF_CH2_OFF_CH3_ON ) )
             cmd[1] |=   ( MUX_123_ENABLED );
         else
             return   AS3933_FAILURE;
@@ -179,7 +179,7 @@ AS3933_status_t  AS3933_SetLowPowerMode ( SPI_parameters_t mySPI_parameters, AS3
 
     // Update power mode and active channels
     cmd[0]           =   ( AS3933_WRITE | AS3933_R0 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -187,7 +187,7 @@ AS3933_status_t  AS3933_SetLowPowerMode ( SPI_parameters_t mySPI_parameters, AS3
     {
         // Read R4 register
         cmd[0]           =    ( AS3933_READ | AS3933_R4 );
-        mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+        mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
         // Mask T_OFF
         cmd[1]          &=   ~( T_OFF_MASK );
@@ -196,7 +196,7 @@ AS3933_status_t  AS3933_SetLowPowerMode ( SPI_parameters_t mySPI_parameters, AS3
         cmd[1]          |=    ( myT_Off );
 
         cmd[0]           =    ( AS3933_WRITE | AS3933_R4 );
-        mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+        mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
     }
 
 
@@ -236,7 +236,7 @@ AS3933_status_t  AS3933_SetArtificialWakeUp ( SPI_parameters_t mySPI_parameters,
 
     // Read R8 register
     cmd[0]           =   ( AS3933_READ | AS3933_R8 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Artificial wakeup
     cmd[1] &=   ~( T_AUTO_MASK );
@@ -247,7 +247,7 @@ AS3933_status_t  AS3933_SetArtificialWakeUp ( SPI_parameters_t mySPI_parameters,
 
     // Update artificial wakeup
     cmd[0]           =   ( AS3933_WRITE | AS3933_R8 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -285,7 +285,7 @@ AS3933_status_t  AS3933_ReadFalseWakeUpRegister ( SPI_parameters_t mySPI_paramet
 
 
     // Read R13 register
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd, 1, (uint8_t*)( &myF_WAKE->f_wake ), 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd, 1, (uint8_t*)( &myF_WAKE->f_wake ), 1 );
 
 
 
@@ -327,7 +327,7 @@ AS3933_status_t  AS3933_SetClockGenerator ( SPI_parameters_t mySPI_parameters, A
     // Configure the Crystal oscillator
     // Read R1 register
     cmd[0]           =   ( AS3933_READ | AS3933_R1 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Crystal oscillator
     cmd[1] &=   ~( EN_XTAL_MASK );
@@ -338,13 +338,13 @@ AS3933_status_t  AS3933_SetClockGenerator ( SPI_parameters_t mySPI_parameters, A
 
     // Update Crystal oscillator
     cmd[0]           =   ( AS3933_WRITE | AS3933_R1 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
     // Configure the Clock Generator Output
     // Read R16 register
     cmd[0]           =   ( AS3933_READ | AS3933_R16 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Clock Generator output signal
     cmd[1] &=   ~( CLOCK_GEN_DIS_MASK );
@@ -355,7 +355,7 @@ AS3933_status_t  AS3933_SetClockGenerator ( SPI_parameters_t mySPI_parameters, A
 
     // Update Clock Generator output signal
     cmd[0]           =   ( AS3933_WRITE | AS3933_R16 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -396,14 +396,14 @@ AS3933_status_t  AS3933_CalibrateRC_Oscillator ( SPI_parameters_t mySPI_paramete
 
     // Start the calibration
     cmd              =   ( AS3933_DIRECT_COMMAND | CALIB_RCO_LC );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd, 1, &cmd, 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd, 1, &cmd, 0 );
 
 
     // RC oscillator will be calibrated when RC_CAL_OK = '1' ( R14<6> )
     myTimeout        =   23232323;
     do{
         cmd              =   ( AS3933_READ | AS3933_R14 );
-        mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd, 1, &cmd, 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+        mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd, 1, &cmd, 1 );
         myTimeout--;
     } while ( ( ( cmd & RC_CAL_OK_MASK ) != RC_CAL_OK_HIGH ) && ( myTimeout > 0 ) );
 
@@ -446,7 +446,7 @@ AS3933_status_t  AS3933_SetAntennaDamper ( SPI_parameters_t mySPI_parameters, AS
     // Configure Antenna dumper
     // Read R1 register
     cmd[0]           =   ( AS3933_READ | AS3933_R1 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Antenna dumper
     cmd[1]          &=  ~( ATT_ON_MASK );
@@ -454,13 +454,13 @@ AS3933_status_t  AS3933_SetAntennaDamper ( SPI_parameters_t mySPI_parameters, AS
     // Update Antenna dumper
     cmd[0]           =   ( AS3933_WRITE | AS3933_R1 );
     cmd[1]          |=   ( myAntennaDamperMode );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
     // Configure Antenna dumper resistor
     // Read R4 register
     cmd[0]           =   ( AS3933_READ | AS3933_R4 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Antenna dumper resistor
     cmd[1]          &=  ~( D_RES_MASK );
@@ -468,7 +468,7 @@ AS3933_status_t  AS3933_SetAntennaDamper ( SPI_parameters_t mySPI_parameters, AS
     // Update Antenna dumper resistor
     cmd[0]           =   ( AS3933_WRITE | AS3933_R4 );
     cmd[1]          |=   ( myShuntResistor );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -508,7 +508,7 @@ AS3933_status_t  AS3933_SetEnvelopDetector ( SPI_parameters_t mySPI_parameters, 
 
     // Read R3 register
     cmd[0]           =   ( AS3933_READ | AS3933_R3 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Symbol rate
     cmd[1]          &=  ~( FS_ENV_MASK );
@@ -516,7 +516,7 @@ AS3933_status_t  AS3933_SetEnvelopDetector ( SPI_parameters_t mySPI_parameters, 
     // Update symbol rate
     cmd[0]           =   ( AS3933_WRITE | AS3933_R3 );
     cmd[1]          |=   ( mySymbolRates );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -559,7 +559,7 @@ AS3933_status_t  AS3933_SetDataSlicer ( SPI_parameters_t mySPI_parameters, AS393
     // Configure Data slicer absolute reference
     // Read R1 register
     cmd[0]           =   ( AS3933_READ | AS3933_R1 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Data slicer absolute reference
     cmd[1]          &=  ~( ABS_HY_MASK );
@@ -567,13 +567,13 @@ AS3933_status_t  AS3933_SetDataSlicer ( SPI_parameters_t mySPI_parameters, AS393
     // Update symbol rate
     cmd[0]           =   ( AS3933_WRITE | AS3933_R1 );
     cmd[1]          |=   ( myAbsoluteThresholdMode );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
     // Configure Data slices time constant
     // Read R3 register
     cmd[0]           =   ( AS3933_READ | AS3933_R3 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Data slices time constant
     cmd[1]          &=  ~( FS_SCL_MASK );
@@ -581,7 +581,7 @@ AS3933_status_t  AS3933_SetDataSlicer ( SPI_parameters_t mySPI_parameters, AS393
     // Update Data slices time constant
     cmd[0]           =   ( AS3933_WRITE | AS3933_R3 );
     cmd[1]          |=   ( myMinimumPreambleLength );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -622,7 +622,7 @@ AS3933_status_t  AS3933_SetComparatorHysteresis ( SPI_parameters_t mySPI_paramet
 
     // Read R3 register
     cmd[0]           =   ( AS3933_READ | AS3933_R3 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask both hysteresis edge and comparator
     cmd[1]          &=  ~( HY_POS_MASK | HY_20M_MASK );
@@ -630,7 +630,7 @@ AS3933_status_t  AS3933_SetComparatorHysteresis ( SPI_parameters_t mySPI_paramet
     // Update hysteresis on the data slicer comparator
     cmd[0]           =   ( AS3933_WRITE | AS3933_R3 );
     cmd[1]          |=   ( myHysteresisMode | myHysteresisRange );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -670,7 +670,7 @@ AS3933_status_t  AS3933_SetGainReduction ( SPI_parameters_t mySPI_parameters, AS
 
     // Read R4 register
     cmd[0]           =   ( AS3933_READ | AS3933_R4 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Gain reduction
     cmd[1]          &=  ~( GR_MASK );
@@ -678,7 +678,7 @@ AS3933_status_t  AS3933_SetGainReduction ( SPI_parameters_t mySPI_parameters, AS
     // Update Gain reduction
     cmd[0]           =   ( AS3933_WRITE | AS3933_R4 );
     cmd[1]          |=   ( myGainReductionValue );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -718,7 +718,7 @@ AS3933_status_t  AS3933_SetOperatingFrequencyRange ( SPI_parameters_t mySPI_para
 
     // Read R8 register
     cmd[0]           =   ( AS3933_READ | AS3933_R8 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Band selection
     cmd[1]          &=  ~( BAND_SEL_MASK );
@@ -726,7 +726,7 @@ AS3933_status_t  AS3933_SetOperatingFrequencyRange ( SPI_parameters_t mySPI_para
     // Update Band selection
     cmd[0]           =   ( AS3933_WRITE | AS3933_R8 );
     cmd[1]          |=   ( myOperatingFrequencyRange );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -766,7 +766,7 @@ AS3933_status_t  AS3933_SetFrequencyDetectionTolerance ( SPI_parameters_t mySPI_
 
     // Read R2 register
     cmd[0]           =   ( AS3933_READ | AS3933_R2 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Tolerance band
     cmd[1]          &=  ~( AS3933_TOLERANCE_MASK );
@@ -774,7 +774,7 @@ AS3933_status_t  AS3933_SetFrequencyDetectionTolerance ( SPI_parameters_t mySPI_
     // Update Tolerance band
     cmd[0]           =   ( AS3933_WRITE | AS3933_R2 );
     cmd[1]          |=   ( myTolerance );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -814,7 +814,7 @@ AS3933_status_t  AS3933_SetGainBoost ( SPI_parameters_t mySPI_parameters, AS3933
 
     // Read R2 register
     cmd[0]           =   ( AS3933_READ | AS3933_R2 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Gain boost
     cmd[1]          &=  ~( G_BOOST_MASK );
@@ -822,7 +822,7 @@ AS3933_status_t  AS3933_SetGainBoost ( SPI_parameters_t mySPI_parameters, AS3933
     // Update Gain boost
     cmd[0]           =   ( AS3933_WRITE | AS3933_R2 );
     cmd[1]          |=   ( myGainBoostMode );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -863,7 +863,7 @@ AS3933_status_t  AS3933_SetAGC ( SPI_parameters_t mySPI_parameters, AS3933_r1_ag
 
     // Read R1 register
     cmd[0]           =   ( AS3933_READ | AS3933_R1 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask both AGC acting only on the first carrier burst and AGC direction operating
     cmd[1]          &=  ~( AGC_TLIM_MASK | AGC_UD_MASK );
@@ -871,7 +871,7 @@ AS3933_status_t  AS3933_SetAGC ( SPI_parameters_t mySPI_parameters, AS3933_r1_ag
     // Update both AGC acting only on the first carrier burst and AGC direction operating
     cmd[0]           =   ( AS3933_WRITE | AS3933_R1 );
     cmd[1]          |=   ( myAGC_CarrierBurstMode | myAGC_OperatingDirection );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -911,7 +911,7 @@ AS3933_status_t  AS3933_SetDataMask ( SPI_parameters_t mySPI_parameters, AS3933_
 
     // Read R0 register
     cmd[0]           =   ( AS3933_READ | AS3933_R0 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Mask data on DAT pin before wakeup happens
     cmd[1]          &=  ~( DAT_MASK_MASK );
@@ -919,7 +919,7 @@ AS3933_status_t  AS3933_SetDataMask ( SPI_parameters_t mySPI_parameters, AS3933_
     // Update Mask data on DAT pin before wakeup happens
     cmd[0]           =   ( AS3933_WRITE | AS3933_R0 );
     cmd[1]          |=   ( myDataMaskMode );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -964,7 +964,7 @@ AS3933_status_t  AS3933_SetCorrelator ( SPI_parameters_t mySPI_parameters, AS393
     // Configure Correlator mode and Manchester decoder mode
     // Read R1 register
     cmd[0]           =   ( AS3933_READ | AS3933_R1 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask both Correlator mode and Manchester decoder mode
     cmd[1]          &=  ~( EN_WPAT_MASK | EN_MANCH_MASK );
@@ -972,13 +972,13 @@ AS3933_status_t  AS3933_SetCorrelator ( SPI_parameters_t mySPI_parameters, AS393
     // Update both Correlator mode and Manchester decoder mode
     cmd[0]           =   ( AS3933_WRITE | AS3933_R1 );
     cmd[1]          |=   ( myCorrelatorMode | myManchesterDecoderMode );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
     // Configure Pattern extended
     // Read R0 register
     cmd[0]           =   ( AS3933_READ | AS3933_R0 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Pattern extended
     cmd[1]          &=  ~( PATT32_MASK );
@@ -986,13 +986,13 @@ AS3933_status_t  AS3933_SetCorrelator ( SPI_parameters_t mySPI_parameters, AS393
     // Update Pattern extended
     cmd[0]           =   ( AS3933_WRITE | AS3933_R0 );
     cmd[1]          |=   ( mySymbolPattern );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
     // Configure Bit rate definition
     // Read R7 register
     cmd[0]           =   ( AS3933_READ | AS3933_R7 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Bit rate definition
     cmd[1]          &=  ~( T_HBIT_MASK );
@@ -1000,7 +1000,7 @@ AS3933_status_t  AS3933_SetCorrelator ( SPI_parameters_t mySPI_parameters, AS393
     // Update Bit rate definition
     cmd[0]           =   ( AS3933_WRITE | AS3933_R7 );
     cmd[1]          |=   ( myRate );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -1042,12 +1042,12 @@ AS3933_status_t  AS3933_SetWakeUpPattern ( SPI_parameters_t mySPI_parameters, AS
     // Update PATT2B
     cmd[0]           =   ( AS3933_WRITE | AS3933_R5 );
     cmd[1]           =   ( myWakeUpPattern.patt2b );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
     // Update PATT1B
     cmd[0]           =   ( AS3933_WRITE | AS3933_R6 );
     cmd[1]           =   ( myWakeUpPattern.patt1b );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -1086,11 +1086,11 @@ AS3933_status_t  AS3933_GetWakeUpPattern ( SPI_parameters_t mySPI_parameters, AS
 
     // Read R5 register
     cmd              =   ( AS3933_READ | AS3933_R5 );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd, 1, &myWakeUpPattern->patt2b, 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd, 1, &myWakeUpPattern->patt2b, 1 );
 
     // Read R6 register
     cmd              =   ( AS3933_READ | AS3933_R6 );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd, 1, &myWakeUpPattern->patt1b, 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd, 1, &myWakeUpPattern->patt1b, 1 );
 
 
 
@@ -1130,7 +1130,7 @@ AS3933_status_t  AS3933_SetAutomaticTimeOut ( SPI_parameters_t mySPI_parameters,
 
     // Read R7 register
     cmd[0]           =   ( AS3933_READ | AS3933_R7 );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Automatic time-out
     cmd[1]          &=  ~( T_OUT_MASK );
@@ -1138,7 +1138,7 @@ AS3933_status_t  AS3933_SetAutomaticTimeOut ( SPI_parameters_t mySPI_parameters,
     // Update Automatic time-out
     cmd[0]           =   ( AS3933_WRITE | AS3933_R7 );
     cmd[1]          |=   ( myAutomaticTimeOut );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -1198,7 +1198,7 @@ AS3933_status_t  AS3933_SetParallelTuningCapacitance ( SPI_parameters_t mySPI_pa
 
     // Read register
     cmd[0]           =   ( AS3933_READ | myAuxRegister );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[1], 1, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[1], 1 );
 
     // Mask Parallel Tuning Capacitance
     cmd[1]          &=  ~( AS3933_CAPACITANCE_MASK );
@@ -1206,7 +1206,7 @@ AS3933_status_t  AS3933_SetParallelTuningCapacitance ( SPI_parameters_t mySPI_pa
     // Update Parallel Tuning Capacitance
     cmd[0]           =   ( AS3933_WRITE | myAuxRegister );
     cmd[1]          |=   ( myAddedCapacitance );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
 
 
@@ -1247,7 +1247,7 @@ AS3933_status_t  AS3933_GetRSSI ( SPI_parameters_t mySPI_parameters, AS3933_data
     // Get All RSSIs
     // Read R10 register ( auto-increment )
     cmd[0]           =   ( AS3933_READ | AS3933_R10 );
-    mySPI_status     =    spi_transfer ( mySPI_parameters.SPIinstance, &cmd[0], 1, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
     // Parse the data
     myChannelRSSI->rssi1     =   ( cmd[0] & RSSI1_MASK );       // Channel1: RSSI1
@@ -1294,7 +1294,7 @@ AS3933_status_t  AS3933_Send_DirectCommand ( SPI_parameters_t mySPI_parameters, 
 
     // Send a direct command
     cmd              =   ( AS3933_DIRECT_COMMAND | myDirectCommand );
-    mySPI_status     =   spi_transfer ( mySPI_parameters.SPIinstance, &cmd, 1, &cmd, 0, mySPI_parameters.CS, mySPI_parameters.CSport );
+    mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd, 1, &cmd, 0 );
 
 
 
