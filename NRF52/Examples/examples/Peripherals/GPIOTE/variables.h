@@ -30,7 +30,10 @@ extern "C" {
 
 
 /* VARIABLES */
-
+static uint32_t changeLEDsSTATE;       /*!<   0x01 = LED1
+                                              0x02 = LED2
+                                              0x04 = LED3
+                                              0x08 = LED4       */
 
 #ifdef __cplusplus
 }
