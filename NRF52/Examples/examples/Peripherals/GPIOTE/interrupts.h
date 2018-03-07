@@ -23,7 +23,7 @@ extern "C" {
 
 
 /* INTERRUPT PRTOTYPES */
-
+void GPIOTE_IRQHandler ( void );
 
 /* VARIABLES */
 
