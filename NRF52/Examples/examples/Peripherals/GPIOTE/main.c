@@ -1,6 +1,17 @@
 /**
  * @brief       main.c
- * @details     This example changes the state of the LEDs every 1.5s by the WDT.
+ * @details     This shows how to work with the internal peripheral GPIOTE. 
+ *
+ *              GPIOTE will be associated with the BTNs to generate an interruption
+ *              and change the state of the LEDs.
+ *              
+ *                BTN1 --> LED1
+ *                BTN2 --> LED2
+ *                BTN3 --> LED3
+ *                BTN4 --> LED4
+ *
+ *
+ *              The microcontroller will remain in low power the rest of the time.
  *
  *
  * @return      N/A
@@ -30,7 +41,8 @@
  */
 int main(void)
 {
-  conf_GPIO  ();
+  conf_GPIO   ();
+  conf_GPIOTE ();
   
 
 
