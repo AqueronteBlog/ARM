@@ -25,6 +25,7 @@ extern "C" {
 
 /* FUNCTION PROTOTYPES */
 void conf_GPIO   ( void );
+void conf_GPIOTE ( void );
 
 
 #ifdef __cplusplus
