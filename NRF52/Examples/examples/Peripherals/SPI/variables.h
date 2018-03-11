@@ -30,7 +30,13 @@ extern "C" {
 
 
 /* VARIABLES */
+static uint32_t changeDataSPIToBeTX;       /*!<   changeDataSPIToBeTX  = 1:     MOSI = 0x01
+                                                  changeDataSPIToBeTX  = 0:     MOSI = 0x10    */
+static uint8_t   mySPI_RX;                 /*!<   Receiver buffer for SPI                      */
+static uint8_t   mySPI_TX;                 /*!<   Transmitter buffer for SPI                   */
 
+static uint32_t mySPIS_RX;                 /*!<   Receiver buffer for SPIS                     */
+static uint32_t mySPIS_TX;                 /*!<   Transmitter buffer for SPIS                  */
 
 #ifdef __cplusplus
 }
