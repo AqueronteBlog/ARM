@@ -83,12 +83,8 @@
     <folder Name="Application">
       <file file_name="../../../main.c" />
       <file file_name="../config/sdk_config.h" />
-      <file file_name="../../../board.h" />
       <file file_name="../../../functions.c" />
-      <file file_name="../../../functions.h" />
       <file file_name="../../../interrupts.c" />
-      <file file_name="../../../interrupts.h" />
-      <file file_name="../../../variables.h" />
     </folder>
     <folder Name="nRF_Segger_RTT">
       <file file_name="../../../../../../external/segger_rtt/SEGGER_RTT.c" />
