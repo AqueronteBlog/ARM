@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1520350784 source:e:\vsprojects\arm\nrf51\examples\basics\spi\spi.c
+1520850186 source:e:\vsprojects\arm\nrf51\examples\basics\spi\spi.c
 	"spi.h"
 
 1520350091 e:\vsprojects\arm\nrf51\examples\basics\spi\spi.h
@@ -28,10 +28,10 @@
 
 1516357608 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\s130.c
 
-1519312219 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\functions.c
+1520874692 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\functions.c
 	"functions.h"
 
-1519312219 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\functions.h
+1520874692 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\functions.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"variables.h"
@@ -43,13 +43,13 @@
 
 1519312219 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\board.h
 
-1519312219 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\interrupts.c
+1520874692 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\interrupts.c
 	"interrupts.h"
 
-1519312219 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\interrupts.h
+1520874692 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\interrupts.h
 	"variables.h"
 
-1520350373 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\main.c
+1520874800 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\main.c
 	"nrf.h"
 	"nrf_delay.h"
 	"ble.h"
@@ -123,6 +123,6 @@
 
 1516357608 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\startup_nrf51.s
 
-1520350694 source:e:\vsprojects\arm\drivers\as3933\as3933.c
+1520873890 source:e:\vsprojects\arm\drivers\as3933\as3933.c
 	"AS3933.h"
 
