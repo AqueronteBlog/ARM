@@ -32,8 +32,9 @@ int main( void )
 
 
     conf_GPIO   ();
+    conf_GPIOTE ();
     //conf_UART   ();
-    //conf_TIMER0 ();
+
 
 
     // SPI definition
@@ -53,19 +54,71 @@ int main( void )
 
 
 
-    // Configure SPI peripheral
+    /* Configure SPI peripheral */
     aux  =   AS3933_Init ( myAS3933_SPI_parameters );
 
+    /* Write and Read the wakeup pattern */
     myAS3933_data.patt1b     =   TS1_WAKEUP_PATTERN_PATT1B;
     myAS3933_data.patt2b     =   TS2_WAKEUP_PATTERN_PATT2B;
     aux  =   AS3933_SetWakeUpPattern    ( myAS3933_SPI_parameters, myAS3933_data );
     aux  =   AS3933_GetWakeUpPattern    ( myAS3933_SPI_parameters, &myAS3933_data );
 
+    /* Configure All channels in Listening mode */
+    aux  =   AS3933_SetLowPowerMode ( myAS3933_SPI_parameters, AS3933_CH1_ON_CH2_ON_CH3_ON, AS3933_STANDARD_LISTENING_MODE, 0 );
+
+    /* Configure Crystal oscillator enabled without output signal displayed on CL_DAT pin */
+    aux  =   AS3933_SetClockGenerator ( myAS3933_SPI_parameters, EN_XTAL_ENABLED, CLOCK_GEN_DIS_DISABLED );
+
+    /* Configure Antenna dumper disabled */
+    aux  =   AS3933_SetAntennaDamper ( myAS3933_SPI_parameters, ATT_ON_DISABLED, 0 );
+
+    /* Configure Envelop detector time constant = 4096 symbol rate */
+    aux  =   AS3933_SetEnvelopDetector ( myAS3933_SPI_parameters, FS_ENV_SYMBOL_RATE_4096 );
+
+    /* Configure Data slicer. Threshold disabled, 2.3ms preamble length */
+    aux  =   AS3933_SetDataSlicer ( myAS3933_SPI_parameters, ABS_HY_DISABLED, FS_SCL_PREAMBLE_LENGTH_2_3 );
+
+    /* Configure Comparator Hysteresis. Both edges, 40mV */
+    aux  =   AS3933_SetComparatorHysteresis ( myAS3933_SPI_parameters, HY_POS_HYSTERESIS_BOTH_EDGES, HY_20M_COMPARATOR_HYSTERESIS_40MV );
+
+    /* Configure Gain reduction, No gain reduction at all */
+    aux  =   AS3933_SetGainReduction ( myAS3933_SPI_parameters, GR_GAIN_REDUCTION_NO_GAIN_REDUCTION );
+
+    /* Configure Operating frequency range: 95-150 kHz */
+    aux  =   AS3933_SetOperatingFrequencyRange ( myAS3933_SPI_parameters, BAND_SEL_RANGE_95_150_KHZ );
+
+    /* Configure Frequency detection tolerance: Tight */
+    aux  =   AS3933_SetFrequencyDetectionTolerance  ( myAS3933_SPI_parameters, AS3933_TOLERANCE_TIGHT );
+
+    /* Configure Sensitivity boost: Disabled */
+    aux  =   AS3933_SetGainBoost ( myAS3933_SPI_parameters, G_BOOST_DISABLED );
+
+    /* Configure AGC: AGC acting only on the first carrier burst is disabled and AGC operating in both direction ( up-down ) */
+    aux  =   AS3933_SetAGC ( myAS3933_SPI_parameters, AGC_TLIM_DISABLED, AGC_UD_UP_DOWN_MODE );
+
+    /* Configure Do mask data before wakeup */
+    aux  =   AS3933_SetDataMask ( myAS3933_SPI_parameters, DAT_MASK_ENABLED );
+
+    /* Configure Clock Generator: Crystal oscillator enabled, do NOT clock signal on CL_DAT pin  */
+    aux  =   AS3933_SetClockGenerator ( myAS3933_SPI_parameters, EN_XTAL_ENABLED, CLOCK_GEN_DIS_DISABLED );
+
+    /* Configure Correlator: Enabled, 16 bit pattern XxX Symbol rate and Manchester decoder enabled  */
+    aux  =   AS3933_SetCorrelator ( myAS3933_SPI_parameters, EN_WPAT_ENABLED, PATT32_16_BITS, T_HBIT_BIT_RATE_12, EN_MANCH_ENABLED );
+
+    /* Configure Automatic Timeout: 50ms  */
+    aux  =   AS3933_SetAutomaticTimeOut ( myAS3933_SPI_parameters, T_OUT_50_MSEC );
+
+    /* Configure Input capacitor bank: NO capacitance in any channels  */
+    aux  =   AS3933_SetParallelTuningCapacitance ( myAS3933_SPI_parameters, AS3933_CHANNEL_LF1P, AS3933_CAPACITANCE_ADDS_NONE );
+    aux  =   AS3933_SetParallelTuningCapacitance ( myAS3933_SPI_parameters, AS3933_CHANNEL_LF2P, AS3933_CAPACITANCE_ADDS_NONE );
+    aux  =   AS3933_SetParallelTuningCapacitance ( myAS3933_SPI_parameters, AS3933_CHANNEL_LF3P, AS3933_CAPACITANCE_ADDS_NONE );
+
+    /* Configure Artificial wakeup: Disabled  */
+    aux  =   AS3933_SetArtificialWakeUp ( myAS3933_SPI_parameters, T_AUTO_NO_ARTIFICIAL_WAKEUP );
 
 
     mySTATE  =   0;                                 // Reset the variable
 
-    //NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
     while( 1 )
     {
@@ -79,36 +132,32 @@ int main( void )
         __WFE();
 
 
-        NRF_GPIO->OUTCLR             =   ( 1UL << LED1 );       // Turn the LED1 on
-//        if ( mySTATE == 1 )
-//        {
-//            NVIC_DisableIRQ ( TIMER0_IRQn );                                            // Timer Interrupt DISABLED
-//
-//            // Trigger a new temperature conversion
-//            aux  =   AS3933_StartConvertTemperature ( myAS3933_I2C_parameters );
-//
-//            // Wait until the temperature conversion is completed or timeout
-//            myTimeoOut   =   232323;
-//            do{
-//                aux  =   AS3933_IsTemperatureConversionDone ( myAS3933_I2C_parameters, &myAS3933_TempConversionStatus );
-//                myTimeoOut--;
-//            } while ( ( ( myAS3933_TempConversionStatus & ACCESS_CONFIG_DONE_MASK ) != ACCESS_CONFIG_DONE_CONVERSION_COMPLETE ) && ( myTimeoOut > 0 ) );
-//
-//            // Check if TimeOut, if so, there was an error ( send: NA ), send the data otherwise
-//            if ( myTimeoOut <= 0 )
-//            {
-//                myTX_buff[0]                 =   'N';
-//                myTX_buff[1]                 =   'A';
-//            }
-//            else
-//            {
-//                //aux  =   AS3933_ReadTemperature    ( myAS3933_I2C_parameters, &myAS3933_data );
-//                aux  =   AS3933_ReadRawTemperature ( myAS3933_I2C_parameters, &myAS3933_data );
-//
-//                myTX_buff[0]                 =   myAS3933_data.MSBTemperature;
-//                myTX_buff[1]                 =   myAS3933_data.LSBTemperature;
-//            }
-//
+        NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );       // Turn all the LEDs on
+        if ( mySTATE == 1 )
+        {
+            NVIC_DisableIRQ ( GPIOTE_IRQn );                                            // Timer Interrupt DISABLED
+
+            /*  Get data ( 16-bits, Manchester ).
+
+                NOTE:   Make sure the transmitter is sending data otherwise the uC may get stuck
+                        in the following piece of code!.
+            */
+            myAS3933_data.data   =   0;
+
+            for ( uint32_t ii = 0; ii < 16; ii++ )
+            {
+                while ( ( NRF_GPIO->IN & GPIO_IN_PIN14_Msk ) == ( GPIO_IN_PIN14_Low << GPIO_IN_PIN14_Pos ) ){}
+
+                myAS3933_data.data <<=   1;
+
+                if ( ( NRF_GPIO->IN & GPIO_IN_PIN13_Msk )  == ( GPIO_IN_PIN13_High << GPIO_IN_PIN13_Pos ) )
+                {
+                    myAS3933_data.data  |=  1;
+                }
+
+                while ( ( NRF_GPIO->IN & GPIO_IN_PIN14_Msk ) == ( GPIO_IN_PIN14_High << GPIO_IN_PIN14_Pos ) ){}
+            }
+
 //
 //            myPtr                        =   &myTX_buff[0];
 //            TX_inProgress                =   YES;
@@ -123,12 +172,14 @@ int main( void )
 //                __SEV();
 //                __WFE();
 //            }
-//
-//
-//            mySTATE             =   0;
-//            NVIC_EnableIRQ ( TIMER0_IRQn );                                              // Timer Interrupt ENABLED
-//        }
-        NRF_GPIO->OUTSET             =   ( 1UL << LED1 );       // Turn the LED1 off
+
+            /* Get RSSI  */
+            aux  =   AS3933_GetRSSI ( myAS3933_SPI_parameters, &myAS3933_data );
+
+            mySTATE             =   0;
+            NVIC_EnableIRQ ( GPIOTE_IRQn );                                              // Timer Interrupt ENABLED
+        }
+        NRF_GPIO->OUTSET             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );       // Turn all the LEDs off
         //__NOP();
     }
 }
