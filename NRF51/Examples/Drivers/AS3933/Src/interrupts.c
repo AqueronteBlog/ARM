@@ -15,32 +15,6 @@
 #include "interrupts.h"
 
 /**
- * @brief       void TIMER0_IRQHandler ()
- * @details     There is a new interrupt every 1s, increment the myState variable
- *              so in the main can process that information.
- *
- *
- * @return      NA
- *
- * @author      Manuel Caballero
- * @date        1/December/2017
- * @version     1/December/2017   The ORIGIN
- * @pre         NaN
- * @warning     NaN
- */
-void TIMER0_IRQHandler()
-{
-    if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0 ) )
-    {
-        mySTATE  =   1;
-
-        NRF_TIMER0->EVENTS_COMPARE[0] = 0;                  // Clear ( flag ) compare register 0 event
-    }
-}
-
-
-
-/**
  * @brief       void UART0_IRQHandler ()
  * @details     It sends the collected data from the external sensor through the UART.
  *
@@ -79,5 +53,30 @@ void UART0_IRQHandler(void)
             dataToBeTX                   =   0;
             TX_inProgress                =   NO;
         }
+    }
+}
+
+
+/**
+ * @brief       void GPIOTE_IRQHandler ()
+ * @details     [todo].
+ *
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        12/March/2018
+ * @version     12/March/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void GPIOTE_IRQHandler()
+{
+    // Channel 0
+    if ( ( NRF_GPIOTE->EVENTS_IN[0] != 0 ) && ( ( NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_IN0_Msk ) != 0 ) )
+    {
+        mySTATE                  = 1;
+        NRF_GPIOTE->EVENTS_IN[0] = 0;                      // Clear ( flag )
     }
 }

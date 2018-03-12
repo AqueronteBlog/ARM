@@ -17,8 +17,8 @@
 
 
 /* INTERRUPT PRTOTYPES */
-void TIMER0_IRQHandler ( void );
 void UART0_IRQHandler  ( void );
+void GPIOTE_IRQHandler ( void );
 
 
 /* VARIABLES */
