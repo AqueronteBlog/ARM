@@ -20,17 +20,16 @@
 
 /**
  * @brief       void conf_GPIO  ( void )
- * @details     It configures GPIO to work with the LEDs.
+ * @details     It configures GPIO to work with the LEDs and P0.12 like input.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        5/May/2017
- * @version     23/May/2017     All the LEDs OFF at the beginning.
- *              5/May/2017      The ORIGIN
- * @pre         NaN
- * @warning     NaN
+ * @date        12/March/2018
+ * @version     12/March/2018      The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
  */
 void conf_GPIO  ( void )
 {
@@ -39,51 +38,30 @@ void conf_GPIO  ( void )
     for ( i = LED1; i < ( LED4 + 1 ); i++ ){
             NRF_GPIO->OUTSET        =   ( 1 << i );
 
-            NRF_GPIO->PIN_CNF[i]    =   GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos    |
-                                        GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos  |
-                                        GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos   |
-                                        GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  |
-                                        GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos;
+            NRF_GPIO->PIN_CNF[i]    =   ( GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos   ) |
+                                        ( GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos ) |
+                                        ( GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos  ) |
+                                        ( GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos ) |
+                                        ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos );
     }
-}
 
+    NRF_GPIO->PIN_CNF[12]    =  ( GPIO_PIN_CNF_DIR_Input     <<  GPIO_PIN_CNF_DIR_Pos   ) |
+                                ( GPIO_PIN_CNF_INPUT_Connect <<  GPIO_PIN_CNF_INPUT_Pos ) |
+                                ( GPIO_PIN_CNF_PULL_Pullup   <<  GPIO_PIN_CNF_PULL_Pos  ) |
+                                ( GPIO_PIN_CNF_DRIVE_S0S1    <<  GPIO_PIN_CNF_DRIVE_Pos ) |
+                                ( GPIO_PIN_CNF_SENSE_Low     <<  GPIO_PIN_CNF_SENSE_Pos );
 
-/**
- * @brief       void conf_TIMER0  ( void )
- * @details     One channels will create an interrupt about every 1s.
- *
- *              Timer0:
- *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
- *                  * 32-bits mode.
- *                  * Interrupt ENABLE.
- *
- *                 --- Channel 0:
- *                  * Overflow:             ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500kHz)^(-1) ) ~ 1s.
- *
- * @return      NA
- *
- * @author      Manuel Caballero
- * @date        2/August/2017
- * @version     2/August/2017   The ORIGIN
- * @pre         NaN
- * @warning     NaN.
- */
-void conf_TIMER0  ( void )
-{
-    NRF_TIMER0->TASKS_STOP  =   1;
-    NRF_TIMER0->MODE        =   TIMER_MODE_MODE_Timer;
-    NRF_TIMER0->PRESCALER   =   5U;                                                                         // f_Timer0 = ( 16MHz / 2^5 ) = 500kHz
-    NRF_TIMER0->BITMODE     =   TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos;                   // 32 bit mode.
-    NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
+    NRF_GPIO->PIN_CNF[13]    =  ( GPIO_PIN_CNF_DIR_Input        <<  GPIO_PIN_CNF_DIR_Pos   ) |
+                                ( GPIO_PIN_CNF_INPUT_Connect    <<  GPIO_PIN_CNF_INPUT_Pos ) |
+                                ( GPIO_PIN_CNF_PULL_Disabled    <<  GPIO_PIN_CNF_PULL_Pos  ) |
+                                ( GPIO_PIN_CNF_DRIVE_S0S1       <<  GPIO_PIN_CNF_DRIVE_Pos ) |
+                                ( GPIO_PIN_CNF_SENSE_Disabled   <<  GPIO_PIN_CNF_SENSE_Pos );
 
-    NRF_TIMER0->CC[0]       =   500000;                                                                    // ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500KHz)^(-1) ) ~ 1s
-
-    NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos );
-
-    NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE0_CLEAR_Enabled << TIMER_SHORTS_COMPARE0_CLEAR_Pos ); // Create an Event-Task shortcut to clear TIMER0 on COMPARE[0].
-
-
-    NVIC_EnableIRQ ( TIMER0_IRQn );                                                                         // Enable Interrupt for the Timer0 in the core.
+    NRF_GPIO->PIN_CNF[14]    =  ( GPIO_PIN_CNF_DIR_Input        <<  GPIO_PIN_CNF_DIR_Pos   ) |
+                                ( GPIO_PIN_CNF_INPUT_Connect    <<  GPIO_PIN_CNF_INPUT_Pos ) |
+                                ( GPIO_PIN_CNF_PULL_Disabled    <<  GPIO_PIN_CNF_PULL_Pos  ) |
+                                ( GPIO_PIN_CNF_DRIVE_S0S1       <<  GPIO_PIN_CNF_DRIVE_Pos ) |
+                                ( GPIO_PIN_CNF_SENSE_Disabled   <<  GPIO_PIN_CNF_SENSE_Pos );
 }
 
 
@@ -95,13 +73,13 @@ void conf_TIMER0  ( void )
  *                  * No Parity.
  *                  * No Flow Control.
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        20/June/2017
  * @version     20/June/2017   The ORIGIN
  * @pre         Only TX pin will be configured.
- * @warning     NaN.
+ * @warning     N/A.
  */
 void conf_UART  ( void )
 {
@@ -137,4 +115,61 @@ void conf_UART  ( void )
     NRF_UART0->ENABLE            =   UART_ENABLE_ENABLE_Enabled << UART_ENABLE_ENABLE_Pos;                  // UART0 ENABLED
     // NRF_UART0->TASKS_STARTTX     =   1;
     // NRF_UART0->TASKS_STARTRX     =   1;                                                                  // Enable reception
+}
+
+
+/**
+ * @brief       void conf_GPIOTE  ( void )
+ * @details     It configures GPIOTE channels.
+ *
+ *                  - P0.12. IN0.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        12/March/2018
+ * @version     12/March/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void conf_GPIOTE  ( void )
+{
+    // Channel 0
+    NRF_GPIOTE->CONFIG[0]    =  ( GPIOTE_CONFIG_POLARITY_LoToHi   << GPIOTE_CONFIG_POLARITY_Pos   ) |
+                                ( 12                              << GPIOTE_CONFIG_PSEL_Pos       ) |
+                                ( GPIOTE_CONFIG_MODE_Event        << GPIOTE_CONFIG_MODE_Pos       );
+
+    NRF_GPIOTE->INTENSET     =  ( GPIOTE_INTENSET_IN0_Set << GPIOTE_INTENSET_IN0_Pos );
+
+//    // Channel 1
+//    NRF_GPIOTE->CONFIG[1]    =  ( GPIOTE_CONFIG_POLARITY_LoToHi   << GPIOTE_CONFIG_POLARITY_Pos   ) |
+//                                ( 13                              << GPIOTE_CONFIG_PSEL_Pos       ) |
+//                                ( GPIOTE_CONFIG_MODE_Event        << GPIOTE_CONFIG_MODE_Pos       );
+//
+//    NRF_GPIOTE->INTENSET     =  ( GPIOTE_INTENSET_IN1_Set << GPIOTE_INTENSET_IN1_Pos );
+//
+//    // Channel 2
+//    NRF_GPIOTE->CONFIG[2]    =  ( GPIOTE_CONFIG_POLARITY_LoToHi   << GPIOTE_CONFIG_POLARITY_Pos   ) |
+//                                ( 14                              << GPIOTE_CONFIG_PSEL_Pos       ) |
+//                                ( GPIOTE_CONFIG_MODE_Event        << GPIOTE_CONFIG_MODE_Pos       );
+//
+//    NRF_GPIOTE->INTENSET     =  ( GPIOTE_INTENSET_IN2_Set << GPIOTE_INTENSET_IN2_Pos );
+
+
+
+    // Reset the events ( channel 0 )
+    NRF_GPIOTE->EVENTS_IN[0] = 0;
+//    NRF_GPIOTE->EVENTS_IN[1] = 0;
+//    NRF_GPIOTE->EVENTS_IN[2] = 0;
+
+    /*
+    NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_IN0_Enabled << GPIOTE_INTENSET_IN0_Pos;
+    NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_IN1_Enabled << GPIOTE_INTENSET_IN1_Pos;
+    NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_IN2_Enabled << GPIOTE_INTENSET_IN2_Pos;
+    NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_IN3_Enabled << GPIOTE_INTENSET_IN3_Pos;
+    */
+
+    // Enable Interrupt
+    NVIC_EnableIRQ ( GPIOTE_IRQn );
 }
