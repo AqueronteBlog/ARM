@@ -382,15 +382,16 @@ AS3933_status_t  AS3933_SetClockGenerator ( SPI_parameters_t mySPI_parameters, A
  *
  * @author      Manuel Caballero
  * @date        28/February/2018
- * @version     28/February/2018   The ORIGIN
+ * @version     12/March/2018       The timeout was removed, the bits for calibration are checked instead.
+ *              28/February/2018    The ORIGIN
  * @pre         RC-Oscillator: Self Calibration is ONLY available.
+ * @pre         There is NO need to calibrate the RC oscillator if the crystal oscillator is enabled.
  * @warning     In case the pattern detection and the Manchester decoder are not enabled ( R1<1>=0 and R1<3>=1 ) the calibration on the RC-oscillator
  *              is not needed. Should this not be the case, the RC-oscillator has to be calibrated.
  */
 AS3933_status_t  AS3933_CalibrateRC_Oscillator ( SPI_parameters_t mySPI_parameters )
 {
     uint8_t             cmd         =    0;
-    uint32_t            myTimeout   =    0;
     spi_status_t        mySPI_status;
 
 
@@ -400,16 +401,14 @@ AS3933_status_t  AS3933_CalibrateRC_Oscillator ( SPI_parameters_t mySPI_paramete
 
 
     // RC oscillator will be calibrated when RC_CAL_OK = '1' ( R14<6> )
-    myTimeout        =   23232323;
     do{
         cmd              =   ( AS3933_READ | AS3933_R14 );
         mySPI_status     =   spi_transfer ( mySPI_parameters, &cmd, 1, &cmd, 1 );
-        myTimeout--;
-    } while ( ( ( cmd & RC_CAL_OK_MASK ) != RC_CAL_OK_HIGH ) && ( myTimeout > 0 ) );
+    } while ( ( ( cmd & RC_CAL_OK_MASK ) != RC_CAL_OK_HIGH ) && ( ( cmd & RC_CAL_KO_MASK ) != RC_CAL_KO_HIGH ) );
 
 
 
-    if ( ( mySPI_status == SPI_SUCCESS ) && ( myTimeout > 0 ) )
+    if ( ( mySPI_status == SPI_SUCCESS ) && ( ( cmd & RC_CAL_KO_MASK ) != RC_CAL_KO_HIGH ) )
         return   AS3933_SUCCESS;
     else
         return   AS3933_FAILURE;
@@ -1234,7 +1233,8 @@ AS3933_status_t  AS3933_SetParallelTuningCapacitance ( SPI_parameters_t mySPI_pa
  *
  * @author      Manuel Caballero
  * @date        28/February/2018
- * @version     28/February/2018   The ORIGIN
+ * @version     12/March/2018       Auto-increment does NOT work when the registers are read
+ *              28/February/2018    The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -1244,15 +1244,31 @@ AS3933_status_t  AS3933_GetRSSI ( SPI_parameters_t mySPI_parameters, AS3933_data
     spi_status_t        mySPI_status;
 
 
-    // Get All RSSIs
-    // Read R10 register ( auto-increment )
+    // Get RSSI1
+    // Read R10 register
     cmd[0]           =   ( AS3933_READ | AS3933_R10 );
-    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[0], 1 );
 
     // Parse the data
     myChannelRSSI->rssi1     =   ( cmd[0] & RSSI1_MASK );       // Channel1: RSSI1
-    myChannelRSSI->rssi3     =   ( cmd[1] & RSSI3_MASK );       // Channel3: RSSI3
-    myChannelRSSI->rssi2     =   ( cmd[2] & RSSI2_MASK );       // Channel2: RSSI2
+
+
+    // Get RSSI3
+    // Read R11 register
+    cmd[0]           =   ( AS3933_READ | AS3933_R11 );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[0], 1 );
+
+    // Parse the data
+    myChannelRSSI->rssi3     =   ( cmd[0] & RSSI3_MASK );       // Channel1: RSSI1
+
+
+    // Get RSSI2
+    // Read R12 register
+    cmd[0]           =   ( AS3933_READ | AS3933_R12 );
+    mySPI_status     =    spi_transfer ( mySPI_parameters, &cmd[0], 1, &cmd[0], 1 );
+
+    // Parse the data
+    myChannelRSSI->rssi2     =   ( cmd[0] & RSSI2_MASK );       // Channel1: RSSI1
 
 
 
