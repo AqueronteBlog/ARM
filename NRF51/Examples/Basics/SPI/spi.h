@@ -20,6 +20,14 @@
 #include "nrf51_bitfields.h"
 
 
+#ifndef SPI_H_
+#define SPI_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /**
   * @brief   SPI MODES.
   *
@@ -111,3 +119,10 @@ typedef struct{
   */
 spi_status_t    spi_transfer    ( SPI_parameters_t mySPIparameters, uint8_t* spi_tx_buff, uint32_t spi_tx_length, uint8_t* spi_rx_buff, uint32_t spi_rx_length );
 spi_status_t    spi_init        ( SPI_parameters_t mySPIparameters );
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* SPI_H_ */
