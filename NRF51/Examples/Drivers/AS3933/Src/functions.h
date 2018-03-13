@@ -16,8 +16,21 @@
 #include "nrf51_bitfields.h"
 #include "variables.h"
 
+#ifndef FUNCTIONS_H_
+#define FUNCTIONS_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /* FUNCTION PROTOTYPES */
 void conf_GPIO      ( void );
 void conf_UART      ( void );
 void conf_GPIOTE    ( void );
 
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* FUNCTIONS_H_ */
