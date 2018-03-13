@@ -18,6 +18,14 @@
 #include "nrf51_bitfields.h"
 #include "board.h"
 
+#ifndef VARIABLES_H_
+#define VARIABLES_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /* CONSTANTS */
 #define ON              1
 #define OFF             0
@@ -27,8 +35,13 @@
 
 
 /* VARIABLES */
-uint32_t mySTATE;                       /*!<   It indicates the next action to be performed                                       */
-uint8_t  dataToBeTX;                    /*!<   A counter. It indicates how many data it will be transmitted through the UART      */
-uint32_t TX_inProgress;                 /*!<   It indicates if a transmission is in progress                                      */
-uint8_t *myPtr;                         /*!<   Pointer to point out the data from the external sensor                             */
+//uint32_t mySTATE;                       /*!<   It indicates the next action to be performed                                       */
+//uint8_t  dataToBeTX;                    /*!<   A counter. It indicates how many data it will be transmitted through the UART      */
+//uint32_t TX_inProgress;                 /*!<   It indicates if a transmission is in progress                                      */
+//uint8_t  *myPtr;                        /*!<   Pointer to point out the data from the external sensor                             */
 
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* VARIABLES_H_ */
