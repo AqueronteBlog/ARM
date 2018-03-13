@@ -15,6 +15,13 @@
 
 #include "variables.h"
 
+#ifndef INTERRUPTS_H_
+#define INTERRUPTS_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /* INTERRUPT PRTOTYPES */
 void UART0_IRQHandler  ( void );
@@ -27,3 +34,9 @@ extern uint32_t  mySTATE;
 extern uint32_t  TX_inProgress;
 extern uint8_t   TX_buff[];
 extern uint8_t   *myPtr;
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* INTERRUPTS_H_ */
