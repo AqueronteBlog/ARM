@@ -1,6 +1,11 @@
 /**
  * @brief       main.c
- * @details     [TODO].
+ * @details     This example shows how to work with the external sensor AS3933
+ *              ( 3D Low Frequency Wakeup Receiver ). Every time the transmitter sends
+ *              a right pattern, it wakes the microcontroller up and it starts
+ *              reading the data ( 8-bits, Manchester ).
+ *
+ *              The data as well as the RSSIs are sent through the UART.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
@@ -24,8 +29,22 @@
 #include "AS3933.h"
 
 
+/* GLOBAL VARIABLES */
+uint32_t mySTATE;                       /*!<   It indicates the next action to be performed                                       */
+uint8_t  dataToBeTX;                    /*!<   A counter. It indicates how many data it will be transmitted through the UART      */
+uint32_t TX_inProgress;                 /*!<   It indicates if a transmission is in progress                                      */
+uint8_t  *myPtr;                        /*!<   Pointer to point out the data from the external sensor                             */
+
+
+
+/* MAIN */
 int main( void )
 {
+    uint8_t  myTX_buff[4]     =  { 0 };
+    uint32_t myCounterData    =  0;
+    uint32_t myCounterTimeout =  0;
+
+
     SPI_parameters_t    myAS3933_SPI_parameters;
     AS3933_status_t     aux;
     AS3933_data_t       myAS3933_data;
@@ -33,11 +52,11 @@ int main( void )
 
     conf_GPIO   ();
     conf_GPIOTE ();
-    //conf_UART   ();
+    conf_UART   ();
 
 
 
-    // SPI definition
+    /* SPI definition */
     myAS3933_SPI_parameters.SPIinstance         =    NRF_SPI0;
     myAS3933_SPI_parameters.MOSI                =    SPI0_MOSI;
     myAS3933_SPI_parameters.MISO                =    SPI0_MISO;
@@ -102,7 +121,7 @@ int main( void )
     /* Configure Clock Generator: Crystal oscillator enabled, do NOT clock signal on CL_DAT pin  */
     aux  =   AS3933_SetClockGenerator ( myAS3933_SPI_parameters, EN_XTAL_ENABLED, CLOCK_GEN_DIS_DISABLED );
 
-    /* Configure Correlator: Enabled, 16 bit pattern XxX Symbol rate and Manchester decoder enabled  */
+    /* Configure Correlator: Enabled, 16 bit pattern and Manchester decoder enabled  */
     aux  =   AS3933_SetCorrelator ( myAS3933_SPI_parameters, EN_WPAT_ENABLED, PATT32_16_BITS, T_HBIT_BIT_RATE_12, EN_MANCH_ENABLED );
 
     /* Configure Automatic Timeout: 50ms  */
@@ -117,13 +136,12 @@ int main( void )
     aux  =   AS3933_SetArtificialWakeUp ( myAS3933_SPI_parameters, T_AUTO_NO_ARTIFICIAL_WAKEUP );
 
 
-    mySTATE  =   0;                                 // Reset the variable
-
+    mySTATE  =   0;                                                                                                     // Reset the variable
 
     while( 1 )
     {
         //NRF_POWER->SYSTEMOFF = 1;
-        NRF_POWER->TASKS_LOWPWR = 1;                // Sub power mode: Low power.
+        NRF_POWER->TASKS_LOWPWR = 1;                                                                                    // Sub power mode: Low power.
 
         // Enter System ON sleep mode
         __WFE();
@@ -132,22 +150,28 @@ int main( void )
         __WFE();
 
 
-        NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );       // Turn all the LEDs on
+        NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );              // Turn all the LEDs on
         if ( mySTATE == 1 )
         {
-            NVIC_DisableIRQ ( GPIOTE_IRQn );                                            // Timer Interrupt DISABLED
+            NVIC_DisableIRQ ( GPIOTE_IRQn );                                                                            // GPIOTE Interrupt DISABLED
 
-            /*  Get data ( 16-bits, Manchester ).
+            /*  Get data ( 8-bits, Manchester ).
 
-                NOTE:   Make sure the transmitter is sending data otherwise the uC may get stuck
-                        in the following piece of code!.
+                NOTE:   Make sure the transmitter is sending data otherwise a little delay will
+                        be introduced by myCounterTimeout.
             */
             myAS3933_data.data   =   0;
 
-            for ( uint32_t ii = 0; ii < 16; ii++ )
+            for ( myCounterData = 0; myCounterData < 8; myCounterData++ )
             {
-                while ( ( NRF_GPIO->IN & GPIO_IN_PIN14_Msk ) == ( GPIO_IN_PIN14_Low << GPIO_IN_PIN14_Pos ) ){}
+                /*  Wait until rising edges on CLD pin or Timeout */
+                myCounterTimeout    =   2323;
+                while ( ( ( NRF_GPIO->IN & GPIO_IN_PIN14_Msk ) == ( GPIO_IN_PIN14_Low << GPIO_IN_PIN14_Pos ) ) && ( myCounterTimeout > 0 ) )
+                {
+                    myCounterTimeout--;
+                }
 
+                /*  Process the data */
                 myAS3933_data.data <<=   1;
 
                 if ( ( NRF_GPIO->IN & GPIO_IN_PIN13_Msk )  == ( GPIO_IN_PIN13_High << GPIO_IN_PIN13_Pos ) )
@@ -155,31 +179,46 @@ int main( void )
                     myAS3933_data.data  |=  1;
                 }
 
-                while ( ( NRF_GPIO->IN & GPIO_IN_PIN14_Msk ) == ( GPIO_IN_PIN14_High << GPIO_IN_PIN14_Pos ) ){}
+                /*  Wait until CLD pin goes low again or Timeout */
+                myCounterTimeout    =   2323;
+                while ( ( ( NRF_GPIO->IN & GPIO_IN_PIN14_Msk ) == ( GPIO_IN_PIN14_High << GPIO_IN_PIN14_Pos ) ) && ( myCounterTimeout > 0 ) )
+                {
+                    myCounterTimeout--;
+                }
             }
 
-//
-//            myPtr                        =   &myTX_buff[0];
-//            TX_inProgress                =   YES;
-//            NRF_UART0->TASKS_STARTTX     =   1;
-//            NRF_UART0->TXD               =   *myPtr++;                                   // Start transmission
-//
-//            // Wait until the message is transmitted
-//            while ( TX_inProgress == YES )
-//            {
-//                __WFE();
-//                // Make sure any pending events are cleared
-//                __SEV();
-//                __WFE();
-//            }
 
             /* Get RSSI  */
             aux  =   AS3933_GetRSSI ( myAS3933_SPI_parameters, &myAS3933_data );
 
+
+            /* Prepare the data to be sent */
+            myTX_buff[0]                 =   myAS3933_data.data;
+            myTX_buff[1]                 =   myAS3933_data.rssi1;
+            myTX_buff[2]                 =   myAS3933_data.rssi2;
+            myTX_buff[3]                 =   myAS3933_data.rssi3;
+
+
+            /* Send data through the UART   */
+            myPtr                        =   &myTX_buff[0];
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   *myPtr++;                                                              // Start transmission
+
+            /* Wait until the message is transmitted */
+            while ( TX_inProgress == YES )
+            {
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
             mySTATE             =   0;
-            NVIC_EnableIRQ ( GPIOTE_IRQn );                                              // Timer Interrupt ENABLED
+            NVIC_EnableIRQ ( GPIOTE_IRQn );                                                                         // GPIOTE Interrupt ENABLED
         }
-        NRF_GPIO->OUTSET             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );       // Turn all the LEDs off
+        NRF_GPIO->OUTSET             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
         //__NOP();
     }
 }
