@@ -19,6 +19,13 @@
 #include "stdbool.h"
 #include "spi.h"
 
+#ifndef AS3933_H_
+#define AS3933_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /* SPI COMMAND STRUCTURE */
 /**
@@ -1042,3 +1049,10 @@ AS3933_status_t  AS3933_GetRSSI                         ( SPI_parameters_t mySPI
 /** It sends a direct command
     */
 AS3933_status_t  AS3933_Send_DirectCommand              ( SPI_parameters_t mySPI_parameters, AS3933_spi_direct_commands_t myDirectCommand                                                                           );
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* AS3933_H_ */
