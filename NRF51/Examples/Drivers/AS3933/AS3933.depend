@@ -2,7 +2,7 @@
 1520850186 source:e:\vsprojects\arm\nrf51\examples\basics\spi\spi.c
 	"spi.h"
 
-1520350091 e:\vsprojects\arm\nrf51\examples\basics\spi\spi.h
+1520943369 e:\vsprojects\arm\nrf51\examples\basics\spi\spi.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 
@@ -31,25 +31,25 @@
 1520874692 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\functions.c
 	"functions.h"
 
-1520874692 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\functions.h
+1520943369 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\functions.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"variables.h"
 
-1519312219 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\variables.h
+1520943576 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\variables.h
 	"nrf.h"
 	"nrf51_bitfields.h"
 	"board.h"
 
-1519312219 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\board.h
+1520946188 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\board.h
 
-1520874692 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\interrupts.c
+1520942999 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\interrupts.c
 	"interrupts.h"
 
-1520874692 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\interrupts.h
+1520943576 e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\interrupts.h
 	"variables.h"
 
-1520874800 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\main.c
+1520945872 source:e:\vsprojects\arm\nrf51\examples\drivers\as3933\src\main.c
 	"nrf.h"
 	"nrf_delay.h"
 	"ble.h"
@@ -110,7 +110,7 @@
 	"ble_gatt.h"
 	"nrf_svc.h"
 
-1520246317 e:\vsprojects\arm\drivers\as3933\as3933.h
+1520943369 e:\vsprojects\arm\drivers\as3933\as3933.h
 	"stdint.h"
 	"stdbool.h"
 	"spi.h"

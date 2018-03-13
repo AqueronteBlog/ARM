@@ -14,10 +14,10 @@ c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/
 Allocating common symbols
 Common symbol       size              file
 
-dataToBeTX          0x1               obj\debug\src\functions.o
-myPtr               0x4               obj\debug\src\functions.o
-TX_inProgress       0x4               obj\debug\src\functions.o
-mySTATE             0x4               obj\debug\src\functions.o
+dataToBeTX          0x1               obj\debug\src\main.o
+myPtr               0x4               obj\debug\src\main.o
+TX_inProgress       0x4               obj\debug\src\main.o
+mySTATE             0x4               obj\debug\src\main.o
 
 Discarded input sections
 
@@ -73,16 +73,9 @@ Discarded input sections
  .group         0x00000000        0x8 obj\debug\src\functions.o
  .group         0x00000000        0x8 obj\debug\src\functions.o
  .group         0x00000000        0x8 obj\debug\src\functions.o
- .group         0x00000000        0x8 obj\debug\src\functions.o
  .text          0x00000000        0x0 obj\debug\src\functions.o
  .data          0x00000000        0x0 obj\debug\src\functions.o
  .bss           0x00000000        0x0 obj\debug\src\functions.o
- .text.NVIC_ClearPendingIRQ
-                0x00000000       0x34 obj\debug\src\functions.o
- .text.NVIC_SetPriority
-                0x00000000       0xdc obj\debug\src\functions.o
- .text.conf_UART
-                0x00000000       0xb8 obj\debug\src\functions.o
  .debug_macro   0x00000000      0x82c obj\debug\src\functions.o
  .debug_macro   0x00000000       0x22 obj\debug\src\functions.o
  .debug_macro   0x00000000       0x3a obj\debug\src\functions.o
@@ -97,7 +90,6 @@ Discarded input sections
  .debug_macro   0x00000000     0x74c6 obj\debug\src\functions.o
  .debug_macro   0x00000000      0x976 obj\debug\src\functions.o
  .debug_macro   0x00000000       0x10 obj\debug\src\functions.o
- .group         0x00000000        0x8 obj\debug\src\interrupts.o
  .group         0x00000000        0x8 obj\debug\src\interrupts.o
  .group         0x00000000        0x8 obj\debug\src\interrupts.o
  .group         0x00000000        0x8 obj\debug\src\interrupts.o
@@ -130,8 +122,7 @@ Discarded input sections
  .debug_macro   0x00000000     0x74c6 obj\debug\src\interrupts.o
  .debug_macro   0x00000000      0x976 obj\debug\src\interrupts.o
  .debug_macro   0x00000000       0x10 obj\debug\src\interrupts.o
- .debug_macro   0x00000000       0x4c obj\debug\src\interrupts.o
- .debug_macro   0x00000000       0x1c obj\debug\src\interrupts.o
+ .debug_macro   0x00000000       0x22 obj\debug\src\interrupts.o
  .group         0x00000000        0x8 obj\debug\src\main.o
  .group         0x00000000        0x8 obj\debug\src\main.o
  .group         0x00000000        0x8 obj\debug\src\main.o
@@ -297,8 +288,7 @@ Discarded input sections
  .debug_macro   0x00000000     0x74c6 obj\debug\src\main.o
  .debug_macro   0x00000000      0x976 obj\debug\src\main.o
  .debug_macro   0x00000000       0x10 obj\debug\src\main.o
- .debug_macro   0x00000000       0x4c obj\debug\src\main.o
- .debug_macro   0x00000000       0x1c obj\debug\src\main.o
+ .debug_macro   0x00000000       0x22 obj\debug\src\main.o
  .group         0x00000000        0x8 obj\debug\src\system_nrf51.o
  .group         0x00000000        0x8 obj\debug\src\system_nrf51.o
  .group         0x00000000        0x8 obj\debug\src\system_nrf51.o
@@ -354,6 +344,7 @@ Discarded input sections
  .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
  .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
  .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+ .group         0x00000000        0x8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
  .text          0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
  .data          0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
  .bss           0x00000000        0x0 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
@@ -378,6 +369,7 @@ Discarded input sections
  .debug_macro   0x00000000     0x74c6 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
  .debug_macro   0x00000000      0x976 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
  .debug_macro   0x00000000       0x10 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+ .debug_macro   0x00000000       0x11 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
  .text          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
@@ -427,7 +419,7 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
  .softdevice    0x00000000    0x1d000 obj\debug\s130.o
                 0x00000000                Nordic_S130_SD
 
-.text           0x0001d000     0x291c
+.text           0x0001d000     0x2b90
  *(.Vectors)
  .Vectors       0x0001d000       0xc0 obj\debug\startup_nrf51.o
                 0x0001d000                __Vectors
@@ -443,140 +435,147 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
                 0x0001d2c8                spi_init
  .text.NVIC_EnableIRQ
                 0x0001d4bc       0x2c obj\debug\src\functions.o
+ .text.NVIC_ClearPendingIRQ
+                0x0001d4e8       0x34 obj\debug\src\functions.o
+ .text.NVIC_SetPriority
+                0x0001d51c       0xdc obj\debug\src\functions.o
  .text.conf_GPIO
-                0x0001d4e8       0x74 obj\debug\src\functions.o
-                0x0001d4e8                conf_GPIO
+                0x0001d5f8       0x74 obj\debug\src\functions.o
+                0x0001d5f8                conf_GPIO
+ .text.conf_UART
+                0x0001d66c       0xb8 obj\debug\src\functions.o
+                0x0001d66c                conf_UART
  .text.conf_GPIOTE
-                0x0001d55c       0x38 obj\debug\src\functions.o
-                0x0001d55c                conf_GPIOTE
+                0x0001d724       0x38 obj\debug\src\functions.o
+                0x0001d724                conf_GPIOTE
  .text.UART0_IRQHandler
-                0x0001d594       0x80 obj\debug\src\interrupts.o
-                0x0001d594                UART0_IRQHandler
+                0x0001d75c       0x80 obj\debug\src\interrupts.o
+                0x0001d75c                UART0_IRQHandler
  .text.GPIOTE_IRQHandler
-                0x0001d614       0x3c obj\debug\src\interrupts.o
-                0x0001d614                GPIOTE_IRQHandler
+                0x0001d7dc       0x3c obj\debug\src\interrupts.o
+                0x0001d7dc                GPIOTE_IRQHandler
  .text.NVIC_EnableIRQ
-                0x0001d650       0x2c obj\debug\src\main.o
+                0x0001d818       0x2c obj\debug\src\main.o
  .text.NVIC_DisableIRQ
-                0x0001d67c       0x30 obj\debug\src\main.o
- .text.main     0x0001d6ac      0x5f4 obj\debug\src\main.o
-                0x0001d6ac                main
+                0x0001d844       0x30 obj\debug\src\main.o
+ .text.main     0x0001d874      0x6a0 obj\debug\src\main.o
+                0x0001d874                main
  .text.SystemInit
-                0x0001dca0       0x40 obj\debug\src\system_nrf51.o
-                0x0001dca0                SystemInit
+                0x0001df14       0x40 obj\debug\src\system_nrf51.o
+                0x0001df14                SystemInit
  .text.is_manual_peripheral_setup_needed
-                0x0001dce0       0x80 obj\debug\src\system_nrf51.o
+                0x0001df54       0x80 obj\debug\src\system_nrf51.o
  .text.is_disabled_in_debug_needed
-                0x0001dd60       0x4c obj\debug\src\system_nrf51.o
- .text          0x0001ddac       0x54 obj\debug\startup_nrf51.o
-                0x0001ddac                Reset_Handler
-                0x0001ddf4                NMI_Handler
-                0x0001ddf6                HardFault_Handler
-                0x0001ddf8                SVC_Handler
-                0x0001ddfa                PendSV_Handler
-                0x0001ddfc                SysTick_Handler
-                0x0001ddfe                RTC0_IRQHandler
-                0x0001ddfe                POWER_CLOCK_IRQHandler
-                0x0001ddfe                RADIO_IRQHandler
-                0x0001ddfe                LPCOMP_IRQHandler
-                0x0001ddfe                SWI4_IRQHandler
-                0x0001ddfe                TEMP_IRQHandler
-                0x0001ddfe                SPI0_TWI0_IRQHandler
-                0x0001ddfe                SWI5_IRQHandler
-                0x0001ddfe                TIMER0_IRQHandler
-                0x0001ddfe                TIMER2_IRQHandler
-                0x0001ddfe                SWI0_IRQHandler
-                0x0001ddfe                TIMER1_IRQHandler
-                0x0001ddfe                ECB_IRQHandler
-                0x0001ddfe                Default_Handler
-                0x0001ddfe                ADC_IRQHandler
-                0x0001ddfe                SWI3_IRQHandler
-                0x0001ddfe                CCM_AAR_IRQHandler
-                0x0001ddfe                WDT_IRQHandler
-                0x0001ddfe                QDEC_IRQHandler
-                0x0001ddfe                SWI2_IRQHandler
-                0x0001ddfe                RNG_IRQHandler
-                0x0001ddfe                SPI1_TWI1_IRQHandler
-                0x0001ddfe                RTC1_IRQHandler
-                0x0001ddfe                SWI1_IRQHandler
+                0x0001dfd4       0x4c obj\debug\src\system_nrf51.o
+ .text          0x0001e020       0x54 obj\debug\startup_nrf51.o
+                0x0001e020                Reset_Handler
+                0x0001e068                NMI_Handler
+                0x0001e06a                HardFault_Handler
+                0x0001e06c                SVC_Handler
+                0x0001e06e                PendSV_Handler
+                0x0001e070                SysTick_Handler
+                0x0001e072                RTC0_IRQHandler
+                0x0001e072                POWER_CLOCK_IRQHandler
+                0x0001e072                RADIO_IRQHandler
+                0x0001e072                LPCOMP_IRQHandler
+                0x0001e072                SWI4_IRQHandler
+                0x0001e072                TEMP_IRQHandler
+                0x0001e072                SPI0_TWI0_IRQHandler
+                0x0001e072                SWI5_IRQHandler
+                0x0001e072                TIMER0_IRQHandler
+                0x0001e072                TIMER2_IRQHandler
+                0x0001e072                SWI0_IRQHandler
+                0x0001e072                TIMER1_IRQHandler
+                0x0001e072                ECB_IRQHandler
+                0x0001e072                Default_Handler
+                0x0001e072                ADC_IRQHandler
+                0x0001e072                SWI3_IRQHandler
+                0x0001e072                CCM_AAR_IRQHandler
+                0x0001e072                WDT_IRQHandler
+                0x0001e072                QDEC_IRQHandler
+                0x0001e072                SWI2_IRQHandler
+                0x0001e072                RNG_IRQHandler
+                0x0001e072                SPI1_TWI1_IRQHandler
+                0x0001e072                RTC1_IRQHandler
+                0x0001e072                SWI1_IRQHandler
  .text.AS3933_Init
-                0x0001de00       0xf4 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001de00                AS3933_Init
+                0x0001e074       0xf4 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001e074                AS3933_Init
  .text.AS3933_SetLowPowerMode
-                0x0001def4      0x34c obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001def4                AS3933_SetLowPowerMode
+                0x0001e168      0x34c obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001e168                AS3933_SetLowPowerMode
  .text.AS3933_SetArtificialWakeUp
-                0x0001e240      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001e240                AS3933_SetArtificialWakeUp
+                0x0001e4b4      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001e4b4                AS3933_SetArtificialWakeUp
  .text.AS3933_SetClockGenerator
-                0x0001e340      0x1b8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001e340                AS3933_SetClockGenerator
+                0x0001e5b4      0x1b8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001e5b4                AS3933_SetClockGenerator
  .text.AS3933_SetAntennaDamper
-                0x0001e4f8      0x1b8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001e4f8                AS3933_SetAntennaDamper
+                0x0001e76c      0x1b8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001e76c                AS3933_SetAntennaDamper
  .text.AS3933_SetEnvelopDetector
-                0x0001e6b0      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001e6b0                AS3933_SetEnvelopDetector
+                0x0001e924      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001e924                AS3933_SetEnvelopDetector
  .text.AS3933_SetDataSlicer
-                0x0001e7b0      0x1b8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001e7b0                AS3933_SetDataSlicer
+                0x0001ea24      0x1b8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001ea24                AS3933_SetDataSlicer
  .text.AS3933_SetComparatorHysteresis
-                0x0001e968      0x114 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001e968                AS3933_SetComparatorHysteresis
+                0x0001ebdc      0x114 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001ebdc                AS3933_SetComparatorHysteresis
  .text.AS3933_SetGainReduction
-                0x0001ea7c      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001ea7c                AS3933_SetGainReduction
+                0x0001ecf0      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001ecf0                AS3933_SetGainReduction
  .text.AS3933_SetOperatingFrequencyRange
-                0x0001eb7c      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001eb7c                AS3933_SetOperatingFrequencyRange
+                0x0001edf0      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001edf0                AS3933_SetOperatingFrequencyRange
  .text.AS3933_SetFrequencyDetectionTolerance
-                0x0001ec7c      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001ec7c                AS3933_SetFrequencyDetectionTolerance
+                0x0001eef0      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001eef0                AS3933_SetFrequencyDetectionTolerance
  .text.AS3933_SetGainBoost
-                0x0001ed7c      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001ed7c                AS3933_SetGainBoost
+                0x0001eff0      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001eff0                AS3933_SetGainBoost
  .text.AS3933_SetAGC
-                0x0001ee7c      0x114 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001ee7c                AS3933_SetAGC
+                0x0001f0f0      0x114 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001f0f0                AS3933_SetAGC
  .text.AS3933_SetDataMask
-                0x0001ef90      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001ef90                AS3933_SetDataMask
+                0x0001f204      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001f204                AS3933_SetDataMask
  .text.AS3933_SetCorrelator
-                0x0001f090      0x280 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001f090                AS3933_SetCorrelator
+                0x0001f304      0x280 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001f304                AS3933_SetCorrelator
  .text.AS3933_SetWakeUpPattern
-                0x0001f310      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001f310                AS3933_SetWakeUpPattern
+                0x0001f584      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001f584                AS3933_SetWakeUpPattern
  .text.AS3933_GetWakeUpPattern
-                0x0001f410       0xc8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001f410                AS3933_GetWakeUpPattern
+                0x0001f684       0xc8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001f684                AS3933_GetWakeUpPattern
  .text.AS3933_SetAutomaticTimeOut
-                0x0001f4d8      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001f4d8                AS3933_SetAutomaticTimeOut
+                0x0001f74c      0x100 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001f74c                AS3933_SetAutomaticTimeOut
  .text.AS3933_SetParallelTuningCapacitance
-                0x0001f5d8      0x13c obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001f5d8                AS3933_SetParallelTuningCapacitance
+                0x0001f84c      0x13c obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001f84c                AS3933_SetParallelTuningCapacitance
  .text.AS3933_GetRSSI
-                0x0001f714      0x140 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                0x0001f714                AS3933_GetRSSI
- .text.exit     0x0001f854       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
-                0x0001f854                exit
+                0x0001f988      0x140 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001f988                AS3933_GetRSSI
+ .text.exit     0x0001fac8       0x2c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-exit.o)
+                0x0001fac8                exit
  .text.__libc_init_array
-                0x0001f880       0x4c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
-                0x0001f880                __libc_init_array
- .text.memset   0x0001f8cc       0x10 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
-                0x0001f8cc                memset
- .text._exit    0x0001f8dc        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
-                0x0001f8dc                _exit
+                0x0001faf4       0x4c c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-init.o)
+                0x0001faf4                __libc_init_array
+ .text.memset   0x0001fb40       0x10 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-memset.o)
+                0x0001fb40                memset
+ .text._exit    0x0001fb50        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libnosys_s.a(_exit.o)
+                0x0001fb50                _exit
  *(.init)
- *fill*         0x0001f8de        0x2 
- .init          0x0001f8e0        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x0001f8e0                _init
- .init          0x0001f8e4        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ *fill*         0x0001fb52        0x2 
+ .init          0x0001fb54        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x0001fb54                _init
+ .init          0x0001fb58        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
  *(.fini)
- .fini          0x0001f8ec        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
-                0x0001f8ec                _fini
- .fini          0x0001f8f0        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
+ .fini          0x0001fb60        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crti.o
+                0x0001fb60                _fini
+ .fini          0x0001fb64        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtn.o
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
@@ -589,46 +588,46 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
  *(.dtors)
  *(.rodata*)
  .rodata.AS3933_SetLowPowerMode
-                0x0001f8f8       0x1c obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                0x0001fb6c       0x1c obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
  .rodata.str1.1
-                0x0001f914        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
- *fill*         0x0001f916        0x2 
+                0x0001fb88        0x2 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
+ *fill*         0x0001fb8a        0x2 
  .rodata._global_impure_ptr
-                0x0001f918        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
-                0x0001f918                _global_impure_ptr
+                0x0001fb8c        0x4 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m\libg_n.a(lib_a-impure.o)
+                0x0001fb8c                _global_impure_ptr
  *(.eh_frame*)
 
-.glue_7         0x0001f91c        0x0
- .glue_7        0x0001f91c        0x0 linker stubs
+.glue_7         0x0001fb90        0x0
+ .glue_7        0x0001fb90        0x0 linker stubs
 
-.glue_7t        0x0001f91c        0x0
- .glue_7t       0x0001f91c        0x0 linker stubs
+.glue_7t        0x0001fb90        0x0
+ .glue_7t       0x0001fb90        0x0 linker stubs
 
-.vfp11_veneer   0x0001f91c        0x0
- .vfp11_veneer  0x0001f91c        0x0 linker stubs
+.vfp11_veneer   0x0001fb90        0x0
+ .vfp11_veneer  0x0001fb90        0x0 linker stubs
 
-.v4_bx          0x0001f91c        0x0
- .v4_bx         0x0001f91c        0x0 linker stubs
+.v4_bx          0x0001fb90        0x0
+ .v4_bx         0x0001fb90        0x0 linker stubs
 
-.iplt           0x0001f91c        0x0
- .iplt          0x0001f91c        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.iplt           0x0001fb90        0x0
+ .iplt          0x0001fb90        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0001f91c                __exidx_start = .
+                0x0001fb90                __exidx_start = .
 
-.ARM.exidx      0x0001f91c        0x8
+.ARM.exidx      0x0001fb90        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x0001f91c        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
- .ARM.exidx     0x0001f924        0x0 obj\debug\startup_nrf51.o
+ .ARM.exidx     0x0001fb90        0x8 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .ARM.exidx     0x0001fb98        0x0 obj\debug\startup_nrf51.o
                                   0x8 (size before relaxing)
-                0x0001f924                __exidx_end = .
-                0x0001f924                __etext = .
+                0x0001fb98                __exidx_end = .
+                0x0001fb98                __etext = .
 
-.rel.dyn        0x0001f924        0x0
- .rel.iplt      0x0001f924        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
+.rel.dyn        0x0001fb98        0x0
+ .rel.iplt      0x0001fb98        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.data           0x20002200       0x60 load address 0x0001f924
+.data           0x20002200       0x60 load address 0x0001fb98
                 0x20002200                __data_start__ = .
  *(vtable)
  *(.data*)
@@ -652,15 +651,15 @@ LOAD c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-
                 0x20002260                . = ALIGN (0x4)
                 0x20002260                __data_end__ = .
 
-.igot.plt       0x20002260        0x0 load address 0x0001f984
+.igot.plt       0x20002260        0x0 load address 0x0001fbf8
  .igot.plt      0x20002260        0x0 c:/program files (x86)/embitz/1.11/share/em_armgcc/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/crtbegin.o
 
-.bss            0x20002260       0x10 load address 0x0001f984
+.bss            0x20002260       0x10 load address 0x0001fbf8
                 0x20002260                . = ALIGN (0x4)
                 0x20002260                __bss_start__ = .
  *(.bss*)
  *(COMMON)
- COMMON         0x20002260       0x10 obj\debug\src\functions.o
+ COMMON         0x20002260       0x10 obj\debug\src\main.o
                 0x20002260                dataToBeTX
                 0x20002264                myPtr
                 0x20002268                TX_inProgress
@@ -750,25 +749,25 @@ OUTPUT(bin\Debug\AS3933.elf elf32-littlearm)
  .comment       0x0000006e       0x6f obj\debug\src\system_nrf51.o
  .comment       0x0000006e       0x6f obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
 
-.debug_info     0x00000000     0x5a3d
+.debug_info     0x00000000     0x5da8
  .debug_info    0x00000000      0x57c obj\debug\~#\~#\basics\spi\spi.o
  .debug_info    0x0000057c       0x5e obj\debug\s130.o
- .debug_info    0x000005da      0x99e obj\debug\src\functions.o
- .debug_info    0x00000f78      0x5a1 obj\debug\src\interrupts.o
- .debug_info    0x00001519     0x2cbd obj\debug\src\main.o
- .debug_info    0x000041d6      0x1ec obj\debug\src\system_nrf51.o
- .debug_info    0x000043c2       0x68 obj\debug\startup_nrf51.o
- .debug_info    0x0000442a     0x1613 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+ .debug_info    0x000005da      0x97c obj\debug\src\functions.o
+ .debug_info    0x00000f56      0x589 obj\debug\src\interrupts.o
+ .debug_info    0x000014df     0x3061 obj\debug\src\main.o
+ .debug_info    0x00004540      0x1ec obj\debug\src\system_nrf51.o
+ .debug_info    0x0000472c       0x68 obj\debug\startup_nrf51.o
+ .debug_info    0x00004794     0x1614 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
 
-.debug_abbrev   0x00000000      0x999
+.debug_abbrev   0x00000000      0x976
  .debug_abbrev  0x00000000      0x159 obj\debug\~#\~#\basics\spi\spi.o
  .debug_abbrev  0x00000159       0x48 obj\debug\s130.o
- .debug_abbrev  0x000001a1      0x169 obj\debug\src\functions.o
- .debug_abbrev  0x0000030a       0xdc obj\debug\src\interrupts.o
- .debug_abbrev  0x000003e6      0x2ed obj\debug\src\main.o
- .debug_abbrev  0x000006d3       0xf4 obj\debug\src\system_nrf51.o
- .debug_abbrev  0x000007c7       0x14 obj\debug\startup_nrf51.o
- .debug_abbrev  0x000007db      0x1be obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+ .debug_abbrev  0x000001a1      0x14f obj\debug\src\functions.o
+ .debug_abbrev  0x000002f0       0xdc obj\debug\src\interrupts.o
+ .debug_abbrev  0x000003cc      0x2e4 obj\debug\src\main.o
+ .debug_abbrev  0x000006b0       0xf4 obj\debug\src\system_nrf51.o
+ .debug_abbrev  0x000007a4       0x14 obj\debug\startup_nrf51.o
+ .debug_abbrev  0x000007b8      0x1be obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
 
 .debug_aranges  0x00000000      0x3e8
  .debug_aranges
@@ -796,68 +795,68 @@ OUTPUT(bin\Debug\AS3933.elf elf32-littlearm)
  .debug_ranges  0x00000268       0x28 obj\debug\src\system_nrf51.o
  .debug_ranges  0x00000290       0xc0 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
 
-.debug_macro    0x00000000     0x9ffb
- .debug_macro   0x00000000       0xd4 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x000000d4      0x82c obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000900       0x22 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000922       0x3a obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x0000095c       0x22 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x0000097e       0x87 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000a05       0x44 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000a49       0xfd obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000b46       0x5e obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000ba4      0x1df obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000d83      0x241 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00000fc4      0x1d2 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00001196     0x74c6 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x0000865c      0x976 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00008fd2       0x10 obj\debug\~#\~#\basics\spi\spi.o
- .debug_macro   0x00008fe2       0x26 obj\debug\s130.o
- .debug_macro   0x00009008       0xe6 obj\debug\src\functions.o
- .debug_macro   0x000090ee       0x4c obj\debug\src\functions.o
- .debug_macro   0x0000913a       0x1c obj\debug\src\functions.o
- .debug_macro   0x00009156       0xe6 obj\debug\src\interrupts.o
- .debug_macro   0x0000923c      0x19f obj\debug\src\main.o
- .debug_macro   0x000093db       0xd6 obj\debug\src\main.o
- .debug_macro   0x000094b1      0x1f7 obj\debug\src\main.o
- .debug_macro   0x000096a8       0x10 obj\debug\src\main.o
- .debug_macro   0x000096b8      0x375 obj\debug\src\main.o
- .debug_macro   0x00009a2d       0x8e obj\debug\src\main.o
- .debug_macro   0x00009abb       0x3a obj\debug\src\main.o
- .debug_macro   0x00009af5       0x22 obj\debug\src\main.o
- .debug_macro   0x00009b17      0x1f0 obj\debug\src\main.o
- .debug_macro   0x00009d07       0x16 obj\debug\src\main.o
- .debug_macro   0x00009d1d       0xd9 obj\debug\src\main.o
- .debug_macro   0x00009df6       0x1c obj\debug\src\main.o
- .debug_macro   0x00009e12       0x22 obj\debug\src\main.o
- .debug_macro   0x00009e34       0xdf obj\debug\src\system_nrf51.o
- .debug_macro   0x00009f13       0xe8 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+.debug_macro    0x00000000     0x9fdb
+ .debug_macro   0x00000000       0xda obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x000000da      0x82c obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000906       0x22 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000928       0x3a obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000962       0x22 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000984       0x87 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000a0b       0x44 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000a4f       0xfd obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000b4c       0x5e obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000baa      0x1df obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000d89      0x241 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00000fca      0x1d2 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x0000119c     0x74c6 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00008662      0x976 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00008fd8       0x10 obj\debug\~#\~#\basics\spi\spi.o
+ .debug_macro   0x00008fe8       0x26 obj\debug\s130.o
+ .debug_macro   0x0000900e       0xed obj\debug\src\functions.o
+ .debug_macro   0x000090fb       0x22 obj\debug\src\functions.o
+ .debug_macro   0x0000911d       0xed obj\debug\src\interrupts.o
+ .debug_macro   0x0000920a      0x19c obj\debug\src\main.o
+ .debug_macro   0x000093a6       0xd6 obj\debug\src\main.o
+ .debug_macro   0x0000947c      0x1f7 obj\debug\src\main.o
+ .debug_macro   0x00009673       0x10 obj\debug\src\main.o
+ .debug_macro   0x00009683      0x375 obj\debug\src\main.o
+ .debug_macro   0x000099f8       0x8e obj\debug\src\main.o
+ .debug_macro   0x00009a86       0x3a obj\debug\src\main.o
+ .debug_macro   0x00009ac0       0x22 obj\debug\src\main.o
+ .debug_macro   0x00009ae2      0x1f0 obj\debug\src\main.o
+ .debug_macro   0x00009cd2       0x16 obj\debug\src\main.o
+ .debug_macro   0x00009ce8       0xd9 obj\debug\src\main.o
+ .debug_macro   0x00009dc1       0x1c obj\debug\src\main.o
+ .debug_macro   0x00009ddd       0x22 obj\debug\src\main.o
+ .debug_macro   0x00009dff       0x11 obj\debug\src\main.o
+ .debug_macro   0x00009e10       0xdf obj\debug\src\system_nrf51.o
+ .debug_macro   0x00009eef       0xec obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
 
-.debug_line     0x00000000     0x1db7
+.debug_line     0x00000000     0x1dde
  .debug_line    0x00000000      0x382 obj\debug\~#\~#\basics\spi\spi.o
  .debug_line    0x00000382       0x27 obj\debug\s130.o
  .debug_line    0x000003a9      0x393 obj\debug\src\functions.o
  .debug_line    0x0000073c      0x326 obj\debug\src\interrupts.o
- .debug_line    0x00000a62      0x918 obj\debug\src\main.o
- .debug_line    0x0000137a      0x34e obj\debug\src\system_nrf51.o
- .debug_line    0x000016c8       0x6e obj\debug\startup_nrf51.o
- .debug_line    0x00001736      0x681 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+ .debug_line    0x00000a62      0x93f obj\debug\src\main.o
+ .debug_line    0x000013a1      0x34e obj\debug\src\system_nrf51.o
+ .debug_line    0x000016ef       0x6e obj\debug\startup_nrf51.o
+ .debug_line    0x0000175d      0x681 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
 
-.debug_str      0x00000000    0x36308
- .debug_str     0x00000000    0x2effd obj\debug\~#\~#\basics\spi\spi.o
-                              0x2f183 (size before relaxing)
- .debug_str     0x0002effd       0x75 obj\debug\s130.o
+.debug_str      0x00000000    0x36346
+ .debug_str     0x00000000    0x2f005 obj\debug\~#\~#\basics\spi\spi.o
+                              0x2f18b (size before relaxing)
+ .debug_str     0x0002f005       0x75 obj\debug\s130.o
                                0x23da (size before relaxing)
- .debug_str     0x0002f072      0x431 obj\debug\src\functions.o
-                              0x2f379 (size before relaxing)
- .debug_str     0x0002f4a3       0x34 obj\debug\src\interrupts.o
-                              0x2f13c (size before relaxing)
- .debug_str     0x0002f4d7     0x622b obj\debug\src\main.o
-                              0x35665 (size before relaxing)
- .debug_str     0x00035702       0xe4 obj\debug\src\system_nrf51.o
+ .debug_str     0x0002f07a      0x3d8 obj\debug\src\functions.o
+                              0x2f30e (size before relaxing)
+ .debug_str     0x0002f452       0x6a obj\debug\src\interrupts.o
+                              0x2f0e5 (size before relaxing)
+ .debug_str     0x0002f4bc     0x6284 obj\debug\src\main.o
+                              0x35759 (size before relaxing)
+ .debug_str     0x00035740       0xe4 obj\debug\src\system_nrf51.o
                               0x2efe7 (size before relaxing)
- .debug_str     0x000357e6      0xb22 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
-                              0x308c7 (size before relaxing)
+ .debug_str     0x00035824      0xb22 obj\debug\~#\~#\~#\~#\drivers\as3933\as3933.o
+                              0x308da (size before relaxing)
 
 .debug_frame    0x00000000      0xaa8
  .debug_frame   0x00000000       0x58 obj\debug\~#\~#\basics\spi\spi.o
