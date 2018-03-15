@@ -17,7 +17,7 @@
 
 /**
  * @brief       void Conf_CLK  ( void )
- * @details     It disabled MCO ans enables the LSI for IWDG
+ * @details     It disabled MCO ans enables the LSI for RTC
  *
  *
  *
@@ -110,4 +110,25 @@ void Conf_GPIO  ( void )
     GPIOA->OTYPER	&=	~GPIO_OTYPER_OT_5; 				// Output push-pull
     GPIOA->OSPEEDR	&=	~GPIO_OSPEEDER_OSPEEDR5;		// Low speed
     GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5;				// No pull-up, pull-down
+}
+
+
+
+/**
+ * @brief       void Conf_RTC  ( void )
+ * @details     [todo]
+ *
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        15/March/2018
+ * @version		15/March/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void Conf_RTC  ( void )
+{
+
 }

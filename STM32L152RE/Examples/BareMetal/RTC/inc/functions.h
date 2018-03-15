@@ -24,6 +24,7 @@ extern "C" {
 /* FUNCTION PROTOTYPES */
 void Conf_CLK  	   ( void );
 void Conf_GPIO 	   ( void );
+void Conf_RTC 	   ( void );
 
 
 #ifdef __cplusplus
