@@ -33,6 +33,7 @@ int main ( void )
 {
 	Conf_GPIO 	 ();
 	Conf_CLK  	 ();
+	Conf_RTC     ();
 
 
 	GPIOA->BRR		 =	( 1 << LED_1 );			// LED1 OFF
