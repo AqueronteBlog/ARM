@@ -40,7 +40,7 @@ typedef enum{
 /* SPIS1 */
 typedef enum{
   SPIS1_SCK  = 3,           /*!<   SPIS1 SCLK: P0.3  */
-  SPIS1_MOSI = 2,           /*!<   SPIS1 MOSI: P0.2  */
+  SPIS1_MOSI = 27,          /*!<   SPIS1 MOSI: P0.27 */
   SPIS1_MISO = 1,           /*!<   SPIS1 MISO: P0.1  */
   SPIS1_CS   = 4            /*!<   SPIS1 CS:   P0.4  */
 } NRF52DK_board_spis1_t;
