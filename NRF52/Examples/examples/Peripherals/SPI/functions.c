@@ -76,11 +76,11 @@ void conf_GPIO  ( void )
 void conf_SPI0  ( void )
 {
     /* GPIO according to Table 221: GPIO configuration ( Reference Manual p.133 ) */
-    NRF_GPIO->OUTSET             =   ( 0 << SPI0_MOSI );
-    NRF_GPIO->OUTSET             =   ( 0 << SPI0_SCK  );
-    NRF_GPIO->DIRCLR             =   ( 1 << SPI0_MISO );
-    NRF_GPIO->DIRSET             =   ( 1 << SPI0_MOSI );
-    NRF_GPIO->DIRSET             =   ( 1 << SPI0_SCK  );
+    NRF_P0->OUTSET             =   ( 0 << SPI0_MOSI );
+    NRF_P0->OUTSET             =   ( 0 << SPI0_SCK  );
+    NRF_P0->DIRCLR             =   ( 1 << SPI0_MISO );
+    NRF_P0->DIRSET             =   ( 1 << SPI0_MOSI );
+    NRF_P0->DIRSET             =   ( 1 << SPI0_SCK  );
 
     /* Disable the SPI0 */
     NRF_SPI0->ENABLE        =   ( SPI_ENABLE_ENABLE_Disabled << SPI_ENABLE_ENABLE_Pos );
@@ -134,10 +134,10 @@ void conf_SPIS1  ( void )
 
 
     /* GPIO according to Table 235: Pin configuration ( Reference Manual p.137 ) */
-    NRF_GPIO->DIRCLR         =   ( 1 << SPIS1_SCK  );
-    NRF_GPIO->DIRCLR         =   ( 1 << SPIS1_MOSI );
-    NRF_GPIO->DIRCLR         =   ( 1 << SPIS1_MISO );
-    NRF_GPIO->DIRCLR         =   ( 1 << SPIS1_CS   );
+    NRF_P0->DIRCLR         =   ( 1 << SPIS1_SCK  );
+    NRF_P0->DIRCLR         =   ( 1 << SPIS1_MOSI );
+    NRF_P0->DIRCLR         =   ( 1 << SPIS1_MISO );
+    NRF_P0->DIRCLR         =   ( 1 << SPIS1_CS   );
 
 
     /* Disable the SPIS1 */
@@ -156,11 +156,11 @@ void conf_SPIS1  ( void )
 
 
     /* Configure Maximum number of bytes in receive/transmit buffer */
-    NRF_SPIS1->MAXRX         =   ( 1 << SPIS_MAXRX_MAXRX_Pos );
-    NRF_SPIS1->MAXTX         =   ( 1 << SPIS_MAXTX_MAXTX_Pos );
+    NRF_SPIS1->RXD.MAXCNT    =   ( 1 << SPIS_MAXRX_MAXRX_Pos );
+    NRF_SPIS1->TXD.MAXCNT    =   ( 1 << SPIS_MAXTX_MAXTX_Pos );
 
-    NRF_SPIS1->RXDPTR        =   (uint32_t)&mySPIS_RX;
-    NRF_SPIS1->TXDPTR        =   (uint32_t)&mySPIS_TX;
+    NRF_SPIS1->RXD.PTR       =   (uint32_t)&mySPIS_RX;
+    NRF_SPIS1->TXD.PTR       =   (uint32_t)&mySPIS_TX;
 
     /* Configure Default characters */
     NRF_SPIS1->DEF           =   ( 0x00  << SPIS_DEF_DEF_Pos );
