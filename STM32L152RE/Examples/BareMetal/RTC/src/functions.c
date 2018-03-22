@@ -130,5 +130,37 @@ void Conf_GPIO  ( void )
  */
 void Conf_RTC  ( void )
 {
+	/* Enable the PWR peripheral */
+	RCC->APB1ENR |= RCC_APB1ENR_PWREN;
 
+	PWR->CR		|=	 PWR_CR_DBP;
+
+	/* Disable the write protection for RTC registers */
+	RTC->WPR   	 =	 0xCA;
+    RTC->WPR	 = 	 0x53;
+
+
+	RTC->CR		&=	~( RTC_CR_WUTE );										// Disable Wakeup timer
+
+	while ( ( RTC->ISR & RTC_ISR_WUTF_Msk ) != RTC_ISR_WUTF );				// Wait until wakeup auto-reload counter and to WUCKSEL[2:0] bits is allowed
+																			// [TODO] 		This is dangerous! the uC may get stuck here
+																			// [WORKAROUND] Insert a counter.
+
+	RTC->PRER	 =	 ( 127 << RTC_PRER_PREDIV_A_Pos ) | ( 255 << RTC_PRER_PREDIV_S_Pos );
+
+
+
+	RTC->WUTR	 =	 0;
+	RTC->ISR	&=	 ~RTC_ISR_WUTF;											// Reset Wakeup timer flag
+
+	RTC->CR		|=	 ( RTC_CR_WUTIE | RTC_CR_WUTE | RTC_CR_WUCKSEL_2 );		// Enable Wakeup timer interrupt, Wakeup timer enable, ck_spre (usually 1 Hz) clock is selected
+
+	/* Enable the write protection for RTC registers */
+	RTC->WPR   	 =	 0xFF;
+
+	/* Access to RTC, RTC Backup and RCC CSR registers disabled */
+	PWR->CR &= ~PWR_CR_DBP;
+
+
+	NVIC_EnableIRQ (RTC_WKUP_IRQn);       									/* Enable RTC WakeUp IRQ              */
 }
