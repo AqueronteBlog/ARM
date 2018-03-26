@@ -23,6 +23,8 @@ extern "C" {
 #endif
 
 // PROTOTYPES
+void RTC_WKUP_IRQHandler ( void );
+
 
 // VARIABLES
 
