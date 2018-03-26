@@ -162,5 +162,5 @@ void Conf_RTC  ( void )
 	PWR->CR &= ~PWR_CR_DBP;
 
 
-	NVIC_EnableIRQ (RTC_WKUP_IRQn);       									/* Enable RTC WakeUp IRQ              */
+	NVIC_EnableIRQ ( RTC_WKUP_IRQn );       								/* Enable RTC WakeUp IRQ              */
 }
