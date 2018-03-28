@@ -34,7 +34,6 @@ int main(void)
 {
   conf_GPIO ();
   conf_PWM0 ();
-  conf_PWM1 ();
 
 
   //NRF_POWER->SYSTEMOFF = 1;
