@@ -49,53 +49,91 @@ void conf_GPIO  ( void )
 
 /**
  * @brief       void conf_PWM0  ( void )
- * @details     [TODO].
+ * @details     It configures the PWM0 peripheral for 4 channels.
  *
- *              Timer0:
- *                  * Prescaler:            5   ( f_Timer0 = 500kHz ( PCLK1M ) ).
- *                  * 32-bits mode.
- *                  * Interrupt ENABLE.
+ *              PWM frequency:  
+ *                  * f_PWM = 100Hz ( COUNTER = T_PWM / T_PWM_CLK = ( 100 / 2MHz )^( -1 ) = 20000 ) 
  *
- *                 --- Channel 0:
- *                  * Overflow:             ( 62500 * (f_Timer0)^(-1) ) = ( 62500 * (500kHz)^(-1) ) ~ 0.125s.
+ *              Channel0:
+ *                  * LED1.
+ *                  * Duty cycle: 50% ( COUNTER * 0.5 = 10000 ).
+ *                  * Polarity: LOW.
+ *
+ *              Channel1:
+ *                  * LED2.
+ *                  * Duty cycle: 50% ( COUNTER * 0.5 = 10000 ).
+ *                  * Polarity: HIGH.
+ *
+ *              Channel2:
+ *                  * LED3.
+ *                  * Duty cycle: 50% ( COUNTER * 0.5 = 10000 ).
+ *                  * Polarity: LOW.
+ *
+ *              Channel3:
+ *                  * LED4.
+ *                  * Duty cycle: 50% ( COUNTER * 0.5 = 10000 ).
+ *                  * Polarity: HIGH.
+ *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        27/March/2018
- * @version     27/March/2018   The ORIGIN
+ * @version     28/March/2018   PWM0 function was completed, the comments were updated too.
+ *              27/March/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
 void conf_PWM0  ( void )
 {
+  /* Duty cycle for 4 channels  */
+  uint16_t pwm_seq[]     =   { 10000, 10000 | 0x8000, 10000, 10000 | 0x8000 };
 
-}
+  
+  /* Connect 4 channels  */
+  NRF_PWM0->PSEL.OUT[0]  =  ( LED1                           << PWM_PSEL_OUT_PIN_Pos      ) | 
+                            ( PWM_PSEL_OUT_CONNECT_Connected << PWM_PSEL_OUT_CONNECT_Pos  );
+
+  NRF_PWM0->PSEL.OUT[1]  =  ( LED2                           << PWM_PSEL_OUT_PIN_Pos      ) |
+                            ( PWM_PSEL_OUT_CONNECT_Connected << PWM_PSEL_OUT_CONNECT_Pos  );
+  
+  NRF_PWM0->PSEL.OUT[2]  =  ( LED3                           << PWM_PSEL_OUT_PIN_Pos      ) | 
+                            ( PWM_PSEL_OUT_CONNECT_Connected << PWM_PSEL_OUT_CONNECT_Pos  );
+
+  NRF_PWM0->PSEL.OUT[3]  =  ( LED4                           << PWM_PSEL_OUT_PIN_Pos      ) |
+                            ( PWM_PSEL_OUT_CONNECT_Connected << PWM_PSEL_OUT_CONNECT_Pos  );
 
 
-/**
- * @brief       void conf_PWM1  ( void )
- * @details     [TODO].
- *
- *              Timer1:
- *                  * Prescaler:            5   ( f_Timer0 = 500kHz ( PCLK1M ) ).
- *                  * 16-bits mode.
- *                  * Interrupt DISABLED.
- *
- *                 --- Channel 0:
- *                  * Overflow:             ( 12500 * (f_Timer0)^(-1) ) = ( 12500 * (500kHz)^(-1) ) ~ 25ms.
- *
- * @return      N/A
- *
- * @author      Manuel Caballero
- * @date        14/February/2018
- * @version     14/February/2018   The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-void conf_PWM1  ( void )
-{
+  /* PWM0 Enabled  */
+  NRF_PWM0->ENABLE      =   ( PWM_ENABLE_ENABLE_Enabled << PWM_ENABLE_ENABLE_Pos );
+  
+  /* PWM0 UP mode */
+  NRF_PWM0->MODE        =   ( PWM_MODE_UPDOWN_Up << PWM_MODE_UPDOWN_Pos );
+  
+  /* f_PWM_CLK = 2Mhz */
+  NRF_PWM0->PRESCALER   =   ( PWM_PRESCALER_PRESCALER_DIV_8 << PWM_PRESCALER_PRESCALER_Pos );
+  
+  /* f_PWM0 = ( 2MHz / 20000 ) = 100Hz ( 10ms ) */
+  NRF_PWM0->COUNTERTOP  =   ( 20000 << PWM_COUNTERTOP_COUNTERTOP_Pos );                 
+  
+  /* LOPP disabled */
+  NRF_PWM0->LOOP        =   ( PWM_LOOP_CNT_Disabled << PWM_LOOP_CNT_Pos );
+  
+  /* LOAD Individual mode */
+  NRF_PWM0->DECODER     =   ( PWM_DECODER_LOAD_Individual   << PWM_DECODER_LOAD_Pos ) |
+                            ( PWM_DECODER_MODE_RefreshCount << PWM_DECODER_MODE_Pos );
+  
+  /* Pointer to the duty cycle in RAM and amount of data */
+  NRF_PWM0->SEQ[0].PTR  =   ( (uint32_t)( pwm_seq ) << PWM_SEQ_PTR_PTR_Pos );
 
+  NRF_PWM0->SEQ[0].CNT  =   ( ( sizeof( pwm_seq ) / sizeof( uint16_t ) ) << PWM_SEQ_CNT_CNT_Pos );
+
+  /* No delay */
+  NRF_PWM0->SEQ[0].REFRESH  = 0;
+  NRF_PWM0->SEQ[0].ENDDELAY = 0;
+  
+  /* It starts PWM0 */
+  NRF_PWM0->TASKS_SEQSTART[0] = 1;
 }
 
 

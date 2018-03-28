@@ -26,7 +26,6 @@ extern "C" {
 /* FUNCTION PROTOTYPES */
 void conf_GPIO    ( void );
 void conf_PWM0    ( void );
-void conf_PWM1    ( void );
 
 
 
