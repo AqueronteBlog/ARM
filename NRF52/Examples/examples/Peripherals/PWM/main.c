@@ -1,9 +1,16 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows how to work with the internal peripheral PWM. It works on
+ *              Up mode with four channels at 4Hz.
  *
- *              This firmware is just an example about how to use the timers on the NRF52832. On
- *              polling mode or by interrupts with different channels.
+ *              Duty Cycle for each channel:
+ *                * Channel0: LED1 50% Duty Cycle, LOW Polarity
+ *                * Channel1: LED2 50% Duty Cycle, HIGH Polarity
+ *                * Channel2: LED3 50% Duty Cycle, LOW Polarity
+ *                * Channel3: LED4 50% Duty Cycle, HIGH Polarity
+ *
+ *              This firmware is just an example about how to use the timers on the NRF52832. The CPU
+ *              remains in low power all the time.
  *
  *
  * @return      N/A
@@ -23,6 +30,7 @@
 
 #include "nordic_common.h"
 #include "nrf.h"
+#include "board.h"
 #include "functions.h"
 #include "interrupts.h"
 
