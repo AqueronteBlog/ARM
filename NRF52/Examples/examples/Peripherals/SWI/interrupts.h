@@ -23,11 +23,15 @@ extern "C" {
 
 
 /* INTERRUPT PRTOTYPES */
-void RTC0_IRQHandler ( void );
+void RTC0_IRQHandler      ( void );
+void SWI5_EGU5_IRQHandler ( void );
+void SWI1_EGU1_IRQHandler ( void );
+void SWI3_EGU3_IRQHandler ( void );
+void SWI4_EGU4_IRQHandler ( void );
 
 
 /* VARIABLES */
-extern uint32_t changeLEDsSTATE;
+extern uint32_t chooseLEDON;
 
 
 #ifdef __cplusplus
