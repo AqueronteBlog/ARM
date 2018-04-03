@@ -25,14 +25,16 @@ extern "C" {
 
 
 /* CONSTANTS */
-#define ON  1
-#define OFF 0
+typedef enum{
+  LED1_ON = 0x01,
+  LED2_ON = ( LED1_ON << 1 ),
+  LED3_ON = ( LED2_ON << 1 ),
+  LED4_ON = ( LED3_ON << 1 )
+}state_leds_t;
 
 
 /* VARIABLES */
-/* VARIABLES */
-static uint32_t changeLEDsSTATE;       /*!<   changeLEDsSTATE = ON     
-                                              changeLEDsSTATE = OFF      */
+
 
 
 #ifdef __cplusplus
