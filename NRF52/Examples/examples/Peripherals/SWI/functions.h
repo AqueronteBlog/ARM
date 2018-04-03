@@ -27,7 +27,7 @@ extern "C" {
 void conf_LFCLK   ( void );
 void conf_GPIO    ( void );
 void conf_RTC0    ( void );
-
+void conf_SWI     ( void );
 
 
 #ifdef __cplusplus

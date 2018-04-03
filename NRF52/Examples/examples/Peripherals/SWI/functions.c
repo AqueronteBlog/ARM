@@ -104,3 +104,26 @@ void conf_RTC0  ( void )
 
     NVIC_EnableIRQ ( RTC0_IRQn );                                                                         // Enable Interrupt for the RTC0 in the core.
 }
+
+
+
+/**
+ * @brief       void conf_SWI  ( void )
+ * @details     Enable 4 software interrupts.
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        3/April/2018
+ * @version     3/April/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+void conf_SWI  ( void )
+{
+    NVIC_EnableIRQ ( SWI5_IRQn );                                                                         // Enable Interrupt for the SWI5 in the core.
+    NVIC_EnableIRQ ( SWI1_IRQn );                                                                         // Enable Interrupt for the SWI1 in the core.
+    NVIC_EnableIRQ ( SWI3_IRQn );                                                                         // Enable Interrupt for the SWI3 in the core.
+    NVIC_EnableIRQ ( SWI4_IRQn );                                                                         // Enable Interrupt for the SWI4 in the core.
+}
+
