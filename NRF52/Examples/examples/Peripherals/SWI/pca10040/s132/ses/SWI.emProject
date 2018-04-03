@@ -121,6 +121,7 @@
       <file file_name="../../../../../../components/softdevice/common/nrf_sdh.c" />
       <file file_name="../../../../../../components/softdevice/common/nrf_sdh_ble.c" />
       <file file_name="../../../../../../components/softdevice/common/nrf_sdh_soc.c" />
+      <configuration Name="Debug" build_exclude_from_build="No" />
     </folder>
   </project>
   <configuration
