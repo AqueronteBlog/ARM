@@ -16,3 +16,4 @@ NRF52/Examples/examples/Peripherals/SPI/pca10040/s132/ses/Output/
 NRF52/Examples/examples/Peripherals/SPI/pca10040/s132/ses/SPI_Debug.jlink
 NRF52/Examples/examples/Peripherals/PWM/pca10040/s132/ses/Output/
 NRF52/Examples/examples/Peripherals/PWM/pca10040/s132/ses/PWM_Debug.jlink
+NRF52/Examples/examples/Peripherals/SWI/pca10040/s132/ses/Output/
