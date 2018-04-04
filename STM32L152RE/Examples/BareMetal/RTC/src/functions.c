@@ -148,8 +148,12 @@ void Conf_RTC  ( void )
 
 	RTC->PRER	 =	 ( 127 << RTC_PRER_PREDIV_A_Pos ) | ( 255 << RTC_PRER_PREDIV_S_Pos );
 
+	/* Enable the RTC Wake-up interrupt */
+	EXTI->IMR	|=	 ( EXTI_IMR_MR20 );
+	EXTI->RTSR	|=	 ( EXTI_RTSR_TR20 );
 
 
+	/* Reset flag and activate the RTC WAKEUP timer */
 	RTC->WUTR	 =	 0;
 	RTC->ISR	&=	 ~RTC_ISR_WUTF;											// Reset Wakeup timer flag
 
@@ -162,5 +166,6 @@ void Conf_RTC  ( void )
 	PWR->CR &= ~PWR_CR_DBP;
 
 
-	NVIC_EnableIRQ ( RTC_WKUP_IRQn );       								/* Enable RTC WakeUp IRQ              */
+	/* Enable RTC WakeUp IRQ  */
+	NVIC_EnableIRQ ( RTC_WKUP_IRQn );
 }
