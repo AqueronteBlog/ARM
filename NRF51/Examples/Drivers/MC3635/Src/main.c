@@ -1,0 +1,157 @@
+/**
+ * @brief       main.c
+ * @details     [todo].
+ *
+ *              The rest of the time, the microcontroller is in low power.
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        6/April/2018
+ * @version     6/April/2018    The ORIGIN
+ * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
+ *              ( SDK 1.1.0 ).
+ * @warning     Softdevice S310 was used although the file's name is S130. The softdevice
+ *              is not used in this example anyway because of Bluetooth was not used.
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
+ */
+
+#include "nrf.h"
+#include "nrf_delay.h"
+#include "ble.h"
+#include "variables.h"
+#include "functions.h"
+#include "MC3635.h"
+
+
+/* GLOBAL VARIABLES */
+uint32_t mySTATE;                       /*!<   It indicates the next action to be performed                                       */
+uint8_t  dataToBeTX;                    /*!<   A counter. It indicates how many data it will be transmitted through the UART      */
+uint32_t TX_inProgress;                 /*!<   It indicates if a transmission is in progress                                      */
+uint8_t  *myPtr;                        /*!<   Pointer to point out the data from the external sensor                             */
+
+
+
+/* MAIN */
+int main( void )
+{
+//    uint8_t  myTX_buff[4]     =  { 0 };
+//    uint32_t myCounterData    =  0;
+//    uint32_t myCounterTimeout =  0;
+
+
+    I2C_parameters_t    myMC3635_I2C_parameters;
+    MC3635_status_t     aux;
+    //MC3635_data_t       myMC3635_data;
+
+
+    conf_GPIO   ();
+    conf_GPIOTE ();
+    conf_UART   ();
+
+
+
+    /* I2C definition */
+    myMC3635_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myMC3635_I2C_parameters.SDA         =    TWI0_SDA;
+    myMC3635_I2C_parameters.SCL         =    TWI0_SCL;
+    //myMC3635_I2C_parameters.ADDR        =    MC3635_ADDRESS_0;
+    myMC3635_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myMC3635_I2C_parameters.SDAport     =    NRF_GPIO;
+    myMC3635_I2C_parameters.SCLport     =    NRF_GPIO;
+
+
+
+    /* Configure SPI peripheral */
+    aux  =   MC3635_Init ( myMC3635_I2C_parameters );
+
+
+
+
+
+    mySTATE  =   0;                                                                                                     // Reset the variable
+
+    while( 1 )
+    {
+        //NRF_POWER->SYSTEMOFF = 1;
+        NRF_POWER->TASKS_LOWPWR = 1;                                                                                    // Sub power mode: Low power.
+
+        // Enter System ON sleep mode
+        __WFE();
+        // Make sure any pending events are cleared
+        __SEV();
+        __WFE();
+
+
+        NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );              // Turn all the LEDs on
+        if ( mySTATE == 1 )
+        {
+//            NVIC_DisableIRQ ( GPIOTE_IRQn );                                                                            // GPIOTE Interrupt DISABLED
+//
+//            /*  Get data ( 8-bits, Manchester ).
+//
+//                NOTE:   Make sure the transmitter is sending data otherwise a little delay will
+//                        be introduced by myCounterTimeout.
+//            */
+//            myMC3635_data.data   =   0;
+//
+//            for ( myCounterData = 0; myCounterData < 8; myCounterData++ )
+//            {
+//                /*  Wait until rising edges on CLD pin or Timeout */
+//                myCounterTimeout    =   2323;
+//                while ( ( ( NRF_GPIO->IN & GPIO_IN_PIN14_Msk ) == ( GPIO_IN_PIN14_Low << GPIO_IN_PIN14_Pos ) ) && ( myCounterTimeout > 0 ) )
+//                {
+//                    myCounterTimeout--;
+//                }
+//
+//                /*  Process the data */
+//                myMC3635_data.data <<=   1;
+//
+//                if ( ( NRF_GPIO->IN & GPIO_IN_PIN13_Msk )  == ( GPIO_IN_PIN13_High << GPIO_IN_PIN13_Pos ) )
+//                {
+//                    myMC3635_data.data  |=  1;
+//                }
+//
+//                /*  Wait until CLD pin goes low again or Timeout */
+//                myCounterTimeout    =   2323;
+//                while ( ( ( NRF_GPIO->IN & GPIO_IN_PIN14_Msk ) == ( GPIO_IN_PIN14_High << GPIO_IN_PIN14_Pos ) ) && ( myCounterTimeout > 0 ) )
+//                {
+//                    myCounterTimeout--;
+//                }
+//            }
+//
+//
+//            /* Get RSSI  */
+//            aux  =   MC3635_GetRSSI ( myMC3635_SPI_parameters, &myMC3635_data );
+//
+//
+//            /* Prepare the data to be sent */
+//            myTX_buff[0]                 =   myMC3635_data.data;
+//            myTX_buff[1]                 =   myMC3635_data.rssi1;
+//            myTX_buff[2]                 =   myMC3635_data.rssi2;
+//            myTX_buff[3]                 =   myMC3635_data.rssi3;
+//
+//
+//            /* Send data through the UART   */
+//            myPtr                        =   &myTX_buff[0];
+//            TX_inProgress                =   YES;
+//            NRF_UART0->TASKS_STARTTX     =   1;
+//            NRF_UART0->TXD               =   *myPtr++;                                                              // Start transmission
+//
+//            /* Wait until the message is transmitted */
+//            while ( TX_inProgress == YES )
+//            {
+//                __WFE();
+//                // Make sure any pending events are cleared
+//                __SEV();
+//                __WFE();
+//            }
+//
+//
+//            mySTATE             =   0;
+//            NVIC_EnableIRQ ( GPIOTE_IRQn );                                                                         // GPIOTE Interrupt ENABLED
+        }
+        NRF_GPIO->OUTSET             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
+        //__NOP();
+    }
+}
