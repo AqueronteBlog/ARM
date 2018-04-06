@@ -1,0 +1,67 @@
+# depslib dependency file v1.0
+1514815777 source:d:\workspace\arm\nrf51\examples\basics\i2c\i2c.c
+	"i2c.h"
+
+1514815777 d:\workspace\arm\nrf51\examples\basics\i2c\i2c.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\inc\nrf.h
+	"nrf51.h"
+	"nrf51_bitfields.h"
+	"nrf51_deprecated.h"
+	"compiler_abstraction.h"
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\inc\nrf51.h
+	<core_cm0.h>
+	"system_nrf51.h"
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\inc\system_nrf51.h
+	<stdint.h>
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\inc\nrf51_bitfields.h
+	<core_cm0.h>
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\inc\nrf51_deprecated.h
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\inc\compiler_abstraction.h
+
+1519330501 source:d:\workspace\arm\nrf51\examples\drivers\mc3635\s130.c
+
+1520887061 source:d:\workspace\arm\nrf51\examples\drivers\mc3635\src\functions.c
+	"functions.h"
+
+1523045326 d:\workspace\arm\nrf51\examples\drivers\mc3635\src\functions.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"variables.h"
+
+1523045326 d:\workspace\arm\nrf51\examples\drivers\mc3635\src\variables.h
+	"nrf.h"
+	"nrf51_bitfields.h"
+	"board.h"
+
+1523045326 d:\workspace\arm\nrf51\examples\drivers\mc3635\src\board.h
+
+1520970847 source:d:\workspace\arm\nrf51\examples\drivers\mc3635\src\interrupts.c
+	"interrupts.h"
+
+1523045326 d:\workspace\arm\nrf51\examples\drivers\mc3635\src\interrupts.h
+	"variables.h"
+
+1519330501 source:d:\workspace\arm\nrf51\examples\drivers\mc3635\src\system_nrf51.c
+	<stdint.h>
+	<stdbool.h>
+	"nrf.h"
+	"system_nrf51.h"
+
+1519330501 source:d:\workspace\arm\nrf51\examples\drivers\mc3635\startup_nrf51.s
+
+1523044881 source:d:\workspace\arm\drivers\mc3635\mc3635.c
+	"MC3635.h"
+
+1523044880 d:\workspace\arm\drivers\mc3635\mc3635.h
+	"stdint.h"
+	"stdbool.h"
+	"i2c.h"
+
