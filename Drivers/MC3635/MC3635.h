@@ -920,7 +920,7 @@ typedef enum{
 
 /* Bits 7:0 : GAIN HSB.  */
 typedef enum{
-    XGAINH_GAIN_MASK                                =   ( 0b10000000 << 0 )    /*!<  XGAINH GAIN Mask                                                                                         */
+    XGAINH_GAIN_MASK                                =   ( 1 << 7 )             /*!<  XGAINH GAIN Mask                                                                                         */
 } MC3635_x_axis_xgainh_t;
 
 
@@ -938,7 +938,7 @@ typedef enum{
 
 /* Bits 7:0 : GAIN HSB.  */
 typedef enum{
-    YGAINH_GAIN_MASK                                =   ( 0b10000000 << 0 )    /*!<  YGAINH GAIN Mask                                                                                         */
+    YGAINH_GAIN_MASK                                =   ( 1 << 7 )             /*!<  YGAINH GAIN Mask                                                                                         */
 } MC3635_y_axis_ygainh_t;
 
 
@@ -956,7 +956,7 @@ typedef enum{
 
 /* Bits 7:0 : GAIN HSB.  */
 typedef enum{
-    ZGAINH_GAIN_MASK                                =   ( 0b10000000 << 0 )    /*!<  ZGAINH GAIN Mask                                                                                         */
+    ZGAINH_GAIN_MASK                                =   ( 1 << 7 )             /*!<  ZGAINH GAIN Mask                                                                                         */
 } MC3635_z_axis_zgainh_t;
 
 
@@ -985,13 +985,6 @@ typedef struct{
 
     uint8_t scratch;                        /*!<  Any value can be written and read-back                                  */
 } MC3635_vector_t;
-
-
-typedef struct{
-    float Xmg_Axis;
-    float Ymg_Axis;
-    float Zmg_Axis;
-} Vector_f;
 #endif
 
 
