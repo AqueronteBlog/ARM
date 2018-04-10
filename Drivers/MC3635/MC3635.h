@@ -100,7 +100,7 @@ typedef enum{
     EXT_STAT_1_I2C_AD0_BIT_MASK =   ( 1 << 3 ),         /*!<  I2C_AD0_BIT Mask                                  */
     EXT_STAT_1_I2C_AD0_BIT_0X4C =   ( 0 << 3 ),         /*!<  I2C Address 0x4C ( DOUT_A1 = LOW )                */
     EXT_STAT_1_I2C_AD0_BIT_0X6C =   ( 1 << 3 )          /*!<  I2C Address 0x6C ( DOUT_A1 = HIGH )               */
-} MC3635_act_inact_ctl_activity_dc_coupled_t;
+} MC3635_ext_stat_1_i2c_ad0_bit_t;
 
 
 
@@ -160,54 +160,54 @@ typedef enum{
   */
 /* Bits 2:0 : MODE.  */
 typedef enum{
-    STATUS_REG_1_MODE_MASK                      =   ( 0b111 << 0 ),       /*!<  MODE Mask                                                                       */
-    STATUS_REG_1_MODE_SLEEP                     =   ( 0b000 << 0 ),       /*!<  Lowest power mode, regulators on, no clock activity, partial chip power-down    */
-    STATUS_REG_1_MODE_STANDBY                   =   ( 0b001 << 0 ),       /*!<  Low power mode, no sampling, clocks active                                      */
-    STATUS_REG_1_MODE_SNIFF                     =   ( 0b010 << 0 ),       /*!<  Sniff activity detection mode, sniff enabled, sniff sampling, no FIFO operations, automatically transition to CWAKE mode upon activity detection     */
-    STATUS_REG_1_MODE_CWAKE                     =   ( 0b101 << 0 ),       /*!<  Continuous wake. Active XYZ sampling. Sniff circuitry not active                */
-    STATUS_REG_1_MODE_SWAKE                     =   ( 0b110 << 0 ),       /*!<  Use Sniff logic, main XYZ pipeline and optional FIFO at the same time; highest power consumption                                                     */
-    STATUS_REG_1_MODE_TRIG                      =   ( 0b111 << 0 )        /*!<  Trigger mode, 1 to 254 samples or continuous, return to sleep upon completion                                                                        */
-} MC3635_status_reg1_mode_t;
+    STATUS_1_MODE_MASK                      =   ( 0b111 << 0 ),       /*!<  MODE Mask                                                                       */
+    STATUS_1_MODE_SLEEP                     =   ( 0b000 << 0 ),       /*!<  Lowest power mode, regulators on, no clock activity, partial chip power-down    */
+    STATUS_1_MODE_STANDBY                   =   ( 0b001 << 0 ),       /*!<  Low power mode, no sampling, clocks active                                      */
+    STATUS_1_MODE_SNIFF                     =   ( 0b010 << 0 ),       /*!<  Sniff activity detection mode, sniff enabled, sniff sampling, no FIFO operations, automatically transition to CWAKE mode upon activity detection     */
+    STATUS_1_MODE_CWAKE                     =   ( 0b101 << 0 ),       /*!<  Continuous wake. Active XYZ sampling. Sniff circuitry not active                */
+    STATUS_1_MODE_SWAKE                     =   ( 0b110 << 0 ),       /*!<  Use Sniff logic, main XYZ pipeline and optional FIFO at the same time; highest power consumption                                                     */
+    STATUS_1_MODE_TRIG                      =   ( 0b111 << 0 )        /*!<  Trigger mode, 1 to 254 samples or continuous, return to sleep upon completion                                                                        */
+} MC3635_status_1_mode_t;
 
 
 /* Bit 3 : NEW_DATA.  */
 typedef enum{
-    STATUS_REG_1_NEW_DATA_MASK                  =   ( 1 << 3 ),         /*!<  NEW_DATA Mask                                                                     */
-    STATUS_REG_1_NEW_DATA_FALSE                 =   ( 0 << 3 ),         /*!<  No new sample data has arrived since last read                                    */
-    STATUS_REG_1_NEW_DATA_TRUE                  =   ( 1 << 3 )          /*!<  New sample data has arrived and has been written to FIFO/registers. This bit is always enabled and valid, regardless of the settings of any interrupt enable bits     */
-} MC3635_status_reg1_new_data_t;
+    STATUS_1_NEW_DATA_MASK                  =   ( 1 << 3 ),         /*!<  NEW_DATA Mask                                                                     */
+    STATUS_1_NEW_DATA_FALSE                 =   ( 0 << 3 ),         /*!<  No new sample data has arrived since last read                                    */
+    STATUS_1_NEW_DATA_TRUE                  =   ( 1 << 3 )          /*!<  New sample data has arrived and has been written to FIFO/registers. This bit is always enabled and valid, regardless of the settings of any interrupt enable bits     */
+} MC3635_status_1_new_data_t;
 
 
 /* Bit 4 : FIFO_EMPTY.  */
 typedef enum{
-    STATUS_REG_1_FIFO_EMPTY_MASK                =   ( 1 << 4 ),         /*!<  FIFO_EMPTY Mask                                                                     */
-    STATUS_REG_1_FIFO_EMPTY_FALSE               =   ( 0 << 4 ),         /*!<  FIFO has one or more samples in storage (level)                                     */
-    STATUS_REG_1_FIFO_EMPTY_TRUE                =   ( 1 << 4 )          /*!<  FIFO is empty (level) (default). This bit is set to 1 immediately after device power-up or device reset   */
-} MC3635_status_reg1_fifo_empty_t;
+    STATUS_1_FIFO_EMPTY_MASK                =   ( 1 << 4 ),         /*!<  FIFO_EMPTY Mask                                                                     */
+    STATUS_1_FIFO_EMPTY_FALSE               =   ( 0 << 4 ),         /*!<  FIFO has one or more samples in storage (level)                                     */
+    STATUS_1_FIFO_EMPTY_TRUE                =   ( 1 << 4 )          /*!<  FIFO is empty (level) (default). This bit is set to 1 immediately after device power-up or device reset   */
+} MC3635_status_1_fifo_empty_t;
 
 
 /* Bit 5 : FIFO_FULL.  */
 typedef enum{
-    STATUS_REG_1_FIFO_FULL_MASK                 =   ( 1 << 5 ),         /*!<  FIFO_FULL Mask                                                                      */
-    STATUS_REG_1_FIFO_FULL_FALSE                =   ( 0 << 5 ),         /*!<  FIFO has space or 1 or more samples (up to 32) (level)                              */
-    STATUS_REG_1_FIFO_FULL_TRUE                 =   ( 1 << 5 )          /*!<  FIFO is full, all 32 samples are used (level)                                       */
-} MC3635_status_reg1_fifo_full_t;
+    STATUS_1_FIFO_FULL_MASK                 =   ( 1 << 5 ),         /*!<  FIFO_FULL Mask                                                                      */
+    STATUS_1_FIFO_FULL_FALSE                =   ( 0 << 5 ),         /*!<  FIFO has space or 1 or more samples (up to 32) (level)                              */
+    STATUS_1_FIFO_FULL_TRUE                 =   ( 1 << 5 )          /*!<  FIFO is full, all 32 samples are used (level)                                       */
+} MC3635_status_1_fifo_full_t;
 
 
 /* Bit 6 : FIFO_THRESH.  */
 typedef enum{
-    STATUS_REG_1_FIFO_THRESH_MASK               =   ( 1 << 6 ),         /*!<  FIFO_THRESH Mask                                                                    */
-    STATUS_REG_1_FIFO_THRESH_LESS               =   ( 0 << 6 ),         /*!<  Amount of data in FIFO is less than the threshold (level)                           */
-    STATUS_REG_1_FIFO_THRESH_EQUAL_GREATER      =   ( 1 << 6 )          /*!<  Amount of data in FIFO is equal to or greater than the threshold (level)            */
-} MC3635_status_reg1_fifo_thresh_t;
+    STATUS_1_FIFO_THRESH_MASK               =   ( 1 << 6 ),         /*!<  FIFO_THRESH Mask                                                                    */
+    STATUS_1_FIFO_THRESH_LESS               =   ( 0 << 6 ),         /*!<  Amount of data in FIFO is less than the threshold (level)                           */
+    STATUS_1_FIFO_THRESH_EQUAL_GREATER      =   ( 1 << 6 )          /*!<  Amount of data in FIFO is equal to or greater than the threshold (level)            */
+} MC3635_status_1_fifo_thresh_t;
 
 
 /* Bit 7 : INT_PEND.  */
 typedef enum{
-    STATUS_REG_1_INT_PEND_MASK                  =   ( 1 << 7 ),         /*!<  INT_PEND Mask                                                                      */
-    STATUS_REG_1_INT_PEND_FALSE                 =   ( 0 << 7 ),         /*!<  No interrupt flags are pending in register 0x09 (level)                            */
-    STATUS_REG_1_INT_PEND_TRUE                  =   ( 1 << 7 )          /*!<  One or more interrupt flags are pending in register 0x09 (logical OR) (level)      */
-} MC3635_status_reg1_int_pend_t;
+    STATUS_1_INT_PEND_MASK                  =   ( 1 << 7 ),         /*!<  INT_PEND Mask                                                                      */
+    STATUS_1_INT_PEND_FALSE                 =   ( 0 << 7 ),         /*!<  No interrupt flags are pending in register 0x09 (level)                            */
+    STATUS_1_INT_PEND_TRUE                  =   ( 1 << 7 )          /*!<  One or more interrupt flags are pending in register 0x09 (logical OR) (level)      */
+} MC3635_status_1_int_pend_t;
 
 
 
@@ -220,50 +220,50 @@ typedef enum{
   */
 /* Bit 2 : INT_WAKE.  */
 typedef enum{
-    STATUS_REG_2_INT_WAKE_MASK                  =   ( 1 << 2 ),         /*!<  INT_WAKE Mask                                                                     */
-    STATUS_REG_2_INT_WAKE_FALSE                 =   ( 0 << 2 ),         /*!<  INT_WAKE not triggered                                                            */
-    STATUS_REG_2_INT_WAKE_TRUE                  =   ( 1 << 2 )          /*!<  INT_WAKE triggered                                                                */
-} MC3635_status_reg2_int_wake_t;
+    STATUS_2_INT_WAKE_MASK                  =   ( 1 << 2 ),         /*!<  INT_WAKE Mask                                                                     */
+    STATUS_2_INT_WAKE_FALSE                 =   ( 0 << 2 ),         /*!<  INT_WAKE not triggered                                                            */
+    STATUS_2_INT_WAKE_TRUE                  =   ( 1 << 2 )          /*!<  INT_WAKE triggered                                                                */
+} MC3635_status_2_int_wake_t;
 
 
 /* Bit 3 : INT_ACQ.  */
 typedef enum{
-    STATUS_REG_2_INT_ACQ_MASK                   =   ( 1 << 3 ),         /*!<  INT_ACQ Mask                                                                      */
-    STATUS_REG_2_INT_ACQ_FALSE                  =   ( 0 << 3 ),         /*!<  INT_ACQ not triggered                                                             */
-    STATUS_REG_2_INT_ACQ_TRUE                   =   ( 1 << 3 )          /*!<  INT_ACQ triggered                                                                 */
-} MC3635_status_reg2_int_acq_t;
+    STATUS_2_INT_ACQ_MASK                   =   ( 1 << 3 ),         /*!<  INT_ACQ Mask                                                                      */
+    STATUS_2_INT_ACQ_FALSE                  =   ( 0 << 3 ),         /*!<  INT_ACQ not triggered                                                             */
+    STATUS_2_INT_ACQ_TRUE                   =   ( 1 << 3 )          /*!<  INT_ACQ triggered                                                                 */
+} MC3635_status_2_int_acq_t;
 
 
 /* Bit 4 : INT_FIFO_EMPTY.  */
 typedef enum{
-    STATUS_REG_2_INT_FIFO_EMPTY_MASK            =   ( 1 << 4 ),         /*!<  INT_FIFO_EMPTY Mask                                                               */
-    STATUS_REG_2_INT_FIFO_EMPTY_FALSE           =   ( 0 << 4 ),         /*!<  INT_FIFO_EMPTY not triggered                                                      */
-    STATUS_REG_2_INT_FIFO_EMPTY_TRUE            =   ( 1 << 4 )          /*!<  INT_FIFO_EMPTY triggered                                                          */
-} MC3635_status_reg2_int_fifo_empty_t;
+    STATUS_2_INT_FIFO_EMPTY_MASK            =   ( 1 << 4 ),         /*!<  INT_FIFO_EMPTY Mask                                                               */
+    STATUS_2_INT_FIFO_EMPTY_FALSE           =   ( 0 << 4 ),         /*!<  INT_FIFO_EMPTY not triggered                                                      */
+    STATUS_2_INT_FIFO_EMPTY_TRUE            =   ( 1 << 4 )          /*!<  INT_FIFO_EMPTY triggered                                                          */
+} MC3635_status_2_int_fifo_empty_t;
 
 
 /* Bit 5 : INT_FIFO_FULL.  */
 typedef enum{
-    STATUS_REG_2_INT_FIFO_FULL_MASK             =   ( 1 << 5 ),         /*!<  INT_FIFO_FULL Mask                                                                */
-    STATUS_REG_2_INT_FIFO_FULL_FALSE            =   ( 0 << 5 ),         /*!<  INT_FIFO_FULL not triggered                                                       */
-    STATUS_REG_2_INT_FIFO_FULL_TRUE             =   ( 1 << 5 )          /*!<  INT_FIFO_FULL triggered                                                           */
-} MC3635_status_reg2_int_fifo_full_t;
+    STATUS_2_INT_FIFO_FULL_MASK             =   ( 1 << 5 ),         /*!<  INT_FIFO_FULL Mask                                                                */
+    STATUS_2_INT_FIFO_FULL_FALSE            =   ( 0 << 5 ),         /*!<  INT_FIFO_FULL not triggered                                                       */
+    STATUS_2_INT_FIFO_FULL_TRUE             =   ( 1 << 5 )          /*!<  INT_FIFO_FULL triggered                                                           */
+} MC3635_status_2_int_fifo_full_t;
 
 
 /* Bit 6 : INT_FIFO_THRESH.  */
 typedef enum{
-    STATUS_REG_2_INT_FIFO_THRESH_MASK           =   ( 1 << 6 ),         /*!<  INT_FIFO_THRESH Mask                                                              */
-    STATUS_REG_2_INT_FIFO_THRESH_FALSE          =   ( 0 << 6 ),         /*!<  INT_FIFO_THRESH not triggered                                                     */
-    STATUS_REG_2_INT_FIFO_THRESH_TRUE           =   ( 1 << 6 )          /*!<  INT_FIFO_THRESH triggered                                                         */
-} MC3635_status_reg2_int_fifo_thresh_t;
+    STATUS_2_INT_FIFO_THRESH_MASK           =   ( 1 << 6 ),         /*!<  INT_FIFO_THRESH Mask                                                              */
+    STATUS_2_INT_FIFO_THRESH_FALSE          =   ( 0 << 6 ),         /*!<  INT_FIFO_THRESH not triggered                                                     */
+    STATUS_2_INT_FIFO_THRESH_TRUE           =   ( 1 << 6 )          /*!<  INT_FIFO_THRESH triggered                                                         */
+} MC3635_status_2_int_fifo_thresh_t;
 
 
 /* Bit 7 : INT_SWAKE.  */
 typedef enum{
-    STATUS_REG_2_INT_SWAKE_MASK                 =   ( 1 << 7 ),         /*!<  INT_SWAKE Mask                                                                    */
-    STATUS_REG_2_INT_SWAKE_FALSE                =   ( 0 << 7 ),         /*!<  INT_SWAKE not triggered                                                           */
-    STATUS_REG_2_INT_SWAKE_TRUE                 =   ( 1 << 7 )          /*!<  INT_SWAKE triggered                                                               */
-} MC3635_status_reg2_int_swake_t;
+    STATUS_2_INT_SWAKE_MASK                 =   ( 1 << 7 ),         /*!<  INT_SWAKE Mask                                                                    */
+    STATUS_2_INT_SWAKE_FALSE                =   ( 0 << 7 ),         /*!<  INT_SWAKE not triggered                                                           */
+    STATUS_2_INT_SWAKE_TRUE                 =   ( 1 << 7 )          /*!<  INT_SWAKE triggered                                                               */
+} MC3635_status_2_int_swake_t;
 
 
 
@@ -275,42 +275,42 @@ typedef enum{
   */
 /* Bit 3 : FREEZE.  */
 typedef enum{
-    FEATURE_REG_1_FREEZE_MASK                   =   ( 1 << 3 ),         /*!<  FREEZE Mask                                                                                                   */
-    FEATURE_REG_1_FREEZE_FIFO_STANDARD_MODE     =   ( 0 << 3 ),         /*!<  FIFO operates in standard mode, does not stop capturing data in SWAKE interrupt (default)                     */
-    FEATURE_REG_1_FREEZE_FIFO_STOP_SWAKE        =   ( 1 << 3 )          /*!<  FIFO stops capturing on SWAKE interrupt, software can examine the conditions which generated the SWAKE event  */
-} MC3635_feature_reg1_freeze_t;
+    FREG_1_FREEZE_MASK                   =   ( 1 << 3 ),         /*!<  FREEZE Mask                                                                                                   */
+    FREG_1_FREEZE_FIFO_STANDARD_MODE     =   ( 0 << 3 ),         /*!<  FIFO operates in standard mode, does not stop capturing data in SWAKE interrupt (default)                     */
+    FREG_1_FREEZE_FIFO_STOP_SWAKE        =   ( 1 << 3 )          /*!<  FIFO stops capturing on SWAKE interrupt, software can examine the conditions which generated the SWAKE event  */
+} MC3635_freg_1_freeze_t;
 
 
 /* Bit 4 : INTSC_EN.  */
 typedef enum{
-    FEATURE_REG_1_INTSC_EN_MASK                 =   ( 1 << 4 ),         /*!<  INTSC_EN Mask                                                                                                                                                                                         */
-    FEATURE_REG_1_INTSC_EN_DISABLED             =   ( 0 << 4 ),         /*!<  Do not re-arm SNIFF block following a SWAKE event (requires the SNIFF block to be reset by exiting SWAKE mode). (default)                                                                             */
-    FEATURE_REG_1_INTSC_EN_ENABLED              =   ( 1 << 4 )          /*!<  Clearing the SWAKE interrupt clears and rearms the SNIFF block for subsequent detections (device may stay in SWAKE mode and continuing processing subsequent SWAKE events once interrupt is cleared)  */
-} MC3635_feature_reg1_intsc_en_t;
+    FREG_1_INTSC_EN_MASK                 =   ( 1 << 4 ),         /*!<  INTSC_EN Mask                                                                                                                                                                                         */
+    FREG_1_INTSC_EN_DISABLED             =   ( 0 << 4 ),         /*!<  Do not re-arm SNIFF block following a SWAKE event (requires the SNIFF block to be reset by exiting SWAKE mode). (default)                                                                             */
+    FREG_1_INTSC_EN_ENABLED              =   ( 1 << 4 )          /*!<  Clearing the SWAKE interrupt clears and rearms the SNIFF block for subsequent detections (device may stay in SWAKE mode and continuing processing subsequent SWAKE events once interrupt is cleared)  */
+} MC3635_freg_1_intsc_en_t;
 
 
 /* Bit 5 : SPI3_EN.  */
 typedef enum{
-    FEATURE_REG_1_SPI3_EN_MASK                  =   ( 1 << 5 ),         /*!<  SPI3_EN Mask                                                                          */
-    FEATURE_REG_1_SPI3_EN_DISABLED              =   ( 0 << 5 ),         /*!<  SPI interface is 4-wire                                                               */
-    FEATURE_REG_1_SPI3_EN_ENABLED               =   ( 1 << 5 )          /*!<  SPI interface is 3-wire (DOUT_A1 is the bidirectional pin)                            */
-} MC3635_feature_reg1_spi3_en_t;
+    FREG_1_SPI3_EN_MASK                  =   ( 1 << 5 ),         /*!<  SPI3_EN Mask                                                                          */
+    FREG_1_SPI3_EN_DISABLED              =   ( 0 << 5 ),         /*!<  SPI interface is 4-wire                                                               */
+    FREG_1_SPI3_EN_ENABLED               =   ( 1 << 5 )          /*!<  SPI interface is 3-wire (DOUT_A1 is the bidirectional pin)                            */
+} MC3635_freg_1_spi3_en_t;
 
 
 /* Bit 6 : I2C_EN.  */
 typedef enum{
-    FEATURE_REG_1_I2C_EN_MASK                   =   ( 1 << 6 ),         /*!<  I2C_EN Mask                                                                           */
-    FEATURE_REG_1_I2C_EN_DISABLED               =   ( 0 << 6 ),         /*!<  Device interface is still defined as it was at power-up but no data will appear in XOUT, YOUT and ZOUT registers if both this bit and SPI_EN are set to 0 (default).  */
-    FEATURE_REG_1_I2C_EN_ENABLED                =   ( 1 << 6 )          /*!<  Disables any SPI communications                                                       */
-} MC3635_feature_reg1_i2c_en_t;
+    FREG_1_I2C_EN_MASK                   =   ( 1 << 6 ),         /*!<  I2C_EN Mask                                                                           */
+    FREG_1_I2C_EN_DISABLED               =   ( 0 << 6 ),         /*!<  Device interface is still defined as it was at power-up but no data will appear in XOUT, YOUT and ZOUT registers if both this bit and SPI_EN are set to 0 (default).  */
+    FREG_1_I2C_EN_ENABLED                =   ( 1 << 6 )          /*!<  Disables any SPI communications                                                       */
+} MC3635_freg_1_i2c_en_t;
 
 
 /* Bit 7 : SPI_EN.  */
 typedef enum{
-    FEATURE_REG_1_SPI_EN_MASK                   =   ( 1 << 7 ),         /*!<  SPI_EN Mask                                                                           */
-    FEATURE_REG_1_SPI_EN_DISABLED               =   ( 0 << 7 ),         /*!<  Device interface is still defined as it was at power-up but no data will appear in XOUT, YOUT and ZOUT registers if both this bit and I2C_EN are set to 0 (default).  */
-    FEATURE_REG_1_SPI_EN_ENABLED                =   ( 1 << 7 )          /*!<  Disables any I2C communications                                                       */
-} MC3635_feature_reg1_spi_en_t;
+    FREG_1_SPI_EN_MASK                   =   ( 1 << 7 ),         /*!<  SPI_EN Mask                                                                           */
+    FREG_1_SPI_EN_DISABLED               =   ( 0 << 7 ),         /*!<  Device interface is still defined as it was at power-up but no data will appear in XOUT, YOUT and ZOUT registers if both this bit and I2C_EN are set to 0 (default).  */
+    FREG_1_SPI_EN_ENABLED                =   ( 1 << 7 )          /*!<  Disables any I2C communications                                                       */
+} MC3635_freg_1_spi_en_t;
 
 
 
@@ -321,66 +321,66 @@ typedef enum{
   */
 /* Bit 0 : WRAPA.  */
 typedef enum{
-    FEATURE_REG_2_WRAPA_MASK                    =   ( 1 << 0 ),         /*!<  WRAPA Mask                                                                                                    */
-    FEATURE_REG_2_WRAPA_ADDRESS_0X07            =   ( 0 << 0 ),         /*!<  Burst read cycle address wrap address is 0x07, counter automatically returns to 0x02. (default)               */
-    FEATURE_REG_2_WRAPA_ADDRESS_0X09            =   ( 1 << 0 )          /*!<  Burst read cycle address wrap address is 0x09, counter automatically returns to 0x02. This setting allows for status registers 0x08 and 0x09 to be included in the burst read  */
-} MC3635_feature_reg2_wrapa_t;
+    FREG_2_WRAPA_MASK                    =   ( 1 << 0 ),         /*!<  WRAPA Mask                                                                                                    */
+    FREG_2_WRAPA_ADDRESS_0X07            =   ( 0 << 0 ),         /*!<  Burst read cycle address wrap address is 0x07, counter automatically returns to 0x02. (default)               */
+    FREG_2_WRAPA_ADDRESS_0X09            =   ( 1 << 0 )          /*!<  Burst read cycle address wrap address is 0x09, counter automatically returns to 0x02. This setting allows for status registers 0x08 and 0x09 to be included in the burst read  */
+} MC3635_freg_2_wrapa_t;
 
 
 /* Bit 1 : FIFO_BURST.  */
 typedef enum{
-    FEATURE_REG_2_FIFO_BURST_MASK               =   ( 1 << 1 ),         /*!<  FIFO_BURST Mask                                                                                               */
-    FEATURE_REG_2_FIFO_BURST_DISABLED           =   ( 0 << 1 ),         /*!<  FIFO burst read cycles are 6-bytes in length, 0x02 to 0x07 per read cycle transaction (default)               */
-    FEATURE_REG_2_FIFO_BURST_ENABLED            =   ( 1 << 1 )          /*!<  FIFO burst read cycle can be any number of 6-byte reads, up to 32 x 6 bytes (i.e. the entire FIFO contents can be read). */
-} MC3635_feature_reg2_fifo_burst_t;
+    FREG_2_FIFO_BURST_MASK               =   ( 1 << 1 ),         /*!<  FIFO_BURST Mask                                                                                               */
+    FREG_2_FIFO_BURST_DISABLED           =   ( 0 << 1 ),         /*!<  FIFO burst read cycles are 6-bytes in length, 0x02 to 0x07 per read cycle transaction (default)               */
+    FREG_2_FIFO_BURST_ENABLED            =   ( 1 << 1 )          /*!<  FIFO burst read cycle can be any number of 6-byte reads, up to 32 x 6 bytes (i.e. the entire FIFO contents can be read). */
+} MC3635_freg_2_fifo_burst_t;
 
 
 /* Bit 2 : SPI_STAT_EN.  */
 typedef enum{
-    FEATURE_REG_2_SPI_STAT_EN_MASK              =   ( 1 << 2 ),         /*!<  SPI_STAT_EN Mask                                                                                               */
-    FEATURE_REG_2_SPI_STAT_EN_SPI_FLAGS_DISABLED=   ( 0 << 2 ),         /*!<  No SPI status flags are shifted out (default)                                                                  */
-    FEATURE_REG_2_SPI_STAT_EN_SPI_FLAGS_ENABLED =   ( 1 << 2 )          /*!<  SPI status flags are shifted out on the first byte of all 4-wire SPI transactions (SPI 3-wire and I2C modes are not supported, so no effect will be seen in those modes).*/
-} MC3635_feature_reg2_spi_stat_en_t;
+    FREG_2_SPI_STAT_EN_MASK              =   ( 1 << 2 ),         /*!<  SPI_STAT_EN Mask                                                                                               */
+    FREG_2_SPI_STAT_EN_SPI_FLAGS_DISABLED=   ( 0 << 2 ),         /*!<  No SPI status flags are shifted out (default)                                                                  */
+    FREG_2_SPI_STAT_EN_SPI_FLAGS_ENABLED =   ( 1 << 2 )          /*!<  SPI status flags are shifted out on the first byte of all 4-wire SPI transactions (SPI 3-wire and I2C modes are not supported, so no effect will be seen in those modes).*/
+} MC3635_freg_2_spi_stat_en_t;
 
 
 /* Bit 3 : FIFO_STAT_EN.  */
 typedef enum{
-    FEATURE_REG_2_FIFO_STAT_EN_MASK              =   ( 1 << 3 ),         /*!<  FIFO_STAT_EN Mask                                                                                                */
-    FEATURE_REG_2_FIFO_STAT_EN_DISABLED          =   ( 0 << 3 ),         /*!<  FIFO status feature is disabled, Z channel FIFO data is not overwritten with FIFO status information. (default)  */
-    FEATURE_REG_2_FIFO_STAT_EN_ENABLED           =   ( 1 << 3 )          /*!<  FIFO status feature is enabled. When the resolution is less than 14-bits, the top 4-bits of 16-bit Z channel FIFO data are replaced with FIFO status information */
-} MC3635_feature_reg2_fifo_stat_en_t;
+    FREG_2_FIFO_STAT_EN_MASK              =   ( 1 << 3 ),         /*!<  FIFO_STAT_EN Mask                                                                                                */
+    FREG_2_FIFO_STAT_EN_DISABLED          =   ( 0 << 3 ),         /*!<  FIFO status feature is disabled, Z channel FIFO data is not overwritten with FIFO status information. (default)  */
+    FREG_2_FIFO_STAT_EN_ENABLED           =   ( 1 << 3 )          /*!<  FIFO status feature is enabled. When the resolution is less than 14-bits, the top 4-bits of 16-bit Z channel FIFO data are replaced with FIFO status information */
+} MC3635_freg_2_fifo_stat_en_t;
 
 
 /* Bit 4 : I2CINT_WRCLRE.  */
 typedef enum{
-    FEATURE_REG_2_I2CINT_WRCLRE_MASK             =   ( 1 << 4 ),         /*!<  I2CINT_WRCLRE Mask                                                                                                */
-    FEATURE_REG_2_I2CINT_WRCLRE_DISABLED         =   ( 0 << 4 ),         /*!<  In I2C mode, interrupts are cleared when reading register 0x09 (default)                                          */
-    FEATURE_REG_2_I2CINT_WRCLRE_ENABLED          =   ( 1 << 4 )          /*!<  if I2C_EN is '1', then interrupts are cleared when writing to register 0x09. Otherwise I2C reads to register 0x09 will still clear pending interrupts */
-} MC3635_feature_reg2_i2cint_wrclre_t;
+    FREG_2_I2CINT_WRCLRE_MASK             =   ( 1 << 4 ),         /*!<  I2CINT_WRCLRE Mask                                                                                                */
+    FREG_2_I2CINT_WRCLRE_DISABLED         =   ( 0 << 4 ),         /*!<  In I2C mode, interrupts are cleared when reading register 0x09 (default)                                          */
+    FREG_2_I2CINT_WRCLRE_ENABLED          =   ( 1 << 4 )          /*!<  if I2C_EN is '1', then interrupts are cleared when writing to register 0x09. Otherwise I2C reads to register 0x09 will still clear pending interrupts */
+} MC3635_freg_2_i2cint_wrclre_t;
 
 
 /* Bit 5 : FIFO_STREAM.  */
 typedef enum{
-    FEATURE_REG_2_FIFO_STREAM_MASK               =   ( 1 << 5 ),         /*!<  FIFO_STREAM Mask                                                                                                   */
-    FEATURE_REG_2_FIFO_STREAM_DISABLED           =   ( 0 << 5 ),         /*!<  FIFO steam mode is disabled, FIFO stops accepting new data when FULL (default)                                     */
-    FEATURE_REG_2_FIFO_STREAM_ENABLED            =   ( 1 << 5 )          /*!<  FIFO stream mode is enabled, FIFO discards oldest samples once new data arrives                                    */
-} MC3635_feature_reg2_fifo_stream_t;
+    FREG_2_FIFO_STREAM_MASK               =   ( 1 << 5 ),         /*!<  FIFO_STREAM Mask                                                                                                   */
+    FREG_2_FIFO_STREAM_DISABLED           =   ( 0 << 5 ),         /*!<  FIFO steam mode is disabled, FIFO stops accepting new data when FULL (default)                                     */
+    FREG_2_FIFO_STREAM_ENABLED            =   ( 1 << 5 )          /*!<  FIFO stream mode is enabled, FIFO discards oldest samples once new data arrives                                    */
+} MC3635_freg_2_fifo_stream_t;
 
 
 /* Bit 6 : EXT_TRIG_POL.  */
 typedef enum{
-    FEATURE_REG_2_EXT_TRIG_POL_MASK              =   ( 1 << 6 ),         /*!<  EXT_TRIG_POL Mask                                                                                                   */
-    FEATURE_REG_2_EXT_TRIG_POL_NEGATIVE_EDGE     =   ( 0 << 6 ),         /*!<  Trigger polarity is negative edge triggered (default)                                                               */
-    FEATURE_REG_2_EXT_TRIG_POL_POSITIVE_EDGE     =   ( 1 << 6 )          /*!<  Trigger polarity is positive edge triggered                                                                         */
-} MC3635_feature_reg2_ext_trig_pol_t;
+    FREG_2_EXT_TRIG_POL_MASK              =   ( 1 << 6 ),         /*!<  EXT_TRIG_POL Mask                                                                                                   */
+    FREG_2_EXT_TRIG_POL_NEGATIVE_EDGE     =   ( 0 << 6 ),         /*!<  Trigger polarity is negative edge triggered (default)                                                               */
+    FREG_2_EXT_TRIG_POL_POSITIVE_EDGE     =   ( 1 << 6 )          /*!<  Trigger polarity is positive edge triggered                                                                         */
+} MC3635_freg_2_ext_trig_pol_t;
 
 
 /* Bit 7 : EXT_TRIG_EN.  */
 typedef enum{
-    FEATURE_REG_2_EXT_TRIG_EN_MASK              =   ( 1 << 7 ),         /*!<  EXT_TRIG_EN Mask                                                                                                    */
-    FEATURE_REG_2_EXT_TRIG_EN_DISABLED          =   ( 0 << 7 ),         /*!<  External trigger mode is not enabled (default)                                                                      */
-    FEATURE_REG_2_EXT_TRIG_EN_ENABLED           =   ( 1 << 7 )          /*!<  External trigger mode is enabled, use INTN pin as the external trigger input.                                       */
-} MC3635_feature_reg2_ext_trig_en_t;
+    FREG_2_EXT_TRIG_EN_MASK              =   ( 1 << 7 ),         /*!<  EXT_TRIG_EN Mask                                                                                                    */
+    FREG_2_EXT_TRIG_EN_DISABLED          =   ( 0 << 7 ),         /*!<  External trigger mode is not enabled (default)                                                                      */
+    FREG_2_EXT_TRIG_EN_ENABLED           =   ( 1 << 7 )          /*!<  External trigger mode is enabled, use INTN pin as the external trigger input.                                       */
+} MC3635_freg_2_ext_trig_en_t;
 
 
 
@@ -391,8 +391,8 @@ typedef enum{
   */
 /* Bits 7:0 : INIT_1.  */
 typedef enum{
-    INITIALIZATION_REGISTER_1_INIT_1_FIXED_VALUE  =   0x42              /*!<  INIT_1 fix value                                                                                                   */
-} MC3635_init_reg1_init_1_t;
+    INIT_1_INIT_1_FIXED_VALUE  =   0x42              /*!<  INIT_1 fix value                                                                                                   */
+} MC3635_init_1_init_1_t;
 
 
 
@@ -407,46 +407,46 @@ typedef enum{
   */
 /* Bits 2:0 : MCTRL.  */
 typedef enum{
-    MODE_CONTROL_REG_MCTRL_MASK                 =   ( 0b111 << 0 ),     /*!<  MCTRL Mask                                                                                                    */
-    MODE_CONTROL_REG_MCTRL_SLEEP                =   ( 0b000 << 0 ),     /*!<  Lowest power mode, regulators on, no clock activity, partial chip power-down                                  */
-    MODE_CONTROL_REG_MCTRL_STANDBY              =   ( 0b001 << 0 ),     /*!<  Low power mode, no sampling, clocks active                                                                    */
-    MODE_CONTROL_REG_MCTRL_SNIFF                =   ( 0b010 << 0 ),     /*!<  Sniff activity detection mode, sniff enabled, no sampling, no FIFO operations, automatically transition to CWAKE mode upon activity detection  */
-    MODE_CONTROL_REG_MCTRL_CWAKE                =   ( 0b101 << 0 ),     /*!<  Continuous wake. Active XYZ sampling. Sniff circuitry not active                                              */
-    MODE_CONTROL_REG_MCTRL_SWAKE                =   ( 0b110 << 0 ),     /*!<  Use Sniff logic, main XYZ pipeline and optional FIFO at the same time; highest power consumption              */
-    MODE_CONTROL_REG_MCTRL_TRIG                 =   ( 0b111 << 0 )      /*!<  Trigger mode, 1 to 254 samples or continuous, return to sleep upon completion                                 */
-} MC3635_mode_control_reg_mctrl_t;
+    MODE_C_MCTRL_MASK                 =   ( 0b111 << 0 ),     /*!<  MCTRL Mask                                                                                                    */
+    MODE_C_MCTRL_SLEEP                =   ( 0b000 << 0 ),     /*!<  Lowest power mode, regulators on, no clock activity, partial chip power-down                                  */
+    MODE_C_MCTRL_STANDBY              =   ( 0b001 << 0 ),     /*!<  Low power mode, no sampling, clocks active                                                                    */
+    MODE_C_MCTRL_SNIFF                =   ( 0b010 << 0 ),     /*!<  Sniff activity detection mode, sniff enabled, no sampling, no FIFO operations, automatically transition to CWAKE mode upon activity detection  */
+    MODE_C_MCTRL_CWAKE                =   ( 0b101 << 0 ),     /*!<  Continuous wake. Active XYZ sampling. Sniff circuitry not active                                              */
+    MODE_C_MCTRL_SWAKE                =   ( 0b110 << 0 ),     /*!<  Use Sniff logic, main XYZ pipeline and optional FIFO at the same time; highest power consumption              */
+    MODE_C_MCTRL_TRIG                 =   ( 0b111 << 0 )      /*!<  Trigger mode, 1 to 254 samples or continuous, return to sleep upon completion                                 */
+} MC3635_mode_c_mctrl_t;
 
 
 /* Bit 4 : X_AXIS_PD.  */
 typedef enum{
-    MODE_CONTROL_REG_X_AXIS_PD_MASK             =   ( 1 << 4 ),         /*!<  X_AXIS_PD Mask                                                                                                */
-    MODE_CONTROL_REG_X_AXIS_PD_ENABLED          =   ( 0 << 4 ),         /*!<  X-axis is enabled                                                                                             */
-    MODE_CONTROL_REG_X_AXIS_PD_DISABLED         =   ( 1 << 4 )          /*!<  X-axis is disabled                                                                                            */
-} MC3635_mode_control_reg_x_axis_pd_t;
+    MODE_C_X_AXIS_PD_MASK             =   ( 1 << 4 ),         /*!<  X_AXIS_PD Mask                                                                                                */
+    MODE_C_X_AXIS_PD_ENABLED          =   ( 0 << 4 ),         /*!<  X-axis is enabled                                                                                             */
+    MODE_C_X_AXIS_PD_DISABLED         =   ( 1 << 4 )          /*!<  X-axis is disabled                                                                                            */
+} MC3635_mode_c_x_axis_pd_t;
 
 
 /* Bit 5 : Y_AXIS_PD.  */
 typedef enum{
-    MODE_CONTROL_REG_Y_AXIS_PD_MASK             =   ( 1 << 5 ),         /*!<  Y_AXIS_PD Mask                                                                                                */
-    MODE_CONTROL_REG_Y_AXIS_PD_ENABLED          =   ( 0 << 5 ),         /*!<  Y-axis is enabled                                                                                             */
-    MODE_CONTROL_REG_Y_AXIS_PD_DISABLED         =   ( 1 << 5 )          /*!<  Y-axis is disabled                                                                                            */
-} MC3635_mode_control_reg_y_axis_pd_t;
+    MODE_C_Y_AXIS_PD_MASK             =   ( 1 << 5 ),         /*!<  Y_AXIS_PD Mask                                                                                                */
+    MODE_C_Y_AXIS_PD_ENABLED          =   ( 0 << 5 ),         /*!<  Y-axis is enabled                                                                                             */
+    MODE_C_Y_AXIS_PD_DISABLED         =   ( 1 << 5 )          /*!<  Y-axis is disabled                                                                                            */
+} MC3635_mode_c_y_axis_pd_t;
 
 
 /* Bit 6 : Z_AXIS_PD.  */
 typedef enum{
-    MODE_CONTROL_REG_Z_AXIS_PD_MASK             =   ( 1 << 6 ),         /*!<  Z_AXIS_PD Mask                                                                                                */
-    MODE_CONTROL_REG_Z_AXIS_PD_ENABLED          =   ( 0 << 6 ),         /*!<  Z-axis is enabled                                                                                             */
-    MODE_CONTROL_REG_Z_AXIS_PD_DISABLED         =   ( 1 << 6 )          /*!<  Z-axis is disabled                                                                                            */
-} MC3635_mode_control_reg_z_axis_pd_t;
+    MODE_C_Z_AXIS_PD_MASK             =   ( 1 << 6 ),         /*!<  Z_AXIS_PD Mask                                                                                                */
+    MODE_C_Z_AXIS_PD_ENABLED          =   ( 0 << 6 ),         /*!<  Z-axis is enabled                                                                                             */
+    MODE_C_Z_AXIS_PD_DISABLED         =   ( 1 << 6 )          /*!<  Z-axis is disabled                                                                                            */
+} MC3635_mode_c_z_axis_pd_t;
 
 
 /* Bit 7 : TRIG_CMD.  */
 typedef enum{
-    MODE_CONTROL_REG_TRIG_CMD_MASK              =   ( 1 << 7 ),         /*!<  TRIG_CMD Mask                                                                                                 */
-    MODE_CONTROL_REG_TRIG_CMD_DISABLED          =   ( 0 << 7 ),
-    MODE_CONTROL_REG_TRIG_CMD_ENABLED           =   ( 1 << 7 )
-} MC3635_mode_control_reg_trig_cmd_t;
+    MODE_C_TRIG_CMD_MASK              =   ( 1 << 7 ),         /*!<  TRIG_CMD Mask                                                                                                 */
+    MODE_C_TRIG_CMD_DISABLED          =   ( 0 << 7 ),
+    MODE_C_TRIG_CMD_ENABLED           =   ( 1 << 7 )
+} MC3635_mode_c_trig_cmd_t;
 
 
 /**
@@ -458,17 +458,59 @@ typedef enum{
   */
 /* Bits 3:0 : RR.  */
 typedef enum{
-    RATE_REGISTER_1_RR_MASK                     =   ( 0b1111 << 0 ),    /*!<  RR Mask                                                                                                    */
-    RATE_REGISTER_1_RR_0X05                     =   ( 0x05 << 0 ),      /*!<  RR value: 0x05                                                                                             */
-    RATE_REGISTER_1_RR_0X06                     =   ( 0x06 << 0 ),      /*!<  RR value: 0x06                                                                                             */
-    RATE_REGISTER_1_RR_0X07                     =   ( 0x07 << 0 ),      /*!<  RR value: 0x07                                                                                             */
-    RATE_REGISTER_1_RR_0X08                     =   ( 0x08 << 0 ),      /*!<  RR value: 0x08                                                                                             */
-    RATE_REGISTER_1_RR_0X09                     =   ( 0x09 << 0 ),      /*!<  RR value: 0x09                                                                                             */
-    RATE_REGISTER_1_RR_0X0A                     =   ( 0x0A << 0 ),      /*!<  RR value: 0x0A                                                                                             */
-    RATE_REGISTER_1_RR_0X0B                     =   ( 0x0B << 0 ),      /*!<  RR value: 0x0B                                                                                             */
-    RATE_REGISTER_1_RR_0X0C                     =   ( 0x0C << 0 ),      /*!<  RR value: 0x0C                                                                                             */
-    RATE_REGISTER_1_RR_0X0F                     =   ( 0x0F << 0 )       /*!<  RR value: 0x0F                                                                                             */
-} MC3635_rate_register_1_rr_t;
+    RATE_1_RR_MASK                     =   ( 0b1111 << 0 ),    /*!<  RR Mask                                                                                                    */
+    RATE_1_RR_0X05                     =   ( 0x05 << 0 ),      /*!<  RR value: 0x05                                                                                             */
+    RATE_1_RR_0X06                     =   ( 0x06 << 0 ),      /*!<  RR value: 0x06                                                                                             */
+    RATE_1_RR_0X07                     =   ( 0x07 << 0 ),      /*!<  RR value: 0x07                                                                                             */
+    RATE_1_RR_0X08                     =   ( 0x08 << 0 ),      /*!<  RR value: 0x08                                                                                             */
+    RATE_1_RR_0X09                     =   ( 0x09 << 0 ),      /*!<  RR value: 0x09                                                                                             */
+    RATE_1_RR_0X0A                     =   ( 0x0A << 0 ),      /*!<  RR value: 0x0A                                                                                             */
+    RATE_1_RR_0X0B                     =   ( 0x0B << 0 ),      /*!<  RR value: 0x0B                                                                                             */
+    RATE_1_RR_0X0C                     =   ( 0x0C << 0 ),      /*!<  RR value: 0x0C                                                                                             */
+    RATE_1_RR_0X0F                     =   ( 0x0F << 0 )       /*!<  RR value: 0x0F                                                                                             */
+} MC3635_rate_1_rr_t;
+
+
+/**
+  * @brief   SNIFF CONTROL REGISTER
+  *
+  *             This register selects the sample rate for SNIFF mode and the clock rate for STANDBY mode.
+  */
+/* Bits 3:0 : SNIFF_SR.  */
+typedef enum{
+    SNIFF_C_SNIFF_SR_MASK                       =   ( 0b1111 << 0 ),      /*!<  SNIFF_SR Mask                                                                                             */
+    SNIFF_C_SNIFF_SR_0                          =   ( 0b0000 << 0 ),
+    SNIFF_C_SNIFF_SR_1                          =   ( 0b0001 << 0 ),
+    SNIFF_C_SNIFF_SR_2                          =   ( 0b0010 << 0 ),
+    SNIFF_C_SNIFF_SR_3                          =   ( 0b0011 << 0 ),
+    SNIFF_C_SNIFF_SR_4                          =   ( 0b0100 << 0 ),
+    SNIFF_C_SNIFF_SR_5                          =   ( 0b0101 << 0 ),
+    SNIFF_C_SNIFF_SR_6                          =   ( 0b0110 << 0 ),
+    SNIFF_C_SNIFF_SR_7                          =   ( 0b0111 << 0 ),
+    SNIFF_C_SNIFF_SR_8                          =   ( 0b1000 << 0 ),
+    SNIFF_C_SNIFF_SR_9                          =   ( 0b1001 << 0 ),
+    SNIFF_C_SNIFF_SR_10                         =   ( 0b1010 << 0 ),
+    SNIFF_C_SNIFF_SR_11                         =   ( 0b1011 << 0 ),
+    SNIFF_C_SNIFF_SR_12                         =   ( 0b1100 << 0 ),
+    SNIFF_C_SNIFF_SR_13                         =   ( 0b1101 << 0 ),
+    SNIFF_C_SNIFF_SR_14                         =   ( 0b1110 << 0 ),
+    SNIFF_C_SNIFF_SR_15                         =   ( 0b1111 << 0 )
+} MC3635_sniff_c_sniff_sr_t;
+
+
+/* Bits 7:5 : STB_RATE.  */
+typedef enum{
+    SNIFF_C_STB_RATE_MASK                       =   ( 0b111 << 5 ),       /*!<  STB_RATE Mask                                                                                             */
+    SNIFF_C_STB_RATE_0                          =   ( 0b000 << 5 ),
+    SNIFF_C_STB_RATE_1                          =   ( 0b001 << 5 ),
+    SNIFF_C_STB_RATE_2                          =   ( 0b010 << 5 ),
+    SNIFF_C_STB_RATE_3                          =   ( 0b011 << 5 ),
+    SNIFF_C_STB_RATE_4                          =   ( 0b100 << 5 ),
+    SNIFF_C_STB_RATE_5                          =   ( 0b101 << 5 ),
+    SNIFF_C_STB_RATE_6                          =   ( 0b110 << 5 ),
+    SNIFF_C_STB_RATE_7                          =   ( 0b111 << 5 )
+} MC3635_sniff_c_stb_rate_t;
+
 
 
 /**
@@ -482,7 +524,7 @@ typedef enum{
   */
 /* Bits 5:0 : SNIFF_TH.  */
 typedef enum{
-    SNIFFTH_C_SNIFF_SR_MASK                       =   ( 0b111111 << 0 )     /*!<  SNIFF_TH Mask                                                                                             */
+    SNIFFTH_C_SNIFF_TH_MASK                       =   ( 0b111111 << 0 )     /*!<  SNIFF_TH Mask                                                                                             */
 } MC3635_sniffth_c_sniff_th_t;
 
 
@@ -696,8 +738,8 @@ typedef enum{
   */
 /* Bits 7:0 : INIT_3.  */
 typedef enum{
-    INIT_3_FIXED VALUE                            =   0                      /*!<  INIT_3 fixed value                                                                                               */
-} MC3635_init_3_t;
+    INIT_3_INT_3_FIXED VALUE                     =   0                      /*!<  INIT_3 fixed value                                                                                               */
+} MC3635_init_3_int_3t;
 
 
 
@@ -829,8 +871,8 @@ typedef enum{
   */
 /* Bits 7:0 : INIT_2.  */
 typedef enum{
-    INIT_2_FIXED VALUE                            =   0                      /*!<  INIT_2 fixed value                                                                                       */
-} MC3635_init_2_t;
+    INIT_2_INT_2_FIXED VALUE                      =   0                      /*!<  INIT_2 fixed value                                                                                       */
+} MC3635_init_2_int_2_t;
 
 
 
