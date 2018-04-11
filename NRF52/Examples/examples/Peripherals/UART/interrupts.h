@@ -25,9 +25,18 @@ extern "C" {
 
 
 /* INTERRUPT PRTOTYPES */
+void UART0_IRQHandler ( void );
 
+
+/* CONSTANTS */
+extern const uint32_t  NO;
+extern const uint32_t  YES;
 
 /* VARIABLES */
+extern uint8_t myRX_buff;
+extern uint8_t myMessage[];
+extern uint8_t *myPtr;
+extern uint8_t TX_inProgress;
 
 
 #ifdef __cplusplus
