@@ -73,7 +73,9 @@
       <file file_name="../../../../../../components/drivers_nrf/clock/nrf_drv_clock.c" />
       <file file_name="../../../../../../components/drivers_nrf/common/nrf_drv_common.c" />
       <file file_name="../../../../../../components/drivers_nrf/gpiote/nrf_drv_gpiote.c" />
-      <file file_name="../../../../../../components/drivers_nrf/uart/nrf_drv_uart.c" />
+      <file file_name="../../../../../../components/drivers_nrf/uart/nrf_drv_uart.c">
+        <configuration Name="Debug" build_exclude_from_build="Yes" />
+      </file>
     </folder>
     <folder Name="Board Support">
       <file file_name="../../../../../../components/libraries/bsp/bsp.c" />
