@@ -25,8 +25,14 @@ typedef enum{
   LED2  = 18,               /*!<   LED2: P0.18   */
   LED3  = 19,               /*!<   LED3: P0.19   */
   LED4  = 20                /*!<   LED4: P0.20   */
-} NRF52DK_board_LEDS_t;
+} NRF52DK_board_leds_t;
 
+
+/* UART0 */
+typedef enum{
+  UART0_TX  = 6,            /*!<   UART0_TX: P0.6  */
+  UART0_RX  = 8             /*!<   UART0_RX: P0.8  */
+} NRF52DK_board_uart0_t;
 
 #ifdef __cplusplus
 }
