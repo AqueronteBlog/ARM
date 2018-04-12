@@ -1,8 +1,17 @@
 /**
  * @brief       main.c
- * @details     [todo]
+ * @details     It changes the state of the LEDs using the UART.
  *
- *              The CPU remains in low power all the time.
+ *              It will depend on what character the user sends through the UART:
+ *                  - '1':  LED1 ON. Message replay: "LED 1 ON".
+ *                  - '2':  LED2 ON. Message replay: "LED 2 ON".
+ *                  - '3':  LED3 ON. Message replay: "LED 3 ON".
+ *                  - '4':  LED4 ON. Message replay: "LED 4 ON".
+ *                  - Another character will turn all the LEDs OFF without any message back through the UART.
+ *
+ *
+ *              This firmware is just an example about how to use the UART on the nrf52832. The system
+ *              will handle everything on the Interrupts ( Low power mode selected ).
  *
  *
  * @return      N/A
