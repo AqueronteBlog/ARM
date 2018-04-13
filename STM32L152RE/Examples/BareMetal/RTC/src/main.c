@@ -1,12 +1,6 @@
 /**
  * @brief       main.c
- * @details     This example shows how to work with the internal peripheral: Independent
- * 				Watch Dog ( IWDG ). Every one second, the IWDG will generate a reset.
- *
- * 				At the beginning of the firmware, the LED1 is OFF for a short period of time,
- * 				then it is turned ON.
- *
- * 				The rest of the time, the microcontroller is in standby mode ( low power ).
+ * @details     [todo].
  *
  *
  * @return      N/A
@@ -36,15 +30,17 @@ int main ( void )
 	Conf_RTC     ();
 
 
+/*
 	GPIOA->BRR		 =	( 1 << LED_1 );			// LED1 OFF
 
 	for ( uint32_t i = 0; i < 23232; i++ );		// Small delay to see the changes when the IWDG resets the uC
 
 	GPIOA->BSRR		=	( 1 << LED_1 );			// LED1 ON
+*/
 
 
 	while ( 1 )
 	{
-		HAL_PWR_EnterSTANDBYMode ();
+		//HAL_PWR_EnterSTANDBYMode ();
 	}
 }
