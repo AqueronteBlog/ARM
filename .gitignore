@@ -19,3 +19,4 @@ NRF52/Examples/examples/Peripherals/PWM/pca10040/s132/ses/PWM_Debug.jlink
 NRF52/Examples/examples/Peripherals/SWI/pca10040/s132/ses/Output/
 NRF52/Examples/examples/Peripherals/UART/pca10040/s132/ses/Output/
 NRF52/Examples/examples/Peripherals/UART/pca10040/s132/ses/UART_Debug.jlink
+STM32L152RE/Examples/BareMetal/RTC/RTC.elf.launch
