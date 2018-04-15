@@ -1045,11 +1045,10 @@ typedef enum{
   * @brief   FUNCTION PROTOTYPES
   */
 MC3635_status_t  MC3635_Init                          ( I2C_parameters_t myI2Cparameters );
-MC3635_status_t  MC3635_Conf                          ( I2C_parameters_t myI2Cparameters, AXDL345_bw_rate_low_power_t LOWPOWER, AXDL345_bw_rate_rate_t RATE,
-                                                          MC3635_data_format_int_invert_t INT_INVERT, MC3635_data_format_full_res_t FULLRESOLUTION, MC3635_data_format_justify_t JUSTIFY,
-                                                          MC3635_data_format_range_t RANGE );
-
-
+MC3635_status_t  MC3635_WriteScratchpadRegister       ( I2C_parameters_t myI2Cparameters, uint8_t myScratchpadRegister );
+MC3635_status_t  MC3635_ReadScratchpadRegister        ( I2C_parameters_t myI2Cparameters, uint8_t* myScratchpadRegister );
+MC3635_status_t  MC3635_SetSoftwareReset              ( I2C_parameters_t myI2Cparameters );
+MC3635_status_t  MC3635_SetReload                     ( I2C_parameters_t myI2Cparameters );
 
 
 #ifdef __cplusplus
