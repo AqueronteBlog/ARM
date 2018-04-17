@@ -1,9 +1,10 @@
 /**
  * @brief       main.c
- * @details     [TODO].
+ * @details     It writes the value 0x23232323 into NRF51 non-volatile memory. Every 125ms,
+ *              the system will check if the value 0x23232323 is stored in a specific memory
+ *              location, if so, it will erase that location, if not, it will write that value.
  *
- *
- *              This firmware is just an example about how to use the UART on the nrf52832. The system
+ *              This firmware is just an example about how to use the NVMC on the nrf52832. The system
  *              will handle everything on the Interrupts ( Low power mode selected ).
  *
  *
@@ -44,8 +45,9 @@ uint32_t writeNVMC;       /*!<   writeNVMC = YES:    Write on NVMC.
  */
 int main(void)
 {
-    uint32_t myPageNumber         =  ( NRF_FICR->CODESIZE - 1 );
-    uint32_t *myPageAddress       =  ( uint32_t * ) ( myPageNumber * NRF_FICR->CODEPAGESIZE );
+    uint32_t myPageNumber         =  ( NRF_FICR->CODESIZE - 1 ); 
+    //uint32_t *myPageAddress       =  ( uint32_t * ) ( myPageNumber * NRF_FICR->CODEPAGESIZE );
+    uint32_t *myPageAddress       =  ( uint32_t * ) 0x10001088 + 12;
     uint32_t myValue              =  0x23232323;
 
 
@@ -56,12 +58,10 @@ int main(void)
 
     NRF_RTC0->TASKS_START = 1;    // Start RTC0
 
-
+    // NRF_POWER->SYSTEMOFF    = 1;
+    NRF_POWER->TASKS_LOWPWR = 1;        // Sub power mode: Low power.
     while( 1 )
     {
-        // NRF_POWER->SYSTEMOFF    = 1;
-        NRF_POWER->TASKS_LOWPWR = 1;        // Sub power mode: Low power.
-
         // Enter System ON sleep mode
 	__WFE();
 	// Make sure any pending events are cleared
