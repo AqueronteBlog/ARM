@@ -557,7 +557,7 @@ typedef enum{
     SNIFFCF_C_SNIFF_THADR_SNIFF_THRESHOLD_X_AXIS    =   ( 0b001 << 0 ),     /*!<  SNIFF Threshold, X-axis                                                                                   */
     SNIFFCF_C_SNIFF_THADR_SNIFF_THRESHOLD_Y_AXIS    =   ( 0b010 << 0 ),     /*!<  SNIFF Threshold, X-axis                                                                                   */
     SNIFFCF_C_SNIFF_THADR_SNIFF_THRESHOLD_Z_AXIS    =   ( 0b011 << 0 ),     /*!<  SNIFF Threshold, X-axis                                                                                   */
-    SNIFFCF_C_SNIFF_THADR_NONE                      =   ( 0b100 << 0 ),     /*!<  None                                                                                                      */
+    //SNIFFCF_C_SNIFF_THADR_NONE                      =   ( 0b100 << 0 ),     /*!<  None                                                                                                      */
     SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_X_AXIS    =   ( 0b101 << 0 ),     /*!<  SNIFF Detection Count, X-axis                                                                             */
     SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_Y_AXIS    =   ( 0b110 << 0 ),     /*!<  SNIFF Detection Count, X-axis                                                                             */
     SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_Z_AXIS    =   ( 0b111 << 0 )      /*!<  SNIFF Detection Count, X-axis                                                                             */
@@ -738,7 +738,7 @@ typedef enum{
   */
 /* Bits 7:0 : INIT_3.  */
 typedef enum{
-    INIT_3_INT_3_FIXED VALUE                     =   0                      /*!<  INIT_3 fixed value                                                                                               */
+    INIT_3_INT_3_FIXED_VALUE                     =   0                      /*!<  INIT_3 fixed value                                                                                               */
 } MC3635_init_3_int_3t;
 
 
@@ -871,7 +871,7 @@ typedef enum{
   */
 /* Bits 7:0 : INIT_2.  */
 typedef enum{
-    INIT_2_INT_2_FIXED VALUE                      =   0                      /*!<  INIT_2 fixed value                                                                                       */
+    INIT_2_INT_2_FIXED_VALUE                      =   0                      /*!<  INIT_2 fixed value                                                                                       */
 } MC3635_init_2_int_2_t;
 
 
@@ -1005,6 +1005,34 @@ typedef enum{
 
 
 
+/**
+  * @brief   ODR ( Hz )
+  *
+  *             Sample rates for wake modes.
+  */
+typedef enum{
+    ODR_14_HZ       =   0x00,                   /*!<  ODR 14 Hz    Mode: Low Power | Precision            */
+    ODR_25_HZ       =   0x01,                   /*!<  ODR 25 Hz    Mode: Ultra-Low Power                  */
+    ODR_28_HZ       =   0x02,                   /*!<  ODR 28 Hz    Mode: Low Power | Precision            */
+    ODR_50_HZ       =   0x03,                   /*!<  ODR 50 Hz    Mode: Ultra-Low Power                  */
+    ODR_54_HZ       =   0x04,                   /*!<  ODR 54 Hz    Mode: Low Power                        */
+    ODR_55_HZ       =   0x05,                   /*!<  ODR 55 Hz    Mode: Precision                        */
+    ODR_80_HZ       =   0x06,                   /*!<  ODR 80 Hz    Mode: Precision                        */
+    ODR_100_HZ      =   0x07,                   /*!<  ODR 100 Hz   Mode: Ultra-Low Power | Precision      */
+    ODR_105_HZ      =   0x08,                   /*!<  ODR 105 Hz   Mode: Low Power                        */
+    ODR_190_HZ      =   0x09,                   /*!<  ODR 190 Hz   Mode: Ultra-Low Power                  */
+    ODR_210_HZ      =   0x0A,                   /*!<  ODR 210 Hz   Mode: Low Power                        */
+    ODR_380_HZ      =   0x0B,                   /*!<  ODR 380 Hz   Mode: Ultra-Low Power                  */
+    ODR_400_HZ      =   0x0C,                   /*!<  ODR 400 Hz   Mode: Low Power                        */
+    ODR_600_HZ      =   0x0D,                   /*!<  ODR 600 Hz   Mode: Low Power                        */
+    ODR_750_HZ      =   0x0E,                   /*!<  ODR 750 Hz   Mode: Ultra-Low Power | Low Power      */
+    ODR_1100_HZ     =   0x0F,                   /*!<  ODR 1100 Hz  Mode: Ultra-Low Power                  */
+    ODR_1300_HZ     =   0x10                    /*!<  ODR 1300 Hz  Mode: Ultra-Low Power                  */
+} MC3635_odr_t;
+
+
+
+
 
 
 
@@ -1026,7 +1054,12 @@ typedef struct{
     uint8_t Zout_msb;                       /*!<  ZOUT MSB                                                                */
 
     uint8_t scratch;                        /*!<  Any value can be written and read-back                                  */
-} MC3635_vector_t;
+    uint8_t ext_stat_2;                     /*!<  It contains the value for the Extended Status Register 2                */
+    uint8_t status_1;                       /*!<  It contains the value for the Status Register 1                         */
+    uint8_t status_2;                       /*!<  It contains the value for the Status Register 2                         */
+    uint8_t myFeatureRegister1;             /*!<  It contains the value for the Feature Register 1                        */
+    uint8_t myFeatureRegister2;             /*!<  It contains the value for the Feature Register 2                        */
+} MC3635_data_t;
 #endif
 
 
@@ -1044,11 +1077,78 @@ typedef enum{
 /**
   * @brief   FUNCTION PROTOTYPES
   */
+/** It configures the I2C peripheral.
+        */
 MC3635_status_t  MC3635_Init                          ( I2C_parameters_t myI2Cparameters );
+
+/** It starts an initialization sequence.
+        */
+MC3635_status_t  MC3635_InitializationSequence        ( I2C_parameters_t myI2Cparameters );
+
+/** It writes into the scratch pad register.
+        */
 MC3635_status_t  MC3635_WriteScratchpadRegister       ( I2C_parameters_t myI2Cparameters, uint8_t myScratchpadRegister );
+
+/** It reads the scratch pad register.
+        */
 MC3635_status_t  MC3635_ReadScratchpadRegister        ( I2C_parameters_t myI2Cparameters, uint8_t* myScratchpadRegister );
+
+/** It performs a software reset.
+        */
 MC3635_status_t  MC3635_SetSoftwareReset              ( I2C_parameters_t myI2Cparameters );
+
+/** It performs a reload.
+        */
 MC3635_status_t  MC3635_SetReload                     ( I2C_parameters_t myI2Cparameters );
+
+///** It sets the operational mode.
+//        */
+//MC3635_status_t  MC3635_SetOperationalMode            ( I2C_parameters_t myI2Cparameters );
+//
+///** It reads the operational mode.
+//        */
+//MC3635_status_t  MC3635_GetOperationalMode            ( I2C_parameters_t myI2Cparameters );
+
+/** It reads the Extended Status Register 2.
+        */
+MC3635_status_t  MC3635_ReadExtendedStatusRegister2     ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myExt_stat_2 );
+
+/** It reads X, Y and Z raw data output.
+        */
+MC3635_status_t  MC3635_ReadRawData                     ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myRawData );
+
+/** It reads the Status Register 1.
+        */
+MC3635_status_t  MC3635_ReadStatusRegister1             ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myStatus_1 );
+
+/** It reads the Status Register 2.
+        */
+MC3635_status_t  MC3635_ReadStatusRegister2             ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myStatus_2 );
+
+/** It reads the Feature Register 1.
+        */
+MC3635_status_t  MC3635_ReadFeatureRegister1            ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myFeatureRegister1 );
+
+/** It reads the Feature Register 2.
+        */
+MC3635_status_t  MC3635_ReadFeatureRegister2            ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myFeatureRegister2 );
+
+/** It starts the Initialization Register 1.
+        */
+MC3635_status_t  MC3635_InitializationRegister1         ( I2C_parameters_t myI2Cparameters );
+
+/** It sets mode control of the device and if the trigger bit is enabled, the number of samples to be acquired is given as well.
+        */
+MC3635_status_t  MC3635_SetModeControl                  ( I2C_parameters_t myI2Cparameters, MC3635_mode_c_mctrl_t myOperationalMode, MC3635_mode_c_x_axis_pd_t myXAxis, MC3635_mode_c_y_axis_pd_t myYAxis,
+                                                          MC3635_mode_c_z_axis_pd_t myZAxis, MC3635_mode_c_trig_cmd_t myTriggerEnable, uint8_t myTriggerSamples );
+/** It sets the operational mode.
+        */
+MC3635_status_t  MC3635_SetOperationalMode              ( I2C_parameters_t myI2Cparameters, MC3635_mode_c_mctrl_t myOperationalMode );
+
+/** It sets the power mode and odr for wake modes.
+        */
+MC3635_status_t  MC3635_SetWakePowerModeODR             ( I2C_parameters_t myI2Cparameters, MC3635_pmcr_cspm_t myPowerMode, MC3635_odr_t myODR );
+
 
 
 #ifdef __cplusplus
