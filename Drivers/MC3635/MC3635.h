@@ -1149,6 +1149,14 @@ MC3635_status_t  MC3635_SetOperationalMode              ( I2C_parameters_t myI2C
         */
 MC3635_status_t  MC3635_SetWakePowerModeODR             ( I2C_parameters_t myI2Cparameters, MC3635_pmcr_cspm_t myPowerMode, MC3635_odr_t myODR );
 
+/** It sets the sample rate for SNIFF mode.
+        */
+MC3635_status_t  MC3635_SetSniffSampleRate              ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_sniff_sr_t mySniffSampleRate );
+
+/** It sets the clock rate for STANDBY mode.
+        */
+MC3635_status_t  MC3635_SetStandbyClockRate             ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_stb_rate_t myStandbyCloclRate );
+
 
 
 #ifdef __cplusplus
