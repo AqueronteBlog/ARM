@@ -1145,7 +1145,7 @@ MC3635_status_t  MC3635_SetModeControl                  ( I2C_parameters_t myI2C
         */
 MC3635_status_t  MC3635_SetOperationalMode              ( I2C_parameters_t myI2Cparameters, MC3635_mode_c_mctrl_t myOperationalMode );
 
-/** It sets the power mode and odr for wake modes.
+/** It sets the power mode and ODR for wake modes.
         */
 MC3635_status_t  MC3635_SetWakePowerModeODR             ( I2C_parameters_t myI2Cparameters, MC3635_pmcr_cspm_t myPowerMode, MC3635_odr_t myODR );
 
@@ -1156,6 +1156,20 @@ MC3635_status_t  MC3635_SetSniffSampleRate              ( I2C_parameters_t myI2C
 /** It sets the clock rate for STANDBY mode.
         */
 MC3635_status_t  MC3635_SetStandbyClockRate             ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_stb_rate_t myStandbyCloclRate );
+
+// 0x13 and 0x14
+
+/** It sets the accelerometer resolution.
+        */
+MC3635_status_t  MC3635_SetResolution                   ( I2C_parameters_t myI2Cparameters, MC3635_range_c_res_t myResolution );
+
+/** It sets the accelerometer range.
+        */
+MC3635_status_t  MC3635_SetRange                        ( I2C_parameters_t myI2Cparameters, MC3635_range_c_range_t myRange );
+
+/** It sets the FIFO behavior.
+        */
+//MC3635_status_t  MC3635_SetFIFO                         ( I2C_parameters_t myI2Cparameters, MC3635_range_c_range_t myRange );
 
 
 
