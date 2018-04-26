@@ -56,7 +56,7 @@ typedef enum
 
     FREG_1          =   0x0D,           /*!<  Feature 1                                         */
     FREG_2          =   0x0E,           /*!<  Feature 2                                         */
-    INIT_1          =   0x0F,           /*!<  Initialization 1                                  */
+    INIT_1          =   0x0F,           /*!<  Initialization Register 1                         */
     MODE_C          =   0x10,           /*!<  Mode Control                                      */
     RATE_1          =   0x11,           /*!<  Rate 1                                            */
     SNIFF_C         =   0x12,           /*!<  Sniff Control                                     */
@@ -66,7 +66,7 @@ typedef enum
     FIFO_C          =   0x16,           /*!<  FIFO Control                                      */
     INTR_C          =   0x17,           /*!<  Interrupt Control                                 */
 
-    INIT_3          =   0x1A,           /*!<  Initialization 3                                  */
+    INIT_3          =   0x1A,           /*!<  Initialization Register 3                         */
     SCRATCH         =   0x1B,           /*!<  Scratchpad                                        */
     PMCR            =   0x1C,           /*!<  Power Mode Control                                */
 
@@ -1042,23 +1042,20 @@ typedef enum{
 #ifndef MC3635_VECTOR_STRUCT_H
 #define MC3635_VECTOR_STRUCT_H
 typedef struct{
-    int16_t XAxis;
-    int16_t YAxis;
-    int16_t ZAxis;
+    int16_t  XAxis;
+    int16_t  YAxis;
+    int16_t  ZAxis;
 
-    uint8_t Xout_lsb;                       /*!<  XOUT LSB                                                                */
-    uint8_t Xout_msb;                       /*!<  XOUT MSB                                                                */
-    uint8_t Yout_lsb;                       /*!<  YOUT LSB                                                                */
-    uint8_t Yout_msb;                       /*!<  YOUT MSB                                                                */
-    uint8_t Zout_lsb;                       /*!<  ZOUT LSB                                                                */
-    uint8_t Zout_msb;                       /*!<  ZOUT MSB                                                                */
+    uint16_t XRawAxis;
+    uint16_t YRawAxis;
+    uint16_t ZRawAxis;
 
-    uint8_t scratch;                        /*!<  Any value can be written and read-back                                  */
-    uint8_t ext_stat_2;                     /*!<  It contains the value for the Extended Status Register 2                */
-    uint8_t status_1;                       /*!<  It contains the value for the Status Register 1                         */
-    uint8_t status_2;                       /*!<  It contains the value for the Status Register 2                         */
-    uint8_t myFeatureRegister1;             /*!<  It contains the value for the Feature Register 1                        */
-    uint8_t myFeatureRegister2;             /*!<  It contains the value for the Feature Register 2                        */
+    uint8_t  scratch;                        /*!<  Any value can be written and read-back                                  */
+    uint8_t  ext_stat_2;                     /*!<  It contains the value for the Extended Status Register 2                */
+    uint8_t  status_1;                       /*!<  It contains the value for the Status Register 1                         */
+    uint8_t  status_2;                       /*!<  It contains the value for the Status Register 2                         */
+    uint8_t  FeatureRegister1;               /*!<  It contains the value for the Feature Register 1                        */
+    uint8_t  FeatureRegister2;               /*!<  It contains the value for the Feature Register 2                        */
 } MC3635_data_t;
 #endif
 
@@ -1079,98 +1076,114 @@ typedef enum{
   */
 /** It configures the I2C peripheral.
         */
-MC3635_status_t  MC3635_Init                          ( I2C_parameters_t myI2Cparameters );
+MC3635_status_t  MC3635_Init                          ( I2C_parameters_t myI2Cparameters                                                                                    );
 
 /** It starts an initialization sequence.
         */
-MC3635_status_t  MC3635_InitializationSequence        ( I2C_parameters_t myI2Cparameters );
+MC3635_status_t  MC3635_InitializationSequence        ( I2C_parameters_t myI2Cparameters                                                                                    );
 
 /** It writes into the scratch pad register.
         */
-MC3635_status_t  MC3635_WriteScratchpadRegister       ( I2C_parameters_t myI2Cparameters, uint8_t myScratchpadRegister );
+MC3635_status_t  MC3635_WriteScratchpadRegister       ( I2C_parameters_t myI2Cparameters, MC3635_data_t myScratchpadRegister                                                );
 
 /** It reads the scratch pad register.
         */
-MC3635_status_t  MC3635_ReadScratchpadRegister        ( I2C_parameters_t myI2Cparameters, uint8_t* myScratchpadRegister );
+MC3635_status_t  MC3635_ReadScratchpadRegister        ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myScratchpadRegister                                               );
 
 /** It performs a software reset.
         */
-MC3635_status_t  MC3635_SetSoftwareReset              ( I2C_parameters_t myI2Cparameters );
+MC3635_status_t  MC3635_SetSoftwareReset              ( I2C_parameters_t myI2Cparameters                                                                                    );
 
 /** It performs a reload.
         */
-MC3635_status_t  MC3635_SetReload                     ( I2C_parameters_t myI2Cparameters );
-
-///** It sets the operational mode.
-//        */
-//MC3635_status_t  MC3635_SetOperationalMode            ( I2C_parameters_t myI2Cparameters );
-//
-///** It reads the operational mode.
-//        */
-//MC3635_status_t  MC3635_GetOperationalMode            ( I2C_parameters_t myI2Cparameters );
+MC3635_status_t  MC3635_SetReload                     ( I2C_parameters_t myI2Cparameters                                                                                    );
 
 /** It reads the Extended Status Register 2.
         */
-MC3635_status_t  MC3635_ReadExtendedStatusRegister2     ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myExt_stat_2 );
+MC3635_status_t  MC3635_ReadExtendedStatusRegister2     ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myExt_stat_2                                                     );
 
 /** It reads X, Y and Z raw data output.
         */
-MC3635_status_t  MC3635_ReadRawData                     ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myRawData );
+MC3635_status_t  MC3635_ReadRawData                     ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myRawData                                                        );
 
 /** It reads the Status Register 1.
         */
-MC3635_status_t  MC3635_ReadStatusRegister1             ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myStatus_1 );
+MC3635_status_t  MC3635_ReadStatusRegister1             ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myStatus_1                                                       );
 
 /** It reads the Status Register 2.
         */
-MC3635_status_t  MC3635_ReadStatusRegister2             ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myStatus_2 );
+MC3635_status_t  MC3635_ReadStatusRegister2             ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myStatus_2                                                       );
 
 /** It reads the Feature Register 1.
         */
-MC3635_status_t  MC3635_ReadFeatureRegister1            ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myFeatureRegister1 );
+MC3635_status_t  MC3635_ReadFeatureRegister1            ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myFeatureRegister1                                               );
 
 /** It reads the Feature Register 2.
         */
-MC3635_status_t  MC3635_ReadFeatureRegister2            ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myFeatureRegister2 );
-
-/** It starts the Initialization Register 1.
-        */
-MC3635_status_t  MC3635_InitializationRegister1         ( I2C_parameters_t myI2Cparameters );
+MC3635_status_t  MC3635_ReadFeatureRegister2            ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myFeatureRegister2                                               );
 
 /** It sets mode control of the device and if the trigger bit is enabled, the number of samples to be acquired is given as well.
         */
-MC3635_status_t  MC3635_SetModeControl                  ( I2C_parameters_t myI2Cparameters, MC3635_mode_c_mctrl_t myOperationalMode, MC3635_mode_c_x_axis_pd_t myXAxis, MC3635_mode_c_y_axis_pd_t myYAxis,
-                                                          MC3635_mode_c_z_axis_pd_t myZAxis, MC3635_mode_c_trig_cmd_t myTriggerEnable, uint8_t myTriggerSamples );
-/** It sets the operational mode.
-        */
-MC3635_status_t  MC3635_SetOperationalMode              ( I2C_parameters_t myI2Cparameters, MC3635_mode_c_mctrl_t myOperationalMode );
-
+MC3635_status_t  MC3635_SetModeControl                  ( I2C_parameters_t myI2Cparameters, MC3635_mode_c_mctrl_t myOperationalMode, MC3635_mode_c_x_axis_pd_t myXAxis,
+                                                          MC3635_mode_c_y_axis_pd_t myYAxis, MC3635_mode_c_z_axis_pd_t myZAxis, MC3635_mode_c_trig_cmd_t myTriggerEnable,
+                                                          uint8_t myTriggerSamples                                                                                          );
 /** It sets the power mode and ODR for wake modes.
         */
-MC3635_status_t  MC3635_SetWakePowerModeODR             ( I2C_parameters_t myI2Cparameters, MC3635_pmcr_cspm_t myPowerMode, MC3635_odr_t myODR );
+MC3635_status_t  MC3635_SetPowerModeAndODR              ( I2C_parameters_t myI2Cparameters, MC3635_pmcr_cspm_t myPowerMode, MC3635_odr_t myODR                              );
 
 /** It sets the sample rate for SNIFF mode.
         */
-MC3635_status_t  MC3635_SetSniffSampleRate              ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_sniff_sr_t mySniffSampleRate );
+MC3635_status_t  MC3635_SetSniffSampleRate              ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_sniff_sr_t mySniffSampleRate                                     );
 
 /** It sets the clock rate for STANDBY mode.
         */
-MC3635_status_t  MC3635_SetStandbyClockRate             ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_stb_rate_t myStandbyCloclRate );
+MC3635_status_t  MC3635_SetStandbyClockRate             ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_stb_rate_t myStandbyCloclRate                                    );
 
 // 0x13 and 0x14
 
 /** It sets the accelerometer resolution.
         */
-MC3635_status_t  MC3635_SetResolution                   ( I2C_parameters_t myI2Cparameters, MC3635_range_c_res_t myResolution );
+MC3635_status_t  MC3635_SetResolution                   ( I2C_parameters_t myI2Cparameters, MC3635_range_c_res_t myResolution                                               );
 
 /** It sets the accelerometer range.
         */
-MC3635_status_t  MC3635_SetRange                        ( I2C_parameters_t myI2Cparameters, MC3635_range_c_range_t myRange );
+MC3635_status_t  MC3635_SetRange                        ( I2C_parameters_t myI2Cparameters, MC3635_range_c_range_t myRange                                                  );
 
 /** It sets the FIFO behavior.
         */
-//MC3635_status_t  MC3635_SetFIFO                         ( I2C_parameters_t myI2Cparameters, MC3635_range_c_range_t myRange );
+MC3635_status_t  MC3635_SetFIFO                         ( I2C_parameters_t myI2Cparameters, uint8_t myNumberOfSamples, MC3635_fifo_c_fifo_mode_t myFIFO_Mode                );
 
+/** It enables/disables the FIFO.
+        */
+MC3635_status_t  MC3635_EnableFIFO                      ( I2C_parameters_t myI2Cparameters, MC3635_fifo_c_fifo_en_t myFIFO_Enable                                           );
+
+/** It resets the FIFO pointers.
+        */
+MC3635_status_t  MC3635_ResetFIFO                       ( I2C_parameters_t myI2Cparameters                                                                                  );
+
+/** It configures the interrupt pin mode and level control.
+        */
+MC3635_status_t  MC3635_Conf_INTN                       ( I2C_parameters_t myI2Cparameters, MC3635_intr_c_ipp_t myINTN_ModeControl, MC3635_intr_c_iah_t myINTN_LevelControl );
+
+/** It activates the interrupts on INTN pin.
+        */
+MC3635_status_t  MC3635_Set_INTN                        ( I2C_parameters_t myI2Cparameters, MC3635_intr_c_int_wake_t myINT_WakeMode, MC3635_intr_c_int_acq_t myINT_ACQMode,
+                                                          MC3635_intr_c_int_fifo_empty_t myINT_FIFO_EmptyMode, MC3635_intr_c_int_fifo_full_t myINT_FIFO_FullMode,
+                                                          MC3635_intr_c_int_fifo_thresh_t myINT_FIFO_ThreshMode, MC3635_intr_c_int_fifo_swake_t myINT_SwakeMode             );
+///** It sets the power mode control.
+//        */
+//MC3635_status_t  MC3635_SetPowerMode                    ( I2C_parameters_t myI2Cparameters, MC3635_pmcr_cspm_t myCWAKE_SWAKE_PowerMode, MC3635_pmcr_spm_t mySNIFF_PowerMode );
+
+
+/** It sets the clock rate for STANDBY mode.
+        */
+MC3635_status_t  MC3635_SetStandbyClockRate             ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_stb_rate_t mySTANDBY_ClockRate );
+
+// 0x20 0x21 0x22
+
+// 0x2A 0x2B 0x2C 0x2D 0x2E 0x2F OFFSET
+
+// GAIN
 
 
 #ifdef __cplusplus
