@@ -10,7 +10,7 @@
  * @date        6/April/2018
  * @version     6/April/2018   The ORIGIN
  * @pre         Although the MC3635 can be handled by SPI or I2C, this library is only
- *              adapted to be used by I2C..
+ *              adapted to be used by I2C.
  * @warning     N/A
  * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ).
  */
@@ -1006,31 +1006,38 @@ typedef enum{
 
 
 /**
-  * @brief   ODR ( Hz )
+  * @brief   POWER MODE FOR SNIFF, CWAKE and SWAKE
   *
-  *             Sample rates for wake modes.
   */
 typedef enum{
-    ODR_14_HZ       =   0x00,                   /*!<  ODR 14 Hz    Mode: Low Power | Precision            */
-    ODR_25_HZ       =   0x01,                   /*!<  ODR 25 Hz    Mode: Ultra-Low Power                  */
-    ODR_28_HZ       =   0x02,                   /*!<  ODR 28 Hz    Mode: Low Power | Precision            */
-    ODR_50_HZ       =   0x03,                   /*!<  ODR 50 Hz    Mode: Ultra-Low Power                  */
-    ODR_54_HZ       =   0x04,                   /*!<  ODR 54 Hz    Mode: Low Power                        */
-    ODR_55_HZ       =   0x05,                   /*!<  ODR 55 Hz    Mode: Precision                        */
-    ODR_80_HZ       =   0x06,                   /*!<  ODR 80 Hz    Mode: Precision                        */
-    ODR_100_HZ      =   0x07,                   /*!<  ODR 100 Hz   Mode: Ultra-Low Power | Precision      */
-    ODR_105_HZ      =   0x08,                   /*!<  ODR 105 Hz   Mode: Low Power                        */
-    ODR_190_HZ      =   0x09,                   /*!<  ODR 190 Hz   Mode: Ultra-Low Power                  */
-    ODR_210_HZ      =   0x0A,                   /*!<  ODR 210 Hz   Mode: Low Power                        */
-    ODR_380_HZ      =   0x0B,                   /*!<  ODR 380 Hz   Mode: Ultra-Low Power                  */
-    ODR_400_HZ      =   0x0C,                   /*!<  ODR 400 Hz   Mode: Low Power                        */
-    ODR_600_HZ      =   0x0D,                   /*!<  ODR 600 Hz   Mode: Low Power                        */
-    ODR_750_HZ      =   0x0E,                   /*!<  ODR 750 Hz   Mode: Ultra-Low Power | Low Power      */
-    ODR_1100_HZ     =   0x0F,                   /*!<  ODR 1100 Hz  Mode: Ultra-Low Power                  */
-    ODR_1300_HZ     =   0x10                    /*!<  ODR 1300 Hz  Mode: Ultra-Low Power                  */
-} MC3635_odr_t;
+    ULTRA_LOW_POWER_MODE    =   0b011,               /*!<  MODE: ULTRA-LOW POWER MODE                            */
+    LOW_POWER_MODE          =   0b000,               /*!<  MODE: LOW POWER MODE                                  */
+    PRECISION               =   0b100                /*!<  MODE: PRECISION                                       */
+} MC3635_power_mode_t;
 
 
+/**
+  * @brief   SAMPLE RATE FOR SNIFF, CWAKE and SWAKE
+  *
+  */
+typedef enum{
+    ODR_0   =   0b0000,             /*!<  ODR: 0b0000                           */
+    ODR_1   =   0b0001,             /*!<  ODR: 0b0001                           */
+    ODR_2   =   0b0010,             /*!<  ODR: 0b0010                           */
+    ODR_3   =   0b0011,             /*!<  ODR: 0b0011                           */
+    ODR_4   =   0b0100,             /*!<  ODR: 0b0100                           */
+    ODR_5   =   0b0101,             /*!<  ODR: 0b0101                           */
+    ODR_6   =   0b0110,             /*!<  ODR: 0b0110                           */
+    ODR_7   =   0b0111,             /*!<  ODR: 0b0111                           */
+    ODR_8   =   0b1000,             /*!<  ODR: 0b1000                           */
+    ODR_9   =   0b1001,             /*!<  ODR: 0b1001                           */
+    ODR_10  =   0b1010,             /*!<  ODR: 0b1010                           */
+    ODR_11  =   0b1011,             /*!<  ODR: 0b1011                           */
+    ODR_12  =   0b1100,             /*!<  ODR: 0b1100                           */
+    ODR_13  =   0b1101,             /*!<  ODR: 0b1101                           */
+    ODR_14  =   0b1110,             /*!<  ODR: 0b1110                           */
+    ODR_15  =   0b1111,             /*!<  ODR: 0b1111                           */
+} MC3635_sample_rate_t;
 
 
 
@@ -1076,108 +1083,119 @@ typedef enum{
   */
 /** It configures the I2C peripheral.
         */
-MC3635_status_t  MC3635_Init                          ( I2C_parameters_t myI2Cparameters                                                                                    );
+MC3635_status_t  MC3635_Init                          ( I2C_parameters_t myI2Cparameters                                                                                            );
 
 /** It starts an initialization sequence.
         */
-MC3635_status_t  MC3635_InitializationSequence        ( I2C_parameters_t myI2Cparameters                                                                                    );
+MC3635_status_t  MC3635_InitializationSequence        ( I2C_parameters_t myI2Cparameters                                                                                            );
 
 /** It writes into the scratch pad register.
         */
-MC3635_status_t  MC3635_WriteScratchpadRegister       ( I2C_parameters_t myI2Cparameters, MC3635_data_t myScratchpadRegister                                                );
+MC3635_status_t  MC3635_WriteScratchpadRegister       ( I2C_parameters_t myI2Cparameters, MC3635_data_t myScratchpadRegister                                                        );
 
 /** It reads the scratch pad register.
         */
-MC3635_status_t  MC3635_ReadScratchpadRegister        ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myScratchpadRegister                                               );
+MC3635_status_t  MC3635_ReadScratchpadRegister        ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myScratchpadRegister                                                       );
 
 /** It performs a software reset.
         */
-MC3635_status_t  MC3635_SetSoftwareReset              ( I2C_parameters_t myI2Cparameters                                                                                    );
+MC3635_status_t  MC3635_SetSoftwareReset              ( I2C_parameters_t myI2Cparameters                                                                                            );
 
 /** It performs a reload.
         */
-MC3635_status_t  MC3635_SetReload                     ( I2C_parameters_t myI2Cparameters                                                                                    );
+MC3635_status_t  MC3635_SetReload                     ( I2C_parameters_t myI2Cparameters                                                                                            );
 
 /** It reads the Extended Status Register 2.
         */
-MC3635_status_t  MC3635_ReadExtendedStatusRegister2     ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myExt_stat_2                                                     );
+MC3635_status_t  MC3635_ReadExtendedStatusRegister2   ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myExt_stat_2                                                               );
 
 /** It reads X, Y and Z raw data output.
         */
-MC3635_status_t  MC3635_ReadRawData                     ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myRawData                                                        );
+MC3635_status_t  MC3635_ReadRawData                   ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myRawData                                                                  );
 
 /** It reads the Status Register 1.
         */
-MC3635_status_t  MC3635_ReadStatusRegister1             ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myStatus_1                                                       );
+MC3635_status_t  MC3635_ReadStatusRegister1           ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myStatus_1                                                                 );
 
 /** It reads the Status Register 2.
         */
-MC3635_status_t  MC3635_ReadStatusRegister2             ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myStatus_2                                                       );
+MC3635_status_t  MC3635_ReadStatusRegister2           ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myStatus_2                                                                 );
 
 /** It reads the Feature Register 1.
         */
-MC3635_status_t  MC3635_ReadFeatureRegister1            ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myFeatureRegister1                                               );
+MC3635_status_t  MC3635_ReadFeatureRegister1          ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myFeatureRegister1                                                         );
 
 /** It reads the Feature Register 2.
         */
-MC3635_status_t  MC3635_ReadFeatureRegister2            ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myFeatureRegister2                                               );
+MC3635_status_t  MC3635_ReadFeatureRegister2          ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myFeatureRegister2                                                         );
 
-/** It sets mode control of the device and if the trigger bit is enabled, the number of samples to be acquired is given as well.
+/** It enables/disables X/Y/Z Axis.
         */
-MC3635_status_t  MC3635_SetModeControl                  ( I2C_parameters_t myI2Cparameters, MC3635_mode_c_mctrl_t myOperationalMode, MC3635_mode_c_x_axis_pd_t myXAxis,
-                                                          MC3635_mode_c_y_axis_pd_t myYAxis, MC3635_mode_c_z_axis_pd_t myZAxis, MC3635_mode_c_trig_cmd_t myTriggerEnable,
-                                                          uint8_t myTriggerSamples                                                                                          );
-/** It sets the power mode and ODR for wake modes.
-        */
-MC3635_status_t  MC3635_SetPowerModeAndODR              ( I2C_parameters_t myI2Cparameters, MC3635_pmcr_cspm_t myPowerMode, MC3635_odr_t myODR                              );
-
-/** It sets the sample rate for SNIFF mode.
-        */
-MC3635_status_t  MC3635_SetSniffSampleRate              ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_sniff_sr_t mySniffSampleRate                                     );
-
+MC3635_status_t  MC3635_EnableAxis                    ( I2C_parameters_t myI2Cparameters, MC3635_mode_c_x_axis_pd_t myXAxis,
+                                                        MC3635_mode_c_y_axis_pd_t myYAxis, MC3635_mode_c_z_axis_pd_t myZAxis                                                        );
 /** It sets the clock rate for STANDBY mode.
         */
-MC3635_status_t  MC3635_SetStandbyClockRate             ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_stb_rate_t myStandbyCloclRate                                    );
+MC3635_status_t  MC3635_SetStandbyClockRate           ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_stb_rate_t myStandbyCloclRate                                              );
 
 // 0x13 and 0x14
 
 /** It sets the accelerometer resolution.
         */
-MC3635_status_t  MC3635_SetResolution                   ( I2C_parameters_t myI2Cparameters, MC3635_range_c_res_t myResolution                                               );
+MC3635_status_t  MC3635_SetResolution                 ( I2C_parameters_t myI2Cparameters, MC3635_range_c_res_t myResolution                                                         );
 
 /** It sets the accelerometer range.
         */
-MC3635_status_t  MC3635_SetRange                        ( I2C_parameters_t myI2Cparameters, MC3635_range_c_range_t myRange                                                  );
+MC3635_status_t  MC3635_SetRange                      ( I2C_parameters_t myI2Cparameters, MC3635_range_c_range_t myRange                                                            );
 
 /** It sets the FIFO behavior.
         */
-MC3635_status_t  MC3635_SetFIFO                         ( I2C_parameters_t myI2Cparameters, uint8_t myNumberOfSamples, MC3635_fifo_c_fifo_mode_t myFIFO_Mode                );
+MC3635_status_t  MC3635_SetFIFO                       ( I2C_parameters_t myI2Cparameters, uint8_t myNumberOfSamples, MC3635_fifo_c_fifo_mode_t myFIFO_Mode                          );
 
 /** It enables/disables the FIFO.
         */
-MC3635_status_t  MC3635_EnableFIFO                      ( I2C_parameters_t myI2Cparameters, MC3635_fifo_c_fifo_en_t myFIFO_Enable                                           );
+MC3635_status_t  MC3635_EnableFIFO                    ( I2C_parameters_t myI2Cparameters, MC3635_fifo_c_fifo_en_t myFIFO_Enable                                                     );
 
 /** It resets the FIFO pointers.
         */
-MC3635_status_t  MC3635_ResetFIFO                       ( I2C_parameters_t myI2Cparameters                                                                                  );
+MC3635_status_t  MC3635_ResetFIFO                     ( I2C_parameters_t myI2Cparameters                                                                                            );
 
 /** It configures the interrupt pin mode and level control.
         */
-MC3635_status_t  MC3635_Conf_INTN                       ( I2C_parameters_t myI2Cparameters, MC3635_intr_c_ipp_t myINTN_ModeControl, MC3635_intr_c_iah_t myINTN_LevelControl );
+MC3635_status_t  MC3635_Conf_INTN                     ( I2C_parameters_t myI2Cparameters, MC3635_intr_c_ipp_t myINTN_ModeControl, MC3635_intr_c_iah_t myINTN_LevelControl           );
 
 /** It activates the interrupts on INTN pin.
         */
-MC3635_status_t  MC3635_Set_INTN                        ( I2C_parameters_t myI2Cparameters, MC3635_intr_c_int_wake_t myINT_WakeMode, MC3635_intr_c_int_acq_t myINT_ACQMode,
-                                                          MC3635_intr_c_int_fifo_empty_t myINT_FIFO_EmptyMode, MC3635_intr_c_int_fifo_full_t myINT_FIFO_FullMode,
-                                                          MC3635_intr_c_int_fifo_thresh_t myINT_FIFO_ThreshMode, MC3635_intr_c_int_fifo_swake_t myINT_SwakeMode             );
-///** It sets the power mode control.
-//        */
-//MC3635_status_t  MC3635_SetPowerMode                    ( I2C_parameters_t myI2Cparameters, MC3635_pmcr_cspm_t myCWAKE_SWAKE_PowerMode, MC3635_pmcr_spm_t mySNIFF_PowerMode );
+MC3635_status_t  MC3635_Set_INTN                      ( I2C_parameters_t myI2Cparameters, MC3635_intr_c_int_wake_t myINT_WakeMode, MC3635_intr_c_int_acq_t myINT_ACQMode,
+                                                        MC3635_intr_c_int_fifo_empty_t myINT_FIFO_EmptyMode, MC3635_intr_c_int_fifo_full_t myINT_FIFO_FullMode,
+                                                        MC3635_intr_c_int_fifo_thresh_t myINT_FIFO_ThreshMode, MC3635_intr_c_int_fifo_swake_t myINT_SwakeMode                       );
+/** It sets the device mode, power mode and the ODR.
+        */
+MC3635_status_t  MC3635_SetMode                       ( I2C_parameters_t myI2Cparameters, MC3635_mode_c_mctrl_t myMode, MC3635_power_mode_t myPowerMode, MC3635_sample_rate_t myODR );
 
+/** It configures the parameters for the SNIFF mode.
+        */
+MC3635_status_t  MC3635_ConfSniffMode                 ( I2C_parameters_t myI2Cparameters, MC3635_sniffcf_c_sniff_thadr_t mySniffADR, uint8_t mySniffThreshold,
+                                                        MC3635_sniffth_c_sniff_and_or_t mySniffLogicalMode, MC3635_sniffth_c_sniff_mode_t mySniffDeltaCount,
+                                                        MC3635_sniffcf_c_sniff_cnten_t mySniffEnableDetectionCount, MC3635_sniffcf_c_sniff_mux_t mySniffMux                         );
+/** It is a manual reset for the Sniff block.
+        */
+MC3635_status_t  MC3635_ManualSniffReset              ( I2C_parameters_t myI2Cparameters                                                                                            );
 
+/** It sets the TRIGGER mode.
+        */
+MC3635_status_t  MC3635_SetTriggerMode                ( I2C_parameters_t myI2Cparameters, MC3635_mode_c_trig_cmd_t myTriggerEnable, uint8_t myTriggerSamples,
+                                                        MC3635_sniff_c_stb_rate_t mySTANDBY_ClockRate                                                                               );
 /** It sets the clock rate for STANDBY mode.
         */
-MC3635_status_t  MC3635_SetStandbyClockRate             ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_stb_rate_t mySTANDBY_ClockRate );
+MC3635_status_t  MC3635_SetStandbyClockRate           ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_stb_rate_t mySTANDBY_ClockRate                                             );
+
+/** It sets the device into the STANDBY mode.
+        */
+MC3635_status_t  MC3635_SetStandbyMode                ( I2C_parameters_t myI2Cparameters                                                                                            );
+
+/** It sets the device into the SLEEP mode.
+        */
+MC3635_status_t  MC3635_SetSleepMode                  ( I2C_parameters_t myI2Cparameters                                                                                            );
 
 // 0x20 0x21 0x22
 
