@@ -176,7 +176,7 @@
 	"ble_gatt.h"
 	"nrf_svc.h"
 
-1524845747 e:\vsprojects\arm\drivers\mc3635\mc3635.h
+1525104217 e:\vsprojects\arm\drivers\mc3635\mc3635.h
 	"stdint.h"
 	"stdbool.h"
 	"i2c.h"
@@ -189,6 +189,6 @@
 
 1523265158 source:e:\vsprojects\arm\nrf51\examples\drivers\mc3635\startup_nrf51.s
 
-1524842749 source:e:\vsprojects\arm\drivers\mc3635\mc3635.c
+1525104107 source:e:\vsprojects\arm\drivers\mc3635\mc3635.c
 	"MC3635.h"
 
