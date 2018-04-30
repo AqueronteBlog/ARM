@@ -587,8 +587,8 @@ typedef enum{
 /* Bits 7 : SNIFF_RESET.  */
 typedef enum{
     SNIFFCF_C_SNIFF_RESET_MASK                      =   ( 1 << 7 ),         /*!<  SNIFF_RESET Mask                                                                                          */
-    SNIFFCF_C_SNIFF_RESET_DISABLED                  =   ( 0 << 7 ),         /*!<  SNIFF block reset is not applied (default).                                                               */
-    SNIFFCF_C_SNIFF_RESET_ENABLED                   =   ( 1 << 7 )          /*!<  SNIFF block reset is applied                                                                              */
+    SNIFFCF_C_SNIFF_RESET_NOT_APPLIED               =   ( 0 << 7 ),         /*!<  SNIFF block reset is not applied (default).                                                               */
+    SNIFFCF_C_SNIFF_RESET_APPLIED                   =   ( 1 << 7 )          /*!<  SNIFF block reset is applied                                                                              */
 } MC3635_sniffcf_c_sniff_reset_t;
 
 
@@ -1137,8 +1137,6 @@ MC3635_status_t  MC3635_EnableAxis                    ( I2C_parameters_t myI2Cpa
         */
 MC3635_status_t  MC3635_SetStandbyClockRate           ( I2C_parameters_t myI2Cparameters, MC3635_sniff_c_stb_rate_t myStandbyCloclRate                                              );
 
-// 0x13 and 0x14
-
 /** It sets the accelerometer resolution.
         */
 MC3635_status_t  MC3635_SetResolution                 ( I2C_parameters_t myI2Cparameters, MC3635_range_c_res_t myResolution                                                         );
@@ -1179,7 +1177,7 @@ MC3635_status_t  MC3635_ConfSniffMode                 ( I2C_parameters_t myI2Cpa
                                                         MC3635_sniffcf_c_sniff_cnten_t mySniffEnableDetectionCount, MC3635_sniffcf_c_sniff_mux_t mySniffMux                         );
 /** It is a manual reset for the Sniff block.
         */
-MC3635_status_t  MC3635_ManualSniffReset              ( I2C_parameters_t myI2Cparameters                                                                                            );
+MC3635_status_t  MC3635_ManualSniffReset              ( I2C_parameters_t myI2Cparameters, MC3635_sniffcf_c_sniff_reset_t mySniffResetBit                                            );
 
 /** It sets the TRIGGER mode.
         */
