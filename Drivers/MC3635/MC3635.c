@@ -1140,3 +1140,51 @@ MC3635_status_t  MC3635_SetTriggerMode ( I2C_parameters_t myI2Cparameters, MC363
     else
        return   MC3635_FAILURE;
 }
+
+
+
+/**
+ * @brief       MC3635_ManualSniffReset  ( I2C_parameters_t , MC3635_sniffcf_c_sniff_reset_t )
+ *
+ * @details     It is a manual reset for the Sniff block.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    mySniffResetBit:   Sniff block reset.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of MC3635_ManualSniffReset.
+ *
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        30/April/2018
+ * @version     30/April/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     The device MUST be in STANDBY mode, the user has to call this function
+ *              first: MC3635_SetStandbyMode.
+ */
+MC3635_status_t  MC3635_ManualSniffReset ( I2C_parameters_t myI2Cparameters, MC3635_sniffcf_c_sniff_reset_t mySniffResetBit )
+{
+    uint8_t         cmd[] =   { SNIFFCF_C, 0 };
+    i2c_status_t    aux   =   0;
+
+
+    // Get the register data
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+    // Update the register data
+    cmd[1] &=  ~SNIFFCF_C_SNIFF_RESET_MASK;
+    cmd[1] |=   mySniffResetBit;
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT  );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MC3635_SUCCESS;
+    else
+       return   MC3635_FAILURE;
+}
