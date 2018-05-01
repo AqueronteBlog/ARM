@@ -468,7 +468,8 @@ MC3635_status_t  MC3635_ReadExtendedStatusRegister2 ( I2C_parameters_t myI2Cpara
  *
  * @author      Manuel Caballero
  * @date        26/April/2018
- * @version     26/April/2018     The ORIGIN
+ * @version     1/May/2018        The device provides data in 'mg' already.
+ *              26/April/2018     The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -483,17 +484,17 @@ MC3635_status_t  MC3635_ReadRawData ( I2C_parameters_t myI2Cparameters, MC3635_d
     aux     =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
     /* Parse the data */
-    myRawData->XRawAxis    =  cmd[1];
-    myRawData->XRawAxis  <<=  8;
-    myRawData->XRawAxis   |=  cmd[0];
+    myRawData->XAxis_mg    =  cmd[1];
+    myRawData->XAxis_mg  <<=  8;
+    myRawData->XAxis_mg   |=  cmd[0];
 
-    myRawData->YRawAxis    =  cmd[3];
-    myRawData->YRawAxis  <<=  8;
-    myRawData->YRawAxis   |=  cmd[2];
+    myRawData->YAxis_mg    =  cmd[3];
+    myRawData->YAxis_mg  <<=  8;
+    myRawData->YAxis_mg   |=  cmd[2];
 
-    myRawData->ZRawAxis    =  cmd[5];
-    myRawData->ZRawAxis  <<=  8;
-    myRawData->ZRawAxis   |=  cmd[4];
+    myRawData->ZAxis_mg    =  cmd[5];
+    myRawData->ZAxis_mg  <<=  8;
+    myRawData->ZAxis_mg   |=  cmd[4];
 
 
 
@@ -1179,6 +1180,80 @@ MC3635_status_t  MC3635_ManualSniffReset ( I2C_parameters_t myI2Cparameters, MC3
     cmd[1] &=  ~SNIFFCF_C_SNIFF_RESET_MASK;
     cmd[1] |=   mySniffResetBit;
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT  );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MC3635_SUCCESS;
+    else
+       return   MC3635_FAILURE;
+}
+
+
+
+/**
+ * @brief       MC3635_ConfSniffMode  ( I2C_parameters_t , MC3635_sniffcf_c_sniff_thadr_t , uint8_t , MC3635_sniffth_c_sniff_and_or_t , MC3635_sniffth_c_sniff_mode_t , MC3635_sniffcf_c_sniff_cnten_t ,
+ *                                      MC3635_sniffcf_c_sniff_mux_t )
+ *
+ * @details     It configures the parameters for the SNIFF mode.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    mySniffADR:   Sniff block reset.
+ * @param[in]    mySniffThreshold:   Sniff block reset.
+ * @param[in]    mySniffLogicalMode:   Sniff block reset.
+ * @param[in]    mySniffDeltaCount:   Sniff block reset.
+ * @param[in]    mySniffEnableDetectionCount:   Sniff block reset.
+ * @param[in]    mySniffMux:   Sniff block reset.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of MC3635_ConfSniffMode.
+ *
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        1/May/2018
+ * @version     1/May/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     The device MUST be in STANDBY mode, the user has to call this function
+ *              first: MC3635_SetStandbyMode.
+ */
+MC3635_status_t  MC3635_ConfSniffMode ( I2C_parameters_t myI2Cparameters, MC3635_sniffcf_c_sniff_thadr_t mySniffADR, uint8_t mySniffThreshold, MC3635_sniffth_c_sniff_and_or_t mySniffLogicalMode,
+                                        MC3635_sniffth_c_sniff_mode_t mySniffDeltaCount, MC3635_sniffcf_c_sniff_cnten_t mySniffEnableDetectionCount, MC3635_sniffcf_c_sniff_mux_t mySniffMux )
+{
+    uint8_t         cmd[] =   { 0, 0 };
+    i2c_status_t    aux   =   0;
+
+
+    /* SNIFF THRESHOLD, LOGICAL MODE and DELTA COUNT */
+    // If threshold is selected:        0<= mySniffThreshold <= 63
+    // If detection count is selected:  0 < mySniffThreshold <= 62
+    if ( ( ( ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_THRESHOLD_X_AXIS ) || ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_THRESHOLD_Y_AXIS ) || ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_THRESHOLD_Z_AXIS ) )  && ( mySniffThreshold > 63 ) ) ||
+        ( ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_X_AXIS ) || ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_Y_AXIS ) || ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_Z_AXIS ) )  && ( ( mySniffThreshold == 0 ) || ( mySniffThreshold > 62 ) ) )
+    {
+        return   MC3635_FAILURE;
+    }
+    else
+    {
+        // Update the register data
+        cmd[0]  =   SNIFFTH_C;
+        cmd[1]  =   ( mySniffADR | mySniffLogicalMode | mySniffDeltaCount );
+        aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT  );
+    }
+
+    /* SNIFF THRESHOLD ADDRESS, DETECTION COUNT and MUX */
+    // Get the register data
+    cmd[0]  =   SNIFFCF_C;
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+    // Update the register data
+    cmd[1] &=  ~( SNIFFCF_C_SNIFF_THADR_MASK | SNIFFCF_C_SNIFF_CNTEN_MASK | SNIFFCF_C_SNIFF_MUX_MASK );
+    cmd[1] |=   ( mySniffADR | mySniffEnableDetectionCount | mySniffMux );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT  );
+
 
 
 
