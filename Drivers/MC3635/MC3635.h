@@ -1049,20 +1049,16 @@ typedef enum{
 #ifndef MC3635_VECTOR_STRUCT_H
 #define MC3635_VECTOR_STRUCT_H
 typedef struct{
-    int16_t  XAxis;
-    int16_t  YAxis;
-    int16_t  ZAxis;
+    int16_t  XAxis_mg;                      /*!<  X Axis raw data in mg                                                   */
+    int16_t  YAxis_mg;                      /*!<  Y Axis raw data in mg                                                   */
+    int16_t  ZAxis_mg;                      /*!<  Z Axis raw data in mg                                                   */
 
-    uint16_t XRawAxis;
-    uint16_t YRawAxis;
-    uint16_t ZRawAxis;
-
-    uint8_t  scratch;                        /*!<  Any value can be written and read-back                                  */
-    uint8_t  ext_stat_2;                     /*!<  It contains the value for the Extended Status Register 2                */
-    uint8_t  status_1;                       /*!<  It contains the value for the Status Register 1                         */
-    uint8_t  status_2;                       /*!<  It contains the value for the Status Register 2                         */
-    uint8_t  FeatureRegister1;               /*!<  It contains the value for the Feature Register 1                        */
-    uint8_t  FeatureRegister2;               /*!<  It contains the value for the Feature Register 2                        */
+    uint8_t  scratch;                       /*!<  Any value can be written and read-back                                  */
+    uint8_t  ext_stat_2;                    /*!<  It contains the value for the Extended Status Register 2                */
+    uint8_t  status_1;                      /*!<  It contains the value for the Status Register 1                         */
+    uint8_t  status_2;                      /*!<  It contains the value for the Status Register 2                         */
+    uint8_t  FeatureRegister1;              /*!<  It contains the value for the Feature Register 1                        */
+    uint8_t  FeatureRegister2;              /*!<  It contains the value for the Feature Register 2                        */
 } MC3635_data_t;
 #endif
 
