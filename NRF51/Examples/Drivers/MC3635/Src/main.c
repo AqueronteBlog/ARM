@@ -42,11 +42,11 @@ int main( void )
 
     I2C_parameters_t    myMC3635_I2C_parameters;
     MC3635_status_t     aux;
-    //MC3635_data_t       myMC3635_data;
+    MC3635_data_t       myMC3635_data;
 
 
     conf_GPIO   ();
-    conf_GPIOTE ();
+    //conf_GPIOTE ();
     conf_UART   ();
 
 
@@ -55,18 +55,39 @@ int main( void )
     myMC3635_I2C_parameters.TWIinstance =    NRF_TWI0;
     myMC3635_I2C_parameters.SDA         =    TWI0_SDA;
     myMC3635_I2C_parameters.SCL         =    TWI0_SCL;
-    //myMC3635_I2C_parameters.ADDR        =    MC3635_ADDRESS_0;
+    myMC3635_I2C_parameters.ADDR        =    MC3635_ADDRESS_LOW;
     myMC3635_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
     myMC3635_I2C_parameters.SDAport     =    NRF_GPIO;
     myMC3635_I2C_parameters.SCLport     =    NRF_GPIO;
 
-
-
-    /* Configure SPI peripheral */
+    /* Configure I2C peripheral */
     aux  =   MC3635_Init ( myMC3635_I2C_parameters );
 
 
+    /* MC3635 Software Reset    */
+    aux  =   MC3635_SetSoftwareReset ( myMC3635_I2C_parameters );
 
+    /*  MC3635 in Standby mode  */
+    aux  =   MC3635_SetStandbyMode ( myMC3635_I2C_parameters );
+
+    /*  MC3635 initialization sequence  */
+    aux  =   MC3635_InitializationSequence ( myMC3635_I2C_parameters );
+
+
+    /* MC3635 Check Scratch register    */
+    myMC3635_data.scratch    =   0x23;
+    aux  =   MC3635_WriteScratchpadRegister ( myMC3635_I2C_parameters, myMC3635_data );
+
+    myMC3635_data.scratch    =   0;
+    aux  =   MC3635_ReadScratchpadRegister ( myMC3635_I2C_parameters, &myMC3635_data );
+
+
+
+    aux  =   MC3635_SetResolution ( myMC3635_I2C_parameters, RANGE_C_RES_14_BITS );
+
+    aux  =   MC3635_SetRange ( myMC3635_I2C_parameters, RANGE_C_RANGE_16G );
+
+    aux  =   MC3635_EnableAxis ( myMC3635_I2C_parameters, MODE_C_X_AXIS_PD_ENABLED, MODE_C_Y_AXIS_PD_ENABLED, MODE_C_Z_AXIS_PD_ENABLED );
 
 
     mySTATE  =   0;                                                                                                     // Reset the variable
