@@ -57,10 +57,10 @@
 
 1519330501 source:d:\workspace\arm\nrf51\examples\drivers\mc3635\startup_nrf51.s
 
-1523044881 source:d:\workspace\arm\drivers\mc3635\mc3635.c
+1525201371 source:d:\workspace\arm\drivers\mc3635\mc3635.c
 	"MC3635.h"
 
-1523044880 d:\workspace\arm\drivers\mc3635\mc3635.h
+1525201371 d:\workspace\arm\drivers\mc3635\mc3635.h
 	"stdint.h"
 	"stdbool.h"
 	"i2c.h"
@@ -191,4 +191,65 @@
 
 1525171321 source:e:\vsprojects\arm\drivers\mc3635\mc3635.c
 	"MC3635.h"
+
+1525290855 source:d:\workspace\arm\nrf51\examples\drivers\mc3635\src\main.c
+	"nrf.h"
+	"nrf_delay.h"
+	"ble.h"
+	"variables.h"
+	"functions.h"
+	"MC3635.h"
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\inc\nrf_delay.h
+	"nrf.h"
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\softdevice\include\ble.h
+	"ble_ranges.h"
+	"ble_types.h"
+	"ble_gap.h"
+	"ble_l2cap.h"
+	"ble_gatt.h"
+	"ble_gattc.h"
+	"ble_gatts.h"
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\softdevice\include\ble_ranges.h
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\softdevice\include\ble_types.h
+	<stdint.h>
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\softdevice\include\ble_gap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\softdevice\include\nrf_svc.h
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\softdevice\include\ble_l2cap.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_err.h"
+	"nrf_svc.h"
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\softdevice\include\ble_err.h
+	"nrf_error.h"
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\softdevice\include\nrf_error.h
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\softdevice\include\ble_gatt.h
+	"ble_types.h"
+	"ble_ranges.h"
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\softdevice\include\ble_gattc.h
+	"ble_gatt.h"
+	"ble_types.h"
+	"ble_ranges.h"
+	"nrf_svc.h"
+
+1519330501 d:\workspace\arm\nrf51\examples\drivers\mc3635\softdevice\include\ble_gatts.h
+	"ble_types.h"
+	"ble_ranges.h"
+	"ble_l2cap.h"
+	"ble_gap.h"
+	"ble_gatt.h"
+	"nrf_svc.h"
 
