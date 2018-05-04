@@ -133,31 +133,38 @@ void Conf_RTC  ( void )
 	/* Enable the PWR peripheral */
 	RCC->APB1ENR |= RCC_APB1ENR_PWREN;
 
+	/* Enable the RTC clock */
+	RCC->CSR 	|= 	 RCC_CSR_RTCEN;
+
+	/* Disable backup write protection	*/
 	PWR->CR		|=	 PWR_CR_DBP;
 
 	/* Disable the write protection for RTC registers */
-	RTC->WPR   	 =	 0xCA;
-    RTC->WPR	 = 	 0x53;
+	RTC->WPR   	 =	 ( 0xCA & RTC_WPR_KEY_Msk );
+    RTC->WPR	 = 	 ( 0x53 & RTC_WPR_KEY_Msk );
 
+    /* Steps for programming the wake-up timer	*/
+	RTC->CR		&=	~( RTC_CR_WUTE );										// Disable wake-up timer
 
-	RTC->CR		&=	~( RTC_CR_WUTE );										// Disable Wakeup timer
-
-	while ( ( RTC->ISR & RTC_ISR_WUTF_Msk ) != RTC_ISR_WUTF );				// Wait until wakeup auto-reload counter and to WUCKSEL[2:0] bits is allowed
+	while ( ( RTC->ISR & RTC_ISR_WUTWF_Msk ) != RTC_ISR_WUTWF );			// Wait until wake-up auto-reload counter and to WUCKSEL[2:0] bits is allowed
 																			// [TODO] 		This is dangerous! the uC may get stuck here
 																			// [WORKAROUND] Insert a counter.
 
-	RTC->PRER	 =	 ( 127 << RTC_PRER_PREDIV_A_Pos ) | ( 255 << RTC_PRER_PREDIV_S_Pos );
-
 	/* Enable the RTC Wake-up interrupt */
 	EXTI->IMR	|=	 ( EXTI_IMR_MR20 );
+	EXTI->EMR	|=	 ( EXTI_EMR_MR20 );
 	EXTI->RTSR	|=	 ( EXTI_RTSR_TR20 );
 
 
 	/* Reset flag and activate the RTC WAKEUP timer */
-	RTC->WUTR	 =	 0;
-	RTC->ISR	&=	 ~RTC_ISR_WUTF;											// Reset Wakeup timer flag
+	RTC->PRER	|=	 ( ( 127 << RTC_PRER_PREDIV_A_Pos ) | ( 255 << RTC_PRER_PREDIV_S_Pos ) );
 
-	RTC->CR		|=	 ( RTC_CR_WUTIE | RTC_CR_WUTE | RTC_CR_WUCKSEL_2 );		// Enable Wakeup timer interrupt, Wakeup timer enable, ck_spre (usually 1 Hz) clock is selected
+	RTC->CR		|=	 ( RTC_CR_WUTE | RTC_CR_WUCKSEL_2 );					// Wake-up timer enable, ck_spre (usually 1 Hz) clock is selected
+
+	RTC->WUTR	 =	 1;
+	RTC->ISR	&=	 ~RTC_ISR_WUTF;											// Reset Wake-up timer flag
+
+	RTC->CR		|=	 ( RTC_CR_WUTIE );										// Enable Wake-up timer interrupt
 
 	/* Enable the write protection for RTC registers */
 	RTC->WPR   	 =	 0xFF;
