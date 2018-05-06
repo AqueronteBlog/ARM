@@ -192,7 +192,7 @@
 1525171321 source:e:\vsprojects\arm\drivers\mc3635\mc3635.c
 	"MC3635.h"
 
-1525290855 source:d:\workspace\arm\nrf51\examples\drivers\mc3635\src\main.c
+1525291302 source:d:\workspace\arm\nrf51\examples\drivers\mc3635\src\main.c
 	"nrf.h"
 	"nrf_delay.h"
 	"ble.h"
