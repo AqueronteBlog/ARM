@@ -1263,3 +1263,99 @@ MC3635_status_t  MC3635_ConfSniffMode ( I2C_parameters_t myI2Cparameters, MC3635
     else
        return   MC3635_FAILURE;
 }
+
+
+
+/**
+ * @brief       MC3635_SetResolution  ( I2C_parameters_t , MC3635_range_c_res_t )
+ *
+ * @details     It sets the accelerometer resolution.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myResolution:      Resolution.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of MC3635_SetResolution.
+ *
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/May/2018
+ * @version     6/May/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     The device MUST be in STANDBY mode, the user has to call this function
+ *              first: MC3635_SetStandbyMode.
+ */
+MC3635_status_t  MC3635_SetResolution ( I2C_parameters_t myI2Cparameters, MC3635_range_c_res_t myResolution )
+{
+    uint8_t         cmd[] =   { RANGE_C, 0 };
+    i2c_status_t    aux   =   0;
+
+
+    // Get the register data
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+    // Update the register data
+    cmd[1] &=  ~RANGE_C_RES_MASK;
+    cmd[1] |=   myResolution;
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT  );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MC3635_SUCCESS;
+    else
+       return   MC3635_FAILURE;
+}
+
+
+
+/**
+ * @brief       MC3635_SetRange  ( I2C_parameters_t , MC3635_range_c_range_t )
+ *
+ * @details     It sets the accelerometer range.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myRange:           Range.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of MC3635_SetRange.
+ *
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/May/2018
+ * @version     6/May/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     The device MUST be in STANDBY mode, the user has to call this function
+ *              first: MC3635_SetStandbyMode.
+ */
+MC3635_status_t  MC3635_SetRange ( I2C_parameters_t myI2Cparameters, MC3635_range_c_range_t myRange )
+{
+    uint8_t         cmd[] =   { RANGE_C, 0 };
+    i2c_status_t    aux   =   0;
+
+
+    // Get the register data
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+    // Update the register data
+    cmd[1] &=  ~RANGE_C_RANGE_MASK;
+    cmd[1] |=   myRange;
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT  );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MC3635_SUCCESS;
+    else
+       return   MC3635_FAILURE;
+}
