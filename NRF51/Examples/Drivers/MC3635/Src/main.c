@@ -89,6 +89,8 @@ int main( void )
 
     aux  =   MC3635_EnableAxis ( myMC3635_I2C_parameters, MODE_C_X_AXIS_PD_ENABLED, MODE_C_Y_AXIS_PD_ENABLED, MODE_C_Z_AXIS_PD_ENABLED );
 
+    aux  =   MC3635_SetMode ( myMC3635_I2C_parameters, MODE_C_MCTRL_CWAKE, LOW_POWER_MODE, ODR_7 );
+
 
     mySTATE  =   0;                                                                                                     // Reset the variable
 
