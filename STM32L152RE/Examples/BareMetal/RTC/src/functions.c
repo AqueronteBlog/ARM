@@ -133,11 +133,11 @@ void Conf_RTC  ( void )
 	/* Enable the PWR peripheral */
 	RCC->APB1ENR |= RCC_APB1ENR_PWREN;
 
-	/* Enable the RTC clock */
-	RCC->CSR 	|= 	 RCC_CSR_RTCEN;
-
 	/* Disable backup write protection	*/
 	PWR->CR		|=	 PWR_CR_DBP;
+
+	/* Enable the RTC clock and choose the LSI clock for RTC */
+	RCC->CSR 	|= 	 ( RCC_CSR_RTCEN | RCC_CSR_RTCSEL_LSI );
 
 	/* Disable the write protection for RTC registers */
 	RTC->WPR   	 =	 ( 0xCA & RTC_WPR_KEY_Msk );
@@ -150,23 +150,25 @@ void Conf_RTC  ( void )
 																			// [TODO] 		This is dangerous! the uC may get stuck here
 																			// [WORKAROUND] Insert a counter.
 
-	/* Enable the RTC Wake-up interrupt */
-	EXTI->IMR	|=	 ( EXTI_IMR_MR20 );
-	EXTI->EMR	|=	 ( EXTI_EMR_MR20 );
-	EXTI->RTSR	|=	 ( EXTI_RTSR_TR20 );
-
-
-	/* Reset flag and activate the RTC WAKEUP timer */
+	/* Select the RTC clock and Reset flag  */
 	RTC->PRER	|=	 ( ( 127 << RTC_PRER_PREDIV_A_Pos ) | ( 255 << RTC_PRER_PREDIV_S_Pos ) );
 
-	RTC->CR		|=	 ( RTC_CR_WUTE | RTC_CR_WUCKSEL_2 );					// Wake-up timer enable, ck_spre (usually 1 Hz) clock is selected
+	RTC->CR		&=	~( RTC_CR_WUCKSEL_Msk );								// Reset Clock
+	RTC->CR		|=	 ( RTC_CR_WUTIE | RTC_CR_WUCKSEL_2 );					// Enable Wake-up timer interrupt, ck_spre (usually 1 Hz) clock is selected
 
 	RTC->WUTR	 =	 1;
 	RTC->ISR	&=	 ~RTC_ISR_WUTF;											// Reset Wake-up timer flag
 
-	RTC->CR		|=	 ( RTC_CR_WUTIE );										// Enable Wake-up timer interrupt
+
+	/* Enable the RTC Wake-up interrupt */
+	EXTI->IMR	|=	 ( EXTI_IMR_MR20 );
+	EXTI->RTSR	|=	 ( EXTI_RTSR_TR20 );
+
+	/* activate the RTC WAKEUP timer */
+	RTC->CR		|=	 ( RTC_CR_WUTE );										// Wake-up timer enable
 
 	/* Enable the write protection for RTC registers */
+	RTC->WPR   	 =	 0xFF;
 	RTC->WPR   	 =	 0xFF;
 
 	/* Access to RTC, RTC Backup and RCC CSR registers disabled */
