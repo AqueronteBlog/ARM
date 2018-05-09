@@ -109,6 +109,9 @@ int main( void )
         NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );              // Turn all the LEDs on
         if ( mySTATE == 1 )
         {
+            aux  =   MC3635_ReadRawData ( myMC3635_I2C_parameters, &myMC3635_data );
+
+
 //            NVIC_DisableIRQ ( GPIOTE_IRQn );                                                                            // GPIOTE Interrupt DISABLED
 //
 //            /*  Get data ( 8-bits, Manchester ).
