@@ -833,7 +833,7 @@ OUTPUT(bin\Debug\MC3635.elf elf32-littlearm)
  .debug_line    0x00001666       0x6e obj\debug\startup_nrf51.o
  .debug_line    0x000016d4      0x73b obj\debug\~#\~#\~#\~#\drivers\mc3635\mc3635.o
 
-.debug_str      0x00000000    0x35d0a
+.debug_str      0x00000000    0x35d3a
  .debug_str     0x00000000    0x2f026 obj\debug\~#\~#\basics\i2c\i2c.o
                               0x2f1a2 (size before relaxing)
  .debug_str     0x0002f026       0x75 obj\debug\s130.o
@@ -842,11 +842,11 @@ OUTPUT(bin\Debug\MC3635.elf elf32-littlearm)
                               0x2f30d (size before relaxing)
  .debug_str     0x0002f3fe       0x6a obj\debug\src\interrupts.o
                               0x2f0e4 (size before relaxing)
- .debug_str     0x0002f468     0x58eb obj\debug\src\main.o
-                              0x34b72 (size before relaxing)
- .debug_str     0x00034d53       0xe4 obj\debug\src\system_nrf51.o
+ .debug_str     0x0002f468     0x591b obj\debug\src\main.o
+                              0x34b73 (size before relaxing)
+ .debug_str     0x00034d83       0xe4 obj\debug\src\system_nrf51.o
                               0x2efe6 (size before relaxing)
- .debug_str     0x00034e37      0xed3 obj\debug\~#\~#\~#\~#\drivers\mc3635\mc3635.o
+ .debug_str     0x00034e67      0xed3 obj\debug\~#\~#\~#\~#\drivers\mc3635\mc3635.o
                               0x303f6 (size before relaxing)
 
 .debug_frame    0x00000000      0xa28
