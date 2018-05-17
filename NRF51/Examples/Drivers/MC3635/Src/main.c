@@ -82,13 +82,16 @@ int main( void )
     aux  =   MC3635_ReadScratchpadRegister ( myMC3635_I2C_parameters, &myMC3635_data );
 
 
-
+    /* MC3635 14-bits resolution ( FIFO not in use)   */
     aux  =   MC3635_SetResolution ( myMC3635_I2C_parameters, RANGE_C_RES_14_BITS );
 
+    /* MC3635 16g range    */
     aux  =   MC3635_SetRange ( myMC3635_I2C_parameters, RANGE_C_RANGE_16G );
 
+    /* MC3635 X/Y/Z axis enabled    */
     aux  =   MC3635_EnableAxis ( myMC3635_I2C_parameters, MODE_C_X_AXIS_PD_ENABLED, MODE_C_Y_AXIS_PD_ENABLED, MODE_C_Z_AXIS_PD_ENABLED );
 
+    /* MC3635 CWAKE mode in Low Power enabled and ODR is 54Hz    */
     aux  =   MC3635_SetMode ( myMC3635_I2C_parameters, MODE_C_MCTRL_CWAKE, LOW_POWER_MODE, ODR_7 );
 
 
@@ -109,6 +112,7 @@ int main( void )
         NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );              // Turn all the LEDs on
         if ( mySTATE == 1 )
         {
+            /* MC3635 Read the data    */
             aux  =   MC3635_ReadRawData ( myMC3635_I2C_parameters, &myMC3635_data );
 
 
