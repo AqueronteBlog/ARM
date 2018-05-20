@@ -81,6 +81,8 @@ int main( void )
     myMC3635_data.scratch    =   0;
     aux  =   MC3635_ReadScratchpadRegister ( myMC3635_I2C_parameters, &myMC3635_data );
 
+    /* MC3635 FIFO disabled   */
+    //aux  =   MC3635_EnableFIFO ( myMC3635_I2C_parameters, FIFO_C_FIFO_EN_DISABLED );
 
     /* MC3635 14-bits resolution ( FIFO not in use)   */
     aux  =   MC3635_SetResolution ( myMC3635_I2C_parameters, RANGE_C_RES_14_BITS );
@@ -95,23 +97,30 @@ int main( void )
     aux  =   MC3635_SetMode ( myMC3635_I2C_parameters, MODE_C_MCTRL_CWAKE, LOW_POWER_MODE, ODR_7 );
 
 
-    mySTATE  =   0;                                                                                                     // Reset the variable
+    mySTATE  =   0;                                                                                                 // Reset the variable
 
+    //NRF_POWER->SYSTEMOFF = 1;
+    NRF_POWER->TASKS_LOWPWR = 1;                                                                                    // Sub power mode: Low power.
     while( 1 )
     {
-        //NRF_POWER->SYSTEMOFF = 1;
-        NRF_POWER->TASKS_LOWPWR = 1;                                                                                    // Sub power mode: Low power.
+//        // Enter System ON sleep mode
+//        __WFE();
+//        // Make sure any pending events are cleared
+//        __SEV();
+//        __WFE();
 
-        // Enter System ON sleep mode
-        __WFE();
-        // Make sure any pending events are cleared
-        __SEV();
-        __WFE();
-
-
+        mySTATE = 1;
         NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );              // Turn all the LEDs on
         if ( mySTATE == 1 )
         {
+            /*  Wait until a new data is available */
+            do{
+                /* MC3635 Read register Status1    */
+                aux  =   MC3635_ReadStatusRegister1 ( myMC3635_I2C_parameters, &myMC3635_data );
+            }while( ( myMC3635_data.status_1 & STATUS_1_NEW_DATA_MASK ) == STATUS_1_NEW_DATA_FALSE );                   // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
+                                                                                                                        // [WORKAROUND] Insert a counter.
+
+
             /* MC3635 Read the data    */
             aux  =   MC3635_ReadRawData ( myMC3635_I2C_parameters, &myMC3635_data );
 
