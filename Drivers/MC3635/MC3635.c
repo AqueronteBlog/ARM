@@ -1359,3 +1359,153 @@ MC3635_status_t  MC3635_SetRange ( I2C_parameters_t myI2Cparameters, MC3635_rang
     else
        return   MC3635_FAILURE;
 }
+
+
+
+/**
+ * @brief       MC3635_SetFIFO  ( I2C_parameters_t , uint8_t , MC3635_fifo_c_fifo_mode_t )
+ *
+ * @details     It sets the FIFO behavior.
+ *
+ * @param[in]    myI2Cparameters:    I2C parameters.
+ * @param[in]    myNumberOfSamples:  Number of samples in the FIFO.
+ * @param[in]    myFIFO_Mode:        FIFO mode: Normal operation/Watermark.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of MC3635_SetFIFO.
+ *
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        21/May/2018
+ * @version     21/May/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     The device MUST be in STANDBY mode, the user has to call this function
+ *              first: MC3635_SetStandbyMode.
+ */
+MC3635_status_t  MC3635_SetFIFO ( I2C_parameters_t myI2Cparameters, uint8_t myNumberOfSamples, MC3635_fifo_c_fifo_mode_t myFIFO_Mode )
+{
+    uint8_t         cmd[] =   { FIFO_C, 0 };
+    i2c_status_t    aux   =   0;
+
+
+    // Check FIFO number of samples
+    if ( ( myNumberOfSamples < 1 ) || ( myNumberOfSamples > 31 ) )
+    {
+        return   MC3635_FAILURE;
+    }
+
+    // Get the register data
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+    // Update the register data
+    cmd[1] &=  ~( FIFO_C_FIFO_TH_MASK | FIFO_C_FIFO_MODE_MASK );
+    cmd[1] |=   ( myNumberOfSamples | myFIFO_Mode );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT  );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MC3635_SUCCESS;
+    else
+       return   MC3635_FAILURE;
+}
+
+
+
+/**
+ * @brief       MC3635_EnableFIFO  ( I2C_parameters_t , MC3635_fifo_c_fifo_en_t )
+ *
+ * @details     It enables/disables the FIFO.
+ *
+ * @param[in]    myI2Cparameters:    I2C parameters.
+ * @param[in]    myFIFO_Enable:      Enable/Disable FIFO.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of MC3635_EnableFIFO.
+ *
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        21/May/2018
+ * @version     21/May/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     The device MUST be in STANDBY mode, the user has to call this function
+ *              first: MC3635_SetStandbyMode.
+ */
+MC3635_status_t  MC3635_EnableFIFO ( I2C_parameters_t myI2Cparameters, MC3635_fifo_c_fifo_en_t myFIFO_Enable )
+{
+    uint8_t         cmd[] =   { FIFO_C, 0 };
+    i2c_status_t    aux   =   0;
+
+
+    // Get the register data
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+    // Update the register data
+    cmd[1] &=  ~FIFO_C_FIFO_EN_MASK;
+    cmd[1] |=   myFIFO_Enable;
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT  );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MC3635_SUCCESS;
+    else
+       return   MC3635_FAILURE;
+}
+
+
+
+/**
+ * @brief       MC3635_ResetFIFO  ( I2C_parameters_t )
+ *
+ * @details     It resets the FIFO pointers.
+ *
+ * @param[in]    myI2Cparameters:    I2C parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of MC3635_ResetFIFO.
+ *
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        21/May/2018
+ * @version     21/May/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     The device MUST be in STANDBY mode, the user has to call this function
+ *              first: MC3635_SetStandbyMode.
+ */
+MC3635_status_t  MC3635_ResetFIFO ( I2C_parameters_t myI2Cparameters )
+{
+    uint8_t         cmd[] =   { FIFO_C, 0 };
+    i2c_status_t    aux   =   0;
+
+
+    // Get the register data
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+    // Update the register data
+    cmd[1] &=  ~FIFO_C_FIFO_RESET_MASK;
+    cmd[1] |=   FIFO_C_FIFO_RESET_ENABLED;
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT  );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MC3635_SUCCESS;
+    else
+       return   MC3635_FAILURE;
+}
