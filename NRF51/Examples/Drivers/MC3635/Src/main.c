@@ -82,7 +82,7 @@ int main( void )
     aux  =   MC3635_ReadScratchpadRegister ( myMC3635_I2C_parameters, &myMC3635_data );
 
     /* MC3635 FIFO disabled   */
-    //aux  =   MC3635_EnableFIFO ( myMC3635_I2C_parameters, FIFO_C_FIFO_EN_DISABLED );
+    aux  =   MC3635_EnableFIFO ( myMC3635_I2C_parameters, FIFO_C_FIFO_EN_DISABLED );
 
     /* MC3635 14-bits resolution ( FIFO not in use)   */
     aux  =   MC3635_SetResolution ( myMC3635_I2C_parameters, RANGE_C_RES_14_BITS );
