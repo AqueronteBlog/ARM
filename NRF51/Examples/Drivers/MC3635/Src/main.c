@@ -56,7 +56,7 @@ int main( void )
     myMC3635_I2C_parameters.SDA         =    TWI0_SDA;
     myMC3635_I2C_parameters.SCL         =    TWI0_SCL;
     myMC3635_I2C_parameters.ADDR        =    MC3635_ADDRESS_LOW;
-    myMC3635_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myMC3635_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K100;
     myMC3635_I2C_parameters.SDAport     =    NRF_GPIO;
     myMC3635_I2C_parameters.SCLport     =    NRF_GPIO;
 
