@@ -747,15 +747,15 @@ OUTPUT(bin\Debug\MC3635.elf elf32-littlearm)
  .comment       0x0000006e       0x6f obj\debug\src\system_nrf51.o
  .comment       0x0000006e       0x6f obj\debug\~#\~#\~#\~#\drivers\mc3635\mc3635.o
 
-.debug_info     0x00000000     0x570f
+.debug_info     0x00000000     0x5710
  .debug_info    0x00000000      0x6b3 obj\debug\~#\~#\basics\i2c\i2c.o
  .debug_info    0x000006b3       0x5e obj\debug\s130.o
  .debug_info    0x00000711      0x97c obj\debug\src\functions.o
  .debug_info    0x0000108d      0x589 obj\debug\src\interrupts.o
  .debug_info    0x00001616     0x288e obj\debug\src\main.o
  .debug_info    0x00003ea4      0x1ec obj\debug\src\system_nrf51.o
- .debug_info    0x00004090       0x67 obj\debug\startup_nrf51.o
- .debug_info    0x000040f7     0x1618 obj\debug\~#\~#\~#\~#\drivers\mc3635\mc3635.o
+ .debug_info    0x00004090       0x68 obj\debug\startup_nrf51.o
+ .debug_info    0x000040f8     0x1618 obj\debug\~#\~#\~#\~#\drivers\mc3635\mc3635.o
 
 .debug_abbrev   0x00000000      0x931
  .debug_abbrev  0x00000000      0x159 obj\debug\~#\~#\basics\i2c\i2c.o
@@ -841,21 +841,21 @@ OUTPUT(bin\Debug\MC3635.elf elf32-littlearm)
  .debug_line    0x00001665       0x6e obj\debug\startup_nrf51.o
  .debug_line    0x000016d3      0x7ab obj\debug\~#\~#\~#\~#\drivers\mc3635\mc3635.o
 
-.debug_str      0x00000000    0x35ec0
- .debug_str     0x00000000    0x2f026 obj\debug\~#\~#\basics\i2c\i2c.o
-                              0x2f1a2 (size before relaxing)
- .debug_str     0x0002f026       0x75 obj\debug\s130.o
-                               0x23d9 (size before relaxing)
- .debug_str     0x0002f09b      0x363 obj\debug\src\functions.o
-                              0x2f30d (size before relaxing)
- .debug_str     0x0002f3fe       0x6a obj\debug\src\interrupts.o
-                              0x2f0e4 (size before relaxing)
- .debug_str     0x0002f468     0x5968 obj\debug\src\main.o
-                              0x34bef (size before relaxing)
- .debug_str     0x00034dd0       0xe4 obj\debug\src\system_nrf51.o
-                              0x2efe6 (size before relaxing)
- .debug_str     0x00034eb4     0x100c obj\debug\~#\~#\~#\~#\drivers\mc3635\mc3635.o
-                              0x30572 (size before relaxing)
+.debug_str      0x00000000    0x35ec1
+ .debug_str     0x00000000    0x2f027 obj\debug\~#\~#\basics\i2c\i2c.o
+                              0x2f1a3 (size before relaxing)
+ .debug_str     0x0002f027       0x75 obj\debug\s130.o
+                               0x23da (size before relaxing)
+ .debug_str     0x0002f09c      0x363 obj\debug\src\functions.o
+                              0x2f30e (size before relaxing)
+ .debug_str     0x0002f3ff       0x6a obj\debug\src\interrupts.o
+                              0x2f0e5 (size before relaxing)
+ .debug_str     0x0002f469     0x5968 obj\debug\src\main.o
+                              0x34bf0 (size before relaxing)
+ .debug_str     0x00034dd1       0xe4 obj\debug\src\system_nrf51.o
+                              0x2efe7 (size before relaxing)
+ .debug_str     0x00034eb5     0x100c obj\debug\~#\~#\~#\~#\drivers\mc3635\mc3635.o
+                              0x30573 (size before relaxing)
 
 .debug_frame    0x00000000      0xaa4
  .debug_frame   0x00000000       0x78 obj\debug\~#\~#\basics\i2c\i2c.o
