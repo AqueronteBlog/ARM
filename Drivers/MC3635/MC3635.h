@@ -1036,8 +1036,20 @@ typedef enum{
     ODR_12  =   0b1100,             /*!<  ODR: 0b1100                           */
     ODR_13  =   0b1101,             /*!<  ODR: 0b1101                           */
     ODR_14  =   0b1110,             /*!<  ODR: 0b1110                           */
-    ODR_15  =   0b1111,             /*!<  ODR: 0b1111                           */
+    ODR_15  =   0b1111              /*!<  ODR: 0b1111                           */
 } MC3635_sample_rate_t;
+
+
+
+/**
+  * @brief   AXIS
+  *
+  */
+typedef enum{
+    X_AXIS  =   0,             /*!<  X-Axis chosen                    */
+    Y_AXIX  =   1,             /*!<  Y-Axis chosen                    */
+    Z_AXIS  =   2              /*!<  Z-Axis chosen                    */
+} MC3635_axis_t;
 
 
 
@@ -1059,6 +1071,14 @@ typedef struct{
     uint8_t  status_2;                      /*!<  It contains the value for the Status Register 2                         */
     uint8_t  FeatureRegister1;              /*!<  It contains the value for the Feature Register 1                        */
     uint8_t  FeatureRegister2;              /*!<  It contains the value for the Feature Register 2                        */
+
+    uint16_t XGAIN;                         /*!<  It contains the value for X-Axis gain                                   */
+    uint16_t YGAIN;                         /*!<  It contains the value for Y-Axis gain                                   */
+    uint16_t ZGAIN;                         /*!<  It contains the value for Z-Axis gain                                   */
+
+    int16_t XOffset;                        /*!<  It contains the value for X-Axis offset                                 */
+    int16_t YOffset;                        /*!<  It contains the value for Y-Axis offset                                 */
+    int16_t ZOffset;                        /*!<  It contains the value for Z-Axis offset                                 */
 } MC3635_data_t;
 #endif
 
@@ -1190,6 +1210,14 @@ MC3635_status_t  MC3635_SetStandbyMode                ( I2C_parameters_t myI2Cpa
 /** It sets the device into the SLEEP mode.
         */
 MC3635_status_t  MC3635_SetSleepMode                  ( I2C_parameters_t myI2Cparameters                                                                                            );
+
+/** It gets the gain for a certain axis.
+        */
+MC3635_status_t  MC3635_GetGain                       ( I2C_parameters_t myI2Cparameters, MC3635_axis_t myChosenAxis, MC3635_data_t* myGain                                         );
+
+/** It gets the offset for a certain axis.
+        */
+MC3635_status_t  MC3635_GetOffset                     ( I2C_parameters_t myI2Cparameters, MC3635_axis_t myChosenAxis, MC3635_data_t* myOffset                                       );
 
 // 0x20 0x21 0x22
 
