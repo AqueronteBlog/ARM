@@ -1047,7 +1047,7 @@ typedef enum{
   */
 typedef enum{
     X_AXIS  =   0,             /*!<  X-Axis chosen                    */
-    Y_AXIX  =   1,             /*!<  Y-Axis chosen                    */
+    Y_AXIS  =   1,             /*!<  Y-Axis chosen                    */
     Z_AXIS  =   2              /*!<  Z-Axis chosen                    */
 } MC3635_axis_t;
 
