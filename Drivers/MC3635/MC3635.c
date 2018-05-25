@@ -1509,3 +1509,208 @@ MC3635_status_t  MC3635_ResetFIFO ( I2C_parameters_t myI2Cparameters )
     else
        return   MC3635_FAILURE;
 }
+
+
+
+/**
+ * @brief       MC3635_GetGain  ( I2C_parameters_t , MC3635_axis_t , MC3635_data_t* )
+ *
+ * @details     It gets the gain for a certain axis.
+ *
+ * @param[in]    myI2Cparameters:    I2C parameters.
+ * @param[in]    myChosenAxis:       Axis gain.
+ *
+ * @param[out]   myGain:             Gain itself.
+ *
+ *
+ * @return       Status of MC3635_GetGain.
+ *
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        25/May/2018
+ * @version     25/May/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     The device MUST be in STANDBY mode, the user has to call this function
+ *              first: MC3635_SetStandbyMode.
+ */
+MC3635_status_t  MC3635_GetGain ( I2C_parameters_t myI2Cparameters, MC3635_axis_t myChosenAxis, MC3635_data_t* myGain )
+{
+    uint8_t         cmd[]        =   { 0, 0 };
+    uint8_t         myAuxReg1, myAuxReg2;
+    uint16_t        myAuxGain    =   0;
+    i2c_status_t    aux          =   0;
+
+
+    /* Select the right axis  */
+    switch ( myChosenAxis )
+    {
+        case X_AXIS:
+            myAuxReg1        =   XOFFH;
+            myAuxReg2        =   XGAIN;
+            break;
+
+        case Y_AXIS:
+            myAuxReg1        =   YOFFH;
+            myAuxReg2        =   YGAIN;
+            break;
+
+        case Z_AXIS:
+            myAuxReg1        =   ZOFFH;
+            myAuxReg2        =   ZGAIN;
+            break;
+
+        default:
+            return   MC3635_FAILURE;
+            break;
+    }
+
+
+    /* MSB GAIN: Get the register data */
+    cmd[0]  =   myAuxReg1;
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+
+    myAuxGain   =   ( cmd[1] & XGAINH_GAIN_MASK );
+    myAuxGain <<=   1;
+
+    /* LSB GAIN: Get the register data */
+    cmd[0]  =   myAuxReg2;
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+
+    myAuxGain |=   cmd[1];
+
+
+    /* Parse the data into the chosen axis  */
+    switch ( myChosenAxis )
+    {
+        case X_AXIS:
+            myGain->XGAIN    =   myAuxGain;
+            break;
+
+        case Y_AXIS:
+            myGain->YGAIN    =   myAuxGain;
+            break;
+
+        case Z_AXIS:
+            myGain->ZGAIN    =   myAuxGain;
+            break;
+
+        default:
+            return   MC3635_FAILURE;
+            break;
+    }
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MC3635_SUCCESS;
+    else
+       return   MC3635_FAILURE;
+}
+
+
+
+/**
+ * @brief       MC3635_GetOffset  ( I2C_parameters_t , MC3635_axis_t , MC3635_data_t* )
+ *
+ * @details     It gets the offset for a certain axis.
+ *
+ * @param[in]    myI2Cparameters:    I2C parameters.
+ * @param[in]    myChosenAxis:       Axis gain.
+ *
+ * @param[out]   myOffset:           Offset itself.
+ *
+ *
+ * @return       Status of MC3635_GetOffset.
+ *
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        25/May/2018
+ * @version     25/May/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     The device MUST be in STANDBY mode, the user has to call this function
+ *              first: MC3635_SetStandbyMode.
+ */
+MC3635_status_t  MC3635_GetOffset ( I2C_parameters_t myI2Cparameters, MC3635_axis_t myChosenAxis, MC3635_data_t* myOffset )
+{
+    uint8_t         cmd[]        =   { 0, 0 };
+    uint8_t         myAuxReg1, myAuxReg2;
+    int16_t         myAuxOffset  =   0;
+    i2c_status_t    aux          =   0;
+
+
+    /* Select the right axis  */
+    switch ( myChosenAxis )
+    {
+        case X_AXIS:
+            myAuxReg1    =   XOFFH;
+            myAuxReg2    =   XOFFL;
+            break;
+
+        case Y_AXIS:
+            myAuxReg1    =   YOFFH;
+            myAuxReg2    =   YOFFL;
+            break;
+
+        case Z_AXIS:
+            myAuxReg1    =   ZOFFH;
+            myAuxReg2    =   ZOFFL;
+            break;
+
+        default:
+            return   MC3635_FAILURE;
+            break;
+    }
+
+
+    /* MSB OFFSET: Get the register data */
+    cmd[0]  =   myAuxReg1;
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+
+    myAuxOffset   =   ( cmd[1] & XOFFH_MASK );
+    myAuxOffset <<=   8;
+
+
+    /* LSB OFFSET: Get the register data */
+    cmd[0]  =   myAuxReg2;
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+
+    myAuxOffset |=   cmd[1];
+
+
+    /* Parse the data into the chosen axis  */
+    switch ( myChosenAxis )
+    {
+        case X_AXIS:
+            myOffset->XOffset    =   myAuxOffset;
+            break;
+
+        case Y_AXIS:
+            myOffset->YOffset    =   myAuxOffset;
+            break;
+
+        case Z_AXIS:
+            myOffset->ZOffset    =   myAuxOffset;
+            break;
+
+        default:
+            return   MC3635_FAILURE;
+            break;
+    }
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MC3635_SUCCESS;
+    else
+       return   MC3635_FAILURE;
+}
