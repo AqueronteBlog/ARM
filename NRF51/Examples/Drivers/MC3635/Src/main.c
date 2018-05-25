@@ -73,6 +73,15 @@ int main( void )
     /*  MC3635 initialization sequence  */
     aux  =   MC3635_InitializationSequence ( myMC3635_I2C_parameters );
 
+    /* MC3635 Get the offset for all the axis   */
+    aux  =   MC3635_GetOffset ( myMC3635_I2C_parameters, X_AXIS,  &myMC3635_data );
+    aux  =   MC3635_GetOffset ( myMC3635_I2C_parameters, Y_AXIS,  &myMC3635_data );
+    aux  =   MC3635_GetOffset ( myMC3635_I2C_parameters, Z_AXIS,  &myMC3635_data );
+
+    /* MC3635 Get the gain for all the axis   */
+    aux  =   MC3635_GetGain ( myMC3635_I2C_parameters, X_AXIS,  &myMC3635_data );
+    aux  =   MC3635_GetGain ( myMC3635_I2C_parameters, Y_AXIS,  &myMC3635_data );
+    aux  =   MC3635_GetGain ( myMC3635_I2C_parameters, Z_AXIS,  &myMC3635_data );
 
     /* MC3635 Check Scratch register    */
     myMC3635_data.scratch    =   0x23;
