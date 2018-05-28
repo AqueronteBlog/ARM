@@ -93,11 +93,11 @@ int main( void )
     /* MC3635 FIFO disabled   */
     aux  =   MC3635_EnableFIFO ( myMC3635_I2C_parameters, FIFO_C_FIFO_EN_DISABLED );
 
-    /* MC3635 14-bits resolution ( FIFO not in use)   */
+    /* MC3635 8-bits resolution ( FIFO not in use)   */
     aux  =   MC3635_SetResolution ( myMC3635_I2C_parameters, RANGE_C_RES_14_BITS );
 
     /* MC3635 16g range    */
-    aux  =   MC3635_SetRange ( myMC3635_I2C_parameters, RANGE_C_RANGE_16G );
+    aux  =   MC3635_SetRange ( myMC3635_I2C_parameters, RANGE_C_RANGE_2G );
 
     /* MC3635 X/Y/Z axis enabled    */
     aux  =   MC3635_EnableAxis ( myMC3635_I2C_parameters, MODE_C_X_AXIS_PD_ENABLED, MODE_C_Y_AXIS_PD_ENABLED, MODE_C_Z_AXIS_PD_ENABLED );

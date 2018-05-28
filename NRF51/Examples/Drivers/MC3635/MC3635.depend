@@ -314,12 +314,12 @@
 1527259498 source:d:\vsprojects\arm\drivers\mc3635\mc3635.c
 	"MC3635.h"
 
-1527258798 d:\vsprojects\arm\drivers\mc3635\mc3635.h
+1527514711 d:\vsprojects\arm\drivers\mc3635\mc3635.h
 	"stdint.h"
 	"stdbool.h"
 	"i2c.h"
 
-1527259860 source:d:\vsprojects\arm\nrf51\examples\drivers\mc3635\src\main.c
+1527512918 source:d:\vsprojects\arm\nrf51\examples\drivers\mc3635\src\main.c
 	"nrf.h"
 	"nrf_delay.h"
 	"ble.h"
