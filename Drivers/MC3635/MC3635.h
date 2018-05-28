@@ -1072,6 +1072,9 @@ typedef struct{
     uint8_t  FeatureRegister1;              /*!<  It contains the value for the Feature Register 1                        */
     uint8_t  FeatureRegister2;              /*!<  It contains the value for the Feature Register 2                        */
 
+    MC3635_range_c_res_t    resolution;     /*!<  It contains the accelerometer resolution                                */
+    MC3635_range_c_range_t  range;          /*!<  It contains the accelerometer range                                     */
+
     uint16_t XGAIN;                         /*!<  It contains the value for X-Axis gain                                   */
     uint16_t YGAIN;                         /*!<  It contains the value for Y-Axis gain                                   */
     uint16_t ZGAIN;                         /*!<  It contains the value for Z-Axis gain                                   */
@@ -1157,9 +1160,17 @@ MC3635_status_t  MC3635_SetStandbyClockRate           ( I2C_parameters_t myI2Cpa
         */
 MC3635_status_t  MC3635_SetResolution                 ( I2C_parameters_t myI2Cparameters, MC3635_range_c_res_t myResolution                                                         );
 
+/** It reads the accelerometer resolution.
+        */
+MC3635_status_t  MC3635_GetResolution                 ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myResolution                                                               );
+
 /** It sets the accelerometer range.
         */
 MC3635_status_t  MC3635_SetRange                      ( I2C_parameters_t myI2Cparameters, MC3635_range_c_range_t myRange                                                            );
+
+/** It reads the accelerometer range.
+        */
+MC3635_status_t  MC3635_GetRange                      ( I2C_parameters_t myI2Cparameters, MC3635_data_t* myRange                                                                    );
 
 /** It sets the FIFO behavior.
         */
