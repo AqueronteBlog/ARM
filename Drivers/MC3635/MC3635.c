@@ -468,7 +468,9 @@ MC3635_status_t  MC3635_ReadExtendedStatusRegister2 ( I2C_parameters_t myI2Cpara
  *
  * @author      Manuel Caballero
  * @date        26/April/2018
- * @version     1/May/2018        The device provides data in 'mg' already.
+ * @version     29/May/2018       It seems that the output depends on both resolution and
+ *                                range, the data must be processed properly then.
+ *              1/May/2018        The device provides data in 'mg' already.
  *              26/April/2018     The ORIGIN
  * @pre         N/A
  * @warning     N/A.
@@ -496,6 +498,105 @@ MC3635_status_t  MC3635_ReadRawData ( I2C_parameters_t myI2Cparameters, MC3635_d
     myRawData->ZAxis_mg  <<=  8;
     myRawData->ZAxis_mg   |=  cmd[4];
 
+    /* Get the range.
+
+       NOTE: 2G and 12-bit are the reference, other values have to be
+             adapted to the configuration.
+
+             This information is NOT in the datasheet, it was calculated
+             experimentally.
+    */
+    MC3635_GetRange ( myI2Cparameters, myRawData );
+
+    switch ( myRawData->range )
+    {
+        default:
+        case RANGE_C_RANGE_2G:
+        // The reference
+            break;
+
+        case RANGE_C_RANGE_4G:
+        // RANGE_C_RANGE_2G * 2
+            myRawData->XAxis_mg  <<=   1;
+            myRawData->YAxis_mg  <<=   1;
+            myRawData->ZAxis_mg  <<=   1;
+            break;
+
+        case RANGE_C_RANGE_8G:
+        // RANGE_C_RANGE_2G * 4
+            myRawData->XAxis_mg  <<=   2;
+            myRawData->YAxis_mg  <<=   2;
+            myRawData->ZAxis_mg  <<=   2;
+            break;
+
+        case RANGE_C_RANGE_16G:
+        // RANGE_C_RANGE_2G * 8
+            myRawData->XAxis_mg  <<=   3;
+            myRawData->YAxis_mg  <<=   3;
+            myRawData->ZAxis_mg  <<=   3;
+            break;
+
+        case RANGE_C_RANGE_12G:
+        // RANGE_C_RANGE_2G * 6
+            myRawData->XAxis_mg  *=   6.0;
+            myRawData->YAxis_mg  *=   6.0;
+            myRawData->ZAxis_mg  *=   6.0;
+            break;
+    }
+
+
+    /* Get the resolution.
+
+       NOTE: 2G and 12-bit are the reference, other values have to be
+             adapted to the configuration.
+
+             This information is NOT in the datasheet, it was calculated
+             experimentally.
+    */
+    MC3635_GetResolution ( myI2Cparameters, myRawData );
+
+    switch ( myRawData->resolution )
+    {
+        default:
+        case RANGE_C_RES_6_BITS:
+        // RANGE_C_RES_12_BITS * 64
+            myRawData->XAxis_mg  <<=   6;
+            myRawData->YAxis_mg  <<=   6;
+            myRawData->ZAxis_mg  <<=   6;
+            break;
+
+        case RANGE_C_RES_7_BITS:
+        // RANGE_C_RES_12_BITS * 32
+            myRawData->XAxis_mg  <<=   5;
+            myRawData->YAxis_mg  <<=   5;
+            myRawData->ZAxis_mg  <<=   5;
+            break;
+
+        case RANGE_C_RES_8_BITS:
+        // RANGE_C_RES_12_BITS * 16
+            myRawData->XAxis_mg  <<=   4;
+            myRawData->YAxis_mg  <<=   4;
+            myRawData->ZAxis_mg  <<=   4;
+            break;
+
+        case RANGE_C_RES_10_BITS:
+        // RANGE_C_RES_12_BITS * 4
+            myRawData->XAxis_mg  <<=   2;
+            myRawData->YAxis_mg  <<=   2;
+            myRawData->ZAxis_mg  <<=   2;
+            break;
+
+        case RANGE_C_RES_12_BITS:
+        // The reference
+            break;
+
+        case RANGE_C_RES_14_BITS:
+        // RANGE_C_RES_12_BITS / 4
+            myRawData->XAxis_mg  >>=   2;
+            myRawData->YAxis_mg  >>=   2;
+            myRawData->ZAxis_mg  >>=   2;
+            break;
+    }
 
 
 
