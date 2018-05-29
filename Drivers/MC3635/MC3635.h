@@ -1232,9 +1232,7 @@ MC3635_status_t  MC3635_GetOffset                     ( I2C_parameters_t myI2Cpa
 
 // 0x20 0x21 0x22
 
-// 0x2A 0x2B 0x2C 0x2D 0x2E 0x2F OFFSET
 
-// GAIN
 
 
 #ifdef __cplusplus
