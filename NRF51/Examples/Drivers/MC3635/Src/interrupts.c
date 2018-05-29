@@ -39,7 +39,7 @@ void UART0_IRQHandler(void)
         NRF_UART0->EVENTS_TXDRDY = 0;
 
         // 3-Bytes more have to be sent
-        if ( dataToBeTX  < 3 )           // 1 - 4 = 3. NOTE: One byte was just transmitted previously.
+        if ( dataToBeTX  < 3 )                      // 1 - 4 = 3. NOTE: One byte was just transmitted previously.
         {
         // Transmit data
             NRF_UART0->TXD   =   *myPtr++;
@@ -52,30 +52,5 @@ void UART0_IRQHandler(void)
             dataToBeTX                   =   0;
             TX_inProgress                =   NO;
         }
-    }
-}
-
-
-/**
- * @brief       void GPIOTE_IRQHandler ()
- * @details     It changes the state of mySTATE.
- *
- *
- *
- * @return      N/A
- *
- * @author      Manuel Caballero
- * @date        12/March/2018
- * @version     12/March/2018   The ORIGIN
- * @pre         N/A
- * @warning     N/A
- */
-void GPIOTE_IRQHandler()
-{
-    // Channel 0
-    if ( ( NRF_GPIOTE->EVENTS_IN[0] != 0 ) && ( ( NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_IN0_Msk ) != 0 ) )
-    {
-        mySTATE                  = 1;
-        NRF_GPIOTE->EVENTS_IN[0] = 0;                      // Clear ( flag )
     }
 }
