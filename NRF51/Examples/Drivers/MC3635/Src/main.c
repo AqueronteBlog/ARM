@@ -46,7 +46,6 @@ int main( void )
 
 
     conf_GPIO   ();
-    //conf_GPIOTE ();
     conf_UART   ();
 
 
@@ -93,11 +92,15 @@ int main( void )
     /* MC3635 FIFO disabled   */
     aux  =   MC3635_EnableFIFO ( myMC3635_I2C_parameters, FIFO_C_FIFO_EN_DISABLED );
 
-    /* MC3635 8-bits resolution ( FIFO not in use)   */
+    /* MC3635 All interrupts DISABLED   */
+//    aux  =   MC3635_Set_INTN ( myMC3635_I2C_parameters, INTR_C_INT_WAKE_DISABLED, INTR_C_INT_ACQ_DISABLED, INTR_C_INT_FIFO_EMPTY_DISABLED,
+//                               INTR_C_INT_FIFO_FULL_DISABLED, INTR_C_INT_FIFO_THRESH_DISABLED, INTR_C_INT_SWAKE_DISABLED                    );
+
+    /* MC3635 14-bits resolution ( FIFO not in use)   */
     aux  =   MC3635_SetResolution ( myMC3635_I2C_parameters, RANGE_C_RES_14_BITS );
 
     /* MC3635 16g range    */
-    aux  =   MC3635_SetRange ( myMC3635_I2C_parameters, RANGE_C_RANGE_2G );
+    aux  =   MC3635_SetRange ( myMC3635_I2C_parameters, RANGE_C_RANGE_16G );
 
     /* MC3635 X/Y/Z axis enabled    */
     aux  =   MC3635_EnableAxis ( myMC3635_I2C_parameters, MODE_C_X_AXIS_PD_ENABLED, MODE_C_Y_AXIS_PD_ENABLED, MODE_C_Z_AXIS_PD_ENABLED );
@@ -128,7 +131,6 @@ int main( void )
                 aux  =   MC3635_ReadStatusRegister1 ( myMC3635_I2C_parameters, &myMC3635_data );
             }while( ( myMC3635_data.status_1 & STATUS_1_NEW_DATA_MASK ) == STATUS_1_NEW_DATA_FALSE );                   // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
                                                                                                                         // [WORKAROUND] Insert a counter.
-
 
             /* MC3635 Read the data    */
             aux  =   MC3635_ReadRawData ( myMC3635_I2C_parameters, &myMC3635_data );
