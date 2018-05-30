@@ -1,6 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows how to work with the external sensor: MC3635 ( 3-Axis Accelerometer ).
+ *              Every one second, a new acceleration data will be read and sent through the UART.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
@@ -35,9 +36,7 @@ uint8_t  *myPtr;                        /*!<   Pointer to point out the data fro
 /* MAIN */
 int main( void )
 {
-//    uint8_t  myTX_buff[4]     =  { 0 };
-//    uint32_t myCounterData    =  0;
-//    uint32_t myCounterTimeout =  0;
+    uint8_t  myTX_buff[6]     =  { 0 };
 
 
     I2C_parameters_t    myMC3635_I2C_parameters;
@@ -45,7 +44,9 @@ int main( void )
     MC3635_data_t       myMC3635_data;
 
 
+    conf_LFCLK  ();
     conf_GPIO   ();
+    conf_RTC1   ();
     conf_UART   ();
 
 
@@ -93,8 +94,8 @@ int main( void )
     aux  =   MC3635_EnableFIFO ( myMC3635_I2C_parameters, FIFO_C_FIFO_EN_DISABLED );
 
     /* MC3635 All interrupts DISABLED   */
-//    aux  =   MC3635_Set_INTN ( myMC3635_I2C_parameters, INTR_C_INT_WAKE_DISABLED, INTR_C_INT_ACQ_DISABLED, INTR_C_INT_FIFO_EMPTY_DISABLED,
-//                               INTR_C_INT_FIFO_FULL_DISABLED, INTR_C_INT_FIFO_THRESH_DISABLED, INTR_C_INT_SWAKE_DISABLED                    );
+    aux  =   MC3635_Set_INTN ( myMC3635_I2C_parameters, INTR_C_INT_WAKE_DISABLED, INTR_C_INT_ACQ_DISABLED, INTR_C_INT_FIFO_EMPTY_DISABLED,
+                               INTR_C_INT_FIFO_FULL_DISABLED, INTR_C_INT_FIFO_THRESH_DISABLED, INTR_C_INT_SWAKE_DISABLED                    );
 
     /* MC3635 14-bits resolution ( FIFO not in use)   */
     aux  =   MC3635_SetResolution ( myMC3635_I2C_parameters, RANGE_C_RES_14_BITS );
@@ -110,96 +111,59 @@ int main( void )
 
 
     mySTATE  =   0;                                                                                                 // Reset the variable
+    NRF_RTC1->TASKS_START = 1;                                                                                      // Start RTC1
 
     //NRF_POWER->SYSTEMOFF = 1;
     NRF_POWER->TASKS_LOWPWR = 1;                                                                                    // Sub power mode: Low power.
     while( 1 )
     {
-//        // Enter System ON sleep mode
-//        __WFE();
-//        // Make sure any pending events are cleared
-//        __SEV();
-//        __WFE();
+        // Enter System ON sleep mode
+        __WFE();
+        // Make sure any pending events are cleared
+        __SEV();
+        __WFE();
 
-        mySTATE = 1;
-        NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );              // Turn all the LEDs on
+
+        NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
         if ( mySTATE == 1 )
         {
             /*  Wait until a new data is available */
             do{
                 /* MC3635 Read register Status1    */
                 aux  =   MC3635_ReadStatusRegister1 ( myMC3635_I2C_parameters, &myMC3635_data );
-            }while( ( myMC3635_data.status_1 & STATUS_1_NEW_DATA_MASK ) == STATUS_1_NEW_DATA_FALSE );                   // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
-                                                                                                                        // [WORKAROUND] Insert a counter.
+            }while( ( myMC3635_data.status_1 & STATUS_1_NEW_DATA_MASK ) == STATUS_1_NEW_DATA_FALSE );               // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
+                                                                                                                    // [WORKAROUND] Insert a counter.
 
             /* MC3635 Read the data    */
             aux  =   MC3635_ReadRawData ( myMC3635_I2C_parameters, &myMC3635_data );
 
 
-//            NVIC_DisableIRQ ( GPIOTE_IRQn );                                                                            // GPIOTE Interrupt DISABLED
-//
-//            /*  Get data ( 8-bits, Manchester ).
-//
-//                NOTE:   Make sure the transmitter is sending data otherwise a little delay will
-//                        be introduced by myCounterTimeout.
-//            */
-//            myMC3635_data.data   =   0;
-//
-//            for ( myCounterData = 0; myCounterData < 8; myCounterData++ )
-//            {
-//                /*  Wait until rising edges on CLD pin or Timeout */
-//                myCounterTimeout    =   2323;
-//                while ( ( ( NRF_GPIO->IN & GPIO_IN_PIN14_Msk ) == ( GPIO_IN_PIN14_Low << GPIO_IN_PIN14_Pos ) ) && ( myCounterTimeout > 0 ) )
-//                {
-//                    myCounterTimeout--;
-//                }
-//
-//                /*  Process the data */
-//                myMC3635_data.data <<=   1;
-//
-//                if ( ( NRF_GPIO->IN & GPIO_IN_PIN13_Msk )  == ( GPIO_IN_PIN13_High << GPIO_IN_PIN13_Pos ) )
-//                {
-//                    myMC3635_data.data  |=  1;
-//                }
-//
-//                /*  Wait until CLD pin goes low again or Timeout */
-//                myCounterTimeout    =   2323;
-//                while ( ( ( NRF_GPIO->IN & GPIO_IN_PIN14_Msk ) == ( GPIO_IN_PIN14_High << GPIO_IN_PIN14_Pos ) ) && ( myCounterTimeout > 0 ) )
-//                {
-//                    myCounterTimeout--;
-//                }
-//            }
-//
-//
-//            /* Get RSSI  */
-//            aux  =   MC3635_GetRSSI ( myMC3635_SPI_parameters, &myMC3635_data );
-//
-//
-//            /* Prepare the data to be sent */
-//            myTX_buff[0]                 =   myMC3635_data.data;
-//            myTX_buff[1]                 =   myMC3635_data.rssi1;
-//            myTX_buff[2]                 =   myMC3635_data.rssi2;
-//            myTX_buff[3]                 =   myMC3635_data.rssi3;
-//
-//
-//            /* Send data through the UART   */
-//            myPtr                        =   &myTX_buff[0];
-//            TX_inProgress                =   YES;
-//            NRF_UART0->TASKS_STARTTX     =   1;
-//            NRF_UART0->TXD               =   *myPtr++;                                                              // Start transmission
-//
-//            /* Wait until the message is transmitted */
-//            while ( TX_inProgress == YES )
-//            {
-//                __WFE();
-//                // Make sure any pending events are cleared
-//                __SEV();
-//                __WFE();
-//            }
-//
-//
-//            mySTATE             =   0;
-//            NVIC_EnableIRQ ( GPIOTE_IRQn );                                                                         // GPIOTE Interrupt ENABLED
+            /* Prepare the data to be sent through the UART */
+            myTX_buff[0]                 =   ( myMC3635_data.XAxis_mg >> 8 ) & 0xFF;                                // X-axis: MSB
+            myTX_buff[1]                 =   ( myMC3635_data.XAxis_mg & 0xFF );                                     // X-axis: LSB
+            myTX_buff[2]                 =   ( myMC3635_data.YAxis_mg >> 8 ) & 0xFF;                                // Y-axis: MSB
+            myTX_buff[3]                 =   ( myMC3635_data.YAxis_mg & 0xFF );                                     // Y-axis: LSB
+            myTX_buff[4]                 =   ( myMC3635_data.ZAxis_mg >> 8 ) & 0xFF;                                // Z-axis: MSB
+            myTX_buff[5]                 =   ( myMC3635_data.ZAxis_mg & 0xFF );                                     // Z-axis: LSB
+
+
+            /* Send data through the UART   */
+            myPtr                        =   &myTX_buff[0];
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   *myPtr++;                                                              // Start transmission
+
+            /* Wait until the message is transmitted */
+            while ( TX_inProgress == YES )
+            {
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+            mySTATE             =   0;
         }
         NRF_GPIO->OUTSET             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
         //__NOP();
