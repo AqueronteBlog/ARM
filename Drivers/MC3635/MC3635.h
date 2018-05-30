@@ -1230,8 +1230,6 @@ MC3635_status_t  MC3635_GetGain                       ( I2C_parameters_t myI2Cpa
         */
 MC3635_status_t  MC3635_GetOffset                     ( I2C_parameters_t myI2Cparameters, MC3635_axis_t myChosenAxis, MC3635_data_t* myOffset                                       );
 
-// 0x20 0x21 0x22
-
 
 
 

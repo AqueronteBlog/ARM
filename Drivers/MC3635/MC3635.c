@@ -1329,10 +1329,10 @@ MC3635_status_t  MC3635_ConfSniffMode ( I2C_parameters_t myI2Cparameters, MC3635
 
 
     /* SNIFF THRESHOLD, LOGICAL MODE and DELTA COUNT */
-    // If threshold is selected:        0<= mySniffThreshold <= 63
+    // If threshold is selected:        0 <= mySniffThreshold <= 63
     // If detection count is selected:  0 < mySniffThreshold <= 62
     if ( ( ( ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_THRESHOLD_X_AXIS ) || ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_THRESHOLD_Y_AXIS ) || ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_THRESHOLD_Z_AXIS ) )  && ( mySniffThreshold > 63 ) ) ||
-        ( ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_X_AXIS ) || ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_Y_AXIS ) || ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_Z_AXIS ) )  && ( ( mySniffThreshold == 0 ) || ( mySniffThreshold > 62 ) ) )
+       ( ( ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_X_AXIS ) || ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_Y_AXIS ) || ( mySniffADR == SNIFFCF_C_SNIFF_THADR_SNIFF_DETECTION_Z_AXIS ) )  && ( ( mySniffThreshold == 0 ) || ( mySniffThreshold > 62 ) ) ) )
     {
         return   MC3635_FAILURE;
     }
@@ -1720,8 +1720,7 @@ MC3635_status_t  MC3635_ResetFIFO ( I2C_parameters_t myI2Cparameters )
  * @date        25/May/2018
  * @version     25/May/2018     The ORIGIN
  * @pre         N/A.
- * @warning     The device MUST be in STANDBY mode, the user has to call this function
- *              first: MC3635_SetStandbyMode.
+ * @warning     N/A.
  */
 MC3635_status_t  MC3635_GetGain ( I2C_parameters_t myI2Cparameters, MC3635_axis_t myChosenAxis, MC3635_data_t* myGain )
 {
@@ -1822,8 +1821,7 @@ MC3635_status_t  MC3635_GetGain ( I2C_parameters_t myI2Cparameters, MC3635_axis_
  * @date        25/May/2018
  * @version     25/May/2018     The ORIGIN
  * @pre         N/A.
- * @warning     The device MUST be in STANDBY mode, the user has to call this function
- *              first: MC3635_SetStandbyMode.
+ * @warning     N/A.
  */
 MC3635_status_t  MC3635_GetOffset ( I2C_parameters_t myI2Cparameters, MC3635_axis_t myChosenAxis, MC3635_data_t* myOffset )
 {
@@ -1895,6 +1893,111 @@ MC3635_status_t  MC3635_GetOffset ( I2C_parameters_t myI2Cparameters, MC3635_axi
             return   MC3635_FAILURE;
             break;
     }
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MC3635_SUCCESS;
+    else
+       return   MC3635_FAILURE;
+}
+
+
+
+/**
+ * @brief       MC3635_Conf_INTN  ( I2C_parameters_t , MC3635_intr_c_ipp_t , MC3635_intr_c_iah_t )
+ *
+ * @details     It configures the interrupt pin mode and level control.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ * @param[in]    myINTN_ModeControl:    INTN pin interrupt pin mode control.
+ * @param[in]    myINTN_LevelControl:   The active drive level of the INTN pin.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of MC3635_Conf_INTN.
+ *
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        30/May/2018
+ * @version     30/May/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     The device MUST be in STANDBY mode, the user has to call this function
+ *              first: MC3635_SetStandbyMode.
+ */
+MC3635_status_t  MC3635_Conf_INTN ( I2C_parameters_t myI2Cparameters, MC3635_intr_c_ipp_t myINTN_ModeControl, MC3635_intr_c_iah_t myINTN_LevelControl )
+{
+    uint8_t         cmd[]        =   { INTR_C, 0 };
+    i2c_status_t    aux          =   0;
+
+
+    /* Get the register data */
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+
+    /* Update the register data */
+    cmd[1] &=  ~( INTR_C_IPP_MASK | INTR_C_IAH_MASK );
+    cmd[1] |=   ( myINTN_ModeControl | myINTN_LevelControl );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT  );
+
+
+
+    if ( aux == I2C_SUCCESS )
+       return   MC3635_SUCCESS;
+    else
+       return   MC3635_FAILURE;
+}
+
+
+
+/**
+ * @brief       MC3635_Set_INTN  ( I2C_parameters_t , MC3635_intr_c_int_wake_t , MC3635_intr_c_int_acq_t , MC3635_intr_c_int_fifo_empty_t , MC3635_intr_c_int_fifo_full_t ,
+ *                                 MC3635_intr_c_int_fifo_thresh_t , MC3635_intr_c_int_fifo_swake_t )
+ *
+ * @details     It activates the interrupts on INTN pin.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ * @param[in]    myINT_WakeMode:        WAKE interrupt (SNIFF to WAKE) enable.
+ * @param[in]    myINT_ACQMode:         Interrupt on sample or acquisition enable.
+ * @param[in]    myINT_FIFO_EmptyMode:  FIFO empty interrupt enable.
+ * @param[in]    myINT_FIFO_FullMode:   FIFO full interrupt enable.
+ * @param[in]    myINT_FIFO_ThreshMode: FIFO threshold interrupt enable.
+ * @param[in]    myINT_SwakeMode:       This interrupt is valid only in SWAKE mode.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of MC3635_Set_INTN.
+ *
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        30/May/2018
+ * @version     30/May/2018     The ORIGIN
+ * @pre         N/A.
+ * @warning     The device MUST be in STANDBY mode, the user has to call this function
+ *              first: MC3635_SetStandbyMode.
+ */
+MC3635_status_t  MC3635_Set_INTN ( I2C_parameters_t myI2Cparameters, MC3635_intr_c_int_wake_t myINT_WakeMode, MC3635_intr_c_int_acq_t myINT_ACQMode,
+                                   MC3635_intr_c_int_fifo_empty_t myINT_FIFO_EmptyMode, MC3635_intr_c_int_fifo_full_t myINT_FIFO_FullMode,
+                                   MC3635_intr_c_int_fifo_thresh_t myINT_FIFO_ThreshMode, MC3635_intr_c_int_fifo_swake_t myINT_SwakeMode                )
+{
+    uint8_t         cmd[]        =   { INTR_C, 0 };
+    i2c_status_t    aux          =   0;
+
+
+    /* Get the register data */
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT  );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+
+    /* Update the register data */
+    cmd[1] &=  ~( INTR_C_INT_WAKE_MASK | INTR_C_INT_ACQ_MASK | INTR_C_INT_FIFO_EMPTY_MASK | INTR_C_INT_FIFO_FULL_MASK | INTR_C_INT_FIFO_THRESH_MASK | INTR_C_INT_SWAKE_MASK );
+    cmd[1] |=   ( myINT_WakeMode | myINT_ACQMode | myINT_FIFO_EmptyMode | myINT_FIFO_FullMode | myINT_FIFO_ThreshMode | myINT_SwakeMode );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT  );
 
 
 
