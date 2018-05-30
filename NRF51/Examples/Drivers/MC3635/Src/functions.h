@@ -25,7 +25,9 @@ extern "C" {
 
 
 /* FUNCTION PROTOTYPES */
+void conf_LFCLK     ( void );
 void conf_GPIO      ( void );
+void conf_RTC1      ( void );
 void conf_UART      ( void );
 
 

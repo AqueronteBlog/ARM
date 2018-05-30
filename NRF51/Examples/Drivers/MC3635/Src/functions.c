@@ -19,6 +19,34 @@
 
 
 /**
+ * @brief       void conf_LFCLK  ( void )
+ * @details     It turns the internal LFCLK clock on for RTCs.
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        8/June/2017
+ * @version     8/June/2017   The ORIGIN
+ * @pre         NaN
+ * @warning     NaN.
+ */
+void conf_LFCLK  ( void )
+{
+    NRF_CLOCK->LFCLKSRC             =   ( CLOCK_LFCLKSRC_SRC_RC << CLOCK_LFCLKSRC_SRC_Pos );
+    NRF_CLOCK->EVENTS_LFCLKSTARTED  =   0;
+    NRF_CLOCK->TASKS_LFCLKSTART     =   1;
+
+    while ( NRF_CLOCK->EVENTS_LFCLKSTARTED == 0 )       // [TODO] Insert a counter! otherwise if there is a problem it will get block!!!
+    {
+        //Do nothing.
+    }
+
+    NRF_CLOCK->EVENTS_LFCLKSTARTED  =   0;
+}
+
+
+
+/**
  * @brief       void conf_GPIO  ( void )
  * @details     It configures GPIO to work with the LEDs and P0.12 like input.
  *
@@ -115,4 +143,38 @@ void conf_UART  ( void )
     NRF_UART0->ENABLE            =   UART_ENABLE_ENABLE_Enabled << UART_ENABLE_ENABLE_Pos;                  // UART0 ENABLED
     // NRF_UART0->TASKS_STARTTX     =   1;
     // NRF_UART0->TASKS_STARTRX     =   1;                                                                  // Enable reception
+}
+
+
+
+/**
+ * @brief       void conf_RTC1  ( void )
+ * @details     Channel 0 will create an interrupt every 1s.
+ *
+ *              RTC1:
+ *                  * Prescaler:            327   ( f_RTC1 = ( 32.768kHz / ( 327 + 1 ) ) ~ 99.9Hz ( ~10ms ) ).
+ *                  * Channel 0:            10ms*100 = 1s
+ *                  * Interrupt ENABLE.
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        30/May/2018
+ * @version     30/May/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+void conf_RTC1  ( void )
+{
+    NRF_RTC1->TASKS_STOP  =   1;
+    NRF_RTC1->PRESCALER   =   327;                                                                        // f_RTC1 = ( 32.768kHz / ( 327 + 1 ) ) ~ 99.9Hz ( ~10ms )
+    NRF_RTC1->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
+
+    NRF_RTC1->CC[0]       =   100;                                                                        // ( 100 * (f_RTC1)^(-1) ) = ( 100 * (99.9Hz)^(-1) ) ~ 1s
+
+    NRF_RTC1->INTENSET    =   ( RTC_INTENSET_COMPARE0_Enabled << RTC_INTENSET_COMPARE0_Pos );
+    NRF_RTC1->EVTENSET    =   ( RTC_EVTENSET_COMPARE0_Enabled << RTC_EVTENSET_COMPARE0_Pos );
+
+
+    NVIC_EnableIRQ ( RTC1_IRQn );                                                                         // Enable Interrupt for the RTC1 in the core.
 }
