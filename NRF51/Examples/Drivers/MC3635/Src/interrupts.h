@@ -24,10 +24,12 @@ extern "C" {
 
 
 /* INTERRUPT PRTOTYPES */
-void UART0_IRQHandler  ( void );
+void RTC1_IRQHandler    ( void );
+void UART0_IRQHandler   ( void );
 
 
 /* VARIABLES */
+extern uint32_t  mySTATE;
 extern uint8_t   dataToBeTX;
 extern uint32_t  TX_inProgress;
 extern uint8_t   TX_buff[];
