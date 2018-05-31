@@ -1,24 +1,24 @@
 /**
- * @brief       DS1624.h
- * @details     Digital Thermometer and Memory.
+ * @brief       iAQ_Core.h
+ * @details     Indoor air quality module, I2C interface.
  *              Functions file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        18/January/2018
- * @version     18/January/2018    The ORIGIN
+ * @date        31/May/2018
+ * @version     31/May/2018    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "DS1624.h"
+#include "iAQ_Core.h"
 
 
 /**
- * @brief       DS1624_Init ( I2C_parameters_t )
+ * @brief       iAQ_Core_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,16 +27,16 @@
  * @param[out]   N/A.
  *
  *
- * @return       Status of DS1624_Init.
+ * @return       Status of iAQ_Core_Init.
  *
  *
  * @author      Manuel Caballero
- * @date        18/January/2018
- * @version     18/January/2018   The ORIGIN
+ * @date        31/May/2018
+ * @version     31/May/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-DS1624_status_t  DS1624_Init ( I2C_parameters_t myI2Cparameters )
+iAQ_Core_status_t  iAQ_Core_Init ( I2C_parameters_t myI2Cparameters )
 {
     i2c_status_t aux;
 
@@ -45,15 +45,15 @@ DS1624_status_t  DS1624_Init ( I2C_parameters_t myI2Cparameters )
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS1624_SUCCESS;
+        return   iAQ_Core_SUCCESS;
     else
-        return   DS1624_FAILURE;
+        return   iAQ_Core_FAILURE;
 }
 
 
 
 /**
- * @brief       DS1624_StartConvertTemperature ( I2C_parameters_t )
+ * @brief       iAQ_Core_StartConvertTemperature ( I2C_parameters_t )
  *
  * @details     It triggers a new temperature conversion.
  *
@@ -62,7 +62,7 @@ DS1624_status_t  DS1624_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   N/A.
  *
  *
- * @return       Status of DS1624_StartConvertTemperature.
+ * @return       Status of iAQ_Core_StartConvertTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -71,9 +71,9 @@ DS1624_status_t  DS1624_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         Temperature Conversion Time ( t_TC ) 200ms maximum.
  * @warning     N/A.
  */
-DS1624_status_t  DS1624_StartConvertTemperature ( I2C_parameters_t myI2Cparameters )
+iAQ_Core_status_t  iAQ_Core_StartConvertTemperature ( I2C_parameters_t myI2Cparameters )
 {
-    uint8_t      cmd       =   DS1624_START_CONVERT_T;
+    uint8_t      cmd       =   iAQ_Core_START_CONVERT_T;
     i2c_status_t aux       =   0;
 
 
@@ -84,14 +84,14 @@ DS1624_status_t  DS1624_StartConvertTemperature ( I2C_parameters_t myI2Cparamete
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS1624_SUCCESS;
+        return   iAQ_Core_SUCCESS;
     else
-        return   DS1624_FAILURE;
+        return   iAQ_Core_FAILURE;
 }
 
 
 /**
- * @brief       DS1624_StopConvertTemperature ( I2C_parameters_t )
+ * @brief       iAQ_Core_StopConvertTemperature ( I2C_parameters_t )
  *
  * @details     It halts the temperature conversion.
  *
@@ -100,7 +100,7 @@ DS1624_status_t  DS1624_StartConvertTemperature ( I2C_parameters_t myI2Cparamete
  * @param[out]   N/A.
  *
  *
- * @return       Status of DS1624_StopConvertTemperature.
+ * @return       Status of iAQ_Core_StopConvertTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -112,9 +112,9 @@ DS1624_status_t  DS1624_StartConvertTemperature ( I2C_parameters_t myI2Cparamete
  *              must be issued for every temperature reading desired.
  * @warning     N/A.
  */
-DS1624_status_t  DS1624_StopConvertTemperature ( I2C_parameters_t myI2Cparameters )
+iAQ_Core_status_t  iAQ_Core_StopConvertTemperature ( I2C_parameters_t myI2Cparameters )
 {
-    uint8_t      cmd       =   DS1624_STOP_CONVERT_T;
+    uint8_t      cmd       =   iAQ_Core_STOP_CONVERT_T;
     i2c_status_t aux       =   0;
 
 
@@ -125,15 +125,15 @@ DS1624_status_t  DS1624_StopConvertTemperature ( I2C_parameters_t myI2Cparameter
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS1624_SUCCESS;
+        return   iAQ_Core_SUCCESS;
     else
-        return   DS1624_FAILURE;
+        return   iAQ_Core_FAILURE;
 }
 
 
 
 /**
- * @brief       DS1624_ReadRawTemperature ( I2C_parameters_t , DS1624_vector_data_t* )
+ * @brief       iAQ_Core_ReadRawTemperature ( I2C_parameters_t , iAQ_Core_vector_data_t* )
  *
  * @details     It reads the last raw temperature conversion result.
  *
@@ -142,7 +142,7 @@ DS1624_status_t  DS1624_StopConvertTemperature ( I2C_parameters_t myI2Cparameter
  * @param[out]   myRawTemperature:  Raw temperature ( two bytes ).
  *
  *
- * @return       Status of DS1624_ReadRawTemperature.
+ * @return       Status of iAQ_Core_ReadRawTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -151,9 +151,9 @@ DS1624_status_t  DS1624_StopConvertTemperature ( I2C_parameters_t myI2Cparameter
  * @pre         DONE bit needs to be checked before calling this function.
  * @warning     N/A.
  */
-DS1624_status_t  DS1624_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myRawTemperature )
+iAQ_Core_status_t  iAQ_Core_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, iAQ_Core_vector_data_t* myRawTemperature )
 {
-    uint8_t      cmd[]     =   { DS1624_READ_TEMPERATURE, 0 };
+    uint8_t      cmd[]     =   { iAQ_Core_READ_TEMPERATURE, 0 };
     i2c_status_t aux       =   0;
 
 
@@ -171,15 +171,15 @@ DS1624_status_t  DS1624_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, 
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS1624_SUCCESS;
+        return   iAQ_Core_SUCCESS;
     else
-        return   DS1624_FAILURE;
+        return   iAQ_Core_FAILURE;
 }
 
 
 
 /**
- * @brief       DS1624_ReadTemperature ( I2C_parameters_t , DS1624_vector_data_t* )
+ * @brief       iAQ_Core_ReadTemperature ( I2C_parameters_t , iAQ_Core_vector_data_t* )
  *
  * @details     It reads the last current temperature conversion result.
  *
@@ -188,7 +188,7 @@ DS1624_status_t  DS1624_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   myTemperature:     Current temperature.
  *
  *
- * @return       Status of DS1624_ReadTemperature.
+ * @return       Status of iAQ_Core_ReadTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -198,9 +198,9 @@ DS1624_status_t  DS1624_ReadRawTemperature  ( I2C_parameters_t myI2Cparameters, 
  * @pre         DONE bit needs to be checked before calling this function.
  * @warning     N/A.
  */
-DS1624_status_t  DS1624_ReadTemperature  ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myTemperature )
+iAQ_Core_status_t  iAQ_Core_ReadTemperature  ( I2C_parameters_t myI2Cparameters, iAQ_Core_vector_data_t* myTemperature )
 {
-    uint8_t      cmd[]     =   { DS1624_READ_TEMPERATURE, 0 };
+    uint8_t      cmd[]     =   { iAQ_Core_READ_TEMPERATURE, 0 };
     i2c_status_t aux       =   0;
     uint32_t     i         =   0;
 
@@ -238,7 +238,7 @@ DS1624_status_t  DS1624_ReadTemperature  ( I2C_parameters_t myI2Cparameters, DS1
 
     // Update the decimal value
     for ( i = 0; i < ( myTemperature->LSBTemperature >> 4 ); i++ )
-            myTemperature->Temperature  +=   DS1624_TEMPERATURE_RESOLUTION;
+            myTemperature->Temperature  +=   iAQ_Core_TEMPERATURE_RESOLUTION;
 
 
 
@@ -246,15 +246,15 @@ DS1624_status_t  DS1624_ReadTemperature  ( I2C_parameters_t myI2Cparameters, DS1
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS1624_SUCCESS;
+        return   iAQ_Core_SUCCESS;
     else
-        return   DS1624_FAILURE;
+        return   iAQ_Core_FAILURE;
 }
 
 
 
 /**
- * @brief       DS1624_GetStatusRegister ( I2C_parameters_t , DS1624_vector_data_t* )
+ * @brief       iAQ_Core_GetStatusRegister ( I2C_parameters_t , iAQ_Core_vector_data_t* )
  *
  * @details     It reads the CONFIGURATION/STATUS register.
  *
@@ -263,7 +263,7 @@ DS1624_status_t  DS1624_ReadTemperature  ( I2C_parameters_t myI2Cparameters, DS1
  * @param[out]   myStatusRegister:  Current Status register value.
  *
  *
- * @return       Status of DS1624_GetStatusRegister.
+ * @return       Status of iAQ_Core_GetStatusRegister.
  *
  *
  * @author      Manuel Caballero
@@ -272,9 +272,9 @@ DS1624_status_t  DS1624_ReadTemperature  ( I2C_parameters_t myI2Cparameters, DS1
  * @pre         N/A.
  * @warning     N/A.
  */
-DS1624_status_t  DS1624_GetStatusRegister   ( I2C_parameters_t myI2Cparameters, DS1624_vector_data_t* myStatusRegister )
+iAQ_Core_status_t  iAQ_Core_GetStatusRegister   ( I2C_parameters_t myI2Cparameters, iAQ_Core_vector_data_t* myStatusRegister )
 {
-    uint8_t      cmd     =   DS1624_ACCESS_CONFIG;
+    uint8_t      cmd     =   iAQ_Core_ACCESS_CONFIG;
     i2c_status_t aux     =   0;
 
 
@@ -287,15 +287,15 @@ DS1624_status_t  DS1624_GetStatusRegister   ( I2C_parameters_t myI2Cparameters, 
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS1624_SUCCESS;
+        return   iAQ_Core_SUCCESS;
     else
-        return   DS1624_FAILURE;
+        return   iAQ_Core_FAILURE;
 }
 
 
 
 /**
- * @brief       DS1624_SetConversionMode ( I2C_parameters_t , DS1624_access_config_1shot_t )
+ * @brief       iAQ_Core_SetConversionMode ( I2C_parameters_t , iAQ_Core_access_config_1shot_t )
  *
  * @details     It sets 1SHOT/Continuous temperature conversion mode.
  *
@@ -306,7 +306,7 @@ DS1624_status_t  DS1624_GetStatusRegister   ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   N/A.
  *
  *
- * @return       Status of DS1624_SetConversionMode.
+ * @return       Status of iAQ_Core_SetConversionMode.
  *
  *
  * @author      Manuel Caballero
@@ -316,11 +316,11 @@ DS1624_status_t  DS1624_GetStatusRegister   ( I2C_parameters_t myI2Cparameters, 
  * @warning     Since the configuration register is implemented in
  *              EEPROM, writes to the register require 10ms to complete.
  *              After issuing a command to write to the configuration register,
- *              no further accesses to the DS1624 should be made for at least 10ms.
+ *              no further accesses to the iAQ_Core should be made for at least 10ms.
  */
-DS1624_status_t  DS1624_SetConversionMode   ( I2C_parameters_t myI2Cparameters, DS1624_access_config_1shot_t myConversionMode )
+iAQ_Core_status_t  iAQ_Core_SetConversionMode   ( I2C_parameters_t myI2Cparameters, iAQ_Core_access_config_1shot_t myConversionMode )
 {
-    uint8_t      cmd[]   =   { DS1624_ACCESS_CONFIG, 0 };
+    uint8_t      cmd[]   =   { iAQ_Core_ACCESS_CONFIG, 0 };
     i2c_status_t aux     =   0;
 
 
@@ -351,15 +351,15 @@ DS1624_status_t  DS1624_SetConversionMode   ( I2C_parameters_t myI2Cparameters, 
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS1624_SUCCESS;
+        return   iAQ_Core_SUCCESS;
     else
-        return   DS1624_FAILURE;
+        return   iAQ_Core_FAILURE;
 }
 
 
 
 /**
- * @brief       DS1624_IsTemperatureConversionDone ( I2C_parameters_t , DS1624_vector_data_t* )
+ * @brief       iAQ_Core_IsTemperatureConversionDone ( I2C_parameters_t , iAQ_Core_vector_data_t* )
  *
  * @details     It checks if a temperature conversion is done.
  *
@@ -370,7 +370,7 @@ DS1624_status_t  DS1624_SetConversionMode   ( I2C_parameters_t myI2Cparameters, 
  *                                                  ACCESS_CONFIG_DONE_CONVERSION_IN_PROGRESS.
  *
  *
- * @return       Status of DS1624_IsTemperatureConversionDone.
+ * @return       Status of iAQ_Core_IsTemperatureConversionDone.
  *
  *
  * @author      Manuel Caballero
@@ -379,9 +379,9 @@ DS1624_status_t  DS1624_SetConversionMode   ( I2C_parameters_t myI2Cparameters, 
  * @pre         N/A.
  * @warning     N/A.
  */
-DS1624_status_t DS1624_IsTemperatureConversionDone ( I2C_parameters_t myI2Cparameters, DS1624_access_config_done_t* myTemperatureConversionStatus )
+iAQ_Core_status_t iAQ_Core_IsTemperatureConversionDone ( I2C_parameters_t myI2Cparameters, iAQ_Core_access_config_done_t* myTemperatureConversionStatus )
 {
-    uint8_t      cmd[]     =   { DS1624_ACCESS_CONFIG, 0 };
+    uint8_t      cmd[]     =   { iAQ_Core_ACCESS_CONFIG, 0 };
     i2c_status_t aux       =   0;
 
 
@@ -396,15 +396,15 @@ DS1624_status_t DS1624_IsTemperatureConversionDone ( I2C_parameters_t myI2Cparam
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS1624_SUCCESS;
+        return   iAQ_Core_SUCCESS;
     else
-        return   DS1624_FAILURE;
+        return   iAQ_Core_FAILURE;
 }
 
 
 
 /**
- * @brief       DS1624_ReadBytesEEPROM ( I2C_parameters_t , uint8_t , uint8_t* , uint8_t )
+ * @brief       iAQ_Core_ReadBytesEEPROM ( I2C_parameters_t , uint8_t , uint8_t* , uint8_t )
  *
  * @details     It reads a certain number of bytes from EEPROM memory.
  *
@@ -415,7 +415,7 @@ DS1624_status_t DS1624_IsTemperatureConversionDone ( I2C_parameters_t myI2Cparam
  * @param[out]   myReadBytesEEPROM:     Read values from EEPROM memory.
  *
  *
- * @return       Status of DS1624_ReadBytesEEPROM.
+ * @return       Status of iAQ_Core_ReadBytesEEPROM.
  *
  *
  * @author      Manuel Caballero
@@ -426,9 +426,9 @@ DS1624_status_t DS1624_IsTemperatureConversionDone ( I2C_parameters_t myI2Cparam
  *              it increments from the end of the memory back to the first location of the memory
  *              ( address 00h ).
  */
-DS1624_status_t DS1624_ReadBytesEEPROM ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t* myReadBytesEEPROM, uint8_t myLength )
+iAQ_Core_status_t iAQ_Core_ReadBytesEEPROM ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t* myReadBytesEEPROM, uint8_t myLength )
 {
-    uint8_t      cmd[]     =   { DS1624_ACCESS_MEMORY, 0 };
+    uint8_t      cmd[]     =   { iAQ_Core_ACCESS_MEMORY, 0 };
     i2c_status_t aux       =   0;
 
 
@@ -443,15 +443,15 @@ DS1624_status_t DS1624_ReadBytesEEPROM ( I2C_parameters_t myI2Cparameters, uint8
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS1624_SUCCESS;
+        return   iAQ_Core_SUCCESS;
     else
-        return   DS1624_FAILURE;
+        return   iAQ_Core_FAILURE;
 }
 
 
 
 /**
- * @brief       DS1624_WriteBytesEEPROM ( I2C_parameters_t , uint8_t , uint8_t , uint8_t )
+ * @brief       iAQ_Core_WriteBytesEEPROM ( I2C_parameters_t , uint8_t , uint8_t , uint8_t )
  *
  * @details     It writes a certain number of bytes to EEPROM memory.
  *
@@ -463,27 +463,27 @@ DS1624_status_t DS1624_ReadBytesEEPROM ( I2C_parameters_t myI2Cparameters, uint8
  * @param[out]   N/A.
  *
  *
- * @return       Status of DS1624_WriteBytesEEPROM.
+ * @return       Status of iAQ_Core_WriteBytesEEPROM.
  *
  *
  * @author      Manuel Caballero
  * @date        26/January/2018
  * @version     26/January/2018     The ORIGIN
  * @pre         N/A.
- * @warning     The STOP condition causes the DS1624 to initiate the write to EEPROM sequence.
+ * @warning     The STOP condition causes the iAQ_Core to initiate the write to EEPROM sequence.
  * @warning     If the starting address is 00 and the incoming data is 00 11 22 33 44 55 66 77 88 99,
  *              the result is mem00=88 mem01=99 mem02=22 mem03=33 mem04=44 mem05=55 mem06=66 mem07=77.
  *              The data wraps around and overwrites itself.
  * @warning     EEPROM Write Cycle Time: 50ms ( maximum ). The user must take care of this time!.
  */
-DS1624_status_t DS1624_WriteBytesEEPROM ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t myWriteBytesEEPROM[], uint8_t myLength )
+iAQ_Core_status_t iAQ_Core_WriteBytesEEPROM ( I2C_parameters_t myI2Cparameters, uint8_t myStartingAddress, uint8_t myWriteBytesEEPROM[], uint8_t myLength )
 {
     uint8_t      cmd[ myLength + 2 ];
     uint32_t     i         =     0;
     i2c_status_t aux       =     0;
 
     // Prepare COMMANDS
-    cmd[0]   =   DS1624_ACCESS_MEMORY;
+    cmd[0]   =   iAQ_Core_ACCESS_MEMORY;
     cmd[1]   =   myStartingAddress;
 
     // Prepare the payload to be stored into the EEPROM memory
@@ -497,7 +497,7 @@ DS1624_status_t DS1624_WriteBytesEEPROM ( I2C_parameters_t myI2Cparameters, uint
 
 
     if ( aux == I2C_SUCCESS )
-        return   DS1624_SUCCESS;
+        return   iAQ_Core_SUCCESS;
     else
-        return   DS1624_FAILURE;
+        return   iAQ_Core_FAILURE;
 }
