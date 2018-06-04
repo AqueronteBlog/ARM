@@ -3,11 +3,11 @@
  * @details     Constants and variables used by the example.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018     The ORIGIN
+ * @date        4/June/2018
+ * @version     4/June/2018     The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     N/A
@@ -25,7 +25,4 @@
 #define YES             1
 #define NO              0
 
-
-/* VARIABLES */
-uint32_t mySTATE;                       /*!<   It indicates the next action to be performed                                       */
 
