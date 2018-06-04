@@ -3,11 +3,11 @@
  * @details     Functions.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
+ * @date        4/June/2018
+ * @version     4/June/2018   The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     N/A
@@ -23,12 +23,11 @@
  * @details     It configures GPIO to work with the LEDs.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        5/May/2017
- * @version     23/May/2017     All the LEDs OFF at the beginning.
- *              5/May/2017      The ORIGIN
+ * @date        4/June/2018
+ * @version     4/June/2018      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -60,11 +59,11 @@ void conf_GPIO  ( void )
  *                 --- Channel 0:
  *                  * Overflow:             ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500kHz)^(-1) ) ~ 0.5s.
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
+ * @date        4/June/2018
+ * @version     4/June/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
