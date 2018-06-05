@@ -33,6 +33,9 @@ uint32_t volatile mySTATE;                       /*!<   It indicates the next ac
 /* MAIN */
 int main( void )
 {
+    uint32_t                   myWarmUpCounter   =   0;
+
+
     I2C_parameters_t           myiAQ_Core_I2C_parameters;
 
     iAQ_Core_status_t          aux;
@@ -57,38 +60,41 @@ int main( void )
     aux  =   iAQ_Core_Init ( myiAQ_Core_I2C_parameters );
 
 
-    /* iAQ-Core warm up is at least 5 minutes  */
-    for ( uint32_t ii = 0; ii < 300; ii++ )
+    /* iAQ-Core warm up is at least 5 minutes ( 300 * 1s ) or when the sensor is ready  */
+    do
     {
+        aux  =   iAQ_Core_GetNewReading ( myiAQ_Core_I2C_parameters, &myiAQ_Core_Data );
         nrf_delay_ms ( 1000 );
-    }
+        myWarmUpCounter++;
+    }while( ( myWarmUpCounter < 300 ) && ( myiAQ_Core_Data.status == iAQ_Core_STATUS_RUNIN ) );
 
 
-
-    NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
+    mySTATE = 1;
+//    NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
 
     //NRF_POWER->SYSTEMOFF = 1;
     NRF_POWER->TASKS_LOWPWR  =   1;             // Sub power mode: Low power.
     while( 1 )
     {
-        /* Enter System ON sleep mode   */
-    	__WFE();
-    	/* Make sure any pending events are cleared */
-    	__SEV();
-    	__WFE();
+//        /* Enter System ON sleep mode   */
+//    	__WFE();
+//    	/* Make sure any pending events are cleared */
+//    	__SEV();
+//    	__WFE();
 
 
     	if ( mySTATE == 1 )
         {
             /* New reading */
-//            do
-//            {
-//                aux      =   iAQ_Core_GetNewReading ( myiAQ_Core_I2C_parameters, &myiAQ_Core_Data );
-//            }while( ( myiAQ_Core_Data.status & iAQ_Core_STATUS_OK ) );
+            do
+            {
+                aux      =   iAQ_Core_GetNewReading ( myiAQ_Core_I2C_parameters, &myiAQ_Core_Data );
+            }while( myiAQ_Core_Data.status != iAQ_Core_STATUS_OK );                                         // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
+                                                                                                            // [WORKAROUND] Insert a counter.
 
 
 
-            mySTATE  =   0;
+//            mySTATE  =   0;
     	}
 
         //__NOP();
