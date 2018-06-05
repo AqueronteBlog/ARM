@@ -45,8 +45,8 @@ typedef enum
 typedef enum
 {
     iAQ_Core_STATUS_OK        =   0x00,         /*!<  Status Flag: OK      ( data valid )                               */
-    iAQ_Core_STATUS_BUSY      =   0x01,         /*!<  Status Flag: BUSY    ( module in warm up phase )                  */
-    iAQ_Core_STATUS_RUNIN     =   0x10,         /*!<  Status Flag: RUNIN   ( re-read multi byte data! )                 */
+    iAQ_Core_STATUS_BUSY      =   0x01,         /*!<  Status Flag: BUSY    ( re-read multi byte data! )                 */
+    iAQ_Core_STATUS_RUNIN     =   0x10,         /*!<  Status Flag: RUNIN   ( module in warm up phase )                  */
     iAQ_Core_STATUS_ERROR     =   0x80          /*!<  Status Flag: ERROR   ( if constant: replace sensor )              */
 } iAQ_Core_status_flag_t;
 
