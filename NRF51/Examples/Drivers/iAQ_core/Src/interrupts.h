@@ -14,18 +14,32 @@
  */
 
 #include "board.h"
+#include "variables.h"
 #include "nrf.h"
 #include "nrf51_bitfields.h"
 
+#ifndef INTERRUPTS_H_
+#define INTERRUPTS_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* INTERRUPT PRTOTYPES */
 void TIMER0_IRQHandler ( void );
+void UART0_IRQHandler   ( void );
 
 
 
 /* VARIABLES */
-//extern uint8_t   dataToBeTX;
+extern uint8_t  volatile dataToBeTX;
 extern uint32_t volatile mySTATE;
-//extern uint32_t  TX_inProgress;
-//extern uint8_t   TX_buff[];
-//extern uint8_t   *myPtr;
+extern uint32_t volatile TX_inProgress;
+extern uint8_t  volatile *myPtr;
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* INTERRUPTS_H_ */
