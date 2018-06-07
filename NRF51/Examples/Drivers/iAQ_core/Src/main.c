@@ -21,29 +21,34 @@
 #include "ble.h"
 #include "board.h"
 #include "functions.h"
+#include "variables.h"
 #include "iAQ_Core.h"
 
 
 
 /* GLOBAL VARIABLES */
 uint32_t volatile mySTATE;                       /*!<   It indicates the next action to be performed                                       */
+uint8_t  volatile dataToBeTX;                    /*!<   A counter. It indicates how many data it will be transmitted through the UART      */
+uint32_t volatile TX_inProgress;                 /*!<   It indicates if a transmission is in progress                                      */
+uint8_t  volatile *myPtr;                        /*!<   Pointer to point out the data from the external sensor                             */
 
 
 
 /* MAIN */
 int main( void )
 {
-    uint32_t                   myWarmUpCounter   =   0;
+    uint8_t  myTX_buff[7]     =  { 0 };
+    uint32_t myWarmUpCounter  =   0;
 
 
     I2C_parameters_t           myiAQ_Core_I2C_parameters;
-
     iAQ_Core_status_t          aux;
     iAQ_Core_vector_data_t     myiAQ_Core_Data;
 
 
     conf_GPIO   ();
     conf_TIMER0 ();
+    conf_UART   ();
 
 
 
@@ -69,21 +74,22 @@ int main( void )
     }while( ( myWarmUpCounter < 300 ) && ( myiAQ_Core_Data.status == iAQ_Core_STATUS_RUNIN ) );
 
 
-    mySTATE = 1;
-//    NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
+    mySTATE  =   0;                             // Reset the variable
+    NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
 
     //NRF_POWER->SYSTEMOFF = 1;
     NRF_POWER->TASKS_LOWPWR  =   1;             // Sub power mode: Low power.
     while( 1 )
     {
-//        /* Enter System ON sleep mode   */
-//    	__WFE();
-//    	/* Make sure any pending events are cleared */
-//    	__SEV();
-//    	__WFE();
+        /* Enter System ON sleep mode   */
+    	__WFE();
+    	/* Make sure any pending events are cleared */
+    	__SEV();
+    	__WFE();
 
 
-    	if ( mySTATE == 1 )
+    	NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
+        if ( mySTATE == 1 )
         {
             /* New reading */
             do
@@ -92,11 +98,36 @@ int main( void )
             }while( myiAQ_Core_Data.status != iAQ_Core_STATUS_OK );                                         // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
                                                                                                             // [WORKAROUND] Insert a counter.
 
+            /* Prepare the data to be sent through the UART */
+            myTX_buff[0]                 =   ( myiAQ_Core_Data.pred >> 8 ) & 0xFF;                          // Prediction (CO2 eq. ppm): MSB
+            myTX_buff[1]                 =   ( myiAQ_Core_Data.pred & 0xFF );                               // Prediction (CO2 eq. ppm): LSB
+            myTX_buff[2]                 =   ( myiAQ_Core_Data.Tvoc >> 8 ) & 0xFF;                          // Prediction (TVOC eq. ppb): MSB
+            myTX_buff[3]                 =   ( myiAQ_Core_Data.Tvoc & 0xFF );                               // Prediction (TVOC eq. ppb): LSB
+            myTX_buff[4]                 =   ( myiAQ_Core_Data.resistance >> 16 ) & 0xFF;                   // Sensor resistance: MSB
+            myTX_buff[5]                 =   ( myiAQ_Core_Data.resistance >> 8 ) & 0xFF;                    // Sensor resistance
+            myTX_buff[6]                 =   ( myiAQ_Core_Data.resistance & 0xFF );                         // Sensor resistance: LSB
 
 
-//            mySTATE  =   0;
+            /* Send data through the UART   */
+            myPtr                        =   &myTX_buff[0];
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   *myPtr++;                                                      // Start transmission
+
+            /* Wait until the message is transmitted */
+            while ( TX_inProgress == YES )
+            {
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+            mySTATE             =   0;
     	}
 
+        NRF_GPIO->OUTSET             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
         //__NOP();
     }
 }
