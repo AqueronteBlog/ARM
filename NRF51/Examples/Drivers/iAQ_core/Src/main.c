@@ -1,8 +1,9 @@
 /**
  * @brief       main.c
- * @details     [todo]
+ * @details     This example shows hot to work with an external device: iAQ-Core ( Indoor Air Quality Sensor Module ).
+ *              Every 1s, a new reading is performed and sent through the UART.
  *
- *              the rest of the time, the microcontroller is in low power.
+ *              The rest of the time, the microcontroller is in low power.
  *
  * @return      N/A
  *
@@ -57,7 +58,7 @@ int main( void )
     myiAQ_Core_I2C_parameters.SDA         =    TWI0_SDA;
     myiAQ_Core_I2C_parameters.SCL         =    TWI0_SCL;
     myiAQ_Core_I2C_parameters.ADDR        =    iAQ_Core_ADDRESS;
-    myiAQ_Core_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myiAQ_Core_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K100;
     myiAQ_Core_I2C_parameters.SDAport     =    NRF_GPIO;
     myiAQ_Core_I2C_parameters.SCLport     =    NRF_GPIO;
 
@@ -68,7 +69,7 @@ int main( void )
     /* iAQ-Core warm up is at least 5 minutes ( 300 * 1s ) or when the sensor is ready  */
     do
     {
-        aux  =   iAQ_Core_GetNewReading ( myiAQ_Core_I2C_parameters, &myiAQ_Core_Data );
+        aux      =   iAQ_Core_GetNewReading ( myiAQ_Core_I2C_parameters, &myiAQ_Core_Data );
         nrf_delay_ms ( 1000 );
         myWarmUpCounter++;
     }while( ( myWarmUpCounter < 300 ) && ( myiAQ_Core_Data.status == iAQ_Core_STATUS_RUNIN ) );
