@@ -78,7 +78,7 @@ iAQ_Core_status_t  iAQ_Core_GetNewReading ( I2C_parameters_t myI2Cparameters, iA
 
 
     /* Get the data */
-    aux = i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    aux = i2c_read ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
     /* Update the parameters    */
