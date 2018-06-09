@@ -1,24 +1,24 @@
 /**
- * @brief       SI7021.c
- * @details     I2C HUMIDITY AND TEMPERATURE SENSOR.
+ * @brief       TMP102.c
+ * @details     Low-Power Digital Temperature Sensor With SMBus and Two-Wire Serial.
  *              Functions file.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018    The ORIGIN
+ * @date        9/June/2018
+ * @version     9/June/2018    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "SI7021.h"
+#include "TMP102.h"
 
 
 /**
- * @brief       SI7021_Init ( I2C_parameters_t )
+ * @brief       TMP102_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,16 +27,16 @@
  * @param[out]   N/A.
  *
  *
- * @return       Status of SI7021_Init.
+ * @return       Status of TMP102_Init.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-SI7021_status_t  SI7021_Init ( I2C_parameters_t myI2Cparameters )
+TMP102_status_t  TMP102_Init ( I2C_parameters_t myI2Cparameters )
 {
     i2c_status_t aux;
 
@@ -45,15 +45,15 @@ SI7021_status_t  SI7021_Init ( I2C_parameters_t myI2Cparameters )
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_Conf ( I2C_parameters_t , SI7021_measurement_resolution_t , SI7021_heater_t )
+ * @brief       TMP102_Conf ( I2C_parameters_t , TMP102_measurement_resolution_t , TMP102_heater_t )
  *
  * @details     It configures the device: resolution and heater.
  *
@@ -64,20 +64,20 @@ SI7021_status_t  SI7021_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   N/A.
  *
  *
- * @return       Status of SI7021_Conf.
+ * @return       Status of TMP102_Conf.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
  * @pre         Except where noted, reserved register bits will always read back as '1' and are not affected by write operations. For
  *              future compatibility, it is recommended that prior to a write operation, registers should be read. Then the values read
  *              from the RSVD bits should be written back unchanged during the write operation
  * @warning     N/A.
  */
-SI7021_status_t  SI7021_Conf ( I2C_parameters_t myI2Cparameters, SI7021_measurement_resolution_t myResolution, SI7021_heater_t myHeater )
+TMP102_status_t  TMP102_Conf ( I2C_parameters_t myI2Cparameters, TMP102_measurement_resolution_t myResolution, TMP102_heater_t myHeater )
 {
-    uint8_t      cmd[]    =    { SI7021_READ_RH_T_USER_REGISTER_1, 0 };
+    uint8_t      cmd[]    =    { TMP102_READ_RH_T_USER_REGISTER_1, 0 };
 
     i2c_status_t aux;
 
@@ -89,32 +89,32 @@ SI7021_status_t  SI7021_Conf ( I2C_parameters_t myI2Cparameters, SI7021_measurem
 
     // Update USER REGISTER according to user requirements
     // Resolution
-    cmd[1]  &= ~SI7021_RESOLUTION_MASK;
+    cmd[1]  &= ~TMP102_RESOLUTION_MASK;
     cmd[1]  |=  myResolution;
 
     // Hater
-    cmd[1]  &= ~SI7021_HTRE_MASK;
+    cmd[1]  &= ~TMP102_HTRE_MASK;
     cmd[1]  |=  myHeater;
 
 
 
     // Update USER REGISTER
-    cmd[0]   =   SI7021_WRITE_RH_T_USER_REGISTER_1;
+    cmd[0]   =   TMP102_WRITE_RH_T_USER_REGISTER_1;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
 
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_SoftReset ( I2C_parameters_t )
+ * @brief       TMP102_SoftReset ( I2C_parameters_t )
  *
  * @details     It resets the device by software.
  *
@@ -123,20 +123,20 @@ SI7021_status_t  SI7021_Conf ( I2C_parameters_t myI2Cparameters, SI7021_measurem
  * @param[out]   N/A.
  *
  *
- * @return       Status of SI7021_SoftReset.
+ * @return       Status of TMP102_SoftReset.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
  * @pre         N/A
  * @warning     The user MUST keep in mind that the device will be
  *              available after 5ms ( typically, 15ms maximum )
  *              The user MUST take care of this delay!.
  */
-SI7021_status_t  SI7021_SoftReset ( I2C_parameters_t myI2Cparameters )
+TMP102_status_t  TMP102_SoftReset ( I2C_parameters_t myI2Cparameters )
 {
-    uint8_t      cmd    =    SI7021_RESET;
+    uint8_t      cmd    =    TMP102_RESET;
 
     i2c_status_t aux;
 
@@ -148,15 +148,15 @@ SI7021_status_t  SI7021_SoftReset ( I2C_parameters_t myI2Cparameters )
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_GetElectronicSerialNumber ( I2C_parameters_t , SI7021_vector_data_t* )
+ * @brief       TMP102_GetElectronicSerialNumber ( I2C_parameters_t , TMP102_vector_data_t* )
  *
  * @details     It gets the electronic serial number.
  *
@@ -165,18 +165,18 @@ SI7021_status_t  SI7021_SoftReset ( I2C_parameters_t myI2Cparameters )
  * @param[out]   mySerialNumber:     The Electronic Serial Number.
  *
  *
- * @return       Status of SI7021_GetElectronicSerialNumber.
+ * @return       Status of TMP102_GetElectronicSerialNumber.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
  * @pre         This function does NOT check the CRC
  * @warning     N/A.
  */
-SI7021_status_t  SI7021_GetElectronicSerialNumber   ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* mySerialNumber )
+TMP102_status_t  TMP102_GetElectronicSerialNumber   ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* mySerialNumber )
 {
-    uint8_t      cmd[]    =    { SI7021_READ_ELECTRONIC_ID_FIRST_BYTE_CMD1, SI7021_READ_ELECTRONIC_ID_FIRST_BYTE_CMD2, 0, 0, 0, 0, 0, 0 };
+    uint8_t      cmd[]    =    { TMP102_READ_ELECTRONIC_ID_FIRST_BYTE_CMD1, TMP102_READ_ELECTRONIC_ID_FIRST_BYTE_CMD2, 0, 0, 0, 0, 0, 0 };
     i2c_status_t aux;
 
 
@@ -189,8 +189,8 @@ SI7021_status_t  SI7021_GetElectronicSerialNumber   ( I2C_parameters_t myI2Cpara
 
 
     // Read Electronic Serial Number. Second Access
-    cmd[0]   =   SI7021_READ_ELECTRONIC_ID_SECOND_BYTE_CMD1;
-    cmd[1]   =   SI7021_READ_ELECTRONIC_ID_SECOND_BYTE_CMD2;
+    cmd[0]   =   TMP102_READ_ELECTRONIC_ID_SECOND_BYTE_CMD1;
+    cmd[1]   =   TMP102_READ_ELECTRONIC_ID_SECOND_BYTE_CMD2;
 
     aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_NO_STOP_BIT );
     aux = i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
@@ -202,15 +202,15 @@ SI7021_status_t  SI7021_GetElectronicSerialNumber   ( I2C_parameters_t myI2Cpara
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_GetFirmwareRevision ( I2C_parameters_t , SI7021_vector_data_t* )
+ * @brief       TMP102_GetFirmwareRevision ( I2C_parameters_t , TMP102_vector_data_t* )
  *
  * @details     It gets the firmware revision.
  *
@@ -219,18 +219,18 @@ SI7021_status_t  SI7021_GetElectronicSerialNumber   ( I2C_parameters_t myI2Cpara
  * @param[out]   myFirmwareRevision: The firmware revision.
  *
  *
- * @return       Status of SI7021_GetFirmwareRevision.
+ * @return       Status of TMP102_GetFirmwareRevision.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
-SI7021_status_t  SI7021_GetFirmwareRevision ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myFirmwareRevision )
+TMP102_status_t  TMP102_GetFirmwareRevision ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myFirmwareRevision )
 {
-    uint8_t      cmd[]    =    { SI7021_READ_FIRMWARE_VERSION_CMD1, SI7021_READ_FIRMWARE_VERSION_CMD2 };
+    uint8_t      cmd[]    =    { TMP102_READ_FIRMWARE_VERSION_CMD1, TMP102_READ_FIRMWARE_VERSION_CMD2 };
 
     i2c_status_t aux;
 
@@ -246,15 +246,15 @@ SI7021_status_t  SI7021_GetFirmwareRevision ( I2C_parameters_t myI2Cparameters, 
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_SetHeaterCurrent ( I2C_parameters_t , uint8_t )
+ * @brief       TMP102_SetHeaterCurrent ( I2C_parameters_t , uint8_t )
  *
  * @details     It sets the heater current.
  *
@@ -264,18 +264,18 @@ SI7021_status_t  SI7021_GetFirmwareRevision ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   N/A.
  *
  *
- * @return       Status of SI7021_SetHeaterCurrent.
+ * @return       Status of TMP102_SetHeaterCurrent.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
-SI7021_status_t  SI7021_SetHeaterCurrent ( I2C_parameters_t myI2Cparameters, uint8_t myHeaterCurrent )
+TMP102_status_t  TMP102_SetHeaterCurrent ( I2C_parameters_t myI2Cparameters, uint8_t myHeaterCurrent )
 {
-    uint8_t   cmd[]    =    { SI7021_READ_HEATER_CONTROL_REGISTER, 0 };
+    uint8_t   cmd[]    =    { TMP102_READ_HEATER_CONTROL_REGISTER, 0 };
     uint32_t  aux      =    0;
 
 
@@ -290,27 +290,27 @@ SI7021_status_t  SI7021_SetHeaterCurrent ( I2C_parameters_t myI2Cparameters, uin
         cmd[1]  &=  0xF0;
 
         // Update the value
-        cmd[0]  =   SI7021_WRITE_HEATER_CONTROL_REGISTER;
+        cmd[0]  =   TMP102_WRITE_HEATER_CONTROL_REGISTER;
         cmd[1] |=   myHeaterCurrent;
 
 
         aux = i2c_write ( myI2Cparameters, &cmd[0], 2, I2C_STOP_BIT );
     } else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_TriggerTemperature ( I2C_parameters_t , SI7021_master_mode_t )
+ * @brief       TMP102_TriggerTemperature ( I2C_parameters_t , TMP102_master_mode_t )
  *
  * @details     It performs a new temperature measurement.
  *
@@ -320,12 +320,12 @@ SI7021_status_t  SI7021_SetHeaterCurrent ( I2C_parameters_t myI2Cparameters, uin
  * @param[out]   N/A
  *
  *
- * @return       Status of SI7021_TriggerTemperature.
+ * @return       Status of TMP102_TriggerTemperature.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
  * @pre         N/A.
  * @warning     The user MUST respect the total conversion time.
  *              14-bit temperature: 7ms   ( 10.8ms max )
@@ -333,7 +333,7 @@ SI7021_status_t  SI7021_SetHeaterCurrent ( I2C_parameters_t myI2Cparameters, uin
  *              12-bit temperature: 2.4ms (  3.8ms max )
  *              11-bit temperature: 1.5ms (  2.4ms max )
  */
-SI7021_status_t  SI7021_TriggerTemperature ( I2C_parameters_t myI2Cparameters, SI7021_master_mode_t myMode  )
+TMP102_status_t  TMP102_TriggerTemperature ( I2C_parameters_t myI2Cparameters, TMP102_master_mode_t myMode  )
 {
     uint8_t      cmd        =    0;
     uint8_t      myI2C_stop =    I2C_STOP_BIT;
@@ -341,14 +341,14 @@ SI7021_status_t  SI7021_TriggerTemperature ( I2C_parameters_t myI2Cparameters, S
     i2c_status_t aux;
 
     // Check the mode if it is HOLD MASTER MODE, then not generate a stop bit
-    if ( myMode == SI7021_HOLD_MASTER_MODE )
+    if ( myMode == TMP102_HOLD_MASTER_MODE )
     {
-        cmd         =    SI7021_MEASURE_TEMPERATURE_HOLD_MASTER_MODE;
+        cmd         =    TMP102_MEASURE_TEMPERATURE_HOLD_MASTER_MODE;
         myI2C_stop  =    I2C_NO_STOP_BIT;
     }
     else
     {
-        cmd         =    SI7021_MEASURE_TEMPERATURE_NO_HOLD_MASTER_MODE;
+        cmd         =    TMP102_MEASURE_TEMPERATURE_NO_HOLD_MASTER_MODE;
         myI2C_stop  =    I2C_STOP_BIT;
     }
 
@@ -361,15 +361,15 @@ SI7021_status_t  SI7021_TriggerTemperature ( I2C_parameters_t myI2Cparameters, S
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_ReadTemperature ( I2C_parameters_t , SI7021_vector_data_t* )
+ * @brief       TMP102_ReadTemperature ( I2C_parameters_t , TMP102_vector_data_t* )
  *
  * @details     It reads the temperature.
  *
@@ -379,17 +379,17 @@ SI7021_status_t  SI7021_TriggerTemperature ( I2C_parameters_t myI2Cparameters, S
  * @param[out]   myTemperature:      The current temperature
  *
  *
- * @return       Status of SI7021_ReadTemperature.
+ * @return       Status of TMP102_ReadTemperature.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
- * @pre         SI7021_TriggerTemperature MUST be called first. This function does NOT
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
+ * @pre         TMP102_TriggerTemperature MUST be called first. This function does NOT
  *              read CRC byte.
  * @warning     N/A.
  */
-SI7021_status_t  SI7021_ReadTemperature ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myTemperature )
+TMP102_status_t  TMP102_ReadTemperature ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature )
 {
     uint8_t      cmd[]      =    { 0, 0 };
 
@@ -410,22 +410,22 @@ SI7021_status_t  SI7021_ReadTemperature ( I2C_parameters_t myI2Cparameters, SI70
         myTemperature->Temperature  -=   46.85;
     }
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 
 
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_ReadRawTemperatureFromRH ( I2C_parameters_t , SI7021_vector_data_t* )
+ * @brief       TMP102_ReadRawTemperatureFromRH ( I2C_parameters_t , TMP102_vector_data_t* )
  *
  * @details     It reads the raw temperature.
  *
@@ -434,18 +434,18 @@ SI7021_status_t  SI7021_ReadTemperature ( I2C_parameters_t myI2Cparameters, SI70
  * @param[out]   myTemperature:      The current temperature
  *
  *
- * @return       Status of SI7021_ReadRawTemperatureFromRH.
+ * @return       Status of TMP102_ReadRawTemperatureFromRH.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
- * @pre         SI7021_TriggerHumidity MUST be called first.
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
+ * @pre         TMP102_TriggerHumidity MUST be called first.
  * @warning     N/A.
  */
-SI7021_status_t  SI7021_ReadRawTemperatureFromRH ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myTemperature )
+TMP102_status_t  TMP102_ReadRawTemperatureFromRH ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature )
 {
-    uint8_t      cmd[]      =    { SI7021_READ_TEMPERATURE_VALUE_FROM_PREVIOUS_RH_MEASUREMENT, 0 };
+    uint8_t      cmd[]      =    { TMP102_READ_TEMPERATURE_VALUE_FROM_PREVIOUS_RH_MEASUREMENT, 0 };
 
     i2c_status_t aux;
 
@@ -462,21 +462,21 @@ SI7021_status_t  SI7021_ReadRawTemperatureFromRH ( I2C_parameters_t myI2Cparamet
         myTemperature->Temperature   =   ( ( cmd[0] << 8 ) | cmd[1] );
     }
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_ReadTemperatureFromRH ( I2C_parameters_t , SI7021_vector_data_t* )
+ * @brief       TMP102_ReadTemperatureFromRH ( I2C_parameters_t , TMP102_vector_data_t* )
  *
  * @details     It reads the temperature.
  *
@@ -485,18 +485,18 @@ SI7021_status_t  SI7021_ReadRawTemperatureFromRH ( I2C_parameters_t myI2Cparamet
  * @param[out]   myTemperature:      The current temperature
  *
  *
- * @return       Status of SI7021_ReadTemperatureFromRH.
+ * @return       Status of TMP102_ReadTemperatureFromRH.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
- * @pre         SI7021_TriggerHumidity MUST be called first.
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
+ * @pre         TMP102_TriggerHumidity MUST be called first.
  * @warning     N/A.
  */
-SI7021_status_t  SI7021_ReadTemperatureFromRH ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myTemperature )
+TMP102_status_t  TMP102_ReadTemperatureFromRH ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature )
 {
-    uint8_t      cmd[]      =    { SI7021_READ_TEMPERATURE_VALUE_FROM_PREVIOUS_RH_MEASUREMENT, 0 };
+    uint8_t      cmd[]      =    { TMP102_READ_TEMPERATURE_VALUE_FROM_PREVIOUS_RH_MEASUREMENT, 0 };
 
     i2c_status_t aux;
 
@@ -516,21 +516,21 @@ SI7021_status_t  SI7021_ReadTemperatureFromRH ( I2C_parameters_t myI2Cparameters
         myTemperature->Temperature  -=   46.85;
     }
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_TriggerHumidity ( I2C_parameters_t , SI7021_master_mode_t )
+ * @brief       TMP102_TriggerHumidity ( I2C_parameters_t , TMP102_master_mode_t )
  *
  * @details     It performs a new relative humidity measurement.
  *
@@ -540,12 +540,12 @@ SI7021_status_t  SI7021_ReadTemperatureFromRH ( I2C_parameters_t myI2Cparameters
  * @param[out]   N/A
  *
  *
- * @return       Status of SI7021_TriggerHumidity.
+ * @return       Status of TMP102_TriggerHumidity.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
  * @pre         Initiating a RH measurement will also automatically initiate a temperature measurement.
  *              The total conversion time will be tCONV(RH) + tCONV(T).
  * @warning     The user MUST respect the total conversion time.
@@ -554,7 +554,7 @@ SI7021_status_t  SI7021_ReadTemperatureFromRH ( I2C_parameters_t myI2Cparameters
  *              10-bit RH: 3.7ms  (  4.5ms max )
  *               8-bit RH: 2.6ms  (  3.1ms max )
  */
-SI7021_status_t  SI7021_TriggerHumidity ( I2C_parameters_t myI2Cparameters, SI7021_master_mode_t myMode )
+TMP102_status_t  TMP102_TriggerHumidity ( I2C_parameters_t myI2Cparameters, TMP102_master_mode_t myMode )
 {
     uint8_t      cmd        =    myMode;
     uint8_t      myI2C_stop =    I2C_STOP_BIT;
@@ -562,14 +562,14 @@ SI7021_status_t  SI7021_TriggerHumidity ( I2C_parameters_t myI2Cparameters, SI70
     i2c_status_t aux;
 
     // Check the mode if it is HOLD MASTER MODE, then not generate a stop bit
-    if ( myMode == SI7021_HOLD_MASTER_MODE )
+    if ( myMode == TMP102_HOLD_MASTER_MODE )
     {
-        cmd         =    SI7021_MEASURE_RELATIVE_HUMIDITY_HOLD_MASTER_MODE;
+        cmd         =    TMP102_MEASURE_RELATIVE_HUMIDITY_HOLD_MASTER_MODE;
         myI2C_stop  =    I2C_NO_STOP_BIT;
     }
     else
     {
-        cmd         =    SI7021_MEASURE_RELATIVE_HUMIDITY_NO_HOLD_MASTER_MODE;
+        cmd         =    TMP102_MEASURE_RELATIVE_HUMIDITY_NO_HOLD_MASTER_MODE;
         myI2C_stop  =    I2C_STOP_BIT;
     }
 
@@ -581,15 +581,15 @@ SI7021_status_t  SI7021_TriggerHumidity ( I2C_parameters_t myI2Cparameters, SI70
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_ReadHumidity ( I2C_parameters_t , SI7021_vector_data_t* )
+ * @brief       TMP102_ReadHumidity ( I2C_parameters_t , TMP102_vector_data_t* )
  *
  * @details     It reads the relative humidity.
  *
@@ -598,17 +598,17 @@ SI7021_status_t  SI7021_TriggerHumidity ( I2C_parameters_t myI2Cparameters, SI70
  * @param[out]   myHumidity:         The current HUMIDITY
  *
  *
- * @return       Status of SI7021_ReadHumidity.
+ * @return       Status of TMP102_ReadHumidity.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
- * @pre         SI7021_TriggerHumidity MUST be called first. This function does NOT
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
+ * @pre         TMP102_TriggerHumidity MUST be called first. This function does NOT
  *              read CRC byte.
  * @warning     N/A.
  */
-SI7021_status_t  SI7021_ReadHumidity ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myHumidity )
+TMP102_status_t  TMP102_ReadHumidity ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myHumidity )
 {
     uint8_t      cmd[]      =    { 0, 0 };
 
@@ -629,21 +629,21 @@ SI7021_status_t  SI7021_ReadHumidity ( I2C_parameters_t myI2Cparameters, SI7021_
         myHumidity->RelativeHumidity  -=   6.0;
     }
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_ReadRawHumidity ( I2C_parameters_t , SI7021_vector_data_t* )
+ * @brief       TMP102_ReadRawHumidity ( I2C_parameters_t , TMP102_vector_data_t* )
  *
  * @details     It reads the raw relative humidity.
  *
@@ -652,17 +652,17 @@ SI7021_status_t  SI7021_ReadHumidity ( I2C_parameters_t myI2Cparameters, SI7021_
  * @param[out]   myHumidity:         The current HUMIDITY
  *
  *
- * @return       Status of SI7021_ReadRawHumidity.
+ * @return       Status of TMP102_ReadRawHumidity.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
- * @pre         SI7021_TriggerHumidity MUST be called first. This function does NOT
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
+ * @pre         TMP102_TriggerHumidity MUST be called first. This function does NOT
  *              read CRC byte.
  * @warning     N/A.
  */
-SI7021_status_t  SI7021_ReadRawHumidity ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myHumidity )
+TMP102_status_t  TMP102_ReadRawHumidity ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myHumidity )
 {
     uint8_t      cmd[]      =    { 0, 0 };
 
@@ -680,21 +680,21 @@ SI7021_status_t  SI7021_ReadRawHumidity ( I2C_parameters_t myI2Cparameters, SI70
         myHumidity->RelativeHumidity   =   ( ( cmd[0] << 8 ) | cmd[1] );
     }
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
 
 
 
 /**
- * @brief       SI7021_GetBatteryStatus ( I2C_parameters_t , SI7021_vector_data_t* )
+ * @brief       TMP102_GetBatteryStatus ( I2C_parameters_t , TMP102_vector_data_t* )
  *
  * @details     It reads the raw relative humidity.
  *
@@ -703,18 +703,18 @@ SI7021_status_t  SI7021_ReadRawHumidity ( I2C_parameters_t myI2Cparameters, SI70
  * @param[out]   myBatteryStatus:   The current battery status
  *
  *
- * @return       Status of SI7021_GetBatteryStatus.
+ * @return       Status of TMP102_GetBatteryStatus.
  *
  *
  * @author      Manuel Caballero
- * @date        5/February/2018
- * @version     5/February/2018   The ORIGIN
+ * @date        9/June/2018
+ * @version     9/June/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
-SI7021_status_t  SI7021_GetBatteryStatus ( I2C_parameters_t myI2Cparameters, SI7021_vector_data_t* myBatteryStatus )
+TMP102_status_t  TMP102_GetBatteryStatus ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myBatteryStatus )
 {
-    uint8_t      cmd      =    SI7021_READ_RH_T_USER_REGISTER_1;
+    uint8_t      cmd      =    TMP102_READ_RH_T_USER_REGISTER_1;
 
     i2c_status_t aux;
 
@@ -723,14 +723,14 @@ SI7021_status_t  SI7021_GetBatteryStatus ( I2C_parameters_t myI2Cparameters, SI7
     aux = i2c_read  ( myI2Cparameters, &cmd, 1 );
 
 
-    myBatteryStatus->BatteryStatus   =   ( cmd & SI7021_VDDS_STATUS_MASK );
+    myBatteryStatus->BatteryStatus   =   ( cmd & TMP102_VDDS_STATUS_MASK );
 
 
 
 
 
     if ( aux == I2C_SUCCESS )
-        return   SI7021_SUCCESS;
+        return   TMP102_SUCCESS;
     else
-        return   SI7021_FAILURE;
+        return   TMP102_FAILURE;
 }
