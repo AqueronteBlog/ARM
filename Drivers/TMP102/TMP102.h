@@ -55,68 +55,141 @@ typedef enum
 
 
 
-// MASTER MODE
+// TEMPERATURE REGISTER
 /**
-  * @brief   MEASUREMENT RESOLUTION
+  * @brief   TEMPERATURE REGISTER
   */
 typedef enum
 {
-    TMP102_HOLD_MASTER_MODE                 =   0x01,           /*!<  TMP102 HOLD MASTER MODE enabled                       */
-    TMP102_NO_HOLD_MASTER_MODE              =   0x00            /*!<  TMP102 NO HOLD MASTER MODE enabled                    */
-} TMP102_master_mode_t;
+    TMP102_RESOLUTION_12_BITS_MASK    =   0xFFF0,           /*!<  TMP102 configured as a 12-bit                         */
+    TMP102_RESOLUTION_13_BITS_MASK    =   0xFFF8            /*!<  TMP102 configured as a 13-bit                         */
+} TMP102_temperature_register_t;
 
 
 
-// USER REGISTER 1
-/*
-    NOTE:   Reset Settings = 0011_1010.
-            Except where noted, reserved register bits will always read back as '1' and are not affected by write operations. For
-            future compatibility, it is recommended that prior to a write operation, registers should be read. Then the values read
-            from the RSVD bits should be written back unchanged during the write operation.
-*/
+// CONFIGURATION REGISTER
 /**
-  * @brief   MEASUREMENT RESOLUTION
+  * @brief   SHUTDOWN MODE
   */
 typedef enum
 {
-    TMP102_RESOLUTION_MASK                  =   0x81,           /*!<  TMP102 Measurement Resolution                         */
-    TMP102_RESOLUTION_RH_12_TEMP_14         =   0x00,           /*!<  TMP102 12b RH 14b Temp.                               */
-    TMP102_RESOLUTION_RH_8_TEMP_12          =   0x01,           /*!<  TMP102 9b  RH 12b Temp.                               */
-    TMP102_RESOLUTION_RH_10_TEMP_13         =   0x80,           /*!<  TMP102 10b RH 13b Temp.                               */
-    TMP102_RESOLUTION_RH_11_TEMP_11         =   0x81            /*!<  TMP102 11b RH 11b Temp.                               */
-} TMP102_measurement_resolution_t;
+    TMP102_CONFIGURATION_SD_MASK        =   ( 1U << 8 ),    /*!<  Shutdown Mode Mask                                    */
+    TMP102_CONFIGURATION_SD_ENABLED     =   ( 1U << 8 ),    /*!<  Shutdown Mode Enabled                                 */
+    TMP102_CONFIGURATION_SD_DISABLED    =   ( 0U << 8 )     /*!<  Shutdown Mode Disabled                                */
+} TMP102_configuration_shutdown_mode_t;
+
+
+/**
+  * @brief   THERMOSTAT MODE
+  */
+typedef enum
+{
+    TMP102_CONFIGURATION_TM_MASK            =   ( 1U << 9 ),    /*!<  Thermostat Mode Mask                           */
+    TMP102_CONFIGURATION_TM_COMPARATOR_MODE =   ( 0U << 9 ),    /*!<  Thermostat Mode: Comparator mode               */
+    TMP102_CONFIGURATION_TM_INTERRUPT_MODE  =   ( 1U << 9 )     /*!<  Thermostat Mode: Interrupt mode                */
+} TMP102_configuration_thermostat_mode_t;
+
+
+/**
+  * @brief   POLARITY
+  */
+typedef enum
+{
+    TMP102_CONFIGURATION_POL_MASK                   =   ( 1U << 10 ),    /*!<  Polarity Mask                                                                      */
+    TMP102_CONFIGURATION_POL_ALERT_PIN_ACTIVE_LOW   =   ( 0U << 10 ),    /*!<  Polarity: ALERT pin becomes active low ( default )                                 */
+    TMP102_CONFIGURATION_POL_ALERT_PIN_ACTIVE_LOW   =   ( 1U << 10 )     /*!<  Polarity: ALERT pin becomes active high and the state of the ALERT pin is inverted */
+} TMP102_configuration_polarity_t;
+
+
+/**
+  * @brief   FAULT QUEUE
+  */
+typedef enum
+{
+    TMP102_CONFIGURATION_F1F0_MASK                   =   ( 0b11 << 11 ),    /*!<  Fault Queue Mask                                                               */
+    TMP102_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_1   =   ( 0b00 << 11 ),    /*!<  Fault Queue: consecutive faults: 1                                             */
+    TMP102_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_2   =   ( 0b01 << 11 ),    /*!<  Fault Queue: consecutive faults: 2                                             */
+    TMP102_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_4   =   ( 0b10 << 11 ),    /*!<  Fault Queue: consecutive faults: 4                                             */
+    TMP102_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_6   =   ( 0b11 << 11 )     /*!<  Fault Queue: consecutive faults: 6                                             */
+} TMP102_configuration_fault_queue_t;
+
+
+/**
+  * @brief   CONVERTER RESOLUTION
+  */
+typedef enum
+{
+    TMP102_CONFIGURATION_R1R0_MASK                   =   ( 0b11 << 13 )     /*!<  Converter resolution bits Mask                                                 */
+} TMP102_configuration_converter_resolution_t;
+
+
+/**
+  * @brief   ONE-SHOT
+  */
+typedef enum
+{
+    TMP102_CONFIGURATION_OS_MASK                                =   ( 1U << 15 ),      /*!<  One-Shot Mask                                                       */
+    TMP102_CONFIGURATION_OS_START_SINGLE_TEMPERATURE_CONVERSION =   ( 1U << 15 ),      /*!<  One-Shot It starts a single temperature conversion                  */
+    TMP102_CONFIGURATION_OS_BUSY                                =   ( 0U << 15 )       /*!<  One-Shot During the conversion, the OS bit reads '0'                */
+} TMP102_configuration_one_shot_t;
 
 
 
 /**
-  * @brief   VDDS
+  * @brief   EXTENDED-MODE BIT
   */
-/*
-    NOTE:   The minimum recommended operating voltage is 1.9 V. A transition
-            of the VDD status bit from 0 to 1 indicates that VDD is
-            between 1.8 V and 1.9 V. If the VDD drops below 1.8 V, the
-            device will no longer operate correctly.
-*/
 typedef enum
 {
-    TMP102_VDDS_STATUS_MASK                 =   0x40,           /*!<  TMP102 VDD mask.                                      */
-    TMP102_VDDS_STATUS_VDD_OK               =   ( 0 << 6 ),     /*!<  VDD OK.                                               */
-    TMP102_VDDS_STATUS_VDD_LOW              =   ( 1 << 6 )      /*!<  VDD Low.                                              */
-} TMP102_vdds_status_t;
-
+    TMP102_CONFIGURATION_EM_MASK                                =   ( 1U << 4 ),      /*!<  Extended-Mode Mask                                                  */
+    TMP102_CONFIGURATION_EM_NORMAL_MODE_OPERATION               =   ( 0U << 4 ),      /*!<  Extended-Mode: Normal Mode operation                                */
+    TMP102_CONFIGURATION_EM_EXTENDED_MODE_OPERATION             =   ( 1U << 4 )       /*!<  Extended-Mode: Extended Mode operation                              */
+} TMP102_configuration_extended_mode_bit_t;
 
 
 /**
-  * @brief   HTRE
+  * @brief   ALERT BIT
   */
 typedef enum
 {
-    TMP102_HTRE_MASK                        =   0x03,           /*!<  TMP102 HTRE Mask                                   */
-    TMP102_HTRE_ENABLED                     =   ( 1 << 2 ),     /*!<  TMP102 On-chip Heater Enable                          */
-    TMP102_HTRE_DISABLED                    =   ( 0 << 2 )      /*!<  TMP102 On-chip Heater Disable                         */
-} TMP102_heater_t;
+    TMP102_CONFIGURATION_AL_MASK                                =   ( 1U << 5 )       /*!<  Alert Mask                                                          */
+} TMP102_configuration_alert_bit_t;
 
 
+/**
+  * @brief   CONVERSION RATE
+  */
+typedef enum
+{
+    TMP102_CONFIGURATION_CR_MASK                                =   ( 0b11 << 6 ),    /*!<  Conversion Rate Mask                                                */
+    TMP102_CONFIGURATION_CR_0_25_HZ                             =   ( 0b00 << 6 ),    /*!<  Conversion Rate: 0.25Hz                                             */
+    TMP102_CONFIGURATION_CR_1_HZ                                =   ( 0b01 << 6 ),    /*!<  Conversion Rate: 1Hz                                                */
+    TMP102_CONFIGURATION_CR_4_HZ                                =   ( 0b10 << 6 ),    /*!<  Conversion Rate: 4Hz ( default )                                    */
+    TMP102_CONFIGURATION_CR_8_HZ                                =   ( 0b11 << 6 )     /*!<  Conversion Rate: 8Hz                                                */
+} TMP102_configuration_conversion_rate_t;
+
+
+
+// HIGH-TEMPERATURE REGISTER
+/**
+  * @brief   TEMPERATURE REGISTER
+  */
+typedef enum
+{
+    TMP102_THIGH_RESOLUTION_12_BITS_MASK    =   0xFFF0,                             /*!<  THIGH configured as a 12-bit                         */
+    TMP102_THIGH_RESOLUTION_13_BITS_MASK    =   0xFFF8                              /*!<  THIGH configured as a 13-bit                         */
+} TMP102_high_temperature_register_t;
+
+
+
+// LOW-TEMPERATURE REGISTER
+/**
+  * @brief   TEMPERATURE REGISTER
+  */
+typedef enum
+{
+    TMP102_TLOW_RESOLUTION_12_BITS_MASK    =   0xFFF0,                             /*!<  TLOW configured as a 12-bit                            */
+    TMP102_TLOW_RESOLUTION_13_BITS_MASK    =   0xFFF8                              /*!<  TLOW configured as a 13-bit                            */
+} TMP102_low_temperature_register_t;
 
 
 
@@ -125,14 +198,12 @@ typedef enum
 #define TMP102_VECTOR_STRUCT_H
 typedef struct
 {
-    float    RelativeHumidity;
     float    Temperature;
 
-    uint32_t ElectronicSerialNumber_LSB;
-    uint32_t ElectronicSerialNumber_MSB;
-
-    uint8_t  FirmwareRevision;
-    uint8_t  BatteryStatus;
+    int16_t  TemperatureRegister;
+    uint16_t ConfigurationRegister;
+    int16_t  TLOW_Register;
+    int16_t  THIGH_Register;
 } TMP102_vector_data_t;
 #endif
 
@@ -157,63 +228,65 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-TMP102_status_t  TMP102_Init                        ( I2C_parameters_t myI2Cparameters );
+TMP102_status_t  TMP102_Init                                ( I2C_parameters_t myI2Cparameters                                                      );
 
-/** It configures the device: resolution and heater.
+/** It gets the temperature register value ( raw temperature ).
   */
-TMP102_status_t  TMP102_Conf                        ( I2C_parameters_t myI2Cparameters, TMP102_measurement_resolution_t myResolution, TMP102_heater_t myHeater );
+TMP102_status_t  TMP102_ReadTemperatureRegister             ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperatureRegister         );
 
-/** It performs a software reset.
+/** It gets the temperature value.
   */
-TMP102_status_t  TMP102_SoftReset                   ( I2C_parameters_t myI2Cparameters );
+TMP102_status_t  TMP102_GetTemperature                      ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature                 );
 
-/** It gets the electronic serial number.
+/** It gets the low temperature register value.
   */
-TMP102_status_t  TMP102_GetElectronicSerialNumber   ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* mySerialNumber );
+TMP102_status_t  TMP102_Read_T_LOW_Register                 ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTLOW_Register               );
 
-/** It gets the firmware revision.
+/** It updates the low temperature register value.
   */
-TMP102_status_t  TMP102_GetFirmwareRevision         ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myFirmwareRevision );
+TMP102_status_t  TMP102_Write_T_LOW_Register                ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t myTLOW_Register                );
 
-/** It sets the heater current.
-*/
-TMP102_status_t  TMP102_SetHeaterCurrent            ( I2C_parameters_t myI2Cparameters, uint8_t myHeaterCurrent );
-
-/** It performs a new temperature measurement.
+/** It gets the high temperature register value.
   */
-TMP102_status_t  TMP102_TriggerTemperature          ( I2C_parameters_t myI2Cparameters, TMP102_master_mode_t myMode );
+TMP102_status_t  TMP102_Read_T_HIGH_Register                ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTHIGH_Register              );
 
-/** It read the temperature.
+/** It updates the high temperature register value.
   */
-TMP102_status_t  TMP102_ReadTemperature             ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature );
+TMP102_status_t  TMP102_Write_T_HIGH_Register               ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t myTHIGH_Register               );
 
-/** It reads the raw data from temperature.
+/** It gets the configuration register value.
   */
-TMP102_status_t  TMP102_ReadRawTemperature          ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature );
+TMP102_status_t  TMP102_ReadConfigurationRegister           ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myConfigurationRegister       );
 
-/** It reads the raw temperature data after a relative humidity measurement was done.
+/** It enables shutdown/continuous mode operation.
   */
-TMP102_status_t  TMP102_ReadRawTemperatureFromRH    ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature );
+TMP102_status_t  TMP102_SetShutdownMode                     ( I2C_parameters_t myI2Cparameters, TMP102_configuration_shutdown_mode_t mySDMode       );
 
-/** It reads the temperature after a relative humidity measurement was done.
+/** It enables comparator/interrupt mode operation.
   */
-TMP102_status_t  TMP102_ReadTemperatureFromRH       ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature );
+TMP102_status_t  TMP102_SetThermostatMode                   ( I2C_parameters_t myI2Cparameters, TMP102_configuration_thermostat_mode_t myTMMode     );
 
-/** It performs a new relative humidity measurement.
+/** The polarity bit allows the user to adjust the polarity of the ALERT pin output.
   */
-TMP102_status_t  TMP102_TriggerHumidity             ( I2C_parameters_t myI2Cparameters, TMP102_master_mode_t myMode );
+TMP102_status_t  TMP102_SetPolarityAlertPinOutput           ( I2C_parameters_t myI2Cparameters, TMP102_configuration_polarity_t myPOLMode           );
 
-/** It reads the relative humidity.
+/** The number of fault conditions required to generate an alert may be programmed using the fault queue.
   */
-TMP102_status_t  TMP102_ReadHumidity                ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myHumidity );
+TMP102_status_t  TMP102_SetConsecutiveFaultsQueue           ( I2C_parameters_t myI2Cparameters, TMP102_configuration_fault_queue_t myF1F0Mode       );
 
-/** It reads the raw data from relative humidity.
+/** When the device is in Shutdown Mode, writing a 1 to the OS bit starts a single temperature conversion.
   */
-TMP102_status_t  TMP102_ReadRawHumidity             ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myHumidity );
+TMP102_status_t  TMP102_TriggerSingleTemperatureConversion  ( I2C_parameters_t myI2Cparameters                                                      );
 
-/** It gets the battery status.
+/** It sets the device into Normal/Extended mode operation.
   */
-TMP102_status_t  TMP102_GetBatteryStatus            ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myBatteryStatus );
+TMP102_status_t  TMP102_SetModeOperation                    ( I2C_parameters_t myI2Cparameters, TMP102_configuration_extended_mode_bit_t myEMMode   );
+
+/** It sets the conversion rate for the device.
+  */
+TMP102_status_t  TMP102_SetConversionRate                   ( I2C_parameters_t myI2Cparameters, TMP102_configuration_conversion_rate_t myCR         );
+
+
 
 
 #ifdef __cplusplus
