@@ -25,3 +25,4 @@ NRF52/Examples/examples/Peripherals/NVMC/pca10040/s132/ses/NVMC_Debug.jlink
 NRF51/Examples/Drivers/iAQ_core/bin/
 NRF51/Examples/Drivers/iAQ_core/obj/
 NRF51/Examples/Drivers/iAQ_core/iAQ_core.depend
+NRF51/Examples/Drivers/TMP102/obj/
