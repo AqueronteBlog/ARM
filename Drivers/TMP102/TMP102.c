@@ -78,13 +78,13 @@ TMP102_status_t  TMP102_ReadTemperatureRegister ( I2C_parameters_t myI2Cparamete
     i2c_status_t aux;
 
 
-    // Read TEMPERATURE REGISTER to mask it
+    /* Read TEMPERATURE REGISTER to mask it */
     cmd[0]   =   TMP102_TEMPERATURE_REGISTER;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
-    // Parse data
+    /* Parse data   */
     myTemperatureRegister->TemperatureRegister   =   ( cmd[0] << 8 );
     myTemperatureRegister->TemperatureRegister  |=   cmd[1];
 
@@ -125,13 +125,13 @@ TMP102_status_t  TMP102_Read_T_LOW_Register ( I2C_parameters_t myI2Cparameters, 
     i2c_status_t aux;
 
 
-    // Read TLOW REGISTER to mask it
+    /* Read TLOW REGISTER to mask it    */
     cmd[0]   =   TMP102_T_LOW_REGISTER;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
-    // Parse data
+    /* Parse data   */
     myTLOW_Register->TLOW_Register  =   ( cmd[0] << 8 );
     myTLOW_Register->TLOW_Register |=   cmd[1];
 
@@ -174,7 +174,7 @@ TMP102_status_t  TMP102_Write_T_LOW_Register ( I2C_parameters_t myI2Cparameters,
     i2c_status_t aux;
 
 
-    // Update TLOW REGISTER
+    /* Update TLOW REGISTER */
     cmd[0]   =   TMP102_T_LOW_REGISTER;
     cmd[1]   =   ( myTLOW_Register.TLOW_Register >> 8 ) & 0xFF;                                                       // MSB
     cmd[2]   =   ( myTLOW_Register.TLOW_Register & 0xFF );                                                            // LSB
@@ -218,13 +218,13 @@ TMP102_status_t  TMP102_Read_T_HIGH_Register ( I2C_parameters_t myI2Cparameters,
     i2c_status_t aux;
 
 
-    // Read THIGH REGISTER to mask it
+    /* Read THIGH REGISTER to mask it   */
     cmd[0]   =   TMP102_T_HIGH_REGISTER;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
-    // Parse data
+    /* Parse data   */
     myTHIGH_Register->THIGH_Register  =   ( cmd[0] << 8 );
     myTHIGH_Register->THIGH_Register |=   cmd[1];
 
@@ -267,7 +267,7 @@ TMP102_status_t  TMP102_Write_T_HIGH_Register ( I2C_parameters_t myI2Cparameters
     i2c_status_t aux;
 
 
-    // Update THIGH REGISTER
+    /* Update THIGH REGISTER    */
     cmd[0]   =   TMP102_T_HIGH_REGISTER;
     cmd[1]   =   ( myTHIGH_Register.THIGH_Register >> 8 ) & 0xFF;                                                   // MSB
     cmd[2]   =   ( myTHIGH_Register.THIGH_Register & 0xFF );                                                        // LSB
@@ -311,13 +311,13 @@ TMP102_status_t  TMP102_ReadConfigurationRegister ( I2C_parameters_t myI2Cparame
     i2c_status_t aux;
 
 
-    // Read CONFIGURATION REGISTER
+    /* Read CONFIGURATION REGISTER  */
     cmd[0]   =   TMP102_CONFIGURATION_REGISTER;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 
-    // Parse data
+    /* Parse data   */
     myConfigurationRegister->ConfigurationRegister  =   ( cmd[0] << 8 );
     myConfigurationRegister->ConfigurationRegister |=   cmd[1];
 
@@ -360,13 +360,13 @@ TMP102_status_t  TMP102_SetShutdownMode ( I2C_parameters_t myI2Cparameters, TMP1
     i2c_status_t aux;
 
 
-    // Read CONFIGURATION REGISTER
+    /* Read CONFIGURATION REGISTER  */
     cmd[0]   =   TMP102_CONFIGURATION_REGISTER;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 2 );
 
 
-    // Mask the result and update the register
+    /* Mask the result and update the register  */
     cmd[1]  &=  ~TMP102_CONFIGURATION_SD_MASK;
     cmd[1]  |=   mySDMode;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -409,13 +409,13 @@ TMP102_status_t  TMP102_SetThermostatMode ( I2C_parameters_t myI2Cparameters, TM
     i2c_status_t aux;
 
 
-    // Read CONFIGURATION REGISTER
+    /* Read CONFIGURATION REGISTER  */
     cmd[0]   =   TMP102_CONFIGURATION_REGISTER;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 2 );
 
 
-    // Mask the result and update the register
+    /* Mask the result and update the register  */
     cmd[1]  &=  ~TMP102_CONFIGURATION_TM_MASK;
     cmd[1]  |=   myTMMode;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -458,13 +458,13 @@ TMP102_status_t  TMP102_SetPolarityAlertPinOutput ( I2C_parameters_t myI2Cparame
     i2c_status_t aux;
 
 
-    // Read CONFIGURATION REGISTER
+    /* Read CONFIGURATION REGISTER  */
     cmd[0]   =   TMP102_CONFIGURATION_REGISTER;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 2 );
 
 
-    // Mask the result and update the register
+    /* Mask the result and update the register  */
     cmd[1]  &=  ~TMP102_CONFIGURATION_POL_MASK;
     cmd[1]  |=   myPOLMode;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -507,13 +507,13 @@ TMP102_status_t  TMP102_SetConsecutiveFaultsQueue ( I2C_parameters_t myI2Cparame
     i2c_status_t aux;
 
 
-    // Read CONFIGURATION REGISTER
+    /* Read CONFIGURATION REGISTER  */
     cmd[0]   =   TMP102_CONFIGURATION_REGISTER;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 2 );
 
 
-    // Mask the result and update the register
+    /* Mask the result and update the register  */
     cmd[1]  &=  ~TMP102_CONFIGURATION_F1F0_MASK;
     cmd[1]  |=   myF1F0Mode;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -555,13 +555,13 @@ TMP102_status_t  TMP102_TriggerSingleTemperatureConversion ( I2C_parameters_t my
     i2c_status_t aux;
 
 
-    // Read CONFIGURATION REGISTER
+    /* Read CONFIGURATION REGISTER  */
     cmd[0]   =   TMP102_CONFIGURATION_REGISTER;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 2 );
 
 
-    // Mask the result and update the register
+    /* Mask the result and update the register  */
     cmd[1]  &=  ~TMP102_CONFIGURATION_OS_MASK;
     cmd[1]  |=   TMP102_CONFIGURATION_OS_START_SINGLE_TEMPERATURE_CONVERSION;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -604,13 +604,13 @@ TMP102_status_t  TMP102_SetModeOperation ( I2C_parameters_t myI2Cparameters, TMP
     i2c_status_t aux;
 
 
-    // Read CONFIGURATION REGISTER
+    /* Read CONFIGURATION REGISTER  */
     cmd[0]   =   TMP102_CONFIGURATION_REGISTER;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 2 );
 
 
-    // Mask the result and update the register
+    /* Mask the result and update the register  */
     cmd[1]  &=  ~TMP102_CONFIGURATION_EM_MASK;
     cmd[1]  |=   myEMMode;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -653,16 +653,85 @@ TMP102_status_t  TMP102_SetConversionRate ( I2C_parameters_t myI2Cparameters, TM
     i2c_status_t aux;
 
 
-    // Read CONFIGURATION REGISTER
+    /* Read CONFIGURATION REGISTER  */
     cmd[0]   =   TMP102_CONFIGURATION_REGISTER;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 2 );
 
 
-    // Mask the result and update the register
+    /* Mask the result and update the register  */
     cmd[1]  &=  ~TMP102_CONFIGURATION_CR_MASK;
     cmd[1]  |=   myCR;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   TMP102_SUCCESS;
+    else
+        return   TMP102_FAILURE;
+}
+
+
+
+/**
+ * @brief       TMP102_GetTemperature ( I2C_parameters_t , TMP102_vector_data_t* )
+ *
+ * @details     It gets the temperature value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myTemperature:     Current temperature.
+ *
+ *
+ * @return       Status of TMP102_GetTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/June/2018
+ * @version     12/June/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+TMP102_status_t  TMP102_GetTemperature ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature )
+{
+    uint8_t      cmd[]               =   { 0, 0, 0 };
+    int16_t      myAuxTemperature    =   0;
+    i2c_status_t aux;
+
+
+    /* Read TEMPERATURE REGISTER  */
+    cmd[0]   =   TMP102_TEMPERATURE_REGISTER;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 2 );
+
+    myAuxTemperature     =   cmd[1];
+    myAuxTemperature   <<=   8;
+    myAuxTemperature    |=   cmd[2];
+
+
+    /* Read CONFIGURATION REGISTER  */
+    cmd[0]   =   TMP102_CONFIGURATION_REGISTER;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 2 );
+
+
+    /* Check Extended-mode the sensor is working with    */
+    if ( ( cmd[1] & TMP102_CONFIGURATION_EM_MASK ) == TMP102_CONFIGURATION_EM_NORMAL_MODE_OPERATION )
+    {
+        /* Normal mode 12-bit configuration   */
+        myAuxTemperature >>=   4;
+    }
+    else
+    {
+        /* Extended mode 13-bit configuration   */
+        myAuxTemperature >>=   3;
+    }
+
+
+    /* Update the temperature value */
+    myTemperature->Temperature  =   ( (float)myAuxTemperature * 0.0625 );
 
 
 
