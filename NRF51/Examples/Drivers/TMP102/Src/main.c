@@ -37,8 +37,7 @@ uint8_t  volatile *myPtr;                        /*!<   Pointer to point out the
 /* MAIN */
 int main( void )
 {
-    uint8_t  myTX_buff[7]     =  { 0 };
-    uint32_t myWarmUpCounter  =   0;
+    uint8_t  myTX_buff[2]     =  { 0 };
 
 
     I2C_parameters_t         myTMP102_I2C_parameters;
@@ -62,7 +61,25 @@ int main( void )
     myTMP102_I2C_parameters.SCLport     =    NRF_GPIO;
 
     /* Configure I2C peripheral */
-    aux  =   TMP102_Init ( myTMP102_I2C_parameters );
+    aux  =   TMP102_Init                        ( myTMP102_I2C_parameters );
+
+    /* Read TLOW value */
+    aux  =   TMP102_Read_T_LOW_Register         ( myTMP102_I2C_parameters, &myTMP102_Data );
+
+    /* Read THIGH value */
+    aux  =   TMP102_Read_T_HIGH_Register        ( myTMP102_I2C_parameters, &myTMP102_Data );
+
+    /* Set polarity LOW */
+    aux  =   TMP102_SetPolarityAlertPinOutput   ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_POL_ALERT_PIN_ACTIVE_LOW );
+
+    /* Set Normal mode operation */
+    aux  =   TMP102_SetModeOperation            ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_EM_NORMAL_MODE_OPERATION );
+
+    /* Set Conversion Rate: 4Hz */
+    aux  =   TMP102_SetConversionRate           ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_CR_4_HZ );
+
+    /* Set Shutdown mode */
+    aux  =   TMP102_SetShutdownMode             ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_SD_ENABLED );
 
 
 
@@ -83,37 +100,39 @@ int main( void )
     	NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
         if ( mySTATE == 1 )
         {
-//            /* New reading */
-//            do
-//            {
-//                aux      =   TMP102_GetNewReading ( myTMP102_I2C_parameters, &myTMP102_Data );
-//            }while( myTMP102_Data.status != TMP102_STATUS_OK );                                         // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
-//                                                                                                            // [WORKAROUND] Insert a counter.
-//
-//            /* Prepare the data to be sent through the UART */
-//            myTX_buff[0]                 =   ( myTMP102_Data.pred >> 8 ) & 0xFF;                          // Prediction (CO2 eq. ppm): MSB
-//            myTX_buff[1]                 =   ( myTMP102_Data.pred & 0xFF );                               // Prediction (CO2 eq. ppm): LSB
-//            myTX_buff[2]                 =   ( myTMP102_Data.Tvoc >> 8 ) & 0xFF;                          // Prediction (TVOC eq. ppb): MSB
-//            myTX_buff[3]                 =   ( myTMP102_Data.Tvoc & 0xFF );                               // Prediction (TVOC eq. ppb): LSB
-//            myTX_buff[4]                 =   ( myTMP102_Data.resistance >> 16 ) & 0xFF;                   // Sensor resistance: MSB
-//            myTX_buff[5]                 =   ( myTMP102_Data.resistance >> 8 ) & 0xFF;                    // Sensor resistance
-//            myTX_buff[6]                 =   ( myTMP102_Data.resistance & 0xFF );                         // Sensor resistance: LSB
-//
-//
-//            /* Send data through the UART   */
-//            myPtr                        =   &myTX_buff[0];
-//            TX_inProgress                =   YES;
-//            NRF_UART0->TASKS_STARTTX     =   1;
-//            NRF_UART0->TXD               =   *myPtr++;                                                      // Start transmission
-//
-//            /* Wait until the message is transmitted */
-//            while ( TX_inProgress == YES )
-//            {
-//                __WFE();
-//                // Make sure any pending events are cleared
-//                __SEV();
-//                __WFE();
-//            }
+            /* New reading */
+            aux  =   TMP102_TriggerSingleTemperatureConversion ( myTMP102_I2C_parameters );
+
+            /* Wait until the conversion is finished    */
+            do
+            {
+                aux      =   TMP102_ReadConfigurationRegister ( myTMP102_I2C_parameters, &myTMP102_Data );
+            }while( ( myTMP102_Data.ConfigurationRegister & TMP102_CONFIGURATION_OS_MASK ) == TMP102_CONFIGURATION_OS_BUSY );   // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
+                                                                                                                                // [WORKAROUND] Insert a counter.
+
+            /* Read the new temperature value */
+            aux  =   TMP102_GetTemperature ( myTMP102_I2C_parameters, &myTMP102_Data );
+
+
+            /* Prepare the data to be sent through the UART */
+            myTX_buff[0]                 =   ( myTMP102_Data.TemperatureRegister >> 8 ) & 0xFF;                         // Temperature Register: MSB
+            myTX_buff[1]                 =   ( myTMP102_Data.TemperatureRegister & 0xFF );                              // Temperature Register: LSB
+
+
+            /* Send data through the UART   */
+            myPtr                        =   &myTX_buff[0];
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   *myPtr++;                                                                  // Start transmission
+
+            /* Wait until the message is transmitted */
+            while ( TX_inProgress == YES )
+            {
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
 
 
             mySTATE             =   0;
