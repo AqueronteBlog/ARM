@@ -691,13 +691,12 @@ TMP102_status_t  TMP102_SetConversionRate ( I2C_parameters_t myI2Cparameters, TM
  * @author      Manuel Caballero
  * @date        12/June/2018
  * @version     12/June/2018   The ORIGIN
- * @pre         N/A.
+ * @pre         The temperature Register variable is updated when this function is used.
  * @warning     N/A.
  */
 TMP102_status_t  TMP102_GetTemperature ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature )
 {
     uint8_t      cmd[]               =   { 0, 0, 0 };
-    int16_t      myAuxTemperature    =   0;
     i2c_status_t aux;
 
 
@@ -706,9 +705,10 @@ TMP102_status_t  TMP102_GetTemperature ( I2C_parameters_t myI2Cparameters, TMP10
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 2 );
 
-    myAuxTemperature     =   cmd[1];
-    myAuxTemperature   <<=   8;
-    myAuxTemperature    |=   cmd[2];
+    /* Update TEMPERATURE REGISTER  */
+    myTemperature->TemperatureRegister   =   cmd[1];
+    myTemperature->TemperatureRegister <<=   8;
+    myTemperature->TemperatureRegister  |=   cmd[2];
 
 
     /* Read CONFIGURATION REGISTER  */
@@ -721,17 +721,17 @@ TMP102_status_t  TMP102_GetTemperature ( I2C_parameters_t myI2Cparameters, TMP10
     if ( ( cmd[1] & TMP102_CONFIGURATION_EM_MASK ) == TMP102_CONFIGURATION_EM_NORMAL_MODE_OPERATION )
     {
         /* Normal mode 12-bit configuration   */
-        myAuxTemperature >>=   4;
+        myTemperature->TemperatureRegister >>=   4;
     }
     else
     {
         /* Extended mode 13-bit configuration   */
-        myAuxTemperature >>=   3;
+        myTemperature->TemperatureRegister >>=   3;
     }
 
 
     /* Update the temperature value */
-    myTemperature->Temperature  =   ( (float)myAuxTemperature * 0.0625 );
+    myTemperature->Temperature  =   ( (float)myTemperature->TemperatureRegister * 0.0625 );
 
 
 
