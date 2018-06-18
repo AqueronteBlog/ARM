@@ -690,13 +690,15 @@ TMP102_status_t  TMP102_SetConversionRate ( I2C_parameters_t myI2Cparameters, TM
  *
  * @author      Manuel Caballero
  * @date        12/June/2018
- * @version     12/June/2018   The ORIGIN
+ * @version     18/June/2018   Negative temperature is processed properly.
+ *              12/June/2018   The ORIGIN
  * @pre         The temperature Register variable is updated when this function is used.
  * @warning     N/A.
  */
 TMP102_status_t  TMP102_GetTemperature ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature )
 {
     uint8_t      cmd[]               =   { 0, 0, 0 };
+    uint32_t     myTempSig           =   0;
     i2c_status_t aux;
 
 
@@ -722,16 +724,33 @@ TMP102_status_t  TMP102_GetTemperature ( I2C_parameters_t myI2Cparameters, TMP10
     {
         /* Normal mode 12-bit configuration   */
         myTemperature->TemperatureRegister >>=   4;
+        myTempSig                            =   0x800;
     }
     else
     {
         /* Extended mode 13-bit configuration   */
         myTemperature->TemperatureRegister >>=   3;
+        myTempSig                            =   0x1000;
     }
 
 
-    /* Update the temperature value */
-    myTemperature->Temperature  =   ( (float)myTemperature->TemperatureRegister * 0.0625 );
+    /* Check if the temperature is positive/negative */
+    if ( ( myTemperature->TemperatureRegister & myTempSig ) == myTempSig )
+    {
+        /* The temperature is NEGATIVE  */
+        myTemperature->TemperatureRegister   =  ~myTemperature->TemperatureRegister;
+        myTemperature->TemperatureRegister  +=   1;
+
+        /* Update the temperature value */
+        myTemperature->Temperature  =   ( -1.0 ) * ( (float)myTemperature->TemperatureRegister * 0.0625 );
+    }
+    else
+    {
+        /* The temperature is POSITIVE  */
+
+        /* Update the temperature value */
+        myTemperature->Temperature  =   ( (float)myTemperature->TemperatureRegister * 0.0625 );
+    }
 
 
 
