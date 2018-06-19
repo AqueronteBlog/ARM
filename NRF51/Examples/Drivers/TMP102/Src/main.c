@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [TODO].
+ * @details     This project shows how to work with the external sensor: TMP102.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
