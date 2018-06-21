@@ -1,6 +1,7 @@
 /**
  * @brief       main.c
- * @details     This project shows how to work with the external sensor: TMP102.
+ * @details     This project shows how to work with the external sensor: TMP102. It
+ *              performs a new reading every one second and send the result through UART.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
