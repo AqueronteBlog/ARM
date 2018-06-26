@@ -355,8 +355,8 @@ TMP102_status_t  TMP102_ReadConfigurationRegister ( I2C_parameters_t myI2Cparame
  */
 TMP102_status_t  TMP102_SetShutdownMode ( I2C_parameters_t myI2Cparameters, TMP102_configuration_shutdown_mode_t mySDMode )
 {
-    uint8_t      cmd[]    =    { 0, 0, 0 };
-
+    uint8_t      cmd[]    =  { 0, 0, 0 };
+    uint16_t     myAuxReg =  0;
     i2c_status_t aux;
 
 
@@ -367,9 +367,18 @@ TMP102_status_t  TMP102_SetShutdownMode ( I2C_parameters_t myI2Cparameters, TMP1
 
 
     /* Mask the result and update the register  */
-    cmd[1]  &=  ~TMP102_CONFIGURATION_SD_MASK;
-    cmd[1]  |=   mySDMode;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    myAuxReg    =   cmd[1];
+    myAuxReg  <<=   8;
+    myAuxReg   |=   cmd[2];
+
+
+    myAuxReg   &=  ~TMP102_CONFIGURATION_SD_MASK;
+    myAuxReg   |=   mySDMode;
+
+    cmd[1]      =   (uint8_t)( myAuxReg >> 8 );
+    cmd[2]      =   (uint8_t)( myAuxReg & 0xFF );
+
+    aux         =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -405,7 +414,7 @@ TMP102_status_t  TMP102_SetShutdownMode ( I2C_parameters_t myI2Cparameters, TMP1
 TMP102_status_t  TMP102_SetThermostatMode ( I2C_parameters_t myI2Cparameters, TMP102_configuration_thermostat_mode_t myTMMode )
 {
     uint8_t      cmd[]    =    { 0, 0, 0 };
-
+    uint16_t     myAuxReg =    0;
     i2c_status_t aux;
 
 
@@ -416,9 +425,17 @@ TMP102_status_t  TMP102_SetThermostatMode ( I2C_parameters_t myI2Cparameters, TM
 
 
     /* Mask the result and update the register  */
-    cmd[1]  &=  ~TMP102_CONFIGURATION_TM_MASK;
-    cmd[1]  |=   myTMMode;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    myAuxReg    =   cmd[1];
+    myAuxReg  <<=   8;
+    myAuxReg   |=   cmd[2];
+
+
+    myAuxReg   &=  ~TMP102_CONFIGURATION_TM_MASK;
+    myAuxReg   |=   myTMMode;
+
+    cmd[1]      =   (uint8_t)( myAuxReg >> 8 );
+    cmd[2]      =   (uint8_t)( myAuxReg & 0xFF );
+    aux         =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -453,8 +470,8 @@ TMP102_status_t  TMP102_SetThermostatMode ( I2C_parameters_t myI2Cparameters, TM
  */
 TMP102_status_t  TMP102_SetPolarityAlertPinOutput ( I2C_parameters_t myI2Cparameters, TMP102_configuration_polarity_t myPOLMode )
 {
-    uint8_t      cmd[]    =    { 0, 0, 0 };
-
+    uint8_t      cmd[]    =  { 0, 0, 0 };
+    uint16_t     myAuxReg =  0;
     i2c_status_t aux;
 
 
@@ -465,9 +482,18 @@ TMP102_status_t  TMP102_SetPolarityAlertPinOutput ( I2C_parameters_t myI2Cparame
 
 
     /* Mask the result and update the register  */
-    cmd[1]  &=  ~TMP102_CONFIGURATION_POL_MASK;
-    cmd[1]  |=   myPOLMode;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    myAuxReg    =   cmd[1];
+    myAuxReg  <<=   8;
+    myAuxReg   |=   cmd[2];
+
+
+    myAuxReg   &=  ~TMP102_CONFIGURATION_POL_MASK;
+    myAuxReg   |=   myPOLMode;
+
+    cmd[1]      =   (uint8_t)( myAuxReg >> 8 );
+    cmd[2]      =   (uint8_t)( myAuxReg & 0xFF );
+
+    aux         =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -502,8 +528,8 @@ TMP102_status_t  TMP102_SetPolarityAlertPinOutput ( I2C_parameters_t myI2Cparame
  */
 TMP102_status_t  TMP102_SetConsecutiveFaultsQueue ( I2C_parameters_t myI2Cparameters, TMP102_configuration_fault_queue_t myF1F0Mode )
 {
-    uint8_t      cmd[]    =    { 0, 0, 0 };
-
+    uint8_t      cmd[]    =  { 0, 0, 0 };
+    uint16_t     myAuxReg =  0;
     i2c_status_t aux;
 
 
@@ -514,9 +540,18 @@ TMP102_status_t  TMP102_SetConsecutiveFaultsQueue ( I2C_parameters_t myI2Cparame
 
 
     /* Mask the result and update the register  */
-    cmd[1]  &=  ~TMP102_CONFIGURATION_F1F0_MASK;
-    cmd[1]  |=   myF1F0Mode;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    myAuxReg    =   cmd[1];
+    myAuxReg  <<=   8;
+    myAuxReg   |=   cmd[2];
+
+
+    myAuxReg   &=  ~TMP102_CONFIGURATION_F1F0_MASK;
+    myAuxReg   |=   myF1F0Mode;
+
+    cmd[1]      =   (uint8_t)( myAuxReg >> 8 );
+    cmd[2]      =   (uint8_t)( myAuxReg & 0xFF );
+
+    aux         =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -550,8 +585,8 @@ TMP102_status_t  TMP102_SetConsecutiveFaultsQueue ( I2C_parameters_t myI2Cparame
  */
 TMP102_status_t  TMP102_TriggerSingleTemperatureConversion ( I2C_parameters_t myI2Cparameters )
 {
-    uint8_t      cmd[]    =    { 0, 0, 0 };
-
+    uint8_t      cmd[]    =  { 0, 0, 0 };
+    uint16_t     myAuxReg =  0;
     i2c_status_t aux;
 
 
@@ -562,10 +597,18 @@ TMP102_status_t  TMP102_TriggerSingleTemperatureConversion ( I2C_parameters_t my
 
 
     /* Mask the result and update the register  */
-    cmd[1]  &=  ~TMP102_CONFIGURATION_OS_MASK;
-    cmd[1]  |=   TMP102_CONFIGURATION_OS_START_SINGLE_TEMPERATURE_CONVERSION;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    myAuxReg    =   cmd[1];
+    myAuxReg  <<=   8;
+    myAuxReg   |=   cmd[2];
 
+
+    myAuxReg   &=  ~TMP102_CONFIGURATION_OS_MASK;
+    myAuxReg   |=   TMP102_CONFIGURATION_OS_START_SINGLE_TEMPERATURE_CONVERSION;
+
+    cmd[1]      =   (uint8_t)( myAuxReg >> 8 );
+    cmd[2]      =   (uint8_t)( myAuxReg & 0xFF );
+
+    aux         =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -599,8 +642,8 @@ TMP102_status_t  TMP102_TriggerSingleTemperatureConversion ( I2C_parameters_t my
  */
 TMP102_status_t  TMP102_SetModeOperation ( I2C_parameters_t myI2Cparameters, TMP102_configuration_extended_mode_bit_t myEMMode  )
 {
-    uint8_t      cmd[]    =    { 0, 0, 0 };
-
+    uint8_t      cmd[]    =  { 0, 0, 0 };
+    uint16_t     myAuxReg =  0;
     i2c_status_t aux;
 
 
@@ -611,9 +654,18 @@ TMP102_status_t  TMP102_SetModeOperation ( I2C_parameters_t myI2Cparameters, TMP
 
 
     /* Mask the result and update the register  */
-    cmd[1]  &=  ~TMP102_CONFIGURATION_EM_MASK;
-    cmd[1]  |=   myEMMode;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    myAuxReg    =   cmd[1];
+    myAuxReg  <<=   8;
+    myAuxReg   |=   cmd[2];
+
+
+    myAuxReg   &=  ~TMP102_CONFIGURATION_EM_MASK;
+    myAuxReg   |=   myEMMode;
+
+    cmd[1]      =   (uint8_t)( myAuxReg >> 8 );
+    cmd[2]      =   (uint8_t)( myAuxReg & 0xFF );
+
+    aux         =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -648,8 +700,8 @@ TMP102_status_t  TMP102_SetModeOperation ( I2C_parameters_t myI2Cparameters, TMP
  */
 TMP102_status_t  TMP102_SetConversionRate ( I2C_parameters_t myI2Cparameters, TMP102_configuration_conversion_rate_t myCR  )
 {
-    uint8_t      cmd[]    =    { 0, 0, 0 };
-
+    uint8_t      cmd[]    =  { 0, 0, 0 };
+    uint16_t     myAuxReg =  0;
     i2c_status_t aux;
 
 
@@ -660,9 +712,18 @@ TMP102_status_t  TMP102_SetConversionRate ( I2C_parameters_t myI2Cparameters, TM
 
 
     /* Mask the result and update the register  */
-    cmd[1]  &=  ~TMP102_CONFIGURATION_CR_MASK;
-    cmd[1]  |=   myCR;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    myAuxReg    =   cmd[1];
+    myAuxReg  <<=   8;
+    myAuxReg   |=   cmd[2];
+
+
+    myAuxReg   &=  ~TMP102_CONFIGURATION_CR_MASK;
+    myAuxReg   |=   myCR;
+
+    cmd[1]      =   (uint8_t)( myAuxReg >> 8 );
+    cmd[2]      =   (uint8_t)( myAuxReg & 0xFF );
+
+    aux         =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -697,8 +758,9 @@ TMP102_status_t  TMP102_SetConversionRate ( I2C_parameters_t myI2Cparameters, TM
  */
 TMP102_status_t  TMP102_GetTemperature ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature )
 {
-    uint8_t      cmd[]               =   { 0, 0, 0 };
-    uint32_t     myTempSig           =   0;
+    uint8_t      cmd[]       =   { 0, 0, 0 };
+    uint32_t     myTempSig   =   0;
+    uint16_t     myAuxReg    =   0;
     i2c_status_t aux;
 
 
@@ -718,9 +780,13 @@ TMP102_status_t  TMP102_GetTemperature ( I2C_parameters_t myI2Cparameters, TMP10
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 2 );
 
+    myAuxReg    =   cmd[1];
+    myAuxReg  <<=   8;
+    myAuxReg   |=   cmd[2];
+
 
     /* Check Extended-mode the sensor is working with    */
-    if ( ( cmd[1] & TMP102_CONFIGURATION_EM_MASK ) == TMP102_CONFIGURATION_EM_NORMAL_MODE_OPERATION )
+    if ( ( myAuxReg & TMP102_CONFIGURATION_EM_MASK ) == TMP102_CONFIGURATION_EM_NORMAL_MODE_OPERATION )
     {
         /* Normal mode 12-bit configuration   */
         myTemperature->TemperatureRegister >>=   4;
