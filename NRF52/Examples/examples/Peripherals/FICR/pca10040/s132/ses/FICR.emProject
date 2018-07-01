@@ -1,6 +1,6 @@
 <!DOCTYPE CrossStudio_Project_File>
-<solution Name="NVMC" target="8" version="2">
-  <project Name="NVMC">
+<solution Name="FICR" target="8" version="2">
+  <project Name="FICR">
     <configuration
       Name="Common"
       arm_architecture="v7EM"
