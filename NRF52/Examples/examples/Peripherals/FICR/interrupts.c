@@ -5,8 +5,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        16/April/2018
- * @version     16/April/2018   The ORIGIN
+ * @date        30/June/2018
+ * @version     30/June/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -22,8 +22,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        16/April/2018
- * @version     16/April/2018   The ORIGIN
+ * @date        30/June/2018
+ * @version     30/June/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
