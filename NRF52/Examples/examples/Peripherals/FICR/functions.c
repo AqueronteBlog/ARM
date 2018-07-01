@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        16/April/2018
- * @version     16/April/2018   The ORIGIN
+ * @date        30/June/2018
+ * @version     30/June/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -23,8 +23,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        16/April/2018
- * @version     16/April/2018   The ORIGIN
+ * @date        30/June/2018
+ * @version     30/June/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -52,9 +52,8 @@ void conf_LFCLK  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        12/February/2018
- * @version     13/February/2018   All the LEDs OFF at the beginning.
- *              12/February/2018   The ORIGIN   
+ * @date        30/June/2018
+ * @version     30/June/2018   The ORIGIN   
  * @pre         N/A
  * @warning     N/A
  */
@@ -86,8 +85,8 @@ void conf_GPIO  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        16/April/2018
- * @version     16/April/2018   The ORIGIN
+ * @date        30/June/2018
+ * @version     30/June/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
