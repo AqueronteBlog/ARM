@@ -28,3 +28,4 @@ NRF51/Examples/Drivers/iAQ_core/iAQ_core.depend
 NRF51/Examples/Drivers/TMP102/obj/
 NRF51/Examples/Drivers/TMP102/bin/
 *.depend
+NRF52/Examples/examples/Peripherals/FICR/pca10040/s132/ses/Output/
