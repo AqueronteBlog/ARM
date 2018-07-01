@@ -1,8 +1,6 @@
 /**
  * @brief       main.c
- * @details     It writes the value 0x23232323 into NRF51 non-volatile memory. Every 125ms,
- *              the system will check if the value 0x23232323 is stored in a specific memory
- *              location, if so, it will erase that location, if not, it will write that value.
+ * @details     [todo].
  *
  *              This firmware is just an example about how to use the NVMC on the nrf52832. The system
  *              will handle everything on the Interrupts ( Low power mode selected ).
@@ -11,8 +9,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        16/April/2018
- * @version     16/April/2018    The ORIGIN
+ * @date        30/June/2018
+ * @version     30/June/2018    The ORIGIN
  * @pre         This firmware was tested on the nrf52-DK with Segger Embedded Studio v3.34a
  *              ( SDK 14.2.0 ).
  * @warning     The softdevice (s132) is taken into account, Bluetooth was not used although.
