@@ -31,11 +31,16 @@ extern "C" {
 
 
 /* CONSTANTS */
-void RTC0_IRQHandler ( void );
+void GPIOTE_IRQHandler ( void );
+void UART0_IRQHandler  ( void );
 
 
 /* VARIABLES */
-extern uint32_t writeNVMC;
+extern uint32_t volatile startCycle;
+extern uint32_t volatile myTX;
+extern uint8_t  volatile TX_inProgress;
+extern uint8_t  volatile dataToBeTX;                    
+
 
 
 #ifdef __cplusplus
