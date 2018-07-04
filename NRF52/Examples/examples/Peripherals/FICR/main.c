@@ -35,7 +35,10 @@
 
 /**@brief Variables.
  */
-uint32_t volatile startCycle;       /*!<   New reading   */
+uint32_t volatile startCycle;                     /*!<   New reading                                                                         */
+uint32_t volatile myTX;                           /*!<   It will store the data from the registers ( FICR ) to be transmitted                */
+uint8_t  volatile dataToBeTX;                     /*!<   A counter. It indicates how many data it will be transmitted through the UART       */
+uint8_t  volatile TX_inProgress;                  /*!<   It indicates if a transmission is in progress                                       */
 
 
 /**@brief Function for application main entry.
@@ -43,8 +46,8 @@ uint32_t volatile startCycle;       /*!<   New reading   */
 int main(void)
 {
     conf_GPIO   ();
-    conf_LFCLK  ();
-    conf_RTC0   ();
+    conf_UART   ();
+    conf_GPIOTE ();
 
 
     NRF_RTC0->TASKS_START = 1;    // Start RTC0
@@ -82,51 +85,6 @@ int main(void)
 
             // Read/Transmit Code memory size in number of pages register
             myTX                         =   NRF_FICR->CODESIZE;
-            TX_inProgress                =   YES;
-            NRF_UART0->TASKS_STARTTX     =   1;
-            NRF_UART0->TXD               =   myTX;
-
-            // Wait until the message is transmitted
-            while ( TX_inProgress == YES ){
-                __WFE();
-                // Make sure any pending events are cleared
-                __SEV();
-                __WFE();
-            }
-
-
-            // Read/Transmit RAM block size register
-            myTX                         =   NRF_FICR->NUMRAMBLOCK;
-            TX_inProgress                =   YES;
-            NRF_UART0->TASKS_STARTTX     =   1;
-            NRF_UART0->TXD               =   myTX;
-
-            // Wait until the message is transmitted
-            while ( TX_inProgress == YES ){
-                __WFE();
-                // Make sure any pending events are cleared
-                __SEV();
-                __WFE();
-            }
-
-
-            // Read/Transmit Size of RAM block 0 register
-            myTX                         =   NRF_FICR->SIZERAMBLOCK[0];
-            TX_inProgress                =   YES;
-            NRF_UART0->TASKS_STARTTX     =   1;
-            NRF_UART0->TXD               =   myTX;
-
-            // Wait until the message is transmitted
-            while ( TX_inProgress == YES ){
-                __WFE();
-                // Make sure any pending events are cleared
-                __SEV();
-                __WFE();
-            }
-
-
-            // Read/Transmit Identification number for the HW register
-            myTX                         =   NRF_FICR->CONFIGID;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -335,8 +293,8 @@ int main(void)
             }
 
 
-            // Read/Transmit OVERRIDEEN register
-            myTX                         =   NRF_FICR->OVERRIDEEN;
+            // Read/Transmit INFO.PART register
+            myTX                         =   NRF_FICR->INFO.PART;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -350,8 +308,9 @@ int main(void)
             }
 
 
-            // Read/Transmit Override values for 1Mbit proprietary mode register
-            myTX                         =   NRF_FICR->NRF_1MBIT[0];
+
+            // Read/Transmit INFO.VARIANT register
+            myTX                         =   NRF_FICR->INFO.VARIANT;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -365,8 +324,9 @@ int main(void)
             }
 
 
-            // Read/Transmit Override values for 1Mbit proprietary mode register
-            myTX                         =   NRF_FICR->NRF_1MBIT[1];
+
+            // Read/Transmit INFO.PACKAGE register
+            myTX                         =   NRF_FICR->INFO.PACKAGE;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -380,8 +340,9 @@ int main(void)
             }
 
 
-            // Read/Transmit Override values for 1Mbit proprietary mode register
-            myTX                         =   NRF_FICR->NRF_1MBIT[2];
+
+            // Read/Transmit INFO.RAM register
+            myTX                         =   NRF_FICR->INFO.RAM;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -395,8 +356,9 @@ int main(void)
             }
 
 
-            // Read/Transmit Override values for 1Mbit proprietary mode register
-            myTX                         =   NRF_FICR->NRF_1MBIT[3];
+
+            // Read/Transmit INFO.FLASH register
+            myTX                         =   NRF_FICR->INFO.FLASH;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -410,8 +372,8 @@ int main(void)
             }
 
 
-            // Read/Transmit Override values for 1Mbit proprietary mode register
-            myTX                         =   NRF_FICR->NRF_1MBIT[4];
+            // Read/Transmit TEMP.A0 register
+            myTX                         =   NRF_FICR->TEMP.A0;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -425,8 +387,8 @@ int main(void)
             }
 
 
-            // Read/Transmit BLE_1MBIT register
-            myTX                         =   NRF_FICR->BLE_1MBIT[0];
+            // Read/Transmit TEMP.A1 register
+            myTX                         =   NRF_FICR->TEMP.A1;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -440,8 +402,8 @@ int main(void)
             }
 
 
-            // Read/Transmit BLE_1MBIT register
-            myTX                         =   NRF_FICR->BLE_1MBIT[1];
+            // Read/Transmit TEMP.A2 register
+            myTX                         =   NRF_FICR->TEMP.A2;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -455,8 +417,8 @@ int main(void)
             }
 
 
-            // Read/Transmit BLE_1MBIT register
-            myTX                         =   NRF_FICR->BLE_1MBIT[2];
+            // Read/Transmit TEMP.A3 register
+            myTX                         =   NRF_FICR->TEMP.A3;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -470,8 +432,8 @@ int main(void)
             }
 
 
-            // Read/Transmit BLE_1MBIT register
-            myTX                         =   NRF_FICR->BLE_1MBIT[3];
+            // Read/Transmit TEMP.A4 register
+            myTX                         =   NRF_FICR->TEMP.A4;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -485,8 +447,8 @@ int main(void)
             }
 
 
-            // Read/Transmit BLE_1MBIT register
-            myTX                         =   NRF_FICR->BLE_1MBIT[4];
+            // Read/Transmit TEMP.A5 register
+            myTX                         =   NRF_FICR->TEMP.A5;
             TX_inProgress                =   YES;
             NRF_UART0->TASKS_STARTTX     =   1;
             NRF_UART0->TXD               =   myTX;
@@ -498,6 +460,245 @@ int main(void)
                 __SEV();
                 __WFE();
             }
+
+
+            // Read/Transmit TEMP.B0 register
+            myTX                         =   NRF_FICR->TEMP.B0;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+            // Read/Transmit TEMP.B1 register
+            myTX                         =   NRF_FICR->TEMP.B1;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+            // Read/Transmit TEMP.B2 register
+            myTX                         =   NRF_FICR->TEMP.B2;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+            // Read/Transmit TEMP.B3 register
+            myTX                         =   NRF_FICR->TEMP.B3;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
+            // Read/Transmit TEMP.B4 register
+            myTX                         =   NRF_FICR->TEMP.B4;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
+            // Read/Transmit TEMP.B5 register
+            myTX                         =   NRF_FICR->TEMP.B5;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
+            // Read/Transmit TEMP.T0 register
+            myTX                         =   NRF_FICR->TEMP.T0;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
+            // Read/Transmit TEMP.T1 register
+            myTX                         =   NRF_FICR->TEMP.T1;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
+            // Read/Transmit TEMP.T2 register
+            myTX                         =   NRF_FICR->TEMP.T2;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
+            // Read/Transmit TEMP.T3 register
+            myTX                         =   NRF_FICR->TEMP.T3;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
+            // Read/Transmit TEMP.T4 register
+            myTX                         =   NRF_FICR->TEMP.T4;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
+            // Read/Transmit NFC.TAGHEADER0 register
+            myTX                         =   NRF_FICR->NFC.TAGHEADER0;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
+            // Read/Transmit NFC.TAGHEADER1 register
+            myTX                         =   NRF_FICR->NFC.TAGHEADER1;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
+            // Read/Transmit NFC.TAGHEADER2 register
+            myTX                         =   NRF_FICR->NFC.TAGHEADER2;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
+            // Read/Transmit NFC.TAGHEADER3 register
+            myTX                         =   NRF_FICR->NFC.TAGHEADER3;
+            TX_inProgress                =   YES;
+            NRF_UART0->TASKS_STARTTX     =   1;
+            NRF_UART0->TXD               =   myTX;
+
+            // Wait until the message is transmitted
+            while ( TX_inProgress == YES ){
+                __WFE();
+                // Make sure any pending events are cleared
+                __SEV();
+                __WFE();
+            }
+
+
+
 
 
             startCycle          =   0;                      // Reset the variable
