@@ -28,11 +28,24 @@ typedef enum{
 } NRF52DK_board_leds_t;
 
 
+
+/* BUTTONs */
+typedef enum{
+  BTN1  = 13,               /*!<   BTN1: P0.13   */
+  BTN2  = 14,               /*!<   BTN2: P0.14   */
+  BTN3  = 15,               /*!<   BTN3: P0.15   */
+  BTN4  = 16                /*!<   BTN4: P0.16   */
+} NRF52DK_board_buttons_t;
+
+
+
 /* UART0 */
 typedef enum{
   UART0_TX  = 6,            /*!<   UART0_TX: P0.6  */
   UART0_RX  = 8             /*!<   UART0_RX: P0.8  */
 } NRF52DK_board_uart0_t;
+
+
 
 #ifdef __cplusplus
 }
