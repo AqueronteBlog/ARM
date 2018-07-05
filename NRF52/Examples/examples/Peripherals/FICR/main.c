@@ -1,9 +1,9 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This firmware is just an example about how to use the FICR on the nrf52832. Every time
+ *              button 1 is pressed, it will send all the FICR information through the UART.
  *
- *              This firmware is just an example about how to use the NVMC on the nrf52832. The system
- *              will handle everything on the Interrupts ( Low power mode selected ).
+ *              The microcontroller is in low power the rest of the time.
  *
  *
  * @return      N/A
@@ -49,8 +49,6 @@ int main(void)
     conf_UART   ();
     conf_GPIOTE ();
 
-
-    NRF_RTC0->TASKS_START = 1;    // Start RTC0
 
     // NRF_POWER->SYSTEMOFF    = 1;
     NRF_POWER->TASKS_LOWPWR = 1;        // Sub power mode: Low power.
