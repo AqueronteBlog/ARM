@@ -2,7 +2,7 @@
  * @brief       main.c
  * @details     This shows how to work with the internal peripheral GPIOTE PORT EVENT. 
  *
- *              GPIOTE will be associated with the BTNs to generate an interruption
+ *              GPIOTE Port event will be associated with the BTNs to generate an interruption
  *              and change the state of the LEDs.
  *              
  *                BTN1 --> LED1
