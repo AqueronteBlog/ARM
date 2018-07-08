@@ -37,6 +37,7 @@ void GPIOTE_IRQHandler()
   /* Port Event  */
   if ( ( NRF_GPIOTE->EVENTS_PORT != 0 ) && ( ( NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_PORT_Msk ) == ( GPIOTE_INTENSET_PORT_Enabled << GPIOTE_INTENSET_PORT_Pos ) ) )
   {
+    /* Button 1  */
     if ( ( NRF_P0->IN & GPIO_IN_PIN13_Msk ) == ( GPIO_IN_PIN13_Low << GPIO_IN_PIN13_Pos ) )
     {
       if ( ( changeLEDsSTATE & 0x01 ) == 0x01 )
@@ -52,7 +53,8 @@ void GPIOTE_IRQHandler()
         changeLEDsSTATE  |=  0x01;
       }
     }
-
+    
+    /* Button 2  */
     if ( ( NRF_P0->IN & GPIO_IN_PIN14_Msk ) == ( GPIO_IN_PIN14_Low << GPIO_IN_PIN14_Pos ) )
     {
       if ( ( changeLEDsSTATE & 0x02 ) == 0x02 )
@@ -68,7 +70,8 @@ void GPIOTE_IRQHandler()
         changeLEDsSTATE  |=  0x02;
       }
     }
-
+    
+    /* Button 3  */
     if ( ( NRF_P0->IN & GPIO_IN_PIN15_Msk ) == ( GPIO_IN_PIN15_Low << GPIO_IN_PIN15_Pos ) )
     {
       if ( ( changeLEDsSTATE & 0x04 ) == 0x04 )
@@ -85,6 +88,7 @@ void GPIOTE_IRQHandler()
       }
     }
 
+    /* Button 4  */
     if ( ( NRF_P0->IN & GPIO_IN_PIN16_Msk ) == ( GPIO_IN_PIN16_Low << GPIO_IN_PIN16_Pos ) )
     {
       if ( ( changeLEDsSTATE & 0x08 ) == 0x08 )
