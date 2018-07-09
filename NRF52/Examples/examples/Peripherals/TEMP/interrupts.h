@@ -33,9 +33,11 @@ void UART0_IRQHandler ( void );
 
 
 /* VARIABLES */
-extern uint8_t myMessage[];
-extern uint8_t *myPtr;
-
+extern volatile uint8_t  myMessage[];
+extern volatile uint8_t  *myPtr;
+extern volatile uint32_t myTEMP;
+extern volatile uint32_t myState;
+extern volatile uint32_t myTEMPFlag;
 
 
 #ifdef __cplusplus

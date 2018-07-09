@@ -49,3 +49,57 @@ void UART0_IRQHandler(void)
     }
   }
 }
+
+
+
+/**
+ * @brief       void TEMP_IRQHandler ()
+ * @details     Temperature measurement complete, data ready.
+ *
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        6/July/2018
+ * @version     6/July/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A
+ */
+void TEMP_IRQHandler()
+{
+  if ( NRF_TEMP->EVENTS_DATARDY != 0 )
+  {
+    myTEMPFlag                   =   1;
+
+    myTEMP                       =   NRF_TEMP->TEMP;                    // Read raw temperature
+    
+    NRF_TEMP->EVENTS_DATARDY     =   0;                                 // Clear ( flag )
+  }
+}
+
+
+
+/**
+ * @brief       void RTC2_IRQHandler ()
+ * @details     RTC2 interruption.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        6/July/2018
+ * @version     6/July/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A
+ */
+void RTC2_IRQHandler()
+{
+  if ( ( NRF_RTC2->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_RTC2->INTENSET & RTC_INTENSET_COMPARE0_Msk ) != 0 ) )
+  {
+      myState                      =   1;               // Change the variable
+
+      NRF_RTC2->CC[0]             +=   100;             // New interruption on 1s
+      NRF_RTC2->EVENTS_COMPARE[0]  =   0;               // Clear ( flag ) compare register 0 event
+  }
+}
