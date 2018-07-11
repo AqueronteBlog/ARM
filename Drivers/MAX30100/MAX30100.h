@@ -38,7 +38,7 @@ typedef enum
 } MAX30100_address_t;
 
 
-// REGISTER MAPS
+/* REGISTER MAPS     */
 /**
   * @brief   REGISTERS BYTE
   */
@@ -61,141 +61,302 @@ typedef enum
 
 
 
-// HOLAHOLAHOLAHOLAHOLA TEMPERATURE REGISTER
+/* INTERRUPT STATUS  */
 /**
-  * @brief   TEMPERATURE REGISTER
+  * @brief   FIFO ALMOST FULL FLAG. In SpO2 and heart-rate modes, this interrupt triggers when the FIFO write pointer is the same as
+  *                                 the FIFO read pointer minus one, which means that the FIFO has only one unwritten space left. If
+  *                                 the FIFO is not read within the next conversion time, the FIFO becomes full and future data is lost.
   */
 typedef enum
 {
-    MAX30100_RESOLUTION_12_BITS_MASK    =   0xFFF0,           /*!<  MAX30100 configured as a 12-bit                         */
-    MAX30100_RESOLUTION_13_BITS_MASK    =   0xFFF8            /*!<  MAX30100 configured as a 13-bit                         */
-} MAX30100_temperature_register_t;
-
-
-
-// CONFIGURATION REGISTER
-/**
-  * @brief   SHUTDOWN MODE
-  */
-typedef enum
-{
-    MAX30100_CONFIGURATION_SD_MASK        =   ( 1U << 8 ),    /*!<  Shutdown Mode Mask                                    */
-    MAX30100_CONFIGURATION_SD_ENABLED     =   ( 1U << 8 ),    /*!<  Shutdown Mode Enabled                                 */
-    MAX30100_CONFIGURATION_SD_DISABLED    =   ( 0U << 8 )     /*!<  Shutdown Mode Disabled                                */
-} MAX30100_configuration_shutdown_mode_t;
+    INTERRUPT_STATUS_A_FULL_MASK        =   ( 1 << 7 ),     /*!<  A_FULL mask                                                   */
+    INTERRUPT_STATUS_A_FULL_TRIGGERED   =   ( 1 << 7 )      /*!<  A_FULL is triggered                                           */
+} MAX30100_interrupt_status_a_full_flag_t;
 
 
 /**
-  * @brief   THERMOSTAT MODE
+  * @brief   TEMPERATURE READY FLAG. When an internal die temperature conversion is finished, this interrupt is triggered so the processor
+  *                                  can read the temperature data registers.
   */
 typedef enum
 {
-    MAX30100_CONFIGURATION_TM_MASK            =   ( 1U << 9 ),    /*!<  Thermostat Mode Mask                           */
-    MAX30100_CONFIGURATION_TM_COMPARATOR_MODE =   ( 0U << 9 ),    /*!<  Thermostat Mode: Comparator mode               */
-    MAX30100_CONFIGURATION_TM_INTERRUPT_MODE  =   ( 1U << 9 )     /*!<  Thermostat Mode: Interrupt mode                */
-} MAX30100_configuration_thermostat_mode_t;
+    INTERRUPT_STATUS_TEMP_RDY_MASK      =   ( 1 << 6 ),     /*!<  TEMP_RDY mask                                                 */
+    INTERRUPT_STATUS_TEMP_RDY_TRIGGERED =   ( 1 << 6 )      /*!<  TEMP_RDY is triggered                                         */
+} MAX30100_interrupt_status_temp_rdy_flag_t;
 
 
 /**
-  * @brief   POLARITY
+  * @brief   HEART RATE DATA READY. In heart rate or SPO2 mode, this interrupt triggers after every data sample is collected. A heart rate
+  *                                 data sample consists of one IR data point only. This bit is automatically cleared when the FIFO data
+  *                                 register is read.
   */
 typedef enum
 {
-    MAX30100_CONFIGURATION_POL_MASK                   =   ( 1U << 10 ),    /*!<  Polarity Mask                                                                      */
-    MAX30100_CONFIGURATION_POL_ALERT_PIN_ACTIVE_LOW   =   ( 0U << 10 ),    /*!<  Polarity: ALERT pin becomes active low ( default )                                 */
-    MAX30100_CONFIGURATION_POL_ALERT_PIN_ACTIVE_HIGH  =   ( 1U << 10 )     /*!<  Polarity: ALERT pin becomes active high and the state of the ALERT pin is inverted */
-} MAX30100_configuration_polarity_t;
+    INTERRUPT_STATUS_HR_RDY_MASK        =   ( 1 << 5 ),     /*!<  HR_RDY mask                                                   */
+    INTERRUPT_STATUS_HR_RDY_TRIGGERED   =   ( 1 << 5 )      /*!<  HR_RDY is triggered                                           */
+} MAX30100_interrupt_status_hr_rdy_flag_t;
 
 
 /**
-  * @brief   FAULT QUEUE
+  * @brief   SPO2 DATA READY. In SpO2 mode, this interrupt triggers after every data sample is collected. An SpO2 data sample consists of
+  *                           one IR and one red data points. This bit is automatically cleared when the FIFO data register is read.
   */
 typedef enum
 {
-    MAX30100_CONFIGURATION_F1F0_MASK                   =   ( 0b11 << 11 ),    /*!<  Fault Queue Mask                                                               */
-    MAX30100_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_1   =   ( 0b00 << 11 ),    /*!<  Fault Queue: consecutive faults: 1                                             */
-    MAX30100_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_2   =   ( 0b01 << 11 ),    /*!<  Fault Queue: consecutive faults: 2                                             */
-    MAX30100_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_4   =   ( 0b10 << 11 ),    /*!<  Fault Queue: consecutive faults: 4                                             */
-    MAX30100_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_6   =   ( 0b11 << 11 )     /*!<  Fault Queue: consecutive faults: 6                                             */
-} MAX30100_configuration_fault_queue_t;
+    INTERRUPT_STATUS_SPO2_RDY_MASK      =   ( 1 << 4 ),     /*!<  SPO2_RDY mask                                                 */
+    INTERRUPT_STATUS_SPO2_RDY_TRIGGERED =   ( 1 << 4 )      /*!<  SPO2_RDY is triggered                                         */
+} MAX30100_interrupt_status_spo2_rdy_flag_t;
 
 
 /**
-  * @brief   CONVERTER RESOLUTION
+  * @brief   POWER READY FLAG. On power-up or after a brownout condition, when the supply voltage VDD transitions from below the UVLO
+  *                            voltage to above the UVLO voltage, a power-ready interrupt is triggered to signal that the IC is powered
+  *                            up and ready to collect data.
   */
 typedef enum
 {
-    MAX30100_CONFIGURATION_R1R0_MASK                   =   ( 0b11 << 13 )     /*!<  Converter resolution bits Mask                                                 */
-} MAX30100_configuration_converter_resolution_t;
+    INTERRUPT_STATUS_PWR_RDY_MASK       =   ( 1 << 0 ),     /*!<  PWR_RDY mask                                                  */
+    INTERRUPT_STATUS_PWR_RDY_TRIGGERED  =   ( 1 << 0 )      /*!<  PWR_RDY is triggered                                          */
+} MAX30100_interrupt_status_pwr_rdy_flag_t;
+
+
+
+/* INTERRUPT ENABLE. NOTE: Each source of hardware interrupt, with the exception of power ready, can be disabled in a software register within the MAX30100 IC.
+                           The power-ready interrupt cannot be disabled because the digital state of the MAX30100 is reset upon a brownout condition (low power-supply voltage),
+                           and the default state is that all the interrupts are disabled. It is important for the system to know that a brownout condition has occurred, and the
+                           data within the device is reset as a result.
+
+                           When an interrupt enable bit is set to zero, the corresponding interrupt appears as 1 in the interrupt status register, but the INT pin is not pulled low.
+                           The four unused bits (B3:B0) should always be set to zero (disabled) for normal operation
+*/
+/**
+  * @brief   ENB_A_FULL.
+  */
+typedef enum
+{
+    INTERRUPT_ENABLE_ENB_A_FULL_MASK        =   ( 1 << 7 ),     /*!<  ENB_A_FULL mask                                               */
+    INTERRUPT_ENABLE_ENB_A_FULL_ENABLE      =   ( 1 << 7 ),     /*!<  ENB_A_FULL enables                                            */
+    INTERRUPT_ENABLE_ENB_A_FULL_DISABLE     =   ( 0 << 7 )      /*!<  ENB_A_FULL disables                                           */
+} MAX30100_interrupt_enable_enb_a_full_t;
 
 
 /**
-  * @brief   ONE-SHOT
+  * @brief   ENB_TEP_RDY.
   */
 typedef enum
 {
-    MAX30100_CONFIGURATION_OS_MASK                                =   ( 1U << 15 ),      /*!<  One-Shot Mask                                                       */
-    MAX30100_CONFIGURATION_OS_START_SINGLE_TEMPERATURE_CONVERSION =   ( 1U << 15 ),      /*!<  One-Shot It starts a single temperature conversion                  */
-    MAX30100_CONFIGURATION_OS_BUSY                                =   ( 0U << 15 )       /*!<  One-Shot During the conversion, the OS bit reads '0'                */
-} MAX30100_configuration_one_shot_t;
+    INTERRUPT_ENABLE_ENB_TEP_RDY_MASK       =   ( 1 << 6 ),     /*!<  ENB_TEP_RDY mask                                              */
+    INTERRUPT_ENABLE_ENB_TEP_RDY_ENABLE     =   ( 1 << 6 ),     /*!<  ENB_TEP_RDY enables                                           */
+    INTERRUPT_ENABLE_ENB_TEP_RDY_DISABLE    =   ( 0 << 6 )      /*!<  ENB_TEP_RDY disables                                          */
+} MAX30100_interrupt_enable_enb_tep_rdy_t;
+
+
+/**
+  * @brief   ENB_HR_RDY.
+  */
+typedef enum
+{
+    INTERRUPT_ENABLE_ENB_HR_RDY_MASK        =   ( 1 << 5 ),     /*!<  ENB_HR_RDY mask                                               */
+    INTERRUPT_ENABLE_ENB_HR_RDY_ENABLE      =   ( 1 << 5 ),     /*!<  ENB_HR_RDY enables                                            */
+    INTERRUPT_ENABLE_ENB_HR_RDY_DISABLE     =   ( 0 << 5 )      /*!<  ENB_HR_RDY disables                                           */
+} MAX30100_interrupt_enable_enb_hr_rdy_t;
+
+
+/**
+  * @brief   ENB_SO2_RDY.
+  */
+typedef enum
+{
+    INTERRUPT_ENABLE_ENB_SO2_RDY_MASK       =   ( 1 << 4 ),     /*!<  ENB_SO2_RDY mask                                              */
+    INTERRUPT_ENABLE_ENB_SO2_RDY_ENABLE     =   ( 1 << 4 ),     /*!<  ENB_SO2_RDY enables                                           */
+    INTERRUPT_ENABLE_ENB_SO2_RDY_DISABLE    =   ( 0 << 4 )      /*!<  ENB_SO2_RDY disables                                          */
+} MAX30100_interrupt_enable_enb_so2_rdy_t;
+
+
+
+/* FIFO  */
+/**
+  * @brief   FIFO WRITE POINTER. The FIFO write pointer points to the location where the MAX30100 writes the next sample. This pointer advances for each sample
+  *                              pushed on to the FIFO. It can also be changed through the I2C interface when MODE[2:0] is nonzero.
+  */
+typedef enum
+{
+    FIFO_FIFO_WRITE_POINTER_MASK            =   0b00001111      /*!<  FIFO WRITE POINTER mask                                       */
+} MAX30100_fifo_fifo_write_pointer_t;
+
+
+/**
+  * @brief   OVER FLOW COUNTER. When the FIFO is full, samples are not pushed on to the FIFO, samples are lost. OVF_COUNTER counts the number of samples lost.
+  *                             It saturates at 0xF. When a complete sample is popped from the FIFO (when the read pointer advances), OVF_COUNTER is reset to zero.
+  */
+typedef enum
+{
+    FIFO_OVER_FLOW_COUNTER_MASK             =   0b00001111      /*!<  OVER FLOW COUNTER mask                                        */
+} MAX30100_fifo_over_flow_counter_t;
+
+
+/**
+  * @brief   FIFO READ POINTER. The FIFO read pointer points to the location from where the processor gets the next sample from the FIFO via the I2C interface.
+  *                             This advances each time a sample is popped from the FIFO. The processor can also write to this pointer after reading the samples,
+  *                             which would allow rereading samples from the FIFO if there is a data communication error.
+  */
+typedef enum
+{
+    FIFO_FIFO_READ_POINTER_MASK             =   0b00001111      /*!<  FIFO READ POINTER mask                                        */
+} MAX30100_fifo_fifo_read_pointer_t;
+
+
+
+/* MODE CONFIGURATION  */
+/**
+  * @brief   SHUTDOWN CONTROL. The part can be put into a power-save mode by setting this bit to one. While in power-save mode, all registers retain their values,
+  *                            and write/read operations function as normal. All interrupts are cleared to zero in this mode.
+  */
+typedef enum
+{
+    MODE_CONFIGURATION_SHDN_MASK        =   ( 1 << 7 ),     /*!<  SHDN mask                                                     */
+    MODE_CONFIGURATION_SHDN_ENABLE      =   ( 1 << 7 ),     /*!<  SHDN enables                                                  */
+    MODE_CONFIGURATION_SHDN_DISABLE     =   ( 0 << 7 )      /*!<  SHDN disables                                                 */
+} MAX30100_mode_configuration_shdn_t;
+
+
+/**
+  * @brief   RESET CONTROL. When the RESET bit is set to one, all configuration, threshold, and data registers are reset to their power-on-state. The only exception is
+  *                         writing both RESET and TEMP_EN bits to one at the same time since temperature data registers 0x16 and 0x17 are not cleared. The RESET bit is
+  *                         cleared automatically back to zero after the reset sequence is completed.
+  */
+typedef enum
+{
+    MODE_CONFIGURATION_RESET_MASK       =   ( 1 << 6 ),     /*!<  RESET mask                                                    */
+    MODE_CONFIGURATION_RESET_ENABLE     =   ( 1 << 6 ),     /*!<  RESET enables                                                 */
+    MODE_CONFIGURATION_RESET_DISABLE    =   ( 0 << 6 )      /*!<  RESET disables                                                */
+} MAX30100_mode_configuration_reset_t;
+
+
+/**
+  * @brief   TEMPERATURE ENABLE. This is a self-clearing bit which, when set, initiates a single temperature reading from the temperature sensor. This bit is cleared
+  *                              automatically back to zero at the conclusion of the temperature reading when the bit is set to one in heart rate or SpO2 mode.
+  */
+typedef enum
+{
+    MODE_CONFIGURATION_TEMP_EN_MASK     =   ( 1 << 3 ),     /*!<  TEMP_EN mask                                                  */
+    MODE_CONFIGURATION_TEMP_EN_ENABLE   =   ( 1 << 3 ),     /*!<  TEMP_EN enables                                               */
+    MODE_CONFIGURATION_TEMP_EN_DISABLE  =   ( 0 << 3 )      /*!<  TEMP_EN disables                                              */
+} MAX30100_mode_configuration_temp_en_t;
+
+
+/**
+  * @brief   MODE CONTROL. These bits set the operating state of the MAX30100. Changing modes does not change any other setting, nor does it erase any previously stored
+  *                        data inside the data registers.
+  */
+typedef enum
+{
+    MODE_CONFIGURATION_MODE_MASK            =   ( 0b111 << 0 ),     /*!<  MODE mask                                                     */
+    MODE_CONFIGURATION_MODE_HR_ONLY_ENABLED =   ( 0b010 << 0 ),     /*!<  MODE: HR only enabled                                         */
+    MODE_CONFIGURATION_MODE_SPO2_ENABLED    =   ( 0b011 << 0 )      /*!<  MODE: SPO2 enabled                                            */
+} MAX30100_mode_configuration_mode_t;
+
+
+
+/* SPO2 CONFIGURATION  */
+/**
+  * @brief   SPO2 HIGH RESOLUTION ENABLE. Set this bit high. The SpO2 ADC resolution is 16-bit with 1.6ms LED pulse width.
+  */
+typedef enum
+{
+    SPO2_CONFIGURATION_SPO2_HI_RES_EN_MASK      =   ( 1 << 6 ),     /*!<  SPO2_HI_RES_EN mask                                           */
+    SPO2_CONFIGURATION_SPO2_HI_RES_EN_ENABLE    =   ( 1 << 6 ),     /*!<  SPO2_HI_RES_EN enables                                        */
+    SPO2_CONFIGURATION_SPO2_HI_RES_EN_DISABLE   =   ( 0 << 6 )      /*!<  SPO2_HI_RES_EN disables                                       */
+} MAX30100_spo2_configuration_spo2_hi_res_en_t;
+
+
+/**
+  * @brief   SPO2 SAMPLE RATE CONTROL. These bits define the effective sampling rate, with one sample consisting of one IR pulse/conversion and one RED pulse/conversion.
+  *                                    The sample rate and pulse width are related, in that the sample rate sets an upper bound on the pulse width time. If the user selects
+  *                                    a sample rate that is too high for the selected LED_PW setting, the highest possible sample rate will instead be programmed into the register.
+  */
+typedef enum
+{
+    SPO2_CONFIGURATION_SPO2_SR_MASK             =   ( 0b111 << 2 ),     /*!<  SPO2_SR mask                                                  */
+    SPO2_CONFIGURATION_SPO2_SR_50               =   ( 0b000 << 2 ),     /*!<  SPO2_SR 50 samples per second   ( default )                   */
+    SPO2_CONFIGURATION_SPO2_SR_100              =   ( 0b001 << 2 ),     /*!<  SPO2_SR 100 samples per second                                */
+    SPO2_CONFIGURATION_SPO2_SR_167              =   ( 0b010 << 2 ),     /*!<  SPO2_SR 167 samples per second                                */
+    SPO2_CONFIGURATION_SPO2_SR_200              =   ( 0b011 << 2 ),     /*!<  SPO2_SR 200 samples per second                                */
+    SPO2_CONFIGURATION_SPO2_SR_400              =   ( 0b100 << 2 ),     /*!<  SPO2_SR 400 samples per second                                */
+    SPO2_CONFIGURATION_SPO2_SR_600              =   ( 0b101 << 2 ),     /*!<  SPO2_SR 600 samples per second                                */
+    SPO2_CONFIGURATION_SPO2_SR_800              =   ( 0b110 << 2 ),     /*!<  SPO2_SR 800 samples per second                                */
+    SPO2_CONFIGURATION_SPO2_SR_1000             =   ( 0b111 << 2 )      /*!<  SPO2_SR 1000 samples per second                               */
+} MAX30100_spo2_configuration_spo2_sr_t;
+
+
+/**
+  * @brief   LED PULSE WIDTH CONTROL. These bits set the LED pulse width (the IR and RED have the same pulse width), and therefore, indirectly set the integration time of the ADC in each
+  *                                   sample. The ADC resolution is directly related to the integration time.
+  */
+typedef enum
+{
+    SPO2_CONFIGURATION_LED_PW_MASK              =   ( 0b11 << 0 ),      /*!<  LED_PW mask                                                   */
+    SPO2_CONFIGURATION_LED_PW_200US_13BITS      =   ( 0b00 << 0 ),      /*!<  LED_PW 200us  13-bits ADC   ( default )                       */
+    SPO2_CONFIGURATION_LED_PW_400US_14BITS      =   ( 0b01 << 0 ),      /*!<  LED_PW 400us  14-bits ADC                                     */
+    SPO2_CONFIGURATION_LED_PW_800US_15BITS      =   ( 0b10 << 0 ),      /*!<  LED_PW 800us  15-bits ADC                                     */
+    SPO2_CONFIGURATION_LED_PW_1600US_16BITS     =   ( 0b11 << 0 )       /*!<  LED_PW 1600us 16-bits ADC                                     */
+} MAX30100_spo2_configuration_led_pw_t;
+
+
+
+/* LED Configuration  */
+/**
+  * @brief   RED LED CURRENT CONTROL.
+  */
+typedef enum
+{
+    LED_CONFIGURATION_RED_PA_MASK              =   ( 0b1111 << 4 ),     /*!<  RED_PA mask                                                   */
+    LED_CONFIGURATION_RED_PA_0_0_MA            =   ( 0b0000 << 4 ),     /*!<  RED_PA LED current 0.0mA                                      */
+    LED_CONFIGURATION_RED_PA_4_4_MA            =   ( 0b0001 << 4 ),     /*!<  RED_PA LED current 4.4mA                                      */
+    LED_CONFIGURATION_RED_PA_7_6_MA            =   ( 0b0010 << 4 ),     /*!<  RED_PA LED current 7.6mA                                      */
+    LED_CONFIGURATION_RED_PA_11_0_MA           =   ( 0b0011 << 4 ),     /*!<  RED_PA LED current 11.0mA                                     */
+    LED_CONFIGURATION_RED_PA_14_2_MA           =   ( 0b0100 << 4 ),     /*!<  RED_PA LED current 14.2mA                                     */
+    LED_CONFIGURATION_RED_PA_17_4_MA           =   ( 0b0101 << 4 ),     /*!<  RED_PA LED current 17.4mA                                     */
+    LED_CONFIGURATION_RED_PA_20_8_MA           =   ( 0b0110 << 4 ),     /*!<  RED_PA LED current 20.8mA                                     */
+    LED_CONFIGURATION_RED_PA_24_0_MA           =   ( 0b0111 << 4 ),     /*!<  RED_PA LED current 24.0mA                                     */
+    LED_CONFIGURATION_RED_PA_27_1_MA           =   ( 0b1000 << 4 ),     /*!<  RED_PA LED current 27.1mA                                     */
+    LED_CONFIGURATION_RED_PA_30_6_MA           =   ( 0b1001 << 4 ),     /*!<  RED_PA LED current 30.6mA                                     */
+    LED_CONFIGURATION_RED_PA_33_8_MA           =   ( 0b1010 << 4 ),     /*!<  RED_PA LED current 33.8mA                                     */
+    LED_CONFIGURATION_RED_PA_37_0_MA           =   ( 0b1011 << 4 ),     /*!<  RED_PA LED current 37.0mA                                     */
+    LED_CONFIGURATION_RED_PA_40_2_MA           =   ( 0b1100 << 4 ),     /*!<  RED_PA LED current 40.2mA                                     */
+    LED_CONFIGURATION_RED_PA_43_6_MA           =   ( 0b1101 << 4 ),     /*!<  RED_PA LED current 43.6mA                                     */
+    LED_CONFIGURATION_RED_PA_46_8_MA           =   ( 0b1110 << 4 ),     /*!<  RED_PA LED current 46.8mA                                     */
+    LED_CONFIGURATION_RED_PA_50_0_MA           =   ( 0b1111 << 4 )      /*!<  RED_PA LED current 50.0mA                                     */
+} MAX30100_led_configuration_red_pa_t;
 
 
 
 /**
-  * @brief   EXTENDED-MODE BIT
+  * @brief   IR LED CURRENT CONTROL.
   */
 typedef enum
 {
-    MAX30100_CONFIGURATION_EM_MASK                                =   ( 1U << 4 ),      /*!<  Extended-Mode Mask                                                  */
-    MAX30100_CONFIGURATION_EM_NORMAL_MODE_OPERATION               =   ( 0U << 4 ),      /*!<  Extended-Mode: Normal Mode operation                                */
-    MAX30100_CONFIGURATION_EM_EXTENDED_MODE_OPERATION             =   ( 1U << 4 )       /*!<  Extended-Mode: Extended Mode operation                              */
-} MAX30100_configuration_extended_mode_bit_t;
-
-
-/**
-  * @brief   ALERT BIT
-  */
-typedef enum
-{
-    MAX30100_CONFIGURATION_AL_MASK                                =   ( 1U << 5 )       /*!<  Alert Mask                                                          */
-} MAX30100_configuration_alert_bit_t;
-
-
-/**
-  * @brief   CONVERSION RATE
-  */
-typedef enum
-{
-    MAX30100_CONFIGURATION_CR_MASK                                =   ( 0b11 << 6 ),    /*!<  Conversion Rate Mask                                                */
-    MAX30100_CONFIGURATION_CR_0_25_HZ                             =   ( 0b00 << 6 ),    /*!<  Conversion Rate: 0.25Hz                                             */
-    MAX30100_CONFIGURATION_CR_1_HZ                                =   ( 0b01 << 6 ),    /*!<  Conversion Rate: 1Hz                                                */
-    MAX30100_CONFIGURATION_CR_4_HZ                                =   ( 0b10 << 6 ),    /*!<  Conversion Rate: 4Hz ( default )                                    */
-    MAX30100_CONFIGURATION_CR_8_HZ                                =   ( 0b11 << 6 )     /*!<  Conversion Rate: 8Hz                                                */
-} MAX30100_configuration_conversion_rate_t;
+    LED_CONFIGURATION_IR_PA_MASK               =   ( 0b1111 << 0 ),     /*!<  IR_PA mask                                                    */
+    LED_CONFIGURATION_IR_PA_0_0_MA             =   ( 0b0000 << 0 ),     /*!<  IR_PA LED current 0.0mA                                       */
+    LED_CONFIGURATION_IR_PA_4_4_MA             =   ( 0b0001 << 0 ),     /*!<  IR_PA LED current 4.4mA                                       */
+    LED_CONFIGURATION_IR_PA_7_6_MA             =   ( 0b0010 << 0 ),     /*!<  IR_PA LED current 7.6mA                                       */
+    LED_CONFIGURATION_IR_PA_11_0_MA            =   ( 0b0011 << 0 ),     /*!<  IR_PA LED current 11.0mA                                      */
+    LED_CONFIGURATION_IR_PA_14_2_MA            =   ( 0b0100 << 0 ),     /*!<  IR_PA LED current 14.2mA                                      */
+    LED_CONFIGURATION_IR_PA_17_4_MA            =   ( 0b0101 << 0 ),     /*!<  IR_PA LED current 17.4mA                                      */
+    LED_CONFIGURATION_IR_PA_20_8_MA            =   ( 0b0110 << 0 ),     /*!<  IR_PA LED current 20.8mA                                      */
+    LED_CONFIGURATION_IR_PA_24_0_MA            =   ( 0b0111 << 0 ),     /*!<  IR_PA LED current 24.0mA                                      */
+    LED_CONFIGURATION_IR_PA_27_1_MA            =   ( 0b1000 << 0 ),     /*!<  IR_PA LED current 27.1mA                                      */
+    LED_CONFIGURATION_IR_PA_30_6_MA            =   ( 0b1001 << 0 ),     /*!<  IR_PA LED current 30.6mA                                      */
+    LED_CONFIGURATION_IR_PA_33_8_MA            =   ( 0b1010 << 0 ),     /*!<  IR_PA LED current 33.8mA                                      */
+    LED_CONFIGURATION_IR_PA_37_0_MA            =   ( 0b1011 << 0 ),     /*!<  IR_PA LED current 37.0mA                                      */
+    LED_CONFIGURATION_IR_PA_40_2_MA            =   ( 0b1100 << 0 ),     /*!<  IR_PA LED current 40.2mA                                      */
+    LED_CONFIGURATION_IR_PA_43_6_MA            =   ( 0b1101 << 0 ),     /*!<  IR_PA LED current 43.6mA                                      */
+    LED_CONFIGURATION_IR_PA_46_8_MA            =   ( 0b1110 << 0 ),     /*!<  IR_PA LED current 46.8mA                                      */
+    LED_CONFIGURATION_IR_PA_50_0_MA            =   ( 0b1111 << 0 )      /*!<  IR_PA LED current 50.0mA                                      */
+} MAX30100_led_configuration_ir_pa_t;
 
 
 
-// HIGH-TEMPERATURE REGISTER
-/**
-  * @brief   TEMPERATURE REGISTER
-  */
-typedef enum
-{
-    MAX30100_THIGH_RESOLUTION_12_BITS_MASK    =   0xFFF0,                             /*!<  THIGH configured as a 12-bit                         */
-    MAX30100_THIGH_RESOLUTION_13_BITS_MASK    =   0xFFF8                              /*!<  THIGH configured as a 13-bit                         */
-} MAX30100_high_temperature_register_t;
-
-
-
-// LOW-TEMPERATURE REGISTER
-/**
-  * @brief   TEMPERATURE REGISTER
-  */
-typedef enum
-{
-    MAX30100_TLOW_RESOLUTION_12_BITS_MASK    =   0xFFF0,                             /*!<  TLOW configured as a 12-bit                            */
-    MAX30100_TLOW_RESOLUTION_13_BITS_MASK    =   0xFFF8                              /*!<  TLOW configured as a 13-bit                            */
-} MAX30100_low_temperature_register_t;
 
 
 
@@ -206,10 +367,8 @@ typedef struct
 {
     float    Temperature;
 
-    int16_t  TemperatureRegister;
-    uint16_t ConfigurationRegister;
-    int16_t  TLOW_Register;
-    int16_t  THIGH_Register;
+    int8_t   Temp_Integer;
+    int8_t   Temp_Fraction;
 } MAX30100_vector_data_t;
 #endif
 
