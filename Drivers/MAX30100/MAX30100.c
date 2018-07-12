@@ -409,7 +409,8 @@ MAX30100_status_t  MAX30100_SpO2_HighResolution ( I2C_parameters_t myI2Cparamete
  * @date        12/July/2018
  * @version     12/July/2018   The ORIGIN
  * @pre         N/A.
- * @warning     N/A.
+ * @warning     The allowed sample rates for both SpO2 and HR mode are summarized in Table 8 and Table 9 in the Data-sheet.
+ *              The user MUST take care of this.
  */
 MAX30100_status_t  MAX30100_SpO2_SampleRateControl ( I2C_parameters_t myI2Cparameters, MAX30100_spo2_configuration_spo2_sr_t mySampleRate )
 {
@@ -441,7 +442,7 @@ MAX30100_status_t  MAX30100_SpO2_SampleRateControl ( I2C_parameters_t myI2Cparam
 
 
 /**
- * @brief       MAX30100_LED_PulseWidthControl ( I2C_parameters_t , MAX30100_spo2_configuration_led_pw_t )
+ * @brief       MAX30100_LED_PulseWidthControl ( I2C_parameters_t , MAX30100_vector_data_t )
  *
  * @details     It sets the LED pulse width.
  *
@@ -458,9 +459,10 @@ MAX30100_status_t  MAX30100_SpO2_SampleRateControl ( I2C_parameters_t myI2Cparam
  * @date        12/July/2018
  * @version     12/July/2018   The ORIGIN
  * @pre         N/A.
- * @warning     N/A.
+ * @warning     The allowed sample rates for both SpO2 and HR mode are summarized in Table 8 and Table 9 in the Data-sheet.
+ *              The user MUST take care of this.
  */
-MAX30100_status_t  MAX30100_LED_PulseWidthControl ( I2C_parameters_t myI2Cparameters, MAX30100_spo2_configuration_led_pw_t myLEDWidth )
+MAX30100_status_t  MAX30100_LED_PulseWidthControl ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t myLEDWidth )
 {
     uint8_t      cmd[]    =  { 0, 0 };
 
@@ -474,7 +476,7 @@ MAX30100_status_t  MAX30100_LED_PulseWidthControl ( I2C_parameters_t myI2Cparame
 
     /* Parse data   */
     cmd[1]  &=  ~SPO2_CONFIGURATION_LED_PW_MASK;
-    cmd[1]  |=   myLEDWidth;
+    cmd[1]  |=   myLEDWidth.Resolution;
 
     /* Update the register   */
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -608,26 +610,20 @@ MAX30100_status_t  MAX30100_SetIR_LED_CurrentControl ( I2C_parameters_t myI2Cpar
  */
 MAX30100_status_t  MAX30100_GetRawTemperature ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myRawTemperature )
 {
-    uint8_t      cmd    =  0;
+    uint8_t      cmd[]    =  { 0, 0 };
 
     i2c_status_t aux;
 
 
-    /* Read TEMP_INTEGER register    */
-    cmd      =   MAX30100_TEMP_INTEGER;
-    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
-    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
+    /* Read TEMP_INTEGER and TEMP_FRACTION register ( auto-increment )    */
+    cmd[0]   =   MAX30100_TEMP_INTEGER;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
 
     /* Parse data   */
-    myRawTemperature->Temp_Integer   =   cmd;
-
-    /* Read TEMP_FRACTION register    */
-    cmd      =   MAX30100_TEMP_FRACTION;
-    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
-    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
-
-    /* Parse data   */
-    myRawTemperature->Temp_Fraction   =   cmd;
+    myRawTemperature->Temp_Integer   =   cmd[0];
+    myRawTemperature->Temp_Fraction  =   cmd[1];
 
 
 
@@ -770,6 +766,253 @@ MAX30100_status_t  MAX30100_GetPartID ( I2C_parameters_t myI2Cparameters, MAX301
 
     /* Parse data   */
     myPartID->PartID   =   cmd;
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MAX30100_SUCCESS;
+    else
+        return   MAX30100_FAILURE;
+}
+
+
+
+/**
+ * @brief       MAX30100_PollingTemperatureConversion ( I2C_parameters_t , MAX30100_vector_data_t* )
+ *
+ * @details     It gets the TEMP_EN value in Mode Configuration register.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myTempFlag:        Temperature flag
+ *
+ *
+ * @return       Status of MAX30100_PollingTemperatureConversion.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/July/2018
+ * @version     12/July/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+MAX30100_status_t  MAX30100_PollingTemperatureConversion ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myTempFlag )
+{
+    uint8_t      cmd    =  0;
+
+    i2c_status_t aux;
+
+
+    /* Read MODE CONFIGURATION register    */
+    cmd      =   MAX30100_MODE_CONFIGURATION;
+    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
+
+    /* Parse data   */
+    myTempFlag->TemperatureFlag   =   (MAX30100_mode_configuration_temp_en_t)( cmd & MODE_CONFIGURATION_TEMP_EN_MASK );
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MAX30100_SUCCESS;
+    else
+        return   MAX30100_FAILURE;
+}
+
+
+
+/**
+ * @brief       MAX30100_PollingSoftwareReset ( I2C_parameters_t , MAX30100_vector_data_t* )
+ *
+ * @details     It checks if the software reset was completed by polling mode.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myResetFlag:       Reset flag
+ *
+ *
+ * @return       Status of MAX30100_PollingSoftwareReset.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/July/2018
+ * @version     12/July/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+MAX30100_status_t  MAX30100_PollingSoftwareReset ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myResetFlag )
+{
+    uint8_t      cmd    =  0;
+
+    i2c_status_t aux;
+
+
+    /* Read MODE CONFIGURATION register    */
+    cmd      =   MAX30100_MODE_CONFIGURATION;
+    aux      =   i2c_write ( myI2Cparameters, &cmd, 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd, 1 );
+
+    /* Parse data   */
+    myResetFlag->ResetFlag   =   (MAX30100_mode_configuration_reset_t)( cmd & MODE_CONFIGURATION_RESET_MASK );
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MAX30100_SUCCESS;
+    else
+        return   MAX30100_FAILURE;
+}
+
+
+
+/**
+ * @brief       MAX30100_ReadFIFO ( I2C_parameters_t , MAX30100_vector_data_t* , uint32_t )
+ *
+ * @details     It checks if the software reset was completed by polling mode.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ * @param[in]    myNumSamplesToRead:    Number of samples to read.
+ *
+ * @param[out]   myDATA:            Data from the FIFO
+ *
+ *
+ * @return       Status of MAX30100_ReadFIFO.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/July/2018
+ * @version     12/July/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+MAX30100_status_t  MAX30100_ReadFIFO ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myDATA, uint32_t myNumSamplesToRead )
+{
+    uint8_t      cmd[64]                 =  { 0 } ;
+    uint32_t     num_available_samples   =   0;
+    uint32_t     i                       =   0;
+    i2c_status_t aux;
+
+
+    /* Check the sample size     */
+    if ( ( myNumSamplesToRead > 0 ) && ( myNumSamplesToRead < 17 ) )
+    {
+        /* FIRST TRANSACTION: Get the FIFO_WR_PTR, OVF_COUNTER and FIFO_RD_PTR    */
+        cmd[0]   =   MAX30100_FIFO_WRITE_POINTER;
+        aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+        aux      =   i2c_read  ( myI2Cparameters, &cmd[0], 3 );
+
+        /* Parse data   */
+        myDATA->FIFO_wr_ptr   =   ( cmd[0] & FIFO_FIFO_WRITE_POINTER_MASK );
+        myDATA->OVF_counter   =   ( cmd[1] & FIFO_OVER_FLOW_COUNTER_MASK );
+        myDATA->FIFO_rd_ptr   =   ( cmd[2] & FIFO_FIFO_READ_POINTER_MASK );
+
+
+        /* If the FIFO is full, just start reading data  */
+        if ( myDATA->OVF_counter == 0xF )
+        {
+            /* Get data from FIFO    */
+            cmd[0]   =   MAX30100_FIFO_DATA_REGISTER;
+            aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+            aux      =   i2c_read  ( myI2Cparameters, &myDATA->FIFO_buff[0], ( myNumSamplesToRead << 2 ) );
+
+            /* Parse the data    */
+//            for ( i = 0; i < ( myNumSamplesToRead << 2 ); i++ )
+//            {
+//                myDATA->FIFO_buff[i]     =   cmd[ ( i << 1 ) ];
+//                myDATA->FIFO_buff[i]   <<=   8U;
+//                myDATA->FIFO_buff[i]    |=   cmd[ ( i << 1 ) + 1 ];
+//            }
+        }
+        else
+        {
+            /* Evaluate the number of samples to be read from the FIFO    */
+            num_available_samples    =   (uint32_t)( myDATA->FIFO_wr_ptr - myDATA->FIFO_rd_ptr );
+
+
+            /* SECOND TRANSACTION: Read 'myNumSamplesToRead' samples from the FIFO    */
+            if ( myNumSamplesToRead <= num_available_samples )
+            {
+                /* Get data from FIFO    */
+                cmd[0]   =   MAX30100_FIFO_DATA_REGISTER;
+                aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+                aux      =   i2c_read  ( myI2Cparameters, &myDATA->FIFO_buff[0], ( myNumSamplesToRead << 2 ) );
+
+                /* Parse the data    */
+//                for ( i = 0; i < ( myNumSamplesToRead << 2 ); i++ )
+//                {
+//                    myDATA->FIFO_buff[i]     =   cmd[ ( i << 1 ) ];
+//                    myDATA->FIFO_buff[i]   <<=   8U;
+//                    myDATA->FIFO_buff[i]    |=   cmd[ ( i << 1 ) + 1 ];
+//                }
+            }
+            else
+            {
+                /* THIRD TRANSACTION: Write to FIFO_RD_PTR register. If the second transaction was successful, FIFO_RD_PTR points to the next sample in the FIFO,
+                                      and this third transaction is not necessary. Otherwise, the processor updates the FIFO_RD_PTR appropriately, so that the samples are reread
+                */
+
+                // [TODO] NOT IMPLEMENTED
+
+                return   MAX30100_FAILURE;
+            }
+        }
+    }
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MAX30100_SUCCESS;
+    else
+        return   MAX30100_FAILURE;
+}
+
+
+
+/**
+ * @brief       MAX30100_ClearFIFO ( I2C_parameters_t , MAX30100_vector_data_t* )
+ *
+ * @details     It clears the FIFO_WR_PTR, OVF_COUNTER, and FIFO_RD_PTR
+ *              registers to all zeros (0x00) to ensure the FIFO is empty and in a known state.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myDATA:            Data from the FIFO
+ *
+ *
+ * @return       Status of MAX30100_ClearFIFO.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/July/2018
+ * @version     12/July/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+MAX30100_status_t  MAX30100_ClearFIFO ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myDATA )
+{
+    uint8_t      cmd[]    =  { 0, 0, 0, 0 } ;
+
+    i2c_status_t aux;
+
+
+    /* Update the FIFO_WR_PTR, FIFO_WR_PTR and OVF_COUNTER registers    */
+    cmd[0]   =   MAX30100_FIFO_WRITE_POINTER;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+    /* Get the FIFO_WR_PTR, OVF_COUNTER and FIFO_RD_PTR    */
+    cmd[0]   =   MAX30100_FIFO_WRITE_POINTER;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], 3 );
+
+
+    /* Update data   */
+    myDATA->FIFO_wr_ptr   =   ( cmd[0] & FIFO_FIFO_WRITE_POINTER_MASK );
+    myDATA->OVF_counter   =   ( cmd[1] & FIFO_OVER_FLOW_COUNTER_MASK );
+    myDATA->FIFO_rd_ptr   =   ( cmd[2] & FIFO_FIFO_READ_POINTER_MASK );
+
 
 
 
