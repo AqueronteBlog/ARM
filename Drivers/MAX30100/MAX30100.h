@@ -371,6 +371,8 @@ typedef struct
     int8_t   Temp_Fraction;
 
     uint8_t  InterruptStatus;
+    uint8_t  RevisionID;
+    uint8_t  PartID;
 } MAX30100_vector_data_t;
 #endif
 
@@ -395,59 +397,67 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-MAX30100_status_t  MAX30100_Init                                ( I2C_parameters_t myI2Cparameters                                                      );
+MAX30100_status_t  MAX30100_Init                        ( I2C_parameters_t myI2Cparameters                                                      );
 
 /** It gets the interrupt status value.
   */
-MAX30100_status_t  MAX30100_ReadInterruptStatus                 ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myInterruptStatus           );
+MAX30100_status_t  MAX30100_ReadInterruptStatus         ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myInterruptStatus           );
 
 /** It sets which interrupt is enabled/disabled.
   */
-MAX30100_status_t  MAX30100_InterrupEnable                      ( I2C_parameters_t myI2Cparameters, uint8_t myInterruptEnable                           );
+MAX30100_status_t  MAX30100_InterrupEnable              ( I2C_parameters_t myI2Cparameters, uint8_t myInterruptEnable                           );
 
 /** It sets the power mode.
   */
-MAX30100_status_t  MAX30100_ShutdownControl                     ( I2C_parameters_t myI2Cparameters, MAX30100_mode_configuration_shdn_t myPowerMode      );
+MAX30100_status_t  MAX30100_ShutdownControl             ( I2C_parameters_t myI2Cparameters, MAX30100_mode_configuration_shdn_t myPowerMode      );
 
 /** It performs a software reset.
   */
-MAX30100_status_t  MAX30100_SoftwareReset                       ( I2C_parameters_t myI2Cparameters                                                      );
+MAX30100_status_t  MAX30100_SoftwareReset               ( I2C_parameters_t myI2Cparameters                                                      );
 
 /** It initiates a single temperature reading from the temperature sensor.
   */
-MAX30100_status_t  MAX30100_TriggerTemperature                  ( I2C_parameters_t myI2Cparameters                                                      );
+MAX30100_status_t  MAX30100_TriggerTemperature          ( I2C_parameters_t myI2Cparameters                                                      );
 
 /** It sets the operating state of the MAX30100.
   */
-MAX30100_status_t  MAX30100_ModeControl                         ( I2C_parameters_t myI2Cparameters, MAX30100_mode_configuration_mode_t myModeControl    );
+MAX30100_status_t  MAX30100_ModeControl                 ( I2C_parameters_t myI2Cparameters, MAX30100_mode_configuration_mode_t myModeControl    );
 
 /** It sets the SpO2 ADC resolution is 16-bit with 1.6ms LED pulse width.
   */
-MAX30100_status_t  MAX30100_SpO2_HighResolution                 ( I2C_parameters_t myI2Cparameters, MAX30100_spo2_configuration_spo2_hi_res_en_t myRes  );
+MAX30100_status_t  MAX30100_SpO2_HighResolution         ( I2C_parameters_t myI2Cparameters, MAX30100_spo2_configuration_spo2_hi_res_en_t myRes  );
 
 /** It defines the effective sampling rate.
   */
-MAX30100_status_t  MAX30100_SpO2_SampleRateControl              ( I2C_parameters_t myI2Cparameters, MAX30100_spo2_configuration_spo2_sr_t mySampleRate  );
+MAX30100_status_t  MAX30100_SpO2_SampleRateControl      ( I2C_parameters_t myI2Cparameters, MAX30100_spo2_configuration_spo2_sr_t mySampleRate  );
 
 /** It sets the LED pulse width.
   */
-MAX30100_status_t  MAX30100_LED_PulseWidthControl               ( I2C_parameters_t myI2Cparameters, MAX30100_spo2_configuration_led_pw_t myLEDWidth     );
+MAX30100_status_t  MAX30100_LED_PulseWidthControl       ( I2C_parameters_t myI2Cparameters, MAX30100_spo2_configuration_led_pw_t myLEDWidth     );
 
 /** It sets the current level of the Red LED.
   */
-MAX30100_status_t  MAX30100_SetRed_LED_CurrentControl           ( I2C_parameters_t myI2Cparameters, MAX30100_led_configuration_red_pa_t myRedLED        );
+MAX30100_status_t  MAX30100_SetRed_LED_CurrentControl   ( I2C_parameters_t myI2Cparameters, MAX30100_led_configuration_red_pa_t myRedLED        );
 
 /** It sets the current level of the IR LED.
   */
-MAX30100_status_t  MAX30100_SetIR_LED_CurrentControl            ( I2C_parameters_t myI2Cparameters, MAX30100_led_configuration_ir_pa_t myIRLED          );
+MAX30100_status_t  MAX30100_SetIR_LED_CurrentControl    ( I2C_parameters_t myI2Cparameters, MAX30100_led_configuration_ir_pa_t myIRLED          );
 
 /** It gets the raw temperature data ( temperature integer and temperature fraction ).
   */
-MAX30100_status_t  MAX30100_GetRawTemperature                   ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myRawTemperature            );
+MAX30100_status_t  MAX30100_GetRawTemperature           ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myRawTemperature            );
 
 /** It gets the temperature value.
   */
-MAX30100_status_t  MAX30100_GetTemperature                      ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myTemperature               );
+MAX30100_status_t  MAX30100_GetTemperature              ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myTemperature               );
+
+/** It gets the revision ID.
+  */
+MAX30100_status_t  MAX30100_GetRevisionID               ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myRevisionID                );
+
+/** It gets the part ID.
+  */
+MAX30100_status_t  MAX30100_GetPartID                   ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myPartID                    );
 
 
 
