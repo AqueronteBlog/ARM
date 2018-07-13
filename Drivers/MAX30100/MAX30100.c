@@ -447,7 +447,7 @@ MAX30100_status_t  MAX30100_SpO2_SampleRateControl ( I2C_parameters_t myI2Cparam
  * @details     It sets the LED pulse width.
  *
  * @param[in]    myI2Cparameters:     I2C parameters.
- * @param[in]    myLEDWidth:          Effective sampling rate.
+ * @param[in]    myLEDWidth:          Pulse width/Resolution..
  *
  * @param[out]   N/A.
  *
@@ -480,6 +480,51 @@ MAX30100_status_t  MAX30100_LED_PulseWidthControl ( I2C_parameters_t myI2Cparame
 
     /* Update the register   */
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+        return   MAX30100_SUCCESS;
+    else
+        return   MAX30100_FAILURE;
+}
+
+
+
+/**
+ * @brief       MAX30100_Get_LED_PulseWidthControl ( I2C_parameters_t , MAX30100_vector_data_t* )
+ *
+ * @details     It gets the LED pulse width.
+ *
+ * @param[in]    myI2Cparameters:     I2C parameters.
+ *
+ * @param[out]   myLEDWidth:          Pulse width/Resolution.
+ *
+ *
+ * @return       Status of MAX30100_Get_LED_PulseWidthControl.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        13/July/2018
+ * @version     13/July/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+MAX30100_status_t  MAX30100_Get_LED_PulseWidthControl ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myLEDWidth )
+{
+    uint8_t      cmd[]    =  { 0, 0 };
+
+    i2c_status_t aux;
+
+
+    /* Read SPO2 CONFIGURATION register    */
+    cmd[0]   =   MAX30100_SPO2_CONFIGURATION;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1 );
+
+    /* Parse data   */
+    myLEDWidth->Resolution   =  ( cmd[1] & SPO2_CONFIGURATION_LED_PW_MASK );
+
 
 
 
@@ -887,10 +932,14 @@ MAX30100_status_t  MAX30100_PollingSoftwareReset ( I2C_parameters_t myI2Cparamet
  */
 MAX30100_status_t  MAX30100_ReadFIFO ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myDATA, uint32_t myNumSamplesToRead )
 {
-    uint8_t      cmd[3]                 =  { 0 } ;
-    uint32_t     num_available_samples   =   0;
-    uint32_t     i                       =   0;
-    i2c_status_t aux;
+    uint8_t             cmd[3]                  =  { 0 } ;
+    uint32_t            num_available_samples   =   0;
+    uint32_t            i                       =   0;
+    uint32_t            myShift                 =   0;
+
+    i2c_status_t        aux;
+    MAX30100_status_t   myMAX30100Status;
+
 
 
     /* Check the sample size     */
@@ -965,15 +1014,66 @@ MAX30100_status_t  MAX30100_ReadFIFO ( I2C_parameters_t myI2Cparameters, MAX3010
             }
         }
     }
-
-
-
-
-
-    if ( aux == I2C_SUCCESS )
-        return   MAX30100_SUCCESS;
     else
+    {
         return   MAX30100_FAILURE;
+    }
+
+
+
+    /* Parse the data according to the ADC resolution    */
+    /* Get the pulse width/resolution    */
+    myMAX30100Status = MAX30100_Get_LED_PulseWidthControl ( myI2Cparameters, myDATA );
+    switch ( myDATA->Resolution )
+    {
+        default:
+        case SPO2_CONFIGURATION_LED_PW_200US_13BITS:
+            myShift  =   3U;
+            break;
+
+        case SPO2_CONFIGURATION_LED_PW_400US_14BITS:
+            myShift  =   2U;
+            break;
+
+        case SPO2_CONFIGURATION_LED_PW_800US_15BITS:
+            myShift  =   1U;
+            break;
+
+        case SPO2_CONFIGURATION_LED_PW_1600US_16BITS:
+            myShift  =   0U;
+            break;
+
+    }
+
+    /* Update the data    */
+    for ( i = 0; i < myNumSamplesToRead; i++ )
+    {
+        myDATA->FIFO_IR_samples[i]  >>=   myShift;
+        myDATA->FIFO_RED_samples[i] >>=   myShift;
+    }
+
+
+    /* Update FIFO pointers: Get the FIFO_WR_PTR, OVF_COUNTER and FIFO_RD_PTR    */
+    cmd[0]   =   MAX30100_FIFO_WRITE_POINTER;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    /* Parse data   */
+    myDATA->FIFO_wr_ptr   =   ( cmd[0] & FIFO_FIFO_WRITE_POINTER_MASK );
+    myDATA->OVF_counter   =   ( cmd[1] & FIFO_OVER_FLOW_COUNTER_MASK );
+    myDATA->FIFO_rd_ptr   =   ( cmd[2] & FIFO_FIFO_READ_POINTER_MASK );
+
+
+
+
+    if ( ( aux == I2C_SUCCESS ) && ( myMAX30100Status == MAX30100_SUCCESS ) )
+    {
+        return   MAX30100_SUCCESS;
+    }
+    else
+    {
+        return   MAX30100_FAILURE;
+    }
 }
 
 
