@@ -887,7 +887,7 @@ MAX30100_status_t  MAX30100_PollingSoftwareReset ( I2C_parameters_t myI2Cparamet
  */
 MAX30100_status_t  MAX30100_ReadFIFO ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myDATA, uint32_t myNumSamplesToRead )
 {
-    uint8_t      cmd[64]                 =  { 0 } ;
+    uint8_t      cmd[3]                 =  { 0 } ;
     uint32_t     num_available_samples   =   0;
     uint32_t     i                       =   0;
     i2c_status_t aux;
@@ -899,7 +899,7 @@ MAX30100_status_t  MAX30100_ReadFIFO ( I2C_parameters_t myI2Cparameters, MAX3010
         /* FIRST TRANSACTION: Get the FIFO_WR_PTR, OVF_COUNTER and FIFO_RD_PTR    */
         cmd[0]   =   MAX30100_FIFO_WRITE_POINTER;
         aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-        aux      =   i2c_read  ( myI2Cparameters, &cmd[0], 3 );
+        aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
         /* Parse data   */
         myDATA->FIFO_wr_ptr   =   ( cmd[0] & FIFO_FIFO_WRITE_POINTER_MASK );
@@ -913,15 +913,19 @@ MAX30100_status_t  MAX30100_ReadFIFO ( I2C_parameters_t myI2Cparameters, MAX3010
             /* Get data from FIFO    */
             cmd[0]   =   MAX30100_FIFO_DATA_REGISTER;
             aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-            aux      =   i2c_read  ( myI2Cparameters, &myDATA->FIFO_buff[0], ( myNumSamplesToRead << 2 ) );
+            aux      =   i2c_read  ( myI2Cparameters, &myDATA->FIFO_buff[0], ( myNumSamplesToRead << 2U ) );
 
             /* Parse the data    */
-//            for ( i = 0; i < ( myNumSamplesToRead << 2 ); i++ )
-//            {
-//                myDATA->FIFO_buff[i]     =   cmd[ ( i << 1 ) ];
-//                myDATA->FIFO_buff[i]   <<=   8U;
-//                myDATA->FIFO_buff[i]    |=   cmd[ ( i << 1 ) + 1 ];
-//            }
+            for ( i = 0; i < myNumSamplesToRead; i++ )
+            {
+                myDATA->FIFO_IR_samples[i]     =   myDATA->FIFO_buff[ ( i << 2 ) ];
+                myDATA->FIFO_IR_samples[i]   <<=   8U;
+                myDATA->FIFO_IR_samples[i]    |=   myDATA->FIFO_buff[ ( i << 2 ) + 1 ];
+
+                myDATA->FIFO_RED_samples[i]    =   myDATA->FIFO_buff[ ( i << 2 ) + 2 ];
+                myDATA->FIFO_RED_samples[i]  <<=   8U;
+                myDATA->FIFO_RED_samples[i]   |=   myDATA->FIFO_buff[ ( ( i << 2 ) + 2 ) + 1 ];
+            }
         }
         else
         {
@@ -935,15 +939,19 @@ MAX30100_status_t  MAX30100_ReadFIFO ( I2C_parameters_t myI2Cparameters, MAX3010
                 /* Get data from FIFO    */
                 cmd[0]   =   MAX30100_FIFO_DATA_REGISTER;
                 aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1, I2C_NO_STOP_BIT );
-                aux      =   i2c_read  ( myI2Cparameters, &myDATA->FIFO_buff[0], ( myNumSamplesToRead << 2 ) );
+                aux      =   i2c_read  ( myI2Cparameters, &myDATA->FIFO_buff[0], ( myNumSamplesToRead << 2U ) );
 
                 /* Parse the data    */
-//                for ( i = 0; i < ( myNumSamplesToRead << 2 ); i++ )
-//                {
-//                    myDATA->FIFO_buff[i]     =   cmd[ ( i << 1 ) ];
-//                    myDATA->FIFO_buff[i]   <<=   8U;
-//                    myDATA->FIFO_buff[i]    |=   cmd[ ( i << 1 ) + 1 ];
-//                }
+                for ( i = 0; i < myNumSamplesToRead; i++ )
+                {
+                    myDATA->FIFO_IR_samples[i]     =   myDATA->FIFO_buff[ ( i << 2 ) ];
+                    myDATA->FIFO_IR_samples[i]   <<=   8U;
+                    myDATA->FIFO_IR_samples[i]    |=   myDATA->FIFO_buff[ ( i << 2 ) + 1 ];
+
+                    myDATA->FIFO_RED_samples[i]    =   myDATA->FIFO_buff[ ( i << 2 ) + 2 ];
+                    myDATA->FIFO_RED_samples[i]  <<=   8U;
+                    myDATA->FIFO_RED_samples[i]   |=   myDATA->FIFO_buff[ ( ( i << 2 ) + 2 ) + 1 ];
+                }
             }
             else
             {
