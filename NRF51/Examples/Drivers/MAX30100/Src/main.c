@@ -1,7 +1,11 @@
 /**
  * @brief       main.c
  * @details     This project shows how to work with the external sensor: MAX30100. It
- *              performs a new reading every one second and send the result through UART.
+ *              performs a new reading every one second and send the result ( temperature ) through UART.
+ *
+ *              It also reads 16 samples from the FIFO. This application does NOT process the data to
+ *              get neither HR nor SpO2, but all the data is available into the buffers that the driver
+ *              provides. To get those parameters, the data has to be filtered.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
@@ -107,8 +111,8 @@ int main( void )
     /* Reset the FIFO    */
     aux  =   MAX30100_ClearFIFO                 ( myMAX30100_I2C_parameters, &myMAX30100_Data );
 
-//    /* Mode Control: SpO2 and HR   */
-//    aux  =   MAX30100_InterrupEnable            ( myMAX30100_I2C_parameters, uint8_t myInterruptEnable  );
+    /* Mode Control: SpO2 and HR   */
+    aux  =   MAX30100_InterrupEnable            ( myMAX30100_I2C_parameters, ( INTERRUPT_ENABLE_ENB_A_FULL_ENABLE | INTERRUPT_ENABLE_ENB_TEP_RDY_DISABLE | INTERRUPT_ENABLE_ENB_HR_RDY_DISABLE | INTERRUPT_ENABLE_ENB_SO2_RDY_DISABLE ) );
 
     /* Shutdown disabled   */
     aux  =   MAX30100_ShutdownControl           ( myMAX30100_I2C_parameters, MODE_CONFIGURATION_SHDN_DISABLE );
@@ -145,9 +149,11 @@ int main( void )
             /* Read the new temperature value */
             aux  =   MAX30100_GetTemperature ( myMAX30100_I2C_parameters, &myMAX30100_Data );
 
-            /* Read the FIFO */
+            /* Read the FIFO, 16 samples */
             aux  =   MAX30100_ReadFIFO ( myMAX30100_I2C_parameters, &myMAX30100_Data, 16 );
 
+            /* Read Interrupt status   */
+            aux  =   MAX30100_ReadInterruptStatus ( myMAX30100_I2C_parameters, &myMAX30100_Data );
 
 
             /* Prepare the data to be sent through the UART */
