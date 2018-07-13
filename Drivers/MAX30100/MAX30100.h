@@ -363,27 +363,27 @@ typedef enum
 #define MAX30100_VECTOR_STRUCT_H
 typedef struct
 {
-    uint8_t FIFO_buff[64];                                          /*!<  FIFO buffer                           */
-    uint8_t FIFO_wr_ptr;                                            /*!<  FIFO write pointer                    */
-    uint8_t OVF_counter;                                            /*!<  FIFO Overflow counter                 */
-    uint8_t FIFO_rd_ptr;                                            /*!<  FIFO read pointer                     */
+    uint8_t  FIFO_buff[64];                                          /*!<  FIFO buffer                           */
+    uint8_t  FIFO_wr_ptr;                                            /*!<  FIFO write pointer                    */
+    uint8_t  OVF_counter;                                            /*!<  FIFO Overflow counter                 */
+    uint8_t  FIFO_rd_ptr;                                            /*!<  FIFO read pointer                     */
 
-    int16_t FIFO_IR_samples[16];                                    /*!<  FIFO IR buffer                        */
-    int16_t FIFO_RED_samples[16];                                   /*!<  FIFO RED buffer                       */
+    uint16_t FIFO_IR_samples[16];                                    /*!<  FIFO IR buffer                        */
+    uint16_t FIFO_RED_samples[16];                                   /*!<  FIFO RED buffer                       */
 
-    float   Temperature;                                            /*!<  Processed temperature                 */
+    float    Temperature;                                            /*!<  Processed temperature                 */
 
-    int8_t  Temp_Integer;                                           /*!<  Raw Temperature: Integer part         */
-    int8_t  Temp_Fraction;                                          /*!<  Raw Temperature: Fraction part        */
+    int8_t   Temp_Integer;                                           /*!<  Raw Temperature: Integer part         */
+    int8_t   Temp_Fraction;                                          /*!<  Raw Temperature: Fraction part        */
 
-    MAX30100_mode_configuration_temp_en_t TemperatureFlag;          /*!<  Temperature flag for polling mode     */
-    MAX30100_mode_configuration_reset_t   ResetFlag;                /*!<  Software Reset flag for polling mode  */
+    MAX30100_mode_configuration_temp_en_t TemperatureFlag;           /*!<  Temperature flag for polling mode     */
+    MAX30100_mode_configuration_reset_t   ResetFlag;                 /*!<  Software Reset flag for polling mode  */
 
-    MAX30100_spo2_configuration_led_pw_t  Resolution;               /*!<  Pulse width/Resolution                */
+    MAX30100_spo2_configuration_led_pw_t  Resolution;                /*!<  Pulse width/Resolution                */
 
-    uint8_t InterruptStatus;                                        /*!<  Interrupt status value                */
-    uint8_t RevisionID;                                             /*!<  Revision ID                           */
-    uint8_t PartID;                                                 /*!<  Part ID                               */
+    uint8_t  InterruptStatus;                                        /*!<  Interrupt status value                */
+    uint8_t  RevisionID;                                             /*!<  Revision ID                           */
+    uint8_t  PartID;                                                 /*!<  Part ID                               */
 } MAX30100_vector_data_t;
 #endif
 
@@ -453,6 +453,10 @@ MAX30100_status_t  MAX30100_SpO2_SampleRateControl          ( I2C_parameters_t m
 /** It sets the LED pulse width.
   */
 MAX30100_status_t  MAX30100_LED_PulseWidthControl           ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t myLEDWidth                           );
+
+/** It gets the LED pulse width.
+  */
+MAX30100_status_t  MAX30100_Get_LED_PulseWidthControl       ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myLEDWidth                          );
 
 /** It sets the current level of the Red LED.
   */
