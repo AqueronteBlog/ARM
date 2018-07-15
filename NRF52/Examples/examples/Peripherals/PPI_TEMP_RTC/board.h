@@ -19,7 +19,8 @@
 extern "C" {
 #endif
 
-/* LEDs */
+/**@brief LEDs.
+ */
 typedef enum{
   LED1  = 17,               /*!<   LED1: P0.17   */
   LED2  = 18,               /*!<   LED2: P0.18   */
@@ -28,11 +29,14 @@ typedef enum{
 } NRF52DK_board_leds_t;
 
 
-/* UART0 */
+/**@brief UART0.
+ */
 typedef enum{
   UART0_TX  = 6,            /*!<   UART0_TX: P0.6  */
   UART0_RX  = 8             /*!<   UART0_RX: P0.8  */
 } NRF52DK_board_uart0_t;
+
+
 
 #ifdef __cplusplus
 }

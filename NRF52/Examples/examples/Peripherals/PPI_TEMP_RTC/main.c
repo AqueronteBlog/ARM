@@ -1,6 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows hot to work with the internal peripheral PPI: RTC and TEMP.
+ *              A new temperature mearument is performed every 1 second by PPI.
  *
  *              The microcontroller is in low power the rest of the time.
  *
@@ -10,7 +11,7 @@
  * @author      Manuel Caballero
  * @date        14/July/2018
  * @version     14/July/2018    The ORIGIN
- * @pre         This firmware was tested on the nrf52-DK with Segger Embedded Studio v3.34a
+ * @pre         This firmware was tested on the nrf52-DK with Segger Embedded Studio v3.40
  *              ( SDK 14.2.0 ).
  * @warning     The softdevice (s132) is taken into account, Bluetooth was not used although.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -33,27 +34,28 @@
  */
 volatile uint8_t  myMessage[ TX_BUFF_SIZE ];     /*!<   Message to be transmitted through the UART     */
 volatile uint8_t  *myPtr;                        /*!<   Pointer to point out myMessage                 */
-volatile uint32_t myTEMP;                        /*!<   Variable to store the temperature              */
 volatile uint32_t myState;                       /*!<   Variable to performe a new reading             */
-volatile uint32_t myTEMPFlag;                    /*!<   Variable to wait for temperature conversion    */
 
 
 /**@brief Function for application main entry.
  */
 int main(void)
 {
-  float  myTemperature   =   0;
+  uint32_t myTEMP;                        
+  float    myTemperature   =   0;
+
 
   conf_CLK    ();
   conf_LFCLK  ();
   conf_GPIO   ();
   conf_UART0  ();
+  conf_PPI    ();
   conf_RTC2   ();
   conf_TEMP   ();
 
 
-  NRF_RTC2->TASKS_START = 1;          // Start RTC2
 
+  NRF_RTC2->TASKS_START = 1;          // Start RTC2
 
 //  NRF_POWER->SYSTEMOFF = 1;
   NRF_POWER->TASKS_LOWPWR = 1;        // Sub power mode: Low power.
@@ -70,12 +72,8 @@ int main(void)
     {
       NRF_GPIO->OUTCLR         =   ( 1 << LED1 );         // Tun the LED1 on
       
-      /* Start another temperature measurement ( one-shot )   */
-      NRF_TEMP->TASKS_START    =   1;                    
-      
-      /* Wait until the temperature conversion is finished   */
-      while ( myTEMPFlag == 0 );                          // [TODO] Insert a counter! otherwise if there is a problem it will get block!!!
-      
+      /* Get the temperature value   */
+      myTEMP   =   NRF_TEMP->TEMP;
 
       /* Parse the data  */
       myTemperature  =   ( myTEMP / 4.0 ) + 0.5;
@@ -91,7 +89,6 @@ int main(void)
 
 
       /* Reset the variables   */
-      myTEMPFlag               =   0;
       myState                  =   0;
       NRF_GPIO->OUTSET         =   ( 1 << LED1 );           // Turn the LED1 off
     }

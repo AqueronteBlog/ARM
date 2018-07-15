@@ -35,13 +35,13 @@ void UART0_IRQHandler(void)
   /* Transmission */
   if ( ( NRF_UART0->EVENTS_TXDRDY != 0 ) && ( NRF_UART0->INTENSET & UART_INTENSET_TXDRDY_Msk ) != 0 )
   {
-    // Clear UART TX event flag.
+    /* Clear UART TX event flag.   */
     NRF_UART0->EVENTS_TXDRDY = 0;
 
-    // Stop transmitting data when that character is found
+    /* Stop transmitting data when that character is found   */
     if ( *myPtr  == '\n' )
     {
-      NRF_UART0->TASKS_STOPTX      =   1;
+      NRF_UART0->TASKS_STOPTX  =   1;
     }
     else
     {
@@ -70,11 +70,9 @@ void TEMP_IRQHandler()
 {
   if ( NRF_TEMP->EVENTS_DATARDY != 0 )
   {
-    myTEMPFlag                   =   1;
-
-    myTEMP                       =   NRF_TEMP->TEMP;                    // Read raw temperature
+    myState                      =   1;               // Change the variable
     
-    NRF_TEMP->EVENTS_DATARDY     =   0;                                 // Clear ( flag )
+    NRF_TEMP->EVENTS_DATARDY     =   0;               // Clear ( flag )
   }
 }
 
@@ -97,8 +95,6 @@ void RTC2_IRQHandler()
 {
   if ( ( NRF_RTC2->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_RTC2->INTENSET & RTC_INTENSET_COMPARE0_Msk ) != 0 ) )
   {
-      myState                      =   1;               // Change the variable
-
       NRF_RTC2->CC[0]             +=   100;             // New interruption on 1s
       NRF_RTC2->EVENTS_COMPARE[0]  =   0;               // Clear ( flag ) compare register 0 event
   }

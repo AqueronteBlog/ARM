@@ -208,3 +208,32 @@ void conf_RTC2  ( void )
 
   NVIC_EnableIRQ ( RTC2_IRQn );                                                                         // Enable Interrupt for the RTC2 in the core.
 }
+
+
+
+/**
+ * @brief       void conf_PPI  ( void )
+ * @details     It sets up one PPI channel.
+ *
+ *              Channel 0:
+ *                  * Event: NRF_RTC2->EVENTS_COMPARE[0].
+ *                  * Task:  NRF_TEMP->TASKS_START.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        14/July/2017
+ * @version     14/July/2017   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+void conf_PPI  ( void )
+{
+    NRF_PPI->CH[0].EEP   =   ( uint32_t )&NRF_RTC2->EVENTS_COMPARE[0];
+    NRF_PPI->CH[0].TEP   =   ( uint32_t )&NRF_TEMP->TASKS_START;
+
+
+    /* Enable PPI channel 0  */
+    NRF_PPI->CHEN        =   ( PPI_CHEN_CH0_Enabled << PPI_CHEN_CH0_Pos );
+}

@@ -24,20 +24,23 @@ extern "C" {
 #endif
 
 
-/* INTERRUPT PRTOTYPES */
+/**@brief Subroutine prototypes.
+ */
 void UART0_IRQHandler ( void );
+void TEMP_IRQHandler  ( void );
+void RTC2_IRQHandler  ( void );
 
 
-/* CONSTANTS */
+/**@brief Constants.
+ */
 
 
 
-/* VARIABLES */
+/**@brief Variables.
+ */
 extern volatile uint8_t  myMessage[];
 extern volatile uint8_t  *myPtr;
-extern volatile uint32_t myTEMP;
 extern volatile uint32_t myState;
-extern volatile uint32_t myTEMPFlag;
 
 
 #ifdef __cplusplus
