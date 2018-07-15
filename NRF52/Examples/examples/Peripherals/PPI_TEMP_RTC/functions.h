@@ -30,6 +30,7 @@ void conf_GPIO    ( void );
 void conf_UART0   ( void );
 void conf_TEMP    ( void );
 void conf_RTC2    ( void );
+void conf_PPI     ( void );
 
 
 
