@@ -21,62 +21,66 @@
 #include "ble.h"
 #include "variables.h"
 #include "functions.h"
-#include "BME680.h"
+#include "bme680_port.h"
 
 
+volatile I2C_parameters_t   myBME680_I2C_parameters;
+
+
+/**@brief FUNCTION FOR APPLICATION MAIN ENTRY.
+ */
 int main( void )
 {
     uint8_t  myTX_buff[2]     =   { 0 };
-    uint8_t  myDataInEEPROM[] =   { 0x23, 0x23, 0x23 };
-    uint32_t myTimeoOut       =   0;
 
 
-//    I2C_parameters_t            myDS1624_I2C_parameters;
-//    DS1624_status_t             aux;
-//    DS1624_access_config_done_t myDS1624_TempConversionStatus;
-//    DS1624_vector_data_t        myDS1624_data;
-//
-//
-//    conf_GPIO   ();
-//    conf_UART   ();
-//    conf_TIMER0 ();
-//
-//
-//
-//    // I2C definition
-//    myDS1624_I2C_parameters.TWIinstance =    NRF_TWI0;
-//    myDS1624_I2C_parameters.SDA         =    TWI0_SDA;
-//    myDS1624_I2C_parameters.SCL         =    TWI0_SCL;
-//    myDS1624_I2C_parameters.ADDR        =    DS1624_ADDRESS_0;
-//    myDS1624_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-//    myDS1624_I2C_parameters.SDAport     =    NRF_GPIO;
-//    myDS1624_I2C_parameters.SCLport     =    NRF_GPIO;
-//
-//    // Configure I2C peripheral
-//    aux  =   DS1624_Init ( myDS1624_I2C_parameters );
-//
-//
-//    // Configure 1SHOT mode
-//    aux  =   DS1624_SetConversionMode ( myDS1624_I2C_parameters, ACCESS_CONFIG_1SHOT_ONE_TEMPERATURE_CONVERSION );
-//    nrf_delay_ms ( 50 );
-//
-//    // Write myDataInEEPROM into EEPROM memory ( address: 0x13 )
-//    aux  =   DS1624_WriteBytesEEPROM  ( myDS1624_I2C_parameters, 0x13, myDataInEEPROM, sizeof( myDataInEEPROM )/sizeof( myDataInEEPROM[0] ) );
-//    nrf_delay_ms ( 50 );
-//
-//    // Read EEPROM memory ( address: 0x13 ), just to check if the data was stored correctly
-//    myDataInEEPROM[0]    =   0;
-//    myDataInEEPROM[1]    =   0;
-//    myDataInEEPROM[2]    =   0;
-//
-//    aux  =   DS1624_ReadBytesEEPROM   ( myDS1624_I2C_parameters, 0x13, &myDataInEEPROM[0], sizeof( myDataInEEPROM )/sizeof( myDataInEEPROM[0] ) );
+
+    BME680_status_t             aux;
 
 
+    conf_GPIO   ();
+    conf_UART   ();
+    conf_TIMER0 ();
+
+
+
+    // I2C definition
+    myBME680_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myBME680_I2C_parameters.SDA         =    TWI0_SDA;
+    myBME680_I2C_parameters.SCL         =    TWI0_SCL;
+    myBME680_I2C_parameters.ADDR        =    BME680_I2C_ADDR_PRIMARY;
+    myBME680_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myBME680_I2C_parameters.SDAport     =    NRF_GPIO;
+    myBME680_I2C_parameters.SCLport     =    NRF_GPIO;
+
+    // Configure I2C peripheral
+    aux  =   BME680_Init ( myBME680_I2C_parameters );
+
+
+
+    struct bme680_dev gas_sensor;
+
+    gas_sensor.dev_id   =   BME680_I2C_ADDR_PRIMARY;
+    gas_sensor.intf     =   BME680_I2C_INTF;
+    gas_sensor.read     =   user_i2c_read;
+    gas_sensor.write    =   user_i2c_write;
+    gas_sensor.delay_ms =   user_delay_ms;
+    /* amb_temp can be set to 25 prior to configuring the gas sensor
+     * or by performing a few temperature readings without operating the gas sensor.
+     */
+    gas_sensor.amb_temp =   25;
+
+
+    int8_t rslt = BME680_OK;
+    rslt = bme680_init(&gas_sensor);
 
     mySTATE  =   0;                                 // Reset the variable
 
     NRF_TIMER0->TASKS_START  =   1;                 // Start Timer0
 
+
+    //NRF_POWER->SYSTEMOFF = 1;
+    NRF_POWER->TASKS_LOWPWR = 1;                // Sub power mode: Low power.
     while( 1 )
     {
         //NRF_POWER->SYSTEMOFF = 1;
@@ -95,14 +99,14 @@ int main( void )
             NVIC_DisableIRQ ( TIMER0_IRQn );                                            // Timer Interrupt DISABLED
 
 //            // Trigger a new temperature conversion
-//            aux  =   DS1624_StartConvertTemperature ( myDS1624_I2C_parameters );
+//            aux  =   BME680_StartConvertTemperature ( myBME680_I2C_parameters );
 //
 //            // Wait until the temperature conversion is completed or timeout
 //            myTimeoOut   =   232323;
 //            do{
-//                aux  =   DS1624_IsTemperatureConversionDone ( myDS1624_I2C_parameters, &myDS1624_TempConversionStatus );
+//                aux  =   BME680_IsTemperatureConversionDone ( myBME680_I2C_parameters, &myBME680_TempConversionStatus );
 //                myTimeoOut--;
-//            } while ( ( ( myDS1624_TempConversionStatus & ACCESS_CONFIG_DONE_MASK ) != ACCESS_CONFIG_DONE_CONVERSION_COMPLETE ) && ( myTimeoOut > 0 ) );
+//            } while ( ( ( myBME680_TempConversionStatus & ACCESS_CONFIG_DONE_MASK ) != ACCESS_CONFIG_DONE_CONVERSION_COMPLETE ) && ( myTimeoOut > 0 ) );
 //
 //            // Check if TimeOut, if so, there was an error ( send: NA ), send the data otherwise
 //            if ( myTimeoOut <= 0 )
@@ -112,11 +116,11 @@ int main( void )
 //            }
 //            else
 //            {
-//                //aux  =   DS1624_ReadTemperature    ( myDS1624_I2C_parameters, &myDS1624_data );
-//                aux  =   DS1624_ReadRawTemperature ( myDS1624_I2C_parameters, &myDS1624_data );
+//                //aux  =   BME680_ReadTemperature    ( myBME680_I2C_parameters, &myBME680_data );
+//                aux  =   BME680_ReadRawTemperature ( myBME680_I2C_parameters, &myBME680_data );
 //
-//                myTX_buff[0]                 =   myDS1624_data.MSBTemperature;
-//                myTX_buff[1]                 =   myDS1624_data.LSBTemperature;
+//                myTX_buff[0]                 =   myBME680_data.MSBTemperature;
+//                myTX_buff[1]                 =   myBME680_data.LSBTemperature;
 //            }
 //
 //
