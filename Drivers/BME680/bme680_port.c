@@ -21,7 +21,7 @@
 
 
 /**
- * @brief       BME680_Init ( I2C_parameters_t )
+ * @brief       BME680_Init_I2C ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -30,7 +30,7 @@
  * @param[out]   N/A.
  *
  *
- * @return       Status of BME680_Init.
+ * @return       Status of BME680_Init_I2C.
  *
  *
  * @author      Manuel Caballero
@@ -39,7 +39,7 @@
  * @pre         N/A
  * @warning     N/A.
  */
-BME680_status_t  BME680_Init ( I2C_parameters_t myI2Cparameters )
+BME680_status_t  BME680_Init_I2C ( I2C_parameters_t myI2Cparameters )
 {
     i2c_status_t aux;
 
@@ -198,19 +198,19 @@ int8_t user_i2c_write ( uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uin
      */
 
     i2c_status_t aux;
-    uint8_t      cmd[64] =  { 0 };
+    uint8_t      cmd[16] =  { 0 };
     uint32_t     i       =   0;
 
     /* Prepare the data to be sent   */
     cmd[0]   =   reg_addr;
     for ( i = 1; i <= len; i++ )
     {
-        cmd[i]   =   reg_data[i];
+        cmd[i]   =   reg_data[i - 1];
     }
 
     /* Write data    */
     myBME680_I2C_parameters.ADDR     =   dev_id;
-    aux      =   i2c_write ( myBME680_I2C_parameters, &cmd[0], len, I2C_STOP_BIT );
+    aux      =   i2c_write ( myBME680_I2C_parameters, &cmd[0], len + 1, I2C_STOP_BIT );
 
 
     if ( aux == I2C_SUCCESS )
