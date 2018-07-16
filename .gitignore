@@ -34,3 +34,9 @@ NRF52/Examples/examples/Peripherals/GPIOTE_PORT_EVENT/pca10040/s132/ses/Output/
 *.jlink
 NRF51/Examples/Drivers/MAX30100/obj/
 NRF52/Examples/examples/Peripherals/PPI_TEMP_RTC/pca10040/s132/ses/Output/
+NRF51/Examples/Drivers/BME680/obj/Debug/~#/~#/~#/~#/Drivers/BME680/bme680_port.d
+NRF51/Examples/Drivers/BME680/obj/Debug/~#/~#/~#/~#/Drivers/BME680/bme680_port.o
+NRF51/Examples/Drivers/TMP102/TMP102.cscope_file_list
+NRF51/Examples/Drivers/BME680/cscope.out
+NRF51/Examples/Drivers/BME680/BME680.cscope_file_list
+NRF51/Examples/Drivers/TMP102/cscope.out

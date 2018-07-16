@@ -49,45 +49,6 @@ void conf_GPIO  ( void )
 
 
 /**
- * @brief       void conf_TIMER0  ( void )
- * @details     One channels will create an interrupt about every 1s.
- *
- *              Timer0:
- *                  * Prescaler:            5   ( f_Timer0 = 1MHz ( PCLK1M ) ).
- *                  * 32-bits mode.
- *                  * Interrupt ENABLE.
- *
- *                 --- Channel 0:
- *                  * Overflow:             ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500kHz)^(-1) ) ~ 1s.
- *
- * @return      N/A
- *
- * @author      Manuel Caballero
- * @date        2/August/2017
- * @version     2/August/2017   The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-void conf_TIMER0  ( void )
-{
-    NRF_TIMER0->TASKS_STOP  =   1;
-    NRF_TIMER0->MODE        =   TIMER_MODE_MODE_Timer;
-    NRF_TIMER0->PRESCALER   =   5U;                                                                         // f_Timer0 = ( 16MHz / 2^5 ) = 500kHz
-    NRF_TIMER0->BITMODE     =   TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos;                   // 32 bit mode.
-    NRF_TIMER0->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
-
-    NRF_TIMER0->CC[0]       =   500000;                                                                    // ( 500000 * (f_Timer0)^(-1) ) = ( 500000 * (500KHz)^(-1) ) ~ 1s
-
-    NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos );
-
-    NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE0_CLEAR_Enabled << TIMER_SHORTS_COMPARE0_CLEAR_Pos ); // Create an Event-Task shortcut to clear TIMER0 on COMPARE[0].
-
-
-    NVIC_EnableIRQ ( TIMER0_IRQn );                                                                         // Enable Interrupt for the Timer0 in the core.
-}
-
-
-/**
  * @brief       void conf_Uart  ( void )
  * @details     Uart0 with the following features:
  *
@@ -98,8 +59,8 @@ void conf_TIMER0  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        20/June/2017
- * @version     20/June/2017   The ORIGIN
+ * @date        9/July/2018
+ * @version     9/July/2018   The ORIGIN
  * @pre         Only TX pin will be configured.
  * @warning     N/A.
  */

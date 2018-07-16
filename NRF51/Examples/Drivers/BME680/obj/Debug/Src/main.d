@@ -9,6 +9,8 @@ obj\debug\src\main.o: Src\main.c Inc/nrf.h Inc/nrf51.h \
  softdevice\Include/nrf_svc.h softdevice\Include/ble_l2cap.h \
  softdevice\Include/ble_err.h softdevice\Include/nrf_error.h \
  softdevice\Include/ble_gatt.h softdevice\Include/ble_gattc.h \
- softdevice\Include/ble_gatts.h Src\variables.h Inc/nrf51_bitfields.h \
- Src\board.h Src\functions.h ..\..\..\..\Drivers\BME680/BME680.h \
- ..\..\Basics\I2C/i2c.h
+ softdevice\Include/ble_gatts.h Src\board.h Src\variables.h \
+ Inc/nrf51_bitfields.h Src\functions.h \
+ ..\..\..\..\Drivers\BME680/bme680_port.h \
+ ..\..\..\..\Drivers\BME680/bme680.h \
+ ..\..\..\..\Drivers\BME680/bme680_defs.h ..\..\Basics\I2C/i2c.h
