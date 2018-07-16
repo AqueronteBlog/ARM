@@ -21,13 +21,19 @@
 #include "stdbool.h"
 #include "bme680.h"
 #include "i2c.h"
+#include "nrf_delay.h"
 
-#ifndef BME680_H_
-#define BME680_H_
+#ifndef BME680_port_H_
+#define BME680_port_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+
+/**@brief VARIABLES.
+ */
+extern volatile I2C_parameters_t    myBME680_I2C_parameters;
 
 
 
@@ -47,9 +53,19 @@ typedef enum{
   */
 /** It configures the I2C peripheral.
         */
-BME680_status_t  BME680_Init                          ( I2C_parameters_t myI2Cparameters                                                                                            );
+BME680_status_t  BME680_Init    ( I2C_parameters_t myI2Cparameters                                  );
 
+/** Return control or wait, for a period amount of milliseconds.
+        */
+void             user_delay_ms  ( uint32_t period                                                   );
 
+/** It reads data through the I2C bus.
+        */
+int8_t           user_i2c_read  ( uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len );
+
+/** It writes data through the I2C bus.
+        */
+int8_t           user_i2c_write ( uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len );
 
 
 
@@ -57,4 +73,4 @@ BME680_status_t  BME680_Init                          ( I2C_parameters_t myI2Cpa
 }
 #endif
 
-#endif /* BME680_H_ */
+#endif /* BME680_port_H_ */
