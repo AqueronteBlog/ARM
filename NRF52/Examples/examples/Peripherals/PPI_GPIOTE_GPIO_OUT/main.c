@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     This example shows hot to work with the internal peripheral PPI: GPIOTE and GPIO.
- *              A new temperature mearument is performed every 1 second by PPI.
+ * @details     This example shows how to work with the PPI peripheral. The LED1
+ *              blinks every 125ms. PPI interconnects the RTC event with the GPIOTE task.
  *
  *              The microcontroller is in low power the rest of the time.
  *
@@ -27,7 +27,6 @@
 
 /**@brief Constants.
  */
-#define TX_BUFF_SIZE  32                        /*!<   UART buffer size                               */
 
 
 /**@brief Variables.
@@ -39,9 +38,15 @@
  */
 int main(void)
 {
+  conf_LFCLK  ();
   conf_GPIO   ();
+  conf_GPIOTE ();
   conf_PPI    ();
+  conf_RTC1   ();
 
+  
+
+  NRF_RTC1->TASKS_START  =   1;       // Start RTC1
 
 //  NRF_POWER->SYSTEMOFF = 1;
   NRF_POWER->TASKS_LOWPWR = 1;        // Sub power mode: Low power.

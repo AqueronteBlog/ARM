@@ -26,7 +26,7 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-void UART0_IRQHandler ( void );
+
 
 
 
