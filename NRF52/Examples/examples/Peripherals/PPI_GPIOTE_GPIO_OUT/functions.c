@@ -17,6 +17,34 @@
 
 
 /**
+ * @brief       void conf_LFCLK  ( void )
+ * @details     It turns the internal LFCLK clock on for RTCs.
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        17/July/2018
+ * @version     17/July/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+void conf_LFCLK  ( void )
+{
+  NRF_CLOCK->LFCLKSRC             =   ( CLOCK_LFCLKSRC_SRC_RC << CLOCK_LFCLKSRC_SRC_Pos );
+  NRF_CLOCK->EVENTS_LFCLKSTARTED  =   0;
+  NRF_CLOCK->TASKS_LFCLKSTART     =   1;
+
+  while ( NRF_CLOCK->EVENTS_LFCLKSTARTED == 0 )       // [TODO] Insert a counter! otherwise if there is a problem it will get block!!!
+  {
+      //Do nothing.
+  }
+
+  NRF_CLOCK->EVENTS_LFCLKSTARTED  =   0;
+}
+
+
+
+/**
  * @brief       void conf_GPIO  ( void )
  * @details     It configures GPIO to work with the LEDs.
  *
@@ -47,28 +75,82 @@ void conf_GPIO  ( void )
 
 
 /**
- * @brief       void conf_PPI  ( void )
- * @details     It sets up one PPI channel.
+ * @brief       void conf_GPIOTE  ( void )
+ * @details     It configures GPIOTE channels.
  *
- *              Channel 0:
- *                  * Event: NRF_RTC2->EVENTS_COMPARE[0].
- *                  * Task:  NRF_TEMP->TASKS_START.
+ *                  - LED1. IN0 ( Task ).
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        17/July/2017
- * @version     17/July/2017   The ORIGIN
+ * @date        17/July/2018
+ * @version     17/July/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void conf_GPIOTE  ( void )
+{
+  /* Channel 0   */
+  NRF_GPIOTE->CONFIG[0]    =    ( GPIOTE_CONFIG_POLARITY_Toggle   << GPIOTE_CONFIG_POLARITY_Pos   ) |
+                                ( LED1                            << GPIOTE_CONFIG_PSEL_Pos       ) |
+                                ( GPIOTE_CONFIG_MODE_Task         << GPIOTE_CONFIG_MODE_Pos       );
+
+
+  /* Reset the task for channel 0  */
+  NRF_GPIOTE->TASKS_OUT[0]  =   0;
+}
+
+
+
+/**
+ * @brief       void conf_PPI  ( void )
+ * @details     It interconnects NRF_RTC1->EVENTS_TICK with NRF_GPIOTE->TASKS_OUT[0].
+ *
+ *              Channel 0:
+ *                  * Event: NRF_RTC1->EVENTS_TICK.
+ *                  * Task:  NRF_GPIOTE->TASKS_OUT[0].
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        17/July/2018
+ * @version     17/July/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
 void conf_PPI  ( void )
 {
-    NRF_PPI->CH[0].EEP   =   ( uint32_t )&NRF_RTC2->EVENTS_COMPARE[0];
-    NRF_PPI->CH[0].TEP   =   ( uint32_t )&NRF_TEMP->TASKS_START;
+  NRF_PPI->CH[0].EEP   =   ( uint32_t )&NRF_RTC1->EVENTS_TICK;
+  NRF_PPI->CH[0].TEP   =   ( uint32_t )&NRF_GPIOTE->TASKS_OUT[0];
+
+  /* Enable PPI channel 0  */
+  NRF_PPI->CHEN        =   ( PPI_CHEN_CH0_Enabled << PPI_CHEN_CH0_Pos );
+}
 
 
-    /* Enable PPI channel 0  */
-    NRF_PPI->CHEN        =   ( PPI_CHEN_CH0_Enabled << PPI_CHEN_CH0_Pos );
+
+/**
+ * @brief       void conf_RTC1  ( void )
+ * @details     Tick will create an event every 125ms.
+ *
+ *              RTC1:
+ *                  * Prescaler:            4095   ( f_RTC0 = ( 32.768kHz / ( 4095 + 1 ) ) = 8Hz ( 125ms ) )
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        17/July/2018
+ * @version     17/July/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+void conf_RTC1  ( void )
+{
+  NRF_RTC1->TASKS_STOP  =   1;
+  NRF_RTC1->PRESCALER   =   4095;                                                   // f_RTC0 = ( 32.768kHz / ( 4095 + 1 ) ) = 8Hz ( 125ms )
+  NRF_RTC1->TASKS_CLEAR =   1;                                                      // clear the task first to be usable for later.
+
+
+  NRF_RTC1->EVTENSET   |=   ( RTC_EVTENSET_TICK_Enabled << RTC_EVTENSET_TICK_Pos );
 }
