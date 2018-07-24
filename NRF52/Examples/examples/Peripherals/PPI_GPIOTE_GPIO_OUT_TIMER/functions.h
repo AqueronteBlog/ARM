@@ -27,7 +27,7 @@ extern "C" {
  */
 void conf_GPIO   ( void );
 void conf_PPI    ( void );
-void conf_RTC1   ( void );
+void conf_TIMER0 ( void );
 void conf_GPIOTE ( void );
 
 
