@@ -1,5 +1,5 @@
 /**
- * @brief       interrupts.h
+ * @brief       interrupts.c
  * @details     Interruption sources.
  *
  * @return      N/A

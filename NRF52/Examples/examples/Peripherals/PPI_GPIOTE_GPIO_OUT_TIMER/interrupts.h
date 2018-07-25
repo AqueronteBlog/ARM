@@ -29,7 +29,6 @@ extern "C" {
 
 
 
-
 /**@brief Constants.
  */
 
@@ -37,9 +36,7 @@ extern "C" {
 
 /**@brief Variables.
  */
-extern volatile uint8_t  myMessage[];
-extern volatile uint8_t  *myPtr;
-extern volatile uint32_t myState;
+
 
 
 #ifdef __cplusplus
