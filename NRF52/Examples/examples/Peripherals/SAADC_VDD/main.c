@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [TODO] This example shows how to work with the PPI peripheral. The LED1
- *              blinks every 500ms. PPI interconnects the TIMER0 CC[0] event with the GPIOTE task.
+ * @details     This example shows how to work with the SAADC peripheral. Every 2 seconds, a new
+ *              VDD sample is performed and transmitted through the UART.
  *
  *              The microcontroller is in low power the rest of the time.
  *
