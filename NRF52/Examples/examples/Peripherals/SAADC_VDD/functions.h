@@ -25,10 +25,20 @@ extern "C" {
 
 /**@brief Function prototypes.
  */
+void conf_CLK    ( void );
 void conf_GPIO   ( void );
-void conf_PPI    ( void );
 void conf_TIMER0 ( void );
-void conf_GPIOTE ( void );
+void conf_UART   ( void );
+void conf_SAADC  ( volatile uint32_t* myADC_Result );
+
+
+/**@brief Constants.
+ */
+
+
+
+/**@brief Variables.
+ */
 
 
 
