@@ -26,7 +26,8 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-
+void TIMER0_IRQHandler ( void );
+void UART0_IRQHandler  ( void );
 
 
 /**@brief Constants.
@@ -36,6 +37,9 @@ extern "C" {
 
 /**@brief Variables.
  */
+extern volatile uint32_t myState;         
+extern volatile uint8_t  myMessage[];
+extern volatile uint8_t  *myPtr;
 
 
 
