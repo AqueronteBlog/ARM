@@ -5,8 +5,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        26/July/2018
- * @version     26/July/2018   The ORIGIN
+ * @date        27/July/2018
+ * @version     27/July/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -36,6 +36,56 @@ void TIMER0_IRQHandler()
 
 
     NRF_TIMER0->EVENTS_COMPARE[0] = 0UL;                    // Clear ( flag ) compare register 0 event
+  }
+}
+
+
+
+/**
+ * @brief       void SAADC_IRQHandler ()
+ * @details     SAADC interruption. 
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        27/July/2018
+ * @version     27/July/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A
+ */
+void SAADC_IRQHandler()
+{
+  /* STARTED event  */
+  if ( ( NRF_SAADC->EVENTS_STARTED != 0UL ) && ( ( NRF_SAADC->INTENSET & SAADC_INTENSET_STARTED_Msk ) != 0UL ) )
+  {
+    /* Do a SAADC sample, will put the result in the configured RAM buffer   */
+    NRF_SAADC->TASKS_SAMPLE  =   1UL;
+
+
+    NRF_SAADC->EVENTS_STARTED = 0UL;             // Clear ( flag )
+  }
+  
+  /* END event   */
+  if ( ( NRF_SAADC->EVENTS_END != 0UL ) && ( ( NRF_SAADC->INTENSET & SAADC_INTENSET_END_Msk ) != 0UL ) )
+  {
+    if ( ( NRF_SAADC->RESULT.AMOUNT & SAADC_RESULT_AMOUNT_AMOUNT_Msk ) != 0 )
+    {
+      myADCDoneFlag  =   1UL;
+    }
+
+
+    NRF_SAADC->EVENTS_END = 0UL;                 // Clear ( flag )
+  }
+
+  /* STOPPED event  */
+  if ( ( NRF_SAADC->EVENTS_STOPPED != 0UL ) && ( ( NRF_SAADC->INTENSET & SAADC_INTENSET_STOPPED_Msk ) != 0UL ) )
+  {
+    /* Disable SAADC   */
+    NRF_SAADC->ENABLE  =   ( SAADC_ENABLE_ENABLE_Disabled << SAADC_ENABLE_ENABLE_Pos );
+
+
+    NRF_SAADC->EVENTS_STOPPED = 0UL;             // Clear ( flag )
   }
 }
 

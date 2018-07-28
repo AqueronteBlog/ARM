@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        26/July/2018
- * @version     26/July/2018   The ORIGIN
+ * @date        27/July/2018
+ * @version     27/July/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -28,6 +28,7 @@ extern "C" {
  */
 void TIMER0_IRQHandler ( void );
 void UART0_IRQHandler  ( void );
+void SAADC_IRQHandler  ( void );
 
 
 /**@brief Constants.
@@ -40,7 +41,7 @@ void UART0_IRQHandler  ( void );
 extern volatile uint32_t myState;         
 extern volatile uint8_t  myMessage[];
 extern volatile uint8_t  *myPtr;
-
+extern volatile uint32_t myADCDoneFlag;
 
 
 #ifdef __cplusplus
