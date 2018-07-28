@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        26/July/2018
- * @version     26/July/2018   The ORIGIN
+ * @date        27/July/2018
+ * @version     27/July/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -58,8 +58,8 @@ void conf_CLK  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        26/July/2018
- * @version     26/July/2018   The ORIGIN   
+ * @date        27/July/2018
+ * @version     27/July/2018   The ORIGIN   
  * @pre         N/A
  * @warning     N/A
  */
@@ -104,7 +104,7 @@ void conf_GPIO  ( void )
  * @pre         N/A
  * @warning     N/A
  */
-void conf_SAADC  ( volatile uint32_t* myADC_Result )
+void conf_SAADC  ( volatile int16_t* myADC_Result )
 {
   /* Disable SAADC   */
   NRF_SAADC->ENABLE  =   ( SAADC_ENABLE_ENABLE_Disabled << SAADC_ENABLE_ENABLE_Pos );
@@ -127,7 +127,7 @@ void conf_SAADC  ( volatile uint32_t* myADC_Result )
                                ( SAADC_CH_CONFIG_RESN_Bypass      << SAADC_CH_CONFIG_RESN_Pos   ) |
                                ( SAADC_CH_CONFIG_GAIN_Gain1_6     << SAADC_CH_CONFIG_GAIN_Pos   ) |
                                ( SAADC_CH_CONFIG_REFSEL_Internal  << SAADC_CH_CONFIG_REFSEL_Pos ) |
-                               ( SAADC_CH_CONFIG_TACQ_15us        << SAADC_CH_CONFIG_TACQ_Pos   ) |
+                               ( SAADC_CH_CONFIG_TACQ_3us         << SAADC_CH_CONFIG_TACQ_Pos   ) |
                                ( SAADC_CH_CONFIG_MODE_SE          << SAADC_CH_CONFIG_MODE_Pos   ) |
                                ( SAADC_CH_CONFIG_BURST_Disabled   << SAADC_CH_CONFIG_BURST_Pos  );
   
@@ -152,6 +152,16 @@ void conf_SAADC  ( volatile uint32_t* myADC_Result )
   while ( NRF_SAADC->EVENTS_CALIBRATEDONE == 0UL );   // [TODO]       This is DANGEROUS, if something goes wrong, the uC will get stuck here!!!.
                                                       // [WORKAROUND] Insert a counter.
   NRF_SAADC->EVENTS_CALIBRATEDONE  =   0UL; 
+
+  /* Disable SAADC   */
+  NRF_SAADC->ENABLE  =   ( SAADC_ENABLE_ENABLE_Disabled << SAADC_ENABLE_ENABLE_Pos );
+  
+  /* Enable interrupts   */
+  NRF_SAADC->INTENSET   =   ( SAADC_INTENSET_STARTED_Set << SAADC_INTENSET_STARTED_Pos ) |
+                            ( SAADC_INTENSET_STOPPED_Set << SAADC_INTENSET_STOPPED_Pos ) |
+                            ( SAADC_INTENSET_END_Set     << SAADC_INTENSET_END_Pos     );        
+
+  NVIC_EnableIRQ ( SAADC_IRQn );                      // Enable Interrupt for the SAADC in the core.
 }
 
 
@@ -177,9 +187,8 @@ void conf_SAADC  ( volatile uint32_t* myADC_Result )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        26/July/2018
- * @version     27/July/2018   Interrupt is enabled now.
- *              26/July/2018   The ORIGIN
+ * @date        27/July/2018
+ * @version     27/July/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
