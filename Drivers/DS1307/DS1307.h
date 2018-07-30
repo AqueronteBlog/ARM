@@ -114,19 +114,19 @@ typedef enum
 typedef enum
 {
     HOURS_MODE_MASK                 =   ( 1 << 6 ),          /*!<  Hours 12/24 mode mask                   */
-    HOURS_MODE_12H_ENABLED          =   ( 1 << 6 ),          /*!<  Hours 12-hour mode enabled              */
-    HOURS_MODE_24H_ENABLED          =   ( 0 << 6 )           /*!<  Hours 24-hour mode enabled              */
+    HOURS_MODE_12H                  =   ( 1 << 6 ),          /*!<  Hours 12-hour mode enabled              */
+    HOURS_MODE_24H                  =   ( 0 << 6 )           /*!<  Hours 24-hour mode enabled              */
 } DS1307_hours_mode_t;
 
 
 /**
-  * @brief   12-HOUR OR 24-HOUR MODE
+  * @brief   AM OR PM MODE
   */
 typedef enum
 {
     HOURS_MODE_AM_PM_MASK           =   ( 1 << 5 ),          /*!<  Hours am/pm mode mask                   */
-    HOURS_MODE_AM_ENABLED           =   ( 1 << 5 ),          /*!<  Hours AM mode enabled                   */
-    HOURS_MODE_PM_ENABLED           =   ( 0 << 5 )           /*!<  Hours PM mode enabled                   */
+    HOURS_MODE_AM                   =   ( 1 << 5 ),          /*!<  Hours AM mode enabled                   */
+    HOURS_MODE_PM                   =   ( 0 << 5 )           /*!<  Hours PM mode enabled                   */
 } DS1307_hours_am_pm_mode_t;
 
 
@@ -264,18 +264,45 @@ typedef enum
 
 
 
+// ALTERNATIVES
+/**
+  * @brief   MONTH
+  */
+typedef enum
+{
+    MONTH_JANUARY                   =   0x01,               /*!<  January                                   */
+    MONTH_FEBRUARY                  =   0x02,               /*!<  February                                  */
+    MONTH_MARCH                     =   0x03,               /*!<  March                                     */
+    MONTH_APRIL                     =   0x04,               /*!<  April                                     */
+    MONTH_MAY                       =   0x05,               /*!<  May                                       */
+    MONTH_JUNE                      =   0x06,               /*!<  June                                      */
+    MONTH_JULY                      =   0x07,               /*!<  July                                      */
+    MONTH_AUGUST                    =   0x08,               /*!<  August                                    */
+    MONTH_SEPTEMBER                 =   0x09,               /*!<  September                                 */
+    MONTH_OCTOBER                   =   0x10,               /*!<  October                                   */
+    MONTH_NOVEMBER                  =   0x11,               /*!<  November                                  */
+    MONTH_DECEMBER                  =   0x12                /*!<  December                                  */
+} DS1307_month_t;
+
+
+
 
 
 #ifndef DS1307_VECTOR_STRUCT_H
 #define DS1307_VECTOR_STRUCT_H
 typedef struct
 {
-    float    Temperature;
+    uint32_t                    BCDTime;
+    DS1307_hours_mode_t         Time12H_24HMode;
+    DS1307_hours_am_pm_mode_t   TimeAM_PM_Mode;
 
-    int16_t  TemperatureRegister;
-    uint16_t ConfigurationRegister;
-    int16_t  TLOW_Register;
-    int16_t  THIGH_Register;
+    DS1307_day_t                DayOfTheWeek;
+
+    uint8_t                     BCDDate;
+
+    DS1307_month_t              BCDMonth;
+
+    uint8_t                     BCDYear;
 } DS1307_vector_data_t;
 #endif
 
@@ -300,16 +327,55 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-DS1307_status_t  DS1307_Init                    ( I2C_parameters_t myI2Cparameters                                                                          );
+DS1307_status_t  DS1307_Init                ( I2C_parameters_t myI2Cparameters                                                                                              );
 
 /** It configures the square-wave output.
   */
-DS1307_status_t  DS1307_SquareWaveOutput        ( I2C_parameters_t myI2Cparameters, DS1307_control_sqwe_t mySQWE, DS1307_control_rate_select_t myRateSelect );
+DS1307_status_t  DS1307_SquareWaveOutput    ( I2C_parameters_t myI2Cparameters, DS1307_control_sqwe_t mySQWE, DS1307_control_rate_select_t myRateSelect                     );
 
 /** It configures the output pin ( OUT ).
   */
-DS1307_status_t  DS1307_ConfOutput              ( I2C_parameters_t myI2Cparameters, DS1307_control_out_t myOUT                                              );
+DS1307_status_t  DS1307_ConfOutput          ( I2C_parameters_t myI2Cparameters, DS1307_control_out_t myOUT                                                                  );
 
+/** It sets the time ( BCD mode ).
+  */
+DS1307_status_t  DS1307_SetTime             ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t myTime                                                                 );
+
+/** It gets the time ( BCD mode ).
+  */
+DS1307_status_t  DS1307_GetTime             ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myTime                                                                );
+
+/** It sets the day of the week.
+  */
+DS1307_status_t  DS1307_SetDayOfTheWeek     ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t myDayOfTheWeek                                                         );
+
+/** It gets the day of the week.
+  */
+DS1307_status_t  DS1307_GetDayOfTheWeek     ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myDayOfTheWeek                                                        );
+
+/** It sets the date ( BCD mode ).
+  */
+DS1307_status_t  DS1307_SetDate             ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t myDate                                                                 );
+
+/** It gets the date ( BCD mode ).
+  */
+DS1307_status_t  DS1307_GetDate             ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myDate                                                                );
+
+/** It sets the month ( BCD mode ).
+  */
+DS1307_status_t  DS1307_SetMonth            ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t myMonth                                                                );
+
+/** It gets the month ( BCD mode ).
+  */
+DS1307_status_t  DS1307_GetMonth            ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myMonth                                                               );
+
+/** It sets the year ( BCD mode ).
+  */
+DS1307_status_t  DS1307_SetYear             ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t myYear                                                                 );
+
+/** It gets the year ( BCD mode ).
+  */
+DS1307_status_t  DS1307_GetYear             ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myYear                                                                );
 
 
 
