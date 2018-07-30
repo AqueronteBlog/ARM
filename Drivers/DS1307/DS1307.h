@@ -73,119 +73,163 @@ typedef enum
   */
 typedef enum
 {
-    SECONDS_10SECONDS_MASK         =   ( 0b111 << 4 )       /*!<  10 Seconds mask                            */
+    SECONDS_10SECONDS_MASK          =   ( 0b111 << 4 )       /*!<  10 Seconds mask                            */
 } DS1307_10seconds_t;
 
 
 /**
-  * @brief   10 SECONDS
+  * @brief   SECONDS
   */
 typedef enum
 {
-    SECONDS_10SECONDS_MASK         =   ( 0b111 << 4 )       /*!<  10 Seconds mask                            */
-} DS1307_10seconds_t;
+    SECONDS_SECONDS_MASK            =   ( 0b1111 << 0 )       /*!<  Seconds mask                            */
+} DS1307_seconds_t;
+
+
+
+// MINUTES
+/**
+  * @brief   10 MINUTES
+  */
+typedef enum
+{
+    MINUTES_10MINUTES_MASK          =   ( 0b111 << 4 )       /*!<  10 Minutes mask                         */
+} DS1307_10minutes_t;
 
 
 /**
-  * @brief   POLARITY
+  * @brief   MINUTES
   */
 typedef enum
 {
-    DS1307_CONFIGURATION_POL_MASK                   =   ( 1U << 10 ),    /*!<  Polarity Mask                                                                      */
-    DS1307_CONFIGURATION_POL_ALERT_PIN_ACTIVE_LOW   =   ( 0U << 10 ),    /*!<  Polarity: ALERT pin becomes active low ( default )                                 */
-    DS1307_CONFIGURATION_POL_ALERT_PIN_ACTIVE_HIGH  =   ( 1U << 10 )     /*!<  Polarity: ALERT pin becomes active high and the state of the ALERT pin is inverted */
-} DS1307_configuration_polarity_t;
+    MINUTES_MINUTES_MASK            =   ( 0b1111 << 0 )       /*!<  Minutes mask                            */
+} DS1307_minutes_t;
+
+
+
+// HOURS
+/**
+  * @brief   12-HOUR OR 24-HOUR MODE
+  */
+typedef enum
+{
+    HOURS_MODE_MASK                 =   ( 1 << 6 ),          /*!<  Hours 12/24 mode mask                   */
+    HOURS_MODE_12H_ENABLED          =   ( 1 << 6 ),          /*!<  Hours 12-hour mode enabled              */
+    HOURS_MODE_24H_ENABLED          =   ( 0 << 6 )           /*!<  Hours 24-hour mode enabled              */
+} DS1307_hours_mode_t;
 
 
 /**
-  * @brief   FAULT QUEUE
+  * @brief   12-HOUR OR 24-HOUR MODE
   */
 typedef enum
 {
-    DS1307_CONFIGURATION_F1F0_MASK                   =   ( 0b11 << 11 ),    /*!<  Fault Queue Mask                                                               */
-    DS1307_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_1   =   ( 0b00 << 11 ),    /*!<  Fault Queue: consecutive faults: 1                                             */
-    DS1307_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_2   =   ( 0b01 << 11 ),    /*!<  Fault Queue: consecutive faults: 2                                             */
-    DS1307_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_4   =   ( 0b10 << 11 ),    /*!<  Fault Queue: consecutive faults: 4                                             */
-    DS1307_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_6   =   ( 0b11 << 11 )     /*!<  Fault Queue: consecutive faults: 6                                             */
-} DS1307_configuration_fault_queue_t;
+    HOURS_MODE_AM_PM_MASK           =   ( 1 << 5 ),          /*!<  Hours am/pm mode mask                   */
+    HOURS_MODE_AM_ENABLED           =   ( 1 << 5 ),          /*!<  Hours AM mode enabled                   */
+    HOURS_MODE_PM_ENABLED           =   ( 0 << 5 )           /*!<  Hours PM mode enabled                   */
+} DS1307_hours_am_pm_mode_t;
 
 
 /**
-  * @brief   CONVERTER RESOLUTION
+  * @brief   10 HOUR
   */
 typedef enum
 {
-    DS1307_CONFIGURATION_R1R0_MASK                   =   ( 0b11 << 13 )     /*!<  Converter resolution bits Mask                                                 */
-} DS1307_configuration_converter_resolution_t;
+    HOUR_10HOUR_MASK                =   ( 0b11 << 4 )        /*!<  10 Hour mask                             */
+} DS1307_10hour_t;
 
 
 /**
-  * @brief   ONE-SHOT
+  * @brief   HOURS
   */
 typedef enum
 {
-    DS1307_CONFIGURATION_OS_MASK                                =   ( 1U << 15 ),      /*!<  One-Shot Mask                                                       */
-    DS1307_CONFIGURATION_OS_START_SINGLE_TEMPERATURE_CONVERSION =   ( 1U << 15 ),      /*!<  One-Shot It starts a single temperature conversion                  */
-    DS1307_CONFIGURATION_OS_BUSY                                =   ( 0U << 15 )       /*!<  One-Shot During the conversion, the OS bit reads '0'                */
-} DS1307_configuration_one_shot_t;
+    HOUR_HOURS_MASK                 =   ( 0b1111 << 0 )      /*!<  Hours mask                               */
+} DS1307_hours_t;
 
+
+
+// DAY
+/**
+  * @brief   DAY
+  */
+typedef enum
+{
+    DAY_MASK                        =   ( 0b111 << 0 ),     /*!<  Day mask                               */
+    DAY_SUNDAY                      =   ( 1 << 0 ),         /*!<  Day Sunday                             */
+    DAY_MONDAY                      =   ( 2 << 0 ),         /*!<  Day Monday                             */
+    DAY_TUESDAY                     =   ( 3 << 0 ),         /*!<  Day Tuesday                            */
+    DAY_WEDNESDAY                   =   ( 4 << 0 ),         /*!<  Day Wednesday                          */
+    DAY_THURSDAY                    =   ( 5 << 0 ),         /*!<  Day Thursday                           */
+    DAY_FRIDAY                      =   ( 6 << 0 ),         /*!<  Day Friday                             */
+    DAY_SATURDAY                    =   ( 7 << 0 )          /*!<  Day Saturday                           */
+} DS1307_day_t;
+
+
+
+// DATE
+/**
+  * @brief   10 DATE
+  */
+typedef enum
+{
+    DATE_10DATE_MASK                =   ( 0b11 << 4 )        /*!<  10 Date mask                         */
+} DS1307_10date_t;
 
 
 /**
-  * @brief   EXTENDED-MODE BIT
+  * @brief   DATE
   */
 typedef enum
 {
-    DS1307_CONFIGURATION_EM_MASK                                =   ( 1U << 4 ),      /*!<  Extended-Mode Mask                                                  */
-    DS1307_CONFIGURATION_EM_NORMAL_MODE_OPERATION               =   ( 0U << 4 ),      /*!<  Extended-Mode: Normal Mode operation                                */
-    DS1307_CONFIGURATION_EM_EXTENDED_MODE_OPERATION             =   ( 1U << 4 )       /*!<  Extended-Mode: Extended Mode operation                              */
-} DS1307_configuration_extended_mode_bit_t;
+    DATE_DATE_MASK                  =   ( 0b1111 << 0 )       /*!<  Date mask                            */
+} DS1307_date_t;
+
+
+
+// MONTH
+/**
+  * @brief   10 MONTH
+  */
+typedef enum
+{
+    MONTH_10MONTH_MASK              =   ( 0b1 << 4 )         /*!<  10 Month mask                         */
+} DS1307_10month_t;
 
 
 /**
-  * @brief   ALERT BIT
+  * @brief   MONTH
   */
 typedef enum
 {
-    DS1307_CONFIGURATION_AL_MASK                                =   ( 1U << 5 )       /*!<  Alert Mask                                                          */
-} DS1307_configuration_alert_bit_t;
+    MONTH_MONTH_MASK                =   ( 0b1111 << 0 )       /*!<  Month mask                            */
+} DS1307_month_t;
+
+
+
+// YEAR
+/**
+  * @brief   10 YEAR
+  */
+typedef enum
+{
+    YEAR_10YEAR_MASK                =   ( 0b1111 << 4 )       /*!<  10 Year mask                           */
+} DS1307_10month_t;
 
 
 /**
-  * @brief   CONVERSION RATE
+  * @brief   YEAR
   */
 typedef enum
 {
-    DS1307_CONFIGURATION_CR_MASK                                =   ( 0b11 << 6 ),    /*!<  Conversion Rate Mask                                                */
-    DS1307_CONFIGURATION_CR_0_25_HZ                             =   ( 0b00 << 6 ),    /*!<  Conversion Rate: 0.25Hz                                             */
-    DS1307_CONFIGURATION_CR_1_HZ                                =   ( 0b01 << 6 ),    /*!<  Conversion Rate: 1Hz                                                */
-    DS1307_CONFIGURATION_CR_4_HZ                                =   ( 0b10 << 6 ),    /*!<  Conversion Rate: 4Hz ( default )                                    */
-    DS1307_CONFIGURATION_CR_8_HZ                                =   ( 0b11 << 6 )     /*!<  Conversion Rate: 8Hz                                                */
-} DS1307_configuration_conversion_rate_t;
+    YEAR_YEAR_MASK                  =   ( 0b1111 << 0 )       /*!<  Year mask                              */
+} DS1307_year_t;
 
 
 
-// HIGH-TEMPERATURE REGISTER
-/**
-  * @brief   TEMPERATURE REGISTER
-  */
-typedef enum
-{
-    DS1307_THIGH_RESOLUTION_12_BITS_MASK    =   0xFFF0,                             /*!<  THIGH configured as a 12-bit                         */
-    DS1307_THIGH_RESOLUTION_13_BITS_MASK    =   0xFFF8                              /*!<  THIGH configured as a 13-bit                         */
-} DS1307_high_temperature_register_t;
 
 
 
-// LOW-TEMPERATURE REGISTER
-/**
-  * @brief   TEMPERATURE REGISTER
-  */
-typedef enum
-{
-    DS1307_TLOW_RESOLUTION_12_BITS_MASK    =   0xFFF0,                             /*!<  TLOW configured as a 12-bit                            */
-    DS1307_TLOW_RESOLUTION_13_BITS_MASK    =   0xFFF8                              /*!<  TLOW configured as a 13-bit                            */
-} DS1307_low_temperature_register_t;
 
 
 
@@ -230,57 +274,6 @@ DS1307_status_t  DS1307_Init                                ( I2C_parameters_t m
   */
 DS1307_status_t  DS1307_ReadTemperatureRegister             ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myTemperatureRegister         );
 
-/** It gets the temperature value.
-  */
-DS1307_status_t  DS1307_GetTemperature                      ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myTemperature                 );
-
-/** It gets the low temperature register value.
-  */
-DS1307_status_t  DS1307_Read_T_LOW_Register                 ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myTLOW_Register               );
-
-/** It updates the low temperature register value.
-  */
-DS1307_status_t  DS1307_Write_T_LOW_Register                ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t myTLOW_Register                );
-
-/** It gets the high temperature register value.
-  */
-DS1307_status_t  DS1307_Read_T_HIGH_Register                ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myTHIGH_Register              );
-
-/** It updates the high temperature register value.
-  */
-DS1307_status_t  DS1307_Write_T_HIGH_Register               ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t myTHIGH_Register               );
-
-/** It gets the configuration register value.
-  */
-DS1307_status_t  DS1307_ReadConfigurationRegister           ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myConfigurationRegister       );
-
-/** It enables shutdown/continuous mode operation.
-  */
-DS1307_status_t  DS1307_SetShutdownMode                     ( I2C_parameters_t myI2Cparameters, DS1307_configuration_shutdown_mode_t mySDMode       );
-
-/** It enables comparator/interrupt mode operation.
-  */
-DS1307_status_t  DS1307_SetThermostatMode                   ( I2C_parameters_t myI2Cparameters, DS1307_configuration_thermostat_mode_t myTMMode     );
-
-/** The polarity bit allows the user to adjust the polarity of the ALERT pin output.
-  */
-DS1307_status_t  DS1307_SetPolarityAlertPinOutput           ( I2C_parameters_t myI2Cparameters, DS1307_configuration_polarity_t myPOLMode           );
-
-/** The number of fault conditions required to generate an alert may be programmed using the fault queue.
-  */
-DS1307_status_t  DS1307_SetConsecutiveFaultsQueue           ( I2C_parameters_t myI2Cparameters, DS1307_configuration_fault_queue_t myF1F0Mode       );
-
-/** When the device is in Shutdown Mode, writing a 1 to the OS bit starts a single temperature conversion.
-  */
-DS1307_status_t  DS1307_TriggerSingleTemperatureConversion  ( I2C_parameters_t myI2Cparameters                                                      );
-
-/** It sets the device into Normal/Extended mode operation.
-  */
-DS1307_status_t  DS1307_SetModeOperation                    ( I2C_parameters_t myI2Cparameters, DS1307_configuration_extended_mode_bit_t myEMMode   );
-
-/** It sets the conversion rate for the device.
-  */
-DS1307_status_t  DS1307_SetConversionRate                   ( I2C_parameters_t myI2Cparameters, DS1307_configuration_conversion_rate_t myCR         );
 
 
 
