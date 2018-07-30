@@ -74,7 +74,7 @@ typedef enum
 typedef enum
 {
     SECONDS_10SECONDS_MASK          =   ( 0b111 << 4 )       /*!<  10 Seconds mask                            */
-} DS1307_10seconds_t;
+} DS1307_seconds_10seconds_t;
 
 
 /**
@@ -83,7 +83,7 @@ typedef enum
 typedef enum
 {
     SECONDS_SECONDS_MASK            =   ( 0b1111 << 0 )       /*!<  Seconds mask                            */
-} DS1307_seconds_t;
+} DS1307_seconds_seconds_t;
 
 
 
@@ -94,7 +94,7 @@ typedef enum
 typedef enum
 {
     MINUTES_10MINUTES_MASK          =   ( 0b111 << 4 )       /*!<  10 Minutes mask                         */
-} DS1307_10minutes_t;
+} DS1307_minutes_10minutes_t;
 
 
 /**
@@ -103,7 +103,7 @@ typedef enum
 typedef enum
 {
     MINUTES_MINUTES_MASK            =   ( 0b1111 << 0 )       /*!<  Minutes mask                            */
-} DS1307_minutes_t;
+} DS1307_minutes_minutes_t;
 
 
 
@@ -136,7 +136,7 @@ typedef enum
 typedef enum
 {
     HOUR_10HOUR_MASK                =   ( 0b11 << 4 )        /*!<  10 Hour mask                             */
-} DS1307_10hour_t;
+} DS1307_hours_10hour_t;
 
 
 /**
@@ -145,7 +145,7 @@ typedef enum
 typedef enum
 {
     HOUR_HOURS_MASK                 =   ( 0b1111 << 0 )      /*!<  Hours mask                               */
-} DS1307_hours_t;
+} DS1307_hours_hours_t;
 
 
 
@@ -174,7 +174,7 @@ typedef enum
 typedef enum
 {
     DATE_10DATE_MASK                =   ( 0b11 << 4 )        /*!<  10 Date mask                         */
-} DS1307_10date_t;
+} DS1307_date_10date_t;
 
 
 /**
@@ -183,7 +183,7 @@ typedef enum
 typedef enum
 {
     DATE_DATE_MASK                  =   ( 0b1111 << 0 )       /*!<  Date mask                            */
-} DS1307_date_t;
+} DS1307_date_date_t;
 
 
 
@@ -194,7 +194,7 @@ typedef enum
 typedef enum
 {
     MONTH_10MONTH_MASK              =   ( 0b1 << 4 )         /*!<  10 Month mask                         */
-} DS1307_10month_t;
+} DS1307_month_10month_t;
 
 
 /**
@@ -203,7 +203,7 @@ typedef enum
 typedef enum
 {
     MONTH_MONTH_MASK                =   ( 0b1111 << 0 )       /*!<  Month mask                            */
-} DS1307_month_t;
+} DS1307_month_month_t;
 
 
 
@@ -214,7 +214,7 @@ typedef enum
 typedef enum
 {
     YEAR_10YEAR_MASK                =   ( 0b1111 << 4 )       /*!<  10 Year mask                           */
-} DS1307_10month_t;
+} DS1307_year_10month_t;
 
 
 /**
@@ -223,12 +223,44 @@ typedef enum
 typedef enum
 {
     YEAR_YEAR_MASK                  =   ( 0b1111 << 0 )       /*!<  Year mask                              */
-} DS1307_year_t;
+} DS1307_year_year_t;
 
 
 
+// CONTROL
+/**
+  * @brief   OUTPUT CONTROL (OUT)
+  */
+typedef enum
+{
+    CONTROL_OUT_MASK                =   ( 1 << 7 ),         /*!<  OUT mask                                */
+    CONTROL_OUT_HIGH                =   ( 1 << 7 ),         /*!<  SQW/OUT high                            */
+    CONTROL_OUT_LOW                 =   ( 0 << 7 )          /*!<  SQW/OUT low                             */
+} DS1307_control_out_t;
 
 
+/**
+  * @brief   SQUARE-WAVE ENABLE (SQWE)
+  */
+typedef enum
+{
+    CONTROL_SQWE_MASK               =   ( 1 << 4 ),         /*!<  SQWE mask                               */
+    CONTROL_SQWE_ENABLED            =   ( 1 << 4 ),         /*!<  SQWE enabled                            */
+    CONTROL_SQWE_DISABLED           =   ( 0 << 4 )          /*!<  SQWE disabled                           */
+} DS1307_control_sqwe_t;
+
+
+/**
+  * @brief   RATE SELECT
+  */
+typedef enum
+{
+    CONTROL_RS_MASK                 =   ( 0b11 << 0 ),      /*!<  RS mask                                   */
+    CONTROL_RS_1_HZ                 =   ( 0b00 << 0 ),      /*!<  RS 1Hz                                    */
+    CONTROL_RS_4_096_KHZ            =   ( 0b01 << 0 ),      /*!<  RS 4.096kHz                               */
+    CONTROL_RS_8_192_KHZ            =   ( 0b10 << 0 ),      /*!<  RS 8.192kHz                               */
+    CONTROL_RS_32_768_KHZ           =   ( 0b11 << 0 )       /*!<  RS 32.768kHz                              */
+} DS1307_control_rate_select_t;
 
 
 
@@ -268,11 +300,15 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-DS1307_status_t  DS1307_Init                                ( I2C_parameters_t myI2Cparameters                                                      );
+DS1307_status_t  DS1307_Init                    ( I2C_parameters_t myI2Cparameters                                                                          );
 
-/** It gets the temperature register value ( raw temperature ).
+/** It configures the square-wave output.
   */
-DS1307_status_t  DS1307_ReadTemperatureRegister             ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myTemperatureRegister         );
+DS1307_status_t  DS1307_SquareWaveOutput        ( I2C_parameters_t myI2Cparameters, DS1307_control_sqwe_t mySQWE, DS1307_control_rate_select_t myRateSelect );
+
+/** It configures the output pin ( OUT ).
+  */
+DS1307_status_t  DS1307_ConfOutput              ( I2C_parameters_t myI2Cparameters, DS1307_control_out_t myOUT                                              );
 
 
 
