@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        4/June/2018
- * @version     4/June/2018    The ORIGIN
+ * @date        30/July/2018
+ * @version     30/July/2018    The ORIGIN
  * @pre         N/A
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -25,17 +25,25 @@
 extern "C" {
 #endif
 
-/* INTERRUPT PRTOTYPES */
+
+/**@brief Subroutine prototypes.
+ */
 void TIMER0_IRQHandler ( void );
-void UART0_IRQHandler   ( void );
+void UART0_IRQHandler  ( void );
 
 
 
-/* VARIABLES */
-extern uint8_t  volatile dataToBeTX;
-extern uint32_t volatile mySTATE;
-extern uint32_t volatile TX_inProgress;
-extern uint8_t  volatile *myPtr;
+/**@brief Constants.
+ */
+
+
+
+/**@brief Variables.
+ */
+extern volatile uint32_t myState;
+extern volatile uint8_t  myMessage[];
+extern volatile uint8_t  *myPtr;
+extern volatile uint32_t myADCDoneFlag;
 
 
 #ifdef __cplusplus
