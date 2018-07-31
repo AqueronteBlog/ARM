@@ -5,8 +5,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        4/June/2018
- * @version     4/June/2018   The ORIGIN
+ * @date        30/July/2018
+ * @version     30/July/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -24,10 +24,21 @@ extern "C" {
 #endif
 
 
-/* FUNCTION PROTOTYPES */
+/**@brief Function prototypes.
+ */
 void conf_GPIO      ( void );
 void conf_TIMER0    ( void );
 void conf_UART      ( void );
+
+
+/**@brief Constants.
+ */
+
+
+
+/**@brief Variables.
+ */
+
 
 
 #ifdef __cplusplus
