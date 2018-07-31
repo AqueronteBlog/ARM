@@ -776,3 +776,58 @@ DS1307_status_t  DS1307_GetYear ( I2C_parameters_t myI2Cparameters, DS1307_vecto
         return   DS1307_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       DS1307_OscillatorMode ( I2C_parameters_t , DS1307_seconds_ch_t )
+ *
+ * @details     It enables/disabled the oscillator.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myOscillator:      Oscillator enabled/disabled.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of DS1307_OscillatorMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        31/July/2018
+ * @version     31/July/2018   The ORIGIN
+ * @pre         The clock can be halted whenever the timekeeping functions are not required,
+ *              which minimizes current ( I_BATDR ).
+ * @warning     N/A.
+ */
+DS1307_status_t  DS1307_OscillatorMode ( I2C_parameters_t myI2Cparameters, DS1307_seconds_ch_t myOscillator )
+{
+    uint8_t      cmd[]    =    { 0, 0 };
+
+    i2c_status_t aux;
+
+
+    /* Read SECONDS REGISTER to mask it */
+    cmd[0]   =   DS1307_SECONDS;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+
+    /* Update the register   */
+    cmd[1]  &=  ~( SECONDS_CH_MASK );
+    cmd[1]  |=   myOscillator;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+        return   DS1307_SUCCESS;
+    }
+    else
+    {
+        return   DS1307_FAILURE;
+    }
+}

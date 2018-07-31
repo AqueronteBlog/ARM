@@ -329,6 +329,10 @@ typedef enum
   */
 DS1307_status_t  DS1307_Init                ( I2C_parameters_t myI2Cparameters                                                                                              );
 
+/** It enables/disabled the oscillator.
+  */
+DS1307_status_t  DS1307_OscillatorMode      ( I2C_parameters_t myI2Cparameters, DS1307_seconds_ch_t myOscillator                                                            );
+
 /** It configures the square-wave output.
   */
 DS1307_status_t  DS1307_SquareWaveOutput    ( I2C_parameters_t myI2Cparameters, DS1307_control_sqwe_t mySQWE, DS1307_control_rate_select_t myRateSelect                     );
