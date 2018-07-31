@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        4/June/2018
- * @version     4/June/2018     The ORIGIN
+ * @date        30/July/2018
+ * @version     30/July/2018     The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     N/A
@@ -25,12 +25,15 @@
 extern "C" {
 #endif
 
-/* CONSTANTS */
-#define ON              1
-#define OFF             0
 
-#define YES             1
-#define NO              0
+/**@brief Constants.
+ */
+
+
+
+/**@brief Variables.
+ */
+
 
 #ifdef __cplusplus
 }
