@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [TODO]This project shows how to work with the external sensor: DS1307. It
+ * @details     This project shows how to work with the external sensor: DS1307. It
  *              performs a new reading every one second and send the result through UART.
  *
  *              The rest of the time, the microcontroller is in low power.
@@ -16,6 +16,7 @@
  *              is not used in this example anyway because of Bluetooth was not used.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
+#include <stdio.h>
 
 #include "nrf.h"
 #include "nrf_delay.h"
@@ -45,9 +46,6 @@ volatile uint8_t  *myPtr;                         /*!<   Pointer to point out my
  */
 int main( void )
 {
-    uint8_t  myTX_buff[2]     =  { 0 };
-
-
     I2C_parameters_t         myDS1307_I2C_parameters;
     DS1307_status_t          aux;
     DS1307_vector_data_t     myDS1307_Data;
@@ -69,8 +67,31 @@ int main( void )
     myDS1307_I2C_parameters.SCLport     =    NRF_GPIO;
 
     /* Configure I2C peripheral */
-    aux  =   DS1307_Init                        ( myDS1307_I2C_parameters );
+    aux  =   DS1307_Init            ( myDS1307_I2C_parameters );
 
+    /* Enable the DS1307 oscillator */
+    aux  =   DS1307_OscillatorMode  ( myDS1307_I2C_parameters, SECONDS_CH_OSCILLATOR_ENABLED );
+
+    /* Set the day of the week */
+    myDS1307_Data.DayOfTheWeek        =   DAY_TUESDAY;
+    aux  =   DS1307_SetDayOfTheWeek ( myDS1307_I2C_parameters, myDS1307_Data );
+
+    /* Set the date */
+    myDS1307_Data.BCDDate             =   0x31;                                                      // Date: 31
+    aux  =   DS1307_SetDate         ( myDS1307_I2C_parameters, myDS1307_Data );
+
+    /* Set the month */
+    myDS1307_Data.BCDMonth            =   MONTH_JULY;
+    aux  =   DS1307_SetMonth        ( myDS1307_I2C_parameters, myDS1307_Data );
+
+    /* Set the year */
+    myDS1307_Data.BCDYear             =   0x18;                                                      // Year: 2018
+    aux  =   DS1307_SetYear         ( myDS1307_I2C_parameters, myDS1307_Data );
+
+    /* Set the time */
+    myDS1307_Data.BCDTime             =   0x081600;                                                  // Time: 08:16.00
+    myDS1307_Data.Time12H_24HMode     =   HOURS_MODE_24H;
+    aux  =   DS1307_SetTime         ( myDS1307_I2C_parameters, myDS1307_Data );
 
 
 
@@ -91,11 +112,27 @@ int main( void )
     	NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
         if ( myState == 1 )
         {
+            /* Get the day of the week */
+            aux  =   DS1307_GetDayOfTheWeek ( myDS1307_I2C_parameters, &myDS1307_Data );
+
+            /* Get the day of the date */
+            aux  =   DS1307_GetDate         ( myDS1307_I2C_parameters, &myDS1307_Data );
+
+            /* Get the month */
+            aux  =   DS1307_GetMonth        ( myDS1307_I2C_parameters, &myDS1307_Data );
+
+            /* Get the year */
+            aux  =   DS1307_GetYear         ( myDS1307_I2C_parameters, &myDS1307_Data );
+
+            /* Get the time */
+            aux  =   DS1307_GetTime         ( myDS1307_I2C_parameters, &myDS1307_Data );
 
 
 
             /* Transmit result through the UART  */
-            //sprintf ( (char*)myMessage, "VDD: %d mV\r\n", (int)( myVDD * 1000.0f ) );
+            sprintf ( (char*)myMessage, "%02x/%02x/%02x %d %02x:%02x.%02x\r\n", myDS1307_Data.BCDDate, myDS1307_Data.BCDMonth, myDS1307_Data.BCDYear, myDS1307_Data.DayOfTheWeek,
+                                                                                (uint8_t)( ( myDS1307_Data.BCDTime & 0xFF0000 ) >> 16U ), (uint8_t)( ( myDS1307_Data.BCDTime & 0x00FF00 ) >> 8U ),
+                                                                                (uint8_t)( myDS1307_Data.BCDTime & 0x0000FF ) );
 
             NRF_UART0->TASKS_STOPRX  =   1UL;
             NRF_UART0->TASKS_STOPTX  =   1UL;
