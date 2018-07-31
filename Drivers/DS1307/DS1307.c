@@ -226,11 +226,11 @@ DS1307_status_t  DS1307_SetTime ( I2C_parameters_t myI2Cparameters, DS1307_vecto
     /* Check if it is 12h or 24h mode    */
     if ( myTime.Time12H_24HMode ==  HOURS_MODE_24H )
     {
-        cmd[1]  |=   ( ( myTime.BCDTime >> 16U ) & ( HOUR_10HOUR_MASK | HOUR_HOURS_MASK ) ) | myTime.Time12H_24HMode );
+        cmd[1]  |=   ( ( ( myTime.BCDTime >> 16U ) & ( HOUR_10HOUR_MASK | HOUR_HOURS_MASK ) ) | myTime.Time12H_24HMode );
     }
     else
     {
-        cmd[1]  |=   ( ( myTime.BCDTime >> 16U ) & ( HOUR_10HOUR_MASK | HOUR_HOURS_MASK ) ) | ( myTime.Time12H_24HMode | myTime.TimeAM_PM_Mode ) );
+        cmd[1]  |=   ( ( ( myTime.BCDTime >> 16U ) & ( HOUR_10HOUR_MASK | HOUR_HOURS_MASK ) ) | ( myTime.Time12H_24HMode | myTime.TimeAM_PM_Mode ) );
     }
 
     /* Update the register   */
