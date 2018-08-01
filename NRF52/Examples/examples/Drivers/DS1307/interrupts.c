@@ -1,43 +1,43 @@
 /**
- * @brief       interrupts.h
+ * @brief       interrupts.c
  * @details     Interruption sources.
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/July/2018
- * @version     30/July/2018    The ORIGIN
+ * @date        31/July/2018
+ * @version     31/July/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
 #include "interrupts.h"
 
+
+
 /**
  * @brief       void TIMER0_IRQHandler ()
- * @details     There is a new interrupt every 0.5s, increment the myState variable
- *              so in the main can process that information.
+ * @details     Timer interruption. 
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/July/2018
- * @version     30/July/2018   The ORIGIN
- * @pre         N/A
+ * @date        31/July/2018
+ * @version     31/July/2018   The ORIGIN
+ * @pre         N/A.
  * @warning     N/A
  */
 void TIMER0_IRQHandler()
 {
-    if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0 ) )
-    {
-        myState++;
+  if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0UL ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0UL ) )
+  {
+    myState  =   1UL;
 
-        NRF_TIMER0->EVENTS_COMPARE[0] = 0;                  // Clear ( flag ) compare register 0 event
-    }
+
+    NRF_TIMER0->EVENTS_COMPARE[0] = 0UL;                    // Clear ( flag ) compare register 0 event
+  }
 }
-
 
 
 /**
@@ -52,8 +52,8 @@ void TIMER0_IRQHandler()
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/July/2018
- * @version     30/July/2018   The ORIGIN
+ * @date        31/July/2018
+ * @version     31/July/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  */

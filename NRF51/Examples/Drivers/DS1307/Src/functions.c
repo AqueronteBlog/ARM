@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        4/June/2018
- * @version     4/June/2018   The ORIGIN
+ * @date        30/July/2018
+ * @version     30/July/2018   The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     N/A
@@ -26,8 +26,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        4/June/2018
- * @version     4/June/2018      The ORIGIN
+ * @date        30/July/2018
+ * @version     30/July/2018      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -62,8 +62,8 @@ void conf_GPIO  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        4/June/2018
- * @version     4/June/2018   The ORIGIN
+ * @date        30/July/2018
+ * @version     30/July/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -98,8 +98,8 @@ void conf_TIMER0  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        7/June/2017
- * @version     7/June/2017   The ORIGIN
+ * @date        30/July/2018
+ * @version     30/July/2018   The ORIGIN
  * @pre         Only TX pin will be configured.
  * @warning     N/A.
  */

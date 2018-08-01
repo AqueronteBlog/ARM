@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     This project shows how to work with the external sensor: TMP102. It
+ * @details     This project shows how to work with the external sensor: DS1307. It
  *              performs a new reading every one second and send the result through UART.
  *
  *              The rest of the time, the microcontroller is in low power.
@@ -8,14 +8,15 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        11/June/2018
- * @version     11/June/2018    The ORIGIN
+ * @date        30/July/2018
+ * @version     30/July/2018    The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
  *              ( SDK 1.1.0 ).
  * @warning     Softdevice S310 was used although the file's name is S130. The softdevice
  *              is not used in this example anyway because of Bluetooth was not used.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
+#include <stdio.h>
 
 #include "nrf.h"
 #include "nrf_delay.h"
@@ -23,27 +24,31 @@
 #include "board.h"
 #include "functions.h"
 #include "variables.h"
-#include "TMP102.h"
+#include "DS1307.h"
 
 
 
-/* GLOBAL VARIABLES */
-uint32_t volatile mySTATE;                       /*!<   It indicates the next action to be performed                                       */
-uint8_t  volatile dataToBeTX;                    /*!<   A counter. It indicates how many data it will be transmitted through the UART      */
-uint32_t volatile TX_inProgress;                 /*!<   It indicates if a transmission is in progress                                      */
-uint8_t  volatile *myPtr;                        /*!<   Pointer to point out the data from the external sensor                             */
+/**@brief Constants.
+ */
+#define TX_BUFF_SIZE  64                          /*!<   UART buffer size                                       */
+
+
+/**@brief Variables.
+ */
+volatile uint32_t myState;                        /*!<   State that indicates when to perform an ADC sample     */
+volatile uint32_t myADCDoneFlag;                  /*!<   It indicates when a new ADC conversion is ready        */
+volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      /*!<   Message to be transmitted through the UART             */
+volatile uint8_t  *myPtr;                         /*!<   Pointer to point out myMessage                         */
 
 
 
-/* MAIN */
+/**@brief Function for application main entry.
+ */
 int main( void )
 {
-    uint8_t  myTX_buff[2]     =  { 0 };
-
-
-    I2C_parameters_t         myTMP102_I2C_parameters;
-    TMP102_status_t          aux;
-    TMP102_vector_data_t     myTMP102_Data;
+    I2C_parameters_t         myDS1307_I2C_parameters;
+    DS1307_status_t          aux;
+    DS1307_vector_data_t     myDS1307_Data;
 
 
     conf_GPIO   ();
@@ -53,38 +58,44 @@ int main( void )
 
 
     /* I2C definition   */
-    myTMP102_I2C_parameters.TWIinstance =    NRF_TWI0;
-    myTMP102_I2C_parameters.SDA         =    TWI0_SDA;
-    myTMP102_I2C_parameters.SCL         =    TWI0_SCL;
-    myTMP102_I2C_parameters.ADDR        =    TMP102_ADDRESS_A0_GROUND;
-    myTMP102_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-    myTMP102_I2C_parameters.SDAport     =    NRF_GPIO;
-    myTMP102_I2C_parameters.SCLport     =    NRF_GPIO;
+    myDS1307_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myDS1307_I2C_parameters.SDA         =    TWI0_SDA;
+    myDS1307_I2C_parameters.SCL         =    TWI0_SCL;
+    myDS1307_I2C_parameters.ADDR        =    DS1307_ADDRESS;
+    myDS1307_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myDS1307_I2C_parameters.SDAport     =    NRF_GPIO;
+    myDS1307_I2C_parameters.SCLport     =    NRF_GPIO;
 
     /* Configure I2C peripheral */
-    aux  =   TMP102_Init                        ( myTMP102_I2C_parameters );
+    aux  =   DS1307_Init            ( myDS1307_I2C_parameters );
 
-    /* Read TLOW value */
-    aux  =   TMP102_Read_T_LOW_Register         ( myTMP102_I2C_parameters, &myTMP102_Data );
+    /* Enable the DS1307 oscillator */
+    aux  =   DS1307_OscillatorMode  ( myDS1307_I2C_parameters, SECONDS_CH_OSCILLATOR_ENABLED );
 
-    /* Read THIGH value */
-    aux  =   TMP102_Read_T_HIGH_Register        ( myTMP102_I2C_parameters, &myTMP102_Data );
+    /* Set the day of the week */
+    myDS1307_Data.DayOfTheWeek        =   DAY_TUESDAY;
+    aux  =   DS1307_SetDayOfTheWeek ( myDS1307_I2C_parameters, myDS1307_Data );
 
-    /* Set polarity LOW */
-    aux  =   TMP102_SetPolarityAlertPinOutput   ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_POL_ALERT_PIN_ACTIVE_LOW );
+    /* Set the date */
+    myDS1307_Data.BCDDate             =   0x31;                                                      // Date: 31
+    aux  =   DS1307_SetDate         ( myDS1307_I2C_parameters, myDS1307_Data );
 
-    /* Set Normal mode operation */
-    aux  =   TMP102_SetModeOperation            ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_EM_NORMAL_MODE_OPERATION );
+    /* Set the month */
+    myDS1307_Data.BCDMonth            =   MONTH_JULY;
+    aux  =   DS1307_SetMonth        ( myDS1307_I2C_parameters, myDS1307_Data );
 
-    /* Set Conversion Rate: 4Hz */
-    aux  =   TMP102_SetConversionRate           ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_CR_4_HZ );
+    /* Set the year */
+    myDS1307_Data.BCDYear             =   0x18;                                                      // Year: 2018
+    aux  =   DS1307_SetYear         ( myDS1307_I2C_parameters, myDS1307_Data );
 
-    /* Set Shutdown mode */
-    aux  =   TMP102_SetShutdownMode             ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_SD_ENABLED );
+    /* Set the time */
+    myDS1307_Data.BCDTime             =   0x081600;                                                  // Time: 08:16.00
+    myDS1307_Data.Time12H_24HMode     =   HOURS_MODE_24H;
+    aux  =   DS1307_SetTime         ( myDS1307_I2C_parameters, myDS1307_Data );
 
 
 
-    mySTATE  =   0;                             // Reset the variable
+    myState  =   0;                             // Reset the variable
     NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
 
     //NRF_POWER->SYSTEMOFF = 1;
@@ -99,44 +110,39 @@ int main( void )
 
 
     	NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
-        if ( mySTATE == 1 )
+        if ( myState == 1 )
         {
-            /* New reading */
-            aux  =   TMP102_TriggerSingleTemperatureConversion ( myTMP102_I2C_parameters );
+            /* Get the day of the week */
+            aux  =   DS1307_GetDayOfTheWeek ( myDS1307_I2C_parameters, &myDS1307_Data );
 
-            /* Wait until the conversion is finished    */
-            do
-            {
-                aux      =   TMP102_ReadConfigurationRegister ( myTMP102_I2C_parameters, &myTMP102_Data );
-            }while( ( myTMP102_Data.ConfigurationRegister & TMP102_CONFIGURATION_OS_MASK ) == TMP102_CONFIGURATION_OS_BUSY );   // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
-                                                                                                                                // [WORKAROUND] Insert a counter.
+            /* Get the day of the date */
+            aux  =   DS1307_GetDate         ( myDS1307_I2C_parameters, &myDS1307_Data );
 
-            /* Read the new temperature value */
-            aux  =   TMP102_GetTemperature ( myTMP102_I2C_parameters, &myTMP102_Data );
+            /* Get the month */
+            aux  =   DS1307_GetMonth        ( myDS1307_I2C_parameters, &myDS1307_Data );
 
+            /* Get the year */
+            aux  =   DS1307_GetYear         ( myDS1307_I2C_parameters, &myDS1307_Data );
 
-            /* Prepare the data to be sent through the UART */
-            myTX_buff[0]                 =   ( myTMP102_Data.TemperatureRegister >> 8 ) & 0xFF;                         // Temperature Register: MSB
-            myTX_buff[1]                 =   ( myTMP102_Data.TemperatureRegister & 0xFF );                              // Temperature Register: LSB
+            /* Get the time */
+            aux  =   DS1307_GetTime         ( myDS1307_I2C_parameters, &myDS1307_Data );
 
 
-            /* Send data through the UART   */
-            myPtr                        =   &myTX_buff[0];
-            TX_inProgress                =   YES;
-            NRF_UART0->TASKS_STARTTX     =   1;
-            NRF_UART0->TXD               =   *myPtr++;                                                                  // Start transmission
 
-            /* Wait until the message is transmitted */
-            while ( TX_inProgress == YES )
-            {
-                __WFE();
-                // Make sure any pending events are cleared
-                __SEV();
-                __WFE();
-            }
+            /* Transmit result through the UART  */
+            sprintf ( (char*)myMessage, "%02x/%02x/%02x %d %02x:%02x.%02x\r\n", myDS1307_Data.BCDDate, myDS1307_Data.BCDMonth, myDS1307_Data.BCDYear, myDS1307_Data.DayOfTheWeek,
+                                                                                (uint8_t)( ( myDS1307_Data.BCDTime & 0xFF0000 ) >> 16U ), (uint8_t)( ( myDS1307_Data.BCDTime & 0x00FF00 ) >> 8U ),
+                                                                                (uint8_t)( myDS1307_Data.BCDTime & 0x0000FF ) );
+
+            NRF_UART0->TASKS_STOPRX  =   1UL;
+            NRF_UART0->TASKS_STOPTX  =   1UL;
+            myPtr                    =   &myMessage[0];
+
+            NRF_UART0->TASKS_STARTTX =   1UL;
+            NRF_UART0->TXD           =   *myPtr;
 
 
-            mySTATE             =   0;
+            myState             =   0;
     	}
 
         NRF_GPIO->OUTSET             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off

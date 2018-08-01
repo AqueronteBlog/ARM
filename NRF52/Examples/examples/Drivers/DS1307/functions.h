@@ -5,19 +5,18 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/July/2018
- * @version     30/July/2018   The ORIGIN
+ * @date        31/July/2018
+ * @version     31/July/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
 #include "nrf.h"
-#include "nrf51_bitfields.h"
+#include "nrf52_bitfields.h"
 #include "board.h"
 
-#ifndef FUNCTIONS_H_
-#define FUNCTIONS_H_
+#ifndef FUNCTION_H_
+#define FUNCTION_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,9 +25,10 @@ extern "C" {
 
 /**@brief Function prototypes.
  */
-void conf_GPIO      ( void );
-void conf_TIMER0    ( void );
-void conf_UART      ( void );
+void conf_CLK    ( void );
+void conf_GPIO   ( void );
+void conf_TIMER0 ( void );
+void conf_UART   ( void );
 
 
 /**@brief Constants.
@@ -45,4 +45,4 @@ void conf_UART      ( void );
 }
 #endif
 
-#endif /* FUNCTIONS_H_ */
+#endif /* FUNCTION_H_ */
