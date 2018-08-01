@@ -125,8 +125,8 @@ typedef enum
 typedef enum
 {
     HOURS_MODE_AM_PM_MASK           =   ( 1 << 5 ),          /*!<  Hours am/pm mode mask                   */
-    HOURS_MODE_AM                   =   ( 1 << 5 ),          /*!<  Hours AM mode enabled                   */
-    HOURS_MODE_PM                   =   ( 0 << 5 )           /*!<  Hours PM mode enabled                   */
+    HOURS_MODE_AM                   =   ( 0 << 5 ),          /*!<  Hours AM mode enabled                   */
+    HOURS_MODE_PM                   =   ( 1 << 5 )           /*!<  Hours PM mode enabled                   */
 } DS1307_hours_am_pm_mode_t;
 
 
@@ -381,8 +381,18 @@ DS1307_status_t  DS1307_SetYear             ( I2C_parameters_t myI2Cparameters, 
   */
 DS1307_status_t  DS1307_GetYear             ( I2C_parameters_t myI2Cparameters, DS1307_vector_data_t* myYear                                                                );
 
+/** It writes a byte into the RAM memory.
+  */
+DS1307_status_t  DS1307_WriteByteRAM        ( I2C_parameters_t myI2Cparameters, uint8_t myByte, uint8_t myAddress                                                           );
 
+/** It reads a byte from the RAM memory.
+  */
+DS1307_status_t  DS1307_ReadByteRAM         ( I2C_parameters_t myI2Cparameters, uint8_t* myByte, uint8_t myAddress                                                          );
 
+/** It ereases a byte into the RAM memory.
+  */
+DS1307_status_t  DS1307_EraseByteRAM        ( I2C_parameters_t myI2Cparameters, uint8_t myAddress                                                                           );
+ 
 
 #ifdef __cplusplus
 }
