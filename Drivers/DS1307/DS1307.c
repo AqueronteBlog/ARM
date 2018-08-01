@@ -287,8 +287,7 @@ DS1307_status_t  DS1307_GetTime ( I2C_parameters_t myI2Cparameters, DS1307_vecto
 
 
     /* Parse the data    */
-    cmd[1]  &=   ( HOUR_10HOUR_MASK | HOUR_HOURS_MASK );
-    myTime->BCDTime   =   cmd[1];
+    myTime->BCDTime   =   ( cmd[1] & ( HOUR_10HOUR_MASK | HOUR_HOURS_MASK ) );
 
 
     /* Check if it is 12h or 24h mode    */
@@ -315,7 +314,7 @@ DS1307_status_t  DS1307_GetTime ( I2C_parameters_t myI2Cparameters, DS1307_vecto
         myTime->BCDTime         &=  ~( HOURS_MODE_AM_PM_MASK );
     }
 
-    myTime->BCDTime <<=   16U;
+    myTime->BCDTime <<=   8U;
 
 
 
@@ -820,6 +819,171 @@ DS1307_status_t  DS1307_OscillatorMode ( I2C_parameters_t myI2Cparameters, DS130
 
 
 
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+        return   DS1307_SUCCESS;
+    }
+    else
+    {
+        return   DS1307_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       DS1307_WriteByteRAM ( I2C_parameters_t , uint8_t , uint8_t )
+ *
+ * @details     It writes a byte into the RAM memory.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myByte:            Byte to be written.
+ * @param[in]    myAddress:         Address to write the byte.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of DS1307_WriteByteRAM.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        31/July/2018
+ * @version     31/July/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+DS1307_status_t  DS1307_WriteByteRAM ( I2C_parameters_t myI2Cparameters, uint8_t myByte, uint8_t myAddress )
+{
+    uint8_t      cmd[]    =    { 0, 0 };
+
+    i2c_status_t aux;
+
+    
+    /* Check RAM memory limits   */
+    if ( ( myAddress >= 0x08 ) && ( myAddress <= 0x3F ) )
+    {
+      /* Write data into the RAM memory   */
+      cmd[0]   =   myAddress;
+      cmd[1]   =   myByte;
+      aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    }
+    else
+    {
+        return DS1307_FAILURE;
+    }
+
+    
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+        return   DS1307_SUCCESS;
+    }
+    else
+    {
+        return   DS1307_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       DS1307_ReadByteRAM ( I2C_parameters_t , uint8_t* , uint8_t )
+ *
+ * @details     It reads a byte from the RAM memory.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myAddress:         Address to write the byte.
+ *
+ * @param[out]   myByte:            Byte to be read.
+ *
+ *
+ * @return       Status of DS1307_ReadByteRAM.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        31/July/2018
+ * @version     31/July/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+DS1307_status_t  DS1307_ReadByteRAM ( I2C_parameters_t myI2Cparameters, uint8_t* myByte, uint8_t myAddress )
+{
+    uint8_t      cmd    =    0;
+
+    i2c_status_t aux;
+
+    
+    /* Check RAM memory limits   */
+    if ( ( myAddress >= 0x08 ) && ( myAddress <= 0x3F ) )
+    {
+      /* Read data from the RAM memory   */
+      cmd   =   myAddress;
+      aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+      aux   =   i2c_read  ( myI2Cparameters, myByte, 1U );
+    }
+    else
+    {
+        return DS1307_FAILURE;
+    }
+
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+        return   DS1307_SUCCESS;
+    }
+    else
+    {
+        return   DS1307_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       DS1307_EraseByteRAM ( I2C_parameters_t , uint8_t )
+ *
+ * @details     It ereases a byte into the RAM memory.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myAddress:         Address to write the byte.
+ *
+ * @param[out]   N/A
+ *
+ *
+ * @return       Status of DS1307_EraseByteRAM.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        31/July/2018
+ * @version     31/July/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+DS1307_status_t  DS1307_EraseByteRAM ( I2C_parameters_t myI2Cparameters, uint8_t myAddress )
+{
+    uint8_t      cmd[]    =    { 0, 0 };
+
+    i2c_status_t aux;
+
+    
+    /* Check RAM memory limits   */
+    if ( ( myAddress >= 0x08 ) && ( myAddress <= 0x3F ) )
+    {
+      /* Write data into the RAM memory   */
+      cmd[0]   =   myAddress;
+      cmd[1]   =   0xFF;
+      aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    }
+    else
+    {
+        return DS1307_FAILURE;
+    }
 
 
     if ( aux == I2C_SUCCESS )
