@@ -37,6 +37,13 @@ typedef enum{
 } NRF52DK_board_uart0_t;
 
 
+/**@brief TWI0.
+ */
+typedef enum{
+  TWI0_SCL  =   27,         /*!<   TWI0 SCL: P0.27   */
+  TWI0_SDA  =   26          /*!<   TWI0 SDA: P0.26   */
+} NRF52DK_board_twi0_t;
+
 
 #ifdef __cplusplus
 }
