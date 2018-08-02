@@ -16,8 +16,9 @@
 
 
 /**
- * @brief       void TIMER0_IRQHandler ()
- * @details     Timer interruption. 
+ * @brief       void RTC2_IRQHandler ()
+ * @details     RTC2 interruption. Checks if there is an interruption
+ *              of RTC2 on channel 0.
  *
  *
  * @return      N/A
@@ -28,14 +29,16 @@
  * @pre         N/A.
  * @warning     N/A
  */
-void TIMER0_IRQHandler()
+void RTC2_IRQHandler()
 {
-  if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0UL ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0UL ) )
+  if ( ( NRF_RTC2->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_RTC2->INTENSET & RTC_INTENSET_COMPARE0_Msk ) != 0 ) )
   {
-    myState  =   1UL;
+    /* Enable SAADC   */
+    NRF_SAADC->ENABLE  =   ( SAADC_ENABLE_ENABLE_Enabled << SAADC_ENABLE_ENABLE_Pos );
 
 
-    NRF_TIMER0->EVENTS_COMPARE[0] = 0UL;                    // Clear ( flag ) compare register 0 event
+    NRF_RTC2->CC[0]             +=   200;             // New interruption on 2s
+    NRF_RTC2->EVENTS_COMPARE[0]  =   0;               // Clear ( flag ) compare register 0 event
   }
 }
 

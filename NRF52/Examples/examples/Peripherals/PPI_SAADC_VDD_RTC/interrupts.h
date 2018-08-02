@@ -26,9 +26,9 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-void TIMER0_IRQHandler ( void );
 void UART0_IRQHandler  ( void );
 void SAADC_IRQHandler  ( void );
+void RTC2_IRQHandler   ( void );
 
 
 /**@brief Constants.
