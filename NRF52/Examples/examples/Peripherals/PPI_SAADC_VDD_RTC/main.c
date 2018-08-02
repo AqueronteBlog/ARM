@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the SAADC peripheral by interrupts. Every 2 seconds, a new
- *              VDD sample is performed and transmitted through the UART.
+ * @details     This example shows how to work with the SAADC peripheral by PPI with RTC2 channel 0. 
+ *              Every 2 seconds, a new VDD sample is performed and transmitted through the UART.
  *
  *              The microcontroller is in low power the rest of the time.
  *
@@ -47,16 +47,16 @@ int main(void)
   volatile int16_t myADC_Result  =   0UL;
   float    myVDD                 =   0;
 
-
-  conf_CLK    ();
+  conf_LFCLK  ();
   conf_GPIO   ();
   conf_UART   ();
+  conf_PPI    ();
   conf_SAADC  ( &myADC_Result );
-  conf_TIMER0 ();
+  conf_RTC2   ();
 
   
 
-  NRF_TIMER0->TASKS_START  =   1UL;   // Start TIMER0
+  NRF_RTC2->TASKS_START  =   1UL;   // Start RTC2
 
 //  NRF_POWER->SYSTEMOFF = 1UL;
   NRF_POWER->TASKS_LOWPWR = 1UL;      // Sub power mode: Low power.
@@ -70,50 +70,31 @@ int main(void)
 
     
     /* New ADC sample or conversion  */
-    if ( ( myState == 1UL ) || ( myADCDoneFlag == 1UL ) )
+    if ( myADCDoneFlag == 1UL ) 
     {
       NRF_GPIO->OUTCLR   =   ( 1UL << LED1 );
 
-      /* Check if there is a new ADC conversion  */
-      if ( myADCDoneFlag == 1UL )
-      {
-        /* Convert the result to voltage
-           Result = [ V(p) - V(n) ] * ( GAIN/REFERENCE ) * 2^( RESOLUTION - m )
-           Result = ( VDD - 0 ) * ( ( 1/6 ) / 0.6 ) * 2^( 8 - 0 )
-           VDD ~ Result / 71.1
-        */
-        myVDD = ( (float)myADC_Result ) / 71.1f;
-
-        /* Stop the SAADC   */
-        NRF_SAADC->TASKS_STOP    =   1UL;
-
-    
-        /* Transmit result through the UART  */
-        sprintf ( (char*)myMessage, "VDD: %d mV\r\n", (int)( myVDD * 1000.0f ) );
-
-        NRF_UART0->TASKS_STOPRX  =   1UL;
-        NRF_UART0->TASKS_STOPTX  =   1UL;
-        myPtr                    =   &myMessage[0];
-
-        NRF_UART0->TASKS_STARTTX =   1UL;
-        NRF_UART0->TXD           =   *myPtr;
+      /* Convert the result to voltage
+         Result = [ V(p) - V(n) ] * ( GAIN/REFERENCE ) * 2^( RESOLUTION - m )
+         Result = ( VDD - 0 ) * ( ( 1/6 ) / 0.6 ) * 2^( 8 - 0 )
+         VDD ~ Result / 71.1
+      */
+      myVDD = ( (float)myADC_Result ) / 71.1f;
 
 
-        /* Reset the variable  */
-        myADCDoneFlag    =   0UL;
-      }
-      else
-      {
-        /* Enable SAADC   */
-        NRF_SAADC->ENABLE  =   ( SAADC_ENABLE_ENABLE_Enabled << SAADC_ENABLE_ENABLE_Pos );
-        
-        /* Start the SAADC and perform a new measurement ( on the interrupt )   */
-        NRF_SAADC->TASKS_START     =   1UL;
-        
-        /* Reset the variable  */
-        myState          =   0UL;
-      }
+      /* Transmit result through the UART  */
+      sprintf ( (char*)myMessage, "VDD: %d mV\r\n", (int)( myVDD * 1000.0f ) );
 
+      NRF_UART0->TASKS_STOPRX  =   1UL;
+      NRF_UART0->TASKS_STOPTX  =   1UL;
+      myPtr                    =   &myMessage[0];
+
+      NRF_UART0->TASKS_STARTTX =   1UL;
+      NRF_UART0->TXD           =   *myPtr;
+
+
+      /* Reset the variable  */
+      myADCDoneFlag    =   0UL;
       NRF_GPIO->OUTSET =   ( 1UL << LED1 );
     }
   }
