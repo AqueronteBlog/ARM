@@ -25,9 +25,10 @@ extern "C" {
 
 /**@brief Function prototypes.
  */
-void conf_CLK    ( void );
+void conf_LFCLK  ( void );
 void conf_GPIO   ( void );
-void conf_TIMER0 ( void );
+void conf_RTC2   ( void );
+void conf_PPI    ( void );
 void conf_UART   ( void );
 void conf_SAADC  ( volatile int16_t* myADC_Result );
 

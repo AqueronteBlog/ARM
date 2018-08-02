@@ -17,31 +17,29 @@
 
 
 /**
- * @brief       void conf_CLK  ( void )
- * @details     It activates the external HFCLK crystal oscillator ( 64MHz ).
- *
- * @param[in]    N/A.
- *
- * @param[out]   N/A.
- *
+ * @brief       void conf_LFCLK  ( void )
+ * @details     It turns the internal LFCLK clock on for RTCs.
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        1/August/2018
- * @version     1/August/2018      The ORIGIN
+ * @version     1/August/2018   The ORIGIN
  * @pre         N/A
- * @warning     N/A
+ * @warning     N/A.
  */
-void conf_CLK  ( void )
+void conf_LFCLK  ( void )
 {
-  NRF_CLOCK->EVENTS_HFCLKSTARTED  =   0UL;                                                        // Reset flag
-  NRF_CLOCK->TASKS_HFCLKSTART     =   ( CLOCK_HFCLKSTAT_SRC_Xtal << CLOCK_HFCLKSTAT_SRC_Pos );    // Start External crystal CLK
+  NRF_CLOCK->LFCLKSRC             =   ( CLOCK_LFCLKSRC_SRC_RC << CLOCK_LFCLKSRC_SRC_Pos );
+  NRF_CLOCK->EVENTS_LFCLKSTARTED  =   0UL;
+  NRF_CLOCK->TASKS_LFCLKSTART     =   1UL;
 
-  while ( NRF_CLOCK->EVENTS_HFCLKSTARTED  !=   1UL );                                             // [TODO]       This is DANGEROUS, if something goes wrong, the uC will get stuck here!!!.
-                                                                                                  // [WORKAROUND] Insert a counter.
-  NRF_CLOCK->EVENTS_HFCLKSTARTED   =   0UL;
-  
+  while ( NRF_CLOCK->EVENTS_LFCLKSTARTED == 0UL )       // [TODO] Insert a counter! otherwise if there is a problem it will get block!!!
+  {
+    //Do nothing.
+  }
+
+  NRF_CLOCK->EVENTS_LFCLKSTARTED  =   0UL;
 }
 
 
@@ -78,6 +76,33 @@ void conf_GPIO  ( void )
                               ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos );
   }
 }
+
+
+/**
+ * @brief       void conf_PPI  ( void )
+ * @details     It interconnects NRF_TIMER0->EVENTS_COMPARE[0] with NRF_SAADC->TASKS_START.
+ *
+ *              Channel 0:
+ *                  * Event: NRF_RTC2->EVENTS_COMPARE[0].
+ *                  * Task:  NRF_SAADC->TASKS_START.
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        1/August/2018
+ * @version     1/August/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+void conf_PPI  ( void )
+{
+  NRF_PPI->CH[0].EEP   =   ( uint32_t )&NRF_RTC2->EVENTS_COMPARE[0];
+  NRF_PPI->CH[0].TEP   =   ( uint32_t )&NRF_SAADC->TASKS_START;
+
+  /* Enable PPI channel 0  */
+  NRF_PPI->CHEN        =   ( PPI_CHEN_CH0_Enabled << PPI_CHEN_CH0_Pos );
+}
+
 
 
 /**
@@ -167,22 +192,13 @@ void conf_SAADC  ( volatile int16_t* myADC_Result )
 
 
 /**
- * @brief       void conf_TIMER0  ( void )
- * @details     One channel. Channel zero at 2s.
+ * @brief       void conf_RTC2  ( void )
+ * @details     Channel 0 will create an interrupt every 2s.
  *
- *              Timer0:
- *                  * Prescaler:            5   ( f_Timer0 = 500kHz ( PCLK1M ) ).
- *                  * 32-bits mode.
- *                  * Interrupt Enabled.
- *
- *                 --- Channel 0:
- *                  * Overflow:             ( 16*62500 * (f_Timer0)^(-1) ) = ( 16*62500 * (500kHz)^(-1) ) ~ 2s
- *
- *
- * @param[in]    N/A.
- *
- * @param[out]   N/A.
- *
+ *              RTC1:
+ *                  * Prescaler:            327   ( f_RTC2 = ( 32.768kHz / ( 327 + 1 ) ) ~ 99.9Hz ( ~10ms ) ).
+ *                  * Channel 0:            10ms*200 = 2s
+ *                  * Interrupt ENABLE.
  *
  * @return      N/A
  *
@@ -192,22 +208,19 @@ void conf_SAADC  ( volatile int16_t* myADC_Result )
  * @pre         N/A
  * @warning     N/A.
  */
-void conf_TIMER0  ( void )
+void conf_RTC2  ( void )
 {
-  NRF_TIMER0->TASKS_STOP  =   1UL;
-  NRF_TIMER0->MODE        =   ( TIMER_MODE_MODE_Timer << TIMER_MODE_MODE_Pos );
-  NRF_TIMER0->PRESCALER   =   5UL;                                                                        // f_Timer0 = ( 16MHz / 2^5 ) = 500kHz
-  NRF_TIMER0->BITMODE     =   ( TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos );               // 32 bit mode.
-  NRF_TIMER0->TASKS_CLEAR =   1UL;                                                                        // clear the task first to be usable for later.
+  NRF_RTC2->TASKS_STOP  =   1;
+  NRF_RTC2->PRESCALER   =   327;                                                                        // f_RTC2 = ( 32.768kHz / ( 32767 + 1 ) ) = 1Hz ( 1s )
+  NRF_RTC2->TASKS_CLEAR =   1;                                                                          // clear the task first to be usable for later.
 
-  NRF_TIMER0->CC[0]       =   ( 16*62500 );                                                               // ( 16*62500 * (f_Timer0)^(-1) ) = ( 16*62500 * (500kHz)^(-1) ) ~ 2s
+  NRF_RTC2->CC[0]       =   200;                                                                        // ( 200 * (f_RTC2)^(-1) ) = ( 200 * (99.9Hz)^(-1) ) ~ 2s
 
-  NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos );
-  
-  NRF_TIMER0->SHORTS      =   ( TIMER_SHORTS_COMPARE0_CLEAR_Enabled << TIMER_SHORTS_COMPARE0_CLEAR_Pos ); // Create an Event-Task shortcut to clear TIMER0 on COMPARE[0] event.
+  NRF_RTC2->INTENSET    =   ( RTC_INTENSET_COMPARE0_Enabled << RTC_INTENSET_COMPARE0_Pos );
+  NRF_RTC2->EVTENSET    =   ( RTC_EVTENSET_COMPARE0_Enabled << RTC_EVTENSET_COMPARE0_Pos );
 
 
-  NVIC_EnableIRQ ( TIMER0_IRQn );                                                                         // Enable Interrupt for the Timer0 in the core.
+  NVIC_EnableIRQ ( RTC2_IRQn );                                                                         // Enable Interrupt for the RTC2 in the core.
 }
 
 
