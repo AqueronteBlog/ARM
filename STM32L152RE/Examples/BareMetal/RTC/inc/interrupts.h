@@ -22,11 +22,21 @@
 extern "C" {
 #endif
 
-// PROTOTYPES
+
+/**@brief Subroutine prototypes.
+ */
 void RTC_WKUP_IRQHandler ( void );
 
 
-// VARIABLES
+/**@brief Constants.
+ */
+
+
+
+/**@brief Variables.
+ */
+extern volatile uint32_t myLEDstate;
+
 
 
 #ifdef __cplusplus
