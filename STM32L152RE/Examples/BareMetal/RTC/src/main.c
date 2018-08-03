@@ -1,6 +1,9 @@
 /**
  * @brief       main.c
- * @details     [todo].
+ * @details     This example shows how to work with the internal peripheral RTC using the
+ * 				periodic wake-up timer. The LED will change its state every 1 second.
+ *
+ * 				The microcontroller will remain in low power the rest of the time.
  *
  *
  * @return      N/A
@@ -9,7 +12,7 @@
  * @date        9/March/2018
  * @version     9/March/2018   The ORIGIN
  * @pre         This firmware was tested on the NUCLEO-L152RE with Atollic TrueSTUDIO for STM32
- *              ( v9.0.0 ).
+ *              ( v9.0.1 ).
  * @warning     Although HAL driver was generated, just the Low Power functions are used.
  */
 
@@ -23,6 +26,20 @@
 
 
 
+/**@brief Constants.
+ */
+
+
+
+/**@brief Variables.
+ */
+volatile uint32_t myLEDstate	 =	 0;				/*!<   LED state                         */
+
+
+
+
+/**@brief Function for application main entry.
+ */
 int main ( void )
 {
 	Conf_GPIO 	 ();
@@ -30,17 +47,9 @@ int main ( void )
 	Conf_RTC     ();
 
 
-/*
-	GPIOA->BRR		 =	( 1 << LED_1 );			// LED1 OFF
-
-	for ( uint32_t i = 0; i < 23232; i++ );		// Small delay to see the changes when the IWDG resets the uC
-
-	GPIOA->BSRR		=	( 1 << LED_1 );			// LED1 ON
-*/
-
 
 	while ( 1 )
 	{
-		//HAL_PWR_EnterSTANDBYMode ();
+		HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
 	}
 }

@@ -17,7 +17,7 @@
 
 /**
  * @brief       void Conf_CLK  ( void )
- * @details     It disabled MCO ans enables the LSI for RTC
+ * @details     It disabled MCO and enables the LSI for RTC
  *
  *
  *
@@ -101,11 +101,11 @@ void Conf_SYSTICK  ( uint32_t myticks )
  */
 void Conf_GPIO  ( void )
 {
-	// GPIOA Periph clock enable
+	/* GPIOA Periph clock enable	 */
 	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN );
 
 
-    // Configure LED1
+    /* Configure LED1	 */
     GPIOA->MODER	|=	 GPIO_MODER_MODER5_0;			// General purpose output mode
     GPIOA->OTYPER	&=	~GPIO_OTYPER_OT_5; 				// Output push-pull
     GPIOA->OSPEEDR	&=	~GPIO_OSPEEDER_OSPEEDR5;		// Low speed
@@ -116,15 +116,19 @@ void Conf_GPIO  ( void )
 
 /**
  * @brief       void Conf_RTC  ( void )
- * @details     [todo]
+ * @details     It configures the RTC peripheral.
  *
- *
+ * 				Periodic Auto Wake-up Timer:
+ * 					- RTC clock: 				ck_spre ( usually 1 Hz )
+ * 					- Wake-up timer interrupt:	Enabled
+ * 					- Wake-up timer overflow: 	~ 1s ( WUTR / ck_spre = 1 / 1 = 1s )
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        15/March/2018
- * @version		15/March/2018   The ORIGIN
+ * @version		3/August/2018   Some instructions were removed to tidy up.
+ * 				15/March/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -151,8 +155,6 @@ void Conf_RTC  ( void )
 																			// [WORKAROUND] Insert a counter.
 
 	/* Select the RTC clock and Reset flag  */
-	RTC->PRER	|=	 ( ( 127 << RTC_PRER_PREDIV_A_Pos ) | ( 255 << RTC_PRER_PREDIV_S_Pos ) );
-
 	RTC->CR		&=	~( RTC_CR_WUCKSEL_Msk );								// Reset Clock
 	RTC->CR		|=	 ( RTC_CR_WUTIE | RTC_CR_WUCKSEL_2 );					// Enable Wake-up timer interrupt, ck_spre (usually 1 Hz) clock is selected
 
@@ -164,7 +166,7 @@ void Conf_RTC  ( void )
 	EXTI->IMR	|=	 ( EXTI_IMR_MR20 );
 	EXTI->RTSR	|=	 ( EXTI_RTSR_TR20 );
 
-	/* activate the RTC WAKEUP timer */
+	/* Activate the RTC WAKEUP timer */
 	RTC->CR		|=	 ( RTC_CR_WUTE );										// Wake-up timer enable
 
 	/* Enable the write protection for RTC registers */
