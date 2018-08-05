@@ -26,6 +26,8 @@ extern "C" {
 /**@brief Subroutine prototypes.
  */
 void RTC_WKUP_IRQHandler ( void );
+void UART5_IRQHandler 	 ( void );
+
 
 
 /**@brief Constants.

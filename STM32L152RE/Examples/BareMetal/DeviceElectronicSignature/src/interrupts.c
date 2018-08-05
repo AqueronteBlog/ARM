@@ -60,3 +60,29 @@ void RTC_WKUP_IRQHandler ( void )
 	/* Access to RTC, RTC Backup and RCC CSR registers disabled */
 	PWR->CR &= ~PWR_CR_DBP;
 }
+
+
+
+/**
+ * @brief       void UART5_IRQHandler ()
+ * @details     UART5 subroutine.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        4/August/2018
+ * @version     4/August/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A
+ */
+void UART5_IRQHandler(void)
+{
+	/* TX: TRANSMISSION COMPLETE	*/
+	if ( ( UART5->SR & USART_SR_TC ) == USART_SR_TC )
+	{
+		UART5->SR	&=	~USART_SR_TC ;									// Clear flag
+
+		UART5->CR1	&=	~USART_CR1_TE;									// Transmitter Disabled
+	}
+}
