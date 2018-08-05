@@ -11,7 +11,7 @@
  * @warning     N/A
  */
 #include "stm32l1xx.h"
-#include "board.h"
+#include "variables.h"
 
 
 #ifndef FUNCTIONS_H_
@@ -25,6 +25,8 @@ extern "C" {
 void Conf_CLK  	   ( void );
 void Conf_GPIO 	   ( void );
 void Conf_RTC 	   ( void );
+void Conf_SYSTICK  ( uint32_t myticks );
+void Conf_UART	   ( uint32_t myCK, uint32_t myBaudRate );
 
 
 #ifdef __cplusplus
