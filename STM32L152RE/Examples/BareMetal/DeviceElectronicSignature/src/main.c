@@ -28,12 +28,17 @@
 
 /**@brief Constants.
  */
+#define F_SIZE	( *(uint16_t *) ( 0x1FF800CC ) )			/*!< Flash size register ( Cat.5 )						*/
+
+#define U_ID1	( *(uint32_t *) ( 0x1FF800D0 ) )
+#define U_ID2	( *(uint32_t *) ( 0x1FF800D0 + 0x04 ) )		/*!< Unique device ID registers ( 96 bits )( Cat.5 )	*/
+#define U_ID3	( *(uint32_t *) ( 0x1FF800D0 + 0x14 ) )
 
 
 
 /**@brief Variables.
  */
-volatile uint32_t myLEDstate	 =	 0;				/*!<   LED state                         */
+volatile uint32_t myLEDstate	 =	 0;						/*!< LED state                         					*/
 
 
 
