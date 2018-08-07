@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral RTC using the
- * 				periodic wake-up timer. The LED will change its state every 1 second.
+ * @details     This example shows how to read the internal Device Electronic Signature ( flash size and
+ * 				ID ). Every two seconds, the data will be transmitted through the UART ( 230400 baud rate ).
  *
  * 				The microcontroller will remain in low power the rest of the time.
  *
@@ -15,7 +15,7 @@
  *              ( v9.0.1 ).
  * @warning     Although HAL driver was generated, just the Low Power functions are used.
  */
-
+#include <stdio.h>
 
 #include "stm32l1xx.h"
 #include "stm32l1xx_hal.h"
@@ -44,9 +44,10 @@
 volatile uint32_t mySystemCoreClock;				/*!<  System CLK in MHz  		   							*/
 volatile uint32_t myUARTClock;						/*!<  UART CLK in MHz  		   	   							*/
 
-volatile uint32_t myState;                        	/*!<   State that indicates when to perform an ADC sample	*/
-volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      	/*!<   Message to be transmitted through the UART         	*/
-volatile uint8_t  *myPtr;                         	/*!<   Pointer to point out myMessage                     	*/
+volatile uint32_t myState;                        	/*!<  State that indicates when performs a new reading		*/
+volatile uint32_t myUART_TxEnd;                     /*!<  It indicates when an UART transmission is finished	*/
+volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      	/*!<  Message to be transmitted through the UART         	*/
+volatile uint8_t  *myPtr;                         	/*!<  Pointer to point out myMessage                     	*/
 
 
 
@@ -57,29 +58,45 @@ int main ( void )
 {
 	Conf_GPIO 	 ();
 	Conf_CLK  	 ();
-	Conf_USART 	 ( UART_CLK, 115200 );				// 115200 Baud Rate
+	Conf_USART 	 ( UART_CLK, 230400 );				// 230400 Baud Rate
 	Conf_RTC     ();
+
+
+	/* Range 2: System frequency up to 16 MHz	 */
+	__HAL_PWR_VOLTAGESCALING_CONFIG ( PWR_REGULATOR_VOLTAGE_SCALE2 );
 
 
 	while ( 1 )
 	{
-		//HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+		/* Low power: Stop mode	 */
+		HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
 
+		/* Re-configure the CLKs	 */
+		Conf_CLK ();
+
+		/* Check myState	 */
 		if ( myState == 1UL )
 		{
-			GPIOA->BSRR	 =	 ( 1UL << LED_1 );						// Turn it ON
+			GPIOA->BSRR	 =	 ( 1UL << LED_1 );					// Turn it ON
 
-			sprintf ( (char*)myMessage, "Flash Size: %x\r\n", F_SIZE );
+			/* Parse the data	 */
+			sprintf ( (char*)myMessage, "Flash Size: %d Kbytes | ID1: %x, ID2: %x, ID3: %x\r\n", F_SIZE, (unsigned int)U_ID1, (unsigned int)U_ID2, (unsigned int)U_ID3 );
 
-
+			/* Transmit data through the UART	 */
 			myPtr   	 =   &myMessage[0];
-			UART5->DR	 =	 *myPtr;
-			UART5->CR1	|=	 USART_CR1_TE;							// Transmitter Enabled
+			USART2->DR	 =	 *myPtr;
+			USART2->CR1	|=	 USART_CR1_TE;						// Transmitter Enabled
+
+			/* Low power: Sleep mode, wait until all data was sent through the UART	 */
+			do{
+				HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+			}while ( myUART_TxEnd == 0UL );
 
 
 			/* Reset variables	 */
-			myState	 	=	 0;
-			GPIOA->BRR	=	( 1 << LED_1 );							// Turn it OFF
+			myUART_TxEnd	 =	 0UL;
+			myState	 		 =	 0UL;
+			GPIOA->BRR		 =	( 1UL << LED_1 );				// Turn it OFF
 		}
 	}
 }
