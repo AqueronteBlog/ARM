@@ -48,6 +48,17 @@ typedef enum
 } nucleol152re_uart_pinout_t;
 
 
+/**
+  * @brief   NUCLEO-L152RE USARTs PINOUT
+  */
+typedef enum
+{
+	UART2_RX      =   3,             /*!<  NUCLEO-L152RE BASIC USART2 RX: 	PA_3	*/
+	UART2_TX      =   2              /*!<  NUCLEO-L152RE BASIC USART2 TX: 	PA_2	*/
+} nucleol152re_usart_pinout_t;
+
+
+
 #ifdef __cplusplus
 }
 #endif
