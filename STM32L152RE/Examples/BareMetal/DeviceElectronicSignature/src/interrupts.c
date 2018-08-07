@@ -40,7 +40,7 @@ void RTC_WKUP_IRQHandler ( void )
 	/* WAKE-UP Interrupt	 */
 	if ( ( RTC->ISR & RTC_ISR_WUTF_Msk ) == RTC_ISR_WUTF )
 	{
-		myState	 =	 1UL;
+		myState	 		 =	 1UL;
 
 		/* Clear flags	 */
 		RTC->ISR	&=	~( RTC_ISR_WUTF | RTC_ISR_INIT );
@@ -66,7 +66,8 @@ void RTC_WKUP_IRQHandler ( void )
  *
  * @author      Manuel Caballero
  * @date        4/August/2018
- * @version     4/August/2018   The ORIGIN
+ * @version     7/August/2018   It transmits a string ( EOF: '\n' )
+ * 				4/August/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  */
@@ -80,7 +81,8 @@ void USART2_IRQHandler ( void )
 		/* Stop transmitting data when that character is found */
 		if ( *myPtr  == '\n' )
 		{
-			USART2->CR1	&=	~USART_CR1_TE;							// Transmitter Disabled
+			myUART_TxEnd	 =	 1UL;
+			USART2->CR1		&=	~USART_CR1_TE;						// Transmitter Disabled
 		}
 		else
 		{

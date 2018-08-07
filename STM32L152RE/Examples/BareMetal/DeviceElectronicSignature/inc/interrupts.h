@@ -39,7 +39,7 @@ void USART2_IRQHandler 	 ( void );
  */
 extern volatile uint32_t myState;
 extern volatile uint8_t  *myPtr;
-
+extern volatile uint32_t myUART_TxEnd;
 
 
 #ifdef __cplusplus
