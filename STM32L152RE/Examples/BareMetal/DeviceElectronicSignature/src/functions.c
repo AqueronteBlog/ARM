@@ -38,19 +38,19 @@
  */
 void Conf_CLK  ( void )
 {
-	// Enable HSI
+	/* Enable HSI	 */
 	RCC->CR		|=	  RCC_CR_HSION;
-	// Wait until HSI is stable
+	/* Wait until HSI is stable	 */
 	while ( ( RCC->CR & RCC_CR_HSIRDY ) != RCC_CR_HSIRDY );					// [TODO] Dangerous!!! Insert a delay, the uC may get stuck
 																			// if something goes wrong otherwise.
-	// HSI -> SYSCLK
+	/* HSI -> SYSCLK	 */
 	RCC->CFGR	|=	 RCC_CFGR_SW_HSI;
-	// Wait until it is stable
+	/* Wait until it is stable	 */
 	while ( ( RCC->CFGR & RCC_CFGR_SWS ) != RCC_CFGR_SWS_HSI );				// [TODO] Dangerous!!! Insert a delay, the uC may get stuck
 																			// if something goes wrong otherwise.
-	// Stop MSI
+	/* Stop MSI	 */
 	RCC->CR		&=	 ~RCC_CR_MSION;
-	// Wait until MSI is off
+	/* Wait until MSI is off	 */
 	while ( ( RCC->CR & RCC_CR_MSIRDY ) == RCC_CR_MSIRDY );					// [TODO] Dangerous!!! Insert a delay, the uC may get stuck
 																			// if something goes wrong otherwise.
 
@@ -141,14 +141,14 @@ void Conf_GPIO  ( void )
     GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5;						// No pull-up, pull-down
 
 
-    /* Configure UART5 pinout	 */
+    /* Configure UART2 pinout	 */
 	/* TX pin	 */
- 	GPIOC->MODER	|=	 GPIO_MODER_MODER12_1;					// Alternate function mode
-	GPIOC->OTYPER	&=	~GPIO_OTYPER_OT_12;						// Output push-pull
-    GPIOC->OSPEEDR	|=	 GPIO_OSPEEDER_OSPEEDR12_0;				// Medium speed
-    GPIOC->PUPDR	&=	~GPIO_PUPDR_PUPDR12_Msk;				// No pull-up, pull-down
-    GPIOC->AFR[1]	&=	~GPIO_AFRH_AFSEL12;						// Mask Alternate function AFIO8 on PC_12
-    GPIOC->AFR[1]	 =	 ( 0b1000 << GPIO_AFRH_AFSEL12_Pos );	// UART5_TX: AF8 on PC_12
+ 	GPIOC->MODER	|=	 GPIO_MODER_MODER2_1;					// Alternate function mode
+	GPIOC->OTYPER	&=	~GPIO_OTYPER_OT_2;						// Output push-pull
+    GPIOC->OSPEEDR	|=	 GPIO_OSPEEDER_OSPEEDR2_0;				// Medium speed
+    GPIOC->PUPDR	&=	~GPIO_PUPDR_PUPDR2_Msk;					// No pull-up, pull-down
+    GPIOC->AFR[0]	&=	~GPIO_AFRL_AFSEL2;						// Mask Alternate function AFIO7 on PA_2
+    GPIOC->AFR[0]	 =	 ( 0b0111 << GPIO_AFRL_AFSEL2_Pos );	// UART2_TX: AF7 on PA_2
 
     /* RX pin	 */
 //    GPIOD->MODER	|=	 GPIO_MODER_MODER2_1;					// Alternate function mode
@@ -229,10 +229,10 @@ void Conf_RTC  ( void )
 
 
 /**
- * @brief       void Conf_UART  ( uint32_t myCK, uint32_t myBaudRate )
+ * @brief       void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
  * @details     It configures the UARTs.
  *
- * 				- UART5 BaudRate = 115200, 8-bit, 1-bit STOP, NO Parity
+ * 				- USART2 BaudRate = 115200, 8-bit, 1-bit STOP, NO Parity
  * 					-- Increase the tolerance ( oversampling by 16 ): OVER8 = 0 	[ p705 Reference Manual ]
  * 					-- Tx/Rx_baud = f_CK / ( 8·( 2 - OVER8 )·( USARTDIV ) ) 		[ p708 Reference Manual ]
  * 						--- f_CK = 16MHz
@@ -260,18 +260,18 @@ void Conf_RTC  ( void )
  * @pre         Rx is disabled, Tx is used only.
  * @warning     N/A
  */
-void Conf_UART  ( uint32_t myCK, uint32_t myBaudRate )
+void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
 {
 	float 		myCalculatedData	=	 0.0f;
 	uint32_t	myOVER8	 			=	 0UL;
 
-	/* UART5 Peripheral clock enable	 */
-	RCC->APB1ENR	|=	 RCC_APB1ENR_UART5EN;
+	/* USART2 Peripheral clock enable	 */
+	RCC->APB1ENR	|=	 RCC_APB1ENR_USART2EN;
 
-	UART5->CR1	&=	~( USART_CR1_OVER8 | USART_CR1_UE | USART_CR1_M | 			// Oversampling by 16,  USART disabled, 1 Start bit, 8 Data bits n Stop bit
+	USART2->CR1	&=	~( USART_CR1_OVER8 | USART_CR1_UE | USART_CR1_M | 			// Oversampling by 16,  USART disabled, 1 Start bit, 8 Data bits n Stop bit
 					   USART_CR1_PCE | USART_CR1_TE | USART_CR1_RE );			// Parity control disabled, Transmitter is disabled, Receiver is disabled
 
-	UART5->CR2	&=	~( USART_CR2_STOP_1 | USART_CR2_STOP_0 | USART_CR2_CLKEN |	// 1 Stop bit, CK pin disabled,
+	USART2->CR2	&=	~( USART_CR2_STOP_1 | USART_CR2_STOP_0 | USART_CR2_CLKEN |	// 1 Stop bit, CK pin disabled,
 					   USART_CR2_CPOL | USART_CR2_CPHA );						// CPOL = 0, CPHA = 0
 
 	/* Calculate Mantissa	 */
@@ -297,7 +297,7 @@ void Conf_UART  ( uint32_t myCK, uint32_t myBaudRate )
 
 
 	/* BaudRate: Update Mantissa	 */
-	UART5->BRR	 =	 ( ( ( uint32_t )( myCalculatedData ) << USART_BRR_DIV_MANTISSA_Pos ) & USART_BRR_DIV_MANTISSA_Msk );
+	USART2->BRR	 =	 ( ( ( uint32_t )( myCalculatedData ) << USART_BRR_DIV_MANTISSA_Pos ) & USART_BRR_DIV_MANTISSA_Msk );
 
 	/* Calculate Fraction	 */
 	myCalculatedData	 =	 myCalculatedData - ( uint32_t )myCalculatedData;
@@ -305,25 +305,25 @@ void Conf_UART  ( uint32_t myCK, uint32_t myBaudRate )
 	myCalculatedData	 =	 _ROUND32U ( myCalculatedData );
 
 	/* BaudRate: Update Fraction	 */
-	UART5->BRR	|=	 ( ( ( uint32_t )( myCalculatedData ) << USART_BRR_DIV_FRACTION_Pos ) & USART_BRR_DIV_FRACTION_Msk );
+	USART2->BRR	|=	 ( ( ( uint32_t )( myCalculatedData ) << USART_BRR_DIV_FRACTION_Pos ) & USART_BRR_DIV_FRACTION_Msk );
 
 
 	/* Enable Interrupt	 */
-	NVIC_SetPriority ( UART5_IRQn, 1 ); 									// Set Priority to 1
-	NVIC_EnableIRQ   ( UART5_IRQn );  										// Enable UART5_IRQn interrupt in NVIC
+	NVIC_SetPriority ( USART2_IRQn, 1 ); 									// Set Priority to 1
+	NVIC_EnableIRQ   ( USART2_IRQn );  										// Enable UART2_IRQn interrupt in NVIC
 
 
 	/* Activate interrupts, and UART	 */
-	UART5->SR	&=	~( USART_SR_TXE | USART_SR_TC | USART_SR_RXNE );		// Clear flags
-//	UART5->CR1	|=	 ( USART_CR1_UE | USART_CR1_RE | USART_CR1_TCIE | 		// USART enabled, Receiver enabled, Transmission complete interrupt enabled
-//					   USART_CR1_RXNEIE );									// RXNE interrupt enable
-	UART5->CR1	|=	 ( USART_CR1_UE | USART_CR1_TCIE );				 		// USART enabled, Transmission complete interrupt enabled
+	USART2->SR	&=	~( USART_SR_TXE | USART_SR_TC | USART_SR_RXNE );		// Clear flags
+	USART2->CR1	|=	 ( USART_CR1_UE | USART_CR1_RE | USART_CR1_TCIE | 		// USART enabled, Receiver enabled, Transmission complete interrupt enabled
+					   USART_CR1_RXNEIE );									// RXNE interrupt enable
+//	USART2->CR1	|=	 ( USART_CR1_UE | USART_CR1_TCIE );				 		// USART enabled, Transmission complete interrupt enabled
 
 
-	while ( ( UART5->SR & USART_SR_TC ) != USART_SR_TC );					// Wait until Idle frame is sent
+//	while ( ( USART2->SR & USART_SR_TC ) != USART_SR_TC );					// Wait until Idle frame is sent
 																			// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
-	UART5->SR	&=	~( USART_SR_TC | USART_SR_RXNE );						// Clear flags
+	USART2->SR	&=	~( USART_SR_TC | USART_SR_RXNE );						// Clear flags
 
-//	UART5->CR1	|=	 ( USART_CR1_TCIE | USART_CR1_RXNEIE );					// Transmission complete interrupt enabled, RXNE interrupt enable
-	UART5->CR1	|=	 ( USART_CR1_TCIE );									// Transmission complete interrupt enabled
+//	USART2->CR1	|=	 ( USART_CR1_TCIE | USART_CR1_RXNEIE );					// Transmission complete interrupt enabled, RXNE interrupt enable
+	USART2->CR1	|=	 ( USART_CR1_TCIE );									// Transmission complete interrupt enabled
 }
