@@ -21,15 +21,14 @@ extern "C" {
 #endif
 
 /**
- * @brief   GENERAL MACROS
+ * @brief   Macros
  */
 #define _ROUND32U( x )  ( uint32_t )( x + 0.5 )
 
 /**
- * @brief   GENERAL VARIABLES
+ * @brief   Variables
  */
-volatile uint32_t mySystemCoreClock;			/*!<  System CLK in MHz  		   */
-volatile uint32_t myUARTClock;					/*!<  UART CLK in MHz  		   	   */
+
 
 
 #ifdef __cplusplus
