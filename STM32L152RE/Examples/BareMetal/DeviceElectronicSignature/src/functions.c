@@ -69,59 +69,20 @@ void Conf_CLK  ( void )
 
 
 /**
- * @brief       void Conf_SYSTICK  ( uint32_t )
- * @details     It disables the SysTick.
- *
- * @param[in]    myticks:	Value of the SYSCLK..
- *
- * @param[out]   N/A.
- *
- *
- *
- * @return      N/A
- *
- * @author      Manuel Caballero
- * @date        4/August/2018
- * @version     4/August/2018   The ORIGIN
- * @pre         N/A
- * @warning     N/A
- */
-void Conf_SYSTICK  ( uint32_t myticks )
-{
-	SysTick->CTRL	&=	 ~SysTick_CTRL_ENABLE_Msk;										// SysTick DISABLED
-
-
-//	SysTick->LOAD	 =	 (uint32_t)(myticks - 1UL);										// Load the value
-//	SysTick->VAL	 =	 0UL;															// Reset current Counter value
-//
-//	// Set the PRIGROUP[10:8] bits according to the PriorityGroup parameter value
-//	NVIC_SetPriorityGrouping	( NVIC_PRIORITYGROUP_4 );
-//	NVIC_SetPriority 			( SysTick_IRQn, ( 1UL << __NVIC_PRIO_BITS ) - 1UL );	// Set Priority for Systick Interrupt
-//	NVIC_EnableIRQ				( SysTick_IRQn );										// Enable interrupt
-//
-//	SysTick->CTRL  	 = 	( SysTick_CTRL_CLKSOURCE_Msk |
-//	                   	  SysTick_CTRL_TICKINT_Msk   |
-//						  SysTick_CTRL_ENABLE_Msk );                    				// Enable SysTick IRQ and SysTick Timer
-
-}
-
-
-
-/**
  * @brief       void Conf_GPIO  ( void )
  * @details     It configures GPIO to work with the LEDs and UART
  *
  * 				- LED1:		PA_5
- * 				- UART5:
- * 					-- TX:	PC_12
- * 					-- RX:	PD_2 ( Not implemented )
+ * 				- USART2:
+ * 					-- TX:	PA_2
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        4/August/2018
- * @version		6/August/2018   UART Rx pin disabled
+ * @version		7/August/2018   USART Tx was defined
+ * 				6/August/2018   UART Rx pin disabled
  * 				5/August/2018   UART pins definition added
  * 				4/August/2018   The ORIGIN
  * @pre         N/A
@@ -131,7 +92,7 @@ void Conf_GPIO  ( void )
 {
 	/* GPIOA and GPIOC Peripheral clock enable	 */
 //	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIODEN );
-	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN );
+	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN );
 
 
     /* Configure LED1	 */
@@ -141,22 +102,14 @@ void Conf_GPIO  ( void )
     GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5;						// No pull-up, pull-down
 
 
-    /* Configure UART2 pinout	 */
+    /* Configure USART2 pinout	 */
 	/* TX pin	 */
- 	GPIOC->MODER	|=	 GPIO_MODER_MODER2_1;					// Alternate function mode
-	GPIOC->OTYPER	&=	~GPIO_OTYPER_OT_2;						// Output push-pull
-    GPIOC->OSPEEDR	|=	 GPIO_OSPEEDER_OSPEEDR2_0;				// Medium speed
-    GPIOC->PUPDR	&=	~GPIO_PUPDR_PUPDR2_Msk;					// No pull-up, pull-down
-    GPIOC->AFR[0]	&=	~GPIO_AFRL_AFSEL2;						// Mask Alternate function AFIO7 on PA_2
-    GPIOC->AFR[0]	 =	 ( 0b0111 << GPIO_AFRL_AFSEL2_Pos );	// UART2_TX: AF7 on PA_2
-
-    /* RX pin	 */
-//    GPIOD->MODER	|=	 GPIO_MODER_MODER2_1;					// Alternate function mode
-//    GPIOD->OTYPER	&=	~GPIO_OTYPER_OT_2;						// Output push-pull
-//    GPIOD->OSPEEDR	|=	 GPIO_OSPEEDER_OSPEEDR2_0;				// Medium speed
-//    GPIOD->PUPDR	&=	~GPIO_PUPDR_PUPDR2_Msk;					// No pull-up, pull-down
-//    GPIOD->AFR[0]	&=	~GPIO_AFRL_AFSEL2;						// Mask Alternate function AFIO8 on PD_2
-//    GPIOD->AFR[0]	 =	 ( 0b1000 << GPIO_AFRL_AFSEL2_Pos );	// UART5_RX: AF8 on PD_2
+    GPIOA->MODER	|=	 GPIO_MODER_MODER2_1;					// Alternate function mode
+    GPIOA->OTYPER	&=	~GPIO_OTYPER_OT_2;						// Output push-pull
+    GPIOA->OSPEEDR	|=	 GPIO_OSPEEDER_OSPEEDR2_0;				// Medium speed
+    GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR2_Msk;					// No pull-up, pull-down
+    GPIOA->AFR[0]	&=	~GPIO_AFRL_AFSEL2;						// Mask Alternate function AFIO7 on PA_2
+    GPIOA->AFR[0]	 =	 ( 0b0111 << GPIO_AFRL_AFSEL2_Pos );	// UART2_TX: AF7 on PA_2
 }
 
 
@@ -232,16 +185,8 @@ void Conf_RTC  ( void )
  * @brief       void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
  * @details     It configures the UARTs.
  *
- * 				- USART2 BaudRate = 115200, 8-bit, 1-bit STOP, NO Parity
- * 					-- Increase the tolerance ( oversampling by 16 ): OVER8 = 0 	[ p705 Reference Manual ]
- * 					-- Tx/Rx_baud = f_CK / ( 8·( 2 - OVER8 )·( USARTDIV ) ) 		[ p708 Reference Manual ]
- * 						--- f_CK = 16MHz
- * 						--- USARTDIV = 16MHz / ( 115200·( 8·( 2 - 0 ) ) ) ~ 8.6806
- * 							---- DIV_Mantissa = 8
- * 							---- DIV_Fraction = 16·0.6806 = 10.8896 ~ 11
- * 								----- USART_BRR = DIV_Mantissa, DIV_Fraction = 0x08B
- *
- * 				- Tx Interrupt ENABLED
+ * 				- USART2
+ * 					-- Tx Interrupt ENABLED
  *
  * @param[in]    myCK: 			UART Clock ( f_CK ).
  * @param[in]    myBaudRate: 	UART baud rate.
@@ -254,7 +199,8 @@ void Conf_RTC  ( void )
  *
  * @author      Manuel Caballero
  * @date        5/August/2018
- * @version     6/August/2018   Rx not implemented
+ * @version     7/August/2018   Code was tidied up.
+ * 				6/August/2018   Rx not implemented
  * 				5/August/2018   The ORIGIN
  * @pre         OVER8 is calculated automatically.
  * @pre         Rx is disabled, Tx is used only.
@@ -315,15 +261,12 @@ void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
 
 	/* Activate interrupts, and UART	 */
 	USART2->SR	&=	~( USART_SR_TXE | USART_SR_TC | USART_SR_RXNE );		// Clear flags
-	USART2->CR1	|=	 ( USART_CR1_UE | USART_CR1_RE | USART_CR1_TCIE | 		// USART enabled, Receiver enabled, Transmission complete interrupt enabled
-					   USART_CR1_RXNEIE );									// RXNE interrupt enable
-//	USART2->CR1	|=	 ( USART_CR1_UE | USART_CR1_TCIE );				 		// USART enabled, Transmission complete interrupt enabled
+	USART2->CR1	|=	 ( USART_CR1_UE | USART_CR1_TCIE );				 		// USART enabled, Transmission complete interrupt enabled
 
 
 //	while ( ( USART2->SR & USART_SR_TC ) != USART_SR_TC );					// Wait until Idle frame is sent
 																			// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
 	USART2->SR	&=	~( USART_SR_TC | USART_SR_RXNE );						// Clear flags
 
-//	USART2->CR1	|=	 ( USART_CR1_TCIE | USART_CR1_RXNEIE );					// Transmission complete interrupt enabled, RXNE interrupt enable
 	USART2->CR1	|=	 ( USART_CR1_TCIE );									// Transmission complete interrupt enabled
 }
