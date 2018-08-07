@@ -26,7 +26,7 @@ extern "C" {
 /**@brief Subroutine prototypes.
  */
 void RTC_WKUP_IRQHandler ( void );
-void UART5_IRQHandler 	 ( void );
+void USART2_IRQHandler 	 ( void );
 
 
 
@@ -37,7 +37,8 @@ void UART5_IRQHandler 	 ( void );
 
 /**@brief Variables.
  */
-extern volatile uint32_t myLEDstate;
+extern volatile uint32_t myState;
+extern volatile uint8_t  *myPtr;
 
 
 

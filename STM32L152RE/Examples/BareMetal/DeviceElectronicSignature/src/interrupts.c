@@ -23,7 +23,8 @@
  *
  * @author      Manuel Caballero
  * @date        4/August/2018
- * @version     4/August/2018   The ORIGIN
+ * @version     7/August/2018   EXTI flag MUST be cleared as well
+ * 				4/August/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -39,18 +40,11 @@ void RTC_WKUP_IRQHandler ( void )
 	/* WAKE-UP Interrupt	 */
 	if ( ( RTC->ISR & RTC_ISR_WUTF_Msk ) == RTC_ISR_WUTF )
 	{
-		if ( myLEDstate	 ==	 0 )
-		{
-			GPIOA->BSRR	 =	 ( 1 << LED_1 );				// LED1 ON
-			myLEDstate	 =	 1;
-		}
-		else
-		{
-			GPIOA->BRR	 =	 ( 1 << LED_1 );				// LED1 OFF
-			myLEDstate	 =	 0;
-		}
+		myState	 =	 1UL;
 
-		RTC->ISR	&=	~( RTC_ISR_WUTF | RTC_ISR_INIT );	// Clear flag
+		/* Clear flags	 */
+		RTC->ISR	&=	~( RTC_ISR_WUTF | RTC_ISR_INIT );
+		EXTI->PR	|=	 EXTI_PR_PR20;
 	}
 
 	/* Enable the write protection for RTC registers */
@@ -64,8 +58,8 @@ void RTC_WKUP_IRQHandler ( void )
 
 
 /**
- * @brief       void UART5_IRQHandler ()
- * @details     UART5 subroutine.
+ * @brief       void USART2_IRQHandler ()
+ * @details     USART2 subroutine.
  *
  *
  * @return      N/A
@@ -76,13 +70,21 @@ void RTC_WKUP_IRQHandler ( void )
  * @pre         N/A.
  * @warning     N/A
  */
-void UART5_IRQHandler(void)
+void USART2_IRQHandler ( void )
 {
 	/* TX: TRANSMISSION COMPLETE	*/
-	if ( ( UART5->SR & USART_SR_TC ) == USART_SR_TC )
+	if ( ( USART2->SR & USART_SR_TC ) == USART_SR_TC )
 	{
-		UART5->SR	&=	~USART_SR_TC ;									// Clear flag
+		USART2->SR	&=	~USART_SR_TC ;								// Clear flag
 
-		UART5->CR1	&=	~USART_CR1_TE;									// Transmitter Disabled
+		/* Stop transmitting data when that character is found */
+		if ( *myPtr  == '\n' )
+		{
+			USART2->CR1	&=	~USART_CR1_TE;							// Transmitter Disabled
+		}
+		else
+		{
+			USART2->DR    =   *++myPtr;
+		}
 	}
 }
