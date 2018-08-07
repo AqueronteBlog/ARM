@@ -28,6 +28,9 @@
 
 /**@brief Constants.
  */
+#define TX_BUFF_SIZE  128	                     			/*!<   UART buffer size                              	*/
+#define UART_CLK	  16000000UL                   			/*!<   UART f_CK = 16 MHz                              	*/
+
 #define F_SIZE	( *(uint16_t *) ( 0x1FF800CC ) )			/*!< Flash size register ( Cat.5 )						*/
 
 #define U_ID1	( *(uint32_t *) ( 0x1FF800D0 ) )
@@ -38,7 +41,12 @@
 
 /**@brief Variables.
  */
-volatile uint32_t myLEDstate	 =	 0;						/*!< LED state                         					*/
+volatile uint32_t mySystemCoreClock;				/*!<  System CLK in MHz  		   							*/
+volatile uint32_t myUARTClock;						/*!<  UART CLK in MHz  		   	   							*/
+
+volatile uint32_t myState;                        	/*!<   State that indicates when to perform an ADC sample	*/
+volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      	/*!<   Message to be transmitted through the UART         	*/
+volatile uint8_t  *myPtr;                         	/*!<   Pointer to point out myMessage                     	*/
 
 
 
@@ -49,12 +57,29 @@ int main ( void )
 {
 	Conf_GPIO 	 ();
 	Conf_CLK  	 ();
+	Conf_USART 	 ( UART_CLK, 115200 );				// 115200 Baud Rate
 	Conf_RTC     ();
-
 
 
 	while ( 1 )
 	{
-		HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+		//HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+
+		if ( myState == 1UL )
+		{
+			GPIOA->BSRR	 =	 ( 1UL << LED_1 );						// Turn it ON
+
+			sprintf ( (char*)myMessage, "Flash Size: %x\r\n", F_SIZE );
+
+
+			myPtr   	 =   &myMessage[0];
+			UART5->DR	 =	 *myPtr;
+			UART5->CR1	|=	 USART_CR1_TE;							// Transmitter Enabled
+
+
+			/* Reset variables	 */
+			myState	 	=	 0;
+			GPIOA->BRR	=	( 1 << LED_1 );							// Turn it OFF
+		}
 	}
 }
