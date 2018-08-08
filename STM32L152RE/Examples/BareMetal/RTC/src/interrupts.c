@@ -23,7 +23,8 @@
  *
  * @author      Manuel Caballero
  * @date        26/March/2018
- * @version     3/August/2018   Write protection was added.
+ * @version     8/August/2018   EXTI flag MUST be cleared as well
+ * 				3/August/2018   Write protection was added.
  * *			26/March/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
@@ -52,6 +53,7 @@ void RTC_WKUP_IRQHandler ( void )
 		}
 
 		RTC->ISR	&=	~( RTC_ISR_WUTF | RTC_ISR_INIT );	// Clear flag
+		EXTI->PR	|=	 EXTI_PR_PR20;
 	}
 
 	/* Enable the write protection for RTC registers */
