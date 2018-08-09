@@ -4,12 +4,12 @@
  *              Function file.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        5/January/2018
  * @version     5/January/2018    The ORIGIN
- * @pre         NaN
+ * @pre         N/A
  * @warning     This file is ONLY for STM32L152RE device.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
@@ -26,40 +26,46 @@
  * @param[out]   Status of i2c_init.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        5/January/2018
  * @version     5/January/2018     The ORIGIN
  * @pre         I2C communication is by polling mode.
- * @warning     NaN.
+ * @warning     N/A.
  */
 i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
 {
 	uint32_t myRightPinAllocation	 =	 0;
 	uint32_t myRightAFRRegister		 =	 0;
 
-	// The minimum allowed frequency is 2MHz, 50Mhz maximum limit
-	if ( myI2Cparameters.PCLK1_Freq < I2C_FREQ_MIN || myI2Cparameters.PCLK1_Freq > I2C_FREQ_MAX )
+	/* The minimum allowed frequency is 2MHz, 50Mhz maximum limit	 */
+	if ( ( myI2Cparameters.PCLK1_Freq < I2C_FREQ_MIN ) || ( myI2Cparameters.PCLK1_Freq > I2C_FREQ_MAX ) )
+	{
 		return I2C_FAILURE;
+	}
 
 
 	/* Reset and Stop I2Cx */
-	// Enable the appropriate I2Cx Clock
+	/* Enable the appropriate I2Cx Clock	 */
 	if ( myI2Cparameters.I2Cinstance == I2C1 )
+	{
 		RCC->APB1ENR 					|= 	 RCC_APB1ENR_I2C1EN; 							// I2C1 Enabled
+	}
 	else
+	{
 		RCC->APB1ENR 					|= 	 RCC_APB1ENR_I2C2EN; 							// I2C2 Enabled
+	}
 
 	myI2Cparameters.I2Cinstance->CR1	|=	 I2C_CR1_SWRST;									// I2C is under reset state
 	myI2Cparameters.I2Cinstance->CR1	&=	~I2C_CR1_PE;									// I2C is disabled
 
 
 	/* Configure the pins */
-	// Enable the GPIO Clock
+	/* Enable the GPIO Clock	 */
 	RCC->AHBENR 						|= 	 RCC_AHBENR_GPIOBEN;
 
-	// Set up the SDA pin
+	/* Set up the SDA pin	 */
 	myI2Cparameters.SDAport->MODER		|=	 ( 0b10 << ( myI2Cparameters.SDA << 1 ) );		// Alternate function mode
 	myI2Cparameters.SDAport->OSPEEDR	|=	 ( 0b01 << ( myI2Cparameters.SDA << 1 ) );		// Medium speed
 	myI2Cparameters.SDAport->PUPDR	    &=	~( 0b11 << ( myI2Cparameters.SDA << 1 ) );		// No pull-up/pull-down
@@ -72,7 +78,7 @@ i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
 
 	myI2Cparameters.SDAport->AFR[myRightAFRRegister]	 =	 ( 0b0100 << ( ( myI2Cparameters.SDA - myRightPinAllocation ) << 2 ) );	// I2Cx_SDA: AF4
 
-	// Set up the SCL pin
+	/* Set up the SCL pin	 */
 	myI2Cparameters.SCLport->MODER		|=	 ( 0b10 << ( myI2Cparameters.SCL << 1 ) );		// Alternate function mode
 	myI2Cparameters.SCLport->OSPEEDR	|=	 ( 0b01 << ( myI2Cparameters.SCL << 1 ) );		// Medium speed
 	myI2Cparameters.SCLport->PUPDR	    &=	~( 0b11 << ( myI2Cparameters.SCL << 1 ) );		// No pull-up/pull-down
@@ -122,7 +128,7 @@ i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
  * @param[out]   Status of i2c_write.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        17/January/2018
@@ -131,7 +137,7 @@ i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
  * @pre         I2C communication is by polling mode.
  * @pre			AN2824 Application note ( en.CD00209826.pdf ) was followed ( flowchart )
  * 				to design the Master transmitter.
- * @warning     NaN.
+ * @warning     N/A.
  */
 i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buff, uint32_t i2c_data_length, uint32_t i2c_generate_stop )
 {
@@ -219,7 +225,7 @@ i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buf
  * @param[out]   Status of i2c_read.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        17/January/2018
@@ -228,7 +234,7 @@ i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buf
  * @pre         I2C communication is by polling mode.
  * @pre			AN2824 Application note ( en.CD00209826.pdf ) was followed ( flowchart )
  * 				to design the Master transmitter.
- * @warning     NaN.
+ * @warning     N/A.
  */
 i2c_status_t     i2c_read   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buff, uint32_t i2c_data_length )
 {
