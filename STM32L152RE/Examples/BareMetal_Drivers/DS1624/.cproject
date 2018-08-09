@@ -66,8 +66,8 @@
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.1573821621" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld">
 								<option id="com.atollic.truestudio.ld.general.scriptfile.515127523" name="Linker script" superClass="com.atollic.truestudio.ld.general.scriptfile" value="${workspace_loc:/${ProjName}/LinkerScript.ld}" valueType="string"/>
 								<option id="com.atollic.truestudio.ld.optimization.do_garbage.1230039032" name="Dead code removal " superClass="com.atollic.truestudio.ld.optimization.do_garbage" value="true" valueType="boolean"/>
-								<option id="com.atollic.truestudio.ld.libraries.list.1481691018" name="Libraries" superClass="com.atollic.truestudio.ld.libraries.list" valueType="libs"/>
-								<option id="com.atollic.truestudio.ld.libraries.searchpath.11318941" name="Library search path" superClass="com.atollic.truestudio.ld.libraries.searchpath" valueType="libPaths"/>
+								<option id="com.atollic.truestudio.ld.libraries.list.1481691018" name="Libraries" superClass="com.atollic.truestudio.ld.libraries.list"/>
+								<option id="com.atollic.truestudio.ld.libraries.searchpath.11318941" name="Library search path" superClass="com.atollic.truestudio.ld.libraries.searchpath"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.117978784" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32L152RE" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.instr_set.1080732231" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpu.1744241741" name="Floating point" superClass="com.atollic.truestudio.common_options.target.fpu" value="com.atollic.truestudio.common_options.target.fpu.soft" valueType="enumerated"/>
