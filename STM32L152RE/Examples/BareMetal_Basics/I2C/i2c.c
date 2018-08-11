@@ -96,9 +96,10 @@ i2c_status_t    i2c_init   ( I2C_parameters_t myI2Cparameters )
     /* Configure the frequency */ // [TODO] It needs to be developded!!!
 	myI2Cparameters.I2Cinstance->CR2	&=	~I2C_CR2_FREQ_Msk;													// Clear the previous FREQ
 	myI2Cparameters.I2Cinstance->CR2	|=	 ( ( myI2Cparameters.PCLK1_Freq / 1000000 ) << I2C_CR2_FREQ_Pos );	// Update the new FREQ
-//    myI2Cparameters.TWIinstance->FREQUENCY      =   ( myI2Cparameters.Freq << TWI_FREQUENCY_FREQUENCY_Pos );
-//
-//
+
+	//myI2Cparameters.I2Cinstance->
+
+
     /* Disable ALL Interrupts and DMA request */
 	myI2Cparameters.I2Cinstance->CR2	&=	~( I2C_CR2_DMAEN | I2C_CR2_ITBUFEN | I2C_CR2_ITEVTEN | I2C_CR2_ITERREN );
 
