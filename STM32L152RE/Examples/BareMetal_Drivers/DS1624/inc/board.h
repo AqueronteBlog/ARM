@@ -57,6 +57,15 @@ typedef enum
 } nucleol152re_usart_pinout_t;
 
 
+/**
+  * @brief   NUCLEO-L152RE I2C1 PINOUT
+  */
+typedef enum
+{
+	IC1_SDA     =   9,             	/*!<  NUCLEO-L152RE I2C1 SDA: 	PB_9			*/
+	IC1_SCL     =   8              	/*!<  NUCLEO-L152RE I2C1 SCL: 	PB_8			*/
+} nucleol152re_i2c1_pinout_t;
+
 
 #ifdef __cplusplus
 }
