@@ -43,13 +43,13 @@ int main ( void )
 
 
 	/* I2C definition	 */
-//	myDS1624_I2C_parameters.TWIinstance =    NRF_TWI0;
-//	myDS1624_I2C_parameters.SDA         =    TWI0_SDA;
-//	myDS1624_I2C_parameters.SCL         =    TWI0_SCL;
-//	myDS1624_I2C_parameters.ADDR        =    DS1624_ADDRESS_0;
-//	myDS1624_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-//	myDS1624_I2C_parameters.SDAport     =    NRF_GPIO;
-//	myDS1624_I2C_parameters.SCLport     =    NRF_GPIO;
+	myDS1624_I2C_parameters.I2Cinstance =    I2C1;
+	myDS1624_I2C_parameters.SDA         =    IC1_SDA;
+	myDS1624_I2C_parameters.SCL         =    IC1_SCL;
+	myDS1624_I2C_parameters.ADDR        =    DS1624_ADDRESS_0;
+	myDS1624_I2C_parameters.I2C_Freq    =    100000;				// 100kHz
+	myDS1624_I2C_parameters.SDAport     =    GPIOB;
+	myDS1624_I2C_parameters.SCLport     =    GPIOB;
 
 	/* Configure I2C peripheral	 */
 	aux  =   DS1624_Init ( myDS1624_I2C_parameters );
