@@ -16,8 +16,7 @@
 
 /**
  * @brief       void TIMER0_IRQHandler ()
- * @details     There is a new interrupt every 0.5s, increment the myState variable
- *              so in the main can process that information.
+ * @details     Timer interrupt.
  *
  *
  * @return      N/A
@@ -30,11 +29,11 @@
  */
 void TIMER0_IRQHandler()
 {
-    if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0 ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0 ) )
+    if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0UL ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0UL ) )
     {
-        myState++;
+        myState  =   1UL;
 
-        NRF_TIMER0->EVENTS_COMPARE[0] = 0;                  // Clear ( flag ) compare register 0 event
+        NRF_TIMER0->EVENTS_COMPARE[0] = 0UL;                  // Clear ( flag ) compare register 0 event
     }
 }
 
