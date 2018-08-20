@@ -43,7 +43,7 @@ void UART0_IRQHandler  ( void );
 extern volatile uint32_t myState;
 extern volatile uint8_t  myMessage[];
 extern volatile uint8_t  *myPtr;
-extern volatile uint32_t myADCDoneFlag;
+
 
 
 #ifdef __cplusplus

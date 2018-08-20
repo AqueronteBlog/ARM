@@ -26,9 +26,10 @@ extern "C" {
 
 /**@brief Function prototypes.
  */
-void conf_GPIO      ( void );
-void conf_TIMER0    ( void );
-void conf_UART      ( void );
+void conf_CLK    ( void );
+void conf_GPIO   ( void );
+void conf_TIMER0 ( void );
+void conf_UART   ( void );
 
 
 /**@brief Constants.

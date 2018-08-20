@@ -26,7 +26,7 @@ void UART5_IRQHandler (void);
 
 
 // VARIABLES
-NUCLEOL152_led_pinout_t myLED1;
+nucleol152re_led_pinout_t myLED1;
 
 
 #ifdef __cplusplus

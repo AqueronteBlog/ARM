@@ -21,12 +21,17 @@
 #include "variables.h"
 #include "functions.h"
 #include "interrupts.h"
-#include "i2c.h"
+#include "DS1624.h"
+
 
 
 int main ( void )
 {
-	I2C_parameters_t myI2Cparameters;
+	I2C_parameters_t            myDS1624_I2C_parameters;
+	DS1624_status_t             aux;
+	DS1624_access_config_done_t myDS1624_TempConversionStatus;
+	DS1624_vector_data_t        myDS1624_data;
+
 
 	mySystemCoreClock	 =	 16000000U;			// SYSCLK = 16 MHz
 	myUARTClock	 		 =	 16000000U;			// f_CK = 16 MHz
@@ -37,7 +42,23 @@ int main ( void )
 	Conf_UART 	 ( myUARTClock, 115200 );		// 115200 Baud Rate
 
 
-	HAL_PWR_DisableSleepOnExit ();
+	/* I2C definition	 */
+	myDS1624_I2C_parameters.I2Cinstance =    I2C1;
+	myDS1624_I2C_parameters.SDA         =    IC1_SDA;
+	myDS1624_I2C_parameters.SCL         =    IC1_SCL;
+	myDS1624_I2C_parameters.ADDR        =    DS1624_ADDRESS_0;
+	myDS1624_I2C_parameters.I2C_Freq    =    100000;				// 100kHz
+	myDS1624_I2C_parameters.SDAport     =    GPIOB;
+	myDS1624_I2C_parameters.SCLport     =    GPIOB;
+
+	/* Configure I2C peripheral	 */
+	aux  =   DS1624_Init ( myDS1624_I2C_parameters );
+
+
+	/* Configure 1SHOT mode	 */
+	aux  =   DS1624_SetConversionMode ( myDS1624_I2C_parameters, ACCESS_CONFIG_1SHOT_ONE_TEMPERATURE_CONVERSION );
+
+
 	while ( 1 )
 	{
 		HAL_PWR_EnterSLEEPMode( PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI );

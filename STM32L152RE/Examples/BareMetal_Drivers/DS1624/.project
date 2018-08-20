@@ -27,9 +27,29 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>I2C</name>
+			<name>Drivers/Basics</name>
 			<type>2</type>
-			<location>D:/Workspace/ARM/STM32L152RE/Examples/BareMetal_Basics/I2C</location>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Drivers/DS1624</name>
+			<type>2</type>
+			<location>D:/Workspace/ARM/Drivers/DS1624</location>
+		</link>
+		<link>
+			<name>Drivers/Basics/i2c</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Drivers/Basics/i2c/i2c.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BareMetal_Basics/I2C/i2c.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/Basics/i2c/i2c.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BareMetal_Basics/I2C/i2c.h</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
