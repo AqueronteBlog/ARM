@@ -45,6 +45,7 @@ volatile uint8_t  *myPtr;                         /*!<   Pointer to point out my
  */
 int main( void )
 {
+    uint32_t                        myTrimState  =   0;
     SPI_parameters_t                myMCP41XXX_42XXX_SPI_parameters;
     MCP41XXX_42XXX_status_t         aux;
     MCP41XXX_42XXX_vector_data_t    myMCP41XXX_42XXX_Data;
@@ -96,8 +97,31 @@ int main( void )
     	NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
         if ( myState == 1 )
         {
-            /* Get the day of the week */
+            /* Change the wiper value */
+            switch ( myTrimState )
+            {
+                case 0:
+                    /* Wiper value 0%    */
+                    myMCP41XXX_42XXX_Data.Dn     =   0x00;
+                    aux  =   MCP41XXX_42XXX_SetWiper ( myMCP41XXX_42XXX_SPI_parameters, MCP41XXX_42XXX_POTENTIOMETER_COMMAND_POTENTIOMETER_0, myMCP41XXX_42XXX_Data );
+                    myTrimState  =   50;
+                    break;
 
+                default:
+                case 50:
+                    /* Wiper value 50%    */
+                    myMCP41XXX_42XXX_Data.Dn     =   0x80;
+                    aux  =   MCP41XXX_42XXX_SetWiper ( myMCP41XXX_42XXX_SPI_parameters, MCP41XXX_42XXX_POTENTIOMETER_COMMAND_POTENTIOMETER_0, myMCP41XXX_42XXX_Data );
+                    myTrimState  =   100;
+                    break;
+
+                case 100:
+                    /* Wiper value 100%    */
+                    myMCP41XXX_42XXX_Data.Dn     =   0xFF;
+                    aux  =   MCP41XXX_42XXX_SetWiper ( myMCP41XXX_42XXX_SPI_parameters, MCP41XXX_42XXX_POTENTIOMETER_COMMAND_POTENTIOMETER_0, myMCP41XXX_42XXX_Data );
+                    myTrimState  =   0;
+                    break;
+            }
 
 
             /* Reset the variables   */
