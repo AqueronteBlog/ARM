@@ -133,7 +133,7 @@ MCP41XXX_42XXX_status_t  MCP41XXX_42XXX_SoftwareShutdown ( SPI_parameters_t mySP
 
 
     /* Make the command byte, the new wiper value does not take place, update the register then     */
-    cmd[0]           =   (uint8_t)( MCP41XXX_42XXX_COMMAND_WRITE_DATA | myChannel );
+    cmd[0]           =   (uint8_t)( MCP41XXX_42XXX_COMMAND_SHUTDOWN | myChannel );
     cmd[1]           =   0;
     mySPI_status     =   spi_transfer ( mySPIparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
