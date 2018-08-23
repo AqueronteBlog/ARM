@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the external device: MCP41XXX_42XXX. Every 1 seconds, a new
- *              sample is performed and transmitted through the UART ( Baud Rate: 230400 ).
+ * @details     This example shows how to work with the external device: MCP41XXX_42XXX. Every 1 seconds, the
+ *              wiper will be modify.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
@@ -30,14 +30,11 @@
 
 /**@brief Constants.
  */
-#define TX_BUFF_SIZE  64                          /*!<   UART buffer size                                       */
 
 
 /**@brief Variables.
  */
-volatile uint32_t myState;                        /*!<   State that indicates when to perform an ADC sample     */
-volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      /*!<   Message to be transmitted through the UART             */
-volatile uint8_t  *myPtr;                         /*!<   Pointer to point out myMessage                         */
+volatile uint32_t myState;
 
 
 
@@ -53,7 +50,6 @@ int main( void )
 
     conf_CLK    ();
     conf_GPIO   ();
-    conf_UART   ();
     conf_TIMER0 ();
 
 
@@ -75,8 +71,6 @@ int main( void )
 
     /* Configure SPI peripheral */
     aux  =   MCP41XXX_42XXX_Init            ( myMCP41XXX_42XXX_SPI_parameters );
-
-
 
 
 
@@ -123,11 +117,9 @@ int main( void )
                     break;
             }
 
-
             /* Reset the variables   */
             myState             =   0;
     	}
-
         NRF_GPIO->OUTSET             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
         //__NOP();
     }
