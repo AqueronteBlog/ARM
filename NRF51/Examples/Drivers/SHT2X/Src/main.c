@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     This example shows how to work with the external device: DS1307. Every 1 seconds, a new
+ * @details     [TODO]This example shows how to work with the external device: SHT2X. Every 1 seconds, a new
  *              sample is performed and transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The rest of the time, the microcontroller is in low power.
@@ -8,15 +8,15 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/July/2018
- * @version     30/July/2018    The ORIGIN
- * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
- *              ( SDK 1.1.0 ).
+ * @date        3/September/2018
+ * @version     3/September/2018    The ORIGIN
+ * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0 ( SDK 1.1.0 ).
  * @warning     Softdevice S310 was used although the file's name is S130. The softdevice
  *              is not used in this example anyway because of Bluetooth was not used.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 #include <stdio.h>
+#include <string.h>
 
 #include "nrf.h"
 #include "nrf_delay.h"
@@ -24,7 +24,7 @@
 #include "board.h"
 #include "functions.h"
 #include "variables.h"
-#include "DS1307.h"
+#include "SHT2X.h"
 
 
 
@@ -36,7 +36,6 @@
 /**@brief Variables.
  */
 volatile uint32_t myState;                        /*!<   State that indicates when to perform an ADC sample     */
-volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      /*!<   Message to be transmitted through the UART             */
 volatile uint8_t  *myPtr;                         /*!<   Pointer to point out myMessage                         */
 
 
@@ -45,78 +44,54 @@ volatile uint8_t  *myPtr;                         /*!<   Pointer to point out my
  */
 int main( void )
 {
-    uint8_t                  myDataRAM;
-    I2C_parameters_t         myDS1307_I2C_parameters;
-    DS1307_status_t          aux;
-    DS1307_vector_data_t     myDS1307_Data;
+    uint8_t  myMessage[ TX_BUFF_SIZE ];           /*!<   Message to be transmitted through the UART             */
+    char     myBatteryMessage[5]  =  "";
 
 
-    conf_CLK    ();
+    I2C_parameters_t        mySHT2X_I2C_parameters;
+    SHT2X_status_t          aux;
+    SHT2X_vector_data_t     mySHT2X_Data;
+
+
+
+    conf_LFCLK  ();
     conf_GPIO   ();
     conf_UART   ();
-    conf_TIMER0 ();
 
 
 
     /* I2C definition   */
-    myDS1307_I2C_parameters.TWIinstance =    NRF_TWI0;
-    myDS1307_I2C_parameters.SDA         =    TWI0_SDA;
-    myDS1307_I2C_parameters.SCL         =    TWI0_SCL;
-    myDS1307_I2C_parameters.ADDR        =    DS1307_ADDRESS;
-    myDS1307_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-    myDS1307_I2C_parameters.SDAport     =    NRF_GPIO;
-    myDS1307_I2C_parameters.SCLport     =    NRF_GPIO;
+    mySHT2X_I2C_parameters.TWIinstance =    NRF_TWI0;
+    mySHT2X_I2C_parameters.SDA         =    TWI0_SDA;
+    mySHT2X_I2C_parameters.SCL         =    TWI0_SCL;
+    mySHT2X_I2C_parameters.ADDR        =    SHT2X_ADDRESS;
+    mySHT2X_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    mySHT2X_I2C_parameters.SDAport     =    NRF_GPIO;
+    mySHT2X_I2C_parameters.SCLport     =    NRF_GPIO;
 
-    /* Configure I2C peripheral */
-    aux  =   DS1307_Init            ( myDS1307_I2C_parameters );
+    /* Configure I2C peripheral  */
+    aux  =   SHT2X_Init            ( mySHT2X_I2C_parameters );
 
-    /* Enable the DS1307 oscillator */
-    aux  =   DS1307_OscillatorMode  ( myDS1307_I2C_parameters, SECONDS_CH_OSCILLATOR_ENABLED );
+    /* Configure the device: Resolution Temperature: 14-bit and Humidity: 12-bit, Heater is disabled     */
+    aux  =   SHT2X_Conf            ( mySHT2X_I2C_parameters, USER_REGISTER_RESOLUTION_12RH_14TEMP, USER_REGISTER_HEATER_DISABLED );
 
-    /* Write data into the RAM memory */
-    myDataRAM  =   0x23;
-    aux  =   DS1307_WriteByteRAM    ( myDS1307_I2C_parameters, myDataRAM, 0x11 );                   // Data: 0x23, Address: 0x11
+    /* Get the serial number     */
+    aux  =   SHT2X_GetSerialNumber ( mySHT2X_I2C_parameters, &mySHT2X_Data );
 
-    /* Read data into the RAM memory */
-    myDataRAM  =   0;
-    aux  =   DS1307_ReadByteRAM     ( myDS1307_I2C_parameters, &myDataRAM, 0x11 );                  // Address: 0x11
+    /* Transmit result through the UART  */
+    sprintf ( (char*)myMessage, "ID: %ld\r\n", (long int)mySHT2X_Data.SerialNumber );
 
-    /* Erase data into the RAM memory */
-    aux  =   DS1307_EraseByteRAM     ( myDS1307_I2C_parameters, 0x11 );                             // Address: 0x11
+    NRF_UART0->TASKS_STOPRX  =   1UL;
+    NRF_UART0->TASKS_STOPTX  =   1UL;
+    myPtr                    =   &myMessage[0];
 
-    /* Read data into the RAM memory */
-    myDataRAM  =   0;
-    aux  =   DS1307_ReadByteRAM     ( myDS1307_I2C_parameters, &myDataRAM, 0x11 );                  // Address: 0x11
-
-    /* Set the day of the week */
-    myDS1307_Data.DayOfTheWeek        =   DAY_TUESDAY;
-    aux  =   DS1307_SetDayOfTheWeek ( myDS1307_I2C_parameters, myDS1307_Data );
-
-    /* Set the date */
-    myDS1307_Data.BCDDate             =   0x31;                                                     // Date: 31
-    aux  =   DS1307_SetDate         ( myDS1307_I2C_parameters, myDS1307_Data );
-
-    /* Set the month */
-    myDS1307_Data.BCDMonth            =   MONTH_JULY;
-    aux  =   DS1307_SetMonth        ( myDS1307_I2C_parameters, myDS1307_Data );
-
-    /* Set the year */
-    myDS1307_Data.BCDYear             =   0x18;                                                     // Year: 2018
-    aux  =   DS1307_SetYear         ( myDS1307_I2C_parameters, myDS1307_Data );
-
-    /* Set the time */
-    myDS1307_Data.BCDTime          =   0x150300;                                                    // Time: 13:52.00
-    myDS1307_Data.Time12H_24HMode  =   HOURS_MODE_24H;
-    myDS1307_Data.TimeAM_PM_Mode   =   HOURS_MODE_PM;
-    aux  =   DS1307_SetTime         ( myDS1307_I2C_parameters, myDS1307_Data );
-
-    /* Set square-wave output pin: 32.768kHz  */
-    aux  =   DS1307_SquareWaveOutput( myDS1307_I2C_parameters, CONTROL_SQWE_ENABLED, CONTROL_RS_32_768_KHZ );
+    NRF_UART0->TASKS_STARTTX =   1UL;
+    NRF_UART0->TXD           =   *myPtr;
 
 
 
     myState  =   0;                             // Reset the variable
-    NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
+    NRF_RTC1->TASKS_START = 1;                  // Start RTC1
 
     //NRF_POWER->SYSTEMOFF = 1;
     NRF_POWER->TASKS_LOWPWR  =   1;             // Sub power mode: Low power.
@@ -129,44 +104,56 @@ int main( void )
     	__WFE();
 
 
-    	NRF_GPIO->OUTCLR             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
-        if ( myState == 1 )
+    	NRF_GPIO->OUTCLR     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
+        switch ( myState )
         {
-            /* Get the day of the week */
-            aux  =   DS1307_GetDayOfTheWeek ( myDS1307_I2C_parameters, &myDS1307_Data );
+            default:
+            case 1:
+                /* Trigger a new temperature measurement     */
+                aux  =   SHT2X_TriggerTemperature ( mySHT2X_I2C_parameters, SHT2X_NO_HOLD_MASTER_MODE );
+                break;
 
-            /* Get the day of the date */
-            aux  =   DS1307_GetDate         ( myDS1307_I2C_parameters, &myDS1307_Data );
+            case 2:
+                /* Get the temperature   */
+                aux  =   SHT2X_ReadTemperature    ( mySHT2X_I2C_parameters, &mySHT2X_Data );
 
-            /* Get the month */
-            aux  =   DS1307_GetMonth        ( myDS1307_I2C_parameters, &myDS1307_Data );
+                /* Trigger a new relative humidity measurement     */
+                aux  =   SHT2X_TriggerHumidity    ( mySHT2X_I2C_parameters, SHT2X_NO_HOLD_MASTER_MODE );
+                break;
 
-            /* Get the year */
-            aux  =   DS1307_GetYear         ( myDS1307_I2C_parameters, &myDS1307_Data );
+            case 3:
+                /* Get the relative humidity     */
+                aux  =   SHT2X_ReadHumidity       ( mySHT2X_I2C_parameters, &mySHT2X_Data );
 
-            /* Get the time */
-            aux  =   DS1307_GetTime         ( myDS1307_I2C_parameters, &myDS1307_Data );
+                /* Get the battery status    */
+                aux  =   SHT2X_BatteryStatus      ( mySHT2X_I2C_parameters, &mySHT2X_Data );
+
+                /* Prepare the message for the battery status  */
+                if ( ( mySHT2X_Data.BatteryStatus & USER_REGISTER_STATUS_END_BATTERY_MASK ) == USER_REGISTER_STATUS_END_BATTERY_HIGH_2V25 )
+                {
+                    strcpy( myBatteryMessage, "GOOD" );
+                }
+                else
+                {
+                    strcpy( myBatteryMessage, "BAD" );
+                }
+
+                /* Transmit result through the UART  */
+                sprintf ( (char*)myMessage, "Temperature: %d C | RH: %d | Battery: %s\r\n", (uint8_t)( mySHT2X_Data.Temperature + 0.5f ), (uint8_t)( mySHT2X_Data.RelativeHumidity + 0.5f ), myBatteryMessage );
+
+                NRF_UART0->TASKS_STOPRX  =   1UL;
+                NRF_UART0->TASKS_STOPTX  =   1UL;
+                myPtr                    =   &myMessage[0];
+
+                NRF_UART0->TASKS_STARTTX =   1UL;
+                NRF_UART0->TXD           =   *myPtr;
 
 
-
-            /* Transmit result through the UART  */
-            sprintf ( (char*)myMessage, "%02x/%02x/%02x %d %02x:%02x.%02x\r\n", myDS1307_Data.BCDDate, myDS1307_Data.BCDMonth, myDS1307_Data.BCDYear, myDS1307_Data.DayOfTheWeek,
-                                                                                (uint8_t)( ( myDS1307_Data.BCDTime & 0xFF0000 ) >> 16U ), (uint8_t)( ( myDS1307_Data.BCDTime & 0x00FF00 ) >> 8U ),
-                                                                                (uint8_t)( myDS1307_Data.BCDTime & 0x0000FF ) );
-
-            NRF_UART0->TASKS_STOPRX  =   1UL;
-            NRF_UART0->TASKS_STOPTX  =   1UL;
-            myPtr                    =   &myMessage[0];
-
-            NRF_UART0->TASKS_STARTTX =   1UL;
-            NRF_UART0->TXD           =   *myPtr;
-
-
-            /* Reset the variables   */
-            myState             =   0;
+                /* Reset the variables   */
+                myState  =   0;
+                break;
     	}
-
-        NRF_GPIO->OUTSET             |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
+        NRF_GPIO->OUTSET     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
         //__NOP();
     }
 }
