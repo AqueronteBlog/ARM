@@ -64,24 +64,63 @@
 			<Add option="-eb_start_files" />
 			<Add option="-eb_lib=n" />
 		</Linker>
+		<Unit filename="..\..\..\..\Drivers\SHT2X\SHT2X.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\..\..\Drivers\SHT2X\SHT2X.h" />
+		<Unit filename="..\..\Basics\I2C\i2c.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\Basics\I2C\i2c.h" />
 		<Unit filename="gcc_nrf51_s130_xxaa.ld" />
 		<Unit filename="Inc\compiler_abstraction.h" />
 		<Unit filename="Inc\nrf.h" />
 		<Unit filename="Inc\nrf51.h" />
 		<Unit filename="Inc\nrf51_bitfields.h" />
 		<Unit filename="Inc\nrf51_deprecated.h" />
+		<Unit filename="Inc\nrf_delay.h" />
 		<Unit filename="Inc\system_nrf51.h" />
 		<Unit filename="readme.txt" />
 		<Unit filename="S130.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="softdevice\Include\ant_error.h" />
+		<Unit filename="softdevice\Include\ant_interface.h" />
+		<Unit filename="softdevice\Include\ant_parameters.h" />
 		<Unit filename="softdevice\Include\ble.h" />
+		<Unit filename="softdevice\Include\ble_err.h" />
+		<Unit filename="softdevice\Include\ble_gap.h" />
+		<Unit filename="softdevice\Include\ble_gatt.h" />
+		<Unit filename="softdevice\Include\ble_gattc.h" />
+		<Unit filename="softdevice\Include\ble_gatts.h" />
+		<Unit filename="softdevice\Include\ble_hci.h" />
+		<Unit filename="softdevice\Include\ble_l2cap.h" />
+		<Unit filename="softdevice\Include\ble_ranges.h" />
+		<Unit filename="softdevice\Include\ble_types.h" />
+		<Unit filename="softdevice\Include\nrf_error.h" />
+		<Unit filename="softdevice\Include\nrf_error_sdm.h" />
+		<Unit filename="softdevice\Include\nrf_error_soc.h" />
+		<Unit filename="softdevice\Include\nrf_mbr.h" />
+		<Unit filename="softdevice\Include\nrf_sdm.h" />
+		<Unit filename="softdevice\Include\nrf_soc.h" />
+		<Unit filename="softdevice\Include\nrf_svc.h" />
+		<Unit filename="softdevice\Include\softdevice_assert.h" />
+		<Unit filename="Src\board.h" />
+		<Unit filename="Src\functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Src\functions.h" />
+		<Unit filename="Src\interrupts.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Src\interrupts.h" />
 		<Unit filename="Src\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Src\system_nrf51.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Src\variables.h" />
 		<Unit filename="startup_nrf51.s">
 			<Option compilerVar="ASM" />
 		</Unit>
