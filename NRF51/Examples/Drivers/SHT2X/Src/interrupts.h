@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/July/2018
- * @version     30/July/2018    The ORIGIN
+ * @date        3/September/2018
+ * @version     3/September/2018    The ORIGIN
  * @pre         N/A
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -29,7 +29,7 @@ extern "C" {
 /**@brief Subroutine prototypes.
  */
 void TIMER0_IRQHandler ( void );
-void UART0_IRQHandler  ( void );
+void RTC1_IRQHandler   ( void );
 
 
 
@@ -41,7 +41,6 @@ void UART0_IRQHandler  ( void );
 /**@brief Variables.
  */
 extern volatile uint32_t myState;
-extern volatile uint8_t  myMessage[];
 extern volatile uint8_t  *myPtr;
 
 

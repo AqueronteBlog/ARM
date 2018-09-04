@@ -5,8 +5,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/July/2018
- * @version     30/July/2018    The ORIGIN
+ * @date        3/September/2018
+ * @version     3/September/2018    The ORIGIN
  * @pre         N/A
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -15,25 +15,26 @@
 #include "interrupts.h"
 
 /**
- * @brief       void TIMER0_IRQHandler ()
- * @details     Timer interrupt.
+ * @brief       void RTC1_IRQHandler ()
+ * @details     RTC1 interruption. Checks if there is an interruption due to RTC1.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/July/2018
- * @version     30/July/2018   The ORIGIN
+ * @date        3/September/2018
+ * @version     3/September/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
-void TIMER0_IRQHandler()
+void RTC1_IRQHandler()
 {
-    if ( ( NRF_TIMER0->EVENTS_COMPARE[0] != 0UL ) && ( ( NRF_TIMER0->INTENSET & TIMER_INTENSET_COMPARE0_Msk ) != 0UL ) )
+    if ( ( NRF_RTC1->EVENTS_COMPARE[0] != 0UL ) && ( ( NRF_RTC1->INTENSET & RTC_INTENSET_COMPARE0_Msk ) != 0UL ) )
     {
-        myState  =   1UL;
+        myState++;
 
-        NRF_TIMER0->EVENTS_COMPARE[0] = 0UL;                  // Clear ( flag ) compare register 0 event
+        NRF_RTC1->CC[0]             +=   50UL;           // New interruption on 0.5s
+        NRF_RTC1->EVENTS_COMPARE[0]  =   0UL;            // Clear ( flag ) compare register 0 event
     }
 }
 
@@ -51,8 +52,8 @@ void TIMER0_IRQHandler()
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/July/2018
- * @version     30/July/2018   The ORIGIN
+ * @date        3/September/2018
+ * @version     3/September/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  */
