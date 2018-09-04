@@ -6,17 +6,15 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/July/2018
- * @version     30/July/2018     The ORIGIN
- * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0
- *              ( SDK 1.1.0 ).
+ * @date        3/September/2018
+ * @version     3/September/2018     The ORIGIN
+ * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0 ( SDK 1.1.0 ).
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
 #include "nrf.h"
 #include "nrf51_bitfields.h"
-#include "board.h"
 
 #ifndef VARIABLES_H_
 #define VARIABLES_H_
