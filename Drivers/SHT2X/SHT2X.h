@@ -1,17 +1,17 @@
 /**
- * @brief       HTU21D.h
- * @details     Digital Relative Humidity sensor with Temperature output.
+ * @brief       SHT2X.h
+ * @details     Humidity and Temperature Sensor IC.
  *              Header file.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        6/July/2017
- * @version     6/July/2017    The ORIGIN
- * @pre         NaN
- * @warning     NaN
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
+ * @date        3/September/2018
+ * @version     3/September/2018    The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ).
  */
 
 
@@ -19,14 +19,21 @@
 #include "i2c.h"
 
 
+#ifndef SHT2X_H_
+#define SHT2X_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /**
   * @brief   DEFAULT ADDRESS
   */
 typedef enum
 {
-    HTU21D_ADDRESS     =   0x40                                                         /*!<   HTU21D I2C Address                                   */
-} HTU21D_address_t;
-
+    SHT2X_ADDRESS     =   0b1000000                                             /*!<   SHT2X I2C Address                */
+} SHT2X_address_t;
 
 
 
@@ -35,14 +42,18 @@ typedef enum
   */
 typedef enum
 {
-    HTU21D_TRIGGER_TEMPERATURE_MEASUREMENT_HOLD_MASTER      =   0xE3,               /*!<  Hold master                       */
-    HTU21D_TRIGGER_HUMIDITY_MEASUREMENT_HOLD_MASTER         =   0xE5,               /*!<  Hold master                       */
-    HTU21D_TRIGGER_TEMPERATURE_MEASUREMENT_NO_HOLD_MASTER   =   0xF3,               /*!<  No Hold master                    */
-    HTU21D_TRIGGER_HUMIDITY_MEASUREMENT_NO_HOLD_MASTER      =   0xF5,               /*!<  No Hold master                    */
-    HTU21D_WRITE_REGISTER                                   =   0xE6,               /*!<  Write register                    */
-    HTU21D_READ_REGISTER                                    =   0xE7,               /*!<  Read register                     */
-    HTU21D_SOFT_RESET                                       =   0xFE                /*!<  Software reset                    */
-} HTU21D_command_registers_t;
+    SHT2X_TRIGGER_TEMPERATURE_MEASUREMENT_HOLD_MASTER      =   0xE3,            /*!<  Hold master                           */
+    SHT2X_TRIGGER_HUMIDITY_MEASUREMENT_HOLD_MASTER         =   0xE5,            /*!<  Hold master                           */
+    SHT2X_TRIGGER_TEMPERATURE_MEASUREMENT_NO_HOLD_MASTER   =   0xF3,            /*!<  No Hold master                        */
+    SHT2X_TRIGGER_HUMIDITY_MEASUREMENT_NO_HOLD_MASTER      =   0xF5,            /*!<  No Hold master                        */
+    SHT2X_WRITE_USER_REGISTER                              =   0xE6,            /*!<  Write user register                   */
+    SHT2X_READ_USER_REGISTER                               =   0xE7,            /*!<  Read user register                    */
+    SHT2X_SOFT_RESET                                       =   0xFE,            /*!<  Software reset                        */
+    SHT2X_SERIAL_NUMBER_FIRST_MEMORY_ACCESS_MSB            =   0xFA,            /*!<  Serial number first memory access     */
+    SHT2X_SERIAL_NUMBER_FIRST_MEMORY_ACCESS_LSB            =   0x0F,            /*!<  Serial number first memory access     */
+    SHT2X_SERIAL_NUMBER_SECOND_MEMORY_ACCESS_MSB           =   0xFC,            /*!<  Serial number second memory access    */
+    SHT2X_SERIAL_NUMBER_SECOND_MEMORY_ACCESS_LSB           =   0xC9             /*!<  Serial number second memory access    */
+} SHT2X_command_registers_t;
 
 
 
@@ -52,9 +63,9 @@ typedef enum
   */
 typedef enum
 {
-    HTU21D_HOLD_MASTER_MODE                 =   0x01,           /*!<  HTU21D HOLD MASTER MODE enabled                       */
-    HTU21D_NO_HOLD_MASTER_MODE              =   0x00            /*!<  HTU21D NO HOLD MASTER MODE enabled                    */
-} HTU21D_master_mode_t;
+    SHT2X_HOLD_MASTER_MODE                 =   0x01,           /*!<  SHT2X HOLD MASTER MODE enabled                       */
+    SHT2X_NO_HOLD_MASTER_MODE              =   0x00            /*!<  SHT2X NO HOLD MASTER MODE enabled                    */
+} SHT2X_master_mode_t;
 
 
 
@@ -69,12 +80,12 @@ typedef enum
   */
 typedef enum
 {
-    USER_REGISTER_RESOLUTION_MASK                =   0x81,           /*!<  HTU21D Measurement Resolution                         */
-    USER_REGISTER_RESOLUTION_12RH_14TEMP         =   0x00,           /*!<  HTU21D 12b RH 14b Temp.                               */
-    USER_REGISTER_RESOLUTION_8RH_12TEMP          =   0x01,           /*!<  HTU21D 9b  RH 12b Temp.                               */
-    USER_REGISTER_RESOLUTION_10RH_13TEMP         =   0x80,           /*!<  HTU21D 10b RH 13b Temp.                               */
-    USER_REGISTER_RESOLUTION_11RH_11TEMP         =   0x81            /*!<  HTU21D 11b RH 11b Temp.                               */
-} HTU21D_measurement_resolution_t;
+    USER_REGISTER_RESOLUTION_MASK                =   0x81,           /*!<  SHT2X Measurement Resolution                         */
+    USER_REGISTER_RESOLUTION_12RH_14TEMP         =   0x00,           /*!<  SHT2X 12b RH 14b Temp.                               */
+    USER_REGISTER_RESOLUTION_8RH_12TEMP          =   0x01,           /*!<  SHT2X 9b  RH 12b Temp.                               */
+    USER_REGISTER_RESOLUTION_10RH_13TEMP         =   0x80,           /*!<  SHT2X 10b RH 13b Temp.                               */
+    USER_REGISTER_RESOLUTION_11RH_11TEMP         =   0x81            /*!<  SHT2X 11b RH 11b Temp.                               */
+} SHT2X_measurement_resolution_t;
 
 
 
@@ -84,9 +95,9 @@ typedef enum
 typedef enum
 {
     USER_REGISTER_STATUS_END_BATTERY_MASK         =   0x40,           /*!<  End battery mask                                      */
-    USER_REGISTER_STATUS_END_BATTERY_HIGH_2V25    =   0x40,           /*!<  VDD > 2.25V.                                          */
-    USER_REGISTER_STATUS_END_BATTERY_LOW_2V25     =   0x00            /*!<  VDD < 2.25V.                                          */
-} HTU21D_status_end_battery_t;
+    USER_REGISTER_STATUS_END_BATTERY_HIGH_2V25    =   0x00,           /*!<  VDD > 2.25V.                                          */
+    USER_REGISTER_STATUS_END_BATTERY_LOW_2V25     =   0x40            /*!<  VDD < 2.25V.                                          */
+} SHT2X_status_end_battery_t;
 
 
 
@@ -98,7 +109,7 @@ typedef enum
     USER_REGISTER_HEATER_MASK                     =   0x04,           /*!<  ON-chip heater mask                                   */
     USER_REGISTER_HEATER_ENABLED                  =   0x04,           /*!<  Heater enabled.                                       */
     USER_REGISTER_HEATER_DISABLED                 =   0x00            /*!<  Heater disabled.                                      */
-} HTU21D_on_chip_heater_t;
+} SHT2X_on_chip_heater_t;
 
 
 
@@ -110,19 +121,23 @@ typedef enum
     USER_REGISTER_OTP_MASK                        =   0x02,           /*!<  OTP heater mask                                       */
     USER_REGISTER_OTP_ENABLED                     =   0x00,           /*!<  OTP enabled.                                          */
     USER_REGISTER_OTP_DISABLED                    =   0x02            /*!<  OTP disabled.                                         */
-} HTU21D_otp_t;
+} SHT2X_otp_t;
 
 
 
-#ifndef HTU21D_VECTOR_STRUCT_H
-#define HTU21D_VECTOR_STRUCT_H
+#ifndef SHT2X_VECTOR_STRUCT_H
+#define SHT2X_VECTOR_STRUCT_H
 typedef struct
 {
     float    RelativeHumidity;
     float    Temperature;
 
+    uint16_t RawRelativeHumidity;
+    uint16_t RawTemperature;
+
     uint8_t  BatteryStatus;
-} HTU21D_vector_data_t;
+    uint64_t SerialNumber;
+} SHT2X_vector_data_t;
 #endif
 
 
@@ -134,22 +149,62 @@ typedef struct
   */
 typedef enum
 {
-    HTU21D_SUCCESS     =       0,
-    HTU21D_FAILURE     =       1
-} HTU21D_status_t;
+    SHT2X_SUCCESS     =       0,
+    SHT2X_FAILURE     =       1
+} SHT2X_status_t;
 
 
 
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-HTU21D_status_t  HTU21D_Init               ( I2C_parameters_t myI2Cparameters );
-HTU21D_status_t  HTU21D_Conf               ( I2C_parameters_t myI2Cparameters, HTU21D_measurement_resolution_t myResolution, HTU21D_on_chip_heater_t myHeater );
-HTU21D_status_t  HTU21D_SoftReset          ( I2C_parameters_t myI2Cparameters );
-HTU21D_status_t  HTU21D_TriggerTemperature ( I2C_parameters_t myI2Cparameters, HTU21D_master_mode_t myMode );
-HTU21D_status_t  HTU21D_ReadTemperature    ( I2C_parameters_t myI2Cparameters, HTU21D_vector_data_t* myTemperature );
-HTU21D_status_t  HTU21D_ReadRawTemperature ( I2C_parameters_t myI2Cparameters, HTU21D_vector_data_t* myRawTemperature );
-HTU21D_status_t  HTU21D_TriggerHumidity    ( I2C_parameters_t myI2Cparameters, HTU21D_master_mode_t myMode );
-HTU21D_status_t  HTU21D_ReadHumidity       ( I2C_parameters_t myI2Cparameters, HTU21D_vector_data_t* myHumidity );
-HTU21D_status_t  HTU21D_ReadRawHumidity    ( I2C_parameters_t myI2Cparameters, HTU21D_vector_data_t* myRawHumidity );
-HTU21D_status_t  HTU21D_BatteryStatus      ( I2C_parameters_t myI2Cparameters, HTU21D_vector_data_t* myBattStatus );
+/** It configures the I2C peripheral.
+  */
+SHT2X_status_t  SHT2X_Init               ( I2C_parameters_t myI2Cparameters                                                                                 );
+
+/** It configures the SHT2X device.
+  */
+SHT2X_status_t  SHT2X_Conf               ( I2C_parameters_t myI2Cparameters, SHT2X_measurement_resolution_t myResolution, SHT2X_on_chip_heater_t myHeater   );
+
+/** Rebooting the SHT2X sensor switching the power off and on again.
+  */
+SHT2X_status_t  SHT2X_SoftReset          ( I2C_parameters_t myI2Cparameters                                                                                 );
+
+/** It triggers a new temperature measurement.
+  */
+SHT2X_status_t  SHT2X_TriggerTemperature ( I2C_parameters_t myI2Cparameters, SHT2X_master_mode_t myMode                                                     );
+
+/** It reads a new temperature measurement.
+  */
+SHT2X_status_t  SHT2X_ReadTemperature    ( I2C_parameters_t myI2Cparameters, SHT2X_vector_data_t* myTemperature                                             );
+
+/** It reads a new raw temperature measurement.
+  */
+SHT2X_status_t  SHT2X_ReadRawTemperature ( I2C_parameters_t myI2Cparameters, SHT2X_vector_data_t* myRawTemperature                                          );
+
+/** It triggers a new humidity measurement.
+  */
+SHT2X_status_t  SHT2X_TriggerHumidity    ( I2C_parameters_t myI2Cparameters, SHT2X_master_mode_t myMode                                                     );
+
+/** It reads a new humidity measurement.
+  */
+SHT2X_status_t  SHT2X_ReadHumidity       ( I2C_parameters_t myI2Cparameters, SHT2X_vector_data_t* myHumidity                                                );
+
+/** It reads a new raw humidity measurement.
+  */
+SHT2X_status_t  SHT2X_ReadRawHumidity    ( I2C_parameters_t myI2Cparameters, SHT2X_vector_data_t* myRawHumidity                                             );
+
+/** It reads the user register to check the battery status.
+  */
+SHT2X_status_t  SHT2X_BatteryStatus      ( I2C_parameters_t myI2Cparameters, SHT2X_vector_data_t* myBattStatus                                              );
+
+/** It gets the serial number ( Electronic Identification Code ).
+  */
+SHT2X_status_t  SHT2X_GetSerialNumber    ( I2C_parameters_t myI2Cparameters, SHT2X_vector_data_t* mySerialNumber                                            );
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* SHT2X_H */
