@@ -1,7 +1,9 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: SHT2X. Every 1 seconds, a new
- *              sample is performed and transmitted through the UART ( Baud Rate: 230400 ).
+ * @details     This example shows how to work with the external device: SHT2X. Every 0.5 seconds, a new
+ *              task ( trigger temperature, get temperature value, trigger relative humidity, get relative humidity ) is
+ *              performed and transmitted through the UART ( Baud Rate: 115200 ). In total, it takes a new sample about
+ *              1.5 seconds to be transmitted through the UART.
  *
  *              The rest of the time, the microcontroller is in low power.
  *
@@ -57,6 +59,7 @@ int main( void )
     conf_LFCLK  ();
     conf_GPIO   ();
     conf_UART   ();
+    conf_RTC1   ();
 
 
 
@@ -104,11 +107,12 @@ int main( void )
     	__WFE();
 
 
-    	NRF_GPIO->OUTCLR     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
         switch ( myState )
         {
             default:
             case 1:
+                NRF_GPIO->OUTSET     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
+
                 /* Trigger a new temperature measurement     */
                 aux  =   SHT2X_TriggerTemperature ( mySHT2X_I2C_parameters, SHT2X_NO_HOLD_MASTER_MODE );
                 break;
@@ -150,10 +154,10 @@ int main( void )
 
 
                 /* Reset the variables   */
-                myState  =   0;
+                myState               =  0;
+                NRF_GPIO->OUTCLR     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
                 break;
     	}
-        NRF_GPIO->OUTSET     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
         //__NOP();
     }
 }
