@@ -57,42 +57,32 @@ BMP180_status_t  BMP180_Init ( I2C_parameters_t myI2Cparameters )
 
 
 /**
- * @brief       BMP180_Conf    ( I2C_parameters_t , BMP180_measurement_resolution_t , BMP180_on_chip_heater_t )
- * @details     It configures the BMP180 device.
+ * @brief       BMP180_GetID    ( I2C_parameters_t , BMP180_data_t* )
+ * @details     It gets the chip-ID.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myResolution:      BMP180 Resolution.
- * @param[in]    myHeater:          BMP180 Heater EN/Abled or Disabled.
  *
- * @param[out]   N/A
+ * @param[out]   myID:   Chip-ID
  *
  *
- * @return      Status of BMP180_Init.
+ * @return      Status of BMP180_GetID.
  *
  * @author      Manuel Caballero
- * @date        6/September/2018
- * @version     6/September/2018    The ORIGIN
- * @pre         N/A
+ * @date        8/September/2018
+ * @version     8/September/2018    The ORIGIN
+ * @pre         It must be 0x55.
  * @warning     N/A.
  */
-BMP180_status_t  BMP180_Conf    ( I2C_parameters_t myI2Cparameters, BMP180_measurement_resolution_t myResolution, BMP180_on_chip_heater_t myHeater )
+BMP180_status_t  BMP180_GetID ( I2C_parameters_t myI2Cparameters, BMP180_data_t* myID )
 {
-    uint8_t      cmd[]   =    { BMP180_READ_USER_REGISTER, 0 };
+    uint8_t      cmd   =    0U;
     i2c_status_t aux;
 
 
-    /*
-        Reserved bits must not be changed. Therefore, for any writing to user register, default values of reserved bits must be read first
-        Datasheet: 5.6. User register p.19/14.
-    */
-    aux = i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-    aux = i2c_read  ( myI2Cparameters, &cmd[1], 1U );
-
-    cmd[1]  &=  ~( USER_REGISTER_RESOLUTION_MASK | USER_REGISTER_STATUS_END_BATTERY_MASK | USER_REGISTER_HEATER_MASK | USER_REGISTER_OTP_MASK );
-    cmd[1]  |=   ( myResolution | myHeater | USER_REGISTER_OTP_DISABLED );
-    cmd[0]   =   BMP180_WRITE_USER_REGISTER;
-
-    aux = i2c_write  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    /* Get ID    */
+    cmd  =   BMP180_ID;
+    aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+    aux  =   i2c_read  ( myI2Cparameters, &myID->id, 1U );
 
 
 
@@ -111,7 +101,7 @@ BMP180_status_t  BMP180_Conf    ( I2C_parameters_t myI2Cparameters, BMP180_measu
 
  /**
  * @brief       BMP180_SoftReset   ( I2C_parameters_t )
- * @details     Rebooting the BMP180 sensor switching the power off and on again.
+ * @details     It performs a soft reset.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
  *
@@ -121,18 +111,22 @@ BMP180_status_t  BMP180_Conf    ( I2C_parameters_t myI2Cparameters, BMP180_measu
  * @return      Status of BMP180_SoftReset.
  *
  * @author      Manuel Caballero
- * @date        6/September/2018
- * @version     6/September/2018        The ORIGIN
+ * @date        8/September/2018
+ * @version     8/September/2018        The ORIGIN
  * @pre         N/A
- * @warning     The soft reset takes less than 15ms. The user MUST take this into account.
+ * @warning     N/A.
  */
 BMP180_status_t  BMP180_SoftReset   ( I2C_parameters_t myI2Cparameters )
 {
-    uint8_t      cmd   =   BMP180_SOFT_RESET;
+    uint8_t      cmd[]   =   { 0, 0 };
     i2c_status_t aux;
 
 
-    aux = i2c_write ( myI2Cparameters, &cmd, 1U, I2C_STOP_BIT );
+    cmd[0]   =   BMP180_SOFT_RESET;
+    cmd[1]   =   SOFT_SOFT_RESET;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
 
 
     if ( aux == I2C_SUCCESS )
