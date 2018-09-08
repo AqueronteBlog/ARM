@@ -236,7 +236,7 @@ BMP180_status_t  BMP180_SoftReset           ( I2C_parameters_t myI2Cparameters  
 
 /** It gets the chip-ID.
   */
-BMP180_status_t  BMP180_GetID               ( I2C_parameters_t myI2Cparameters, BMP180_data_t myID                                                                                      );
+BMP180_status_t  BMP180_GetID               ( I2C_parameters_t myI2Cparameters, BMP180_data_t* myID                                                                                     );
 
 /** It reads the calibration data.
   */
