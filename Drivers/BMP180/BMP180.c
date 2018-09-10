@@ -122,7 +122,7 @@ BMP180_status_t  BMP180_SoftReset   ( I2C_parameters_t myI2Cparameters )
     i2c_status_t aux;
 
 
-    cmd[0]   =   BMP180_SOFT_RESET;
+    cmd[0]   =   BMP180_SOFT;
     cmd[1]   =   SOFT_SOFT_RESET;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -160,8 +160,6 @@ BMP180_status_t  BMP180_SoftReset   ( I2C_parameters_t myI2Cparameters )
 BMP180_status_t  BMP180_Get_Cal_Param ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t* myCalibrationData )
 {
     uint8_t      cmd[22]    =    { 0U };
-    uint8_t      myI2C_stop =    I2C_STOP_BIT;
-
     i2c_status_t aux;
 
 
@@ -253,7 +251,6 @@ BMP180_status_t  BMP180_Get_Cal_Param ( I2C_parameters_t myI2Cparameters, BMP180
 BMP180_status_t  BMP180_Get_UT ( I2C_parameters_t myI2Cparameters, BMP180_uncompensated_data_t* myUT )
 {
     uint8_t      cmd[]      =    { 0U, 0U };
-    uint8_t      myI2C_stop =    I2C_STOP_BIT;
     uint32_t     myTimeout  =    0U;
     i2c_status_t aux;
 
@@ -329,7 +326,6 @@ BMP180_status_t  BMP180_Get_UT ( I2C_parameters_t myI2Cparameters, BMP180_uncomp
 BMP180_status_t  BMP180_Get_UP ( I2C_parameters_t myI2Cparameters, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t* myUP )
 {
     uint8_t      cmd[]      =    { 0U, 0U, 0U };
-    uint8_t      myI2C_stop =    I2C_STOP_BIT;
     uint32_t     myTimeout  =    0U;
     i2c_status_t aux;
 
@@ -456,7 +452,7 @@ BMP180_data_t  BMP180_Get_CalPressure ( I2C_parameters_t myI2Cparameters, BMP180
     BMP180_data_t myTrueData;
 
     /* Calculate B6  */
-    b6   =   ( myB5 - 4000 );
+    b6   =   ( myB5.b5 - 4000 );
 
     /* Calculate X1  */
     x1   =   ( myCalibrationData.b2 * ( b6 * b6/4096 ) );
@@ -489,7 +485,7 @@ BMP180_data_t  BMP180_Get_CalPressure ( I2C_parameters_t myI2Cparameters, BMP180
     b4 <<=   15;
 
     /* Calculate B7  */
-    b7   =   ( (unsigned long)myUP - b3 ) * ( 50000 >> ( myPressureResolutionMode >> 6U ) );
+    b7   =   ( (unsigned long)myUP.up - b3 ) * ( 50000 >> ( myPressureResolutionMode >> 6U ) );
 
 
     if ( b7 < 0x80000000 )
