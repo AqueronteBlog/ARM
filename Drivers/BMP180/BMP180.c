@@ -300,3 +300,221 @@ BMP180_status_t  BMP180_Get_UT ( I2C_parameters_t myI2Cparameters, BMP180_uncomp
         return   BMP180_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       BMP180_Get_UP   ( I2C_parameters_t , BMP180_pressure_resolution_t , BMP180_uncompensated_data_t* )
+ * @details     It reads uncompensated pressure value.
+ *
+ * @param[in]    myI2Cparameters:           I2C parameters.
+ * @param[in]    myPressureResolutionMode:  Resolution mode.
+ *
+ * @param[out]   myUP:                      Uncompensated pressure value.
+ *
+ *
+ * @return      Status of BMP180_Get_UP.
+ *
+ * @author      Manuel Caballero
+ * @date        10/September/2018
+ * @version     10/September/2018        The ORIGIN
+ * @pre         This function checks the bit SCO until the conversion is complete instead of
+ *              the delay depending of the resolution mode:
+ *                  - Ultra low power mode           4.5ms ( max. )
+ *                  - Standard mode                  7.5ms ( max. )
+ *                  - High resolution mode          13.5ms ( max. )
+ *                  - Ultra high resolution mode    25.5ms ( max. )
+ * @warning     N/A
+ */
+BMP180_status_t  BMP180_Get_UP ( I2C_parameters_t myI2Cparameters, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t* myUP )
+{
+    uint8_t      cmd[]      =    { 0U, 0U, 0U };
+    uint8_t      myI2C_stop =    I2C_STOP_BIT;
+    uint32_t     myTimeout  =    0U;
+    i2c_status_t aux;
+
+
+    /* Read out the uncompensated pressure data according to the chosen resolution mode    */
+    cmd[0]   =   BMP180_CTRL_MEAS;
+    cmd[1]   =   ( BMP180_TRIGGER_PRESSURE | myPressureResolutionMode ) ;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 2U, I2C_STOP_BIT );
+
+
+    /* Wait until conversion is complete or timeout  */
+    myTimeout    =   0x232323;
+    do{
+        cmd[0]   =   BMP180_CTRL_MEAS;
+        aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+        aux      =   i2c_read  ( myI2Cparameters, &cmd[0], 1U );
+        myTimeout--;
+    }while ( ( ( cmd[0] & CTRL_MEAS_SCO_MASK ) == CTRL_MEAS_SCO_CONVERSION_IN_PROGRESS ) && ( myTimeout > 0U ) );
+
+
+    /* Parse the data only if not timeout    */
+    if ( myTimeout > 0U )
+    {
+        cmd[0]   =   BMP180_OUT_MSB;
+        aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+        aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+        /* Parse the data  */
+        myUP->up    =   cmd[0];
+        myUP->up  <<=   8U;
+        myUP->up   |=   cmd[1];
+        myUP->up  <<=   8U;
+        myUP->up   |=   cmd[2];
+        myUP->up  >>=   ( 8U - ( myPressureResolutionMode >> 6U ) );
+    }
+
+
+
+
+
+    if ( ( aux == I2C_SUCCESS ) && ( myTimeout > 0U ) )
+    {
+        return   BMP180_SUCCESS;
+    }
+    else
+    {
+        return   BMP180_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       BMP180_Get_Temperature   ( I2C_parameters_t , BMP180_calibration_data_t , BMP180_uncompensated_data_t )
+ * @details     It calculates true temperature.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myCalibrationData: Calibration data.
+ * @param[in]    myUT:              Uncompensated temperature value.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      True temperature.
+ *
+ * @author      Manuel Caballero
+ * @date        10/September/2018
+ * @version     10/September/2018        The ORIGIN
+ * @pre         True temperature in 0.1 C.
+ * @warning     N/A
+ */
+BMP180_data_t  BMP180_Get_Temperature ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_uncompensated_data_t myUT )
+{
+    int32_t       x1 = 0, x2 = 0;
+    BMP180_data_t myTrueData;
+
+    /* Calculate X1  */
+    x1   =   ( myUT.ut - myCalibrationData.ac6 ) * myCalibrationData.ac5;
+    x1 <<=   15;
+
+    /* Calculate X2  */
+    x2   =   ( myCalibrationData.mc * 2048 );
+    x2  /=   ( x1 + myCalibrationData.md );
+
+    /* Calculate B5  */
+    myTrueData.b5    =   ( x1 + x2 );
+
+    /* Calculate True Temperature  */
+    myTrueData.temp   =  ( myTrueData.b5 + 8 );
+    myTrueData.temp <<=  4;
+
+
+
+    return   myTrueData;
+}
+
+
+
+/**
+ * @brief       BMP180_Get_CalPressure   ( I2C_parameters_t , BMP180_calibration_data_t , BMP180_data_t , BMP180_pressure_resolution_t , BMP180_uncompensated_data_t )
+ * @details     It calculates true pressure.
+ *
+ * @param[in]    myI2Cparameters:           I2C parameters.
+ * @param[in]    myCalibrationData:         Calibration data.
+ * @param[in]    myB5:                      Temperature parameter value.
+ * @param[in]    myPressureResolutionMode:  Resolution mode.
+ * @param[in]    myUP:                      Uncompensated pressure value.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      True Pressure.
+ *
+ * @author      Manuel Caballero
+ * @date        10/September/2018
+ * @version     10/September/2018        The ORIGIN
+ * @pre         True temperature in Pa.
+ * @warning     N/A
+ */
+BMP180_data_t  BMP180_Get_CalPressure ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_data_t myB5, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t myUP )
+{
+    int32_t       b6 = 0, x1 = 0, x2 = 0, x3 = 0, b3 = 0;
+    uint32_t      b4 = 0, b7 = 0;
+    BMP180_data_t myTrueData;
+
+    /* Calculate B6  */
+    b6   =   ( myB5 - 4000 );
+
+    /* Calculate X1  */
+    x1   =   ( myCalibrationData.b2 * ( b6 * b6/4096 ) );
+    x1 <<=   11;
+
+    /* Calculate X2  */
+    x2   =   myCalibrationData.ac2 * b6/4096;
+
+    /* Calculate X3  */
+    x3   =   x1 + x2;
+
+    /* Calculate B3  */
+    b3   =   ( ( ( ( (long)myCalibrationData.ac1 * 4 + x3 ) << ( myPressureResolutionMode >> 6U ) ) + 2 ) );
+    b3 <<=   2;
+
+    /* Re-calculate X1  */
+    x1   =   ( myCalibrationData.ac3 * b6 );
+    x1 <<=   19;
+
+    /* Re-calculate X2  */
+    x2   =   ( myCalibrationData.b1 * ( b6 * b6/4096 ) );
+    x2 <<=   16;
+
+    /* Re-calculate X3  */
+    x3   =   ( ( x1 + x2 ) + 2 );
+    x3 <<=   2;
+
+    /* Calculate B4  */
+    b4   =   myCalibrationData.ac4 * (unsigned long)( x3 + 32768 );
+    b4 <<=   15;
+
+    /* Calculate B7  */
+    b7   =   ( (unsigned long)myUP - b3 ) * ( 50000 >> ( myPressureResolutionMode >> 6U ) );
+
+
+    if ( b7 < 0x80000000 )
+    {
+        myTrueData.press     =   ( b7 * 2 ) / b4;
+    }
+    else
+    {
+        myTrueData.press     =   ( b7 / b4 ) * 2;
+    }
+
+    /* Re-calculate X1  */
+    x1   =   ( myTrueData.press / 256 ) * ( myTrueData.press / 256 );
+    x1   =   ( x1 * 3038 );
+    x1 <<=   16;
+
+    /* Re-calculate X2  */
+    x2   =   ( -7357 * myTrueData.press );
+    x2 <<=   16;
+
+    /* Calculate True Pressure  */
+    myTrueData.press  +=  ( x1 + x2 + 3791 );
+    myTrueData.press <<=  4;
+
+
+
+    return   myTrueData;
+}
