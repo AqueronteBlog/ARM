@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     This example shows how to work with the external device: SHT2X. Every 0.5 seconds, a new
+ * @details     [todo]This example shows how to work with the external device: BMP180. Every 0.5 seconds, a new
  *              task ( trigger temperature, get temperature value, trigger relative humidity, get relative humidity ) is
  *              performed and transmitted through the UART ( Baud Rate: 115200 ). In total, it takes a new sample about
  *              1.5 seconds to be transmitted through the UART.
@@ -10,11 +10,10 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        3/September/2018
- * @version     3/September/2018    The ORIGIN
+ * @date        10/September/2018
+ * @version     10/September/2018    The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0 ( SDK 1.1.0 ).
- * @warning     Softdevice S310 was used although the file's name is S130. The softdevice
- *              is not used in this example anyway because of Bluetooth was not used.
+ * @warning     Softdevice S310 was used although the file's name is S130. The softdevice is not used in this example anyway because of Bluetooth was not used.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 #include <stdio.h>
@@ -26,13 +25,13 @@
 #include "board.h"
 #include "functions.h"
 #include "variables.h"
-#include "SHT2X.h"
+#include "BMP180.h"
 
 
 
 /**@brief Constants.
  */
-#define TX_BUFF_SIZE  64                          /*!<   UART buffer size                                       */
+#define TX_BUFF_SIZE  128                         /*!<   UART buffer size                                       */
 
 
 /**@brief Variables.
@@ -47,12 +46,13 @@ volatile uint8_t  *myPtr;                         /*!<   Pointer to point out my
 int main( void )
 {
     uint8_t  myMessage[ TX_BUFF_SIZE ];           /*!<   Message to be transmitted through the UART             */
-    char     myBatteryMessage[5]  =  "";
 
 
-    I2C_parameters_t        mySHT2X_I2C_parameters;
-    SHT2X_status_t          aux;
-    SHT2X_vector_data_t     mySHT2X_Data;
+    I2C_parameters_t            myBMP180_I2C_parameters;
+    BMP180_status_t             aux;
+    BMP180_data_t               myBMP180_Data;
+    BMP180_calibration_data_t   myBMP180_Calibration_Data;
+    BMP180_uncompensated_data_t myBMP180_Uncompensated_Data;
 
 
 
@@ -64,25 +64,37 @@ int main( void )
 
 
     /* I2C definition   */
-    mySHT2X_I2C_parameters.TWIinstance =    NRF_TWI0;
-    mySHT2X_I2C_parameters.SDA         =    TWI0_SDA;
-    mySHT2X_I2C_parameters.SCL         =    TWI0_SCL;
-    mySHT2X_I2C_parameters.ADDR        =    SHT2X_ADDRESS;
-    mySHT2X_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-    mySHT2X_I2C_parameters.SDAport     =    NRF_GPIO;
-    mySHT2X_I2C_parameters.SCLport     =    NRF_GPIO;
+    myBMP180_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myBMP180_I2C_parameters.SDA         =    TWI0_SDA;
+    myBMP180_I2C_parameters.SCL         =    TWI0_SCL;
+    myBMP180_I2C_parameters.ADDR        =    BMP180_ADDRESS;
+    myBMP180_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myBMP180_I2C_parameters.SDAport     =    NRF_GPIO;
+    myBMP180_I2C_parameters.SCLport     =    NRF_GPIO;
 
     /* Configure I2C peripheral  */
-    aux  =   SHT2X_Init            ( mySHT2X_I2C_parameters );
+    aux  =   BMP180_Init            ( myBMP180_I2C_parameters );
 
-    /* Configure the device: Resolution Temperature: 14-bit and Humidity: 12-bit, Heater is disabled     */
-    aux  =   SHT2X_Conf            ( mySHT2X_I2C_parameters, USER_REGISTER_RESOLUTION_12RH_14TEMP, USER_REGISTER_HEATER_DISABLED );
-
-    /* Get the serial number     */
-    aux  =   SHT2X_GetSerialNumber ( mySHT2X_I2C_parameters, &mySHT2X_Data );
+    /* Get the chip-id     */
+    aux  =   BMP180_GetID           ( myBMP180_I2C_parameters, &myBMP180_Data );
 
     /* Transmit result through the UART  */
-    sprintf ( (char*)myMessage, "ID: %ld\r\n", (long int)mySHT2X_Data.SerialNumber );
+    sprintf ( (char*)myMessage, "Chip-ID: %d\r\n", myBMP180_Data.id );
+
+    NRF_UART0->TASKS_STOPRX  =   1UL;
+    NRF_UART0->TASKS_STOPTX  =   1UL;
+    myPtr                    =   &myMessage[0];
+
+    NRF_UART0->TASKS_STARTTX =   1UL;
+    NRF_UART0->TXD           =   *myPtr;
+
+    /* Get calibration data     */
+    aux  =   BMP180_Get_Cal_Param   ( myBMP180_I2C_parameters, &myBMP180_Calibration_Data );
+
+    /* Transmit result through the UART  */
+    sprintf ( (char*)myMessage, "AC1: %d, AC2: %d, AC3: %d, AC4: %d, AC5: %d, AC6: %d, B1: %d, B2: %d, MB: %d, MC: %d, MD: %d\r\n", myBMP180_Calibration_Data.ac1, myBMP180_Calibration_Data.ac2,
+             myBMP180_Calibration_Data.ac3, myBMP180_Calibration_Data.ac4, myBMP180_Calibration_Data.ac5, myBMP180_Calibration_Data.ac6, myBMP180_Calibration_Data.b1, myBMP180_Calibration_Data.b2,
+             myBMP180_Calibration_Data.mb, myBMP180_Calibration_Data.mc, myBMP180_Calibration_Data.md );
 
     NRF_UART0->TASKS_STOPRX  =   1UL;
     NRF_UART0->TASKS_STOPTX  =   1UL;
@@ -107,56 +119,37 @@ int main( void )
     	__WFE();
 
 
-        switch ( myState )
+        if ( myState == 1 )
         {
-            default:
-            case 1:
-                NRF_GPIO->OUTSET     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
+            NRF_GPIO->OUTSET     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
 
-                /* Trigger a new temperature measurement     */
-                aux  =   SHT2X_TriggerTemperature ( mySHT2X_I2C_parameters, SHT2X_NO_HOLD_MASTER_MODE );
-                break;
+            /* Get uncompensated temperature    */
+            aux  =   BMP180_Get_UT ( myBMP180_I2C_parameters, &myBMP180_Uncompensated_Data );
 
-            case 2:
-                /* Get the temperature   */
-                aux  =   SHT2X_ReadTemperature    ( mySHT2X_I2C_parameters, &mySHT2X_Data );
+            /* Get uncompensated pressure, Resolution: Standard    */
+            aux  =   BMP180_Get_UP ( myBMP180_I2C_parameters, PRESSURE_STANDARD_MODE, &myBMP180_Uncompensated_Data );
 
-                /* Trigger a new relative humidity measurement     */
-                aux  =   SHT2X_TriggerHumidity    ( mySHT2X_I2C_parameters, SHT2X_NO_HOLD_MASTER_MODE );
-                break;
+            /* Calculate the true temperature    */
+            myBMP180_Data  =   BMP180_Get_Temperature ( myBMP180_I2C_parameters, myBMP180_Calibration_Data, myBMP180_Uncompensated_Data );
 
-            case 3:
-                /* Get the relative humidity     */
-                aux  =   SHT2X_ReadHumidity       ( mySHT2X_I2C_parameters, &mySHT2X_Data );
-
-                /* Get the battery status    */
-                aux  =   SHT2X_BatteryStatus      ( mySHT2X_I2C_parameters, &mySHT2X_Data );
-
-                /* Prepare the message for the battery status  */
-                if ( ( mySHT2X_Data.BatteryStatus & USER_REGISTER_STATUS_END_BATTERY_MASK ) == USER_REGISTER_STATUS_END_BATTERY_HIGH_2V25 )
-                {
-                    strcpy( myBatteryMessage, "GOOD" );
-                }
-                else
-                {
-                    strcpy( myBatteryMessage, "BAD" );
-                }
-
-                /* Transmit result through the UART  */
-                sprintf ( (char*)myMessage, "Temperature: %d C | RH: %d | Battery: %s\r\n", (uint8_t)( mySHT2X_Data.Temperature + 0.5f ), (uint8_t)( mySHT2X_Data.RelativeHumidity + 0.5f ), myBatteryMessage );
-
-                NRF_UART0->TASKS_STOPRX  =   1UL;
-                NRF_UART0->TASKS_STOPTX  =   1UL;
-                myPtr                    =   &myMessage[0];
-
-                NRF_UART0->TASKS_STARTTX =   1UL;
-                NRF_UART0->TXD           =   *myPtr;
+            /* Calculate the true pressure    */
+            myBMP180_Data  =   BMP180_Get_CalPressure ( myBMP180_I2C_parameters, myBMP180_Calibration_Data, myBMP180_Data, PRESSURE_STANDARD_MODE, myBMP180_Uncompensated_Data );
 
 
-                /* Reset the variables   */
-                myState               =  0;
-                NRF_GPIO->OUTCLR     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
-                break;
+            /* Transmit result through the UART  */
+            sprintf ( (char*)myMessage, "Temperature: %ld C | Pressure: %ld Pa\r\n", ( myBMP180_Data.temp ), ( myBMP180_Data.press ) );
+
+            NRF_UART0->TASKS_STOPRX  =   1UL;
+            NRF_UART0->TASKS_STOPTX  =   1UL;
+            myPtr                    =   &myMessage[0];
+
+            NRF_UART0->TASKS_STARTTX =   1UL;
+            NRF_UART0->TXD           =   *myPtr;
+
+
+            /* Reset the variables   */
+            myState               =  0;
+            NRF_GPIO->OUTCLR     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
     	}
         //__NOP();
     }
