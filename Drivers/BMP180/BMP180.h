@@ -79,7 +79,7 @@ typedef enum
     BMP180_CTRL_MEAS    =   0xF4,               /*!<  Measurement control ( Control register )  | Reset: 0x00   */
     BMP180_SOFT         =   0xE0,               /*!<  Software reset                            | Reset: 0x00   */
     BMP180_ID           =   0xD0                /*!<  Chip-ID                                   | Reset: 0x55   */
-} BMP180_registers map_t;
+} BMP180_registers_map_t;
 
 
 
@@ -202,8 +202,8 @@ typedef struct
     uint8_t  id;
     int32_t  b5;
 
-    float    temp;
-    float    press;
+    int32_t  temp;
+    int32_t  press;
 } BMP180_data_t;
 #endif
 
