@@ -1,9 +1,8 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the external device: BMP180. Every 0.5 seconds, a new
- *              task ( trigger temperature, get temperature value, trigger relative humidity, get relative humidity ) is
- *              performed and transmitted through the UART ( Baud Rate: 115200 ). In total, it takes a new sample about
- *              1.5 seconds to be transmitted through the UART.
+ * @details     This example shows how to work with the external device: BMP180. Every 2 seconds, a new
+ *              task ( get uncompensated temperature and pressure and get true temperature and pressure ) is
+ *              performed and transmitted through the UART ( Baud Rate: 115200 ).
  *
  *              The rest of the time, the microcontroller is in low power.
  *
@@ -144,7 +143,7 @@ int main( void )
 
 
             /* Transmit result through the UART  */
-            sprintf ( (char*)myMessage, "Temperature: %ld C | Pressure: %ld Pa\r\n", (int32_t)( myBMP180_TemperatureData.temp / 10.0f ), ( myBMP180_PressureData.press ) );
+            sprintf ( (char*)myMessage, "Temperature: %ld C | Pressure: %ld Pa\r\n", (int32_t)( ( myBMP180_TemperatureData.temp / 10.0f ) + 0.5f ), ( myBMP180_PressureData.press ) );
 
             NRF_UART0->TASKS_STOPRX  =   1UL;
             NRF_UART0->TASKS_STOPTX  =   1UL;
