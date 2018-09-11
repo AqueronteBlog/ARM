@@ -395,7 +395,9 @@ BMP180_status_t  BMP180_Get_UP ( I2C_parameters_t myI2Cparameters, BMP180_pressu
  * @date        10/September/2018
  * @version     10/September/2018        The ORIGIN
  * @pre         True temperature in 0.1 C.
- * @warning     N/A
+ * @pre         It is sufficient to measure the temperature only once per second and use this value for all pressure measurements during the same period.
+ * @warning     This function should have been called at least once: BMP180_Get_Cal_Param.
+ * @warning     This function should have been called before: BMP180_Get_UT.
  */
 BMP180_temperature_data_t  BMP180_Get_Temperature ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_uncompensated_data_t myUT )
 {
@@ -443,7 +445,9 @@ BMP180_temperature_data_t  BMP180_Get_Temperature ( I2C_parameters_t myI2Cparame
  * @date        10/September/2018
  * @version     10/September/2018        The ORIGIN
  * @pre         True temperature in Pa.
- * @warning     N/A
+ * @pre         It is sufficient to measure the temperature only once per second and use this value for all pressure measurements during the same period.
+ * @warning     These functions should have been called at least once: BMP180_Get_Cal_Param and BMP180_Get_Temperature.
+ * @warning     This function should have been called before: BMP180_Get_UP.
  */
 BMP180_pressure_data_t  BMP180_Get_CalPressure ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_temperature_data_t myB5, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t myUP )
 {
