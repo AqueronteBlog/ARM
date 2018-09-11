@@ -57,7 +57,7 @@ BMP180_status_t  BMP180_Init ( I2C_parameters_t myI2Cparameters )
 
 
 /**
- * @brief       BMP180_GetID    ( I2C_parameters_t , BMP180_data_t* )
+ * @brief       BMP180_GetID    ( I2C_parameters_t , BMP180_chip_id_data_t* )
  * @details     It gets the chip-ID.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
@@ -73,7 +73,7 @@ BMP180_status_t  BMP180_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         It must be 0x55.
  * @warning     N/A.
  */
-BMP180_status_t  BMP180_GetID ( I2C_parameters_t myI2Cparameters, BMP180_data_t* myID )
+BMP180_status_t  BMP180_GetID ( I2C_parameters_t myI2Cparameters, BMP180_chip_id_data_t* myID )
 {
     uint8_t      cmd   =    0U;
     i2c_status_t aux;
@@ -397,25 +397,25 @@ BMP180_status_t  BMP180_Get_UP ( I2C_parameters_t myI2Cparameters, BMP180_pressu
  * @pre         True temperature in 0.1 C.
  * @warning     N/A
  */
-BMP180_data_t  BMP180_Get_Temperature ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_uncompensated_data_t myUT )
+BMP180_temperature_data_t  BMP180_Get_Temperature ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_uncompensated_data_t myUT )
 {
-    int32_t       x1 = 0, x2 = 0;
-    BMP180_data_t myTrueData;
+    int32_t x1 = 0, x2 = 0;
+
+    BMP180_temperature_data_t myTrueData;
+
 
     /* Calculate X1  */
-    x1   =   ( myUT.ut - myCalibrationData.ac6 ) * myCalibrationData.ac5;
-    x1 <<=   15;
+    x1   =   ( myUT.ut - myCalibrationData.ac6 ) * myCalibrationData.ac5 / 32768.0f;
 
     /* Calculate X2  */
-    x2   =   ( myCalibrationData.mc * 2048 );
+    x2   =   ( myCalibrationData.mc * 2048.0f );
     x2  /=   ( x1 + myCalibrationData.md );
 
     /* Calculate B5  */
     myTrueData.b5    =   ( x1 + x2 );
 
     /* Calculate True Temperature  */
-    myTrueData.temp   =  ( myTrueData.b5 + 8 );
-    myTrueData.temp <<=  4;
+    myTrueData.temp   =  ( myTrueData.b5 + 8.0f ) / 16.0f;
 
 
 
@@ -445,44 +445,40 @@ BMP180_data_t  BMP180_Get_Temperature ( I2C_parameters_t myI2Cparameters, BMP180
  * @pre         True temperature in Pa.
  * @warning     N/A
  */
-BMP180_data_t  BMP180_Get_CalPressure ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_data_t myB5, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t myUP )
+BMP180_pressure_data_t  BMP180_Get_CalPressure ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_temperature_data_t myB5, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t myUP )
 {
-    int32_t       b6 = 0, x1 = 0, x2 = 0, x3 = 0, b3 = 0;
-    uint32_t      b4 = 0, b7 = 0;
-    BMP180_data_t myTrueData;
+    int32_t  b6 = 0, x1 = 0, x2 = 0, x3 = 0, b3 = 0;
+    uint32_t b4 = 0, b7 = 0;
+
+    BMP180_pressure_data_t myTrueData;
+
 
     /* Calculate B6  */
-    b6   =   ( myB5.b5 - 4000 );
+    b6   =   ( myB5.b5 - 4000.0f );
 
     /* Calculate X1  */
-    x1   =   ( myCalibrationData.b2 * ( b6 * b6/4096 ) );
-    x1 <<=   11;
+    x1   =   ( myCalibrationData.b2 * ( b6 * b6 / 4096.0f ) ) / 2048.0f;
 
     /* Calculate X2  */
-    x2   =   myCalibrationData.ac2 * b6/4096;
+    x2   =   myCalibrationData.ac2 * b6 / 4096.0f;
 
     /* Calculate X3  */
     x3   =   x1 + x2;
 
     /* Calculate B3  */
-    b3   =   ( ( ( ( (long)myCalibrationData.ac1 * 4 + x3 ) << ( myPressureResolutionMode >> 6U ) ) + 2 ) );
-    b3 <<=   2;
+    b3   =   ( ( ( ( (long)myCalibrationData.ac1 * 4 + x3 ) << ( myPressureResolutionMode >> 6U ) ) + 2 ) ) / 4.0f;
 
     /* Re-calculate X1  */
-    x1   =   ( myCalibrationData.ac3 * b6 );
-    x1 <<=   19;
+    x1   =   ( myCalibrationData.ac3 * b6 ) / 524288.0f;
 
     /* Re-calculate X2  */
-    x2   =   ( myCalibrationData.b1 * ( b6 * b6/4096 ) );
-    x2 <<=   16;
+    x2   =   ( myCalibrationData.b1 * ( b6 * b6 / 4096.0f ) ) / 65536.0f;
 
     /* Re-calculate X3  */
-    x3   =   ( ( x1 + x2 ) + 2 );
-    x3 <<=   2;
+    x3   =   ( ( x1 + x2 ) + 2.0f ) / 4.0f;
 
     /* Calculate B4  */
-    b4   =   myCalibrationData.ac4 * (unsigned long)( x3 + 32768 );
-    b4 <<=   15;
+    b4   =   myCalibrationData.ac4 * (unsigned long)( x3 + 32768.0f ) / 32768.0f;
 
     /* Calculate B7  */
     b7   =   ( (unsigned long)myUP.up - b3 ) * ( 50000 >> ( myPressureResolutionMode >> 6U ) );
@@ -490,25 +486,22 @@ BMP180_data_t  BMP180_Get_CalPressure ( I2C_parameters_t myI2Cparameters, BMP180
 
     if ( b7 < 0x80000000 )
     {
-        myTrueData.press     =   ( b7 * 2 ) / b4;
+        myTrueData.press     =   ( b7 * 2.0f ) / b4;
     }
     else
     {
-        myTrueData.press     =   ( b7 / b4 ) * 2;
+        myTrueData.press     =   ( b7 / b4 ) * 2.0f;
     }
 
     /* Re-calculate X1  */
-    x1   =   ( myTrueData.press / 256 ) * ( myTrueData.press / 256 );
-    x1   =   ( x1 * 3038 );
-    x1 <<=   16;
+    x1   =   ( myTrueData.press / 256.0f ) * ( myTrueData.press / 256.0f );
+    x1   =   ( x1 * 3038.0f ) / 65536.0f;
 
     /* Re-calculate X2  */
-    x2   =   ( -7357 * myTrueData.press );
-    x2 <<=   16;
+    x2   =   ( -7357.0f * myTrueData.press ) / 65536.0f;
 
     /* Calculate True Pressure  */
-    myTrueData.press  +=  ( x1 + x2 + 3791 );
-    myTrueData.press <<=  4;
+    myTrueData.press  +=  ( x1 + x2 + 3791.0f ) / 16.0f;
 
 
 
