@@ -50,7 +50,9 @@ int main( void )
 
     I2C_parameters_t            myBMP180_I2C_parameters;
     BMP180_status_t             aux;
-    BMP180_data_t               myBMP180_Data;
+    BMP180_chip_id_data_t       myBMP180_ChipID;
+    BMP180_temperature_data_t   myBMP180_TemperatureData;
+    BMP180_pressure_data_t      myBMP180_PressureData;
     BMP180_calibration_data_t   myBMP180_Calibration_Data;
     BMP180_uncompensated_data_t myBMP180_Uncompensated_Data;
 
@@ -76,10 +78,10 @@ int main( void )
     aux  =   BMP180_Init            ( myBMP180_I2C_parameters );
 
     /* Get the chip-id     */
-    aux  =   BMP180_GetID           ( myBMP180_I2C_parameters, &myBMP180_Data );
+    aux  =   BMP180_GetID           ( myBMP180_I2C_parameters, &myBMP180_ChipID );
 
     /* Transmit result through the UART  */
-    sprintf ( (char*)myMessage, "Chip-ID: %d\r\n", myBMP180_Data.id );
+    sprintf ( (char*)myMessage, "Chip-ID: %d\r\n", myBMP180_ChipID.id );
 
     NRF_UART0->TASKS_STOPRX  =   1UL;
     NRF_UART0->TASKS_STOPTX  =   1UL;
@@ -87,6 +89,9 @@ int main( void )
 
     NRF_UART0->TASKS_STARTTX =   1UL;
     NRF_UART0->TXD           =   *myPtr;
+
+    nrf_delay_ms ( 500 );
+
 
     /* Get calibration data     */
     aux  =   BMP180_Get_Cal_Param   ( myBMP180_I2C_parameters, &myBMP180_Calibration_Data );
@@ -102,6 +107,8 @@ int main( void )
 
     NRF_UART0->TASKS_STARTTX =   1UL;
     NRF_UART0->TXD           =   *myPtr;
+
+    nrf_delay_ms ( 500 );
 
 
 
@@ -121,7 +128,7 @@ int main( void )
 
         if ( myState == 1 )
         {
-            NRF_GPIO->OUTSET     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
+            NRF_GPIO->OUTCLR     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
 
             /* Get uncompensated temperature    */
             aux  =   BMP180_Get_UT ( myBMP180_I2C_parameters, &myBMP180_Uncompensated_Data );
@@ -130,14 +137,14 @@ int main( void )
             aux  =   BMP180_Get_UP ( myBMP180_I2C_parameters, PRESSURE_STANDARD_MODE, &myBMP180_Uncompensated_Data );
 
             /* Calculate the true temperature    */
-            myBMP180_Data  =   BMP180_Get_Temperature ( myBMP180_I2C_parameters, myBMP180_Calibration_Data, myBMP180_Uncompensated_Data );
+            myBMP180_TemperatureData  =   BMP180_Get_Temperature ( myBMP180_I2C_parameters, myBMP180_Calibration_Data, myBMP180_Uncompensated_Data );
 
             /* Calculate the true pressure    */
-            myBMP180_Data  =   BMP180_Get_CalPressure ( myBMP180_I2C_parameters, myBMP180_Calibration_Data, myBMP180_Data, PRESSURE_STANDARD_MODE, myBMP180_Uncompensated_Data );
+            myBMP180_PressureData  =   BMP180_Get_CalPressure ( myBMP180_I2C_parameters, myBMP180_Calibration_Data, myBMP180_TemperatureData, PRESSURE_STANDARD_MODE, myBMP180_Uncompensated_Data );
 
 
             /* Transmit result through the UART  */
-            sprintf ( (char*)myMessage, "Temperature: %ld C | Pressure: %ld Pa\r\n", ( myBMP180_Data.temp ), ( myBMP180_Data.press ) );
+            sprintf ( (char*)myMessage, "Temperature: %ld C | Pressure: %ld Pa\r\n", (int32_t)( myBMP180_TemperatureData.temp / 10.0f ), ( myBMP180_PressureData.press ) );
 
             NRF_UART0->TASKS_STOPRX  =   1UL;
             NRF_UART0->TASKS_STOPTX  =   1UL;
@@ -149,7 +156,7 @@ int main( void )
 
             /* Reset the variables   */
             myState               =  0;
-            NRF_GPIO->OUTCLR     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
+            NRF_GPIO->OUTSET     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
     	}
         //__NOP();
     }
