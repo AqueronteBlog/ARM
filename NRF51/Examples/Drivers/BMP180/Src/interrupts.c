@@ -33,7 +33,7 @@ void RTC1_IRQHandler()
     {
         myState++;
 
-        NRF_RTC1->CC[0]             +=   50UL;           // New interruption on 0.5s
+        NRF_RTC1->CC[0]             +=   200UL;          // New interruption on 2s
         NRF_RTC1->EVENTS_COMPARE[0]  =   0UL;            // Clear ( flag ) compare register 0 event
     }
 }
