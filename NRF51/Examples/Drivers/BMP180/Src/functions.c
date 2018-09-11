@@ -76,11 +76,11 @@ void conf_GPIO  ( void )
 
 /**
  * @brief       void conf_RTC1  ( void )
- * @details     Channel 0 will create an interrupt every 0.5s.
+ * @details     Channel 0 will create an interrupt every 2s.
  *
  *              RTC1:
  *                  * Prescaler:            327   ( f_RTC1 = ( 32.768kHz / ( 327 + 1 ) ) ~ 99.9Hz ( ~10ms ) ).
- *                  * Channel 0:            10ms*50 = 0.5s
+ *                  * Channel 0:            10ms*200 = 2s
  *                  * Interrupt ENABLE.
  *
  * @return      N/A
@@ -97,7 +97,7 @@ void conf_RTC1  ( void )
     NRF_RTC1->PRESCALER   =   327UL;                                                                      // f_RTC1 = ( 32.768kHz / ( 327 + 1 ) ) ~ 99.9Hz ( ~10ms )
     NRF_RTC1->TASKS_CLEAR =   1UL;                                                                        // clear the task first to be usable for later.
 
-    NRF_RTC1->CC[0]       =   50UL;                                                                       // ( 50 * (f_RTC1)^(-1) ) = ( 50 * (99.9Hz)^(-1) ) ~ 0.5s
+    NRF_RTC1->CC[0]       =   200UL;                                                                      // ( 200 * (f_RTC1)^(-1) ) = ( 200 * (99.9Hz)^(-1) ) ~ 2s
 
     NRF_RTC1->INTENSET    =   ( RTC_INTENSET_COMPARE0_Enabled << RTC_INTENSET_COMPARE0_Pos );
     NRF_RTC1->EVTENSET    =   ( RTC_EVTENSET_COMPARE0_Enabled << RTC_EVTENSET_COMPARE0_Pos );
