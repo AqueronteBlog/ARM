@@ -199,12 +199,20 @@ typedef struct
 /* Data  */
 typedef struct
 {
-    uint8_t  id;
     int32_t  b5;
 
     int32_t  temp;
+} BMP180_temperature_data_t;
+
+typedef struct
+{
     int32_t  press;
-} BMP180_data_t;
+} BMP180_pressure_data_t;
+
+typedef struct
+{
+    uint8_t  id;
+} BMP180_chip_id_data_t;
 #endif
 
 
@@ -228,35 +236,35 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-BMP180_status_t  BMP180_Init                ( I2C_parameters_t myI2Cparameters                                                                                                                                                              );
+BMP180_status_t             BMP180_Init                ( I2C_parameters_t myI2Cparameters                                                                                                                                                                       );
 
 /** It performs a soft reset.
   */
-BMP180_status_t  BMP180_SoftReset           ( I2C_parameters_t myI2Cparameters                                                                                                                                                              );
+BMP180_status_t             BMP180_SoftReset           ( I2C_parameters_t myI2Cparameters                                                                                                                                                                       );
 
 /** It gets the chip-ID.
   */
-BMP180_status_t  BMP180_GetID               ( I2C_parameters_t myI2Cparameters, BMP180_data_t* myID                                                                                                                                         );
+BMP180_status_t             BMP180_GetID               ( I2C_parameters_t myI2Cparameters, BMP180_chip_id_data_t* myID                                                                                                                                         );
 
 /** It reads the calibration data.
   */
-BMP180_status_t  BMP180_Get_Cal_Param       ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t* myCalibrationData                                                                                                                );
+BMP180_status_t             BMP180_Get_Cal_Param       ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t* myCalibrationData                                                                                                                         );
 
 /** It reads uncompensated temperature value.
   */
-BMP180_status_t  BMP180_Get_UT              ( I2C_parameters_t myI2Cparameters, BMP180_uncompensated_data_t* myUT                                                                                                                           );
+BMP180_status_t             BMP180_Get_UT              ( I2C_parameters_t myI2Cparameters, BMP180_uncompensated_data_t* myUT                                                                                                                                    );
 
 /** It reads uncompensated pressure value.
   */
-BMP180_status_t  BMP180_Get_UP              ( I2C_parameters_t myI2Cparameters, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t* myUP                                                                    );
+BMP180_status_t             BMP180_Get_UP              ( I2C_parameters_t myI2Cparameters, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t* myUP                                                                             );
 
 /** It calculates true temperature.
   */
-BMP180_data_t    BMP180_Get_Temperature     ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_uncompensated_data_t myUT                                                                               );
+BMP180_temperature_data_t   BMP180_Get_Temperature     ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_uncompensated_data_t myUT                                                                                        );
 
 /** It calculates true pressure.
   */
-BMP180_data_t    BMP180_Get_CalPressure     ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_data_t myB5, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t myUP    );
+BMP180_pressure_data_t      BMP180_Get_CalPressure     ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_temperature_data_t myB5, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t myUP );
 
 
 #ifdef __cplusplus
