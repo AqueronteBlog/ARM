@@ -136,10 +136,10 @@ int main( void )
             aux  =   BMP180_Get_UP ( myBMP180_I2C_parameters, PRESSURE_STANDARD_MODE, &myBMP180_Uncompensated_Data );
 
             /* Calculate the true temperature    */
-            myBMP180_TemperatureData  =   BMP180_Get_Temperature ( myBMP180_I2C_parameters, myBMP180_Calibration_Data, myBMP180_Uncompensated_Data );
+            myBMP180_TemperatureData  =   BMP180_Get_Temperature ( myBMP180_Calibration_Data, myBMP180_Uncompensated_Data );
 
             /* Calculate the true pressure    */
-            myBMP180_PressureData  =   BMP180_Get_CalPressure ( myBMP180_I2C_parameters, myBMP180_Calibration_Data, myBMP180_TemperatureData, PRESSURE_STANDARD_MODE, myBMP180_Uncompensated_Data );
+            myBMP180_PressureData  =   BMP180_Get_CalPressure ( myBMP180_Calibration_Data, myBMP180_TemperatureData, PRESSURE_STANDARD_MODE, myBMP180_Uncompensated_Data );
 
 
             /* Transmit result through the UART  */
