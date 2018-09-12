@@ -379,7 +379,7 @@ BMP180_status_t  BMP180_Get_UP ( I2C_parameters_t myI2Cparameters, BMP180_pressu
 
 
 /**
- * @brief       BMP180_Get_Temperature   ( I2C_parameters_t , BMP180_calibration_data_t , BMP180_uncompensated_data_t )
+ * @brief       BMP180_Get_Temperature   ( BMP180_calibration_data_t , BMP180_uncompensated_data_t )
  * @details     It calculates true temperature.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
@@ -399,7 +399,7 @@ BMP180_status_t  BMP180_Get_UP ( I2C_parameters_t myI2Cparameters, BMP180_pressu
  * @warning     This function should have been called at least once: BMP180_Get_Cal_Param.
  * @warning     This function should have been called before: BMP180_Get_UT.
  */
-BMP180_temperature_data_t  BMP180_Get_Temperature ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_uncompensated_data_t myUT )
+BMP180_temperature_data_t  BMP180_Get_Temperature ( BMP180_calibration_data_t myCalibrationData, BMP180_uncompensated_data_t myUT )
 {
     int32_t x1 = 0, x2 = 0;
 
@@ -427,10 +427,9 @@ BMP180_temperature_data_t  BMP180_Get_Temperature ( I2C_parameters_t myI2Cparame
 
 
 /**
- * @brief       BMP180_Get_CalPressure   ( I2C_parameters_t , BMP180_calibration_data_t , BMP180_data_t , BMP180_pressure_resolution_t , BMP180_uncompensated_data_t )
+ * @brief       BMP180_Get_CalPressure   ( BMP180_calibration_data_t , BMP180_data_t , BMP180_pressure_resolution_t , BMP180_uncompensated_data_t )
  * @details     It calculates true pressure.
  *
- * @param[in]    myI2Cparameters:           I2C parameters.
  * @param[in]    myCalibrationData:         Calibration data.
  * @param[in]    myB5:                      Temperature parameter value.
  * @param[in]    myPressureResolutionMode:  Resolution mode.
@@ -449,7 +448,7 @@ BMP180_temperature_data_t  BMP180_Get_Temperature ( I2C_parameters_t myI2Cparame
  * @warning     These functions should have been called at least once: BMP180_Get_Cal_Param and BMP180_Get_Temperature.
  * @warning     This function should have been called before: BMP180_Get_UP.
  */
-BMP180_pressure_data_t  BMP180_Get_CalPressure ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_temperature_data_t myB5, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t myUP )
+BMP180_pressure_data_t  BMP180_Get_CalPressure ( BMP180_calibration_data_t myCalibrationData, BMP180_temperature_data_t myB5, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t myUP )
 {
     int32_t  b6 = 0, x1 = 0, x2 = 0, x3 = 0, b3 = 0;
     uint32_t b4 = 0, b7 = 0;

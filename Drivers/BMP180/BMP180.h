@@ -260,11 +260,11 @@ BMP180_status_t             BMP180_Get_UP              ( I2C_parameters_t myI2Cp
 
 /** It calculates true temperature.
   */
-BMP180_temperature_data_t   BMP180_Get_Temperature     ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_uncompensated_data_t myUT                                                                                        );
+BMP180_temperature_data_t   BMP180_Get_Temperature     ( BMP180_calibration_data_t myCalibrationData, BMP180_uncompensated_data_t myUT                                                                                        );
 
 /** It calculates true pressure.
   */
-BMP180_pressure_data_t      BMP180_Get_CalPressure     ( I2C_parameters_t myI2Cparameters, BMP180_calibration_data_t myCalibrationData, BMP180_temperature_data_t myB5, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t myUP );
+BMP180_pressure_data_t      BMP180_Get_CalPressure     ( BMP180_calibration_data_t myCalibrationData, BMP180_temperature_data_t myB5, BMP180_pressure_resolution_t myPressureResolutionMode, BMP180_uncompensated_data_t myUP );
 
 
 #ifdef __cplusplus
