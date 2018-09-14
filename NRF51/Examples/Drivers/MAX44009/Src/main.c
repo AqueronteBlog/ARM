@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     This example shows how to work with the external device: BMP180. Every 2 seconds, a new
+ * @details     [todo]This example shows how to work with the external device: MAX44009. Every 2 seconds, a new
  *              task ( get uncompensated temperature and pressure and get true temperature and pressure ) is
  *              performed and transmitted through the UART ( Baud Rate: 115200 ).
  *
@@ -9,8 +9,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        10/September/2018
- * @version     10/September/2018    The ORIGIN
+ * @date        14/September/2018
+ * @version     14/September/2018    The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0 ( SDK 1.1.0 ).
  * @warning     Softdevice S310 was used although the file's name is S130. The softdevice is not used in this example anyway because of Bluetooth was not used.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -24,7 +24,7 @@
 #include "board.h"
 #include "functions.h"
 #include "variables.h"
-#include "BMP180.h"
+#include "MAX44009.h"
 
 
 
@@ -47,13 +47,10 @@ int main( void )
     uint8_t  myMessage[ TX_BUFF_SIZE ];           /*!<   Message to be transmitted through the UART             */
 
 
-    I2C_parameters_t            myBMP180_I2C_parameters;
-    BMP180_status_t             aux;
-    BMP180_chip_id_data_t       myBMP180_ChipID;
-    BMP180_temperature_data_t   myBMP180_TemperatureData;
-    BMP180_pressure_data_t      myBMP180_PressureData;
-    BMP180_calibration_data_t   myBMP180_Calibration_Data;
-    BMP180_uncompensated_data_t myBMP180_Uncompensated_Data;
+    I2C_parameters_t        myMAX44009_I2C_parameters;
+    MAX44009_status_t       aux;
+    MAX44009_vector_data_t  myMAX44009_Data;
+
 
 
 
@@ -65,49 +62,22 @@ int main( void )
 
 
     /* I2C definition   */
-    myBMP180_I2C_parameters.TWIinstance =    NRF_TWI0;
-    myBMP180_I2C_parameters.SDA         =    TWI0_SDA;
-    myBMP180_I2C_parameters.SCL         =    TWI0_SCL;
-    myBMP180_I2C_parameters.ADDR        =    BMP180_ADDRESS;
-    myBMP180_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-    myBMP180_I2C_parameters.SDAport     =    NRF_GPIO;
-    myBMP180_I2C_parameters.SCLport     =    NRF_GPIO;
+    myMAX44009_I2C_parameters.TWIinstance =    NRF_TWI0;
+    myMAX44009_I2C_parameters.SDA         =    TWI0_SDA;
+    myMAX44009_I2C_parameters.SCL         =    TWI0_SCL;
+    myMAX44009_I2C_parameters.ADDR        =    MAX44009_ADDRESS_A0_GND;
+    myMAX44009_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+    myMAX44009_I2C_parameters.SDAport     =    NRF_GPIO;
+    myMAX44009_I2C_parameters.SCLport     =    NRF_GPIO;
 
     /* Configure I2C peripheral  */
-    aux  =   BMP180_Init            ( myBMP180_I2C_parameters );
+    aux  =   MAX44009_Init                  ( myMAX44009_I2C_parameters );
 
-    /* Get the chip-id     */
-    aux  =   BMP180_GetID           ( myBMP180_I2C_parameters, &myBMP180_ChipID );
-
-    /* Transmit result through the UART  */
-    sprintf ( (char*)myMessage, "Chip-ID: %d\r\n", myBMP180_ChipID.id );
-
-    NRF_UART0->TASKS_STOPRX  =   1UL;
-    NRF_UART0->TASKS_STOPTX  =   1UL;
-    myPtr                    =   &myMessage[0];
-
-    NRF_UART0->TASKS_STARTTX =   1UL;
-    NRF_UART0->TXD           =   *myPtr;
-
-    nrf_delay_ms ( 500 );
+    /* Get the interrupt status     */
+    //aux  =   MAX44009_Configuration   ( myMAX44009_I2C_parameters, &myMAX44009_Data );
 
 
-    /* Get calibration data     */
-    aux  =   BMP180_Get_Cal_Param   ( myBMP180_I2C_parameters, &myBMP180_Calibration_Data );
 
-    /* Transmit result through the UART  */
-    sprintf ( (char*)myMessage, "AC1: %d, AC2: %d, AC3: %d, AC4: %d, AC5: %d, AC6: %d, B1: %d, B2: %d, MB: %d, MC: %d, MD: %d\r\n", myBMP180_Calibration_Data.ac1, myBMP180_Calibration_Data.ac2,
-             myBMP180_Calibration_Data.ac3, myBMP180_Calibration_Data.ac4, myBMP180_Calibration_Data.ac5, myBMP180_Calibration_Data.ac6, myBMP180_Calibration_Data.b1, myBMP180_Calibration_Data.b2,
-             myBMP180_Calibration_Data.mb, myBMP180_Calibration_Data.mc, myBMP180_Calibration_Data.md );
-
-    NRF_UART0->TASKS_STOPRX  =   1UL;
-    NRF_UART0->TASKS_STOPTX  =   1UL;
-    myPtr                    =   &myMessage[0];
-
-    NRF_UART0->TASKS_STARTTX =   1UL;
-    NRF_UART0->TXD           =   *myPtr;
-
-    nrf_delay_ms ( 500 );
 
 
 
@@ -129,21 +99,12 @@ int main( void )
         {
             NRF_GPIO->OUTCLR     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
 
-            /* Get uncompensated temperature    */
-            aux  =   BMP180_Get_UT ( myBMP180_I2C_parameters, &myBMP180_Uncompensated_Data );
-
-            /* Get uncompensated pressure, Resolution: Standard    */
-            aux  =   BMP180_Get_UP ( myBMP180_I2C_parameters, PRESSURE_STANDARD_MODE, &myBMP180_Uncompensated_Data );
-
-            /* Calculate the true temperature    */
-            myBMP180_TemperatureData  =   BMP180_Get_Temperature ( myBMP180_Calibration_Data, myBMP180_Uncompensated_Data );
-
-            /* Calculate the true pressure    */
-            myBMP180_PressureData  =   BMP180_Get_CalPressure ( myBMP180_Calibration_Data, myBMP180_TemperatureData, PRESSURE_STANDARD_MODE, myBMP180_Uncompensated_Data );
+            /* Get Lux value    */
+            aux  =   MAX44009_GetLux ( myMAX44009_I2C_parameters, RESOLUTION_EXTENDED_RESOLUTION, &myMAX44009_Data );
 
 
             /* Transmit result through the UART  */
-            sprintf ( (char*)myMessage, "Temperature: %ld C | Pressure: %ld Pa\r\n", (int32_t)( ( myBMP180_TemperatureData.temp / 10.0f ) + 0.5f ), ( myBMP180_PressureData.press ) );
+            sprintf ( (char*)myMessage, "Lux: %ld mLux\r\n", (int32_t)( myMAX44009_Data.lux * 1000U ) );
 
             NRF_UART0->TASKS_STOPRX  =   1UL;
             NRF_UART0->TASKS_STOPTX  =   1UL;
