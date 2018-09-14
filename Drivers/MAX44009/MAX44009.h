@@ -131,7 +131,7 @@ typedef enum
     CONFIGURATION_TIM_400_MS        =   ( 0b001 << 0 ),     /*!<  Integration timer 400ms                                                                                               */
     CONFIGURATION_TIM_200_MS        =   ( 0b010 << 0 ),     /*!<  Integration timer 200ms                                                                                               */
     CONFIGURATION_TIM_100_MS        =   ( 0b011 << 0 ),     /*!<  Integration timer 100ms   ( This is a preferred mode for high-brightness applications )                               */
-    CONFIGURATION_TIM_50_MS         =   ( 0b100 << 0 ),     /*!<  Integration timer 50ms    ( Manual mode only )                                                                        */                                                                                            */
+    CONFIGURATION_TIM_50_MS         =   ( 0b100 << 0 ),     /*!<  Integration timer 50ms    ( Manual mode only )                                                                        */
     CONFIGURATION_TIM_25_MS         =   ( 0b101 << 0 ),     /*!<  Integration timer 25ms    ( Manual mode only )                                                                        */
     CONFIGURATION_TIM_12_5_MS       =   ( 0b110 << 0 ),     /*!<  Integration timer 12.5ms  ( Manual mode only )                                                                        */
     CONFIGURATION_TIM_6_25_MS       =   ( 0b111 << 0 )      /*!<  Integration timer 6.25ms  ( Manual mode only )                                                                        */
