@@ -1,6 +1,6 @@
 /**
  * @brief       MAX44009.h
- * @details     Industry’s Lowest-Power Ambient Light Sensor with ADC.
+ * @details     Industry's Lowest-Power Ambient Light Sensor with ADC.
  *              Header file.
  *
  *
@@ -66,7 +66,7 @@ typedef enum
 {
     INTERRUPT_STATUS_INTS_MASK                                      =   ( 1 << 0 ),     /*!<  INTS mask                                                             */
     INTERRUPT_STATUS_INTS_LIGHT_INTENSITY_OUTSIDE_THRESHOLD_WINDOW  =   ( 1 << 0 ),     /*!<  The light intensity exceeds either upper or lower threshold limits    */
-    INTERRUPT_STATUS_INTS_LIGHT_INTENSITY_INSIDE_THRESHOLD_WINDOW   =   ( 1 << 0 )      /*!<  The light intensity is inside threshold window                        */
+    INTERRUPT_STATUS_INTS_LIGHT_INTENSITY_INSIDE_THRESHOLD_WINDOW   =   ( 0 << 0 )      /*!<  The light intensity is inside threshold window                        */
 } MAX44009_interrupt_status_ints_t;
 
 
@@ -246,7 +246,7 @@ MAX44009_status_t  MAX44009_Init                ( I2C_parameters_t myI2Cparamete
   */
 MAX44009_status_t  MAX44009_ReadInterruptStatus ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myInterruptStatus                                                           );
 
-/** It sets which interrupt is enabled/disabled.
+/** It enables/disables the interrupt.
   */
 MAX44009_status_t  MAX44009_InterrupEnable      ( I2C_parameters_t myI2Cparameters, MAX44009_interrupt_enable_ints_t myInterruptEnable                                                  );
 
@@ -261,11 +261,11 @@ MAX44009_status_t  MAX44009_GetLux              ( I2C_parameters_t myI2Cparamete
 
 /** It sets the upper threshold high-byte
   */
-MAX44009_status_t  MAX44009_SetUpperThreshold   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myUpperThreshold                                                            );
+MAX44009_status_t  MAX44009_SetUpperThreshold   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myUpperThreshold                                                             );
 
 /** It sets the lower threshold high-byte
   */
-MAX44009_status_t  MAX44009_SetLowerThreshold   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myLowerThreshold                                                            );
+MAX44009_status_t  MAX44009_SetLowerThreshold   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myLowerThreshold                                                             );
 
 /** It gets the upper threshold high-byte
   */
@@ -277,7 +277,7 @@ MAX44009_status_t  MAX44009_GetLowerThreshold   ( I2C_parameters_t myI2Cparamete
 
 /** It sets the threshold timer register
   */
-MAX44009_status_t  MAX44009_SetThresholdTimer   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myThresholdTimer_us                                                         );
+MAX44009_status_t  MAX44009_SetThresholdTimer   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myThresholdTimer_us                                                          );
 
 /** It gets the threshold timer register
   */
