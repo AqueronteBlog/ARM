@@ -1,5 +1,5 @@
 /**
- * @brief       MAX30100.c
+ * @brief       MAX44009.c
  * @details     Industry's Lowest-Power Ambient Light Sensor with ADC.
  *              Functions file.
  *
@@ -14,11 +14,11 @@
  * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ).
  */
 
-#include "MAX30100.h"
+#include "MAX44009.h"
 
 
 /**
- * @brief       MAX30100_Init ( I2C_parameters_t )
+ * @brief       MAX44009_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,7 +27,7 @@
  * @param[out]   N/A.
  *
  *
- * @return       Status of MAX30100_Init.
+ * @return       Status of MAX44009_Init.
  *
  *
  * @author      Manuel Caballero
@@ -36,7 +36,7 @@
  * @pre         N/A
  * @warning     N/A.
  */
-MAX30100_status_t  MAX30100_Init ( I2C_parameters_t myI2Cparameters )
+MAX44009_status_t  MAX44009_Init ( I2C_parameters_t myI2Cparameters )
 {
     i2c_status_t aux;
 
@@ -46,18 +46,18 @@ MAX30100_status_t  MAX30100_Init ( I2C_parameters_t myI2Cparameters )
 
     if ( aux == I2C_SUCCESS )
     {
-        return   MAX30100_SUCCESS;
+        return   MAX44009_SUCCESS;
     }
     else
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       MAX30100_ReadInterruptStatus ( I2C_parameters_t , MAX30100_vector_data_t* )
+ * @brief       MAX44009_ReadInterruptStatus ( I2C_parameters_t , MAX44009_vector_data_t* )
  *
  * @details     It gets the interrupt status value.
  *
@@ -66,7 +66,7 @@ MAX30100_status_t  MAX30100_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   myInterruptStatus:     Interrupt status register.
  *
  *
- * @return       Status of MAX30100_ReadInterruptStatus.
+ * @return       Status of MAX44009_ReadInterruptStatus.
  *
  *
  * @author      Manuel Caballero
@@ -75,37 +75,37 @@ MAX30100_status_t  MAX30100_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A.
  * @warning     N/A.
  */
-MAX30100_status_t  MAX30100_ReadInterruptStatus ( I2C_parameters_t myI2Cparameters, MAX30100_vector_data_t* myInterruptStatus )
+MAX44009_status_t  MAX44009_ReadInterruptStatus ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myInterruptStatus )
 {
     uint8_t      cmd    =    0U;
     i2c_status_t aux;
 
 
     /* Read INTERRUPT STATUS register    */
-    cmd      =   MAX30100_INTERRUPT_STATUS;
+    cmd      =   MAX44009_INTERRUPT_STATUS;
     aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
 
     /* Parse data   */
-    myInterruptStatus->InterruptStatus   =   ( cmd & INTERRUPT_STATUS_INTS_MASK );
+    myInterruptStatus->interruptStatus   =   ( cmd & INTERRUPT_STATUS_INTS_MASK );
 
 
 
     if ( aux == I2C_SUCCESS )
     {
-        return   MAX30100_SUCCESS;
+        return   MAX44009_SUCCESS;
     }
     else
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       MAX30100_InterrupEnable ( I2C_parameters_t , MAX44009_interrupt_enable_ints_t )
+ * @brief       MAX44009_InterrupEnable ( I2C_parameters_t , MAX44009_interrupt_enable_ints_t )
  *
  * @details     It enables/disables the interrupt.
  *
@@ -115,7 +115,7 @@ MAX30100_status_t  MAX30100_ReadInterruptStatus ( I2C_parameters_t myI2Cparamete
  * @param[out]   N/A.
  *
  *
- * @return       Status of MAX30100_InterrupEnable.
+ * @return       Status of MAX44009_InterrupEnable.
  *
  *
  * @author      Manuel Caballero
@@ -124,14 +124,14 @@ MAX30100_status_t  MAX30100_ReadInterruptStatus ( I2C_parameters_t myI2Cparamete
  * @pre         N/A.
  * @warning     N/A.
  */
-MAX30100_status_t  MAX30100_InterrupEnable ( I2C_parameters_t myI2Cparameters, MAX44009_interrupt_enable_ints_t myInterruptEnable )
+MAX44009_status_t  MAX44009_InterrupEnable ( I2C_parameters_t myI2Cparameters, MAX44009_interrupt_enable_ints_t myInterruptEnable )
 {
     uint8_t      cmd[]    =  { 0U, 0U };
     i2c_status_t aux;
 
 
     /* Update the register   */
-    cmd[0]   =   MAX30100_INTERRUPT_ENABLE;
+    cmd[0]   =   MAX44009_INTERRUPT_ENABLE;
     cmd[1]   =   myInterruptEnable;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -139,11 +139,11 @@ MAX30100_status_t  MAX30100_InterrupEnable ( I2C_parameters_t myI2Cparameters, M
 
     if ( aux == I2C_SUCCESS )
     {
-        return   MAX30100_SUCCESS;
+        return   MAX44009_SUCCESS;
     }
     else
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 }
 
@@ -172,7 +172,7 @@ MAX30100_status_t  MAX30100_InterrupEnable ( I2C_parameters_t myI2Cparameters, M
  * @pre         N/A.
  * @warning     N/A.
  */
-MAX30100_status_t  MAX44009_Configuration ( I2C_parameters_t myI2Cparameters, MAX44009_configuration_cont_t myContinuousMode, MAX44009_configuration_manual_t myManualMode,
+MAX44009_status_t  MAX44009_Configuration ( I2C_parameters_t myI2Cparameters, MAX44009_configuration_cont_t myContinuousMode, MAX44009_configuration_manual_t myManualMode,
                                             MAX44009_configuration_cdr_t myCurrentRatio, MAX44009_configuration_tim_t myIntegrationTime )
 {
     uint8_t      cmd[]    =  { 0U, 0U };
@@ -181,18 +181,30 @@ MAX30100_status_t  MAX44009_Configuration ( I2C_parameters_t myI2Cparameters, MA
 
     /* Update the register   */
     cmd[0]   =   MAX44009_CONFIGURATION;
-    cmd[1]   =   ( myContinuousMode | myManualMode | myCurrentRatio | myIntegrationTime );
+
+    /* In automatic mode ( MANUAL = 0 ), reading the contents of TIM<2:0> and CDR bits reflects the automatically generated values from an internal timing register and are read-only  */
+    if ( myManualMode == CONFIGURATION_MANUAL_MANUAL_MODE )
+    {
+        cmd[1]   =   ( myContinuousMode | myManualMode | myCurrentRatio | myIntegrationTime );
+    }
+    else
+    {
+        cmd[1]   =   ( myContinuousMode | myManualMode );
+    }
+
+    /* Update the register   */
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
 
 
 
     if ( aux == I2C_SUCCESS )
     {
-        return   MAX30100_SUCCESS;
+        return   MAX44009_SUCCESS;
     }
     else
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 }
 
@@ -218,7 +230,7 @@ MAX30100_status_t  MAX44009_Configuration ( I2C_parameters_t myI2Cparameters, MA
  * @pre         N/A.
  * @warning     N/A.
  */
-MAX30100_status_t  MAX44009_GetLux ( I2C_parameters_t myI2Cparameters, MAX44009_device_resolution_t myResolution, MAX44009_vector_data_t* myLux )
+MAX44009_status_t  MAX44009_GetLux ( I2C_parameters_t myI2Cparameters, MAX44009_device_resolution_t myResolution, MAX44009_vector_data_t* myLux )
 {
     uint8_t      cmd        =   0U;
     uint8_t      exponent   =   0U;
@@ -262,11 +274,11 @@ MAX30100_status_t  MAX44009_GetLux ( I2C_parameters_t myI2Cparameters, MAX44009_
 
     if ( aux == I2C_SUCCESS )
     {
-        return   MAX30100_SUCCESS;
+        return   MAX44009_SUCCESS;
     }
     else
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 }
 
@@ -297,7 +309,7 @@ MAX30100_status_t  MAX44009_GetLux ( I2C_parameters_t myI2Cparameters, MAX44009_
  *              exponent: BITS<7:4>, mantissa: BITS<3:0>
  * @warning     N/A.
  */
-MAX30100_status_t  MAX44009_SetUpperThreshold ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myUpperThreshold )
+MAX44009_status_t  MAX44009_SetUpperThreshold ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myUpperThreshold )
 {
     uint8_t      cmd[]   =   { 0U, 0U };
     i2c_status_t aux;
@@ -306,18 +318,18 @@ MAX30100_status_t  MAX44009_SetUpperThreshold ( I2C_parameters_t myI2Cparameters
     /* Update the register value   */
     cmd[0]  =   MAX44009_UPPER_THRESHOLD_HIGH_BYTE;
     cmd[1]  =   myUpperThreshold.lux_upper_threshold;
-    aux     =   i2c_write ( myI2Cparameters, &cmd, sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
 
     if ( aux == I2C_SUCCESS )
     {
-        return   MAX30100_SUCCESS;
+        return   MAX44009_SUCCESS;
     }
     else
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 }
 
@@ -348,7 +360,7 @@ MAX30100_status_t  MAX44009_SetUpperThreshold ( I2C_parameters_t myI2Cparameters
  *              exponent: BITS<7:4>, mantissa: BITS<3:0>
  * @warning     N/A.
  */
-MAX30100_status_t  MAX44009_SetLowerThreshold ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myLowerThreshold )
+MAX44009_status_t  MAX44009_SetLowerThreshold ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myLowerThreshold )
 {
     uint8_t      cmd[]   =   { 0U, 0U };
     i2c_status_t aux;
@@ -357,18 +369,18 @@ MAX30100_status_t  MAX44009_SetLowerThreshold ( I2C_parameters_t myI2Cparameters
     /* Update the register value   */
     cmd[0]  =   MAX44009_LOWER_THRESHOLD_HIGH_BYTE;
     cmd[1]  =   myLowerThreshold.lux_lower_threshold;
-    aux     =   i2c_write ( myI2Cparameters, &cmd, sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
 
     if ( aux == I2C_SUCCESS )
     {
-        return   MAX30100_SUCCESS;
+        return   MAX44009_SUCCESS;
     }
     else
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 }
 
@@ -398,7 +410,7 @@ MAX30100_status_t  MAX44009_SetLowerThreshold ( I2C_parameters_t myI2Cparameters
  *              exponent: BITS<7:4>, mantissa: BITS<3:0>
  * @warning     N/A.
  */
-MAX30100_status_t  MAX44009_GetUpperThreshold ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myUpperThreshold )
+MAX44009_status_t  MAX44009_GetUpperThreshold ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myUpperThreshold )
 {
     uint8_t      cmd   =   0U;
     i2c_status_t aux;
@@ -413,11 +425,11 @@ MAX30100_status_t  MAX44009_GetUpperThreshold ( I2C_parameters_t myI2Cparameters
 
     if ( aux == I2C_SUCCESS )
     {
-        return   MAX30100_SUCCESS;
+        return   MAX44009_SUCCESS;
     }
     else
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 }
 
@@ -447,7 +459,7 @@ MAX30100_status_t  MAX44009_GetUpperThreshold ( I2C_parameters_t myI2Cparameters
  *              exponent: BITS<7:4>, mantissa: BITS<3:0>
  * @warning     N/A.
  */
-MAX30100_status_t  MAX44009_GetLowerThreshold ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myLowerThreshold )
+MAX44009_status_t  MAX44009_GetLowerThreshold ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myLowerThreshold )
 {
     uint8_t      cmd   =   0U;
     i2c_status_t aux;
@@ -462,11 +474,11 @@ MAX30100_status_t  MAX44009_GetLowerThreshold ( I2C_parameters_t myI2Cparameters
 
     if ( aux == I2C_SUCCESS )
     {
-        return   MAX30100_SUCCESS;
+        return   MAX44009_SUCCESS;
     }
     else
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 }
 
@@ -495,34 +507,34 @@ MAX30100_status_t  MAX44009_GetLowerThreshold ( I2C_parameters_t myI2Cparameters
  *
  * @warning     N/A.
  */
-MAX30100_status_t  MAX44009_SetThresholdTimer ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myThresholdTimer_us )
+MAX44009_status_t  MAX44009_SetThresholdTimer ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myThresholdTimer_us )
 {
-    uint8_t      cmd[0]   =   { 0U, 0U };
+    uint8_t      cmd[]   =   { 0U, 0U };
     i2c_status_t aux;
 
 
     /* Maximum delay is 25.5ms   */
-    if ( myThresholdTimer_us > 25500U )
+    if ( myThresholdTimer_us.threshold_timer_us > 25500U )
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 
 
     /* Update the register value  */
     cmd[0]  =   MAX44009_THRESHOLD_TIMER;
     cmd[1]  =   ( myThresholdTimer_us.threshold_timer_us / 100U );
-    aux     =   i2c_write ( myI2Cparameters, &cmd, sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
 
     if ( aux == I2C_SUCCESS )
     {
-        return   MAX30100_SUCCESS;
+        return   MAX44009_SUCCESS;
     }
     else
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 }
 
@@ -550,7 +562,7 @@ MAX30100_status_t  MAX44009_SetThresholdTimer ( I2C_parameters_t myI2Cparameters
  *
  * @warning     N/A.
  */
-MAX30100_status_t  MAX44009_GetThresholdTimer ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myThresholdTimer_us )
+MAX44009_status_t  MAX44009_GetThresholdTimer ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myThresholdTimer_us )
 {
     uint8_t      cmd   =   0U;
     i2c_status_t aux;
@@ -570,10 +582,10 @@ MAX30100_status_t  MAX44009_GetThresholdTimer ( I2C_parameters_t myI2Cparameters
 
     if ( aux == I2C_SUCCESS )
     {
-        return   MAX30100_SUCCESS;
+        return   MAX44009_SUCCESS;
     }
     else
     {
-        return   MAX30100_FAILURE;
+        return   MAX44009_FAILURE;
     }
 }
