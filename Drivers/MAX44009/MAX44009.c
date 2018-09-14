@@ -169,7 +169,7 @@ MAX44009_status_t  MAX44009_InterrupEnable ( I2C_parameters_t myI2Cparameters, M
  * @author      Manuel Caballero
  * @date        14/September/2018
  * @version     14/September/2018   The ORIGIN
- * @pre         N/A.
+ * @pre         In automatic mode ( MANUAL = 0 ), reading the contents of TIM<2:0> and CDR bits reflects the automatically generated values from an internal timing register and are read-only.
  * @warning     N/A.
  */
 MAX44009_status_t  MAX44009_Configuration ( I2C_parameters_t myI2Cparameters, MAX44009_configuration_cont_t myContinuousMode, MAX44009_configuration_manual_t myManualMode,
@@ -195,6 +195,100 @@ MAX44009_status_t  MAX44009_Configuration ( I2C_parameters_t myI2Cparameters, MA
     /* Update the register   */
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+        return   MAX44009_SUCCESS;
+    }
+    else
+    {
+        return   MAX44009_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       MAX44009_GetCurrentDivisionRatio ( I2C_parameters_t , MAX44009_vector_data_t* )
+ *
+ * @details     It gets the current division ratio.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myCDR:             Current Division Ratio value
+ *
+ *
+ * @return       Status of MAX44009_GetCurrentDivisionRatio.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/September/2018
+ * @version     14/September/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+MAX44009_status_t  MAX44009_GetCurrentDivisionRatio ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myCDR )
+{
+    uint8_t      cmd    =   0U;
+    i2c_status_t aux;
+
+
+    /* Read the CONFIGURATION register   */
+    cmd  =   MAX44009_CONFIGURATION;
+    aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+    aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+    /* Parse the data    */
+    myCDR->cdr   =   ( cmd & CONFIGURATION_CDR_MASK );
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+        return   MAX44009_SUCCESS;
+    }
+    else
+    {
+        return   MAX44009_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       MAX44009_GetIntegrationTime ( I2C_parameters_t , MAX44009_vector_data_t* )
+ *
+ * @details     It gets the integration time.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myTIM:             Integration Time value
+ *
+ *
+ * @return       Status of MAX44009_GetIntegrationTime.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/September/2018
+ * @version     14/September/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+MAX44009_status_t  MAX44009_GetIntegrationTime ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myTIM )
+{
+    uint8_t      cmd    =   0U;
+    i2c_status_t aux;
+
+
+    /* Read the CONFIGURATION register   */
+    cmd  =   MAX44009_CONFIGURATION;
+    aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+    aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+    /* Parse the data    */
+    myTIM->tim   =   ( cmd & CONFIGURATION_TIM_MASK );
 
 
 
