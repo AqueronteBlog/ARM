@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        10/September/2018
- * @version     10/September/2018   The ORIGIN
+ * @date        14/September/2018
+ * @version     14/September/2018   The ORIGIN
  * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0 ( SDK 1.1.0 ).
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
@@ -24,8 +24,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        10/September/2018
- * @version     10/September/2018   The ORIGIN
+ * @date        14/September/2018
+ * @version     14/September/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -53,8 +53,8 @@ void conf_LFCLK  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        10/September/2018
- * @version     10/September/2018      The ORIGIN
+ * @date        14/September/2018
+ * @version     14/September/2018      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -86,8 +86,8 @@ void conf_GPIO  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        10/September/2018
- * @version     10/September/2018   The ORIGIN
+ * @date        14/September/2018
+ * @version     14/September/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -119,8 +119,8 @@ void conf_RTC1  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        10/September/2018
- * @version     10/September/2018    The ORIGIN
+ * @date        14/September/2018
+ * @version     14/September/2018    The ORIGIN
  * @pre         Only TX pin will be configured.
  * @warning     N/A.
  */
