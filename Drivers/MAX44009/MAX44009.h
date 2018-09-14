@@ -216,6 +216,8 @@ typedef struct
     uint16_t                            threshold_timer_us;     /*!<  Timer threshold           */
 
     MAX44009_interrupt_status_ints_t    interruptStatus;        /*!<  Interrupt status value    */
+    MAX44009_configuration_cdr_t        cdr;                    /*!<  Current division ratio    */
+    MAX44009_configuration_tim_t        tim;                    /*!<  integration time          */
 } MAX44009_vector_data_t;
 #endif
 
@@ -240,48 +242,56 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-MAX44009_status_t  MAX44009_Init                ( I2C_parameters_t myI2Cparameters                                                                                                      );
+MAX44009_status_t  MAX44009_Init                    ( I2C_parameters_t myI2Cparameters                                                                                                  );
 
 /** It gets the interrupt status value.
   */
-MAX44009_status_t  MAX44009_ReadInterruptStatus ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myInterruptStatus                                                           );
+MAX44009_status_t  MAX44009_ReadInterruptStatus     ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myInterruptStatus                                                       );
 
 /** It enables/disables the interrupt.
   */
-MAX44009_status_t  MAX44009_InterrupEnable      ( I2C_parameters_t myI2Cparameters, MAX44009_interrupt_enable_ints_t myInterruptEnable                                                  );
+MAX44009_status_t  MAX44009_InterrupEnable          ( I2C_parameters_t myI2Cparameters, MAX44009_interrupt_enable_ints_t myInterruptEnable                                              );
 
 /** It configures the device.
   */
-MAX44009_status_t  MAX44009_Configuration       ( I2C_parameters_t myI2Cparameters, MAX44009_configuration_cont_t myContinuousMode, MAX44009_configuration_manual_t myManualMode,
-                                                  MAX44009_configuration_cdr_t myCurrentRatio, MAX44009_configuration_tim_t myIntegrationTime                                           );
+MAX44009_status_t  MAX44009_Configuration           ( I2C_parameters_t myI2Cparameters, MAX44009_configuration_cont_t myContinuousMode, MAX44009_configuration_manual_t myManualMode,
+                                                      MAX44009_configuration_cdr_t myCurrentRatio, MAX44009_configuration_tim_t myIntegrationTime                                       );
+
+/** It gets the current division ratio
+  */
+MAX44009_status_t  MAX44009_GetCurrentDivisionRatio ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myCDR                                                                   );
+
+/** It gets the integration time
+  */
+MAX44009_status_t  MAX44009_GetIntegrationTime      ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myTIM                                                                   );
 
 /** It gets the Lux value regarding of the resolution.
   */
-MAX44009_status_t  MAX44009_GetLux              ( I2C_parameters_t myI2Cparameters, MAX44009_device_resolution_t myResolution, MAX44009_vector_data_t* myLux                            );
+MAX44009_status_t  MAX44009_GetLux                  ( I2C_parameters_t myI2Cparameters, MAX44009_device_resolution_t myResolution, MAX44009_vector_data_t* myLux                        );
 
 /** It sets the upper threshold high-byte
   */
-MAX44009_status_t  MAX44009_SetUpperThreshold   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myUpperThreshold                                                             );
+MAX44009_status_t  MAX44009_SetUpperThreshold       ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myUpperThreshold                                                         );
 
 /** It sets the lower threshold high-byte
   */
-MAX44009_status_t  MAX44009_SetLowerThreshold   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myLowerThreshold                                                             );
+MAX44009_status_t  MAX44009_SetLowerThreshold       ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myLowerThreshold                                                         );
 
 /** It gets the upper threshold high-byte
   */
-MAX44009_status_t  MAX44009_GetUpperThreshold   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myUpperThreshold                                                            );
+MAX44009_status_t  MAX44009_GetUpperThreshold       ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myUpperThreshold                                                        );
 
 /** It gets the lower threshold high-byte
   */
-MAX44009_status_t  MAX44009_GetLowerThreshold   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myLowerThreshold                                                            );
+MAX44009_status_t  MAX44009_GetLowerThreshold       ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myLowerThreshold                                                        );
 
 /** It sets the threshold timer register
   */
-MAX44009_status_t  MAX44009_SetThresholdTimer   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myThresholdTimer_us                                                          );
+MAX44009_status_t  MAX44009_SetThresholdTimer       ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t myThresholdTimer_us                                                      );
 
 /** It gets the threshold timer register
   */
-MAX44009_status_t  MAX44009_GetThresholdTimer   ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myThresholdTimer_us                                                         );
+MAX44009_status_t  MAX44009_GetThresholdTimer       ( I2C_parameters_t myI2Cparameters, MAX44009_vector_data_t* myThresholdTimer_us                                                     );
 
 
 #ifdef __cplusplus
