@@ -1,8 +1,7 @@
 /**
  * @brief       main.c
  * @details     [todo]This example shows how to work with the external device: MAX44009. Every 2 seconds, a new
- *              task ( get uncompensated temperature and pressure and get true temperature and pressure ) is
- *              performed and transmitted through the UART ( Baud Rate: 115200 ).
+ *              Lux value is gotten and transmitted through the UART ( Baud Rate: 115200 ).
  *
  *              The rest of the time, the microcontroller is in low power.
  *
@@ -46,19 +45,15 @@ int main( void )
 {
     uint8_t  myMessage[ TX_BUFF_SIZE ];           /*!<   Message to be transmitted through the UART             */
 
-
     I2C_parameters_t        myMAX44009_I2C_parameters;
     MAX44009_status_t       aux;
     MAX44009_vector_data_t  myMAX44009_Data;
-
-
 
 
     conf_LFCLK  ();
     conf_GPIO   ();
     conf_UART   ();
     conf_RTC1   ();
-
 
 
     /* I2C definition   */
@@ -71,13 +66,10 @@ int main( void )
     myMAX44009_I2C_parameters.SCLport     =    NRF_GPIO;
 
     /* Configure I2C peripheral  */
-    aux  =   MAX44009_Init                  ( myMAX44009_I2C_parameters );
+    aux  =   MAX44009_Init          ( myMAX44009_I2C_parameters );
 
-    /* Get the interrupt status     */
-    //aux  =   MAX44009_Configuration   ( myMAX44009_I2C_parameters, &myMAX44009_Data );
-
-
-
+    /* Configure the device: Default mode ( sample every 800ms ), CDR and TIM are automatically determined     */
+    aux  =   MAX44009_Configuration ( myMAX44009_I2C_parameters, CONFIGURATION_CONT_DEFAULT_MODE, CONFIGURATION_MANUAL_DEFAULT_MODE, CONFIGURATION_CDR_CURRENT_NOT_DIVIDED, CONFIGURATION_TIM_800_MS );
 
 
 
@@ -100,7 +92,13 @@ int main( void )
             NRF_GPIO->OUTCLR     |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
 
             /* Get Lux value    */
-            aux  =   MAX44009_GetLux ( myMAX44009_I2C_parameters, RESOLUTION_EXTENDED_RESOLUTION, &myMAX44009_Data );
+            aux  =   MAX44009_GetLux                    ( myMAX44009_I2C_parameters, RESOLUTION_EXTENDED_RESOLUTION, &myMAX44009_Data );
+
+            /* Get current division ratio    */
+            aux  =   MAX44009_GetCurrentDivisionRatio   ( myMAX44009_I2C_parameters, &myMAX44009_Data );
+
+            /* Get integration time    */
+            aux  =   MAX44009_GetIntegrationTime        ( myMAX44009_I2C_parameters, &myMAX44009_Data );
 
 
             /* Transmit result through the UART  */
