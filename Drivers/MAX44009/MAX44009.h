@@ -18,7 +18,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "i2c.h"
-
+#include "math.h"
 
 #ifndef MAX44009_H_
 #define MAX44009_H_
