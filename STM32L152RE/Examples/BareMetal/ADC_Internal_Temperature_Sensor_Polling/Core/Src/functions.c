@@ -264,3 +264,30 @@ void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
 
 	USART2->CR1	|=	 ( USART_CR1_TCIE );									// Transmission complete interrupt enabled
 }
+
+
+
+/**
+ * @brief       void Conf_ADC  ( void )
+ * @details     It configures the ADC to work with the internal temperature sensor.
+ *
+ *
+ * @param[in]    N/A.
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        18/September/2018
+ * @version		18/September/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void Conf_ADC  ( void )
+{
+
+}

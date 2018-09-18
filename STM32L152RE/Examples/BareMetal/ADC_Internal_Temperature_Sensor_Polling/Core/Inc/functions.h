@@ -27,6 +27,7 @@ void Conf_GPIO 	   ( void );
 void Conf_RTC 	   ( void );
 void Conf_SYSTICK  ( uint32_t myticks );
 void Conf_USART	   ( uint32_t myCK, uint32_t myBaudRate );
+void Conf_ADC 	   ( void );
 
 
 #ifdef __cplusplus
