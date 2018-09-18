@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the external device: MAX44009. Every 2 seconds, a new
+ * @details     This example shows how to work with the external device: MAX44009. Every 2 seconds, a new
  *              Lux value is gotten and transmitted through the UART ( Baud Rate: 115200 ).
  *
  *              The rest of the time, the microcontroller is in low power.
@@ -60,7 +60,7 @@ int main( void )
     myMAX44009_I2C_parameters.TWIinstance =    NRF_TWI0;
     myMAX44009_I2C_parameters.SDA         =    TWI0_SDA;
     myMAX44009_I2C_parameters.SCL         =    TWI0_SCL;
-    myMAX44009_I2C_parameters.ADDR        =    MAX44009_ADDRESS_A0_GND;
+    myMAX44009_I2C_parameters.ADDR        =    MAX44009_ADDRESS_A0_VCC;
     myMAX44009_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
     myMAX44009_I2C_parameters.SDAport     =    NRF_GPIO;
     myMAX44009_I2C_parameters.SCLport     =    NRF_GPIO;
@@ -102,7 +102,7 @@ int main( void )
 
 
             /* Transmit result through the UART  */
-            sprintf ( (char*)myMessage, "Lux: %ld mLux\r\n", (int32_t)( myMAX44009_Data.lux * 1000U ) );
+            sprintf ( (char*)myMessage, "Lux: %ld Lux\r\n", (int32_t)( myMAX44009_Data.lux + 0.5 ) );
 
             NRF_UART0->TASKS_STOPRX  =   1UL;
             NRF_UART0->TASKS_STOPTX  =   1UL;
