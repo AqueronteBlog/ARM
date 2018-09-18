@@ -320,7 +320,9 @@ MAX44009_status_t  MAX44009_GetIntegrationTime ( I2C_parameters_t myI2Cparameter
  *
  * @author      Manuel Caballero
  * @date        14/September/2018
- * @version     14/September/2018   The ORIGIN
+ * @version     17/September/2018   Exponent was fixed it must have been shifted 4 position to the right.
+ *                                  Pow function was used.
+ *              14/September/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -341,6 +343,7 @@ MAX44009_status_t  MAX44009_GetLux ( I2C_parameters_t myI2Cparameters, MAX44009_
 
     /* Check the resolution  */
     exponent   =   ( cmd & LUX_HIGH_BYTE_EXPONENT_MASK );
+    exponent >>=   4U;
     mantissa   =   ( cmd & LUX_HIGH_BYTE_MANTISSA_MASK );
     if ( myResolution == RESOLUTION_NORMAL_RESOLUTION )
     {
@@ -360,8 +363,7 @@ MAX44009_status_t  MAX44009_GetLux ( I2C_parameters_t myI2Cparameters, MAX44009_
 
 
     /* Calculate the Lux value   */
-    myLux->lux   =   ( 1 << exponent );
-    myLux->lux   =   (float)( myLux->lux * mantissa * mulFactor );
+    myLux->lux   =   (float)( pow( 2.0, exponent ) * mantissa * mulFactor );
 
 
 
