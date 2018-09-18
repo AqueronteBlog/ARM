@@ -1,5 +1,22 @@
 
 /**
+ * @brief       main.c
+ * @details     [TODO]This example shows how to read the internal Device Electronic Signature ( flash size and
+ * 				ID ). Every two seconds, the data will be transmitted through the UART ( 230400 baud rate ).
+ *
+ * 				The microcontroller will remain in low power the rest of the time.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        18/September/2018
+ * @version     18/September/2018   The ORIGIN
+ * @pre         This firmware was tested on the NUCLEO-L152RE with Atollic TrueSTUDIO for STM32
+ *              ( v9.0.1 ). This project was generated using SMT32CubeMX ( used to generate a template ).
+ * @warning     Although HAL driver was generated, just the Low Power functions are used.
+ */
+/**
   ******************************************************************************
   * @file           : main.c
   * @brief          : Main program body
@@ -41,14 +58,26 @@
 #include "stm32l1xx_hal.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "board.h"
+#include "variables.h"
+#include "functions.h"
+#include "interrupts.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+#define TX_BUFF_SIZE  128	                     	/*!<   UART buffer size                              		*/
+#define UART_CLK	  16000000UL                  	/*!<   UART f_CK = 16 MHz                              		*/
 
+volatile uint32_t mySystemCoreClock;				/*!<  System CLK in MHz  		   							*/
+volatile uint32_t myUARTClock;						/*!<  UART CLK in MHz  		   	   							*/
+
+volatile uint32_t myState;                        	/*!<  State that indicates when performs a new reading		*/
+volatile uint32_t myUART_TxEnd;                     /*!<  It indicates when an UART transmission is finished	*/
+volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      	/*!<  Message to be transmitted through the UART         	*/
+volatile uint8_t  *myPtr;                         	/*!<  Pointer to point out myMessage                     	*/
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,23 +116,56 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
+  Conf_CLK   ();
 
+  /* Range 2: System frequency up to 16 MHz	 */
+  __HAL_PWR_VOLTAGESCALING_CONFIG ( PWR_REGULATOR_VOLTAGE_SCALE2 );
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
-
+  Conf_GPIO  ();
+  Conf_USART ( UART_CLK, 230400 );				// 230400 Baud Rate
+  Conf_RTC   ();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  /* Low power: Stop mode	 */
+	  HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
 
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+	  /* Re-configure the CLKs	 */
+	  Conf_CLK ();
 
+	  /* Check myState	 */
+	  if ( myState == 1UL )
+	  {
+	  	GPIOA->BSRR	 =	 ( 1UL << LED_1 );					// Turn it ON
+
+	  	/* Parse the data	 */
+	  	//sprintf ( (char*)myMessage, "Flash Size: %d Kbytes | ID1: %x, ID2: %x, ID3: %x\r\n", F_SIZE, (unsigned int)U_ID1, (unsigned int)U_ID2, (unsigned int)U_ID3 );
+
+	  	/* Transmit data through the UART	 */
+	  	myPtr   	 =   &myMessage[0];
+	  	USART2->DR	 =	 *myPtr;
+	  	USART2->CR1	|=	 USART_CR1_TE;						// Transmitter Enabled
+
+	  	/* Low power: Sleep mode, wait until all data was sent through the UART	 */
+	  	do{
+	  		HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	  	}while ( myUART_TxEnd == 0UL );
+
+
+	  	/* Reset variables	 */
+	  	myUART_TxEnd	 =	 0UL;
+	  	myState	 		 =	 0UL;
+	  	GPIOA->BRR		 =	( 1UL << LED_1 );				// Turn it OFF
+	  }
   }
   /* USER CODE END 3 */
 
