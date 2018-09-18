@@ -126,6 +126,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Conf_GPIO  ();
   Conf_USART ( UART_CLK, 230400 );				// 230400 Baud Rate
+  Conf_ADC   ();
   Conf_RTC   ();
   /* USER CODE END 2 */
 
@@ -145,7 +146,24 @@ int main(void)
 	  /* Check myState	 */
 	  if ( myState == 1UL )
 	  {
-	  	GPIOA->BSRR	 =	 ( 1UL << LED_1 );					// Turn it ON
+	  	GPIOA->BSRR	 =	 ( 1UL << LED_1 );							// Turn it ON
+
+	  	/* Turn on the ADC	 */
+	  	ADC1->CR2	|=	 ADC_CR2_ADON;
+	  	while ( ( ADC1->SR & ADC_SR_ADONS_Msk ) != ADC_SR_ADONS );	// Wait until the ADC is ready
+	  																// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
+
+	  	/* Single conversion mode: 	 */
+	  	ADC1->SQR5	&=	~ADC_SQR5_SQ1;								// Clear 1st conversion in regular sequence
+	  	ADC1->SQR5	|=	 ADC_SQR5_SQ1_4;							// ADC_IN16 input channel ( Temperature sensor )
+
+	  	/* Start a conversion	 */
+	  	ADC1->CR2	|=	 ADC_CR2_SWSTART;
+	  	while ( ( ADC1->SR & ADC_SR_EOCS_Msk ) != ADC_SR_EOCS );	// Wait until the conversion is completed
+	  		  														// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
+
+
+
 
 	  	/* Parse the data	 */
 	  	//sprintf ( (char*)myMessage, "Flash Size: %d Kbytes | ID1: %x, ID2: %x, ID3: %x\r\n", F_SIZE, (unsigned int)U_ID1, (unsigned int)U_ID2, (unsigned int)U_ID3 );
