@@ -68,16 +68,22 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-#define TX_BUFF_SIZE  128	                     	/*!<   UART buffer size                              		*/
-#define UART_CLK	  16000000UL                  	/*!<   UART f_CK = 16 MHz                              		*/
+#define TS_CAL2  				((uint16_t*) ((uint32_t)0x1FF800FE))	/*!<   Temperature sensor calibration value acquired at 110°C	*/
+#define TS_CAL1	  				((uint16_t*) ((uint32_t)0x1FF800FA))	/*!<   Temperature sensor calibration value acquired at 30°C	*/
+#define TEMPSENSOR_CAL1_TEMP	((int32_t)   30)                    	/*!<   Internal temperature sensor, temperature at which temperature sensor has been calibrated in production 	*/
+#define TEMPSENSOR_CAL2_TEMP 	((int32_t)  110)                    	/*!<   Internal temperature sensor, temperature at which temperature sensor has been calibrated in production	*/
 
-volatile uint32_t mySystemCoreClock;				/*!<  System CLK in MHz  		   							*/
-volatile uint32_t myUARTClock;						/*!<  UART CLK in MHz  		   	   							*/
 
-volatile uint32_t myState;                        	/*!<  State that indicates when performs a new reading		*/
-volatile uint32_t myUART_TxEnd;                     /*!<  It indicates when an UART transmission is finished	*/
-volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      	/*!<  Message to be transmitted through the UART         	*/
-volatile uint8_t  *myPtr;                         	/*!<  Pointer to point out myMessage                     	*/
+#define TX_BUFF_SIZE  128	                     			/*!<   UART buffer size                              		*/
+#define UART_CLK	  16000000UL                  			/*!<   UART f_CK = 16 MHz                              		*/
+
+volatile uint32_t mySystemCoreClock;						/*!<  System CLK in MHz  		   							*/
+volatile uint32_t myUARTClock;								/*!<  UART CLK in MHz  		   	   							*/
+
+volatile uint32_t myState;                        			/*!<  State that indicates when performs a new reading		*/
+volatile uint32_t myUART_TxEnd;                     		/*!<  It indicates when an UART transmission is finished	*/
+volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      			/*!<  Message to be transmitted through the UART         	*/
+volatile uint8_t  *myPtr;                         			/*!<  Pointer to point out myMessage                     	*/
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -109,7 +115,9 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  int32_t	ts_data	 		=	0UL;
+  float		myTemperature	=	0UL;
+  int16_t	a1 =  TS_CAL1, a2 = TS_CAL2;
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -148,25 +156,53 @@ int main(void)
 	  {
 	  	GPIOA->BSRR	 =	 ( 1UL << LED_1 );							// Turn it ON
 
+	  	/* Turn on the ADC1 clock	 */
+	  	RCC->APB2ENR	|=	 RCC_APB2ENR_ADC1EN;
+
+	  	/* Turn off the ADC	 */
+	  	ADC1->CR2	&=	~ADC_CR2_ADON;
+
+	  	/* Channel: ADC_IN16 ( Temperature sensor ) 	 */
+	  	ADC1->SQR5	&=	~ADC_SQR5_SQ1;								// Clear 1st conversion in regular sequence
+	  	ADC1->SQR5	|=	 ADC_SQR5_SQ1_4;							// ADC_IN16 input channel ( Temperature sensor )
+
+	  	/* Sampling time ( T_s = T_ADC_CLK * Cycles ): ( 16MHz )^( -1 ) * 192 = 12us ( > TS_temp = 4us minimum )	 */
+	  	ADC1->SMPR2	&=	~ADC_SMPR2_SMP16;							// Clear SMP16
+	  	ADC1->SMPR2	|=	 ( ADC_SMPR2_SMP16_2 | ADC_SMPR2_SMP16_1 );	// Sampling time: 192 cycles
+
+	  	/* Configure ADC Prescaler and TSVREFE	 */
+	  	ADC->CCR	&=	~ADC_CCR_ADCPRE;							// HSI divided by 1 ( f_ADC = 16MHz )
+	 	ADC->CCR	|=	 ADC_CCR_TSVREFE;							// Temperature sensor and VREFINT channel enabled
+	 	for(uint32_t ii = 0; ii < 10; ii++);
+
 	  	/* Turn on the ADC	 */
 	  	ADC1->CR2	|=	 ADC_CR2_ADON;
 	  	while ( ( ADC1->SR & ADC_SR_ADONS_Msk ) != ADC_SR_ADONS );	// Wait until the ADC is ready
-	  																// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
-
-	  	/* Single conversion mode: 	 */
-	  	ADC1->SQR5	&=	~ADC_SQR5_SQ1;								// Clear 1st conversion in regular sequence
-	  	ADC1->SQR5	|=	 ADC_SQR5_SQ1_4;							// ADC_IN16 input channel ( Temperature sensor )
+	  		  														// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
 
 	  	/* Start a conversion	 */
 	  	ADC1->CR2	|=	 ADC_CR2_SWSTART;
 	  	while ( ( ADC1->SR & ADC_SR_EOCS_Msk ) != ADC_SR_EOCS );	// Wait until the conversion is completed
 	  		  														// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
 
+	  	/* Read the result ( it will clear EOC flag as well )	 */
+	  	ts_data	 =	 ( ADC1->DR & ADC_DR_DATA_Msk );
+
+	  	/* Disable TSVREFE	 */
+	  	ADC->CCR	&=	~ADC_CCR_TSVREFE;							// Temperature sensor and VREFINT channel disabled
+
+	  	/* Turn off the ADC	 */
+	  	ADC1->CR2	&=	~ADC_CR2_ADON;
+
+	  	/* Turn off the ADC1 clock	 */
+	  	RCC->APB2ENR	&=	~RCC_APB2ENR_ADC1EN;
 
 
+	  	/* Calculate the true temperature	 */
+	  	myTemperature	 =	 (float)( ( TEMPSENSOR_CAL2_TEMP - TEMPSENSOR_CAL1_TEMP )/( TS_CAL2 - TS_CAL1 ) ) * ( ts_data - (int32_t)TS_CAL1 ) + 30.0f;
 
 	  	/* Parse the data	 */
-	  	//sprintf ( (char*)myMessage, "Flash Size: %d Kbytes | ID1: %x, ID2: %x, ID3: %x\r\n", F_SIZE, (unsigned int)U_ID1, (unsigned int)U_ID2, (unsigned int)U_ID3 );
+	  	sprintf ( (char*)myMessage, "Temperature: %ld\r\n", (int32_t)( myTemperature + 0.5f ) );
 
 	  	/* Transmit data through the UART	 */
 	  	myPtr   	 =   &myMessage[0];
