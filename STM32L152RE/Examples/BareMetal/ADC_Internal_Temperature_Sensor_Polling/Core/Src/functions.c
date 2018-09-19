@@ -271,6 +271,15 @@ void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
  * @brief       void Conf_ADC  ( void )
  * @details     It configures the ADC to work with the internal temperature sensor.
  *
+ * 					- Resolution: 12-bit
+ * 					- Interrupts DISABLED
+ * 					- Right alignment
+ * 					- DMA mode disabled
+ * 					- No delay
+ * 					- Bank A selected for channels ADC_IN0..31
+ * 					- Single conversion mode
+ * 					- The EOC bit is set at the end of each regular conversion
+ *
  *
  * @param[in]    N/A.
  * @param[in]    N/A.
@@ -289,5 +298,32 @@ void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
  */
 void Conf_ADC  ( void )
 {
+	/* Turn off the ADC	 */
+	ADC1->CR2	&=	~ADC_CR2_ADON;
 
+	/* Configure the ADC:
+	 * 	- Overrun interrupt disabled
+	 * 	- 12-bit Resolution (TCONV = 12 ADCCLK cycles)
+	 * 	- Analog watchdog disabled on regular channels
+	 * 	- Analog watchdog disabled on injected channels
+	 * 	- Discontinuous mode on injected channels disabled
+	 * 	- Discontinuous mode on regular channels disabled
+	 * 	- Automatic injected group conversion disabled
+	 * 	- Scan mode disabled
+	 * 	- JEOC interrupt disabled
+	 * 	- Analog watchdog interrupt disabled
+	 * 	- EOC interrupt disabled
+	 */
+	ADC1->CR1	&=	~( ADC_CR1_OVRIE | ADC_CR1_RES | ADC_CR1_AWDEN | ADC_CR1_JAWDEN | ADC_CR1_JDISCEN | ADC_CR1_DISCEN | ADC_CR1_JAUTO | ADC_CR1_SCAN | ADC_CR1_JEOSIE | ADC_CR1_AWDIE | ADC_CR1_EOCSIE );
+
+	/* Configure the ADC:
+	 *  - Right alignment
+	 *  - DMA mode disabled
+	 *  - No delay
+	 *  - Bank A selected for channels ADC_IN0..31
+	 *  - Single conversion mode
+	 *  - The EOC bit is set at the end of each regular conversion
+	 */
+	ADC1->CR2	&=	~( ADC_CR2_ALIGN | ADC_CR2_DMA | ADC_CR2_DELS | ADC_CR2_CFG | ADC_CR2_CONT );
+	ADC1->CR2	|=	 ( ADC_CR2_EOCS );
 }
