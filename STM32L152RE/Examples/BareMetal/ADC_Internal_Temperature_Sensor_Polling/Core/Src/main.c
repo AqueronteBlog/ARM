@@ -1,8 +1,7 @@
-
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to read the internal Device Electronic Signature ( flash size and
- * 				ID ). Every two seconds, the data will be transmitted through the UART ( 230400 baud rate ).
+ * @details     This example shows how to read the internal temperature sensor by polling mode. Every one second, the data will be
+ * 				transmitted through the UART ( 230400 baud rate ).
  *
  * 				The microcontroller will remain in low power the rest of the time.
  *
@@ -12,8 +11,8 @@
  * @author      Manuel Caballero
  * @date        18/September/2018
  * @version     18/September/2018   The ORIGIN
- * @pre         This firmware was tested on the NUCLEO-L152RE with Atollic TrueSTUDIO for STM32
- *              ( v9.0.1 ). This project was generated using SMT32CubeMX ( used to generate a template ).
+ * @pre         This firmware was tested on the NUCLEO-L152RE with Atollic TrueSTUDIO for STM32 ( v9.0.1 ). This project was
+ * 				generated using SMT32CubeMX ( used to generate a template ).
  * @warning     Although HAL driver was generated, just the Low Power functions are used.
  */
 /**
@@ -68,10 +67,12 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-#define TS_CAL2  				((uint16_t*) ((uint32_t)0x1FF800FE))	/*!<   Temperature sensor calibration value acquired at 110°C	*/
-#define TS_CAL1	  				((uint16_t*) ((uint32_t)0x1FF800FA))	/*!<   Temperature sensor calibration value acquired at 30°C	*/
-#define TEMPSENSOR_CAL1_TEMP	((int32_t)   30)                    	/*!<   Internal temperature sensor, temperature at which temperature sensor has been calibrated in production 	*/
-#define TEMPSENSOR_CAL2_TEMP 	((int32_t)  110)                    	/*!<   Internal temperature sensor, temperature at which temperature sensor has been calibrated in production	*/
+#define TS_CAL2  						((uint16_t*) ((uint32_t)0x1FF800FE))	/*!<   Temperature sensor calibration value acquired at 110°C and VDD = 3V	*/
+#define TS_CAL1	  						((uint16_t*) ((uint32_t)0x1FF800FA))	/*!<   Temperature sensor calibration value acquired at 30°C and VDD = 3V	*/
+#define TEMPSENSOR_CAL1_TEMP			30.0f                    				/*!<   Internal temperature sensor, temperature at which temperature sensor has been calibrated in production 	*/
+#define TEMPSENSOR_CAL2_TEMP 			110.0f                    				/*!<   Internal temperature sensor, temperature at which temperature sensor has been calibrated in production	*/
+#define CALIBRATION_REFERENCE_VOLTAGE	3.0f									/*!<   VDD for calibration data												*/
+#define REFERENCE_VOLTAGE				3.3f									/*!<   Current VDD for the system											*/
 
 
 #define TX_BUFF_SIZE  128	                     			/*!<   UART buffer size                              		*/
@@ -106,7 +107,8 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  int32_t	ts_data	 		=	0UL;
+  float		myTemperature	=	0UL;
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -115,9 +117,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  int32_t	ts_data	 		=	0UL;
-  float		myTemperature	=	0UL;
-  int16_t	a1 =  TS_CAL1, a2 = TS_CAL2;
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -134,7 +134,6 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Conf_GPIO  ();
   Conf_USART ( UART_CLK, 230400 );				// 230400 Baud Rate
-  Conf_ADC   ();
   Conf_RTC   ();
   /* USER CODE END 2 */
 
@@ -156,29 +155,12 @@ int main(void)
 	  {
 	  	GPIOA->BSRR	 =	 ( 1UL << LED_1 );							// Turn it ON
 
-	  	/* Turn on the ADC1 clock	 */
-	  	RCC->APB2ENR	|=	 RCC_APB2ENR_ADC1EN;
-
-	  	/* Turn off the ADC	 */
-	  	ADC1->CR2	&=	~ADC_CR2_ADON;
-
-	  	/* Channel: ADC_IN16 ( Temperature sensor ) 	 */
-	  	ADC1->SQR5	&=	~ADC_SQR5_SQ1;								// Clear 1st conversion in regular sequence
-	  	ADC1->SQR5	|=	 ADC_SQR5_SQ1_4;							// ADC_IN16 input channel ( Temperature sensor )
-
-	  	/* Sampling time ( T_s = T_ADC_CLK * Cycles ): ( 16MHz )^( -1 ) * 192 = 12us ( > TS_temp = 4us minimum )	 */
-	  	ADC1->SMPR2	&=	~ADC_SMPR2_SMP16;							// Clear SMP16
-	  	ADC1->SMPR2	|=	 ( ADC_SMPR2_SMP16_2 | ADC_SMPR2_SMP16_1 );	// Sampling time: 192 cycles
-
-	  	/* Configure ADC Prescaler and TSVREFE	 */
-	  	ADC->CCR	&=	~ADC_CCR_ADCPRE;							// HSI divided by 1 ( f_ADC = 16MHz )
-	 	ADC->CCR	|=	 ADC_CCR_TSVREFE;							// Temperature sensor and VREFINT channel enabled
-	 	for(uint32_t ii = 0; ii < 10; ii++);
-
-	  	/* Turn on the ADC	 */
-	  	ADC1->CR2	|=	 ADC_CR2_ADON;
-	  	while ( ( ADC1->SR & ADC_SR_ADONS_Msk ) != ADC_SR_ADONS );	// Wait until the ADC is ready
-	  		  														// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
+	  	/* Configure the ADC module
+	  	 * 	 NOTE:
+	  	 * 	 	This function has to be called due to all the ADC registers are reset when the ADC1 clock is
+	  	 * 	 	turned off.
+	  	 */
+	  	Conf_ADC   ();
 
 	  	/* Start a conversion	 */
 	  	ADC1->CR2	|=	 ADC_CR2_SWSTART;
@@ -198,11 +180,19 @@ int main(void)
 	  	RCC->APB2ENR	&=	~RCC_APB2ENR_ADC1EN;
 
 
-	  	/* Calculate the true temperature	 */
-	  	myTemperature	 =	 (float)( ( TEMPSENSOR_CAL2_TEMP - TEMPSENSOR_CAL1_TEMP )/( TS_CAL2 - TS_CAL1 ) ) * ( ts_data - (int32_t)TS_CAL1 ) + 30.0f;
+	  	/* Calculate the true temperature
+	  	 * 	NOTE:
+	  	 * 		Because of all the calibration data was taken at VDDA = 3V and our system is
+	  	 * 		powered at VDDA = 3.3V, the ts_data must be normalized by using the formula below:
+	  	 *
+	  	 * 			ts_data_normalised = VDDA*ts_data/3
+	  	 *
+	  	 * 		Ref: AN3964 Application note, 1.2 Temperature measurement and data processing, p6/14
+	  	 */
+	  	myTemperature	 =	 (float)( ( TEMPSENSOR_CAL2_TEMP - TEMPSENSOR_CAL1_TEMP )/( *TS_CAL2 - *TS_CAL1 ) ) * ( ( ts_data * ( REFERENCE_VOLTAGE / CALIBRATION_REFERENCE_VOLTAGE ) ) - *TS_CAL1 ) + 30.0f;
 
 	  	/* Parse the data	 */
-	  	sprintf ( (char*)myMessage, "Temperature: %ld\r\n", (int32_t)( myTemperature + 0.5f ) );
+	  	sprintf ( (char*)myMessage, "Temperature: %ld C\r\n", (int32_t)( myTemperature + 0.5f ) );
 
 	  	/* Transmit data through the UART	 */
 	  	myPtr   	 =   &myMessage[0];
