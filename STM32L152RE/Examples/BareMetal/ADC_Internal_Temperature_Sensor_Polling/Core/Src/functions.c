@@ -279,6 +279,9 @@ void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
  * 					- Bank A selected for channels ADC_IN0..31
  * 					- Single conversion mode
  * 					- The EOC bit is set at the end of each regular conversion
+ * 					- Sampling time ( T_s = T_ADC_CLK * Cycles ): ( 16MHz )^( -1 ) * 192 = 12us ( > TS_temp = 4us minimum )
+ * 					- ADC_IN16 input channel ( Temperature sensor )
+ * 					- HSI divided by 1 ( f_ADC = 16MHz )
  *
  *
  * @param[in]    N/A.
@@ -292,12 +295,16 @@ void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
  *
  * @author      Manuel Caballero
  * @date        18/September/2018
- * @version		18/September/2018   The ORIGIN
+ * @version		19/September/2018   The ADC function was completed.
+ * 				18/September/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
 void Conf_ADC  ( void )
 {
+	/* Turn on the ADC1 clock	 */
+	RCC->APB2ENR	|=	 RCC_APB2ENR_ADC1EN;
+
 	/* Turn off the ADC	 */
 	ADC1->CR2	&=	~ADC_CR2_ADON;
 
@@ -326,4 +333,22 @@ void Conf_ADC  ( void )
 	 */
 	ADC1->CR2	&=	~( ADC_CR2_ALIGN | ADC_CR2_DMA | ADC_CR2_DELS | ADC_CR2_CFG | ADC_CR2_CONT );
 	ADC1->CR2	|=	 ( ADC_CR2_EOCS );
+
+	/* Channel: ADC_IN16 ( Temperature sensor ) 	 */
+	ADC1->SQR5	&=	~ADC_SQR5_SQ1;								// Clear 1st conversion in regular sequence
+	ADC1->SQR5	|=	 ADC_SQR5_SQ1_4;							// ADC_IN16 input channel ( Temperature sensor )
+
+	/* Sampling time ( T_s = T_ADC_CLK * Cycles ): ( 16MHz )^( -1 ) * 192 = 12us ( > TS_temp = 4us minimum )	 */
+	ADC1->SMPR2	&=	~ADC_SMPR2_SMP16;							// Clear SMP16
+	ADC1->SMPR2	|=	 ( ADC_SMPR2_SMP16_2 | ADC_SMPR2_SMP16_1 );	// Sampling time: 192 cycles
+
+	/* Configure ADC Prescaler and TSVREFE	 */
+	ADC->CCR	&=	~ADC_CCR_ADCPRE;							// HSI divided by 1 ( f_ADC = 16MHz )
+	ADC->CCR	|=	 ADC_CCR_TSVREFE;							// Temperature sensor and VREFINT channel enabled
+	//wait 10us ( maximum t_START, STM32L151xE STM32L152xE Datasheet, Table 61. Temperature sensor characteristics, p112/136 )
+
+	/* Turn on the ADC	 */
+	ADC1->CR2	|=	 ADC_CR2_ADON;
+	while ( ( ADC1->SR & ADC_SR_ADONS_Msk ) != ADC_SR_ADONS );	// Wait until the ADC is ready
+		  		  												// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
 }
