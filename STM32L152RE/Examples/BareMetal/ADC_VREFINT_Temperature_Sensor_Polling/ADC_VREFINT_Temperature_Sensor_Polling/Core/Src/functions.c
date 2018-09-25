@@ -269,7 +269,7 @@ void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
 
 /**
  * @brief       void Conf_ADC  ( void )
- * @details     It configures the ADC to work with the internal temperature sensor.
+ * @details     It configures the ADC to work with the internal temperature sensor and V_REFINT.
  *
  * 					- Resolution: 12-bit
  * 					- Interrupts DISABLED
@@ -279,8 +279,9 @@ void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
  * 					- Bank A selected for channels ADC_IN0..31
  * 					- Single conversion mode
  * 					- The EOC bit is set at the end of each regular conversion
- * 					- Sampling time ( T_s = T_ADC_CLK * Cycles ): ( 16MHz )^( -1 ) * 192 = 12us ( > TS_temp = 4us minimum )
+ * 					- Sampling time for both channels ( T_s = T_ADC_CLK * Cycles ): ( 16MHz )^( -1 ) * 192 = 12us ( > TS_temp, TS_vrefint = 4us minimum )
  * 					- ADC_IN16 input channel ( Temperature sensor )
+ * 					- ADC_IN17 input channel ( V_REFINT )
  * 					- HSI divided by 1 ( f_ADC = 16MHz )
  *
  *
@@ -315,12 +316,13 @@ void Conf_ADC  ( void )
 	 * 	- Discontinuous mode on injected channels disabled
 	 * 	- Discontinuous mode on regular channels disabled
 	 * 	- Automatic injected group conversion disabled
-	 * 	- Scan mode disabled
+	 * 	- Scan mode enabled
 	 * 	- JEOC interrupt disabled
 	 * 	- Analog watchdog interrupt disabled
 	 * 	- EOC interrupt disabled
 	 */
-	ADC1->CR1	&=	~( ADC_CR1_OVRIE | ADC_CR1_RES | ADC_CR1_AWDEN | ADC_CR1_JAWDEN | ADC_CR1_JDISCEN | ADC_CR1_DISCEN | ADC_CR1_JAUTO | ADC_CR1_SCAN | ADC_CR1_JEOSIE | ADC_CR1_AWDIE | ADC_CR1_EOCSIE );
+	ADC1->CR1	&=	~( ADC_CR1_OVRIE | ADC_CR1_RES | ADC_CR1_AWDEN | ADC_CR1_JAWDEN | ADC_CR1_JDISCEN | ADC_CR1_DISCEN | ADC_CR1_JAUTO | ADC_CR1_JEOSIE | ADC_CR1_AWDIE | ADC_CR1_EOCSIE );
+	ADC1->CR1	|=	 ADC_CR1_SCAN;
 
 	/* Configure the ADC:
 	 *  - Right alignment
@@ -328,26 +330,31 @@ void Conf_ADC  ( void )
 	 *  - No delay
 	 *  - Bank A selected for channels ADC_IN0..31
 	 *  - Single conversion mode
+	 *  - Two conversions in the regular channel conversion sequence
 	 *  - The EOC bit is set at the end of each regular conversion
 	 */
 	ADC1->CR2	&=	~( ADC_CR2_ALIGN | ADC_CR2_DMA | ADC_CR2_DELS | ADC_CR2_CFG | ADC_CR2_CONT );
 	ADC1->CR2	|=	 ( ADC_CR2_EOCS );
 
-	/* Channel: ADC_IN16 ( Temperature sensor ) 	 */
-	ADC1->SQR5	&=	~ADC_SQR5_SQ1;								// Clear 1st conversion in regular sequence
-	ADC1->SQR5	|=	 ADC_SQR5_SQ1_4;							// ADC_IN16 input channel ( Temperature sensor )
+	/* Channel: ADC_IN16 ( Temperature sensor ) and ADC_IN17 ( V_REFINT ) 	 */
+	ADC1->SQR5	&=	~( ADC_SQR5_SQ1 | ADC_SQR5_SQ2 );															// Clear 1st and 2nd conversion in regular sequence
+	ADC1->SQR5	|=	 ( ADC_SQR5_SQ1_4 | ( ADC_SQR5_SQ2_4 | ADC_SQR5_SQ2_0 ) );									// ADC_IN16 input channel ( Temperature sensor ) and ADC_IN17 ( V_REFINT )
 
-	/* Sampling time ( T_s = T_ADC_CLK * Cycles ): ( 16MHz )^( -1 ) * 192 = 12us ( > TS_temp = 4us minimum )	 */
-	ADC1->SMPR2	&=	~ADC_SMPR2_SMP16;							// Clear SMP16
-	ADC1->SMPR2	|=	 ( ADC_SMPR2_SMP16_2 | ADC_SMPR2_SMP16_1 );	// Sampling time: 192 cycles
+	/* Sampling time, for both channels Channel 16 ( Temperature sensor ) and Channel 17 ( V_REFINT ), ( T_s = T_ADC_CLK * Cycles ): ( 16MHz )^( -1 ) * 192 = 12us ( > TS_temp, TS_vrefint = 4us minimum )	 */
+	ADC1->SMPR2	&=	~( ADC_SMPR2_SMP16 | ADC_SMPR2_SMP17 );														// Clear SMP16 and SMP17
+	ADC1->SMPR2	|=	 ( ( ADC_SMPR2_SMP16_2 | ADC_SMPR2_SMP16_1 ) | ( ADC_SMPR2_SMP17_2 | ADC_SMPR2_SMP17_1 ) );	// Sampling time: 192 cycles for both channels ( 16 and 17 )
+
+	/* Define total number of conversion in the regular channel conversion sequence: Two conversions	 */
+	ADC1->SQR1	&=	~ADC_SQR1_L;
+	ADC1->SQR1	|=	 ADC_SQR1_L_0;
 
 	/* Configure ADC Prescaler and TSVREFE	 */
-	ADC->CCR	&=	~ADC_CCR_ADCPRE;							// HSI divided by 1 ( f_ADC = 16MHz )
-	ADC->CCR	|=	 ADC_CCR_TSVREFE;							// Temperature sensor and VREFINT channel enabled
+	ADC->CCR	&=	~ADC_CCR_ADCPRE;																			// HSI divided by 1 ( f_ADC = 16MHz )
+	ADC->CCR	|=	 ADC_CCR_TSVREFE;																			// Temperature sensor and VREFINT channel enabled
 	//wait 10us ( maximum t_START, STM32L151xE STM32L152xE Datasheet, Table 61. Temperature sensor characteristics, p112/136 )
 
 	/* Turn on the ADC	 */
 	ADC1->CR2	|=	 ADC_CR2_ADON;
-	while ( ( ADC1->SR & ADC_SR_ADONS_Msk ) != ADC_SR_ADONS );	// Wait until the ADC is ready
-		  		  												// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
+	while ( ( ADC1->SR & ADC_SR_ADONS_Msk ) != ADC_SR_ADONS );													// Wait until the ADC is ready
+		  		  																								// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
 }
