@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to read the internal temperature sensor by polling mode. Every one second, the data will be
- * 				transmitted through the UART ( 230400 baud rate ).
+ * @details     This example shows how to read the internal temperature sensor and calculates the actual V_DDA by polling mode. Every one
+ * 				second, the data will be transmitted through the UART ( 230400 baud rate ). Two ADC channels are read in regular sequence.
  *
  * 				The microcontroller will remain in low power the rest of the time.
  *
@@ -67,6 +67,8 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+#define VREFINT_CAL						((uint16_t*) ((uint32_t)0x1FF800F8))	/*!<   Embedded internal reference voltage calibration values at temperature of 30C and VDD = 3V				*/
+
 #define TS_CAL2  						((uint16_t*) ((uint32_t)0x1FF800FE))	/*!<   Temperature sensor calibration value acquired at 110°C and VDD = 3V	*/
 #define TS_CAL1	  						((uint16_t*) ((uint32_t)0x1FF800FA))	/*!<   Temperature sensor calibration value acquired at 30°C and VDD = 3V	*/
 #define TEMPSENSOR_CAL1_TEMP			30.0f                    				/*!<   Internal temperature sensor, temperature at which temperature sensor has been calibrated in production 	*/
@@ -108,7 +110,9 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
   int32_t	ts_data	 		=	0UL;
+  int32_t	vrefint_data	=	0UL;
   float		myTemperature	=	0UL;
+  float		myCalculatedVDD	=	0UL;
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -162,13 +166,22 @@ int main(void)
 	  	 */
 	  	Conf_ADC   ();
 
-	  	/* Start a conversion	 */
+	  	/* Start a conversion for Temperature Sensor	 */
 	  	ADC1->CR2	|=	 ADC_CR2_SWSTART;
 	  	while ( ( ADC1->SR & ADC_SR_EOCS_Msk ) != ADC_SR_EOCS );	// Wait until the conversion is completed
 	  		  														// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
 
 	  	/* Read the result ( it will clear EOC flag as well )	 */
 	  	ts_data	 =	 ( ADC1->DR & ADC_DR_DATA_Msk );
+
+	  	/* Start a conversion for V_REFINT	 */
+	    ADC1->CR2	|=	 ADC_CR2_SWSTART;
+	  	while ( ( ADC1->SR & ADC_SR_EOCS_Msk ) != ADC_SR_EOCS );	// Wait until the conversion is completed
+	  		  		  												// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
+
+	  	/* Read the result ( it will clear EOC flag as well )	 */
+	  	vrefint_data	 =	 ( ADC1->DR & ADC_DR_DATA_Msk );
+
 
 	  	/* Disable TSVREFE	 */
 	  	ADC->CCR	&=	~ADC_CCR_TSVREFE;							// Temperature sensor and VREFINT channel disabled
@@ -191,8 +204,18 @@ int main(void)
 	  	 */
 	  	myTemperature	 =	 (float)( ( TEMPSENSOR_CAL2_TEMP - TEMPSENSOR_CAL1_TEMP )/( *TS_CAL2 - *TS_CAL1 ) ) * ( ( ts_data * ( REFERENCE_VOLTAGE / CALIBRATION_REFERENCE_VOLTAGE ) ) - *TS_CAL1 ) + 30.0f;
 
+	  	/* Calculate the actual V_DDA
+	  	* 	NOTE:
+	  	* 		VDDA = 3 V x VREFINT_CAL / VREFINT_DATA
+	  	*
+	    * 		Ref: CD00240193 Reference Manual, Calculating the actual VDDA voltage using the internal reference voltage, p288/911
+	  	*/
+	  	myCalculatedVDD	 =	 (float)( ( 3.0f * *VREFINT_CAL )/vrefint_data );
+
+
+
 	  	/* Parse the data	 */
-	  	sprintf ( (char*)myMessage, "Temperature: %ld C\r\n", (int32_t)( myTemperature + 0.5f ) );
+	  	sprintf ( (char*)myMessage, "Temperature: %ld C, V_DDA: %ld mV\r\n", (int32_t)( myTemperature + 0.5f ), (int32_t)( 1000.0f * myCalculatedVDD ) );
 
 	  	/* Transmit data through the UART	 */
 	  	myPtr   	 =   &myMessage[0];
