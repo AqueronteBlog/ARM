@@ -138,6 +138,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Conf_GPIO  ();
   Conf_USART ( UART_CLK, 230400 );				// 230400 Baud Rate
+  Conf_ADC   ();
   Conf_RTC   ();
   /* USER CODE END 2 */
 
@@ -145,52 +146,31 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /* Low power: Stop mode	 */
-	  HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	  /* Low power: Sleep mode	 */
+	  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
 
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-	  /* Re-configure the CLKs	 */
-	  Conf_CLK ();
-
 	  /* Check myState	 */
 	  if ( myState == 1UL )
 	  {
 	  	GPIOA->BSRR	 =	 ( 1UL << LED_1 );							// Turn it ON
 
-	  	/* Configure the ADC module
-	  	 * 	 NOTE:
-	  	 * 	 	This function has to be called due to all the ADC registers are reset when the ADC1 clock is
-	  	 * 	 	turned off.
-	  	 */
-	  	Conf_ADC   ();
 
 	  	/* Start a conversion for Temperature Sensor	 */
 	  	ADC1->CR2	|=	 ADC_CR2_SWSTART;
-	  	while ( ( ADC1->SR & ADC_SR_EOCS_Msk ) != ADC_SR_EOCS );	// Wait until the conversion is completed
-	  		  														// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
 
 	  	/* Read the result ( it will clear EOC flag as well )	 */
 	  	ts_data	 =	 ( ADC1->DR & ADC_DR_DATA_Msk );
 
+
 	  	/* Start a conversion for V_REFINT	 */
 	    ADC1->CR2	|=	 ADC_CR2_SWSTART;
-	  	while ( ( ADC1->SR & ADC_SR_EOCS_Msk ) != ADC_SR_EOCS );	// Wait until the conversion is completed
-	  		  		  												// [TODO] Dangerous!!! Insert a delay, the uC may get stuck here otherwise.
 
 	  	/* Read the result ( it will clear EOC flag as well )	 */
 	  	vrefint_data	 =	 ( ADC1->DR & ADC_DR_DATA_Msk );
 
-
-	  	/* Disable TSVREFE	 */
-	  	ADC->CCR	&=	~ADC_CCR_TSVREFE;							// Temperature sensor and VREFINT channel disabled
-
-	  	/* Turn off the ADC	 */
-	  	ADC1->CR2	&=	~ADC_CR2_ADON;
-
-	  	/* Turn off the ADC1 clock	 */
-	  	RCC->APB2ENR	&=	~RCC_APB2ENR_ADC1EN;
 
 
 	  	/* Calculate the true temperature
