@@ -272,7 +272,7 @@ void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
  * @details     It configures the ADC to work with the internal temperature sensor and V_REFINT.
  *
  * 					- Resolution: 12-bit
- * 					- Interrupts DISABLED
+ * 					- Interrupts ENABLED
  * 					- Right alignment
  * 					- DMA mode disabled
  * 					- No delay
@@ -296,7 +296,8 @@ void Conf_USART  ( uint32_t myCK, uint32_t myBaudRate )
  *
  * @author      Manuel Caballero
  * @date        28/September/2018
- * @version		28/September/2018   The ORIGIN
+ * @version		2/October/2018   	EOC interrupt was enabled
+ * 				28/September/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -307,6 +308,10 @@ void Conf_ADC  ( void )
 
 	/* Turn off the ADC	 */
 	ADC1->CR2	&=	~ADC_CR2_ADON;
+
+	/* Enable Interrupt	 */
+	NVIC_SetPriority ( ADC1_IRQn, 1 ); 									// Set Priority to 1
+	NVIC_EnableIRQ   ( ADC1_IRQn );  									// Enable ADC1_IRQn interrupt in NVIC
 
 	/* Configure the ADC:
 	 * 	- Overrun interrupt disabled
@@ -319,10 +324,10 @@ void Conf_ADC  ( void )
 	 * 	- Scan mode enabled
 	 * 	- JEOC interrupt disabled
 	 * 	- Analog watchdog interrupt disabled
-	 * 	- EOC interrupt disabled
+	 * 	- EOC interrupt enabled
 	 */
-	ADC1->CR1	&=	~( ADC_CR1_OVRIE | ADC_CR1_RES | ADC_CR1_AWDEN | ADC_CR1_JAWDEN | ADC_CR1_JDISCEN | ADC_CR1_DISCEN | ADC_CR1_JAUTO | ADC_CR1_JEOSIE | ADC_CR1_AWDIE | ADC_CR1_EOCSIE );
-	ADC1->CR1	|=	 ADC_CR1_SCAN;
+	ADC1->CR1	&=	~( ADC_CR1_OVRIE | ADC_CR1_RES | ADC_CR1_AWDEN | ADC_CR1_JAWDEN | ADC_CR1_JDISCEN | ADC_CR1_DISCEN | ADC_CR1_JAUTO | ADC_CR1_JEOSIE | ADC_CR1_AWDIE );
+	ADC1->CR1	|=	 ( ADC_CR1_SCAN | ADC_CR1_EOCSIE );
 
 	/* Configure the ADC:
 	 *  - Right alignment
