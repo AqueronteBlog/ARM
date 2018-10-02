@@ -27,7 +27,7 @@ extern "C" {
  */
 void RTC_WKUP_IRQHandler ( void );
 void USART2_IRQHandler 	 ( void );
-
+void ADC1_IRQHandler 	 ( void );
 
 
 /**@brief Constants.

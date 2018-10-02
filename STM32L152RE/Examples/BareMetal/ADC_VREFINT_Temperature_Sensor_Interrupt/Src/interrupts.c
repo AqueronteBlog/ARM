@@ -72,7 +72,7 @@ void RTC_WKUP_IRQHandler ( void )
 void USART2_IRQHandler ( void )
 {
 	/* TX: TRANSMISSION COMPLETE	*/
-	if ( ( USART2->SR & USART_SR_TC ) == USART_SR_TC )
+	if ( ( USART2->SR & USART_SR_TC_Msk ) == USART_SR_TC )
 	{
 		USART2->SR	&=	~USART_SR_TC ;								// Clear flag
 
@@ -88,3 +88,30 @@ void USART2_IRQHandler ( void )
 		}
 	}
 }
+
+
+
+/**
+ * @brief       void ADC1_IRQHandler ()
+ * @details     ADC1 subroutine.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        2/October/2018
+ * @version     2/October/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A
+ */
+void ADC1_IRQHandler ( void )
+{
+	/* EOC: END OF CONVERSION	*/
+	if ( ( ADC1->SR & ADC_SR_EOCS_Msk ) == ADC_SR_EOCS )
+	{
+		ADC1->SR	&=	~ADC_SR_EOCS ;								// Clear flag
+
+		//[todo]
+	}
+}
+
