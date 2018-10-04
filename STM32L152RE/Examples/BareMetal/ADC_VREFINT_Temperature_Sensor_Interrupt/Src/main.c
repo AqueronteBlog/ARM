@@ -83,10 +83,13 @@
 volatile uint32_t mySystemCoreClock;						/*!<  System CLK in MHz  		   							*/
 volatile uint32_t myUARTClock;								/*!<  UART CLK in MHz  		   	   							*/
 
-volatile uint32_t myState;                        			/*!<  State that indicates when performs a new reading		*/
+volatile system_state_machine_t	myState;           			/*!<  State machine for this example						*/
 volatile uint32_t myUART_TxEnd;                     		/*!<  It indicates when an UART transmission is finished	*/
 volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      			/*!<  Message to be transmitted through the UART         	*/
 volatile uint8_t  *myPtr;                         			/*!<  Pointer to point out myMessage                     	*/
+
+
+volatile system_state_machine_t	myState;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -146,73 +149,83 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /* Low power: Sleep mode	 */
-	  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	  /* Check myState	 */
+	  switch ( myState )
+	  {
+	  	  default:
+	  	  case STATE_SLEEP_MODE:
+	  		  /* Low power: Sleep mode	 */
+	  		  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	  		  break;
+
+	  	  case STATE_TRIGGER_INTERNAL_TEMPERATURE:
+	  		  GPIOA->BSRR	 =	 ( 1UL << LED_1 );							// Turn it ON
+
+	  		  /* Start a conversion for Temperature Sensor	 */
+	  		  ADC1->CR2	|=	 ADC_CR2_SWSTART;
+	  		  break;
+
+	  	  case STATE_GET_RAW_TEMPERATURE_DATA:
+	  		  /* Read the result ( it will clear EOC flag as well )	 */
+	  		  ts_data	 =	 ( ADC1->DR & ADC_DR_DATA_Msk );
+	  		  break;
+
+	  	  case STATE_TRIGGER_VDD:
+	  		  /* Start a conversion for V_REFINT	 */
+	  		  ADC1->CR2	|=	 ADC_CR2_SWSTART;
+	  		  break;
+
+	  	  case STATE_GET_RAW_VDD_DATA:
+	  		  /* Read the result ( it will clear EOC flag as well )	 */
+	  		  vrefint_data	 =	 ( ADC1->DR & ADC_DR_DATA_Msk );
+	  		  break;
+
+	  	  case STATE_PROCESS_ALL_DATA:
+	  		/* Calculate the true temperature
+	  		 * 	NOTE:
+	  		 * 		Because of all the calibration data was taken at VDDA = 3V and our system is
+	  		 * 		powered at VDDA = 3.3V, the ts_data must be normalized by using the formula below:
+	  		 *
+	  		 * 			ts_data_normalised = VDDA*ts_data/3
+	  		 *
+	  		 * 		Ref: AN3964 Application note, 1.2 Temperature measurement and data processing, p6/14
+	  		 */
+	  		  myTemperature	 =	 (float)( ( TEMPSENSOR_CAL2_TEMP - TEMPSENSOR_CAL1_TEMP )/( *TS_CAL2 - *TS_CAL1 ) ) * ( ( ts_data * ( REFERENCE_VOLTAGE / CALIBRATION_REFERENCE_VOLTAGE ) ) - *TS_CAL1 ) + 30.0f;
+
+	  		  /* Calculate the actual V_DDA
+	  		   * 	NOTE:
+	  		   * 		VDDA = 3 V x VREFINT_CAL / VREFINT_DATA
+	  		   *
+	  		   * 		Ref: CD00240193 Reference Manual, Calculating the actual VDDA voltage using the internal reference voltage, p288/911
+	  		   */
+	  		  myCalculatedVDD	 =	 (float)( ( 3.0f * *VREFINT_CAL )/vrefint_data );
+	  		  break;
+
+	  	  case STATE_SEND_DATA_THROUGH_UART:
+	  		  /* Parse the data	 */
+	  		  sprintf ( (char*)myMessage, "Temperature: %ld C, V_DDA: %ld mV\r\n", (int32_t)( myTemperature + 0.5f ), (int32_t)( 1000.0f * myCalculatedVDD ) );
+
+	  		  /* Transmit data through the UART	 */
+	  		  myPtr   	 =   &myMessage[0];
+	  		  USART2->DR	 =	 *myPtr;
+	  		  USART2->CR1	|=	 USART_CR1_TE;						// Transmitter Enabled
+
+	  		  /* Low power: Sleep mode, wait until all data was sent through the UART	 */
+	  		  do{
+	  			  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	  		  }while ( myUART_TxEnd == 0UL );
+
+
+	  		  /* Reset variables	 */
+	  		  myUART_TxEnd	 =	 0UL;
+	  		  myState	 	 =	 STATE_SLEEP_MODE;
+	  		  GPIOA->BRR	  =	( 1UL << LED_1 );				// Turn it OFF
+	  		  break;
+	  	  }
 
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-	  /* Check myState	 */
-	  if ( myState == 1UL )
-	  {
-	  	GPIOA->BSRR	 =	 ( 1UL << LED_1 );							// Turn it ON
-
-
-	  	/* Start a conversion for Temperature Sensor	 */
-	  	ADC1->CR2	|=	 ADC_CR2_SWSTART;
-
-	  	/* Read the result ( it will clear EOC flag as well )	 */
-	  	ts_data	 =	 ( ADC1->DR & ADC_DR_DATA_Msk );
-
-
-	  	/* Start a conversion for V_REFINT	 */
-	    ADC1->CR2	|=	 ADC_CR2_SWSTART;
-
-	  	/* Read the result ( it will clear EOC flag as well )	 */
-	  	vrefint_data	 =	 ( ADC1->DR & ADC_DR_DATA_Msk );
-
-
-
-	  	/* Calculate the true temperature
-	  	 * 	NOTE:
-	  	 * 		Because of all the calibration data was taken at VDDA = 3V and our system is
-	  	 * 		powered at VDDA = 3.3V, the ts_data must be normalized by using the formula below:
-	  	 *
-	  	 * 			ts_data_normalised = VDDA*ts_data/3
-	  	 *
-	  	 * 		Ref: AN3964 Application note, 1.2 Temperature measurement and data processing, p6/14
-	  	 */
-	  	myTemperature	 =	 (float)( ( TEMPSENSOR_CAL2_TEMP - TEMPSENSOR_CAL1_TEMP )/( *TS_CAL2 - *TS_CAL1 ) ) * ( ( ts_data * ( REFERENCE_VOLTAGE / CALIBRATION_REFERENCE_VOLTAGE ) ) - *TS_CAL1 ) + 30.0f;
-
-	  	/* Calculate the actual V_DDA
-	  	* 	NOTE:
-	  	* 		VDDA = 3 V x VREFINT_CAL / VREFINT_DATA
-	  	*
-	    * 		Ref: CD00240193 Reference Manual, Calculating the actual VDDA voltage using the internal reference voltage, p288/911
-	  	*/
-	  	myCalculatedVDD	 =	 (float)( ( 3.0f * *VREFINT_CAL )/vrefint_data );
-
-
-
-	  	/* Parse the data	 */
-	  	sprintf ( (char*)myMessage, "Temperature: %ld C, V_DDA: %ld mV\r\n", (int32_t)( myTemperature + 0.5f ), (int32_t)( 1000.0f * myCalculatedVDD ) );
-
-	  	/* Transmit data through the UART	 */
-	  	myPtr   	 =   &myMessage[0];
-	  	USART2->DR	 =	 *myPtr;
-	  	USART2->CR1	|=	 USART_CR1_TE;						// Transmitter Enabled
-
-	  	/* Low power: Sleep mode, wait until all data was sent through the UART	 */
-	  	do{
-	  		HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
-	  	}while ( myUART_TxEnd == 0UL );
-
-
-	  	/* Reset variables	 */
-	  	myUART_TxEnd	 =	 0UL;
-	  	myState	 		 =	 0UL;
-	  	GPIOA->BRR		 =	( 1UL << LED_1 );				// Turn it OFF
-	  }
   }
   /* USER CODE END 3 */
 
