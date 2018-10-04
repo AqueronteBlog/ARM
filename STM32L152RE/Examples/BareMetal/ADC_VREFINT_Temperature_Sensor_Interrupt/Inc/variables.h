@@ -26,6 +26,20 @@ extern "C" {
 #define _ROUND32U( x )  ( uint32_t )( x + 0.5 )
 
 /**
+ * @brief   Constants
+ */
+/* STATE MACHINE	 */
+typedef enum{
+  STATE_SLEEP_MODE                 		=   0UL,      /*!< System in Low Power         						 */
+  STATE_TRIGGER_INTERNAL_TEMPERATURE	=   1UL,      /*!< Trigger a new internal temperature measurement	 	 */
+  STATE_GET_RAW_TEMPERATURE_DATA		=   2UL,      /*!< Get raw internal temperature value      		 	 */
+  STATE_TRIGGER_VDD  					=   3UL,      /*!< Trigger a new VDD measurement      			 	 */
+  STATE_GET_RAW_VDD_DATA		        =   4UL,      /*!< Get raw VDD value      						 	 */
+  STATE_PROCESS_ALL_DATA			    =   5UL,      /*!< Process all data, both temperature and VDD data	 */
+  STATE_SEND_DATA_THROUGH_UART          =   6UL       /*!< Send all data through the UART      				 */
+} system_state_machine_t;
+
+/**
  * @brief   Variables
  */
 
