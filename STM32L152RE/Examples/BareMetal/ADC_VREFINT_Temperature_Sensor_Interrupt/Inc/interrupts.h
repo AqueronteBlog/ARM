@@ -37,9 +37,9 @@ void ADC1_IRQHandler 	 ( void );
 
 /**@brief Variables.
  */
-extern volatile uint32_t myState;
-extern volatile uint8_t  *myPtr;
-extern volatile uint32_t myUART_TxEnd;
+extern volatile system_state_machine_t 	myState;
+extern volatile uint8_t  				*myPtr;
+extern volatile uint32_t 				myUART_TxEnd;
 
 
 #ifdef __cplusplus

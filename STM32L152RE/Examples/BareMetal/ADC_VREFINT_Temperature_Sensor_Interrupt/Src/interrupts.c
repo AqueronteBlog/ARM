@@ -39,7 +39,7 @@ void RTC_WKUP_IRQHandler ( void )
 	/* WAKE-UP Interrupt	 */
 	if ( ( RTC->ISR & RTC_ISR_WUTF_Msk ) == RTC_ISR_WUTF )
 	{
-		myState	 		 =	 1UL;
+		myState	 		 =	 STATE_TRIGGER_INTERNAL_TEMPERATURE;
 
 		/* Clear flags	 */
 		RTC->ISR	&=	~( RTC_ISR_WUTF | RTC_ISR_INIT );
