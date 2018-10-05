@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to read the internal temperature sensor and calculates the actual V_DDA by interrupt mode. Every one
+ * @details     This example shows how to read the internal temperature sensor and calculates the actual V_DDA by interrupt mode. Every one
  * 				second, the data will be transmitted through the UART ( 230400 baud rate ). Two ADC channels are read in regular sequence.
  *
  * 				The microcontroller will remain in low power the rest of the time.
@@ -84,12 +84,11 @@ volatile uint32_t mySystemCoreClock;						/*!<  System CLK in MHz  		   							*
 volatile uint32_t myUARTClock;								/*!<  UART CLK in MHz  		   	   							*/
 
 volatile system_state_machine_t	myState;           			/*!<  State machine for this example						*/
-volatile uint32_t myUART_TxEnd;                     		/*!<  It indicates when an UART transmission is finished	*/
+
 volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      			/*!<  Message to be transmitted through the UART         	*/
 volatile uint8_t  *myPtr;                         			/*!<  Pointer to point out myMessage                     	*/
 
-
-volatile system_state_machine_t	myState;
+volatile uint32_t myRawADC_value;                     		/*!<  It stores the raw ADC value							*/
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -147,6 +146,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  myState	 =	 STATE_SLEEP_MODE;
   while (1)
   {
 	  /* Check myState	 */
@@ -161,24 +161,37 @@ int main(void)
 	  	  case STATE_TRIGGER_INTERNAL_TEMPERATURE:
 	  		  GPIOA->BSRR	 =	 ( 1UL << LED_1 );							// Turn it ON
 
+	  		  /* Disable RTC WakeUp IRQ  */
+	  		  NVIC_DisableIRQ ( RTC_WKUP_IRQn );
+
 	  		  /* Start a conversion for Temperature Sensor	 */
 	  		  ADC1->CR2	|=	 ADC_CR2_SWSTART;
+
+	  		  /* Go to sleep mode, the states are changed in the interrupts mostly	 */
+	  		  myState	 	 =	 STATE_SLEEP_MODE;
 	  		  break;
 
 	  	  case STATE_GET_RAW_TEMPERATURE_DATA:
-	  		  /* Read the result ( it will clear EOC flag as well )	 */
-	  		  ts_data	 =	 ( ADC1->DR & ADC_DR_DATA_Msk );
-	  		  break;
+	  		  /* Read the result  */
+	  		  ts_data	 =	 myRawADC_value;
+
+	  		  /* Trigger a new ADC measurement	 */
+	  		  myState	 	 =	 STATE_TRIGGER_VDD;
 
 	  	  case STATE_TRIGGER_VDD:
 	  		  /* Start a conversion for V_REFINT	 */
 	  		  ADC1->CR2	|=	 ADC_CR2_SWSTART;
+
+	  		  /* Go to sleep mode, the states are changed in the interrupts mostly	 */
+	  		  myState	 	 =	 STATE_SLEEP_MODE;
 	  		  break;
 
 	  	  case STATE_GET_RAW_VDD_DATA:
-	  		  /* Read the result ( it will clear EOC flag as well )	 */
-	  		  vrefint_data	 =	 ( ADC1->DR & ADC_DR_DATA_Msk );
-	  		  break;
+	  		  /* Read the result  */
+	  		  vrefint_data	 =	 myRawADC_value;
+
+	  		  /* Process all the data	 */
+	  		  myState	 	 =	 STATE_PROCESS_ALL_DATA;
 
 	  	  case STATE_PROCESS_ALL_DATA:
 	  		/* Calculate the true temperature
@@ -199,7 +212,9 @@ int main(void)
 	  		   * 		Ref: CD00240193 Reference Manual, Calculating the actual VDDA voltage using the internal reference voltage, p288/911
 	  		   */
 	  		  myCalculatedVDD	 =	 (float)( ( 3.0f * *VREFINT_CAL )/vrefint_data );
-	  		  break;
+
+	  		  /* Send all the data through the UART	 */
+	  		  myState	 	 =	 STATE_SEND_DATA_THROUGH_UART;
 
 	  	  case STATE_SEND_DATA_THROUGH_UART:
 	  		  /* Parse the data	 */
@@ -208,18 +223,10 @@ int main(void)
 	  		  /* Transmit data through the UART	 */
 	  		  myPtr   	 =   &myMessage[0];
 	  		  USART2->DR	 =	 *myPtr;
-	  		  USART2->CR1	|=	 USART_CR1_TE;						// Transmitter Enabled
-
-	  		  /* Low power: Sleep mode, wait until all data was sent through the UART	 */
-	  		  do{
-	  			  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
-	  		  }while ( myUART_TxEnd == 0UL );
-
+	  		  USART2->CR1	|=	 USART_CR1_TE;		// Transmitter Enabled
 
 	  		  /* Reset variables	 */
-	  		  myUART_TxEnd	 =	 0UL;
 	  		  myState	 	 =	 STATE_SLEEP_MODE;
-	  		  GPIOA->BRR	  =	( 1UL << LED_1 );				// Turn it OFF
 	  		  break;
 	  	  }
 
