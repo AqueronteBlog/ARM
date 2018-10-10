@@ -25,27 +25,17 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-void RTC_WKUP_IRQHandler ( void );
-void USART2_IRQHandler 	 ( void );
-void ADC1_IRQHandler 	 ( void );
+void WWDG_IRQHandler ( void );
 
 
 /**@brief Constants.
  */
-/* ADC channels	 */
-typedef enum{
-  INTERNAL_TEMPERATURE_TRIGGERED	=   0UL,      /*!< A new internal temperature measurement was triggered	 	 */
-  VDD_TRIGGERED  					=   1UL       /*!< A new VDD measurement was triggered      				 */
-} adc_channels_t;
+
 
 
 /**@brief Variables.
  */
-extern volatile system_state_machine_t 	myState;
-extern volatile uint8_t  				*myPtr;
-extern volatile uint32_t 				myRawADC_value;
 
-adc_channels_t							myNextADC_Measurement;
 
 #ifdef __cplusplus
 }
