@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to read the internal temperature sensor and calculates the actual V_DDA by interrupt mode. Every one
- * 				second, the data will be transmitted through the UART ( 230400 baud rate ). Two ADC channels are read in regular sequence.
+ * @details     [TODO]This example shows how to work with the window watchdog ( WWDG ). A WWDG overflow every ~131.07ms.
+ * 				The LED1 will blink.
  *
  * 				The microcontroller will remain in low power the rest of the time.
  *
@@ -67,28 +67,8 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-#define VREFINT_CAL						((uint16_t*) ((uint32_t)0x1FF800F8))	/*!<   Embedded internal reference voltage calibration values at temperature of 30C and VDD = 3V				*/
-
-#define TS_CAL2  						((uint16_t*) ((uint32_t)0x1FF800FE))	/*!<   Temperature sensor calibration value acquired at 110°C and VDD = 3V	*/
-#define TS_CAL1	  						((uint16_t*) ((uint32_t)0x1FF800FA))	/*!<   Temperature sensor calibration value acquired at 30°C and VDD = 3V	*/
-#define TEMPSENSOR_CAL1_TEMP			30.0f                    				/*!<   Internal temperature sensor, temperature at which temperature sensor has been calibrated in production 	*/
-#define TEMPSENSOR_CAL2_TEMP 			110.0f                    				/*!<   Internal temperature sensor, temperature at which temperature sensor has been calibrated in production	*/
-#define CALIBRATION_REFERENCE_VOLTAGE	3.0f									/*!<   VDD for calibration data												*/
-#define REFERENCE_VOLTAGE				3.3f									/*!<   Current VDD for the system											*/
-
-
-#define TX_BUFF_SIZE  128	                     			/*!<   UART buffer size                              		*/
-#define UART_CLK	  16000000UL                  			/*!<   UART f_CK = 16 MHz                              		*/
-
 volatile uint32_t mySystemCoreClock;						/*!<  System CLK in MHz  		   							*/
-volatile uint32_t myUARTClock;								/*!<  UART CLK in MHz  		   	   							*/
 
-volatile system_state_machine_t	myState;           			/*!<  State machine for this example						*/
-
-volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      			/*!<  Message to be transmitted through the UART         	*/
-volatile uint8_t  *myPtr;                         			/*!<  Pointer to point out myMessage                     	*/
-
-volatile uint32_t myRawADC_value;                     		/*!<  It stores the raw ADC value							*/
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -111,10 +91,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  int32_t	ts_data	 		=	0UL;
-  int32_t	vrefint_data	=	0UL;
-  float		myTemperature	=	0UL;
-  float		myCalculatedVDD	=	0UL;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -139,96 +116,22 @@ int main(void)
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
   Conf_GPIO  ();
-  Conf_USART ( UART_CLK, 230400 );				// 230400 Baud Rate
-  Conf_ADC   ();
-  Conf_RTC   ();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  myState	 =	 STATE_SLEEP_MODE;
+  GPIOA->BRR		 =	( 1 << LED_1 );			// LED1 OFF
+  for ( uint32_t i = 0; i < 0x2323; i++ );		// Small delay to see the changes when the WWDG resets the uC
+
+  /* Configure and start the WWDG	 */
+  Conf_WWDG ();
+
+
   while (1)
   {
-	  /* Check myState	 */
-	  switch ( myState )
-	  {
-	  	  default:
-	  	  case STATE_SLEEP_MODE:
-	  		  /* Low power: Sleep mode	 */
-	  		  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
-	  		  break;
-
-	  	  case STATE_TRIGGER_INTERNAL_TEMPERATURE:
-	  		  GPIOA->BSRR	 =	 ( 1UL << LED_1 );							// Turn it ON
-
-	  		  /* Disable RTC WakeUp IRQ  */
-	  		  NVIC_DisableIRQ ( RTC_WKUP_IRQn );
-
-	  		  /* Start a conversion for Temperature Sensor	 */
-	  		  ADC1->CR2	|=	 ADC_CR2_SWSTART;
-
-	  		  /* Go to sleep mode, the states are changed in the interrupts mostly	 */
-	  		  myState	 	 =	 STATE_SLEEP_MODE;
-	  		  break;
-
-	  	  case STATE_GET_RAW_TEMPERATURE_DATA:
-	  		  /* Read the result  */
-	  		  ts_data	 =	 myRawADC_value;
-
-	  		  /* Trigger a new ADC measurement	 */
-	  		  myState	 	 =	 STATE_TRIGGER_VDD;
-
-	  	  case STATE_TRIGGER_VDD:
-	  		  /* Start a conversion for V_REFINT	 */
-	  		  ADC1->CR2	|=	 ADC_CR2_SWSTART;
-
-	  		  /* Go to sleep mode, the states are changed in the interrupts mostly	 */
-	  		  myState	 	 =	 STATE_SLEEP_MODE;
-	  		  break;
-
-	  	  case STATE_GET_RAW_VDD_DATA:
-	  		  /* Read the result  */
-	  		  vrefint_data	 =	 myRawADC_value;
-
-	  		  /* Process all the data	 */
-	  		  myState	 	 =	 STATE_PROCESS_ALL_DATA;
-
-	  	  case STATE_PROCESS_ALL_DATA:
-	  		/* Calculate the true temperature
-	  		 * 	NOTE:
-	  		 * 		Because of all the calibration data was taken at VDDA = 3V and our system is
-	  		 * 		powered at VDDA = 3.3V, the ts_data must be normalized by using the formula below:
-	  		 *
-	  		 * 			ts_data_normalised = VDDA*ts_data/3
-	  		 *
-	  		 * 		Ref: AN3964 Application note, 1.2 Temperature measurement and data processing, p6/14
-	  		 */
-	  		  myTemperature	 =	 (float)( ( TEMPSENSOR_CAL2_TEMP - TEMPSENSOR_CAL1_TEMP )/( *TS_CAL2 - *TS_CAL1 ) ) * ( ( ts_data * ( REFERENCE_VOLTAGE / CALIBRATION_REFERENCE_VOLTAGE ) ) - *TS_CAL1 ) + 30.0f;
-
-	  		  /* Calculate the actual V_DDA
-	  		   * 	NOTE:
-	  		   * 		VDDA = 3 V x VREFINT_CAL / VREFINT_DATA
-	  		   *
-	  		   * 		Ref: CD00240193 Reference Manual, Calculating the actual VDDA voltage using the internal reference voltage, p288/911
-	  		   */
-	  		  myCalculatedVDD	 =	 (float)( ( 3.0f * *VREFINT_CAL )/vrefint_data );
-
-	  		  /* Send all the data through the UART	 */
-	  		  myState	 	 =	 STATE_SEND_DATA_THROUGH_UART;
-
-	  	  case STATE_SEND_DATA_THROUGH_UART:
-	  		  /* Parse the data	 */
-	  		  sprintf ( (char*)myMessage, "Temperature: %ld C, V_DDA: %ld mV\r\n", (int32_t)( myTemperature + 0.5f ), (int32_t)( 1000.0f * myCalculatedVDD ) );
-
-	  		  /* Transmit data through the UART	 */
-	  		  myPtr   	 =   &myMessage[0];
-	  		  USART2->DR	 =	 *myPtr;
-	  		  USART2->CR1	|=	 USART_CR1_TE;		// Transmitter Enabled
-
-	  		  /* Reset variables	 */
-	  		  myState	 	 =	 STATE_SLEEP_MODE;
-	  		  break;
-	  	  }
+	  /* Low power mode: Sleep mode	 */
+	  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
 
   /* USER CODE END WHILE */
 
