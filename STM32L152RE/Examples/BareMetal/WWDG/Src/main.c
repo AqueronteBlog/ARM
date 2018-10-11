@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the window watchdog ( WWDG ). A WWDG overflow every ~131.07ms.
+ * @details     This example shows how to work with the window watchdog ( WWDG ). A WWDG overflow every ~131.07ms.
  * 				The LED1 will blink.
  *
  * 				The microcontroller will remain in low power the rest of the time.
