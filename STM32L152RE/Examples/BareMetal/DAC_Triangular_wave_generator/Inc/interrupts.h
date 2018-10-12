@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        9/October/2018
- * @version     9/October/2018   The ORIGIN
+ * @date        12/October/2018
+ * @version     12/October/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
