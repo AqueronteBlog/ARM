@@ -25,7 +25,7 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-void WWDG_IRQHandler ( void );
+
 
 
 /**@brief Constants.
