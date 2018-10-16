@@ -78,7 +78,7 @@ void Conf_CLK  ( void )
  * @brief       void Conf_GPIO  ( void )
  * @details     It configures GPIOs.
  *
- * 				- LED1:		PA_5
+ * 				- DAC:	LED1 ( PA_5 )
  *
  *
  * @param[in]    N/A.
@@ -102,20 +102,19 @@ void Conf_GPIO  ( void )
 	RCC->AHBENR 	|= 	 ( RCC_AHBENR_GPIOAEN );
 
 
-    /* Configure LED1	 */
-    GPIOA->MODER	|=	 GPIO_MODER_MODER5_0;					// General purpose output mode
-    GPIOA->OTYPER	&=	~GPIO_OTYPER_OT_5; 						// Output push-pull
-    GPIOA->OSPEEDR	&=	~GPIO_OSPEEDER_OSPEEDR5;				// Low speed
-    GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5;						// No pull-up, pull-down
+    /* Configure PA5 ( LED1 )	 */
+    GPIOA->MODER	|=	 ( GPIO_MODER_MODER5_1 | GPIO_MODER_MODER5_0 );	// Analog mode
+    GPIOA->OTYPER	|=	 GPIO_OTYPER_OT_5; 								// Output open-drain
+    GPIOA->OSPEEDR	&=	~GPIO_OSPEEDER_OSPEEDR5;						// Low speed
+    GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5;								// No pull-up, pull-down
 }
 
 
 /**
- * @brief       void Conf_WWDG  ( void )
- * @details     It configures the window watchdog ( WWDG ).
+ * @brief       void Conf_DAC  ( void )
+ * @details     It configures the DAC as Triangular-wave generation.
  *
- * 					- Early wakeup interrupt enabled
- * 					- Overflow ( t_WWDG = t_PCLK1 * 4096 * 2^WDGTB[1:0] * ( T[5:0] + 1 ) = ( 16MHz )^-1 * 4096 * 2^3 * ( 63 + 1 ) ~ 131.07ms )
+ * 					- [todo]
  *
  *
  * @param[in]    N/A.
@@ -133,20 +132,26 @@ void Conf_GPIO  ( void )
  * @pre         N/A
  * @warning     N/A
  */
-void Conf_WWDG  ( void )
+void Conf_DAC  ( void )
 {
-	/* Turn on the WWDG clock	 */
-	RCC->APB1ENR	|=	 RCC_APB1ENR_WWDGEN;
+	/* Turn on the DAC clock	 */
+	RCC->APB1ENR	|=	 RCC_APB1ENR_DACEN;
 
-	/* WWDG:
-	* 	- Early wakeup interrupt enabled
-	* 	- Timer base: Counter_Clock/8
-	*/
-	WWDG->CFR	|=	 ( WWDG_CFR_EWI | WWDG_CFR_WDGTB_0 | WWDG_CFR_WDGTB_1 );
+	/* DAC configuration:
+	 * 	- DAC channel1 disabled
+	 * 	- DAC channel1 trigger disabled
+	 * 	- Channel2 Wave generation enabled: Triangle wave generation
+	 * 	- DAC channel1 DMA mode disabled
+	 * 	- DAC channel1 DMA Underrun Interrupt disabled
+	 * 	- DAC channel2 enabled
+	 * 	- DAC channel2 output buffer enabled
+	 * 	- DAC channel2 trigger enabled
+	 * 	- DAC channel2 trigger selection: Software trigger
+	 * 	- Channel2 Unmask bits[11:0] of LFSR/ triangle amplitude equal to 4095	 */
+	DAC->CR	&=	~( DAC_CR_EN1 | DAC_CR_TEN1 | DAC_CR_WAVE1 | DAC_CR_DMAEN1 | DAC_CR_DMAUDRIE1 | DAC_CR_BOFF2 | DAC_CR_TEN2 );
+	DAC->CR	|=	 ( DAC_CR_TEN2 | DAC_CR_TSEL2_2 | DAC_CR_TSEL2_1 | DAC_CR_TSEL2_0 | DAC_CR_MAMP2_3 | DAC_CR_MAMP2_1 | DAC_CR_MAMP2_0 | DAC_CR_WAVE2_1 | DAC_CR_WAVE2_0 );
+	DAC->CR	|=	 ( DAC_CR_EN2 );
 
-	/* Enable WWDG WakeUp IRQ  */
-	NVIC_EnableIRQ ( WWDG_IRQn );
-
-	/* Configure 7-bit counter: T[5:0] = 63 and turn on the WWDG	 */
-	WWDG->CR	|=	 ( WWDG_CR_WDGA | WWDG_CR_T_0 | WWDG_CR_T_1 | WWDG_CR_T_2 | WWDG_CR_T_3 | WWDG_CR_T_4 | WWDG_CR_T_5 | WWDG_CR_T_6 );
+	/* DAC channel2 Software trigger enabled	 */
+	DAC->SWTRIGR	|=	 DAC_SWTRIGR_SWTRIG2;
 }
