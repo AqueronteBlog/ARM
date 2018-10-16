@@ -67,6 +67,20 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+#define Triangle_Amplitude_equal_to_1                                                    0x00
+#define Triangle_Amplitude_equal_to_3                                                    0x01
+#define Triangle_Amplitude_equal_to_7                                                    0x02
+#define Triangle_Amplitude_equal_to_15                                                   0x03
+#define Triangle_Amplitude_equal_to_31                                                   0x04
+#define Triangle_Amplitude_equal_to_63                                                   0x05
+#define Triangle_Amplitude_equal_to_127                                                  0x06
+#define Triangle_Amplitude_equal_to_255                                                  0x07
+#define Triangle_Amplitude_equal_to_511                                                  0x08
+#define Triangle_Amplitude_equal_to_1023                                                 0x09
+#define Triangle_Amplitude_equal_to_2047                                                 0x0A
+#define Triangle_Amplitude_equal_to_4095                                                 0x0B
+
+
 volatile uint32_t mySystemCoreClock;						/*!<  System CLK in MHz  		   							*/
 
 /* USER CODE END PV */
@@ -115,27 +129,35 @@ int main(void)
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
-  Conf_GPIO  ();
+  Conf_GPIO ();
+  Conf_DAC  ();
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  GPIOA->BRR		 =	( 1 << LED_1 );			// LED1 OFF
-  for ( uint32_t i = 0; i < 0x2323; i++ );		// Small delay to see the changes when the WWDG resets the uC
-
-  /* Configure and start the WWDG	 */
-  Conf_WWDG ();
-
-
+  uint32_t myPeak	 =	 0;
   while (1)
   {
 	  /* Low power mode: Sleep mode	 */
-	  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	  //HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
 
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+	  DAC->CR	&=	~( DAC_CR_EN2 | DAC_CR_MAMP2 );
+
+	  myPeak++;
+
+	  if( myPeak > Triangle_Amplitude_equal_to_4095 )
+	  {
+		  myPeak = Triangle_Amplitude_equal_to_1;
+	  }
+
+	  DAC->CR	|=	 ( myPeak << DAC_CR_MAMP2_Pos );
+
+	  DAC->CR	|=	 DAC_CR_EN2;
+
   }
   /* USER CODE END 3 */
 
