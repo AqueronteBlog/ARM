@@ -92,7 +92,8 @@ void Conf_CLK  ( void )
  *
  * @author      Manuel Caballero
  * @date        12/October/2018
- * @version		12/October/2018   The ORIGIN
+ * @version		17/October/2018   Output push-pull instead of open-drain
+ * 				12/October/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -104,7 +105,7 @@ void Conf_GPIO  ( void )
 
     /* Configure PA5 ( LED1 )	 */
     GPIOA->MODER	|=	 ( GPIO_MODER_MODER5_1 | GPIO_MODER_MODER5_0 );	// Analog mode
-    GPIOA->OTYPER	|=	 GPIO_OTYPER_OT_5; 								// Output open-drain
+    GPIOA->OTYPER	&=	~GPIO_OTYPER_OT_5; 								// Output push-pull
     GPIOA->OSPEEDR	&=	~GPIO_OSPEEDER_OSPEEDR5;						// Low speed
     GPIOA->PUPDR	&=	~GPIO_PUPDR_PUPDR5;								// No pull-up, pull-down
 }
@@ -114,7 +115,12 @@ void Conf_GPIO  ( void )
  * @brief       void Conf_DAC  ( void )
  * @details     It configures the DAC as Triangular-wave generation.
  *
- * 					- [todo]
+ * 					Channel 2:
+ * 					 - Software triggered
+ * 					 - Output buffer enabled
+ * 					 - DMA disabled
+ * 					 - Triangle wave generation enabled
+ * 					 - Triangle amplitude: 4095
  *
  *
  * @param[in]    N/A.
@@ -128,7 +134,8 @@ void Conf_GPIO  ( void )
  *
  * @author      Manuel Caballero
  * @date        12/October/2018
- * @version		12/October/2018   The ORIGIN
+ * @version		17/October/2018   The comments were improved.
+ * 				12/October/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -148,8 +155,8 @@ void Conf_DAC  ( void )
 	 * 	- DAC channel2 trigger enabled
 	 * 	- DAC channel2 trigger selection: Software trigger
 	 * 	- Channel2 Unmask bits[11:0] of LFSR/ triangle amplitude equal to 4095	 */
-	DAC->CR	&=	~( DAC_CR_EN1 | DAC_CR_TEN1 | DAC_CR_WAVE1 | DAC_CR_DMAEN1 | DAC_CR_DMAUDRIE1 | DAC_CR_BOFF2 | DAC_CR_TEN2 );
-	DAC->CR	|=	 ( DAC_CR_TEN2 | DAC_CR_TSEL2_2 | DAC_CR_TSEL2_1 | DAC_CR_TSEL2_0 | DAC_CR_MAMP2_3 | DAC_CR_MAMP2_1 | DAC_CR_MAMP2_0 | DAC_CR_WAVE2_1 | DAC_CR_WAVE2_0 );
+	DAC->CR	&=	~( DAC_CR_EN1 | DAC_CR_TEN1 | DAC_CR_WAVE1 | DAC_CR_DMAEN1 | DAC_CR_DMAUDRIE1 | DAC_CR_BOFF2 | DAC_CR_TEN2 | DAC_CR_MAMP2 );
+	DAC->CR	|=	 ( DAC_CR_TEN2 | DAC_CR_TSEL2_2 | DAC_CR_TSEL2_1 | DAC_CR_TSEL2_0 | DAC_CR_MAMP2_3 | DAC_CR_MAMP2_1 | DAC_CR_MAMP2_0 |  DAC_CR_WAVE2_1 | DAC_CR_WAVE2_0 );
 	DAC->CR	|=	 ( DAC_CR_EN2 );
 
 	/* DAC channel2 Software trigger enabled	 */
