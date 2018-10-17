@@ -67,20 +67,6 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-#define Triangle_Amplitude_equal_to_1                                                    0x00
-#define Triangle_Amplitude_equal_to_3                                                    0x01
-#define Triangle_Amplitude_equal_to_7                                                    0x02
-#define Triangle_Amplitude_equal_to_15                                                   0x03
-#define Triangle_Amplitude_equal_to_31                                                   0x04
-#define Triangle_Amplitude_equal_to_63                                                   0x05
-#define Triangle_Amplitude_equal_to_127                                                  0x06
-#define Triangle_Amplitude_equal_to_255                                                  0x07
-#define Triangle_Amplitude_equal_to_511                                                  0x08
-#define Triangle_Amplitude_equal_to_1023                                                 0x09
-#define Triangle_Amplitude_equal_to_2047                                                 0x0A
-#define Triangle_Amplitude_equal_to_4095                                                 0x0B
-
-
 volatile uint32_t mySystemCoreClock;						/*!<  System CLK in MHz  		   							*/
 
 /* USER CODE END PV */
@@ -136,7 +122,6 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint32_t myPeak	 =	 0;
   while (1)
   {
 	  /* Low power mode: Sleep mode	 */
@@ -145,19 +130,11 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-	  DAC->CR	&=	~( DAC_CR_EN2 | DAC_CR_MAMP2 );
+	  /* DAC channel2 Software trigger enabled	 */
+	  DAC->SWTRIGR	|=	 DAC_SWTRIGR_SWTRIG2;
 
-	  myPeak++;
-
-	  if( myPeak > Triangle_Amplitude_equal_to_4095 )
-	  {
-		  myPeak = Triangle_Amplitude_equal_to_1;
-	  }
-
-	  DAC->CR	|=	 ( myPeak << DAC_CR_MAMP2_Pos );
-
-	  DAC->CR	|=	 DAC_CR_EN2;
-
+	  /* Delay: Frequency for the Triangle wave generation	 */
+	  for(uint32_t ii = 0; ii < 0x232; ii++);
   }
   /* USER CODE END 3 */
 
