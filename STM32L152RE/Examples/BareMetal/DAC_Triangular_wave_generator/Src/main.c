@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the window watchdog ( WWDG ). A WWDG overflow every ~131.07ms.
- * 				The LED1 will blink.
+ * @details     This example shows how to work with the digital-to-analog converter ( DAC ). A triangular wave form is created
+ * 				with a period of 860ms ( The DAC's frequency is controlled by the RTC ). The LED1 is connected to the DAC's output.
  *
  * 				The microcontroller will remain in low power the rest of the time.
  *
@@ -13,6 +13,9 @@
  * @version     12/October/2018   The ORIGIN
  * @pre         This firmware was tested on the NUCLEO-L152RE with Atollic TrueSTUDIO for STM32 ( v9.0.1 ). This project was
  * 				generated using SMT32CubeMX ( used to generate a template ).
+ * @warning     DAC_period = DAC_amplitud * 2 * DAC_trigger = 4095 * 2 * 54.05us ~ 442.67ms. It seems that we have to multiply by 2
+ * 				to get the right DAC's frequency ( DAC_period = DAC_amplitud * 2 * 2 * DAC_trigger = 4095 * 2 * 2 * 54.05us ~ 885.34ms ).
+ * 				This behavior has to be analyzed!.
  * @warning     Although HAL driver was generated, just the Low Power functions are used.
  */
 /**
@@ -117,24 +120,19 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Conf_GPIO ();
   Conf_DAC  ();
-
+  Conf_RTC	();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /* Low power mode: Sleep mode	 */
-	  //HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	  /* Low power mode: Stop mode	 */
+	  HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
 
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-	  /* DAC channel2 Software trigger enabled	 */
-	  DAC->SWTRIGR	|=	 DAC_SWTRIGR_SWTRIG2;
-
-	  /* Delay: Frequency for the Triangle wave generation	 */
-	  for(uint32_t ii = 0; ii < 0x232; ii++);
   }
   /* USER CODE END 3 */
 
