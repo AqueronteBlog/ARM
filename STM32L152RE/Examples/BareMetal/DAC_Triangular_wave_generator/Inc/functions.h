@@ -25,6 +25,7 @@ extern "C" {
 void Conf_CLK  	   ( void );
 void Conf_GPIO 	   ( void );
 void Conf_DAC 	   ( void );
+void Conf_RTC 	   ( void );
 
 
 #ifdef __cplusplus

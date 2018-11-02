@@ -120,7 +120,7 @@ void Conf_GPIO  ( void )
  * 					 - Output buffer enabled
  * 					 - DMA disabled
  * 					 - Triangle wave generation enabled
- * 					 - Triangle amplitude: 4095
+ * 					 - Triangle amplitude ( DOR ): 4095 ( DAC_output = V_REF * ( DOR / 4096 ) )
  *
  *
  * @param[in]    N/A.
@@ -134,7 +134,8 @@ void Conf_GPIO  ( void )
  *
  * @author      Manuel Caballero
  * @date        12/October/2018
- * @version		17/October/2018   The comments were improved.
+ * @version		1/November/2018   The comments were improved.
+ * 				17/October/2018   The comments were improved.
  * 				12/October/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
@@ -161,4 +162,72 @@ void Conf_DAC  ( void )
 
 	/* DAC channel2 Software trigger enabled	 */
 	DAC->SWTRIGR	|=	 DAC_SWTRIGR_SWTRIG2;
+}
+
+
+
+/**
+ * @brief       void Conf_RTC  ( void )
+ * @details     It configures the RTC peripheral.
+ *
+ * 				Periodic Auto Wake-up Timer:
+ * 					- RTC clock: 				RTC/2 ( = LSI/2 = 37kHz/2 = 18.5kHz )
+ * 					- Wake-up timer interrupt:	Enabled
+ * 					- Wake-up timer overflow: 	~ 54.05us ( WUTR / RTC/2 = 1 / ( 37kHz / 2 ) = 54.05us )
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        1/November/2018
+ * @version		1/November/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void Conf_RTC  ( void )
+{
+	/* Enable the PWR peripheral */
+	RCC->APB1ENR |= RCC_APB1ENR_PWREN;
+
+	/* Disable backup write protection	*/
+	PWR->CR		|=	 PWR_CR_DBP;
+
+	/* Enable the RTC clock and choose the LSI clock for RTC */
+	RCC->CSR 	|= 	 ( RCC_CSR_RTCEN | RCC_CSR_RTCSEL_LSI );
+
+	/* Disable the write protection for RTC registers */
+	RTC->WPR   	 =	 ( 0xCA & RTC_WPR_KEY_Msk );
+    RTC->WPR	 = 	 ( 0x53 & RTC_WPR_KEY_Msk );
+
+    /* Steps for programming the wake-up timer	*/
+	RTC->CR		&=	~( RTC_CR_WUTE );										// Disable wake-up timer
+
+	while ( ( RTC->ISR & RTC_ISR_WUTWF_Msk ) != RTC_ISR_WUTWF );			// Wait until wake-up auto-reload counter and to WUCKSEL[2:0] bits is allowed
+																			// [TODO] 		This is dangerous! the uC may get stuck here
+																			// [WORKAROUND] Insert a counter.
+
+	/* Select the RTC clock and Reset flag  */
+	RTC->CR		&=	~( RTC_CR_WUCKSEL_Msk );									// Reset Clock
+	RTC->CR		|=	 ( RTC_CR_WUTIE | RTC_CR_WUCKSEL_0 | RTC_CR_WUCKSEL_1 );	// Enable Wake-up timer interrupt, RTC/2 clock is selected
+
+	RTC->WUTR	 =	 1;
+	RTC->ISR	&=	 ~RTC_ISR_WUTF;											// Reset Wake-up timer flag
+
+
+	/* Enable the RTC Wake-up interrupt */
+	EXTI->IMR	|=	 ( EXTI_IMR_MR20 );
+	EXTI->RTSR	|=	 ( EXTI_RTSR_TR20 );
+
+	/* Activate the RTC WAKEUP timer */
+	RTC->CR		|=	 ( RTC_CR_WUTE );										// Wake-up timer enable
+
+	/* Enable the write protection for RTC registers */
+	RTC->WPR   	 =	 0xFF;
+	RTC->WPR   	 =	 0xFF;
+
+	/* Access to RTC, RTC Backup and RCC CSR registers disabled */
+	PWR->CR &= ~PWR_CR_DBP;
+
+
+	/* Enable RTC WakeUp IRQ  */
+	NVIC_EnableIRQ ( RTC_WKUP_IRQn );
 }
