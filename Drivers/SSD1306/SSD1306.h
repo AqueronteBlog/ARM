@@ -33,8 +33,8 @@ extern "C" {
   */
 typedef enum
 {
-    SSD1306_ADDRESS_A0_GND     =   0b1001010,              /*!<   SSD1306 I2C Address: A0 connected to GND                */
-    SSD1306_ADDRESS_A0_VCC     =   0b1001011               /*!<   SSD1306 I2C Address: A0 connected to VCC                */
+    SSD1306_ADDRESS_SA0_GND    =   0b0111100,              /*!<   SSD1306 I2C Address: SA0 connected to GND                */
+    SSD1306_ADDRESS_SA0_VCC    =   0b0111101               /*!<   SSD1306 I2C Address: SA0 connected to VCC                */
 } SSD1306_address_t;
 
 
