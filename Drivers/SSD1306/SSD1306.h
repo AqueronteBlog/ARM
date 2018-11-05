@@ -74,12 +74,29 @@ typedef enum
 typedef enum
 {
     /* Fundamental Command Table   */
-    SSD1306_SET_CONTRAST_CONTROL       =   ( 0b10000001 << 0U ),  /*!<  Double byte command to select 1 out of 256 contrast steps. Contrast increases as the value increases ( Read/Write ) ( RESET = 7Fh ) */
-    SSD1306_ENTIRE_DISPLAY_ON          =   ( 0b1010010 << 1U ),   /*!<  Entire Display ON                                                                                    ( Read/Write ) ( RESET = A4h ) */
-    SSD1306_SET_NORMAL_INVERSE_DISPLAY =   ( 0b1010011 << 1U ),   /*!<  Set Normal/Inverse Display                                                                           ( Read/Write ) ( RESET = A6h ) */
-    SSD1306_SET_DISPLAY_ON_OFF         =   ( 0b1010111 << 1U ),   /*!<  Set Display ON/OFF                                                                                   ( Read/Write ) ( RESET = AEh ) */
+    SSD1306_SET_CONTRAST_CONTROL                        =   ( 0b10000001 << 0U ),  /*!<  Double byte command to select 1 out of 256 contrast steps. Contrast increases as the value increases ( Read/Write ) ( RESET = 7Fh ) */
+    SSD1306_ENTIRE_DISPLAY_ON                           =   ( 0b1010010 << 1U ),   /*!<  Entire Display ON                                                                                    ( Read/Write ) ( RESET = A4h ) */
+    SSD1306_SET_NORMAL_INVERSE_DISPLAY                  =   ( 0b1010011 << 1U ),   /*!<  Set Normal/Inverse Display                                                                           ( Read/Write ) ( RESET = A6h ) */
+    SSD1306_SET_DISPLAY_ON_OFF                          =   ( 0b1010111 << 1U ),   /*!<  Set Display ON/OFF                                                                                   ( Read/Write ) ( RESET = AEh ) */
     
-    /* Scrolling Command Table   */
+    /* Horizontal Scrolling Command Table   */
+    SSD1306_HORIZONTAL_SCROLL                           =   ( 0b0010011 << 1U ),   /*!<  Continuous Horizontal Scroll                                                                                                        */
+    SSD1306_HORIZONTAL_SCROLL_DUMMY_BYTE                =   ( 0b00000000 << 0U ),  /*!<  Dummy byte ( Set as 00h )                                                                                                           */
+    SSD1306_HORIZONTAL_SCROLL_DEFINE_START_PAGE_ADDRESS =   ( 0b00000000 << 3U ),  /*!<  Define start page address                                                                                                           */
+    SSD1306_HORIZONTAL_SCROLL_SET_TIME_INTERVAL         =   ( 0b00000000 << 3U ),  /*!<  Set time interval between each scroll step in terms of frame frequency                                                              */
+    SSD1306_HORIZONTAL_SCROLL_DEFINE_END_PAGE_ADDRESS   =   ( 0b00000000 << 3U ),  /*!<  Define end page address                                                                                                             */
+    
+    /* Vertical Scrolling Command Table   */
+    SSD1306_VERTICAL_SCROLL                             =   ( 0b001010 << 2U ),    /*!<  Continuous Vertical Scroll                                                                                                          */
+    SSD1306_VERTICAL_SCROLL_DUMMY_BYTE                  =   ( 0b00000000 << 0U ),  /*!<  Dummy byte ( Set as 00h )                                                                                                           */
+    SSD1306_VERTICAL_SCROLL_DEFINE_START_PAGE_ADDRESS   =   ( 0b00000000 << 3U ),  /*!<  Define start page address                                                                                                           */
+    SSD1306_VERTICAL_SCROLL_SET_TIME_INTERVAL           =   ( 0b00000000 << 3U ),  /*!<  Set time interval between each scroll step in terms of frame frequency                                                              */
+    SSD1306_VERTICAL_SCROLL_DEFINE_END_PAGE_ADDRESS     =   ( 0b00000000 << 3U ),  /*!<  Define end page address                                                                                                             */
+    SSD1306_VERTICAL_SCROLL_OFFSET                      =   ( 0b00000000 << 6U ),  /*!<  Vertical scrolling offset                                                                                                           */
+    
+    /* General Scrolling Command Table   */
+    SSD1306_DEACTIVATE_SCROLL                           =   0x2E,                  /*!<  Stop scrolling that is configured by command                                                                                        */
+    SSD1306_ACTIVATE_SCROLL                             =   0x2F,                  /*!<  Start scrolling that is configured by the scrolling setup commands                                                                  */
     
 } SSD1306_command_table_t;
 
@@ -117,7 +134,7 @@ typedef enum
 #define SSD1306_VECTOR_STRUCT_H
 typedef struct
 {
-    uint8_t                             contrast;               /*!<  Display constrats         */
+    uint8_t contrast;               /*!<  Display constrats         */
 } SSD1306_vector_data_t;
 #endif
 
