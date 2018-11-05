@@ -45,11 +45,9 @@ volatile uint8_t  *myPtr;                         /*!<   Pointer to point out my
  */
 int main(void)
 {
-  uint8_t                  myDataRAM;
   I2C_parameters_t         mySSD1306_I2C_parameters;
-//  SSD1306_status_t         aux;
-//  SSD1306_vector_data_t    mySSD1306_Data;
-    
+  SSD1306_status_t         aux;
+  SSD1306_vector_data_t    mySSD1306_Data;
 
   conf_CLK    ();
   conf_GPIO   ();
@@ -58,20 +56,30 @@ int main(void)
 
   
 
-//  /* I2C definition   */
-//  mySSD1306_I2C_parameters.TWIinstance =    NRF_TWI0;
-//  mySSD1306_I2C_parameters.SDA         =    TWI0_SDA;
-//  mySSD1306_I2C_parameters.SCL         =    TWI0_SCL;
-//  mySSD1306_I2C_parameters.ADDR        =    SSD1306_ADDRESS;
-//  mySSD1306_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-//  mySSD1306_I2C_parameters.SDAport     =    NRF_P0;
-//  mySSD1306_I2C_parameters.SCLport     =    NRF_P0;
-//
-//  /* Configure I2C peripheral */
-//  aux  =   SSD1306_Init            ( mySSD1306_I2C_parameters );
-//
-//  /* Enable the SSD1306 oscillator */
-//  aux  =   SSD1306_OscillatorMode  ( mySSD1306_I2C_parameters, SECONDS_CH_OSCILLATOR_ENABLED );
+  /* I2C definition   */
+  mySSD1306_I2C_parameters.TWIinstance =    NRF_TWI0;
+  mySSD1306_I2C_parameters.SDA         =    TWI0_SDA;
+  mySSD1306_I2C_parameters.SCL         =    TWI0_SCL;
+  mySSD1306_I2C_parameters.ADDR        =    SSD1306_ADDRESS_SA0_GND;
+  mySSD1306_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+  mySSD1306_I2C_parameters.SDAport     =    NRF_P0;
+  mySSD1306_I2C_parameters.SCLport     =    NRF_P0;
+
+  /* Configure I2C peripheral */
+  aux  =   SSD1306_Init                     ( mySSD1306_I2C_parameters );
+
+  /* Set constranst to maximum */
+  mySSD1306_Data.contrast  =   0x7F;
+  aux  =   SSD1306_SetContrastControl       ( mySSD1306_I2C_parameters, mySSD1306_Data );
+  
+  /* Turn on the display */
+  aux  =   SSD1306_SetEntireDisplay         ( mySSD1306_I2C_parameters, ENTIRE_DISPLAY_ON_RESUME_TO_RAM_CONTENT );
+  
+  /* Turn on the display */
+  aux  =   SSD1306_SetDisplay               ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_ON );
+
+  /* Set inverse display   */
+  aux  =   SSD1306_SetNormalInverseDisplay  ( mySSD1306_I2C_parameters, SET_DISPLAY_INVERSE_DISPLAY );
 
   
   myState  =   0;                             // Reset the variable
