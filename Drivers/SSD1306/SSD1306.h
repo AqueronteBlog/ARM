@@ -98,6 +98,14 @@ typedef enum
     SSD1306_DEACTIVATE_SCROLL                           =   0x2E,                  /*!<  Stop scrolling that is configured by command                                                                                        */
     SSD1306_ACTIVATE_SCROLL                             =   0x2F,                  /*!<  Start scrolling that is configured by the scrolling setup commands                                                                  */
     
+    /* Set Vertical Scroll Area  */
+    /* Check it!   */
+
+    /* Hardware Configuration (Panel resolution & layout related) Command Table  */
+    /* Check it!   */
+
+    /* Timing & Driving Scheme Setting Command Table  */
+    /* Check it!   */
 } SSD1306_command_table_t;
 
 
