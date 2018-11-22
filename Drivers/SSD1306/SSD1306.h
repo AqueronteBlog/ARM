@@ -322,6 +322,15 @@ SSD1306_status_t  SSD1306_SetCOM_OutputScanDirection        ( I2C_parameters_t m
 SSD1306_status_t  SSD1306_SetCOM_PinsHardwareConfiguration  ( I2C_parameters_t myI2Cparameters, SSD1306_com_pin_configuration_t myCOM_PinConfiguration, SSD1306_com_left_right_re_map_t myCOM_LeftRightEnable );
 
 
+/** It sends a command byte to SSD1306.
+  */
+SSD1306_status_t  SSD1306_SendCommand                       ( I2C_parameters_t myI2Cparameters, uint8_t myCommand                                                                                             );
+
+/** It sends a data byte to SSD1306.
+  */
+SSD1306_status_t  SSD1306_SendData                          ( I2C_parameters_t myI2Cparameters, uint8_t* myData, uint8_t myDataSize                                                                           );
+
+
 #ifdef __cplusplus
 }
 #endif
