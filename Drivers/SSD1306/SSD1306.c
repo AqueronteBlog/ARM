@@ -169,7 +169,6 @@ SSD1306_status_t  SSD1306_SendData ( I2C_parameters_t myI2Cparameters, uint8_t* 
  */
 SSD1306_status_t  SSD1306_SetContrastControl ( I2C_parameters_t myI2Cparameters, SSD1306_vector_data_t myContrastStep )
 {
-    uint8_t          cmd[]  =    { 0U, 0U };
     SSD1306_status_t aux;
 
 
@@ -213,14 +212,13 @@ SSD1306_status_t  SSD1306_SetContrastControl ( I2C_parameters_t myI2Cparameters,
  */
 SSD1306_status_t  SSD1306_SetEntireDisplay ( I2C_parameters_t myI2Cparameters, SSD1306_entire_display_on_t myEntireDisplayOn )
 {
-    uint8_t      cmd[]  =    { 0U, 0U };
-    i2c_status_t aux;
+    uint8_t          cmd  =  0U;
+    SSD1306_status_t aux;
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_CO_DATA_BYTES | SSD1306_DATA_COMMAND_BIT_COMMAND | SSD1306_CONTROL_BYTE );   // Control byte
-    cmd[1]   =   ( SSD1306_ENTIRE_DISPLAY_ON | myEntireDisplayOn );                                                                 
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    cmd  =   ( SSD1306_ENTIRE_DISPLAY_ON | myEntireDisplayOn );                                                                 
+    aux  =   SSD1306_SendCommand ( myI2Cparameters, cmd );
 
 
     
