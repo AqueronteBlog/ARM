@@ -256,14 +256,13 @@ SSD1306_status_t  SSD1306_SetEntireDisplay ( I2C_parameters_t myI2Cparameters, S
  */
 SSD1306_status_t  SSD1306_SetNormalInverseDisplay ( I2C_parameters_t myI2Cparameters, SSD1306_set_normal_inverse_display_t myNormalInverseDisplay )
 {
-    uint8_t      cmd[]  =    { 0U, 0U };
+    uint8_t      cmd  = 0U;
     i2c_status_t aux;
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_CO_DATA_BYTES | SSD1306_DATA_COMMAND_BIT_COMMAND | SSD1306_CONTROL_BYTE );   // Control byte
-    cmd[1]   =   ( SSD1306_SET_NORMAL_INVERSE_DISPLAY | myNormalInverseDisplay );                                                               
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    cmd  =   ( SSD1306_SET_NORMAL_INVERSE_DISPLAY | myNormalInverseDisplay );
+    aux  =   SSD1306_SendCommand ( myI2Cparameters, cmd );
 
 
     
@@ -301,14 +300,13 @@ SSD1306_status_t  SSD1306_SetNormalInverseDisplay ( I2C_parameters_t myI2Cparame
  */
 SSD1306_status_t  SSD1306_SetDisplay ( I2C_parameters_t myI2Cparameters, SSD1306_set_display_t myDisplayMode )
 {
-    uint8_t      cmd[]  =    { 0U, 0U };
+    uint8_t      cmd  = 0U;
     i2c_status_t aux;
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_CO_DATA_BYTES | SSD1306_DATA_COMMAND_BIT_COMMAND | SSD1306_CONTROL_BYTE );   // Control byte
-    cmd[1]   =   ( SSD1306_SET_DISPLAY_ON_OFF | myDisplayMode );                                                               
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    cmd  =   ( SSD1306_SET_DISPLAY_ON_OFF | myDisplayMode );   
+    aux  =   SSD1306_SendCommand ( myI2Cparameters, cmd );
 
 
     
