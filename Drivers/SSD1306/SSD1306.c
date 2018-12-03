@@ -169,22 +169,24 @@ SSD1306_status_t  SSD1306_SendData ( I2C_parameters_t myI2Cparameters, uint8_t* 
  */
 SSD1306_status_t  SSD1306_SetContrastControl ( I2C_parameters_t myI2Cparameters, SSD1306_vector_data_t myContrastStep )
 {
-    SSD1306_status_t aux;
+    uint8_t      cmd[]  =    { 0U, 0U };
+    i2c_status_t aux;
 
 
-    /* Set new constrast value    */
-    aux  =   SSD1306_SendCommand ( myI2Cparameters, myContrastStep.contrast );
-
+    /* Update the register    */
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   myContrastStep.contrast;                                                                   // Data byte
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
     
     if ( aux == I2C_SUCCESS )
     {
-        return   SSD1306_SUCCESS;
+      return  SSD1306_SUCCESS;
     }
     else
     {
-        return   SSD1306_FAILURE;
+      return  SSD1306_FAILURE;
     }
 }
 
@@ -212,23 +214,24 @@ SSD1306_status_t  SSD1306_SetContrastControl ( I2C_parameters_t myI2Cparameters,
  */
 SSD1306_status_t  SSD1306_SetEntireDisplay ( I2C_parameters_t myI2Cparameters, SSD1306_entire_display_on_t myEntireDisplayOn )
 {
-    uint8_t          cmd  =  0U;
-    SSD1306_status_t aux;
+    uint8_t      cmd[]  =    { 0U, 0U };
+    i2c_status_t aux;
 
 
     /* Update the register    */
-    cmd  =   ( SSD1306_ENTIRE_DISPLAY_ON | myEntireDisplayOn );                                                                 
-    aux  =   SSD1306_SendCommand ( myI2Cparameters, cmd );
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   ( SSD1306_ENTIRE_DISPLAY_ON | myEntireDisplayOn );                                         // Data byte
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
     
     if ( aux == I2C_SUCCESS )
     {
-        return   SSD1306_SUCCESS;
+      return  SSD1306_SUCCESS;
     }
     else
     {
-        return   SSD1306_FAILURE;
+      return  SSD1306_FAILURE;
     }
 }
 
@@ -256,23 +259,24 @@ SSD1306_status_t  SSD1306_SetEntireDisplay ( I2C_parameters_t myI2Cparameters, S
  */
 SSD1306_status_t  SSD1306_SetNormalInverseDisplay ( I2C_parameters_t myI2Cparameters, SSD1306_set_normal_inverse_display_t myNormalInverseDisplay )
 {
-    uint8_t      cmd  = 0U;
+    uint8_t      cmd[]  =    { 0U, 0U };
     i2c_status_t aux;
 
 
     /* Update the register    */
-    cmd  =   ( SSD1306_SET_NORMAL_INVERSE_DISPLAY | myNormalInverseDisplay );
-    aux  =   SSD1306_SendCommand ( myI2Cparameters, cmd );
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   ( SSD1306_SET_NORMAL_INVERSE_DISPLAY | myNormalInverseDisplay );                           // Data byte
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
     
     if ( aux == I2C_SUCCESS )
     {
-        return   SSD1306_SUCCESS;
+      return  SSD1306_SUCCESS;
     }
     else
     {
-        return   SSD1306_FAILURE;
+      return  SSD1306_FAILURE;
     }
 }
 
@@ -300,23 +304,24 @@ SSD1306_status_t  SSD1306_SetNormalInverseDisplay ( I2C_parameters_t myI2Cparame
  */
 SSD1306_status_t  SSD1306_SetDisplay ( I2C_parameters_t myI2Cparameters, SSD1306_set_display_t myDisplayMode )
 {
-    uint8_t      cmd  = 0U;
+    uint8_t      cmd[]  =    { 0U, 0U };
     i2c_status_t aux;
 
 
     /* Update the register    */
-    cmd  =   ( SSD1306_SET_DISPLAY_ON_OFF | myDisplayMode );   
-    aux  =   SSD1306_SendCommand ( myI2Cparameters, cmd );
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   ( SSD1306_SET_DISPLAY_ON_OFF | myDisplayMode );                                            // Data byte
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
     
     if ( aux == I2C_SUCCESS )
     {
-        return   SSD1306_SUCCESS;
+      return  SSD1306_SUCCESS;
     }
     else
     {
-        return   SSD1306_FAILURE;
+      return  SSD1306_FAILURE;
     }
 }
 
@@ -339,7 +344,8 @@ SSD1306_status_t  SSD1306_SetDisplay ( I2C_parameters_t myI2Cparameters, SSD1306
  *
  * @author      Manuel Caballero
  * @date        21/November/2018
- * @version     21/November/2018   The ORIGIN
+ * @version     3/December/2018    Updated to the new architecture
+ *              21/November/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -350,21 +356,21 @@ SSD1306_status_t  SSD1306_SetMultiplexRatio ( I2C_parameters_t myI2Cparameters, 
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_CO_DATA_BYTES | SSD1306_DATA_COMMAND_BIT_COMMAND | SSD1306_CONTROL_BYTE );   // Control byte
-    cmd[1]   =   SSD1306_SET_MULTIPLEX_RATIO;
-    cmd[2]   =   cmd[0];
-    cmd[3]   =   myMultiplexRatio;                                                               
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   SSD1306_SET_MULTIPLEX_RATIO;                                                               // Data byte
+    cmd[2]   =   cmd[0];                                                                                    // Control byte
+    cmd[3]   =   myMultiplexRatio;                                                                          // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
     
     if ( aux == I2C_SUCCESS )
     {
-        return   SSD1306_SUCCESS;
+      return  SSD1306_SUCCESS;
     }
     else
     {
-        return   SSD1306_FAILURE;
+      return  SSD1306_FAILURE;
     }
 }
 
@@ -392,8 +398,9 @@ SSD1306_status_t  SSD1306_SetMultiplexRatio ( I2C_parameters_t myI2Cparameters, 
  */
 SSD1306_status_t  SSD1306_SetDisplayOffset ( I2C_parameters_t myI2Cparameters, uint8_t myDisplayOffset )
 {
-    uint8_t      cmd[]  =    { 0U, 0U };
+    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
     i2c_status_t aux;
+
 
     if ( myDisplayOffset > 63U )
     {
@@ -402,8 +409,10 @@ SSD1306_status_t  SSD1306_SetDisplayOffset ( I2C_parameters_t myI2Cparameters, u
     else
     {
       /* Update the register    */
-      cmd[0]   =   ( SSD1306_CO_DATA_BYTES | SSD1306_DATA_COMMAND_BIT_COMMAND | SSD1306_SET_DISPLAY_OFFSET );   // Control byte
-      cmd[1]   =   myDisplayOffset;                                                               
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[1]   =   SSD1306_SET_DISPLAY_OFFSET;                                                                // Data byte
+      cmd[2]   =   cmd[0];                                                                                    // Control byte
+      cmd[3]   =   myDisplayOffset;                                                                           // Data byte
       aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
 
@@ -411,11 +420,11 @@ SSD1306_status_t  SSD1306_SetDisplayOffset ( I2C_parameters_t myI2Cparameters, u
     
     if ( aux == I2C_SUCCESS )
     {
-        return   SSD1306_SUCCESS;
+      return  SSD1306_SUCCESS;
     }
     else
     {
-        return   SSD1306_FAILURE;
+      return  SSD1306_FAILURE;
     }
 }
 
@@ -437,14 +446,16 @@ SSD1306_status_t  SSD1306_SetDisplayOffset ( I2C_parameters_t myI2Cparameters, u
  *
  * @author      Manuel Caballero
  * @date        21/November/2018
- * @version     21/November/2018   The ORIGIN
+ * @version     3/December/2018    Updated to the new architecture
+ *              21/November/2018   The ORIGIN
  * @pre         Display start line register is reset to 000000b during RESET.
  * @warning     N/A.
  */
 SSD1306_status_t  SSD1306_SetDisplayStartLine ( I2C_parameters_t myI2Cparameters, uint8_t myDisplayStartLine )
 {
-    uint8_t      cmd  =  0U;
+    uint8_t      cmd[]  =    { 0U, 0U };
     i2c_status_t aux;
+
 
     if ( myDisplayStartLine > 63U )
     {
@@ -453,19 +464,20 @@ SSD1306_status_t  SSD1306_SetDisplayStartLine ( I2C_parameters_t myI2Cparameters
     else
     {
       /* Update the register    */
-      cmd  =   ( SSD1306_SET_DISPLAY_START_LINE & myDisplayStartLine );
-      aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_STOP_BIT );
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[1]   =   ( SSD1306_SET_DISPLAY_START_LINE | myDisplayStartLine );                                   // Data byte
+      aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
-
+    
 
     
     if ( aux == I2C_SUCCESS )
     {
-        return   SSD1306_SUCCESS;
+      return  SSD1306_SUCCESS;
     }
     else
     {
-        return   SSD1306_FAILURE;
+      return  SSD1306_FAILURE;
     }
 }
 
@@ -487,28 +499,31 @@ SSD1306_status_t  SSD1306_SetDisplayStartLine ( I2C_parameters_t myI2Cparameters
  *
  * @author      Manuel Caballero
  * @date        21/November/2018
- * @version     21/November/2018   The ORIGIN
+ * @version     3/December/2018    Updated to the new architecture
+ *              21/November/2018   The ORIGIN
  * @pre         Column address 0 is mapped to SEG0 during RESET.
  * @warning     N/A.
  */
 SSD1306_status_t  SSD1306_SetSegmentReMap ( I2C_parameters_t myI2Cparameters, SSD1306_set_segment_re_map_t mySegmentReMap )
 {
-    uint8_t      cmd  =  0U;
+    uint8_t      cmd[]  =    { 0U, 0U };
     i2c_status_t aux;
 
+
     /* Update the register    */
-    cmd  =   mySegmentReMap;
-    aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_STOP_BIT );
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   mySegmentReMap;                                                                            // Data byte
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
     
     if ( aux == I2C_SUCCESS )
     {
-        return   SSD1306_SUCCESS;
+      return  SSD1306_SUCCESS;
     }
     else
     {
-        return   SSD1306_FAILURE;
+      return  SSD1306_FAILURE;
     }
 }
 
@@ -530,28 +545,31 @@ SSD1306_status_t  SSD1306_SetSegmentReMap ( I2C_parameters_t myI2Cparameters, SS
  *
  * @author      Manuel Caballero
  * @date        21/November/2018
- * @version     21/November/2018   The ORIGIN
+ * @version     3/December/2018    Updated to the new architecture
+ *              21/November/2018   The ORIGIN
  * @pre         Normal mode ( RESET ) Scan from COM0 to COM[N –1].
  * @warning     N/A.
  */
 SSD1306_status_t  SSD1306_SetCOM_OutputScanDirection ( I2C_parameters_t myI2Cparameters, SSD1306_set_com_output_scan_direction_t myScanDirection )
 {
-    uint8_t      cmd  =  0U;
+    uint8_t      cmd[]  =    { 0U, 0U };
     i2c_status_t aux;
 
+
     /* Update the register    */
-    cmd  =   myScanDirection;
-    aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_STOP_BIT );
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   myScanDirection;                                                                           // Data byte
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
     
     if ( aux == I2C_SUCCESS )
     {
-        return   SSD1306_SUCCESS;
+      return  SSD1306_SUCCESS;
     }
     else
     {
-        return   SSD1306_FAILURE;
+      return  SSD1306_FAILURE;
     }
 }
 
@@ -574,28 +592,234 @@ SSD1306_status_t  SSD1306_SetCOM_OutputScanDirection ( I2C_parameters_t myI2Cpar
  *
  * @author      Manuel Caballero
  * @date        21/November/2018
- * @version     21/November/2018   The ORIGIN
+ * @version     3/December/2018    Updated to the new architecture
+ *              21/November/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
 SSD1306_status_t  SSD1306_SetCOM_PinsHardwareConfiguration ( I2C_parameters_t myI2Cparameters, SSD1306_com_pin_configuration_t myCOM_PinConfiguration, SSD1306_com_left_right_re_map_t myCOM_LeftRightEnable )
 {
-    uint8_t      cmd[]  =    { 0U, 0U };
+    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
     i2c_status_t aux;
 
+
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_CO_DATA_BYTES | SSD1306_DATA_COMMAND_BIT_COMMAND | SSD1306_SET_COM_PINS_HARDWARE_CONFIGURATION );  // Control byte
-    cmd[1]   =   ( 0x02 | myCOM_PinConfiguration | myCOM_LeftRightEnable );                                                               
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   SSD1306_SET_COM_PINS_HARDWARE_CONFIGURATION;                                               // Data byte
+    cmd[2]   =   cmd[0];                                                                                    // Control byte
+    cmd[3]   =   ( myCOM_PinConfiguration | myCOM_LeftRightEnable );                                        // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
     
     if ( aux == I2C_SUCCESS )
     {
-        return   SSD1306_SUCCESS;
+      return  SSD1306_SUCCESS;
     }
     else
     {
-        return   SSD1306_FAILURE;
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_SetDisplayClockDivideRatio_OscFreq ( I2C_parameters_t , uint8_t , uint8_t )
+ *
+ * @details     It sets Display Clock Divide Ratio/Oscillator Frequency.
+ *
+ * @param[in]    myI2Cparameters:           I2C parameters.
+ * @param[in]    myOscillatorFrequency:     Set the divide ratio to generate DCLK (Display Clock) from CLK. 
+ *                                          The divide ratio is from 1 to 16, with reset value = 1.
+ * @param[in]    myDisplayClockDivideRatio: Program the oscillator frequency Fosc that is the source of CLK.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SetDisplayClockDivideRatio_OscFreq.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        3/December/2018
+ * @version     3/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SetDisplayClockDivideRatio_OscFreq ( I2C_parameters_t myI2Cparameters, uint8_t myOscillatorFrequency, uint8_t myDisplayClockDivideRatio )
+{
+    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    i2c_status_t aux;
+
+    
+    if ( ( myOscillatorFrequency > 0x0F ) || ( myDisplayClockDivideRatio > 0x0E ) )
+    {
+      return I2C_FAILURE;
+    }
+    else
+    {
+      /* Update the register    */
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[1]   =   SSD1306_SET_DISPLAY_CLOCK_DIVIDE_RATIO_OSC_FREQ;                                           // Data byte
+      cmd[2]   =   cmd[0];                                                                                    // Control byte
+      cmd[3]   =   ( ( myOscillatorFrequency << 4U ) | myDisplayClockDivideRatio );                           // Data byte
+      aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    }
+
+
+    
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_SePreChargePeriod ( I2C_parameters_t , uint8_t , uint8_t )
+ *
+ * @details     It sets Display Clock Divide Ratio/Oscillator Frequency.
+ *
+ * @param[in]    myI2Cparameters:    I2C parameters.
+ * @param[in]    myPreChargePeriod1: Phase 1. Set the duration of the pre-charge period ( RESET = 2h ).
+ * @param[in]    myPreChargePeriod2: Phase 2. Set the duration of the pre-charge period ( RESET = 2h ).
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SePreChargePeriod.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        3/December/2018
+ * @version     3/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SePreChargePeriod ( I2C_parameters_t myI2Cparameters, uint8_t myPreChargePeriodPhase1, uint8_t myPreChargePeriodPhase2 )
+{
+    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    i2c_status_t aux;
+
+    
+    if ( ( ( myPreChargePeriodPhase1 == 0x00 ) || ( myPreChargePeriodPhase1 == 0x0F ) ) || ( ( myPreChargePeriodPhase2 == 0x00 ) || ( myPreChargePeriodPhase2 == 0x0F ) ) )
+    {
+      return I2C_FAILURE;
+    }
+    else
+    {
+      /* Update the register    */
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[1]   =   SSD1306_SET_PRE_CHARGE_PERIOD;                                                             // Data byte
+      cmd[2]   =   cmd[0];                                                                                    // Control byte
+      cmd[3]   =   ( myPreChargePeriodPhase2 << 4U ) | ( myPreChargePeriodPhase1 );                           // Data byte
+      aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    }
+
+
+    
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_SeVCOMH_DeselectLevel ( I2C_parameters_t , SSD1306_v_comh_deselect_level_t )
+ *
+ * @details     It adjusts the VCOMH regulator output.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ * @param[in]    myVCOMH_DeselctLevel:  V_COMH deselect level.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SeVCOMH_DeselectLevel.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        3/December/2018
+ * @version     3/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SeVCOMH_DeselectLevel ( I2C_parameters_t myI2Cparameters, SSD1306_v_comh_deselect_level_t myVCOMH_DeselctLevel )
+{
+    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    i2c_status_t aux;
+
+    
+    /* Update the register    */
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   SSD1306_SET_V_COMH_DESELECT_LEVEL;                                                         // Data byte
+    cmd[2]   =   cmd[0];                                                                                    // Control byte
+    cmd[3]   =   myVCOMH_DeselctLevel;                                                                      // Data byte
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_NopCommand ( I2C_parameters_t )
+ *
+ * @details     No Operation Command.
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_NopCommand.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        3/December/2018
+ * @version     3/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_NopCommand ( I2C_parameters_t myI2Cparameters )
+{
+    uint8_t      cmd[]  =    { 0U, 0U };
+    i2c_status_t aux;
+
+    
+    /* Update the register    */
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   SSD1306_NOP;                                                                               // Data byte
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
     }
 }
