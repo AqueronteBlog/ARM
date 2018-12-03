@@ -103,13 +103,17 @@ typedef enum
 
     /* Hardware Configuration (Panel resolution & layout related) Command Table  */
     /* Check it!   */
-    SSD1306_SET_DISPLAY_START_LINE                      =   0b01111111,            /*!<  Set display RAM display start line register from 0-63                                                                 ( RESET = 40h ) */
+    SSD1306_SET_DISPLAY_START_LINE                      =   ( 0b01 << 6U ),        /*!<  Set display RAM display start line register from 0-63                                                                 ( RESET = 40h ) */
     SSD1306_SET_MULTIPLEX_RATIO                         =   0xA8,                  /*!<  Set MUX ratio to N + 1 MUX                                                                                                            */
     SSD1306_SET_DISPLAY_OFFSET                          =   0xD3,                  /*!<  Set vertical shift by COM from 0-63                                                                                                   */
     SSD1306_SET_COM_PINS_HARDWARE_CONFIGURATION         =   0xDA,                  /*!<  Set COM Pins Hardware configuration                                                                                                   */
 
     /* Timing & Driving Scheme Setting Command Table  */
-    /* Check it!   */
+    SSD1306_SET_DISPLAY_CLOCK_DIVIDE_RATIO_OSC_FREQ     =   0xD5,                  /*!<  Set Display Clock Divide Ratio/ Oscillator Frequency                                                                                  */
+    SSD1306_SET_PRE_CHARGE_PERIOD                       =   0xD9,                  /*!<  Set Pre-charge Period                                                                                                                 */
+    SSD1306_SET_V_COMH_DESELECT_LEVEL                   =   0xDB,                  /*!<  Set VCOMH Deselect level                                                                                                              */
+    SSD1306_NOP                                         =   0xE3,                  /*!<  No operation command                                                                                                                  */
+
 } SSD1306_command_table_t;
 
 
@@ -229,9 +233,9 @@ typedef enum
 */
 typedef enum
 {
-    COM_PIN_CONFIGURATION_MASK                =   0b00010000,         /*!<  COM pin configuration mask                                                */
-    COM_PIN_CONFIGURATION_SEQUENCTIAL_COM_PIN =   0b00000000,         /*!<  COM pin configuration: Sequential mode                          ( RESET ) */
-    COM_PIN_CONFIGURATION_ALTERNATIVE_COM_PIN =   0b00010000          /*!<  COM pin configuration: Alternative mode                                   */
+    COM_PIN_CONFIGURATION_MASK                =   0b00010010,         /*!<  COM pin configuration mask                                                */
+    COM_PIN_CONFIGURATION_SEQUENCTIAL_COM_PIN =   0b00000010,         /*!<  COM pin configuration: Sequential mode                          ( RESET ) */
+    COM_PIN_CONFIGURATION_ALTERNATIVE_COM_PIN =   0b00010010          /*!<  COM pin configuration: Alternative mode                                   */
 } SSD1306_com_pin_configuration_t;
 
 
@@ -239,11 +243,46 @@ typedef enum
 */
 typedef enum
 {
-    COM_LEFT_RIGHT_REMAP_MASK               =   0b00100000,           /*!<  COM left/right re-map mask                                                */
-    COM_LEFT_RIGHT_REMAP_DISABLED           =   0b00000000,           /*!<  COM left/right re-map: Disabled                                 ( RESET ) */
-    COM_LEFT_RIGHT_REMAP_ENABLED            =   0b00100000            /*!<  COM left/right re-map: Enabled                                            */
+    COM_LEFT_RIGHT_REMAP_MASK               =   0b00100010,           /*!<  COM left/right re-map mask                                                */
+    COM_LEFT_RIGHT_REMAP_DISABLED           =   0b00000010,           /*!<  COM left/right re-map: Disabled                                 ( RESET ) */
+    COM_LEFT_RIGHT_REMAP_ENABLED            =   0b00100010            /*!<  COM left/right re-map: Enabled                                            */
 } SSD1306_com_left_right_re_map_t;
 
+
+
+/**
+  * @brief   SET DISPLAY CLOCK DIVIDE RATIO/OSCILLATOR FREQUENCY
+  */
+/* DISPLAY CLOCK DIVIDE RATIO <3:0>
+ *  Set the divide ratio to generate DCLK (Display Clock) from CLK. The divide ratio is from 1 to 16,
+ *  with reset value = 1. Please refer to section 8.3 for the details relationship of DCLK and CLK.
+*/
+typedef enum
+{
+    DISPLAY_CLOCK_DIVIDE_RATIO_MASK         =   0b00001111            /*!<  Display Clock Divide Ratio mask                                           */
+} SSD1306_display_clock_divide_ratio_t;
+
+
+/* OSCILLATOR FREQUENCY <7:4>
+ *  Program the oscillator frequency Fosc that is the source of CLK if CLS pin is pulled high. The 4-bit
+ * value results in 16 different frequency settings available as shown below. The default setting is 1000b.
+*/
+typedef enum
+{
+    OSCILLATOR_FREQUENCY_MASK               =   0b11110000            /*!<  Oscillator Frequency mask                                                 */
+} SSD1306_oscillator_frequency_t;
+
+
+/**
+  * @brief   SET V_COMH DESELECT LEVEL
+  */
+typedef enum
+{
+    VCOMH_DESELECT_LEVEL_MASK               =   0b01110000,           /*!<  V_COMH deselect level mask                                                */
+    VCOMH_DESELECT_LEVEL_0_65XVCC           =   0b00000000,           /*!<  V_COMH deselect level: ~0.65 x VCC                                        */
+    VCOMH_DESELECT_LEVEL_0_77XVCC           =   0b00100000,           /*!<  V_COMH deselect level: ~0.77 x VCC                              ( RESET ) */
+    VCOMH_DESELECT_LEVEL_0_83XVCC           =   0b00110000            /*!<  V_COMH deselect level: ~0.83 x VCC                                        */
+} SSD1306_v_comh_deselect_level_t;
 
 
 
@@ -320,6 +359,29 @@ SSD1306_status_t  SSD1306_SetCOM_OutputScanDirection        ( I2C_parameters_t m
 /** Set COM Pins Hardware Configuration.
   */
 SSD1306_status_t  SSD1306_SetCOM_PinsHardwareConfiguration  ( I2C_parameters_t myI2Cparameters, SSD1306_com_pin_configuration_t myCOM_PinConfiguration, SSD1306_com_left_right_re_map_t myCOM_LeftRightEnable );
+
+/** Set Display Clock Divide Ratio/Oscillator Frequency.
+  */
+SSD1306_status_t  SSD1306_SetDisplayClockDivideRatio_OscFreq( I2C_parameters_t myI2Cparameters, uint8_t myOscillatorFrequency, uint8_t myDisplayClockDivideRatio );
+
+/** Set Pre-charge Period.
+  */
+SSD1306_status_t  SSD1306_SePreChargePeriod                 ( I2C_parameters_t myI2Cparameters, uint8_t myPreChargePeriodPhase1, uint8_t myPreChargePeriodPhase2 );
+
+/** Set Pre-charge Period.
+  */
+SSD1306_status_t  SSD1306_SePreChargePeriod                 ( I2C_parameters_t myI2Cparameters, uint8_t myPreChargePeriodPhase1, uint8_t myPreChargePeriodPhase2 );
+
+/** It adjusts the VCOMH regulator output.
+  */
+SSD1306_status_t  SSD1306_SeVCOMH_DeselectLevel             ( I2C_parameters_t myI2Cparameters, SSD1306_v_comh_deselect_level_t myVCOMH_DeselctLevel );
+
+/** No Operation Command.
+  */
+SSD1306_status_t  SSD1306_NopCommand                        ( I2C_parameters_t myI2Cparameters );
+
+
+
 
 
 /** It sends a command byte to SSD1306.
