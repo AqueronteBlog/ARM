@@ -69,7 +69,7 @@ typedef enum
 
 /* COMMAND TABLE     */
 /**
-  * @brief   COMMAND TABLE
+  * @brief   FUNDAMENTAL COMMAND TABLE
   */
 typedef enum
 {
@@ -112,9 +112,21 @@ typedef enum
     SSD1306_SET_DISPLAY_CLOCK_DIVIDE_RATIO_OSC_FREQ     =   0xD5,                  /*!<  Set Display Clock Divide Ratio/ Oscillator Frequency                                                                                  */
     SSD1306_SET_PRE_CHARGE_PERIOD                       =   0xD9,                  /*!<  Set Pre-charge Period                                                                                                                 */
     SSD1306_SET_V_COMH_DESELECT_LEVEL                   =   0xDB,                  /*!<  Set VCOMH Deselect level                                                                                                              */
-    SSD1306_NOP                                         =   0xE3,                  /*!<  No operation command                                                                                                                  */
+    SSD1306_NOP                                         =   0xE3                   /*!<  No operation command                                                                                                                  */
+} SSD1306_fundamental_command_t;
 
-} SSD1306_command_table_t;
+
+///**
+//  * @brief   GRAPHIC ACCELERATION COMMAND TABLE
+//  */
+//typedef enum
+//{
+//    /* Fundamental Command Table   */
+//    SSD1306_SET_CONTRAST_CONTROL                        =   ( 0b10000001 << 0U ),  /*!<  Double byte command to select 1 out of 256 contrast steps. Contrast increases as the value increases ( Read/Write ) ( RESET = 7Fh ) */
+//    SSD1306_ENTIRE_DISPLAY_ON                           =   ( 0b1010010 << 1U ),   /*!<  Entire Display ON                                                                                    ( Read/Write ) ( RESET = A4h ) */
+//    SSD1306_SET_NORMAL_INVERSE_DISPLAY                  =   ( 0b1010011 << 1U ),   /*!<  Set Normal/Inverse Display                                                                           ( Read/Write ) ( RESET = A6h ) */
+//    SSD1306_SET_DISPLAY_ON_OFF                          =   ( 0b1010111 << 1U ),   /*!<  Set Display ON/OFF                                                                                   ( Read/Write ) ( RESET = AEh ) */
+//} SSD1306_graphic_acceleration_command_t;
 
 
 
@@ -286,6 +298,70 @@ typedef enum
 
 
 
+/**
+  * @brief   CONTINUOS HORIZONTAL SCROLL SETUP
+  */
+/* RIGHT/LEFT HORIZONTAL SCROLL SETUP
+*/
+typedef enum
+{
+    HORIZONTAL_SCROLL_MASK                  =   0b00100111,           /*!<  Horizontal scroll mask                                                   */
+    HORIZONTAL_SCROLL_RIGHT                 =   0b00100110,           /*!<  Horizontal scroll: right direction                                       */
+    HORIZONTAL_SCROLL_LEFT                  =   0b00100111            /*!<  Horizontal scroll: left direction                                        */
+} SSD1306_horizontal_scroll_t;
+
+
+/* HORIZONTAL SCROLL SETUP: START PAGE ADDRESS
+*/
+typedef enum
+{
+    HORIZONTAL_SCROLL_START_PAGE_ADDR_MASK    =   0b00000111,         /*!<  Horizontal scroll start page address mask                                */
+    HORIZONTAL_SCROLL_START_PAGE_ADDR_PAGE_0  =   0b00000000,         /*!<  Horizontal scroll start page address: Page 0                             */
+    HORIZONTAL_SCROLL_START_PAGE_ADDR_PAGE_1  =   0b00000001,         /*!<  Horizontal scroll start page address: Page 1                             */
+    HORIZONTAL_SCROLL_START_PAGE_ADDR_PAGE_2  =   0b00000010,         /*!<  Horizontal scroll start page address: Page 2                             */
+    HORIZONTAL_SCROLL_START_PAGE_ADDR_PAGE_3  =   0b00000011,         /*!<  Horizontal scroll start page address: Page 3                             */
+    HORIZONTAL_SCROLL_START_PAGE_ADDR_PAGE_4  =   0b00000100,         /*!<  Horizontal scroll start page address: Page 4                             */
+    HORIZONTAL_SCROLL_START_PAGE_ADDR_PAGE_5  =   0b00000101,         /*!<  Horizontal scroll start page address: Page 5                             */
+    HORIZONTAL_SCROLL_START_PAGE_ADDR_PAGE_6  =   0b00000110,         /*!<  Horizontal scroll start page address: Page 6                             */
+    HORIZONTAL_SCROLL_START_PAGE_ADDR_PAGE_7  =   0b00000111          /*!<  Horizontal scroll start page address: Page 7                             */
+} SSD1306_horizontal_scroll_start_page_address_t;
+
+
+/* HORIZONTAL SCROLL SETUP: FRAME FREQUENCY
+*/
+typedef enum
+{
+    HORIZONTAL_SCROLL_FRAME_FREQUENCY_MASK        =   0b00000111,     /*!<  Horizontal scroll frame frequency mask                                   */
+    HORIZONTAL_SCROLL_FRAME_FREQUENCY_FRAMES_5    =   0b00000000,     /*!<  Horizontal scroll frame frequency:   5 frames                            */
+    HORIZONTAL_SCROLL_FRAME_FREQUENCY_FRAMES_64   =   0b00000001,     /*!<  Horizontal scroll frame frequency:  64 frames                            */
+    HORIZONTAL_SCROLL_FRAME_FREQUENCY_FRAMES_128  =   0b00000010,     /*!<  Horizontal scroll frame frequency: 128 frames                            */
+    HORIZONTAL_SCROLL_FRAME_FREQUENCY_FRAMES_256  =   0b00000011,     /*!<  Horizontal scroll frame frequency: 256 frames                            */
+    HORIZONTAL_SCROLL_FRAME_FREQUENCY_FRAMES_3    =   0b00000100,     /*!<  Horizontal scroll frame frequency:   3 frames                            */
+    HORIZONTAL_SCROLL_FRAME_FREQUENCY_FRAMES_4    =   0b00000101,     /*!<  Horizontal scroll frame frequency:   4 frames                            */
+    HORIZONTAL_SCROLL_FRAME_FREQUENCY_FRAMES_25   =   0b00000110,     /*!<  Horizontal scroll frame frequency:  25 frames                            */
+    HORIZONTAL_SCROLL_FRAME_FREQUENCY_FRAMES_2    =   0b00000111      /*!<  Horizontal scroll frame frequency:   2 frames                            */
+} SSD1306_horizontal_scroll_frame_frequency_t;
+
+
+/* HORIZONTAL SCROLL SETUP: END PAGE ADDRESS
+*/
+typedef enum
+{
+    HORIZONTAL_SCROLL_END_PAGE_ADDR_MASK    =   0b00000111,          /*!<  Horizontal scroll end page address mask                                  */
+    HORIZONTAL_SCROLL_END_PAGE_ADDR_PAGE_0  =   0b00000000,          /*!<  Horizontal scroll end page address: Page 0                               */
+    HORIZONTAL_SCROLL_END_PAGE_ADDR_PAGE_1  =   0b00000001,          /*!<  Horizontal scroll end page address: Page 1                               */
+    HORIZONTAL_SCROLL_END_PAGE_ADDR_PAGE_2  =   0b00000010,          /*!<  Horizontal scroll end page address: Page 2                               */
+    HORIZONTAL_SCROLL_END_PAGE_ADDR_PAGE_3  =   0b00000011,          /*!<  Horizontal scroll end page address: Page 3                               */
+    HORIZONTAL_SCROLL_END_PAGE_ADDR_PAGE_4  =   0b00000100,          /*!<  Horizontal scroll end page address: Page 4                               */
+    HORIZONTAL_SCROLL_END_PAGE_ADDR_PAGE_5  =   0b00000101,          /*!<  Horizontal scroll end page address: Page 5                               */
+    HORIZONTAL_SCROLL_END_PAGE_ADDR_PAGE_6  =   0b00000110,          /*!<  Horizontal scroll end page address: Page 6                               */
+    HORIZONTAL_SCROLL_END_PAGE_ADDR_PAGE_7  =   0b00000111           /*!<  Horizontal scroll end page address: Page 7                               */
+} SSD1306_horizontal_scroll_end_page_address_t;
+
+
+
+
+
 
 
 #ifndef SSD1306_VECTOR_STRUCT_H
@@ -379,6 +455,11 @@ SSD1306_status_t  SSD1306_SeVCOMH_DeselectLevel             ( I2C_parameters_t m
 /** No Operation Command.
   */
 SSD1306_status_t  SSD1306_NopCommand                        ( I2C_parameters_t myI2Cparameters );
+
+
+/** Horizontal scroll setup.
+  */
+SSD1306_status_t  SSD1306_SetHorizontalScrollSetup          ( I2C_parameters_t myI2Cparameters, SSD1306_horizontal_scroll_t myRightLeftHorizontalScroll, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr );
 
 
 
