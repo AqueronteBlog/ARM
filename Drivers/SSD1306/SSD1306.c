@@ -787,7 +787,7 @@ SSD1306_status_t  SSD1306_SeVCOMH_DeselectLevel ( I2C_parameters_t myI2Cparamete
  *
  * @details     No Operation Command.
  *
- * @param[in]    N/A.
+ * @param[in]    myI2Cparameters:       I2C parameters.
  *
  * @param[out]   N/A.
  *
@@ -810,6 +810,66 @@ SSD1306_status_t  SSD1306_NopCommand ( I2C_parameters_t myI2Cparameters )
     /* Update the register    */
     cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   SSD1306_NOP;                                                                               // Data byte
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_SetHorizontalScrollSetup ( I2C_parameters_t , SSD1306_horizontal_scroll_t , SSD1306_horizontal_scroll_start_page_address_t , SSD1306_horizontal_scroll_frame_frequency_t, SSD1306_horizontal_scroll_end_page_address_t )
+ *
+ * @details     No Operation Command.
+ *
+ * @param[in]    myI2Cparameters:             I2C parameters.
+ * @param[in]    myRightLeftHorizontalScroll: Right/Left horizontal scroll.
+ * @param[in]    myStartPageAddr:             Define start page address.
+ * @param[in]    myFrames:                    Frame frequency.
+ * @param[in]    myEndPageAddr:               Define end page address.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SetHorizontalScrollSetup.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        4/December/2018
+ * @version     4/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SetHorizontalScrollSetup ( I2C_parameters_t myI2Cparameters, SSD1306_horizontal_scroll_t myRightLeftHorizontalScroll, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr )
+{
+    uint8_t      cmd[14]  =    { 0U };
+    i2c_status_t aux;
+
+    
+    /* Update the register    */
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   myRightLeftHorizontalScroll;                                                               // Data byte
+    cmd[2]   =   cmd[0];                                                                                    // Control byte
+    cmd[3]   =   0x00;                                                                                      // Data byte ( dummy byte ) 
+    cmd[4]   =   cmd[0];                                                                                    // Control byte
+    cmd[5]   =   myStartPageAddr;                                                                           // Data byte ( start page )
+    cmd[6]   =   cmd[0];                                                                                    // Control byte  
+    cmd[7]   =   myFrames;                                                                                  // Data byte ( frame frequency )
+    cmd[8]   =   cmd[0];                                                                                    // Control byte
+    cmd[9]   =   myEndPageAddr;                                                                             // Data byte ( end page )
+    cmd[10]  =   cmd[0];                                                                                    // Control byte
+    cmd[11]  =   0x00;                                                                                      // Data byte ( dummy byte ) 
+    cmd[12]  =   cmd[0];                                                                                    // Control byte
+    cmd[13]  =   0xFF;                                                                                      // Data byte ( dummy byte ) 
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
