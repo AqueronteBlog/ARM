@@ -94,10 +94,6 @@ typedef enum
     SSD1306_VERTICAL_SCROLL_DEFINE_END_PAGE_ADDRESS     =   ( 0b00000000 << 3U ),  /*!<  Define end page address                                                                                                             */
     SSD1306_VERTICAL_SCROLL_OFFSET                      =   ( 0b00000000 << 6U ),  /*!<  Vertical scrolling offset                                                                                                           */
     
-    /* General Scrolling Command Table   */
-    SSD1306_DEACTIVATE_SCROLL                           =   0x2E,                  /*!<  Stop scrolling that is configured by command                                                                                        */
-    SSD1306_ACTIVATE_SCROLL                             =   0x2F,                  /*!<  Start scrolling that is configured by the scrolling setup commands                                                                  */
-    
     /* Set Vertical Scroll Area  */
     /* Check it!   */
 
@@ -116,17 +112,17 @@ typedef enum
 } SSD1306_fundamental_command_t;
 
 
-///**
-//  * @brief   GRAPHIC ACCELERATION COMMAND TABLE
-//  */
-//typedef enum
-//{
-//    /* Fundamental Command Table   */
-//    SSD1306_SET_CONTRAST_CONTROL                        =   ( 0b10000001 << 0U ),  /*!<  Double byte command to select 1 out of 256 contrast steps. Contrast increases as the value increases ( Read/Write ) ( RESET = 7Fh ) */
-//    SSD1306_ENTIRE_DISPLAY_ON                           =   ( 0b1010010 << 1U ),   /*!<  Entire Display ON                                                                                    ( Read/Write ) ( RESET = A4h ) */
-//    SSD1306_SET_NORMAL_INVERSE_DISPLAY                  =   ( 0b1010011 << 1U ),   /*!<  Set Normal/Inverse Display                                                                           ( Read/Write ) ( RESET = A6h ) */
-//    SSD1306_SET_DISPLAY_ON_OFF                          =   ( 0b1010111 << 1U ),   /*!<  Set Display ON/OFF                                                                                   ( Read/Write ) ( RESET = AEh ) */
-//} SSD1306_graphic_acceleration_command_t;
+/**
+  * @brief   GRAPHIC ACCELERATION COMMAND TABLE
+  */
+typedef enum
+{
+    /*  Scrolling Command Table   */
+    SSD1306_DEACTIVATE_SCROLL                           =   0x2E,                  /*!<  Deactivate scroll                                                                                                                    */
+    SSD1306_ACTIVATE_SCROLL                             =   0x2F,                  /*!<  Activate scroll                                                                                                                      */                                                                
+    SSD1306_SET_VERTICAL_SCROLL_AREA                    =   0xA3                   /*!<  Set vertical scroll area                                                                                                             */                                                                
+} SSD1306_graphic_acceleration_command_t;
+
 
 
 
@@ -359,6 +355,95 @@ typedef enum
 } SSD1306_horizontal_scroll_end_page_address_t;
 
 
+/**
+  * @brief   CONTINUOUS VERTICAL AND HORIZONTAL SCROLL SETUP
+  */
+/* VERTICAL RIGHT/LEFT HORIZONTAL SCROLL SETUP
+*/
+typedef enum
+{
+    CONTINUOUS_VERTICAL_HORIZONTAL_SCROLL_MASK    =   0b00101011,     /*!<  Continuous vertical Horizontal scroll mask                               */
+    CONTINUOUS_VERTICAL_HORIZONTAL_SCROLL_RIGHT   =   0b00101001,     /*!<  Continuous vertical Horizontal scroll: right direction                   */
+    CONTINUOUS_VERTICAL_HORIZONTAL_SCROLL_LEFT    =   0b00101010      /*!<  Continuous vertical Horizontal scroll: left direction                    */
+} SSD1306_continuous_vertical_right_left_horizontal_scroll_t;
+
+
+/* VERTICAL SCROLLING OFFSET
+*/
+typedef enum
+{
+    VERTICAL_SCROLLING_OFFSET_MASK   =   0b11111111,                  /*!<  Vertical scrolling offset mask                                           */
+    VERTICAL_SCROLLING_OFFSET_ROW_0  =   0b00000000,                  /*!<  Vertical scrolling offset:  0 row                                        */
+    VERTICAL_SCROLLING_OFFSET_ROW_1  =   0b00000001,                  /*!<  Vertical scrolling offset:  1 row                                        */
+    VERTICAL_SCROLLING_OFFSET_ROW_2  =   0b00000010,                  /*!<  Vertical scrolling offset:  2 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_3  =   0b00000011,                  /*!<  Vertical scrolling offset:  3 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_4  =   0b00000100,                  /*!<  Vertical scrolling offset:  4 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_5  =   0b00000101,                  /*!<  Vertical scrolling offset:  5 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_6  =   0b00000110,                  /*!<  Vertical scrolling offset:  6 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_7  =   0b00000111,                  /*!<  Vertical scrolling offset:  7 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_8  =   0b00001000,                  /*!<  Vertical scrolling offset:  8 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_9  =   0b00001001,                  /*!<  Vertical scrolling offset:  9 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_10 =   0b00001010,                  /*!<  Vertical scrolling offset: 10 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_11 =   0b00001011,                  /*!<  Vertical scrolling offset: 11 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_12 =   0b00001100,                  /*!<  Vertical scrolling offset: 12 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_13 =   0b00001101,                  /*!<  Vertical scrolling offset: 13 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_14 =   0b00001110,                  /*!<  Vertical scrolling offset: 14 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_15 =   0b00001111,                  /*!<  Vertical scrolling offset: 15 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_16 =   0b00010000,                  /*!<  Vertical scrolling offset: 16 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_17 =   0b00010001,                  /*!<  Vertical scrolling offset: 17 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_18 =   0b00010010,                  /*!<  Vertical scrolling offset: 18 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_19 =   0b00010011,                  /*!<  Vertical scrolling offset: 19 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_20 =   0b00010100,                  /*!<  Vertical scrolling offset: 20 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_21 =   0b00010101,                  /*!<  Vertical scrolling offset: 21 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_22 =   0b00010110,                  /*!<  Vertical scrolling offset: 22 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_23 =   0b00010111,                  /*!<  Vertical scrolling offset: 23 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_24 =   0b00011000,                  /*!<  Vertical scrolling offset: 24 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_25 =   0b00011001,                  /*!<  Vertical scrolling offset: 25 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_26 =   0b00011010,                  /*!<  Vertical scrolling offset: 26 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_27 =   0b00011011,                  /*!<  Vertical scrolling offset: 27 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_28 =   0b00011100,                  /*!<  Vertical scrolling offset: 28 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_29 =   0b00011101,                  /*!<  Vertical scrolling offset: 29 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_30 =   0b00011110,                  /*!<  Vertical scrolling offset: 30 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_31 =   0b00011111,                  /*!<  Vertical scrolling offset: 31 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_32 =   0b00100000,                  /*!<  Vertical scrolling offset: 32 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_33 =   0b00100001,                  /*!<  Vertical scrolling offset: 33 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_34 =   0b00100010,                  /*!<  Vertical scrolling offset: 34 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_35 =   0b00100011,                  /*!<  Vertical scrolling offset: 35 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_36 =   0b00100100,                  /*!<  Vertical scrolling offset: 36 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_37 =   0b00100101,                  /*!<  Vertical scrolling offset: 37 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_38 =   0b00100110,                  /*!<  Vertical scrolling offset: 38 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_39 =   0b00100111,                  /*!<  Vertical scrolling offset: 39 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_40 =   0b00101000,                  /*!<  Vertical scrolling offset: 40 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_41 =   0b00101001,                  /*!<  Vertical scrolling offset: 41 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_42 =   0b00101010,                  /*!<  Vertical scrolling offset: 42 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_43 =   0b00101011,                  /*!<  Vertical scrolling offset: 43 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_44 =   0b00101100,                  /*!<  Vertical scrolling offset: 44 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_45 =   0b00101101,                  /*!<  Vertical scrolling offset: 45 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_46 =   0b00101110,                  /*!<  Vertical scrolling offset: 46 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_47 =   0b00101111,                  /*!<  Vertical scrolling offset: 47 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_48 =   0b00110000,                  /*!<  Vertical scrolling offset: 48 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_49 =   0b00110001,                  /*!<  Vertical scrolling offset: 49 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_50 =   0b00110010,                  /*!<  Vertical scrolling offset: 50 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_51 =   0b00110011,                  /*!<  Vertical scrolling offset: 51 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_52 =   0b00110100,                  /*!<  Vertical scrolling offset: 52 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_53 =   0b00110101,                  /*!<  Vertical scrolling offset: 53 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_54 =   0b00110110,                  /*!<  Vertical scrolling offset: 54 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_55 =   0b00110111,                  /*!<  Vertical scrolling offset: 55 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_56 =   0b00111000,                  /*!<  Vertical scrolling offset: 56 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_57 =   0b00111001,                  /*!<  Vertical scrolling offset: 57 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_58 =   0b00111010,                  /*!<  Vertical scrolling offset: 58 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_59 =   0b00111011,                  /*!<  Vertical scrolling offset: 59 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_60 =   0b00111100,                  /*!<  Vertical scrolling offset: 60 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_61 =   0b00111101,                  /*!<  Vertical scrolling offset: 61 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_62 =   0b00111110,                  /*!<  Vertical scrolling offset: 62 rows                                       */
+    VERTICAL_SCROLLING_OFFSET_ROW_63 =   0b00111111                   /*!<  Vertical scrolling offset: 63 rows                                       */
+} SSD1306_vertical_scrolling_offset_t;
+
+
+
+
+
+
 
 
 
@@ -391,75 +476,83 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-SSD1306_status_t  SSD1306_Init                    ( I2C_parameters_t myI2Cparameters                                                              );
+SSD1306_status_t  SSD1306_Init                                        ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
 
 /** It sets the constrast value to select 1 out of 256 contrast steps.
   */
-SSD1306_status_t  SSD1306_SetContrastControl      ( I2C_parameters_t myI2Cparameters, SSD1306_vector_data_t myContrastStep                        );
+SSD1306_status_t  SSD1306_SetContrastControl                          ( I2C_parameters_t myI2Cparameters, SSD1306_vector_data_t myContrastStep                                                                                                                                                                                                                                                                                                                  );
 
 /** It sets if the display's output follows RAM content or ignores it.
   */
-SSD1306_status_t  SSD1306_SetEntireDisplay        ( I2C_parameters_t myI2Cparameters, SSD1306_entire_display_on_t myEntireDisplayOn               );
+SSD1306_status_t  SSD1306_SetEntireDisplay                            ( I2C_parameters_t myI2Cparameters, SSD1306_entire_display_on_t myEntireDisplayOn                                                                                                                                                                                                                                                                                                         );
 
 /** It sets normal/inverse display.
   */
-SSD1306_status_t  SSD1306_SetNormalInverseDisplay ( I2C_parameters_t myI2Cparameters, SSD1306_set_normal_inverse_display_t myNormalInverseDisplay );
+SSD1306_status_t  SSD1306_SetNormalInverseDisplay                     ( I2C_parameters_t myI2Cparameters, SSD1306_set_normal_inverse_display_t myNormalInverseDisplay                                                                                                                                                                                                                                                                                           );
 
 /** It sets display ON/OFF.
   */
-SSD1306_status_t  SSD1306_SetDisplay              ( I2C_parameters_t myI2Cparameters, SSD1306_set_display_t myDisplayMode                         );
+SSD1306_status_t  SSD1306_SetDisplay                                  ( I2C_parameters_t myI2Cparameters, SSD1306_set_display_t myDisplayMode                                                                                                                                                                                                                                                                                                                   );
 
-
-
-/** This command switches the default 63 multiplex mode to any multiplex ratio, ranging from 16 to 63. The
-    output pads COM0-COM63 will be switched to the corresponding COM signal.
+/** This command switches the default 63 multiplex mode to any multiplex ratio, ranging from 16 to 63. The output pads COM0-COM63 will be switched to the corresponding COM signal.
   */
-SSD1306_status_t  SSD1306_SetMultiplexRatio                 ( I2C_parameters_t myI2Cparameters, SSD1306_set_multiplex_ratio_t myMultiplexRatio                                                                );
+SSD1306_status_t  SSD1306_SetMultiplexRatio                           ( I2C_parameters_t myI2Cparameters, SSD1306_set_multiplex_ratio_t myMultiplexRatio                                                                                                                                                                                                                                                                                                        );
 
 /** Set vertical shift by COM from 0-63.
   */
-SSD1306_status_t  SSD1306_SetDisplayOffset                  ( I2C_parameters_t myI2Cparameters, uint8_t myDisplayOffset                                                                                       );
+SSD1306_status_t  SSD1306_SetDisplayOffset                            ( I2C_parameters_t myI2Cparameters, uint8_t myDisplayOffset                                                                                                                                                                                                                                                                                                                               );
 
 /** Set display RAM display start line register from 0-63.
   */
-SSD1306_status_t  SSD1306_SetDisplayStartLine               ( I2C_parameters_t myI2Cparameters, uint8_t myDisplayStartLine                                                                                    );
+SSD1306_status_t  SSD1306_SetDisplayStartLine                         ( I2C_parameters_t myI2Cparameters, uint8_t myDisplayStartLine                                                                                                                                                                                                                                                                                                                            );
 
 /** Set Segment Re-map.
   */
-SSD1306_status_t  SSD1306_SetSegmentReMap                   ( I2C_parameters_t myI2Cparameters, SSD1306_set_segment_re_map_t mySegmentReMap                                                                   );
+SSD1306_status_t  SSD1306_SetSegmentReMap                             ( I2C_parameters_t myI2Cparameters, SSD1306_set_segment_re_map_t mySegmentReMap                                                                                                                                                                                                                                                                                                           );
 
 /** Set COM Output Scan Direction.
   */
-SSD1306_status_t  SSD1306_SetCOM_OutputScanDirection        ( I2C_parameters_t myI2Cparameters, SSD1306_set_com_output_scan_direction_t myScanDirection                                                       );
+SSD1306_status_t  SSD1306_SetCOM_OutputScanDirection                  ( I2C_parameters_t myI2Cparameters, SSD1306_set_com_output_scan_direction_t myScanDirection                                                                                                                                                                                                                                                                                               );
 
 /** Set COM Pins Hardware Configuration.
   */
-SSD1306_status_t  SSD1306_SetCOM_PinsHardwareConfiguration  ( I2C_parameters_t myI2Cparameters, SSD1306_com_pin_configuration_t myCOM_PinConfiguration, SSD1306_com_left_right_re_map_t myCOM_LeftRightEnable );
+SSD1306_status_t  SSD1306_SetCOM_PinsHardwareConfiguration            ( I2C_parameters_t myI2Cparameters, SSD1306_com_pin_configuration_t myCOM_PinConfiguration, SSD1306_com_left_right_re_map_t myCOM_LeftRightEnable                                                                                                                                                                                                                                         );
 
 /** Set Display Clock Divide Ratio/Oscillator Frequency.
   */
-SSD1306_status_t  SSD1306_SetDisplayClockDivideRatio_OscFreq( I2C_parameters_t myI2Cparameters, uint8_t myOscillatorFrequency, uint8_t myDisplayClockDivideRatio );
+SSD1306_status_t  SSD1306_SetDisplayClockDivideRatio_OscFreq          ( I2C_parameters_t myI2Cparameters, uint8_t myOscillatorFrequency, uint8_t myDisplayClockDivideRatio                                                                                                                                                                                                                                                                                      );
 
 /** Set Pre-charge Period.
   */
-SSD1306_status_t  SSD1306_SePreChargePeriod                 ( I2C_parameters_t myI2Cparameters, uint8_t myPreChargePeriodPhase1, uint8_t myPreChargePeriodPhase2 );
-
-/** Set Pre-charge Period.
-  */
-SSD1306_status_t  SSD1306_SePreChargePeriod                 ( I2C_parameters_t myI2Cparameters, uint8_t myPreChargePeriodPhase1, uint8_t myPreChargePeriodPhase2 );
+SSD1306_status_t  SSD1306_SePreChargePeriod                           ( I2C_parameters_t myI2Cparameters, uint8_t myPreChargePeriodPhase1, uint8_t myPreChargePeriodPhase2                                                                                                                                                                                                                                                                                      );
 
 /** It adjusts the VCOMH regulator output.
   */
-SSD1306_status_t  SSD1306_SeVCOMH_DeselectLevel             ( I2C_parameters_t myI2Cparameters, SSD1306_v_comh_deselect_level_t myVCOMH_DeselctLevel );
+SSD1306_status_t  SSD1306_SeVCOMH_DeselectLevel                       ( I2C_parameters_t myI2Cparameters, SSD1306_v_comh_deselect_level_t myVCOMH_DeselctLevel                                                                                                                                                                                                                                                                                                  );
 
 /** No Operation Command.
   */
-SSD1306_status_t  SSD1306_NopCommand                        ( I2C_parameters_t myI2Cparameters );
-
+SSD1306_status_t  SSD1306_NopCommand                                  ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
 
 /** Horizontal scroll setup.
   */
-SSD1306_status_t  SSD1306_SetHorizontalScrollSetup          ( I2C_parameters_t myI2Cparameters, SSD1306_horizontal_scroll_t myRightLeftHorizontalScroll, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr );
+SSD1306_status_t  SSD1306_SetHorizontalScrollSetup                    ( I2C_parameters_t myI2Cparameters, SSD1306_horizontal_scroll_t myRightLeftHorizontalScroll, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr                                                                                                             );
+
+/** Continuous Vertical and Horizontal Scroll Setup.
+  */
+SSD1306_status_t  SSD1306_SetContinuousHorizontalVerticalScrollSetup  ( I2C_parameters_t myI2Cparameters, SSD1306_continuous_vertical_right_left_horizontal_scroll_t myContinuousVerticalHorizontalScrollSetup, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr, SSD1306_vertical_scrolling_offset_t myVerticalScrollingOffset );
+
+/** Deactivate Scroll.
+  */
+SSD1306_status_t  SSD1306_DeactivateScroll                            ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
+
+/** Activate Scroll.
+  */
+SSD1306_status_t  SSD1306_ActivateScroll                              ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
+
+/** Set Vertical Scroll Area.
+  */
+SSD1306_status_t  SSD1306_SetVerticalScrollArea                       ( I2C_parameters_t myI2Cparameters, uint8_t myNoRowsTopFixArea, uint8_t NoRowsScrollArea                                                                                                                                                                                                                                                                                                  );
 
 
 
