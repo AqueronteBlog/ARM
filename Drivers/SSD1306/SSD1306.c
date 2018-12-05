@@ -883,3 +883,207 @@ SSD1306_status_t  SSD1306_SetHorizontalScrollSetup ( I2C_parameters_t myI2Cparam
       return  SSD1306_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       SSD1306_SetContinuousHorizontalVerticalScrollSetup ( I2C_parameters_t , SSD1306_horizontal_scroll_t , SSD1306_horizontal_scroll_start_page_address_t , SSD1306_horizontal_scroll_frame_frequency_t, SSD1306_horizontal_scroll_end_page_address_t , SSD1306_vertical_scrolling_offset_t )
+ *
+ * @details     No Operation Command.
+ *
+ * @param[in]    myI2Cparameters:                           I2C parameters.
+ * @param[in]    myContinuousVerticalHorizontalScrollSetup: Continuos Vertical Right/Left horizontal scroll.
+ * @param[in]    myStartPageAddr:                           Define start page address.
+ * @param[in]    myFrames:                                  Frame frequency.
+ * @param[in]    myEndPageAddr:                             Define end page address.
+ * @param[in]    myVerticalScrollingOffset:                 Define vertical scrolling offset.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SetContinuousHorizontalVerticalScrollSetup.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        5/December/2018
+ * @version     5/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SetContinuousHorizontalVerticalScrollSetup ( I2C_parameters_t myI2Cparameters, SSD1306_continuous_vertical_right_left_horizontal_scroll_t myContinuousVerticalHorizontalScrollSetup, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr, SSD1306_vertical_scrolling_offset_t myVerticalScrollingOffset )
+{
+    uint8_t      cmd[12]  =    { 0U };
+    i2c_status_t aux;
+
+    
+    /* Update the register    */
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   myContinuousVerticalHorizontalScrollSetup;                                                 // Data byte ( Vertical and Right/Left Horizontal Scroll )
+    cmd[2]   =   cmd[0];                                                                                    // Control byte
+    cmd[3]   =   0x00;                                                                                      // Data byte ( dummy byte ) 
+    cmd[4]   =   cmd[0];                                                                                    // Control byte
+    cmd[5]   =   myStartPageAddr;                                                                           // Data byte ( start page )
+    cmd[6]   =   cmd[0];                                                                                    // Control byte  
+    cmd[7]   =   myFrames;                                                                                  // Data byte ( frame frequency )
+    cmd[8]   =   cmd[0];                                                                                    // Control byte
+    cmd[9]   =   myEndPageAddr;                                                                             // Data byte ( end page )
+    cmd[10]  =   cmd[0];                                                                                    // Control byte
+    cmd[11]  =   myVerticalScrollingOffset;                                                                 // Data byte ( Vertical scrolling offset )  
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_DeactivateScroll ( I2C_parameters_t )
+ *
+ * @details     Deactivate Scroll.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_DeactivateScroll.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        5/December/2018
+ * @version     5/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_DeactivateScroll ( I2C_parameters_t myI2Cparameters )
+{
+    uint8_t      cmd[]  =    { 0U, 0U };
+    i2c_status_t aux;
+
+    
+    /* Update the register    */
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   SSD1306_DEACTIVATE_SCROLL;                                                                 // Data byte 
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_ActivateScroll ( I2C_parameters_t )
+ *
+ * @details     Activate Scroll.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_ActivateScroll.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        5/December/2018
+ * @version     5/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_ActivateScroll ( I2C_parameters_t myI2Cparameters )
+{
+    uint8_t      cmd[]  =    { 0U, 0U };
+    i2c_status_t aux;
+
+    
+    /* Update the register    */
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   SSD1306_ACTIVATE_SCROLL;                                                                   // Data byte 
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_SetVerticalScrollArea ( I2C_parameters_t , uint8_t , uint8_t )
+ *
+ * @details     Set Vertical Scroll Area.
+ *
+ * @param[in]    myI2Cparameters:     I2C parameters.
+ * @param[in]    myNoRowsTopFixArea:  Set No. of rows in top fixed area.
+ * @param[in]    NoRowsScrollArea:    Set No. of rows in scroll area.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SetVerticalScrollArea.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        5/December/2018
+ * @version     5/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SetVerticalScrollArea ( I2C_parameters_t myI2Cparameters, uint8_t myNoRowsTopFixArea, uint8_t NoRowsScrollArea )
+{
+    uint8_t      cmd[6]  =    { 0U };
+    i2c_status_t aux;
+
+    
+    if ( ( myNoRowsTopFixArea > 0x3F ) || ( NoRowsScrollArea > 0x7F ) )
+    {
+      return  SSD1306_FAILURE;
+    }
+    else
+    {
+      /* Update the register    */
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[1]   =   SSD1306_SET_VERTICAL_SCROLL_AREA;                                                          // Data byte 
+      cmd[2]   =   cmd[0];                                                                                    // Control byte
+      cmd[3]   =   myNoRowsTopFixArea;                                                                        // Data byte ( Set No. of rows in top fixed area )
+      cmd[4]   =   cmd[0];                                                                                    // Control byte
+      cmd[5]   =   NoRowsScrollArea;                                                                          // Data byte ( Set No. of rows in scroll area )   
+      aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    }
+    
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
