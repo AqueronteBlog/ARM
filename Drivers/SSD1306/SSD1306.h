@@ -87,18 +87,19 @@ typedef enum
     SSD1306_HORIZONTAL_SCROLL_DEFINE_END_PAGE_ADDRESS   =   ( 0b00000000 << 3U ),  /*!<  Define end page address                                                                                                             */
     
     /* Vertical Scrolling Command Table   */
-    SSD1306_VERTICAL_SCROLL                             =   ( 0b001010 << 2U ),    /*!<  Continuous Vertical Scroll                                                                                                          */
-    SSD1306_VERTICAL_SCROLL_DUMMY_BYTE                  =   ( 0b00000000 << 0U ),  /*!<  Dummy byte ( Set as 00h )                                                                                                           */
-    SSD1306_VERTICAL_SCROLL_DEFINE_START_PAGE_ADDRESS   =   ( 0b00000000 << 3U ),  /*!<  Define start page address                                                                                                           */
-    SSD1306_VERTICAL_SCROLL_SET_TIME_INTERVAL           =   ( 0b00000000 << 3U ),  /*!<  Set time interval between each scroll step in terms of frame frequency                                                              */
-    SSD1306_VERTICAL_SCROLL_DEFINE_END_PAGE_ADDRESS     =   ( 0b00000000 << 3U ),  /*!<  Define end page address                                                                                                             */
-    SSD1306_VERTICAL_SCROLL_OFFSET                      =   ( 0b00000000 << 6U ),  /*!<  Vertical scrolling offset                                                                                                           */
+    SSD1306_VERTICAL_SCROLL                             =   ( 0b001010 << 2U ),    /*!<  Continuous Vertical Scroll                                                                                                           */
+    SSD1306_VERTICAL_SCROLL_DUMMY_BYTE                  =   ( 0b00000000 << 0U ),  /*!<  Dummy byte ( Set as 00h )                                                                                                            */
+    SSD1306_VERTICAL_SCROLL_DEFINE_START_PAGE_ADDRESS   =   ( 0b00000000 << 3U ),  /*!<  Define start page address                                                                                                            */
+    SSD1306_VERTICAL_SCROLL_SET_TIME_INTERVAL           =   ( 0b00000000 << 3U ),  /*!<  Set time interval between each scroll step in terms of frame frequency                                                               */
+    SSD1306_VERTICAL_SCROLL_DEFINE_END_PAGE_ADDRESS     =   ( 0b00000000 << 3U ),  /*!<  Define end page address                                                                                                              */
+    SSD1306_VERTICAL_SCROLL_OFFSET                      =   ( 0b00000000 << 6U ),  /*!<  Vertical scrolling offset                                                                                                            */
     
-    /* Set Vertical Scroll Area  */
-    /* Check it!   */
-
+    /* Addressing Setting Command Table  */
+    SSD1306_SET_MEMORY_ADDRESSING_MODE                  =   0x20,                  /*!<  Set addressing mode                                                                                                                  */
+    SSD1306_SET_COLUMN_ADDRESS                          =   0x21,                  /*!<  Set column address                                                                                                                   */
+    SSD1306_SET_PAGE_ADDRESS                            =   0x22,                  /*!<  Set page address                                                                                                                     */
+    
     /* Hardware Configuration (Panel resolution & layout related) Command Table  */
-    /* Check it!   */
     SSD1306_SET_DISPLAY_START_LINE                      =   ( 0b01 << 6U ),        /*!<  Set display RAM display start line register from 0-63                                                                 ( RESET = 40h ) */
     SSD1306_SET_MULTIPLEX_RATIO                         =   0xA8,                  /*!<  Set MUX ratio to N + 1 MUX                                                                                                            */
     SSD1306_SET_DISPLAY_OFFSET                          =   0xD3,                  /*!<  Set vertical shift by COM from 0-63                                                                                                   */
@@ -440,10 +441,35 @@ typedef enum
 } SSD1306_vertical_scrolling_offset_t;
 
 
+/**
+  * @brief   SET MEMORY ADDRESSING MODE
+  */
+/* ADDRESSING MODE
+*/
+typedef enum
+{
+    ADDRESSING_MODE_MASK        =   0b11111111,                       /*!<  Addressing mode mask                                                     */
+    ADDRESSING_MODE_HORIZONTAL  =   0b11111100,                       /*!<  Horizontal addressing mode                                               */
+    ADDRESSING_MODE_VERTICAL    =   0b11111101,                       /*!<  Vertical addressing mode                                                 */
+    ADDRESSING_MODE_PAGE        =   0b11111110                        /*!<  Page addressing mode                                           ( RESET ) */
+} SSD1306_addressing_mode_t;
 
 
-
-
+/**
+  * @brief   SET PAGE START ADDRESS FOR PAGE ADDRESSING MODE
+  */
+typedef enum
+{
+    PAGE_START_ADDRESS_MASK     =   0b10110111,                       /*!<  Page starts address mode mask                                            */
+    PAGE_START_ADDRESS_PAGE_0   =   0b10110000,                       /*!<  Page start address: PAGE0                                                */
+    PAGE_START_ADDRESS_PAGE_1   =   0b10110001,                       /*!<  Page start address: PAGE1                                                */
+    PAGE_START_ADDRESS_PAGE_2   =   0b10110010,                       /*!<  Page start address: PAGE2                                                */
+    PAGE_START_ADDRESS_PAGE_3   =   0b10110011,                       /*!<  Page start address: PAGE3                                                */
+    PAGE_START_ADDRESS_PAGE_4   =   0b10110100,                       /*!<  Page start address: PAGE4                                                */
+    PAGE_START_ADDRESS_PAGE_5   =   0b10110101,                       /*!<  Page start address: PAGE5                                                */
+    PAGE_START_ADDRESS_PAGE_6   =   0b10110110,                       /*!<  Page start address: PAGE6                                                */
+    PAGE_START_ADDRESS_PAGE_7   =   0b10110111,                       /*!<  Page start address: PAGE7                                                */
+} SSD1306_page_start_address_mode_t;
 
 
 
@@ -476,95 +502,109 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-SSD1306_status_t  SSD1306_Init                                        ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
+SSD1306_status_t  SSD1306_Init                                            ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
 
 /** It sets the constrast value to select 1 out of 256 contrast steps.
   */
-SSD1306_status_t  SSD1306_SetContrastControl                          ( I2C_parameters_t myI2Cparameters, SSD1306_vector_data_t myContrastStep                                                                                                                                                                                                                                                                                                                  );
+SSD1306_status_t  SSD1306_SetContrastControl                              ( I2C_parameters_t myI2Cparameters, SSD1306_vector_data_t myContrastStep                                                                                                                                                                                                                                                                                                                  );
 
 /** It sets if the display's output follows RAM content or ignores it.
   */
-SSD1306_status_t  SSD1306_SetEntireDisplay                            ( I2C_parameters_t myI2Cparameters, SSD1306_entire_display_on_t myEntireDisplayOn                                                                                                                                                                                                                                                                                                         );
+SSD1306_status_t  SSD1306_SetEntireDisplay                                ( I2C_parameters_t myI2Cparameters, SSD1306_entire_display_on_t myEntireDisplayOn                                                                                                                                                                                                                                                                                                         );
 
 /** It sets normal/inverse display.
   */
-SSD1306_status_t  SSD1306_SetNormalInverseDisplay                     ( I2C_parameters_t myI2Cparameters, SSD1306_set_normal_inverse_display_t myNormalInverseDisplay                                                                                                                                                                                                                                                                                           );
+SSD1306_status_t  SSD1306_SetNormalInverseDisplay                         ( I2C_parameters_t myI2Cparameters, SSD1306_set_normal_inverse_display_t myNormalInverseDisplay                                                                                                                                                                                                                                                                                           );
 
 /** It sets display ON/OFF.
   */
-SSD1306_status_t  SSD1306_SetDisplay                                  ( I2C_parameters_t myI2Cparameters, SSD1306_set_display_t myDisplayMode                                                                                                                                                                                                                                                                                                                   );
+SSD1306_status_t  SSD1306_SetDisplay                                      ( I2C_parameters_t myI2Cparameters, SSD1306_set_display_t myDisplayMode                                                                                                                                                                                                                                                                                                                   );
 
 /** This command switches the default 63 multiplex mode to any multiplex ratio, ranging from 16 to 63. The output pads COM0-COM63 will be switched to the corresponding COM signal.
   */
-SSD1306_status_t  SSD1306_SetMultiplexRatio                           ( I2C_parameters_t myI2Cparameters, SSD1306_set_multiplex_ratio_t myMultiplexRatio                                                                                                                                                                                                                                                                                                        );
+SSD1306_status_t  SSD1306_SetMultiplexRatio                               ( I2C_parameters_t myI2Cparameters, SSD1306_set_multiplex_ratio_t myMultiplexRatio                                                                                                                                                                                                                                                                                                        );
 
 /** Set vertical shift by COM from 0-63.
   */
-SSD1306_status_t  SSD1306_SetDisplayOffset                            ( I2C_parameters_t myI2Cparameters, uint8_t myDisplayOffset                                                                                                                                                                                                                                                                                                                               );
+SSD1306_status_t  SSD1306_SetDisplayOffset                                ( I2C_parameters_t myI2Cparameters, uint8_t myDisplayOffset                                                                                                                                                                                                                                                                                                                               );
 
 /** Set display RAM display start line register from 0-63.
   */
-SSD1306_status_t  SSD1306_SetDisplayStartLine                         ( I2C_parameters_t myI2Cparameters, uint8_t myDisplayStartLine                                                                                                                                                                                                                                                                                                                            );
+SSD1306_status_t  SSD1306_SetDisplayStartLine                             ( I2C_parameters_t myI2Cparameters, uint8_t myDisplayStartLine                                                                                                                                                                                                                                                                                                                            );
 
 /** Set Segment Re-map.
   */
-SSD1306_status_t  SSD1306_SetSegmentReMap                             ( I2C_parameters_t myI2Cparameters, SSD1306_set_segment_re_map_t mySegmentReMap                                                                                                                                                                                                                                                                                                           );
+SSD1306_status_t  SSD1306_SetSegmentReMap                                 ( I2C_parameters_t myI2Cparameters, SSD1306_set_segment_re_map_t mySegmentReMap                                                                                                                                                                                                                                                                                                           );
 
 /** Set COM Output Scan Direction.
   */
-SSD1306_status_t  SSD1306_SetCOM_OutputScanDirection                  ( I2C_parameters_t myI2Cparameters, SSD1306_set_com_output_scan_direction_t myScanDirection                                                                                                                                                                                                                                                                                               );
+SSD1306_status_t  SSD1306_SetCOM_OutputScanDirection                      ( I2C_parameters_t myI2Cparameters, SSD1306_set_com_output_scan_direction_t myScanDirection                                                                                                                                                                                                                                                                                               );
 
 /** Set COM Pins Hardware Configuration.
   */
-SSD1306_status_t  SSD1306_SetCOM_PinsHardwareConfiguration            ( I2C_parameters_t myI2Cparameters, SSD1306_com_pin_configuration_t myCOM_PinConfiguration, SSD1306_com_left_right_re_map_t myCOM_LeftRightEnable                                                                                                                                                                                                                                         );
+SSD1306_status_t  SSD1306_SetCOM_PinsHardwareConfiguration                ( I2C_parameters_t myI2Cparameters, SSD1306_com_pin_configuration_t myCOM_PinConfiguration, SSD1306_com_left_right_re_map_t myCOM_LeftRightEnable                                                                                                                                                                                                                                         );
 
 /** Set Display Clock Divide Ratio/Oscillator Frequency.
   */
-SSD1306_status_t  SSD1306_SetDisplayClockDivideRatio_OscFreq          ( I2C_parameters_t myI2Cparameters, uint8_t myOscillatorFrequency, uint8_t myDisplayClockDivideRatio                                                                                                                                                                                                                                                                                      );
+SSD1306_status_t  SSD1306_SetDisplayClockDivideRatio_OscFreq              ( I2C_parameters_t myI2Cparameters, uint8_t myOscillatorFrequency, uint8_t myDisplayClockDivideRatio                                                                                                                                                                                                                                                                                      );
 
 /** Set Pre-charge Period.
   */
-SSD1306_status_t  SSD1306_SePreChargePeriod                           ( I2C_parameters_t myI2Cparameters, uint8_t myPreChargePeriodPhase1, uint8_t myPreChargePeriodPhase2                                                                                                                                                                                                                                                                                      );
+SSD1306_status_t  SSD1306_SePreChargePeriod                               ( I2C_parameters_t myI2Cparameters, uint8_t myPreChargePeriodPhase1, uint8_t myPreChargePeriodPhase2                                                                                                                                                                                                                                                                                      );
 
 /** It adjusts the VCOMH regulator output.
   */
-SSD1306_status_t  SSD1306_SeVCOMH_DeselectLevel                       ( I2C_parameters_t myI2Cparameters, SSD1306_v_comh_deselect_level_t myVCOMH_DeselctLevel                                                                                                                                                                                                                                                                                                  );
+SSD1306_status_t  SSD1306_SeVCOMH_DeselectLevel                           ( I2C_parameters_t myI2Cparameters, SSD1306_v_comh_deselect_level_t myVCOMH_DeselctLevel                                                                                                                                                                                                                                                                                                  );
 
 /** No Operation Command.
   */
-SSD1306_status_t  SSD1306_NopCommand                                  ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
+SSD1306_status_t  SSD1306_NopCommand                                      ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
 
 /** Horizontal scroll setup.
   */
-SSD1306_status_t  SSD1306_SetHorizontalScrollSetup                    ( I2C_parameters_t myI2Cparameters, SSD1306_horizontal_scroll_t myRightLeftHorizontalScroll, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr                                                                                                             );
+SSD1306_status_t  SSD1306_SetHorizontalScrollSetup                        ( I2C_parameters_t myI2Cparameters, SSD1306_horizontal_scroll_t myRightLeftHorizontalScroll, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr                                                                                                             );
 
 /** Continuous Vertical and Horizontal Scroll Setup.
   */
-SSD1306_status_t  SSD1306_SetContinuousHorizontalVerticalScrollSetup  ( I2C_parameters_t myI2Cparameters, SSD1306_continuous_vertical_right_left_horizontal_scroll_t myContinuousVerticalHorizontalScrollSetup, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr, SSD1306_vertical_scrolling_offset_t myVerticalScrollingOffset );
+SSD1306_status_t  SSD1306_SetContinuousHorizontalVerticalScrollSetup      ( I2C_parameters_t myI2Cparameters, SSD1306_continuous_vertical_right_left_horizontal_scroll_t myContinuousVerticalHorizontalScrollSetup, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr, SSD1306_vertical_scrolling_offset_t myVerticalScrollingOffset );
 
 /** Deactivate Scroll.
   */
-SSD1306_status_t  SSD1306_DeactivateScroll                            ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
+SSD1306_status_t  SSD1306_DeactivateScroll                                ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
 
 /** Activate Scroll.
   */
-SSD1306_status_t  SSD1306_ActivateScroll                              ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
+SSD1306_status_t  SSD1306_ActivateScroll                                  ( I2C_parameters_t myI2Cparameters                                                                                                                                                                                                                                                                                                                                                        );
 
 /** Set Vertical Scroll Area.
   */
-SSD1306_status_t  SSD1306_SetVerticalScrollArea                       ( I2C_parameters_t myI2Cparameters, uint8_t myNoRowsTopFixArea, uint8_t NoRowsScrollArea                                                                                                                                                                                                                                                                                                  );
+SSD1306_status_t  SSD1306_SetVerticalScrollArea                           ( I2C_parameters_t myI2Cparameters, uint8_t myNoRowsTopFixArea, uint8_t NoRowsScrollArea                                                                                                                                                                                                                                                                                                  );
 
-
-
-
-
-/** It sends a command byte to SSD1306.
+/** Set Memory Addressing Mode.
   */
-SSD1306_status_t  SSD1306_SendCommand                       ( I2C_parameters_t myI2Cparameters, uint8_t myCommand                                                                                             );
+SSD1306_status_t  SSD1306_SetMemoryAddressingMode                         ( I2C_parameters_t myI2Cparameters, SSD1306_addressing_mode_t myMemoryAddressingMode                                                                                                                                                                                                                                                                                                      );
 
-/** It sends a data byte to SSD1306.
+/** Set Column Address.
   */
-SSD1306_status_t  SSD1306_SendData                          ( I2C_parameters_t myI2Cparameters, uint8_t* myData, uint8_t myDataSize                                                                           );
+SSD1306_status_t  SSD1306_SetColumnAddress                                ( I2C_parameters_t myI2Cparameters, uint8_t myColumnStartAddress, uint8_t myColumnEndAddress                                                                                                                                                                                                                                                                                              );
+
+/** Set Page Address.
+  */
+SSD1306_status_t  SSD1306_SetPageAddress                                  ( I2C_parameters_t myI2Cparameters, uint8_t myPageStartAddress, uint8_t myPageEndAddress                                                                                                                                                                                                                                                                                                  );
+
+/** Set Lower Column Start Address for Page Addressing Mode.
+  */
+SSD1306_status_t  SSD1306_SetLowerColumnStartAddressForPageAddressingMode ( I2C_parameters_t myI2Cparameters, uint8_t myLowerColumnStartAddress                                                                                                                                                                                                                                                                                                                     );
+
+/** Set Higher Column Start Address for Page Addressing Mode.
+  */
+SSD1306_status_t  SSD1306_SetHigherColumnStartAddressForPageAddressingMode( I2C_parameters_t myI2Cparameters, uint8_t myHigherColumnStartAddress                                                                                                                                                                                                                                                                                                                    );
+
+/** Set Page Start Address for Page Addressing Mode.
+  */
+SSD1306_status_t  SSD1306_SetPageAddressForPageAddressingMode             ( I2C_parameters_t myI2Cparameters, SSD1306_page_start_address_mode_t myPageAddress                                                                                                                                                                                                                                                                                                       );
+
+
 
 
 #ifdef __cplusplus
