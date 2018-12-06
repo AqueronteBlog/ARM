@@ -56,94 +56,49 @@ SSD1306_status_t  SSD1306_Init ( I2C_parameters_t myI2Cparameters )
 
 
 
-/**
- * @brief       SSD1306_SendCommand ( I2C_parameters_t , uint8_t )
- *
- * @details     It sends a command byte to SSD1306.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myCommand:       Command.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of SSD1306_SendCommand.
- *
- *
- * @author      Manuel Caballero
- * @date        22/November/2018
- * @version     22/November/2018   The ORIGIN
- * @pre         N/A.
- * @warning     N/A.
- */
-SSD1306_status_t  SSD1306_SendCommand ( I2C_parameters_t myI2Cparameters, uint8_t myCommand )
-{
-    uint8_t      cmd[]  =    { 0U, 0U };
-    i2c_status_t aux;
-
-
-    /* Send a new command value    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
-    cmd[1]   =   myCommand;                                                              
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-    
-    if ( aux == I2C_SUCCESS )
-    {
-        return   SSD1306_SUCCESS;
-    }
-    else
-    {
-        return   SSD1306_FAILURE;
-    }
-}
-
-
-
-/**
- * @brief       SSD1306_SendData ( I2C_parameters_t , uint8_t* , uint8_t )
- *
- * @details     It sends a command byte to SSD1306.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myData:          Data.
- * @param[in]    myDataSize:      Amount of data to be sent.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of SSD1306_SendData.
- *
- *
- * @author      Manuel Caballero
- * @date        22/November/2018
- * @version     22/November/2018   The ORIGIN
- * @pre         N/A.
- * @warning     N/A.
- */
-SSD1306_status_t  SSD1306_SendData ( I2C_parameters_t myI2Cparameters, uint8_t* myData, uint8_t myDataSize )
-{
-    uint8_t      *cmd;
-    i2c_status_t aux;
-
-    *cmd++   =   ( SSD1306_DATA_COMMAND_BIT_DATA | ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
-    cmd   =   myData;
-
-    /* Send a new data value    */                                                             
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], myDataSize, I2C_STOP_BIT );
-
-
-    
-    if ( aux == I2C_SUCCESS )
-    {
-        return   SSD1306_SUCCESS;
-    }
-    else
-    {
-        return   SSD1306_FAILURE;
-    }
-}
+///**
+// * @brief       SSD1306_SendData ( I2C_parameters_t , uint8_t* , uint8_t )
+// *
+// * @details     It sends a command byte to SSD1306.
+// *
+// * @param[in]    myI2Cparameters: I2C parameters.
+// * @param[in]    myData:          Data.
+// * @param[in]    myDataSize:      Amount of data to be sent.
+// *
+// * @param[out]   N/A.
+// *
+// *
+// * @return       Status of SSD1306_SendData.
+// *
+// *
+// * @author      Manuel Caballero
+// * @date        22/November/2018
+// * @version     22/November/2018   The ORIGIN
+// * @pre         N/A.
+// * @warning     N/A.
+// */
+//SSD1306_status_t  SSD1306_SendData ( I2C_parameters_t myI2Cparameters, uint8_t* myData, uint8_t myDataSize )
+//{
+//    uint8_t      *cmd;
+//    i2c_status_t aux;
+//
+//    *cmd++   =   ( SSD1306_DATA_COMMAND_BIT_DATA | ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+//    cmd   =   myData;
+//
+//    /* Send a new data value    */                                                             
+//    aux      =   i2c_write ( myI2Cparameters, &cmd[0], myDataSize, I2C_STOP_BIT );
+//
+//
+//    
+//    if ( aux == I2C_SUCCESS )
+//    {
+//        return   SSD1306_SUCCESS;
+//    }
+//    else
+//    {
+//        return   SSD1306_FAILURE;
+//    }
+//}
 
 
 
@@ -1075,6 +1030,317 @@ SSD1306_status_t  SSD1306_SetVerticalScrollArea ( I2C_parameters_t myI2Cparamete
       cmd[5]   =   NoRowsScrollArea;                                                                          // Data byte ( Set No. of rows in scroll area )   
       aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
+    
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_SetMemoryAddressingMode ( I2C_parameters_t , SSD1306_addressing_mode_t )
+ *
+ * @details     Set Memory Addressing Mode.
+ *
+ * @param[in]    myI2Cparameters:         I2C parameters.
+ * @param[in]    myMemoryAddressingMode:  Memory addressing mode.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SetMemoryAddressingMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/December/2018
+ * @version     6/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SetMemoryAddressingMode ( I2C_parameters_t myI2Cparameters, SSD1306_addressing_mode_t myMemoryAddressingMode )
+{
+    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    i2c_status_t aux;
+
+    
+    /* Update the register    */
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   SSD1306_SET_MEMORY_ADDRESSING_MODE;                                                        // Data byte 
+    cmd[2]   =   cmd[0];                                                                                    // Control byte
+    cmd[3]   =   myMemoryAddressingMode;                                                                    // Data byte 
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_SetLowerColumnStartAddressForPageAddressingMode ( I2C_parameters_t , uint8_t )
+ *
+ * @details     Set Lower Column Start Address for Page Addressing Mode.
+ *
+ * @param[in]    myI2Cparameters:           I2C parameters.
+ * @param[in]    myLowerColumnStartAddress: Lower column start address.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SetLowerColumnStartAddressForPageAddressingMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/December/2018
+ * @version     6/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SetLowerColumnStartAddressForPageAddressingMode ( I2C_parameters_t myI2Cparameters, uint8_t myLowerColumnStartAddress )
+{
+    uint8_t      cmd[]  =    { 0U, 0U };
+    i2c_status_t aux;
+
+    
+    if ( myLowerColumnStartAddress > 0x0F )
+    {
+      return  SSD1306_FAILURE;
+    }
+    else
+    {
+      /* Update the register    */
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[1]   =   myLowerColumnStartAddress;                                                                 // Data byte 
+      aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    }
+    
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_SetHigherColumnStartAddressForPageAddressingMode ( I2C_parameters_t , uint8_t )
+ *
+ * @details     Set Higher Column Start Address for Page Addressing Mode.
+ *
+ * @param[in]    myI2Cparameters:             I2C parameters.
+ * @param[in]    myHigherColumnStartAddress:  Higher column start address.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SetHigherColumnStartAddressForPageAddressingMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/December/2018
+ * @version     6/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SetHigherColumnStartAddressForPageAddressingMode ( I2C_parameters_t myI2Cparameters, uint8_t myHigherColumnStartAddress )
+{
+    uint8_t      cmd[]  =    { 0U, 0U };
+    i2c_status_t aux;
+
+    
+    myHigherColumnStartAddress  |=   0x10;
+    if ( myHigherColumnStartAddress > 0x1F )
+    {
+      return  SSD1306_FAILURE;
+    }
+    else
+    {
+      /* Update the register    */
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[1]   =   myHigherColumnStartAddress;                                                                // Data byte 
+      aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    }
+    
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_SetColumnAddress ( I2C_parameters_t , uint8_t , uint8_t )
+ *
+ * @details     Set Column Address.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ * @param[in]    myColumnStartAddress:  Column start address.
+ * @param[in]    myColumnEndAddress:    Column end address.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SetColumnAddress.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/December/2018
+ * @version     6/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SetColumnAddress ( I2C_parameters_t myI2Cparameters, uint8_t myColumnStartAddress, uint8_t myColumnEndAddress )
+{
+    uint8_t      cmd[6]  =    { 0U };
+    i2c_status_t aux;
+
+    
+    if ( ( myColumnStartAddress > 127U ) || ( myColumnEndAddress > 127U ) )
+    {
+      return  SSD1306_FAILURE;
+    }
+    else
+    {
+      /* Update the register    */
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[1]   =   SSD1306_SET_COLUMN_ADDRESS;                                                                // Data byte 
+      cmd[2]   =   cmd[0];                                                                                    // Control byte
+      cmd[3]   =   myColumnStartAddress;                                                                      // Data byte 
+      cmd[4]   =   cmd[0];                                                                                    // Control byte
+      cmd[5]   =   myColumnEndAddress;                                                                        // Data byte 
+      aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    }
+    
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_SetPageAddress ( I2C_parameters_t , uint8_t , uint8_t )
+ *
+ * @details     Set Page Address.
+ *
+ * @param[in]    myI2Cparameters:     I2C parameters.
+ * @param[in]    myPageStartAddress:  Page start address.
+ * @param[in]    myPageEndAddress:    Page end address.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SetPageAddress.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/December/2018
+ * @version     6/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SetPageAddress ( I2C_parameters_t myI2Cparameters, uint8_t myPageStartAddress, uint8_t myPageEndAddress )
+{
+    uint8_t      cmd[6]  =    { 0U };
+    i2c_status_t aux;
+
+    
+    if ( ( myPageStartAddress > 7U ) || ( myPageEndAddress > 7U ) )
+    {
+      return  SSD1306_FAILURE;
+    }
+    else
+    {
+      /* Update the register    */
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[1]   =   SSD1306_SET_PAGE_ADDRESS;                                                                  // Data byte 
+      cmd[2]   =   cmd[0];                                                                                    // Control byte
+      cmd[3]   =   myPageStartAddress;                                                                        // Data byte 
+      cmd[4]   =   cmd[0];                                                                                    // Control byte
+      cmd[5]   =   myPageEndAddress;                                                                          // Data byte 
+      aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    }
+    
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SSD1306_SetPageAddressForPageAddressingMode ( I2C_parameters_t , SSD1306_page_start_address_mode_t )
+ *
+ * @details     Set Page Start Address for Page Addressing Mode.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myPageAddress:   Page start address.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SetPageAddressForPageAddressingMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/December/2018
+ * @version     6/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SetPageAddressForPageAddressingMode ( I2C_parameters_t myI2Cparameters, SSD1306_page_start_address_mode_t myPageAddress )
+{
+    uint8_t      cmd[2]  =    { 0U };
+    i2c_status_t aux;
+
+    
+    /* Update the register    */
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   myPageAddress;                                                                             // Data byte  
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     
 
 
