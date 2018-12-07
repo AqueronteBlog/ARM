@@ -69,21 +69,47 @@ int main(void)
   mySSD1306_I2C_parameters.SDAport     =    NRF_P0;
   mySSD1306_I2C_parameters.SCLport     =    NRF_P0;
 
-  /* Configure I2C peripheral */
-  aux  =   SSD1306_Init                     ( mySSD1306_I2C_parameters );
+  /* Configure I2C peripheral  */
+  aux  =   SSD1306_Init                 ( mySSD1306_I2C_parameters );
 
-  /* Set constranst to maximum */
+  /* Turn off the display */
+  aux  =   SSD1306_SetDisplay           ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_OFF );
+  
+  /* Set MUX ratio: 64MUX  */
+  aux  =   SSD1306_SetMultiplexRatio    ( mySSD1306_I2C_parameters, SET_MULTIPLEX_RATIO_64MUX );
+
+  /* Set display offset: 0   */
+  aux  =   SSD1306_SetDisplayOffset     ( mySSD1306_I2C_parameters, 0U );
+
+  /* Set display start line: 0   */
+  aux  =   SSD1306_SetDisplayStartLine  ( mySSD1306_I2C_parameters, 0U );
+
+  /* Set segment re-map: Column address 0 is mapped to SEG0  */
+  aux  =   SSD1306_SetSegmentReMap      ( mySSD1306_I2C_parameters, SET_SEGMENT_RE_MAP_COL_0_SEG0 );
+  
+  /* Set COM pins hardware configuration: Alternative COM configuration, Disable COM left/right re-map  */
+  aux  =   SSD1306_SetCOM_PinsHardwareConfiguration ( mySSD1306_I2C_parameters, COM_PIN_CONFIGURATION_SEQUENCTIAL_COM_PIN, COM_LEFT_RIGHT_REMAP_DISABLED );
+
+  /* Set constranst: 0x7F ( 127, middle point )  */
   mySSD1306_Data.contrast  =   0x7F;
-  aux  =   SSD1306_SetContrastControl       ( mySSD1306_I2C_parameters, mySSD1306_Data );
-  
-  /* Turn on the display */
-  aux  =   SSD1306_SetEntireDisplay         ( mySSD1306_I2C_parameters, ENTIRE_DISPLAY_ON_RESUME_TO_RAM_CONTENT );
-  
-  /* Turn on the display */
-  aux  =   SSD1306_SetDisplay               ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_ON );
+  aux  =   SSD1306_SetContrastControl   ( mySSD1306_I2C_parameters, mySSD1306_Data );
 
-  /* Set inverse display   */
-  aux  =   SSD1306_SetNormalInverseDisplay  ( mySSD1306_I2C_parameters, SET_DISPLAY_INVERSE_DISPLAY );
+  /* Disable entire display on   */
+  aux  =   SSD1306_SetEntireDisplay     ( mySSD1306_I2C_parameters, ENTIRE_DISPLAY_ON_RESUME_TO_RAM_CONTENT );
+
+  /* Set Display: Normal display   */
+  aux  =   SSD1306_SetNormalInverseDisplay  ( mySSD1306_I2C_parameters, SET_DISPLAY_NORMAL_DISPLAY );
+
+  /* Set Osc Frequency: Oscillator frequency = 1, Clock divide ratio = 0 ( Divide ratio= A[3:0] + 1 = 0 + 1 = 1 )   */
+  aux  =   SSD1306_SetDisplayClockDivideRatio_OscFreq ( mySSD1306_I2C_parameters, 1U, 0U );
+
+  /* Enable charge pump regulator: Enabled   */
+  aux  =   SSD1306_SetChargePumpSetting ( mySSD1306_I2C_parameters, CHARGE_PUMP_ENABLE_CHARGE_PUMP_DURING_DISPLAY_ON );
+
+  /* Turn on the display */
+  aux  =   SSD1306_SetDisplay           ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_ON );
+
+  
 
   
   myState  =   0;                             // Reset the variable
