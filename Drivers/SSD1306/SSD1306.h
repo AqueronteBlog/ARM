@@ -125,6 +125,17 @@ typedef enum
 } SSD1306_graphic_acceleration_command_t;
 
 
+/**
+  * @brief   COMMAND TABLE FOR CHARGE BUMP SETTINGS
+  */
+typedef enum
+{
+    /*  Charge Pump Command Table   */
+    SSD1306_CHARGE_PUMP_SETTING                         =   0x8D                   /*!<  Charge pump setting                                                                                                                  */
+} SSD1306_charge_bump_setting_command_t;
+
+
+
 
 
 /* ENTIRE DISPLAY ON  */
@@ -472,6 +483,20 @@ typedef enum
 } SSD1306_page_start_address_mode_t;
 
 
+/**
+  * @brief   CHARGE PUMP SETTING
+  */
+/* CHARGE PUMP
+*/
+typedef enum
+{
+    CHARGE_PUMP_MASK                                  =   0b11010100, /*!<  Charge pump mask                                                         */
+    CHARGE_PUMP_DISABLE_CHARGE_PUMP                   =   0b00010000, /*!<  Disable charge pump                                            ( RESET ) */
+    CHARGE_PUMP_ENABLE_CHARGE_PUMP_DURING_DISPLAY_ON  =   0b00010100  /*!<  Enable charge pump during display on                                     */
+} SSD1306_charge_pump_t;
+
+
+
 
 
 
@@ -603,6 +628,10 @@ SSD1306_status_t  SSD1306_SetHigherColumnStartAddressForPageAddressingMode( I2C_
 /** Set Page Start Address for Page Addressing Mode.
   */
 SSD1306_status_t  SSD1306_SetPageAddressForPageAddressingMode             ( I2C_parameters_t myI2Cparameters, SSD1306_page_start_address_mode_t myPageAddress                                                                                                                                                                                                                                                                                                       );
+
+/** Set Charge Pump Setting.
+  */
+SSD1306_status_t  SSD1306_SetChargePumpSetting                            ( I2C_parameters_t myI2Cparameters, SSD1306_charge_pump_t myChargePump                                                                                                                                                                                                                                                                                                                    );
 
 
 
