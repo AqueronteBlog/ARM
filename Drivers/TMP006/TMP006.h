@@ -1,17 +1,17 @@
 /**
- * @brief       TMP102.h
- * @details     Low-Power Digital Temperature Sensor With SMBus and Two-Wire Serial.
+ * @brief       TMP006.h
+ * @details     Infrared Thermopile Sensor in Chip-Scale Package.
  *              Header file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        9/June/2018
- * @version     9/June/2018    The ORIGIN
+ * @date        7/December/2018
+ * @version     7/December/2018    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
+ * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ). All rights reserved.
  */
 
 
@@ -20,8 +20,8 @@
 #include "i2c.h"
 
 
-#ifndef TMP102_H_
-#define TMP102_H_
+#ifndef TMP006_H_
+#define TMP006_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,177 +34,143 @@ extern "C" {
   */
 typedef enum
 {
-    TMP102_ADDRESS_A0_GROUND     =   0b1001000,             /*!<   TMP102 I2C Address: A0 connected to Ground           */
-    TMP102_ADDRESS_A0_VPOS       =   0b1001001,             /*!<   TMP102 I2C Address: A0 connected to V+               */
-    TMP102_ADDRESS_A0_SDA        =   0b1001010,             /*!<   TMP102 I2C Address: A0 connected to SDA              */
-    TMP102_ADDRESS_A0_SCL        =   0b1001011              /*!<   TMP102 I2C Address: A0 connected to SCL              */
-} TMP102_addresses_t;
-
-
-// REGISTERS
-/**
-  * @brief   REGISTERS BYTE
-  */
-typedef enum
-{
-    TMP102_TEMPERATURE_REGISTER     =   0x00,               /*!<  Temperature Register      ( Read Only  )              */
-    TMP102_CONFIGURATION_REGISTER   =   0x01,               /*!<  Configuration Register    ( Read/Write )              */
-    TMP102_T_LOW_REGISTER           =   0x02,               /*!<  T LOW Register            ( Read/Write )              */
-    TMP102_T_HIGH_REGISTER          =   0x03                /*!<  T HIGH Register           ( Read/Write )              */
-} TMP102_registers_byte_t;
-
-
-
-// TEMPERATURE REGISTER
-/**
-  * @brief   TEMPERATURE REGISTER
-  */
-typedef enum
-{
-    TMP102_RESOLUTION_12_BITS_MASK    =   0xFFF0,           /*!<  TMP102 configured as a 12-bit                         */
-    TMP102_RESOLUTION_13_BITS_MASK    =   0xFFF8            /*!<  TMP102 configured as a 13-bit                         */
-} TMP102_temperature_register_t;
-
-
-
-// CONFIGURATION REGISTER
-/**
-  * @brief   SHUTDOWN MODE
-  */
-typedef enum
-{
-    TMP102_CONFIGURATION_SD_MASK        =   ( 1U << 8 ),    /*!<  Shutdown Mode Mask                                    */
-    TMP102_CONFIGURATION_SD_ENABLED     =   ( 1U << 8 ),    /*!<  Shutdown Mode Enabled                                 */
-    TMP102_CONFIGURATION_SD_DISABLED    =   ( 0U << 8 )     /*!<  Shutdown Mode Disabled                                */
-} TMP102_configuration_shutdown_mode_t;
-
-
-/**
-  * @brief   THERMOSTAT MODE
-  */
-typedef enum
-{
-    TMP102_CONFIGURATION_TM_MASK            =   ( 1U << 9 ),    /*!<  Thermostat Mode Mask                           */
-    TMP102_CONFIGURATION_TM_COMPARATOR_MODE =   ( 0U << 9 ),    /*!<  Thermostat Mode: Comparator mode               */
-    TMP102_CONFIGURATION_TM_INTERRUPT_MODE  =   ( 1U << 9 )     /*!<  Thermostat Mode: Interrupt mode                */
-} TMP102_configuration_thermostat_mode_t;
-
-
-/**
-  * @brief   POLARITY
-  */
-typedef enum
-{
-    TMP102_CONFIGURATION_POL_MASK                   =   ( 1U << 10 ),    /*!<  Polarity Mask                                                                      */
-    TMP102_CONFIGURATION_POL_ALERT_PIN_ACTIVE_LOW   =   ( 0U << 10 ),    /*!<  Polarity: ALERT pin becomes active low ( default )                                 */
-    TMP102_CONFIGURATION_POL_ALERT_PIN_ACTIVE_HIGH  =   ( 1U << 10 )     /*!<  Polarity: ALERT pin becomes active high and the state of the ALERT pin is inverted */
-} TMP102_configuration_polarity_t;
-
-
-/**
-  * @brief   FAULT QUEUE
-  */
-typedef enum
-{
-    TMP102_CONFIGURATION_F1F0_MASK                   =   ( 0b11 << 11 ),    /*!<  Fault Queue Mask                                                               */
-    TMP102_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_1   =   ( 0b00 << 11 ),    /*!<  Fault Queue: consecutive faults: 1                                             */
-    TMP102_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_2   =   ( 0b01 << 11 ),    /*!<  Fault Queue: consecutive faults: 2                                             */
-    TMP102_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_4   =   ( 0b10 << 11 ),    /*!<  Fault Queue: consecutive faults: 4                                             */
-    TMP102_CONFIGURATION_F1F0_CONSECUTIVE_FAULTS_6   =   ( 0b11 << 11 )     /*!<  Fault Queue: consecutive faults: 6                                             */
-} TMP102_configuration_fault_queue_t;
-
-
-/**
-  * @brief   CONVERTER RESOLUTION
-  */
-typedef enum
-{
-    TMP102_CONFIGURATION_R1R0_MASK                   =   ( 0b11 << 13 )     /*!<  Converter resolution bits Mask                                                 */
-} TMP102_configuration_converter_resolution_t;
-
-
-/**
-  * @brief   ONE-SHOT
-  */
-typedef enum
-{
-    TMP102_CONFIGURATION_OS_MASK                                =   ( 1U << 15 ),      /*!<  One-Shot Mask                                                       */
-    TMP102_CONFIGURATION_OS_START_SINGLE_TEMPERATURE_CONVERSION =   ( 1U << 15 ),      /*!<  One-Shot It starts a single temperature conversion                  */
-    TMP102_CONFIGURATION_OS_BUSY                                =   ( 0U << 15 )       /*!<  One-Shot During the conversion, the OS bit reads '0'                */
-} TMP102_configuration_one_shot_t;
+    TMP006_ADDRESS_ADR1_0_ADR0_0     =   0b1000000,   /*!<   TMP006 I2C Address: ADR1 = 0 | ADR0 = 0             */
+    TMP006_ADDRESS_ADR1_0_ADR0_1     =   0b1000001,   /*!<   TMP006 I2C Address: ADR1 = 0 | ADR0 = 1             */
+    TMP006_ADDRESS_ADR1_0_ADR0_SDA   =   0b1000010,   /*!<   TMP006 I2C Address: ADR1 = 0 | ADR0 = SDA           */
+    TMP006_ADDRESS_ADR1_0_ADR0_SCL   =   0b1000011,   /*!<   TMP006 I2C Address: ADR1 = 0 | ADR0 = SCL           */
+    TMP006_ADDRESS_ADR1_1_ADR0_0     =   0b1000100,   /*!<   TMP006 I2C Address: ADR1 = 1 | ADR0 = 0             */
+    TMP006_ADDRESS_ADR1_1_ADR0_1     =   0b1000101,   /*!<   TMP006 I2C Address: ADR1 = 1 | ADR0 = 1             */
+    TMP006_ADDRESS_ADR1_1_ADR0_SDA   =   0b1000110,   /*!<   TMP006 I2C Address: ADR1 = 1 | ADR0 = SDA           */
+    TMP006_ADDRESS_ADR1_1_ADR0_SCL   =   0b1000111    /*!<   TMP006 I2C Address: ADR1 = 1 | ADR0 = SCL           */
+} TMP006_addresses_t;
 
 
 
 /**
-  * @brief   EXTENDED-MODE BIT
+  * @brief   REGISTER MAP
   */
 typedef enum
 {
-    TMP102_CONFIGURATION_EM_MASK                                =   ( 1U << 4 ),      /*!<  Extended-Mode Mask                                                  */
-    TMP102_CONFIGURATION_EM_NORMAL_MODE_OPERATION               =   ( 0U << 4 ),      /*!<  Extended-Mode: Normal Mode operation                                */
-    TMP102_CONFIGURATION_EM_EXTENDED_MODE_OPERATION             =   ( 1U << 4 )       /*!<  Extended-Mode: Extended Mode operation                              */
-} TMP102_configuration_extended_mode_bit_t;
+    TMP006_SENSOR_VOLTAGE     =   0x00,               /*!<  Sensor voltage      ( Read Only  )                    */
+    TMP006_LOCAL_TEMPERATURE  =   0x01,               /*!<  Local temperature   ( Read Only )                     */
+    TMP006_CONFIGURATION      =   0x02,               /*!<  Configuration       ( Read/Write )                    */
+    TMP006_MANUFACTURER_ID    =   0xFE,               /*!<  Manufacturer ID     ( Read Only )                     */
+    TMP006_DEVICE_ID          =   0xFF                /*!<  Device ID           ( Read Only )                     */
+} TMP006_register_map_t;
+
 
 
 /**
-  * @brief   ALERT BIT
+  * @brief   CONFIGURATION REGISTER
   */
+/* SOFTWARE RESET BIT <15>
+*/
 typedef enum
 {
-    TMP102_CONFIGURATION_AL_MASK                                =   ( 1U << 5 )       /*!<  Alert Mask                                                          */
-} TMP102_configuration_alert_bit_t;
+    RST_BIT_MASK                      =   ( 1U << 15U ),      /*!<  Software reset bit mask                                                 */
+    RST_NORMAL_OPERATION              =   ( 0U << 15U ),      /*!<  Software reset bit: Normal operation                          ( RESET ) */
+    RST_SOFTWARE_RESET                =   ( 1U << 15U )       /*!<  Software reset bit: Software reset                                      */
+} TMP006_rst_t;
+
+
+/* MODE OF OPERATION <14:12>
+*/
+typedef enum
+{
+    MOD_MASK                           =   ( 0b111 << 12U ),   /*!<  Mode of operation mask                                                  */
+    MOD_POWER_DOWN                     =   ( 0b000 << 12U ),   /*!<  Mode of operation: Power-down                                           */
+    MOD_SENSOR_AND_DIE_CONT_CONVERSION =   ( 0b111 << 12U )    /*!<  Mode of operation: Sensor and die continuous conversion (MOD) ( RESET ) */
+} TMP006_mod_t;
+
+
+/* ADC CONVERSION RATE <11:9>
+*/
+typedef enum
+{
+    CR_MASK                           =   ( 0b111 << 9U ),    /*!<  ADC Conversion rate mask                                                */
+    CR_1_AVERAGED_SAMPLES             =   ( 0b000 << 9U ),    /*!<  ADC Conversion rate:  1 number of averaged sample                       */
+    CR_2_AVERAGED_SAMPLES             =   ( 0b001 << 9U ),    /*!<  ADC Conversion rate:  2 number of averaged sample                       */
+    CR_4_AVERAGED_SAMPLES             =   ( 0b010 << 9U ),    /*!<  ADC Conversion rate:  4 number of averaged sample             ( RESET ) */
+    CR_8_AVERAGED_SAMPLES             =   ( 0b011 << 9U ),    /*!<  ADC Conversion rate:  8 number of averaged sample                       */
+    CR_16_AVERAGED_SAMPLES            =   ( 0b100 << 9U )     /*!<  ADC Conversion rate: 16 number of averaged sample                       */
+} TMP006_cr_t;
+
+
+/* #DRDY ENABLE BIT <8>
+*/
+typedef enum
+{
+    EN_MASK                           =   ( 1U << 8U ),       /*!<  #DRDY enable bit mask                                                   */
+    EN_nDRDY_PIN_DISABLED             =   ( 0U << 8U ),       /*!<  #DRDY enable bit: Pin disabled                                ( RESET ) */
+    EN_nDRDY_PIN_ENABLED              =   ( 1U << 8U )        /*!<  #DRDY enable bit: Pin enabled                                           */
+} TMP006_en_t;
+
+
+/* DATA READY BIT <7>
+*/
+typedef enum
+{
+    nDRDY_MASK                        =   ( 1U << 7U ),       /*!<  Data ready bit mask                                                     */
+    nDRDY_CONVERSION_IN_PROGRESS      =   ( 0U << 7U ),       /*!<  Data ready bit: Conversion in progress                        ( RESET ) */
+    nDRDY_CONVERSION_COMPLETED        =   ( 1U << 7U )        /*!<  Data ready bit: Conversion completed                                    */
+} TMP006_ndrdy_t;
+
+
 
 
 /**
-  * @brief   CONVERSION RATE
+  * @brief   MANUFACTURER ID REGISTER
   */
 typedef enum
 {
-    TMP102_CONFIGURATION_CR_MASK                                =   ( 0b11 << 6 ),    /*!<  Conversion Rate Mask                                                */
-    TMP102_CONFIGURATION_CR_0_25_HZ                             =   ( 0b00 << 6 ),    /*!<  Conversion Rate: 0.25Hz                                             */
-    TMP102_CONFIGURATION_CR_1_HZ                                =   ( 0b01 << 6 ),    /*!<  Conversion Rate: 1Hz                                                */
-    TMP102_CONFIGURATION_CR_4_HZ                                =   ( 0b10 << 6 ),    /*!<  Conversion Rate: 4Hz ( default )                                    */
-    TMP102_CONFIGURATION_CR_8_HZ                                =   ( 0b11 << 6 )     /*!<  Conversion Rate: 8Hz                                                */
-} TMP102_configuration_conversion_rate_t;
+    MANUFACTURER_ID_MASK              =   0xFFFF,             /*!<  Manufacturer ID mask                                                    */
+    MANUFACTURER_ID_VALUE             =   0x5449              /*!<  Manufacturer ID value                                         ( RESET ) */
+} TMP006_manufacturer_id_register_t;
 
 
 
-// HIGH-TEMPERATURE REGISTER
 /**
-  * @brief   TEMPERATURE REGISTER
+  * @brief   DEVICE ID REGISTER
   */
 typedef enum
 {
-    TMP102_THIGH_RESOLUTION_12_BITS_MASK    =   0xFFF0,                             /*!<  THIGH configured as a 12-bit                         */
-    TMP102_THIGH_RESOLUTION_13_BITS_MASK    =   0xFFF8                              /*!<  THIGH configured as a 13-bit                         */
-} TMP102_high_temperature_register_t;
+    DEVICE_ID_MASK                    =   0xFFFF,             /*!<  Device ID mask                                                          */
+    DEVICE_ID_VALUE                   =   0x0067              /*!<  Device ID value                                               ( RESET ) */
+} TMP006_device_id_register_t;
 
 
 
-// LOW-TEMPERATURE REGISTER
+
 /**
-  * @brief   TEMPERATURE REGISTER
+  * @brief   CONSTANS TO BE USED IN THE FORMULAS
+  *           NOTE: User Guide ( sbou107.pdf ) 5.1 Equations for Calculating Target Object Temperatures, p10.
   */
-typedef enum
-{
-    TMP102_TLOW_RESOLUTION_12_BITS_MASK    =   0xFFF0,                             /*!<  TLOW configured as a 12-bit                            */
-    TMP102_TLOW_RESOLUTION_13_BITS_MASK    =   0xFFF8                              /*!<  TLOW configured as a 13-bit                            */
-} TMP102_low_temperature_register_t;
+#define A1      0.00175                                         /*!<  A1                                                                */
+#define A2      -0.00001678                                     /*!<  A2                                                                */
+#define T_REF   298.15                                          /*!<  T_REF, Kelvin                                                     */
+#define B0      -0.0000294                                      /*!<  B0                                                                */
+#define B1      -0.00000057                                     /*!<  B1                                                                */
+#define B2      -0.00000000463                                  /*!<  B2                                                                */
+#define C2      13.4                                            /*!<  C2                                                                */
+#define S0      ( 0.00000000000005 + 0.00000000000007 ) / 2.0   /*!<  Primary calibration sensitivity factor ( mean of typical values ) */
 
 
 
-
-#ifndef TMP102_VECTOR_STRUCT_H
-#define TMP102_VECTOR_STRUCT_H
+#ifndef TMP006_VECTOR_STRUCT_H
+#define TMP006_VECTOR_STRUCT_H
 typedef struct
 {
-    float    Temperature;
+    float    TemperatureK;                  /*!<  Temperature of the target object in Kelvins                                       */
+    float    TemperatureC;                  /*!<  Temperature of the target object in Celsius degrees                               */
+    float    s0;                            /*!<  Primary calibration sensitivity factor ( typical values: 5×10^–14 and 7×10^–14 )  */
 
-    int16_t  TemperatureRegister;
-    uint16_t ConfigurationRegister;
-    int16_t  TLOW_Register;
-    int16_t  THIGH_Register;
-} TMP102_vector_data_t;
+    int16_t  SensorVoltageResultRegister;   /*!<  V_sensor                                                                          */
+    int16_t  TemperatureRegister;           /*!<  T_DIE                                                                             */
+    uint16_t ConfigurationRegister;         /*!<  Configuration register                                                            */
+    
+    uint16_t ManufacturerID;                /*!<  Manufacturer ID                                                                   */
+    uint16_t DeviceID;                      /*!<  Device ID                                                                         */
+} TMP006_data_t;
 #endif
 
 
@@ -216,9 +182,9 @@ typedef struct
   */
 typedef enum
 {
-    TMP102_SUCCESS     =       0,
-    TMP102_FAILURE     =       1
-} TMP102_status_t;
+    TMP006_SUCCESS     =       0,
+    TMP006_FAILURE     =       1
+} TMP006_status_t;
 
 
 
@@ -228,69 +194,41 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-TMP102_status_t  TMP102_Init                                ( I2C_parameters_t myI2Cparameters                                                      );
+TMP006_status_t  TMP006_Init                      ( I2C_parameters_t myI2Cparameters                                  );
 
-/** It gets the temperature register value ( raw temperature ).
+/** It gets the manufacturer ID.
   */
-TMP102_status_t  TMP102_ReadTemperatureRegister             ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperatureRegister         );
+TMP006_status_t  TMP006_GetManufacturerID         ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myManufacturerID );
 
-/** It gets the temperature value.
+/** It gets the device ID.
   */
-TMP102_status_t  TMP102_GetTemperature                      ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTemperature                 );
+TMP006_status_t  TMP006_GetDeviceID               ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myDeviceID       );
 
-/** It gets the low temperature register value.
+/** It reads the configuration register.
   */
-TMP102_status_t  TMP102_Read_T_LOW_Register                 ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTLOW_Register               );
+TMP006_status_t  TMP006_ReadConfigurationRegister ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myConfReg        );
 
-/** It updates the low temperature register value.
+/** It performs a software reset.
   */
-TMP102_status_t  TMP102_Write_T_LOW_Register                ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t myTLOW_Register                );
+TMP006_status_t  TMP006_SoftwareReset             ( I2C_parameters_t myI2Cparameters                                  );
 
-/** It gets the high temperature register value.
+/** It sets mode of operation.
   */
-TMP102_status_t  TMP102_Read_T_HIGH_Register                ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myTHIGH_Register              );
+TMP006_status_t  TMP006_SetModeOperation          ( I2C_parameters_t myI2Cparameters, TMP006_mod_t myModeOpreation    );
 
-/** It updates the high temperature register value.
+/** It sets conversion rate.
   */
-TMP102_status_t  TMP102_Write_T_HIGH_Register               ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t myTHIGH_Register               );
+TMP006_status_t  TMP006_SetConversionRate         ( I2C_parameters_t myI2Cparameters, TMP006_cr_t myConversionRate    );
 
-/** It gets the configuration register value.
+/** It sets #DRDY control.
   */
-TMP102_status_t  TMP102_ReadConfigurationRegister           ( I2C_parameters_t myI2Cparameters, TMP102_vector_data_t* myConfigurationRegister       );
+TMP006_status_t  TMP006_SetnDRDY_EnableBit        ( I2C_parameters_t myI2Cparameters, TMP006_en_t myEnableBit         );
 
-/** It enables shutdown/continuous mode operation.
-  */
-TMP102_status_t  TMP102_SetShutdownMode                     ( I2C_parameters_t myI2Cparameters, TMP102_configuration_shutdown_mode_t mySDMode       );
-
-/** It enables comparator/interrupt mode operation.
-  */
-TMP102_status_t  TMP102_SetThermostatMode                   ( I2C_parameters_t myI2Cparameters, TMP102_configuration_thermostat_mode_t myTMMode     );
-
-/** The polarity bit allows the user to adjust the polarity of the ALERT pin output.
-  */
-TMP102_status_t  TMP102_SetPolarityAlertPinOutput           ( I2C_parameters_t myI2Cparameters, TMP102_configuration_polarity_t myPOLMode           );
-
-/** The number of fault conditions required to generate an alert may be programmed using the fault queue.
-  */
-TMP102_status_t  TMP102_SetConsecutiveFaultsQueue           ( I2C_parameters_t myI2Cparameters, TMP102_configuration_fault_queue_t myF1F0Mode       );
-
-/** When the device is in Shutdown Mode, writing a 1 to the OS bit starts a single temperature conversion.
-  */
-TMP102_status_t  TMP102_TriggerSingleTemperatureConversion  ( I2C_parameters_t myI2Cparameters                                                      );
-
-/** It sets the device into Normal/Extended mode operation.
-  */
-TMP102_status_t  TMP102_SetModeOperation                    ( I2C_parameters_t myI2Cparameters, TMP102_configuration_extended_mode_bit_t myEMMode   );
-
-/** It sets the conversion rate for the device.
-  */
-TMP102_status_t  TMP102_SetConversionRate                   ( I2C_parameters_t myI2Cparameters, TMP102_configuration_conversion_rate_t myCR         );
-
-
+// RawTemperature, RawVoltage and Object's temperature are still missing
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* TMP102_H */
+#endif /* TMP006_H */
