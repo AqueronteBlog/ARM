@@ -1353,3 +1353,50 @@ SSD1306_status_t  SSD1306_SetPageAddressForPageAddressingMode ( I2C_parameters_t
       return  SSD1306_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       SSD1306_SetChargePumpSetting ( I2C_parameters_t , SSD1306_charge_pump_t )
+ *
+ * @details     Set Charge Pump Setting.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myChargePump:    Charge pump setting.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SSD1306_SetChargePumpSetting.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        7/December/2018
+ * @version     7/December/2018    The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SSD1306_status_t  SSD1306_SetChargePumpSetting ( I2C_parameters_t myI2Cparameters, SSD1306_charge_pump_t myChargePump )
+{
+    uint8_t      cmd[4]  =    { 0U };
+    i2c_status_t aux;
+
+    
+    /* Update the register    */
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[1]   =   SSD1306_CHARGE_PUMP_SETTING;                                                               // Data byte
+    cmd[2]   =   cmd[0];                                                                                    // Control byte
+    cmd[3]   =   myChargePump;                                                                              // Data byte  
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return  SSD1306_SUCCESS;
+    }
+    else
+    {
+      return  SSD1306_FAILURE;
+    }
+}
