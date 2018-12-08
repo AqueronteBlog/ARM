@@ -73,7 +73,7 @@ int main(void)
   aux  =   SSD1306_Init                 ( mySSD1306_I2C_parameters );
 
   /* Turn off the display */
-  aux  =   SSD1306_SetDisplay           ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_OFF );
+  //aux  =   SSD1306_SetDisplay           ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_OFF );
   
   /* Set MUX ratio: 64MUX  */
   aux  =   SSD1306_SetMultiplexRatio    ( mySSD1306_I2C_parameters, SET_MULTIPLEX_RATIO_64MUX );
@@ -87,6 +87,9 @@ int main(void)
   /* Set segment re-map: Column address 0 is mapped to SEG0  */
   aux  =   SSD1306_SetSegmentReMap      ( mySSD1306_I2C_parameters, SET_SEGMENT_RE_MAP_COL_0_SEG0 );
   
+  /* Set COM output scan direction: Normal mode. Scan from COM0 to COM[N –1]  */
+  aux  =   SSD1306_SetCOM_OutputScanDirection ( mySSD1306_I2C_parameters, SET_SCAN_DIR_NORMAL_MODE );
+
   /* Set COM pins hardware configuration: Alternative COM configuration, Disable COM left/right re-map  */
   aux  =   SSD1306_SetCOM_PinsHardwareConfiguration ( mySSD1306_I2C_parameters, COM_PIN_CONFIGURATION_SEQUENCTIAL_COM_PIN, COM_LEFT_RIGHT_REMAP_DISABLED );
 
@@ -100,18 +103,16 @@ int main(void)
   /* Set Display: Normal display   */
   aux  =   SSD1306_SetNormalInverseDisplay  ( mySSD1306_I2C_parameters, SET_DISPLAY_NORMAL_DISPLAY );
 
-  /* Set Osc Frequency: Oscillator frequency = 1, Clock divide ratio = 0 ( Divide ratio= A[3:0] + 1 = 0 + 1 = 1 )   */
-  aux  =   SSD1306_SetDisplayClockDivideRatio_OscFreq ( mySSD1306_I2C_parameters, 1U, 0U );
+  /* Set Osc Frequency: Oscillator frequency = 0x08, Clock divide ratio = 0 ( Divide ratio= A[3:0] + 1 = 0 + 1 = 1 )   */
+  aux  =   SSD1306_SetDisplayClockDivideRatio_OscFreq ( mySSD1306_I2C_parameters, 8U, 0U );
 
   /* Enable charge pump regulator: Enabled   */
   aux  =   SSD1306_SetChargePumpSetting ( mySSD1306_I2C_parameters, CHARGE_PUMP_ENABLE_CHARGE_PUMP_DURING_DISPLAY_ON );
 
   /* Turn on the display */
   aux  =   SSD1306_SetDisplay           ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_ON );
-
   
 
-  
   myState  =   0;                             // Reset the variable
   NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
 
