@@ -118,19 +118,22 @@ SSD1306_status_t  SSD1306_Init ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        4/November/2018
- * @version     4/November/2018   The ORIGIN
+ * @version     8/December/2018   Fixed! The command register must be sent first!
+ *              4/November/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
 SSD1306_status_t  SSD1306_SetContrastControl ( I2C_parameters_t myI2Cparameters, SSD1306_vector_data_t myContrastStep )
 {
-    uint8_t      cmd[]  =    { 0U, 0U };
+    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
     i2c_status_t aux;
 
 
     /* Update the register    */
     cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
-    cmd[1]   =   myContrastStep.contrast;                                                                   // Data byte
+    cmd[1]   =   SSD1306_SET_CONTRAST_CONTROL;                                                              // Data byte
+    cmd[2]   =   cmd[0];                                                                                    // Control byte
+    cmd[3]   =   myContrastStep.contrast;                                                                   // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
