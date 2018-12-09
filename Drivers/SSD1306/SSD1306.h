@@ -52,7 +52,8 @@ typedef enum
   */
 typedef enum
 {
-    SSD1306_CO_DATA_BYTES =   ( 0U << 7U )                 /*!<   The transmission of the following information will contain data bytes only */
+    SSD1306_CO_DATA_BYTES_NO_STREAMING =   ( 1U << 7U ),   /*!<   Command + Data byte                                                        */
+    SSD1306_CO_DATA_BYTES_STREAMING    =   ( 0U << 7U )    /*!<   The transmission of the following information will contain data bytes only */
 } SSD1306_co_t;
 
 
