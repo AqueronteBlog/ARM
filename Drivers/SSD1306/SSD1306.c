@@ -82,7 +82,7 @@ SSD1306_status_t  SSD1306_Init ( I2C_parameters_t myI2Cparameters )
 //    uint8_t      *cmd;
 //    i2c_status_t aux;
 //
-//    *cmd++   =   ( SSD1306_DATA_COMMAND_BIT_DATA | ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+//    *cmd++   =   ( SSD1306_DATA_COMMAND_BIT_DATA | ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
 //    cmd   =   myData;
 //
 //    /* Send a new data value    */                                                             
@@ -125,15 +125,14 @@ SSD1306_status_t  SSD1306_Init ( I2C_parameters_t myI2Cparameters )
  */
 SSD1306_status_t  SSD1306_SetContrastControl ( I2C_parameters_t myI2Cparameters, SSD1306_vector_data_t myContrastStep )
 {
-    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    uint8_t      cmd[]  =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   SSD1306_SET_CONTRAST_CONTROL;                                                              // Data byte
-    cmd[2]   =   cmd[0];                                                                                    // Control byte
-    cmd[3]   =   myContrastStep.contrast;                                                                   // Data byte
+    cmd[2]   =   myContrastStep.contrast;                                                                   // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -177,7 +176,7 @@ SSD1306_status_t  SSD1306_SetEntireDisplay ( I2C_parameters_t myI2Cparameters, S
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   ( SSD1306_ENTIRE_DISPLAY_ON | myEntireDisplayOn );                                         // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -222,7 +221,7 @@ SSD1306_status_t  SSD1306_SetNormalInverseDisplay ( I2C_parameters_t myI2Cparame
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   ( SSD1306_SET_NORMAL_INVERSE_DISPLAY | myNormalInverseDisplay );                           // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -267,7 +266,7 @@ SSD1306_status_t  SSD1306_SetDisplay ( I2C_parameters_t myI2Cparameters, SSD1306
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   ( SSD1306_SET_DISPLAY_ON_OFF | myDisplayMode );                                            // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -309,15 +308,14 @@ SSD1306_status_t  SSD1306_SetDisplay ( I2C_parameters_t myI2Cparameters, SSD1306
  */
 SSD1306_status_t  SSD1306_SetMultiplexRatio ( I2C_parameters_t myI2Cparameters, SSD1306_set_multiplex_ratio_t myMultiplexRatio )
 {
-    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    uint8_t      cmd[]  =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   SSD1306_SET_MULTIPLEX_RATIO;                                                               // Data byte
-    cmd[2]   =   cmd[0];                                                                                    // Control byte
-    cmd[3]   =   myMultiplexRatio;                                                                          // Data byte
+    cmd[2]   =   myMultiplexRatio;                                                                          // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -356,7 +354,7 @@ SSD1306_status_t  SSD1306_SetMultiplexRatio ( I2C_parameters_t myI2Cparameters, 
  */
 SSD1306_status_t  SSD1306_SetDisplayOffset ( I2C_parameters_t myI2Cparameters, uint8_t myDisplayOffset )
 {
-    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    uint8_t      cmd[]  =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
 
@@ -367,10 +365,9 @@ SSD1306_status_t  SSD1306_SetDisplayOffset ( I2C_parameters_t myI2Cparameters, u
     else
     {
       /* Update the register    */
-      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
       cmd[1]   =   SSD1306_SET_DISPLAY_OFFSET;                                                                // Data byte
-      cmd[2]   =   cmd[0];                                                                                    // Control byte
-      cmd[3]   =   myDisplayOffset;                                                                           // Data byte
+      cmd[2]   =   myDisplayOffset;                                                                           // Data byte
       aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
 
@@ -422,7 +419,7 @@ SSD1306_status_t  SSD1306_SetDisplayStartLine ( I2C_parameters_t myI2Cparameters
     else
     {
       /* Update the register    */
-      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
       cmd[1]   =   ( SSD1306_SET_DISPLAY_START_LINE | myDisplayStartLine );                                   // Data byte
       aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
@@ -469,7 +466,7 @@ SSD1306_status_t  SSD1306_SetSegmentReMap ( I2C_parameters_t myI2Cparameters, SS
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   mySegmentReMap;                                                                            // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -515,7 +512,7 @@ SSD1306_status_t  SSD1306_SetCOM_OutputScanDirection ( I2C_parameters_t myI2Cpar
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   myScanDirection;                                                                           // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -557,15 +554,14 @@ SSD1306_status_t  SSD1306_SetCOM_OutputScanDirection ( I2C_parameters_t myI2Cpar
  */
 SSD1306_status_t  SSD1306_SetCOM_PinsHardwareConfiguration ( I2C_parameters_t myI2Cparameters, SSD1306_com_pin_configuration_t myCOM_PinConfiguration, SSD1306_com_left_right_re_map_t myCOM_LeftRightEnable )
 {
-    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    uint8_t      cmd[]  =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
 
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   SSD1306_SET_COM_PINS_HARDWARE_CONFIGURATION;                                               // Data byte
-    cmd[2]   =   cmd[0];                                                                                    // Control byte
-    cmd[3]   =   ( myCOM_PinConfiguration | myCOM_LeftRightEnable );                                        // Data byte
+    cmd[2]   =   ( myCOM_PinConfiguration | myCOM_LeftRightEnable );                                        // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -606,7 +602,7 @@ SSD1306_status_t  SSD1306_SetCOM_PinsHardwareConfiguration ( I2C_parameters_t my
  */
 SSD1306_status_t  SSD1306_SetDisplayClockDivideRatio_OscFreq ( I2C_parameters_t myI2Cparameters, uint8_t myOscillatorFrequency, uint8_t myDisplayClockDivideRatio )
 {
-    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    uint8_t      cmd[]  =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
     
@@ -617,10 +613,9 @@ SSD1306_status_t  SSD1306_SetDisplayClockDivideRatio_OscFreq ( I2C_parameters_t 
     else
     {
       /* Update the register    */
-      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
       cmd[1]   =   SSD1306_SET_DISPLAY_CLOCK_DIVIDE_RATIO_OSC_FREQ;                                           // Data byte
-      cmd[2]   =   cmd[0];                                                                                    // Control byte
-      cmd[3]   =   ( ( myOscillatorFrequency << 4U ) | myDisplayClockDivideRatio );                           // Data byte
+      cmd[2]   =   ( ( myOscillatorFrequency << 4U ) | myDisplayClockDivideRatio );                           // Data byte
       aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
 
@@ -661,7 +656,7 @@ SSD1306_status_t  SSD1306_SetDisplayClockDivideRatio_OscFreq ( I2C_parameters_t 
  */
 SSD1306_status_t  SSD1306_SePreChargePeriod ( I2C_parameters_t myI2Cparameters, uint8_t myPreChargePeriodPhase1, uint8_t myPreChargePeriodPhase2 )
 {
-    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    uint8_t      cmd[]  =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
     
@@ -672,10 +667,9 @@ SSD1306_status_t  SSD1306_SePreChargePeriod ( I2C_parameters_t myI2Cparameters, 
     else
     {
       /* Update the register    */
-      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
       cmd[1]   =   SSD1306_SET_PRE_CHARGE_PERIOD;                                                             // Data byte
-      cmd[2]   =   cmd[0];                                                                                    // Control byte
-      cmd[3]   =   ( myPreChargePeriodPhase2 << 4U ) | ( myPreChargePeriodPhase1 );                           // Data byte
+      cmd[2]   =   ( myPreChargePeriodPhase2 << 4U ) | ( myPreChargePeriodPhase1 );                           // Data byte
       aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
 
@@ -715,15 +709,14 @@ SSD1306_status_t  SSD1306_SePreChargePeriod ( I2C_parameters_t myI2Cparameters, 
  */
 SSD1306_status_t  SSD1306_SeVCOMH_DeselectLevel ( I2C_parameters_t myI2Cparameters, SSD1306_v_comh_deselect_level_t myVCOMH_DeselctLevel )
 {
-    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    uint8_t      cmd[]  =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
     
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   SSD1306_SET_V_COMH_DESELECT_LEVEL;                                                         // Data byte
-    cmd[2]   =   cmd[0];                                                                                    // Control byte
-    cmd[3]   =   myVCOMH_DeselctLevel;                                                                      // Data byte
+    cmd[2]   =   myVCOMH_DeselctLevel;                                                                      // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -766,7 +759,7 @@ SSD1306_status_t  SSD1306_NopCommand ( I2C_parameters_t myI2Cparameters )
 
     
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   SSD1306_NOP;                                                                               // Data byte
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -809,25 +802,19 @@ SSD1306_status_t  SSD1306_NopCommand ( I2C_parameters_t myI2Cparameters )
  */
 SSD1306_status_t  SSD1306_SetHorizontalScrollSetup ( I2C_parameters_t myI2Cparameters, SSD1306_horizontal_scroll_t myRightLeftHorizontalScroll, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr )
 {
-    uint8_t      cmd[14]  =    { 0U };
+    uint8_t      cmd[8]  =    { 0U };
     i2c_status_t aux;
 
     
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   myRightLeftHorizontalScroll;                                                               // Data byte
-    cmd[2]   =   cmd[0];                                                                                    // Control byte
-    cmd[3]   =   0x00;                                                                                      // Data byte ( dummy byte ) 
-    cmd[4]   =   cmd[0];                                                                                    // Control byte
-    cmd[5]   =   myStartPageAddr;                                                                           // Data byte ( start page )
-    cmd[6]   =   cmd[0];                                                                                    // Control byte  
-    cmd[7]   =   myFrames;                                                                                  // Data byte ( frame frequency )
-    cmd[8]   =   cmd[0];                                                                                    // Control byte
-    cmd[9]   =   myEndPageAddr;                                                                             // Data byte ( end page )
-    cmd[10]  =   cmd[0];                                                                                    // Control byte
-    cmd[11]  =   0x00;                                                                                      // Data byte ( dummy byte ) 
-    cmd[12]  =   cmd[0];                                                                                    // Control byte
-    cmd[13]  =   0xFF;                                                                                      // Data byte ( dummy byte ) 
+    cmd[2]   =   0x00;                                                                                      // Data byte ( dummy byte ) 
+    cmd[3]   =   myStartPageAddr;                                                                           // Data byte ( start page )
+    cmd[4]   =   myFrames;                                                                                  // Data byte ( frame frequency )
+    cmd[5]   =   myEndPageAddr;                                                                             // Data byte ( end page )
+    cmd[6]  =   0x00;                                                                                      // Data byte ( dummy byte ) 
+    cmd[7]  =   0xFF;                                                                                      // Data byte ( dummy byte ) 
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -870,23 +857,18 @@ SSD1306_status_t  SSD1306_SetHorizontalScrollSetup ( I2C_parameters_t myI2Cparam
  */
 SSD1306_status_t  SSD1306_SetContinuousHorizontalVerticalScrollSetup ( I2C_parameters_t myI2Cparameters, SSD1306_continuous_vertical_right_left_horizontal_scroll_t myContinuousVerticalHorizontalScrollSetup, SSD1306_horizontal_scroll_start_page_address_t myStartPageAddr, SSD1306_horizontal_scroll_frame_frequency_t myFrames, SSD1306_horizontal_scroll_end_page_address_t myEndPageAddr, SSD1306_vertical_scrolling_offset_t myVerticalScrollingOffset )
 {
-    uint8_t      cmd[12]  =    { 0U };
+    uint8_t      cmd[6]  =    { 0U };
     i2c_status_t aux;
 
     
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   myContinuousVerticalHorizontalScrollSetup;                                                 // Data byte ( Vertical and Right/Left Horizontal Scroll )
-    cmd[2]   =   cmd[0];                                                                                    // Control byte
-    cmd[3]   =   0x00;                                                                                      // Data byte ( dummy byte ) 
-    cmd[4]   =   cmd[0];                                                                                    // Control byte
-    cmd[5]   =   myStartPageAddr;                                                                           // Data byte ( start page )
-    cmd[6]   =   cmd[0];                                                                                    // Control byte  
-    cmd[7]   =   myFrames;                                                                                  // Data byte ( frame frequency )
-    cmd[8]   =   cmd[0];                                                                                    // Control byte
-    cmd[9]   =   myEndPageAddr;                                                                             // Data byte ( end page )
-    cmd[10]  =   cmd[0];                                                                                    // Control byte
-    cmd[11]  =   myVerticalScrollingOffset;                                                                 // Data byte ( Vertical scrolling offset )  
+    cmd[2]   =   0x00;                                                                                      // Data byte ( dummy byte ) 
+    cmd[3]   =   myStartPageAddr;                                                                           // Data byte ( start page )
+    cmd[4]   =   myFrames;                                                                                  // Data byte ( frame frequency )
+    cmd[5]   =   myEndPageAddr;                                                                             // Data byte ( end page )
+    cmd[6]  =   myVerticalScrollingOffset;                                                                 // Data byte ( Vertical scrolling offset )  
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -929,7 +911,7 @@ SSD1306_status_t  SSD1306_DeactivateScroll ( I2C_parameters_t myI2Cparameters )
 
     
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   SSD1306_DEACTIVATE_SCROLL;                                                                 // Data byte 
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -973,7 +955,7 @@ SSD1306_status_t  SSD1306_ActivateScroll ( I2C_parameters_t myI2Cparameters )
 
     
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   SSD1306_ACTIVATE_SCROLL;                                                                   // Data byte 
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -1014,7 +996,7 @@ SSD1306_status_t  SSD1306_ActivateScroll ( I2C_parameters_t myI2Cparameters )
  */
 SSD1306_status_t  SSD1306_SetVerticalScrollArea ( I2C_parameters_t myI2Cparameters, uint8_t myNoRowsTopFixArea, uint8_t NoRowsScrollArea )
 {
-    uint8_t      cmd[6]  =    { 0U };
+    uint8_t      cmd[4]  =    { 0U };
     i2c_status_t aux;
 
     
@@ -1025,12 +1007,10 @@ SSD1306_status_t  SSD1306_SetVerticalScrollArea ( I2C_parameters_t myI2Cparamete
     else
     {
       /* Update the register    */
-      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
       cmd[1]   =   SSD1306_SET_VERTICAL_SCROLL_AREA;                                                          // Data byte 
-      cmd[2]   =   cmd[0];                                                                                    // Control byte
-      cmd[3]   =   myNoRowsTopFixArea;                                                                        // Data byte ( Set No. of rows in top fixed area )
-      cmd[4]   =   cmd[0];                                                                                    // Control byte
-      cmd[5]   =   NoRowsScrollArea;                                                                          // Data byte ( Set No. of rows in scroll area )   
+      cmd[2]   =   myNoRowsTopFixArea;                                                                        // Data byte ( Set No. of rows in top fixed area )
+      cmd[3]   =   NoRowsScrollArea;                                                                          // Data byte ( Set No. of rows in scroll area )   
       aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
     
@@ -1070,15 +1050,14 @@ SSD1306_status_t  SSD1306_SetVerticalScrollArea ( I2C_parameters_t myI2Cparamete
  */
 SSD1306_status_t  SSD1306_SetMemoryAddressingMode ( I2C_parameters_t myI2Cparameters, SSD1306_addressing_mode_t myMemoryAddressingMode )
 {
-    uint8_t      cmd[]  =    { 0U, 0U, 0U, 0U };
+    uint8_t      cmd[]  =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
     
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   SSD1306_SET_MEMORY_ADDRESSING_MODE;                                                        // Data byte 
-    cmd[2]   =   cmd[0];                                                                                    // Control byte
-    cmd[3]   =   myMemoryAddressingMode;                                                                    // Data byte 
+    cmd[2]   =   myMemoryAddressingMode;                                                                    // Data byte 
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -1128,7 +1107,7 @@ SSD1306_status_t  SSD1306_SetLowerColumnStartAddressForPageAddressingMode ( I2C_
     else
     {
       /* Update the register    */
-      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
       cmd[1]   =   myLowerColumnStartAddress;                                                                 // Data byte 
       aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
@@ -1181,7 +1160,7 @@ SSD1306_status_t  SSD1306_SetHigherColumnStartAddressForPageAddressingMode ( I2C
     else
     {
       /* Update the register    */
-      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
       cmd[1]   =   myHigherColumnStartAddress;                                                                // Data byte 
       aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
@@ -1223,7 +1202,7 @@ SSD1306_status_t  SSD1306_SetHigherColumnStartAddressForPageAddressingMode ( I2C
  */
 SSD1306_status_t  SSD1306_SetColumnAddress ( I2C_parameters_t myI2Cparameters, uint8_t myColumnStartAddress, uint8_t myColumnEndAddress )
 {
-    uint8_t      cmd[6]  =    { 0U };
+    uint8_t      cmd[4]  =    { 0U };
     i2c_status_t aux;
 
     
@@ -1234,12 +1213,10 @@ SSD1306_status_t  SSD1306_SetColumnAddress ( I2C_parameters_t myI2Cparameters, u
     else
     {
       /* Update the register    */
-      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
       cmd[1]   =   SSD1306_SET_COLUMN_ADDRESS;                                                                // Data byte 
-      cmd[2]   =   cmd[0];                                                                                    // Control byte
-      cmd[3]   =   myColumnStartAddress;                                                                      // Data byte 
-      cmd[4]   =   cmd[0];                                                                                    // Control byte
-      cmd[5]   =   myColumnEndAddress;                                                                        // Data byte 
+      cmd[2]   =   myColumnStartAddress;                                                                      // Data byte 
+      cmd[3]   =   myColumnEndAddress;                                                                        // Data byte 
       aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
     
@@ -1280,7 +1257,7 @@ SSD1306_status_t  SSD1306_SetColumnAddress ( I2C_parameters_t myI2Cparameters, u
  */
 SSD1306_status_t  SSD1306_SetPageAddress ( I2C_parameters_t myI2Cparameters, uint8_t myPageStartAddress, uint8_t myPageEndAddress )
 {
-    uint8_t      cmd[6]  =    { 0U };
+    uint8_t      cmd[4]  =    { 0U };
     i2c_status_t aux;
 
     
@@ -1291,12 +1268,10 @@ SSD1306_status_t  SSD1306_SetPageAddress ( I2C_parameters_t myI2Cparameters, uin
     else
     {
       /* Update the register    */
-      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+      cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
       cmd[1]   =   SSD1306_SET_PAGE_ADDRESS;                                                                  // Data byte 
-      cmd[2]   =   cmd[0];                                                                                    // Control byte
-      cmd[3]   =   myPageStartAddress;                                                                        // Data byte 
-      cmd[4]   =   cmd[0];                                                                                    // Control byte
-      cmd[5]   =   myPageEndAddress;                                                                          // Data byte 
+      cmd[2]   =   myPageStartAddress;                                                                        // Data byte 
+      cmd[3]   =   myPageEndAddress;                                                                          // Data byte 
       aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     }
     
@@ -1341,7 +1316,7 @@ SSD1306_status_t  SSD1306_SetPageAddressForPageAddressingMode ( I2C_parameters_t
 
     
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   myPageAddress;                                                                             // Data byte  
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     
@@ -1381,15 +1356,14 @@ SSD1306_status_t  SSD1306_SetPageAddressForPageAddressingMode ( I2C_parameters_t
  */
 SSD1306_status_t  SSD1306_SetChargePumpSetting ( I2C_parameters_t myI2Cparameters, SSD1306_charge_pump_t myChargePump )
 {
-    uint8_t      cmd[4]  =    { 0U };
+    uint8_t      cmd[3]  =    { 0U };
     i2c_status_t aux;
 
     
     /* Update the register    */
-    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES & SSD1306_CONTROL_BYTE ) );   // Control byte
+    cmd[0]   =   ( SSD1306_DATA_COMMAND_BIT_COMMAND & ( SSD1306_CO_DATA_BYTES_STREAMING & SSD1306_CONTROL_BYTE ) );   // Control byte
     cmd[1]   =   SSD1306_CHARGE_PUMP_SETTING;                                                               // Data byte
-    cmd[2]   =   cmd[0];                                                                                    // Control byte
-    cmd[3]   =   myChargePump;                                                                              // Data byte  
+    cmd[2]   =   myChargePump;                                                                              // Data byte  
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
     
 
