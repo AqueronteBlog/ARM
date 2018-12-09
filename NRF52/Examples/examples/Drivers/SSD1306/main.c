@@ -73,7 +73,7 @@ int main(void)
   aux  =   SSD1306_Init                 ( mySSD1306_I2C_parameters );
 
   /* Turn off the display */
-  //aux  =   SSD1306_SetDisplay           ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_OFF );
+  aux  =   SSD1306_SetDisplay           ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_OFF );
   
   /* Set MUX ratio: 64MUX  */
   aux  =   SSD1306_SetMultiplexRatio    ( mySSD1306_I2C_parameters, SET_MULTIPLEX_RATIO_64MUX );
@@ -112,6 +112,11 @@ int main(void)
   /* Turn on the display */
   aux  =   SSD1306_SetDisplay           ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_ON );
   
+  
+
+  /* Set Display: Normal display   */
+  aux  =   SSD1306_SetNormalInverseDisplay  ( mySSD1306_I2C_parameters, SET_DISPLAY_INVERSE_DISPLAY );
+
 
   myState  =   0;                             // Reset the variable
   NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
