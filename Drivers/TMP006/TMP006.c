@@ -537,7 +537,8 @@ TMP006_status_t  TMP006_GetRawSensorVoltage ( I2C_parameters_t myI2Cparameters, 
  */
 TMP006_status_t  TMP006_CalculateTemperature ( TMP006_data_t* myTemperature  )
 {
-    uint16_t  aux  =   0U;
+    uint8_t   myDataPosNeg  =   0U;
+    uint16_t  aux           =   0U;
 
     aux  =   myTemperature->TemperatureRegister;
 
@@ -546,11 +547,19 @@ TMP006_status_t  TMP006_CalculateTemperature ( TMP006_data_t* myTemperature  )
     {
       aux   =  ~aux;
       aux  +=   1U;
+
+      myDataPosNeg   =   1U;
     }
 
 
     /* Parse the data   */
     myTemperature->TemperatureC   =  (float)( aux * TEMP_1LSB );                        // Celsius degrees
+    
+    if ( myDataPosNeg == 1U )
+    {
+      myTemperature->TemperatureC  *=  -1.0;
+    }
+    
     myTemperature->TemperatureK   =  (float)( myTemperature->TemperatureC + 273.15 );   // Kelvins degrees
 
 
@@ -581,7 +590,8 @@ TMP006_status_t  TMP006_CalculateTemperature ( TMP006_data_t* myTemperature  )
  */
 TMP006_status_t  TMP006_CalculateSensorVoltage ( TMP006_data_t* myV_sensor  )
 {
-    uint16_t  aux  =   0U;
+    uint8_t   myDataPosNeg  =   0U;
+    uint16_t  aux           =   0U;
 
     aux  =   myV_sensor->SensorVoltageResultRegister;
 
@@ -590,11 +600,17 @@ TMP006_status_t  TMP006_CalculateSensorVoltage ( TMP006_data_t* myV_sensor  )
     {
       aux   =  ~aux;
       aux  +=   1U;
+
+      myDataPosNeg   =   1U;
     }
 
-
     /* Parse the data   */
-    myV_sensor->V_Sensor   =  (float)( aux * SVOL_1LSB / 1000000000.0 );                        
+    myV_sensor->V_Sensor   =  (float)( aux * SVOL_1LSB / 1000000000.0 ); 
+                           
+    if ( myDataPosNeg == 1U )
+    {
+      myV_sensor->V_Sensor  *=  -1.0;
+    }
 
 
 
@@ -624,9 +640,9 @@ TMP006_status_t  TMP006_CalculateSensorVoltage ( TMP006_data_t* myV_sensor  )
  */
 TMP006_status_t  TMP006_CalculateObjectTemperature ( TMP006_data_t* myObjTemperature  )
 {
-    float     s       =   0.0;
-    float     v_os    =   0.0;
-    float     f_v_obj =   0.0;
+    double s       =   0.0;
+    double v_os    =   0.0;
+    double f_v_obj =   0.0;
 
 
     /* Claculate the sensitivity of the thermopile sensor  */
