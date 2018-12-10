@@ -152,11 +152,11 @@ int main(void)
       aux  =   TMP006_GetRawSensorVoltage         ( myTMP006_I2C_parameters, &myTMP006_Data );
 
       /* Calculate temperature ( T_DIE ) */
-      aux  =   TMP006_CalculateTemperature        ( myTMP006_I2C_parameters, &myTMP006_Data );
+      aux  =   TMP006_CalculateTemperature        ( &myTMP006_Data );
 
       /* Calculate object temperature ( T_OBJ ) */
       myTMP006_Data.s0   =   S0;                                                                        // Typical values for S0 are between 5×10^–14 and 7×10^–14
-      aux  =   TMP006_CalculateObjectTemperature  ( myTMP006_I2C_parameters, &myTMP006_Data );
+      aux  =   TMP006_CalculateObjectTemperature  ( &myTMP006_Data );
 
 
       /* Transmit result through the UART  */
