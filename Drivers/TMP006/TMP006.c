@@ -410,3 +410,198 @@ TMP006_status_t  TMP006_SetnDRDY_EnableBit ( I2C_parameters_t myI2Cparameters, T
         return   TMP006_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       TMP006_GetRawTemperature ( I2C_parameters_t , TMP006_data_t* )
+ *
+ * @details     It reads raw temperature ( T_DIE ) value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myRawTemperature:  Raw temperature value.
+ *
+ *
+ * @return       Status of TMP006_GetRawTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/December/2018
+ * @version     10/December/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+TMP006_status_t  TMP006_GetRawTemperature ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myRawTemperature )
+{
+    uint8_t      cmd[]    =    { 0U, 0U };
+    i2c_status_t aux;
+
+
+    /* Read the register */
+    cmd[0]   =   TMP006_LOCAL_TEMPERATURE;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    /* Parse the data   */
+    myRawTemperature->TemperatureRegister   = cmd[0];
+    myRawTemperature->TemperatureRegister <<= 8U;
+    myRawTemperature->TemperatureRegister  |= cmd[1];
+    
+    /* Temperature register is configured as a 14-bit value   */
+    myRawTemperature->TemperatureRegister >>= 2U;
+
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+        return   TMP006_SUCCESS;
+    }
+    else
+    {
+        return   TMP006_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       TMP006_GetRawSensorVoltage ( I2C_parameters_t , TMP006_data_t* )
+ *
+ * @details     It reads raw sensor voltage result ( V_SENSOR ) register.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myRawVoltage:    Raw sensor voltage value.
+ *
+ *
+ * @return       Status of TMP006_GetRawSensorVoltage.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/December/2018
+ * @version     10/December/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+TMP006_status_t  TMP006_GetRawSensorVoltage ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myRawVoltage )
+{
+    uint8_t      cmd[]    =    { 0U, 0U };
+    i2c_status_t aux;
+
+
+    /* Read the register */
+    cmd[0]   =   TMP006_SENSOR_VOLTAGE;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    /* Parse the data   */
+    myRawVoltage->SensorVoltageResultRegister   = cmd[0];
+    myRawVoltage->SensorVoltageResultRegister <<= 8U;
+    myRawVoltage->SensorVoltageResultRegister  |= cmd[1];
+    
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+        return   TMP006_SUCCESS;
+    }
+    else
+    {
+        return   TMP006_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       TMP006_CalculateTemperature ( I2C_parameters_t , TMP006_data_t* )
+ *
+ * @details     It calculates the real temperature ( T_DIE ) value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myRawTemperature:  Raw temperature value.
+ *
+ * @param[out]   myTemperature:     Real Temperature value.
+ *
+ *
+ * @return       Status of TMP006_CalculateTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/December/2018
+ * @version     10/December/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     TMP006_GetRawTemperature function must be called first.
+ */
+TMP006_status_t  TMP006_CalculateTemperature ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myTemperature  )
+{
+    uint16_t  aux  =   0U;
+
+    aux  =   myTemperature->TemperatureRegister;
+
+    /* Check if the temperature value is negative, MSB = 1  */
+    if ( ( aux & 0x2000 ) == 0x2000 )
+    {
+      aux   =  ~aux;
+      aux  +=   1U;
+    }
+
+
+    /* Parse the data   */
+    myTemperature->TemperatureC   =  (float)( aux * TEMP_1LSB );                        // Celsius degrees
+    myTemperature->TemperatureK   =  (float)( myTemperature->TemperatureC + 273.15 );   // Kelvins degrees
+
+
+
+    return   TMP006_SUCCESS;
+}
+
+
+
+/**
+ * @brief       TMP006_CalculateObjectTemperature ( I2C_parameters_t , TMP006_data_t* )
+ *
+ * @details     It calculates the real temperature ( T_DIE ) value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myRawTemperature:  Raw temperature value.
+ *
+ * @param[out]   myObjTemperature:  Real Object Temperature value.
+ *
+ *
+ * @return       Status of TMP006_CalculateObjectTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/December/2018
+ * @version     10/December/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     TMP006_GetRawTemperature function must be called first.
+ */
+TMP006_status_t  TMP006_CalculateObjectTemperature ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myObjTemperature  )
+{
+    float     s       =   0.0;
+    float     v_os    =   0.0;
+    float     f_v_obj =   0.0;
+    uint16_t  aux     =   0U;
+
+    /* Claculate the sensitivity of the thermopile sensor  */
+    s  =   myObjTemperature->s0 * ( 1 + A1 * ( myObjTemperature->TemperatureK - T_REF ) + A2 * pow( ( myObjTemperature->TemperatureK - T_REF ), 2U ) );
+
+    /* Calculate the offset voltage  */
+    v_os   =   B0 + B1 * ( myObjTemperature->TemperatureK - T_REF ) + B2 * pow( ( myObjTemperature->TemperatureK - T_REF ), 2U );
+    
+    /* Model the Seebeck coefficients of the thermopile  */
+    f_v_obj  =   ( myObjTemperature->SensorVoltageResultRegister - v_os ) + C2 * pow( ( myObjTemperature->SensorVoltageResultRegister - v_os ), 2U );
+    
+    /* Relates the radiant transfer of IR energy between the target object and the TMP006 and the conducted heat in the thermopile in the TMP006  */ 
+    myObjTemperature->ObjectTemperatureK    =  sqrt( sqrt( pow( myObjTemperature->TemperatureK, 4U ) + ( f_v_obj / s ) ) );
+    myObjTemperature->ObjectTemperatureC    =  ( myObjTemperature->ObjectTemperatureK - 273.15 );
+
+
+
+    return   TMP006_SUCCESS;
+}
