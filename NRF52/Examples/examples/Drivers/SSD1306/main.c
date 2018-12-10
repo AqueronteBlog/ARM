@@ -114,8 +114,8 @@ int main(void)
   
   
 
-  /* Set Display: Normal display   */
-  aux  =   SSD1306_SetNormalInverseDisplay  ( mySSD1306_I2C_parameters, SET_DISPLAY_INVERSE_DISPLAY );
+//  /* Set Display: Normal display   */
+//  aux  =   SSD1306_SetNormalInverseDisplay  ( mySSD1306_I2C_parameters, SET_DISPLAY_INVERSE_DISPLAY );
 
 
   myState  =   0;                             // Reset the variable
