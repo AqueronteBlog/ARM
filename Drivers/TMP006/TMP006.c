@@ -561,6 +561,49 @@ TMP006_status_t  TMP006_CalculateTemperature ( TMP006_data_t* myTemperature  )
 
 
 /**
+ * @brief       TMP006_CalculateSensorVoltage ( TMP006_data_t* )
+ *
+ * @details     It calculates the real sensor voltage ( V_SENSOR ) value.
+ *
+ * @param[in]    SensorVoltageResultRegister:  Raw sensor voltage value.
+ *
+ * @param[out]   myV_sensor:                   Real sensor voltage value.
+ *
+ *
+ * @return       Status of TMP006_CalculateSensorVoltage.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/December/2018
+ * @version     10/December/2018   The ORIGIN
+ * @pre         N/A.
+ * @warning     TMP006_GetRawSensorVoltage function must be called first.
+ */
+TMP006_status_t  TMP006_CalculateSensorVoltage ( TMP006_data_t* myV_sensor  )
+{
+    uint16_t  aux  =   0U;
+
+    aux  =   myV_sensor->SensorVoltageResultRegister;
+
+    /* Check if the sensor voltage value is negative, MSB = 1  */
+    if ( ( aux & 0x8000 ) == 0x8000 )
+    {
+      aux   =  ~aux;
+      aux  +=   1U;
+    }
+
+
+    /* Parse the data   */
+    myV_sensor->V_Sensor   =  (float)( aux * SVOL_1LSB / 1000000000.0 );                        
+
+
+
+    return   TMP006_SUCCESS;
+}
+
+
+
+/**
  * @brief       TMP006_CalculateObjectTemperature ( TMP006_data_t* )
  *
  * @details     It calculates the real temperature ( T_DIE ) value.
@@ -585,6 +628,7 @@ TMP006_status_t  TMP006_CalculateObjectTemperature ( TMP006_data_t* myObjTempera
     float     v_os    =   0.0;
     float     f_v_obj =   0.0;
 
+
     /* Claculate the sensitivity of the thermopile sensor  */
     s  =   myObjTemperature->s0 * ( 1 + A1 * ( myObjTemperature->TemperatureK - T_REF ) + A2 * pow( ( myObjTemperature->TemperatureK - T_REF ), 2U ) );
 
@@ -592,7 +636,7 @@ TMP006_status_t  TMP006_CalculateObjectTemperature ( TMP006_data_t* myObjTempera
     v_os   =   B0 + B1 * ( myObjTemperature->TemperatureK - T_REF ) + B2 * pow( ( myObjTemperature->TemperatureK - T_REF ), 2U );
     
     /* Model the Seebeck coefficients of the thermopile  */
-    f_v_obj  =   ( myObjTemperature->SensorVoltageResultRegister - v_os ) + C2 * pow( ( myObjTemperature->SensorVoltageResultRegister - v_os ), 2U );
+    f_v_obj  =   ( myObjTemperature->V_Sensor - v_os ) + C2 * pow( ( myObjTemperature->V_Sensor - v_os ), 2U );
     
     /* Relates the radiant transfer of IR energy between the target object and the TMP006 and the conducted heat in the thermopile in the TMP006  */ 
     myObjTemperature->ObjectTemperatureK    =  sqrt( sqrt( pow( myObjTemperature->TemperatureK, 4U ) + ( f_v_obj / s ) ) );

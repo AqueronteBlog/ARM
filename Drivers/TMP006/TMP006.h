@@ -155,6 +155,7 @@ typedef enum
 #define C2        13.4                                            /*!<  C2                                                                */
 #define S0        ( 0.00000000000005 + 0.00000000000007 ) / 2.0   /*!<  Primary calibration sensitivity factor ( mean of typical values ) */
 #define TEMP_1LSB 0.03125                                         /*!<  Temperature: 1 LSB = 1 / 32°C = 0.03125                           */
+#define SVOL_1LSB 156.25                                          /*!<  Sensor voltage: 1 LSB = 156.25 nV                                 */
 
 
 
@@ -167,6 +168,7 @@ typedef struct
 
     float    TemperatureK;                  /*!<  T_DIE in Kelvins degrees                                                          */
     float    TemperatureC;                  /*!<  T_DIE in Celsius degrees                                                          */
+    float    V_Sensor;                      /*!<  Sensor voltage result                                                             */
     float    s0;                            /*!<  Primary calibration sensitivity factor ( typical values: 5×10^–14 and 7×10^–14 )  */
 
     uint16_t SensorVoltageResultRegister;   /*!<  V_sensor                                                                          */
@@ -240,6 +242,10 @@ TMP006_status_t  TMP006_GetRawSensorVoltage       ( I2C_parameters_t myI2Cparame
 /** It calculates the real temperature ( T_DIE ) value.
   */
 TMP006_status_t  TMP006_CalculateTemperature      ( TMP006_data_t* myTemperature                                      );
+
+/** It calculates the real sensor voltage ( V_SENSOR ) value.
+  */
+TMP006_status_t  TMP006_CalculateSensorVoltage    ( TMP006_data_t* myV_sensor                                         );
 
 /** It calculates the object temperature ( T_OBJ ) value.
   */
