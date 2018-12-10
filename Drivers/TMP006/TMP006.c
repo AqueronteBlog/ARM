@@ -579,7 +579,7 @@ TMP006_status_t  TMP006_CalculateTemperature ( I2C_parameters_t myI2Cparameters,
  * @date        10/December/2018
  * @version     10/December/2018   The ORIGIN
  * @pre         N/A.
- * @warning     TMP006_GetRawTemperature function must be called first.
+ * @warning     TMP006_CalculateTemperature and TMP006_GetRawSensorVoltage functions must be called first.
  */
 TMP006_status_t  TMP006_CalculateObjectTemperature ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myObjTemperature  )
 {
