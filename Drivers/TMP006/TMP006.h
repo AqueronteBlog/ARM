@@ -239,11 +239,11 @@ TMP006_status_t  TMP006_GetRawSensorVoltage       ( I2C_parameters_t myI2Cparame
 
 /** It calculates the real temperature ( T_DIE ) value.
   */
-TMP006_status_t  TMP006_CalculateTemperature      ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myTemperature    );
+TMP006_status_t  TMP006_CalculateTemperature      ( TMP006_data_t* myTemperature                                      );
 
 /** It calculates the object temperature ( T_OBJ ) value.
   */
-TMP006_status_t  TMP006_CalculateObjectTemperature( I2C_parameters_t myI2Cparameters, TMP006_data_t* myObjTemperature );
+TMP006_status_t  TMP006_CalculateObjectTemperature( TMP006_data_t* myObjTemperature                                   );
 
 
 

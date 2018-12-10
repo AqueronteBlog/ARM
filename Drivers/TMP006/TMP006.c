@@ -517,11 +517,10 @@ TMP006_status_t  TMP006_GetRawSensorVoltage ( I2C_parameters_t myI2Cparameters, 
 
 
 /**
- * @brief       TMP006_CalculateTemperature ( I2C_parameters_t , TMP006_data_t* )
+ * @brief       TMP006_CalculateTemperature ( TMP006_data_t* )
  *
  * @details     It calculates the real temperature ( T_DIE ) value.
  *
- * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myRawTemperature:  Raw temperature value.
  *
  * @param[out]   myTemperature:     Real Temperature value.
@@ -536,7 +535,7 @@ TMP006_status_t  TMP006_GetRawSensorVoltage ( I2C_parameters_t myI2Cparameters, 
  * @pre         N/A.
  * @warning     TMP006_GetRawTemperature function must be called first.
  */
-TMP006_status_t  TMP006_CalculateTemperature ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myTemperature  )
+TMP006_status_t  TMP006_CalculateTemperature ( TMP006_data_t* myTemperature  )
 {
     uint16_t  aux  =   0U;
 
@@ -562,11 +561,10 @@ TMP006_status_t  TMP006_CalculateTemperature ( I2C_parameters_t myI2Cparameters,
 
 
 /**
- * @brief       TMP006_CalculateObjectTemperature ( I2C_parameters_t , TMP006_data_t* )
+ * @brief       TMP006_CalculateObjectTemperature ( TMP006_data_t* )
  *
  * @details     It calculates the real temperature ( T_DIE ) value.
  *
- * @param[in]    myI2Cparameters:   I2C parameters.
  * @param[in]    myRawTemperature:  Raw temperature value.
  *
  * @param[out]   myObjTemperature:  Real Object Temperature value.
@@ -581,12 +579,11 @@ TMP006_status_t  TMP006_CalculateTemperature ( I2C_parameters_t myI2Cparameters,
  * @pre         N/A.
  * @warning     TMP006_CalculateTemperature and TMP006_GetRawSensorVoltage functions must be called first.
  */
-TMP006_status_t  TMP006_CalculateObjectTemperature ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myObjTemperature  )
+TMP006_status_t  TMP006_CalculateObjectTemperature ( TMP006_data_t* myObjTemperature  )
 {
     float     s       =   0.0;
     float     v_os    =   0.0;
     float     f_v_obj =   0.0;
-    uint16_t  aux     =   0U;
 
     /* Claculate the sensitivity of the thermopile sensor  */
     s  =   myObjTemperature->s0 * ( 1 + A1 * ( myObjTemperature->TemperatureK - T_REF ) + A2 * pow( ( myObjTemperature->TemperatureK - T_REF ), 2U ) );
