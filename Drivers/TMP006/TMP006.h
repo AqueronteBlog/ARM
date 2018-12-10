@@ -17,6 +17,7 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include <math.h>
 #include "i2c.h"
 
 
@@ -145,14 +146,15 @@ typedef enum
   * @brief   CONSTANS TO BE USED IN THE FORMULAS
   *           NOTE: User Guide ( sbou107.pdf ) 5.1 Equations for Calculating Target Object Temperatures, p10.
   */
-#define A1      0.00175                                         /*!<  A1                                                                */
-#define A2      -0.00001678                                     /*!<  A2                                                                */
-#define T_REF   298.15                                          /*!<  T_REF, Kelvin                                                     */
-#define B0      -0.0000294                                      /*!<  B0                                                                */
-#define B1      -0.00000057                                     /*!<  B1                                                                */
-#define B2      -0.00000000463                                  /*!<  B2                                                                */
-#define C2      13.4                                            /*!<  C2                                                                */
-#define S0      ( 0.00000000000005 + 0.00000000000007 ) / 2.0   /*!<  Primary calibration sensitivity factor ( mean of typical values ) */
+#define A1        0.00175                                         /*!<  A1                                                                */
+#define A2        -0.00001678                                     /*!<  A2                                                                */
+#define T_REF     298.15                                          /*!<  T_REF, Kelvin                                                     */
+#define B0        -0.0000294                                      /*!<  B0                                                                */
+#define B1        -0.00000057                                     /*!<  B1                                                                */
+#define B2        -0.00000000463                                  /*!<  B2                                                                */
+#define C2        13.4                                            /*!<  C2                                                                */
+#define S0        ( 0.00000000000005 + 0.00000000000007 ) / 2.0   /*!<  Primary calibration sensitivity factor ( mean of typical values ) */
+#define TEMP_1LSB 0.03125                                         /*!<  Temperature: 1 LSB = 1 / 32°C = 0.03125                           */
 
 
 
@@ -160,12 +162,15 @@ typedef enum
 #define TMP006_VECTOR_STRUCT_H
 typedef struct
 {
-    float    TemperatureK;                  /*!<  Temperature of the target object in Kelvins                                       */
-    float    TemperatureC;                  /*!<  Temperature of the target object in Celsius degrees                               */
+    float    ObjectTemperatureC;             /*!<  Temperature of the target object in Celsius degrees                              */
+    float    ObjectTemperatureK;             /*!<  Temperature of the target object in Kelvins degrees                              */
+
+    float    TemperatureK;                  /*!<  T_DIE in Kelvins degrees                                                          */
+    float    TemperatureC;                  /*!<  T_DIE in Celsius degrees                                                          */
     float    s0;                            /*!<  Primary calibration sensitivity factor ( typical values: 5×10^–14 and 7×10^–14 )  */
 
-    int16_t  SensorVoltageResultRegister;   /*!<  V_sensor                                                                          */
-    int16_t  TemperatureRegister;           /*!<  T_DIE                                                                             */
+    uint16_t SensorVoltageResultRegister;   /*!<  V_sensor                                                                          */
+    uint16_t TemperatureRegister;           /*!<  T_DIE                                                                             */
     uint16_t ConfigurationRegister;         /*!<  Configuration register                                                            */
     
     uint16_t ManufacturerID;                /*!<  Manufacturer ID                                                                   */
@@ -224,7 +229,22 @@ TMP006_status_t  TMP006_SetConversionRate         ( I2C_parameters_t myI2Cparame
   */
 TMP006_status_t  TMP006_SetnDRDY_EnableBit        ( I2C_parameters_t myI2Cparameters, TMP006_en_t myEnableBit         );
 
-// RawTemperature, RawVoltage and Object's temperature are still missing
+/** It reads raw temperature ( T_DIE ) register.
+  */
+TMP006_status_t  TMP006_GetRawTemperature         ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myRawTemperature );
+
+/** It reads raw sensor voltage result ( V_SENSOR ) register.
+  */
+TMP006_status_t  TMP006_GetRawSensorVoltage       ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myRawVoltage     );
+
+/** It calculates the real temperature ( T_DIE ) value.
+  */
+TMP006_status_t  TMP006_CalculateTemperature      ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myTemperature    );
+
+/** It calculates the object temperature ( T_OBJ ) value.
+  */
+TMP006_status_t  TMP006_CalculateObjectTemperature( I2C_parameters_t myI2Cparameters, TMP006_data_t* myObjTemperature );
+
 
 
 #ifdef __cplusplus
