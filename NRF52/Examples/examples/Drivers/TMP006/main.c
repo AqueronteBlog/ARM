@@ -13,17 +13,18 @@
  * @version     7/December/2018    The ORIGIN
  * @pre         This firmware was tested on the nrf52-DK with Segger Embedded Studio v4.10a ( SDK 14.2.0 ).
  * @warning     The softdevice (s132) is taken into account, Bluetooth was not used although.
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ). All rights reserved.
  */
 #include <stdio.h>
 
 #include "nordic_common.h"
 #include "nrf.h"
+#include "nrf_delay.h"
 #include "board.h"
 #include "functions.h"
 #include "interrupts.h"
 #if defined (WORK_FROM_HOME)
-#include "D:/Workspace/ARM/Drivers/SSD1306/SSD1306.h" 
+#include "D:/Workspace/ARM/Drivers/TMP006/TMP006.h" 
 #else
 #include "D:/vsProjects/ARM/Drivers/TMP006/TMP006.h" 
 #endif
@@ -37,8 +38,6 @@
 /**@brief Variables.
  */
 volatile uint32_t myState;                        /*!<   State that indicates when to perform an ADC sample     */
-volatile uint32_t myADCDoneFlag;                  /*!<   It indicates when a new ADC conversion is ready        */
-volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      /*!<   Message to be transmitted through the UART             */
 volatile uint8_t  *myPtr;                         /*!<   Pointer to point out myMessage                         */
 
 
@@ -48,67 +47,76 @@ volatile uint8_t  *myPtr;                         /*!<   Pointer to point out my
  */
 int main(void)
 {
-  I2C_parameters_t         mySSD1306_I2C_parameters;
-//  SSD1306_status_t         aux;
-//  SSD1306_vector_data_t    mySSD1306_Data;
+  uint8_t  myMessage[ TX_BUFF_SIZE ];
+
+  I2C_parameters_t myTMP006_I2C_parameters;
+  TMP006_status_t  aux;
+  TMP006_data_t    myTMP006_Data;
+
 
   conf_CLK    ();
   conf_GPIO   ();
   conf_UART   ();
-  //conf_TIMER0 ();
+  conf_TIMER0 ();
 
   
 
-//  /* I2C definition   */
-//  mySSD1306_I2C_parameters.TWIinstance =    NRF_TWI0;
-//  mySSD1306_I2C_parameters.SDA         =    TWI0_SDA;
-//  mySSD1306_I2C_parameters.SCL         =    TWI0_SCL;
-//  mySSD1306_I2C_parameters.ADDR        =    SSD1306_ADDRESS_SA0_GND;
-//  mySSD1306_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-//  mySSD1306_I2C_parameters.SDAport     =    NRF_P0;
-//  mySSD1306_I2C_parameters.SCLport     =    NRF_P0;
-//
-//  /* Configure I2C peripheral  */
-//  aux  =   SSD1306_Init                 ( mySSD1306_I2C_parameters );
-//
-//  /* Turn off the display */
-//  aux  =   SSD1306_SetDisplay           ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_OFF );
-//  
-//  /* Set MUX ratio: 64MUX  */
-//  aux  =   SSD1306_SetMultiplexRatio    ( mySSD1306_I2C_parameters, SET_MULTIPLEX_RATIO_64MUX );
-//
-//  /* Set display offset: 0   */
-//  aux  =   SSD1306_SetDisplayOffset     ( mySSD1306_I2C_parameters, 0U );
-//
-//  /* Set display start line: 0   */
-//  aux  =   SSD1306_SetDisplayStartLine  ( mySSD1306_I2C_parameters, 0U );
-//
-//  /* Set segment re-map: Column address 0 is mapped to SEG0  */
-//  aux  =   SSD1306_SetSegmentReMap      ( mySSD1306_I2C_parameters, SET_SEGMENT_RE_MAP_COL_0_SEG0 );
-//  
-//  /* Set COM pins hardware configuration: Alternative COM configuration, Disable COM left/right re-map  */
-//  aux  =   SSD1306_SetCOM_PinsHardwareConfiguration ( mySSD1306_I2C_parameters, COM_PIN_CONFIGURATION_SEQUENCTIAL_COM_PIN, COM_LEFT_RIGHT_REMAP_DISABLED );
-//
-//  /* Set constranst: 0x7F ( 127, middle point )  */
-//  mySSD1306_Data.contrast  =   0x7F;
-//  aux  =   SSD1306_SetContrastControl   ( mySSD1306_I2C_parameters, mySSD1306_Data );
-//
-//  /* Disable entire display on   */
-//  aux  =   SSD1306_SetEntireDisplay     ( mySSD1306_I2C_parameters, ENTIRE_DISPLAY_ON_RESUME_TO_RAM_CONTENT );
-//
-//  /* Set Display: Normal display   */
-//  aux  =   SSD1306_SetNormalInverseDisplay  ( mySSD1306_I2C_parameters, SET_DISPLAY_NORMAL_DISPLAY );
-//
-//  /* Set Osc Frequency: Oscillator frequency = 1, Clock divide ratio = 0 ( Divide ratio= A[3:0] + 1 = 0 + 1 = 1 )   */
-//  aux  =   SSD1306_SetDisplayClockDivideRatio_OscFreq ( mySSD1306_I2C_parameters, 1U, 0U );
-//
-//  /* Enable charge pump regulator: Enabled   */
-//  aux  =   SSD1306_SetChargePumpSetting ( mySSD1306_I2C_parameters, CHARGE_PUMP_ENABLE_CHARGE_PUMP_DURING_DISPLAY_ON );
-//
-//  /* Turn on the display */
-//  aux  =   SSD1306_SetDisplay           ( mySSD1306_I2C_parameters, SET_DISPLAY_ON_OFF_DISPLAY_ON );
+  /* I2C definition   */
+  myTMP006_I2C_parameters.TWIinstance =    NRF_TWI0;
+  myTMP006_I2C_parameters.SDA         =    TWI0_SDA;
+  myTMP006_I2C_parameters.SCL         =    TWI0_SCL;
+  myTMP006_I2C_parameters.ADDR        =    TMP006_ADDRESS_ADR1_0_ADR0_0;
+  myTMP006_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+  myTMP006_I2C_parameters.SDAport     =    NRF_P0;
+  myTMP006_I2C_parameters.SCLport     =    NRF_P0;
 
+  /* Configure I2C peripheral  */
+  aux  =   TMP006_Init              ( myTMP006_I2C_parameters );
+
+  /* Reset the device by software  */
+  aux  =   TMP006_SoftwareReset     ( myTMP006_I2C_parameters );
   
+  /* Wait until the device is ready  */
+  do
+  {
+    /* Read configuration register  */
+    aux  =   TMP006_ReadConfigurationRegister ( myTMP006_I2C_parameters, &myTMP006_Data );
+  }while ( ( myTMP006_Data.ConfigurationRegister & RST_BIT_MASK ) != RST_NORMAL_OPERATION );  // [TODO]       This is DANGEROUS, if something goes wrong, the uC will get stuck here!!!.
+                                                                                              // [WORKAROUND] Insert a timeout.
+  /* Turn off the device  */
+  aux  =   TMP006_SetModeOperation ( myTMP006_I2C_parameters, MOD_POWER_DOWN );
+
+  /* Get manufacturer ID */
+  aux  =   TMP006_GetManufacturerID ( myTMP006_I2C_parameters, &myTMP006_Data );
+  sprintf ( (char*)myMessage, "Manufacturer ID: %02x\r\n", myTMP006_Data.ManufacturerID );
+  NRF_UART0->TASKS_STOPRX  =   1UL;
+  NRF_UART0->TASKS_STOPTX  =   1UL;
+  myPtr                    =   &myMessage[0];
+
+  NRF_UART0->TASKS_STARTTX =   1UL;
+  NRF_UART0->TXD           =   *myPtr;
+  nrf_delay_ms ( 500 );
+
+  /* Get device ID */
+  aux  =   TMP006_GetDeviceID       ( myTMP006_I2C_parameters, &myTMP006_Data );
+  sprintf ( (char*)myMessage, "Device ID: %02x\r\n", myTMP006_Data.DeviceID );
+  NRF_UART0->TASKS_STOPRX  =   1UL;
+  NRF_UART0->TASKS_STOPTX  =   1UL;
+  myPtr                    =   &myMessage[0];
+
+  NRF_UART0->TASKS_STARTTX =   1UL;
+  NRF_UART0->TXD           =   *myPtr;
+  nrf_delay_ms ( 500 );
+  
+  /* Conversion Rate: 1 conversions/sec ( 4 averaged samples ) */
+  aux  =   TMP006_SetConversionRate ( myTMP006_I2C_parameters, CR_4_AVERAGED_SAMPLES );
+
+  /* Disbale #DRDY pin */
+  aux  =   TMP006_SetnDRDY_EnableBit ( myTMP006_I2C_parameters, EN_nDRDY_PIN_DISABLED );
+
+  /* Turn on the device  */
+  aux  =   TMP006_SetModeOperation ( myTMP006_I2C_parameters, MOD_SENSOR_AND_DIE_CONT_CONVERSION );
+
 
   
   myState  =   0;                             // Reset the variable
@@ -126,17 +134,33 @@ int main(void)
 
 
 
-    if ( myState == 1 )
+    if ( myState == 1UL )
     {
-      NRF_P0->OUTCLR  |= ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs on
+      NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );          // Turn all the LEDs on
 
-//      /* Get the day of the week */
-//      aux  =   SSD1306_GetDayOfTheWeek ( mySSD1306_I2C_parameters, &mySSD1306_Data );
+      /* Wait until a new data is ready to be read  */
+      do
+      {
+        /* Read configuration register  */
+        aux  =   TMP006_ReadConfigurationRegister ( myTMP006_I2C_parameters, &myTMP006_Data );
+      }while ( ( myTMP006_Data.ConfigurationRegister & nDRDY_MASK ) == nDRDY_CONVERSION_IN_PROGRESS );  // [TODO]       This is DANGEROUS, if something goes wrong, the uC will get stuck here!!!.
+                                                                                                        // [WORKAROUND] Insert a timeout.
+      /* Get raw temperature ( T_DIE ) */
+      aux  =   TMP006_GetRawTemperature           ( myTMP006_I2C_parameters, &myTMP006_Data );
+
+      /* Get raw sensor voltage result ( V_SENSOR ) */
+      aux  =   TMP006_GetRawSensorVoltage         ( myTMP006_I2C_parameters, &myTMP006_Data );
+
+      /* Calculate temperature ( T_DIE ) */
+      aux  =   TMP006_CalculateTemperature        ( myTMP006_I2C_parameters, &myTMP006_Data );
+
+      /* Calculate object temperature ( T_OBJ ) */
+      myTMP006_Data.s0   =   S0;                                                                        // Typical values for S0 are between 5×10^–14 and 7×10^–14
+      aux  =   TMP006_CalculateObjectTemperature  ( myTMP006_I2C_parameters, &myTMP006_Data );
+
 
       /* Transmit result through the UART  */
-//      sprintf ( (char*)myMessage, "%02x/%02x/%02x %d %02x:%02x.%02x\r\n", mySSD1306_Data.BCDDate, mySSD1306_Data.BCDMonth, mySSD1306_Data.BCDYear, mySSD1306_Data.DayOfTheWeek,
-//                                                                          (uint8_t)( ( mySSD1306_Data.BCDTime & 0xFF0000 ) >> 16U ), (uint8_t)( ( mySSD1306_Data.BCDTime & 0x00FF00 ) >> 8U ),
-//                                                                          (uint8_t)( mySSD1306_Data.BCDTime & 0x0000FF ) );
+      sprintf ( (char*)myMessage, "T_DIE: %d mC | T_OBJ: %d mC\r\n", ( myTMP006_Data.TemperatureC * 1000.0 ), ( myTMP006_Data.ObjectTemperatureC * 1000.0 ) );
 
       NRF_UART0->TASKS_STOPRX  =   1UL;
       NRF_UART0->TASKS_STOPTX  =   1UL;
@@ -147,8 +171,8 @@ int main(void)
 
       
       /* Reset the variables   */
-      myState          =   0;
-      NRF_P0->OUTSET  |=   ( ( 1 << LED1 ) | ( 1 << LED2 ) | ( 1 << LED3 ) | ( 1 << LED4 ) );          // Turn all the LEDs off
+      myState          =   0UL;
+      NRF_P0->OUTSET  |=   ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );          // Turn all the LEDs off
     }
     //__NOP();
   }
