@@ -154,13 +154,16 @@ int main(void)
       /* Calculate temperature ( T_DIE ) */
       aux  =   TMP006_CalculateTemperature        ( &myTMP006_Data );
 
+      /* Calculates the real sensor voltage ( V_SENSOR ) value */
+      aux  =   TMP006_CalculateSensorVoltage      ( &myTMP006_Data );
+
       /* Calculate object temperature ( T_OBJ ) */
       myTMP006_Data.s0   =   S0;                                                                        // Typical values for S0 are between 5×10^–14 and 7×10^–14
       aux  =   TMP006_CalculateObjectTemperature  ( &myTMP006_Data );
 
 
       /* Transmit result through the UART  */
-      sprintf ( (char*)myMessage, "T_DIE: %d mC | T_OBJ: %d mC\r\n", ( myTMP006_Data.TemperatureC * 1000.0 ), ( myTMP006_Data.ObjectTemperatureC * 1000.0 ) );
+      sprintf ( (char*)myMessage, "T_DIE: %d mC | T_OBJ: %d mC\r\n", (int32_t)( myTMP006_Data.TemperatureC * 1000.0 ), (int32_t)( myTMP006_Data.ObjectTemperatureC * 1000.0 ) );
 
       NRF_UART0->TASKS_STOPRX  =   1UL;
       NRF_UART0->TASKS_STOPTX  =   1UL;
