@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: TMP006. Every 1 seconds, a new
+ * @details     This example shows how to work with the external device: TMP006. Every 1 seconds, a new
  *              sample is performed and transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
