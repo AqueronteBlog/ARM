@@ -24,8 +24,10 @@
 #include "functions.h"
 #include "interrupts.h"
 #if defined (WORK_FROM_HOME)
+#include "D:/Workspace/ARM/Drivers/SSD1306/SSD1306_Graphics.h"
 #include "D:/Workspace/ARM/Drivers/SSD1306/SSD1306.h" 
 #else
+#include "D:/vsProjects/ARM/Drivers/SSD1306/SSD1306_Graphics.h"
 #include "D:/vsProjects/ARM/Drivers/SSD1306/SSD1306.h" 
 #endif
 
