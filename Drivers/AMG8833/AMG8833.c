@@ -1,5 +1,5 @@
 /**
- * @brief       TMP006.c
+ * @brief       AMG8833.c
  * @details     Infrared Thermopile Sensor in Chip-Scale Package.
  *              Functions file.
  *
@@ -14,11 +14,11 @@
  * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ). All rights reserved.
  */
 
-#include "TMP006.h"
+#include "AMG8833.h"
 
 
 /**
- * @brief       TMP006_Init ( I2C_parameters_t )
+ * @brief       AMG8833_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,7 +27,7 @@
  * @param[out]   N/A.
  *
  *
- * @return       Status of TMP006_Init.
+ * @return       Status of AMG8833_Init.
  *
  *
  * @author      Manuel Caballero
@@ -36,7 +36,7 @@
  * @pre         N/A
  * @warning     N/A.
  */
-TMP006_status_t  TMP006_Init ( I2C_parameters_t myI2Cparameters )
+AMG8833_status_t  AMG8833_Init ( I2C_parameters_t myI2Cparameters )
 {
     i2c_status_t aux;
 
@@ -46,18 +46,18 @@ TMP006_status_t  TMP006_Init ( I2C_parameters_t myI2Cparameters )
 
     if ( aux == I2C_SUCCESS )
     {
-        return   TMP006_SUCCESS;
+        return   AMG8833_SUCCESS;
     }
     else
     {
-        return   TMP006_FAILURE;
+        return   AMG8833_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       TMP006_GetManufacturerID ( I2C_parameters_t , TMP006_data_t* )
+ * @brief       AMG8833_GetManufacturerID ( I2C_parameters_t , AMG8833_data_t* )
  *
  * @details     It gets the manufacturer ID.
  *
@@ -66,7 +66,7 @@ TMP006_status_t  TMP006_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   myManufacturerID:  Manufacturer ID.
  *
  *
- * @return       Status of TMP006_GetManufacturerID.
+ * @return       Status of AMG8833_GetManufacturerID.
  *
  *
  * @author      Manuel Caballero
@@ -75,14 +75,14 @@ TMP006_status_t  TMP006_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A.
  * @warning     N/A.
  */
-TMP006_status_t  TMP006_GetManufacturerID ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myManufacturerID )
+AMG8833_status_t  AMG8833_GetManufacturerID ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myManufacturerID )
 {
     uint8_t      cmd[]    =    { 0U, 0U };
     i2c_status_t aux;
 
 
     /* Read the register */
-    cmd[0]   =   TMP006_MANUFACTURER_ID;
+    cmd[0]   =   AMG8833_MANUFACTURER_ID;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -96,18 +96,18 @@ TMP006_status_t  TMP006_GetManufacturerID ( I2C_parameters_t myI2Cparameters, TM
 
     if ( aux == I2C_SUCCESS )
     {
-        return   TMP006_SUCCESS;
+        return   AMG8833_SUCCESS;
     }
     else
     {
-        return   TMP006_FAILURE;
+        return   AMG8833_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       TMP006_GetDeviceID ( I2C_parameters_t , TMP006_data_t* )
+ * @brief       AMG8833_GetDeviceID ( I2C_parameters_t , AMG8833_data_t* )
  *
  * @details     It gets the device ID.
  *
@@ -116,7 +116,7 @@ TMP006_status_t  TMP006_GetManufacturerID ( I2C_parameters_t myI2Cparameters, TM
  * @param[out]   myDeviceID:      Device ID.
  *
  *
- * @return       Status of TMP006_GetDeviceID.
+ * @return       Status of AMG8833_GetDeviceID.
  *
  *
  * @author      Manuel Caballero
@@ -125,14 +125,14 @@ TMP006_status_t  TMP006_GetManufacturerID ( I2C_parameters_t myI2Cparameters, TM
  * @pre         N/A.
  * @warning     N/A.
  */
-TMP006_status_t  TMP006_GetDeviceID ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myDeviceID )
+AMG8833_status_t  AMG8833_GetDeviceID ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myDeviceID )
 {
     uint8_t      cmd[]    =    { 0U, 0U };
     i2c_status_t aux;
 
 
     /* Read the register */
-    cmd[0]   =   TMP006_DEVICE_ID;
+    cmd[0]   =   AMG8833_DEVICE_ID;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -146,18 +146,18 @@ TMP006_status_t  TMP006_GetDeviceID ( I2C_parameters_t myI2Cparameters, TMP006_d
 
     if ( aux == I2C_SUCCESS )
     {
-        return   TMP006_SUCCESS;
+        return   AMG8833_SUCCESS;
     }
     else
     {
-        return   TMP006_FAILURE;
+        return   AMG8833_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       TMP006_ReadConfigurationRegister ( I2C_parameters_t , TMP006_data_t* )
+ * @brief       AMG8833_ReadConfigurationRegister ( I2C_parameters_t , AMG8833_data_t* )
  *
  * @details     It reads the configuration register.
  *
@@ -166,7 +166,7 @@ TMP006_status_t  TMP006_GetDeviceID ( I2C_parameters_t myI2Cparameters, TMP006_d
  * @param[out]   myConfReg:       Configuration register value.
  *
  *
- * @return       Status of TMP006_ReadConfigurationRegister.
+ * @return       Status of AMG8833_ReadConfigurationRegister.
  *
  *
  * @author      Manuel Caballero
@@ -175,14 +175,14 @@ TMP006_status_t  TMP006_GetDeviceID ( I2C_parameters_t myI2Cparameters, TMP006_d
  * @pre         N/A.
  * @warning     N/A.
  */
-TMP006_status_t  TMP006_ReadConfigurationRegister ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myConfReg )
+AMG8833_status_t  AMG8833_ReadConfigurationRegister ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myConfReg )
 {
     uint8_t      cmd[]    =    { 0U, 0U };
     i2c_status_t aux;
 
 
     /* Read the register */
-    cmd[0]   =   TMP006_CONFIGURATION;
+    cmd[0]   =   AMG8833_CONFIGURATION;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -196,18 +196,18 @@ TMP006_status_t  TMP006_ReadConfigurationRegister ( I2C_parameters_t myI2Cparame
 
     if ( aux == I2C_SUCCESS )
     {
-        return   TMP006_SUCCESS;
+        return   AMG8833_SUCCESS;
     }
     else
     {
-        return   TMP006_FAILURE;
+        return   AMG8833_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       TMP006_SoftwareReset ( I2C_parameters_t )
+ * @brief       AMG8833_SoftwareReset ( I2C_parameters_t )
  *
  * @details     It performs a software reset.
  *
@@ -216,7 +216,7 @@ TMP006_status_t  TMP006_ReadConfigurationRegister ( I2C_parameters_t myI2Cparame
  * @param[out]   N/A.
  *
  *
- * @return       Status of TMP006_SoftwareReset.
+ * @return       Status of AMG8833_SoftwareReset.
  *
  *
  * @author      Manuel Caballero
@@ -225,21 +225,21 @@ TMP006_status_t  TMP006_ReadConfigurationRegister ( I2C_parameters_t myI2Cparame
  * @pre         N/A.
  * @warning     N/A.
  */
-TMP006_status_t  TMP006_SoftwareReset ( I2C_parameters_t myI2Cparameters )
+AMG8833_status_t  AMG8833_SoftwareReset ( I2C_parameters_t myI2Cparameters )
 {
     uint8_t      cmd[]    =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
 
     /* Read the register */
-    cmd[0]   =   TMP006_CONFIGURATION;
+    cmd[0]   =   AMG8833_CONFIGURATION;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], 2U );
 
     /* Mask the option and update the register   */
     cmd[2]   =   cmd[1];
     cmd[1]   =   ( ( cmd[0] & ~RST_BIT_MASK ) | RST_SOFTWARE_RESET );
-    cmd[0]   =   TMP006_CONFIGURATION;
+    cmd[0]   =   AMG8833_CONFIGURATION;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -247,18 +247,18 @@ TMP006_status_t  TMP006_SoftwareReset ( I2C_parameters_t myI2Cparameters )
 
     if ( aux == I2C_SUCCESS )
     {
-        return   TMP006_SUCCESS;
+        return   AMG8833_SUCCESS;
     }
     else
     {
-        return   TMP006_FAILURE;
+        return   AMG8833_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       TMP006_SetModeOperation ( I2C_parameters_t , TMP006_mod_t )
+ * @brief       AMG8833_SetModeOperation ( I2C_parameters_t , AMG8833_mod_t )
  *
  * @details     It sets mode of operation.
  *
@@ -268,7 +268,7 @@ TMP006_status_t  TMP006_SoftwareReset ( I2C_parameters_t myI2Cparameters )
  * @param[out]   N/A.
  *
  *
- * @return       Status of TMP006_SetModeOperation.
+ * @return       Status of AMG8833_SetModeOperation.
  *
  *
  * @author      Manuel Caballero
@@ -277,21 +277,21 @@ TMP006_status_t  TMP006_SoftwareReset ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A.
  * @warning     N/A.
  */
-TMP006_status_t  TMP006_SetModeOperation ( I2C_parameters_t myI2Cparameters, TMP006_mod_t myModeOpreation )
+AMG8833_status_t  AMG8833_SetModeOperation ( I2C_parameters_t myI2Cparameters, AMG8833_mod_t myModeOpreation )
 {
     uint8_t      cmd[]    =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
 
     /* Read the register */
-    cmd[0]   =   TMP006_CONFIGURATION;
+    cmd[0]   =   AMG8833_CONFIGURATION;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], 2U );
 
     /* Mask the option and update the register   */
     cmd[2]   =   cmd[1];
     cmd[1]   =   ( ( cmd[0] & ~MOD_MASK ) | myModeOpreation );
-    cmd[0]   =   TMP006_CONFIGURATION;
+    cmd[0]   =   AMG8833_CONFIGURATION;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -299,18 +299,18 @@ TMP006_status_t  TMP006_SetModeOperation ( I2C_parameters_t myI2Cparameters, TMP
 
     if ( aux == I2C_SUCCESS )
     {
-        return   TMP006_SUCCESS;
+        return   AMG8833_SUCCESS;
     }
     else
     {
-        return   TMP006_FAILURE;
+        return   AMG8833_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       TMP006_SetConversionRate ( I2C_parameters_t , TMP006_cr_t )
+ * @brief       AMG8833_SetConversionRate ( I2C_parameters_t , AMG8833_cr_t )
  *
  * @details     It sets conversion rate.
  *
@@ -320,7 +320,7 @@ TMP006_status_t  TMP006_SetModeOperation ( I2C_parameters_t myI2Cparameters, TMP
  * @param[out]   N/A.
  *
  *
- * @return       Status of TMP006_SetConversionRate.
+ * @return       Status of AMG8833_SetConversionRate.
  *
  *
  * @author      Manuel Caballero
@@ -329,21 +329,21 @@ TMP006_status_t  TMP006_SetModeOperation ( I2C_parameters_t myI2Cparameters, TMP
  * @pre         N/A.
  * @warning     N/A.
  */
-TMP006_status_t  TMP006_SetConversionRate ( I2C_parameters_t myI2Cparameters, TMP006_cr_t myConversionRate )
+AMG8833_status_t  AMG8833_SetConversionRate ( I2C_parameters_t myI2Cparameters, AMG8833_cr_t myConversionRate )
 {
     uint8_t      cmd[]    =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
 
     /* Read the register */
-    cmd[0]   =   TMP006_CONFIGURATION;
+    cmd[0]   =   AMG8833_CONFIGURATION;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], 2U );
 
     /* Mask the option and update the register   */
     cmd[2]   =   cmd[1];
     cmd[1]   =   ( ( cmd[0] & ~CR_MASK ) | myConversionRate );
-    cmd[0]   =   TMP006_CONFIGURATION;
+    cmd[0]   =   AMG8833_CONFIGURATION;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -351,18 +351,18 @@ TMP006_status_t  TMP006_SetConversionRate ( I2C_parameters_t myI2Cparameters, TM
 
     if ( aux == I2C_SUCCESS )
     {
-        return   TMP006_SUCCESS;
+        return   AMG8833_SUCCESS;
     }
     else
     {
-        return   TMP006_FAILURE;
+        return   AMG8833_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       TMP006_SetnDRDY_EnableBit ( I2C_parameters_t , TMP006_en_t )
+ * @brief       AMG8833_SetnDRDY_EnableBit ( I2C_parameters_t , AMG8833_en_t )
  *
  * @details     It sets conversion rate.
  *
@@ -372,7 +372,7 @@ TMP006_status_t  TMP006_SetConversionRate ( I2C_parameters_t myI2Cparameters, TM
  * @param[out]   N/A.
  *
  *
- * @return       Status of TMP006_SetnDRDY_EnableBit.
+ * @return       Status of AMG8833_SetnDRDY_EnableBit.
  *
  *
  * @author      Manuel Caballero
@@ -381,21 +381,21 @@ TMP006_status_t  TMP006_SetConversionRate ( I2C_parameters_t myI2Cparameters, TM
  * @pre         N/A.
  * @warning     N/A.
  */
-TMP006_status_t  TMP006_SetnDRDY_EnableBit ( I2C_parameters_t myI2Cparameters, TMP006_en_t myEnableBit )
+AMG8833_status_t  AMG8833_SetnDRDY_EnableBit ( I2C_parameters_t myI2Cparameters, AMG8833_en_t myEnableBit )
 {
     uint8_t      cmd[]    =    { 0U, 0U, 0U };
     i2c_status_t aux;
 
 
     /* Read the register */
-    cmd[0]   =   TMP006_CONFIGURATION;
+    cmd[0]   =   AMG8833_CONFIGURATION;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], 2U );
 
     /* Mask the option and update the register   */
     cmd[2]   =   cmd[1];
     cmd[1]   =   ( ( cmd[0] & ~EN_MASK ) | myEnableBit );
-    cmd[0]   =   TMP006_CONFIGURATION;
+    cmd[0]   =   AMG8833_CONFIGURATION;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -403,18 +403,18 @@ TMP006_status_t  TMP006_SetnDRDY_EnableBit ( I2C_parameters_t myI2Cparameters, T
 
     if ( aux == I2C_SUCCESS )
     {
-        return   TMP006_SUCCESS;
+        return   AMG8833_SUCCESS;
     }
     else
     {
-        return   TMP006_FAILURE;
+        return   AMG8833_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       TMP006_GetRawTemperature ( I2C_parameters_t , TMP006_data_t* )
+ * @brief       AMG8833_GetRawTemperature ( I2C_parameters_t , AMG8833_data_t* )
  *
  * @details     It reads raw temperature ( T_DIE ) value.
  *
@@ -423,7 +423,7 @@ TMP006_status_t  TMP006_SetnDRDY_EnableBit ( I2C_parameters_t myI2Cparameters, T
  * @param[out]   myRawTemperature:  Raw temperature value.
  *
  *
- * @return       Status of TMP006_GetRawTemperature.
+ * @return       Status of AMG8833_GetRawTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -432,14 +432,14 @@ TMP006_status_t  TMP006_SetnDRDY_EnableBit ( I2C_parameters_t myI2Cparameters, T
  * @pre         N/A.
  * @warning     N/A.
  */
-TMP006_status_t  TMP006_GetRawTemperature ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myRawTemperature )
+AMG8833_status_t  AMG8833_GetRawTemperature ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myRawTemperature )
 {
     uint8_t      cmd[]    =    { 0U, 0U };
     i2c_status_t aux;
 
 
     /* Read the register */
-    cmd[0]   =   TMP006_LOCAL_TEMPERATURE;
+    cmd[0]   =   AMG8833_LOCAL_TEMPERATURE;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -456,18 +456,18 @@ TMP006_status_t  TMP006_GetRawTemperature ( I2C_parameters_t myI2Cparameters, TM
 
     if ( aux == I2C_SUCCESS )
     {
-        return   TMP006_SUCCESS;
+        return   AMG8833_SUCCESS;
     }
     else
     {
-        return   TMP006_FAILURE;
+        return   AMG8833_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       TMP006_GetRawSensorVoltage ( I2C_parameters_t , TMP006_data_t* )
+ * @brief       AMG8833_GetRawSensorVoltage ( I2C_parameters_t , AMG8833_data_t* )
  *
  * @details     It reads raw sensor voltage result ( V_SENSOR ) register.
  *
@@ -476,7 +476,7 @@ TMP006_status_t  TMP006_GetRawTemperature ( I2C_parameters_t myI2Cparameters, TM
  * @param[out]   myRawVoltage:    Raw sensor voltage value.
  *
  *
- * @return       Status of TMP006_GetRawSensorVoltage.
+ * @return       Status of AMG8833_GetRawSensorVoltage.
  *
  *
  * @author      Manuel Caballero
@@ -485,14 +485,14 @@ TMP006_status_t  TMP006_GetRawTemperature ( I2C_parameters_t myI2Cparameters, TM
  * @pre         N/A.
  * @warning     N/A.
  */
-TMP006_status_t  TMP006_GetRawSensorVoltage ( I2C_parameters_t myI2Cparameters, TMP006_data_t* myRawVoltage )
+AMG8833_status_t  AMG8833_GetRawSensorVoltage ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myRawVoltage )
 {
     uint8_t      cmd[]    =    { 0U, 0U };
     i2c_status_t aux;
 
 
     /* Read the register */
-    cmd[0]   =   TMP006_SENSOR_VOLTAGE;
+    cmd[0]   =   AMG8833_SENSOR_VOLTAGE;
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
     aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -506,18 +506,18 @@ TMP006_status_t  TMP006_GetRawSensorVoltage ( I2C_parameters_t myI2Cparameters, 
 
     if ( aux == I2C_SUCCESS )
     {
-        return   TMP006_SUCCESS;
+        return   AMG8833_SUCCESS;
     }
     else
     {
-        return   TMP006_FAILURE;
+        return   AMG8833_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       TMP006_CalculateTemperature ( TMP006_data_t* )
+ * @brief       AMG8833_CalculateTemperature ( AMG8833_data_t* )
  *
  * @details     It calculates the real temperature ( T_DIE ) value.
  *
@@ -526,16 +526,16 @@ TMP006_status_t  TMP006_GetRawSensorVoltage ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   myTemperature:     Real Temperature value.
  *
  *
- * @return       Status of TMP006_CalculateTemperature.
+ * @return       Status of AMG8833_CalculateTemperature.
  *
  *
  * @author      Manuel Caballero
  * @date        10/December/2018
  * @version     10/December/2018   The ORIGIN
  * @pre         N/A.
- * @warning     TMP006_GetRawTemperature function must be called first.
+ * @warning     AMG8833_GetRawTemperature function must be called first.
  */
-TMP006_status_t  TMP006_CalculateTemperature ( TMP006_data_t* myTemperature  )
+AMG8833_status_t  AMG8833_CalculateTemperature ( AMG8833_data_t* myTemperature  )
 {
     uint8_t   myDataPosNeg  =   0U;
     uint16_t  aux           =   0U;
@@ -564,13 +564,13 @@ TMP006_status_t  TMP006_CalculateTemperature ( TMP006_data_t* myTemperature  )
 
 
 
-    return   TMP006_SUCCESS;
+    return   AMG8833_SUCCESS;
 }
 
 
 
 /**
- * @brief       TMP006_CalculateSensorVoltage ( TMP006_data_t* )
+ * @brief       AMG8833_CalculateSensorVoltage ( AMG8833_data_t* )
  *
  * @details     It calculates the real sensor voltage ( V_SENSOR ) value.
  *
@@ -579,16 +579,16 @@ TMP006_status_t  TMP006_CalculateTemperature ( TMP006_data_t* myTemperature  )
  * @param[out]   myV_sensor:                   Real sensor voltage value.
  *
  *
- * @return       Status of TMP006_CalculateSensorVoltage.
+ * @return       Status of AMG8833_CalculateSensorVoltage.
  *
  *
  * @author      Manuel Caballero
  * @date        10/December/2018
  * @version     10/December/2018   The ORIGIN
  * @pre         N/A.
- * @warning     TMP006_GetRawSensorVoltage function must be called first.
+ * @warning     AMG8833_GetRawSensorVoltage function must be called first.
  */
-TMP006_status_t  TMP006_CalculateSensorVoltage ( TMP006_data_t* myV_sensor  )
+AMG8833_status_t  AMG8833_CalculateSensorVoltage ( AMG8833_data_t* myV_sensor  )
 {
     uint8_t   myDataPosNeg  =   0U;
     uint16_t  aux           =   0U;
@@ -614,13 +614,13 @@ TMP006_status_t  TMP006_CalculateSensorVoltage ( TMP006_data_t* myV_sensor  )
 
 
 
-    return   TMP006_SUCCESS;
+    return   AMG8833_SUCCESS;
 }
 
 
 
 /**
- * @brief       TMP006_CalculateObjectTemperature ( TMP006_data_t* )
+ * @brief       AMG8833_CalculateObjectTemperature ( AMG8833_data_t* )
  *
  * @details     It calculates the real temperature ( T_DIE ) value.
  *
@@ -629,16 +629,16 @@ TMP006_status_t  TMP006_CalculateSensorVoltage ( TMP006_data_t* myV_sensor  )
  * @param[out]   myObjTemperature:  Real Object Temperature value.
  *
  *
- * @return       Status of TMP006_CalculateObjectTemperature.
+ * @return       Status of AMG8833_CalculateObjectTemperature.
  *
  *
  * @author      Manuel Caballero
  * @date        10/December/2018
  * @version     10/December/2018   The ORIGIN
  * @pre         N/A.
- * @warning     TMP006_CalculateTemperature and TMP006_GetRawSensorVoltage functions must be called first.
+ * @warning     AMG8833_CalculateTemperature and AMG8833_GetRawSensorVoltage functions must be called first.
  */
-TMP006_status_t  TMP006_CalculateObjectTemperature ( TMP006_data_t* myObjTemperature  )
+AMG8833_status_t  AMG8833_CalculateObjectTemperature ( AMG8833_data_t* myObjTemperature  )
 {
     double s       =   0.0;
     double v_os    =   0.0;
@@ -654,11 +654,11 @@ TMP006_status_t  TMP006_CalculateObjectTemperature ( TMP006_data_t* myObjTempera
     /* Model the Seebeck coefficients of the thermopile  */
     f_v_obj  =   ( myObjTemperature->V_Sensor - v_os ) + C2 * pow( ( myObjTemperature->V_Sensor - v_os ), 2U );
     
-    /* Relates the radiant transfer of IR energy between the target object and the TMP006 and the conducted heat in the thermopile in the TMP006  */ 
+    /* Relates the radiant transfer of IR energy between the target object and the AMG8833 and the conducted heat in the thermopile in the AMG8833  */ 
     myObjTemperature->ObjectTemperatureK    =  sqrt( sqrt( pow( myObjTemperature->TemperatureK, 4U ) + ( f_v_obj / s ) ) );
     myObjTemperature->ObjectTemperatureC    =  ( myObjTemperature->ObjectTemperatureK - 273.15 );
 
 
 
-    return   TMP006_SUCCESS;
+    return   AMG8833_SUCCESS;
 }
