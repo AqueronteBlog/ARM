@@ -56,3 +56,4 @@ NRF51/Examples/Drivers/BMP180/obj/
 NRF51/Examples/Drivers/MAX44009/obj/
 NRF52/Examples/examples/Drivers/SSD1306/pca10040/s132/ses/Output/
 NRF52/Examples/examples/Drivers/TMP006/pca10040/s132/ses/Output/
+NRF52/Examples/examples/Drivers/AMG8833/pca10040/s132/ses/Output/
