@@ -268,31 +268,145 @@ typedef enum
 
 
 
+/**
+  * @brief   STATUS REGISTER
+  */
+/**
+  * OVF_THS ( THERMISTOR TEMPERATURE OUTPUT OVERFLOW ) <3>
+  */
+typedef enum
+{
+    OVF_THS_MASK                                =   ( 1U << 3U ), /*!<  OVF_THS mask                                          */
+    OVF_THS_THERMISTOR_TEMPERATURE_OVERFLOW     =   ( 1U << 3U ), /*!<  Thermistor Temperature Output Overflow                */
+    OVF_THS_THERMISTOR_TEMPERATURE_NO_OVERFLOW  =   ( 0U << 3U )  /*!<  Thermistor Temperature Output NO Overflow             */
+} AMG8833_ovf_ths_t;
+
+
+/**
+  * OVF_IRS ( TEMPERATURE OUTPUT OVERFLOW ) <2>
+  */
+typedef enum
+{
+    OVF_IRS_MASK                      =   ( 1U << 2U ),   /*!<  OVF_IRS mask                                          */
+    OVF_IRS_TEMPERATURE_OVERFLOW      =   ( 1U << 2U ),   /*!<  Temperature Output Overflow                           */
+    OVF_IRS_TEMPERATURE_NO_OVERFLOW   =   ( 0U << 2U )    /*!<  Temperature Output NO Overflow                        */
+} AMG8833_ovf_irs_t;
+
+
+/**
+  * INTF ( INTERRUPT OUTBREAK ) <1>
+  */
+typedef enum
+{
+    INTF_MASK                         =   ( 1U << 1U ),   /*!<  INTF mask                                             */
+    INTF_INTERRUPT_OUTBREAK           =   ( 1U << 1U ),   /*!<  Interrupt Outbreak                                    */
+    INTF_INTERRUPT_NO_OUTBREAK        =   ( 0U << 1U )    /*!<  Interrupt NO Outbreak                                 */
+} AMG8833_intf_t;
+
+
+
+/**
+  * @brief   STATUS CLEAR REGISTER
+  */
+/**
+  * OVT_CLR ( THERMISTOR TEMPERATURE OUTPUT OVERFLOW FLAG CLEAR  ) <3>
+  */
+typedef enum
+{
+    OVT_CLR_THERMISTOR_TEMPERATURE_OVERFLOW_CLEAR_FLAG  =   ( 1U << 3U )  /*!<  Thermistor Temperature Output Overflow Clear Flag     */
+} AMG8833_ovf_clr_t;
+
+
+/**
+  * OVS_CLR ( TEMPERATURE OUTPUT OVERFLOW FLAG CLEAR ) <2>
+  */
+typedef enum
+{
+    OVS_CLR_TEMPERATURE_OVERFLOW_CLEAR_FLAG =   ( 1U << 2U )    /*!<  Temperature Output Overflow Flag Clear                */
+} AMG8833_ovs_clr_t;
+
+
+/**
+  * INTCLR ( INTERRUPT OUTBREAK FLAG CLEAR ) <1>
+  */
+typedef enum
+{
+    INTCLR_INTERRUPT_OUTBREAK_CLEAR_FLAG   =   ( 1U << 1U )    /*!<  Interrupt Outbreak Clear Flag                           */
+} AMG8833_intclr_t;
+
+
+
+/**
+  * @brief   AVERAGE REGISTER
+  */
+/**
+  * MAMOD ( TWICE MOVING AVERAGE OUTPUT MODE ) <5> 
+  */
+typedef enum
+{
+    MAMOD_MASK                                  =   ( 1U << 5U ), /*!<  MAMOD mask                                            */
+    MAMOD_WICE_MOVING_AVERAGE_OUTPUT_MODE_ON    =   ( 1U << 5U ), /*!<  Twice moving average Output Mode ON                   */
+    MAMOD_WICE_MOVING_AVERAGE_OUTPUT_MODE_OFF   =   ( 0U << 5U )  /*!<  Twice moving average Output Mode OFF                  */
+} AMG8833_mamod_t;
+
+
+
+/**
+  * @brief   INTERRUPT LEVEL REGISTER
+  */
+/**
+  * SETTING UPPER/LOWER LIMIT HYSTERESIS ON INTERRUPT LEVEL 
+  */
+typedef enum
+{
+    LIMIT_HYSTERESIS_INTHH_MASK    =   0b00001111,                /*!<  INTHH mask                                            */
+    LIMIT_HYSTERESIS_INTLH_MASK    =   0b00001111,                /*!<  INTLH mask                                            */
+    LIMIT_HYSTERESIS_IHYSH_MASK    =   0b00001111                 /*!<  IHYSH mask                                            */
+} AMG8833_limit_hysteresis_interrupt_level_t;
+
+
+
+/**
+  * @brief   THERMISTOR REGISTER
+  */
+typedef enum
+{
+    TTHH_MASK    =   0b00001111                 /*!<  TTHH mask                                            */
+} AMG8833_thermistor_register_t;
+
+
+
+/**
+  * @brief   TEMPERATURE REGISTER
+  */
+typedef enum
+{
+    TXXH_MASK    =   0b00001111                 /*!<  TXXH mask                                            */
+} AMG8833_temperature_register_t;
+
+
 
 
 
 #ifndef AMG8833_VECTOR_STRUCT_H
 #define AMG8833_VECTOR_STRUCT_H
+
+#define THERMISTOR_RESOLUTION   0.0625      /*!<  Thermistor Temperature Data 1 LSB has 12 bit resolution at 0.0625C  */
+#define TEMPERATURE_RESOLUTION  0.25        /*!<  Pixel Temperature Data 1 LSB has 12 bit resolution at 0.25C         */
+
 typedef struct
 {
-    float    ObjectTemperatureC;             /*!<  Temperature of the target object in Celsius degrees                              */
-    float    ObjectTemperatureK;             /*!<  Temperature of the target object in Kelvins degrees                              */
-
-    float    TemperatureK;                  /*!<  T_DIE in Kelvins degrees                                                          */
-    float    TemperatureC;                  /*!<  T_DIE in Celsius degrees                                                          */
-    float    V_Sensor;                      /*!<  Sensor voltage result                                                             */
-    float    s0;                            /*!<  Primary calibration sensitivity factor ( typical values: 5×10^–14 and 7×10^–14 )  */
-
-    uint16_t SensorVoltageResultRegister;   /*!<  V_sensor                                                                          */
-    uint16_t TemperatureRegister;           /*!<  T_DIE                                                                             */
-    uint16_t ConfigurationRegister;         /*!<  Configuration register                                                            */
+    float    termistorOutputValue;          /*!<  Termistor output value in Celsius degrees */
+    float    pixelOutputValues[64U];        /*!<  Pixel output values in Celsius degrees    */
     
-    uint16_t ManufacturerID;                /*!<  Manufacturer ID                                                                   */
-    uint16_t DeviceID;                      /*!<  Device ID                                                                         */
+    uint16_t termistorOutputRawValue;       /*!<  Termistor output raw value                */
+    uint16_t pixelOutputRawValues[64U];     /*!<  Pixel output raw values                   */
+
+    AMG8833_pctl_t operationMode;           /*!<  AMG8833 operation mode                    */
 } AMG8833_data_t;
 #endif
 
-
+ 
 
 
 
@@ -315,53 +429,6 @@ typedef enum
   */
 AMG8833_status_t  AMG8833_Init                      ( I2C_parameters_t myI2Cparameters                                  );
 
-///** It gets the manufacturer ID.
-//  */
-//AMG8833_status_t  AMG8833_GetManufacturerID         ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myManufacturerID );
-//
-///** It gets the device ID.
-//  */
-//AMG8833_status_t  AMG8833_GetDeviceID               ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myDeviceID       );
-//
-///** It reads the configuration register.
-//  */
-//AMG8833_status_t  AMG8833_ReadConfigurationRegister ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myConfReg        );
-//
-///** It performs a software reset.
-//  */
-//AMG8833_status_t  AMG8833_SoftwareReset             ( I2C_parameters_t myI2Cparameters                                  );
-//
-///** It sets mode of operation.
-//  */
-//AMG8833_status_t  AMG8833_SetModeOperation          ( I2C_parameters_t myI2Cparameters, AMG8833_mod_t myModeOpreation    );
-//
-///** It sets conversion rate.
-//  */
-//AMG8833_status_t  AMG8833_SetConversionRate         ( I2C_parameters_t myI2Cparameters, AMG8833_cr_t myConversionRate    );
-//
-///** It sets #DRDY control.
-//  */
-//AMG8833_status_t  AMG8833_SetnDRDY_EnableBit        ( I2C_parameters_t myI2Cparameters, AMG8833_en_t myEnableBit         );
-//
-///** It reads raw temperature ( T_DIE ) register.
-//  */
-//AMG8833_status_t  AMG8833_GetRawTemperature         ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myRawTemperature );
-//
-///** It reads raw sensor voltage result ( V_SENSOR ) register.
-//  */
-//AMG8833_status_t  AMG8833_GetRawSensorVoltage       ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myRawVoltage     );
-//
-///** It calculates the real temperature ( T_DIE ) value.
-//  */
-//AMG8833_status_t  AMG8833_CalculateTemperature      ( AMG8833_data_t* myTemperature                                      );
-//
-///** It calculates the real sensor voltage ( V_SENSOR ) value.
-//  */
-//AMG8833_status_t  AMG8833_CalculateSensorVoltage    ( AMG8833_data_t* myV_sensor                                         );
-//
-///** It calculates the object temperature ( T_OBJ ) value.
-//  */
-//AMG8833_status_t  AMG8833_CalculateObjectTemperature( AMG8833_data_t* myObjTemperature                                   );
 
 
 
