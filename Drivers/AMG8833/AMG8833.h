@@ -17,7 +17,6 @@
 
 #include "stdint.h"
 #include "stdbool.h"
-#include <math.h>
 #include "i2c.h"
 
 
@@ -403,6 +402,7 @@ typedef struct
     uint16_t pixelOutputRawValues[64U];     /*!<  Pixel output raw values                   */
 
     AMG8833_pctl_t operationMode;           /*!<  AMG8833 operation mode                    */
+    uint8_t pixelInterruptTable[64U];       /*!<  Pixel interrupt table                     */
 } AMG8833_data_t;
 #endif
 
@@ -427,7 +427,67 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-AMG8833_status_t  AMG8833_Init                      ( I2C_parameters_t myI2Cparameters                                  );
+AMG8833_status_t  AMG8833_Init                      ( I2C_parameters_t myI2Cparameters                                                                      );
+
+/** It reads the operation mode ( power control register ).
+  */
+AMG8833_status_t  AMG8833_GetOperationMode          ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myOperationMode                                     );
+
+/** It sets the operation mode ( power control register ).
+  */
+AMG8833_status_t  AMG8833_SetOperationMode          ( I2C_parameters_t myI2Cparameters, AMG8833_data_t myOperationMode                                      );
+
+/** It sets the reset mode.
+  */
+AMG8833_status_t  AMG8833_SoftwareReset             ( I2C_parameters_t myI2Cparameters, AMG8833_rst_t mySoftwareReset                                       );
+
+/** It sets frame mode.
+  */
+AMG8833_status_t  AMG8833_SetFrameMode              ( I2C_parameters_t myI2Cparameters, AMG8833_fpsc_t myFrameMode                                          );
+
+/** It sets interrupt function mode.
+  */
+AMG8833_status_t  AMG8833_SetInterruptFunctionMode  ( I2C_parameters_t myI2Cparameters, AMG8833_intmod_t myInterruptMode, AMG8833_inten_t myInterruptOutput );
+
+/** It gets the status register value.
+  */
+AMG8833_status_t  AMG8833_GetStatusRegisterValue    ( I2C_parameters_t myI2Cparameters, uint8_t myStatusRegisterValue                                       );
+
+/** It clears overflow and/or interrupt flags.
+  */
+AMG8833_status_t  AMG8833_ClearFlags                ( I2C_parameters_t myI2Cparameters, uint8_t myFlagsToBeCleared                                          );
+
+/** It sets twice moving average output mode.
+  */
+AMG8833_status_t  AMG8833_SetAverageOutputMode      ( I2C_parameters_t myI2Cparameters, AMG8833_mamod_t myAverageOutputMode                                 );
+
+/** It sets interrupt level upper/lower limit.
+  */
+AMG8833_status_t  AMG8833_SetInterruptLevel         ( I2C_parameters_t myI2Cparameters, uint16_t myUpperLimit, uint16_t myLowerLimit                        );
+
+/** It sets interrupt hysteresis level when interrupt is generated.
+  */
+AMG8833_status_t  AMG8833_SetHysteresisLevel        ( I2C_parameters_t myI2Cparameters, uint16_t myUpperLimit, uint16_t myLowerLimit                        );
+
+/** It gets thermistor raw temperature data.
+  */
+AMG8833_status_t  AMG8833_GetThermistorRawData      ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myThermistorRawData                                 );
+
+/** It gets thermistor temperature data.
+  */
+AMG8833_status_t  AMG8833_GetThermistorValue        ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myThermistorValue                                   );
+
+/** It gets pixel interrupt table.
+  */
+AMG8833_status_t  AMG8833_GetPixelInterruptTable    ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myPixelInterruptTable                               );
+
+/** It gets pixel raw temperature data.
+  */
+AMG8833_status_t  AMG8833_GetPixelRawTemperatures   ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myPixelRawTemperatureData                           );
+
+/** It gets pixel temperature value in Celsius degrees.
+  */
+AMG8833_status_t  AMG8833_GetPixelTemperatures      ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myPixelTemperatureData                              );
 
 
 
