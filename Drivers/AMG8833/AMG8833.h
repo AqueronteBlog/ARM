@@ -451,7 +451,7 @@ AMG8833_status_t  AMG8833_SetInterruptFunctionMode  ( I2C_parameters_t myI2Cpara
 
 /** It gets the status register value.
   */
-AMG8833_status_t  AMG8833_GetStatusRegisterValue    ( I2C_parameters_t myI2Cparameters, uint8_t myStatusRegisterValue                                       );
+AMG8833_status_t  AMG8833_GetStatusRegisterValue    ( I2C_parameters_t myI2Cparameters, uint8_t* myStatusRegisterValue                                      );
 
 /** It clears overflow and/or interrupt flags.
   */
@@ -463,11 +463,11 @@ AMG8833_status_t  AMG8833_SetAverageOutputMode      ( I2C_parameters_t myI2Cpara
 
 /** It sets interrupt level upper/lower limit.
   */
-AMG8833_status_t  AMG8833_SetInterruptLevel         ( I2C_parameters_t myI2Cparameters, uint16_t myUpperLimit, uint16_t myLowerLimit                        );
+AMG8833_status_t  AMG8833_SetInterruptLevel         ( I2C_parameters_t myI2Cparameters, int16_t myUpperLimit, int16_t myLowerLimit                          );
 
 /** It sets interrupt hysteresis level when interrupt is generated.
   */
-AMG8833_status_t  AMG8833_SetHysteresisLevel        ( I2C_parameters_t myI2Cparameters, uint16_t myUpperLimit, uint16_t myLowerLimit                        );
+AMG8833_status_t  AMG8833_SetHysteresisLevel        ( I2C_parameters_t myI2Cparameters, int16_t myHysteresisLimit                                           );
 
 /** It gets thermistor raw temperature data.
   */
