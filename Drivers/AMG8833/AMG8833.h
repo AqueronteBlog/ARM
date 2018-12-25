@@ -345,7 +345,7 @@ typedef enum
 {
     MAMOD_MASK                                  =   ( 1U << 5U ), /*!<  MAMOD mask                                            */
     MAMOD_WICE_MOVING_AVERAGE_OUTPUT_MODE_ON    =   ( 1U << 5U ), /*!<  Twice moving average Output Mode ON                   */
-    MAMOD_WICE_MOVING_AVERAGE_OUTPUT_MODE_OFF   =   ( 0U << 5U )  /*!<  Twice moving average Output Mode OFF                  */
+    MAMOD_WICE_MOVING_AVERAGE_OUTPUT_MODE_OFF   =   ( 0U << 5U )  /*!<  Twice moving average Output Mode OFF        ( RESET ) */
 } AMG8833_mamod_t;
 
 
