@@ -82,7 +82,7 @@ void conf_GPIO  ( void )
 
 /**
  * @brief       void conf_TIMER0  ( void )
- * @details     One channel. Channel zero at 1s.
+ * @details     One channel. Channel zero at 10s.
  *
  *              Timer0:
  *                  * Prescaler:            5   ( f_Timer0 = 500kHz ( PCLK1M ) ).
@@ -90,7 +90,7 @@ void conf_GPIO  ( void )
  *                  * Interrupt Enabled.
  *
  *                 --- Channel 0:
- *                  * Overflow:             ( 8*62500 * (f_Timer0)^(-1) ) = ( 8*62500 * (500kHz)^(-1) ) ~ 1s
+ *                  * Overflow:             ( 8*625000 * (f_Timer0)^(-1) ) = ( 8*625000 * (500kHz)^(-1) ) ~ 10s
  *
  *
  * @param[in]    N/A.
@@ -102,7 +102,8 @@ void conf_GPIO  ( void )
  *
  * @author      Manuel Caballero
  * @date        7/December/2018
- * @version     7/December/2018   The ORIGIN
+ * @version     25/December/2018  Overflow every 10s.
+ *              7/December/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -114,7 +115,7 @@ void conf_TIMER0  ( void )
   NRF_TIMER0->BITMODE     =   ( TIMER_BITMODE_BITMODE_32Bit << TIMER_BITMODE_BITMODE_Pos );               // 32 bit mode.
   NRF_TIMER0->TASKS_CLEAR =   1UL;                                                                        // clear the task first to be usable for later.
 
-  NRF_TIMER0->CC[0]       =   ( 8*62500 );                                                                // ( 8*62500 * (f_Timer0)^(-1) ) = ( 8*62500 * (500kHz)^(-1) ) ~ 1s
+  NRF_TIMER0->CC[0]       =   ( 8*625000 );                                                               // ( 8*625000 * (f_Timer0)^(-1) ) = ( 8*625000 * (500kHz)^(-1) ) ~ 10s
 
   NRF_TIMER0->INTENSET    =   ( TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos );
   
