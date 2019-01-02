@@ -223,7 +223,8 @@ typedef enum
 {
     RST_MASK                  =   0xFF,         /*!<  RST mask                                                      */
     RST_FLAG_RESET            =   0x30,         /*!<  Flag reset                                                    */
-    RST_INITIAL_RESET         =   0x3F          /*!<  Initial reset reset                                           */
+    RST_INITIAL_RESET         =   0x3F,         /*!<  Initial reset reset                                           */
+    RST_RESUME_FROM_RESET     =   0x00          /*!<  Resume from reset                                             */
 } AMG8833_rst_t;
 
 
