@@ -569,7 +569,8 @@ AMG8833_status_t  AMG8833_SetHysteresisLevel ( I2C_parameters_t myI2Cparameters,
  *
  * @author      Manuel Caballero
  * @date        24/December/2018
- * @version     24/December/2018   The ORIGIN
+ * @version     2/January/2018     Updated to auto-increment feature.
+ *              24/December/2018   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -719,7 +720,8 @@ AMG8833_status_t  AMG8833_GetPixelInterruptTable ( I2C_parameters_t myI2Cparamet
  *
  * @author      Manuel Caballero
  * @date        24/December/2018
- * @version     24/December/2018   The ORIGIN
+ * @version     2/January/2018    Updated to auto-increment feature
+ *              24/December/2018  The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -736,11 +738,11 @@ AMG8833_status_t  AMG8833_GetPixelRawTemperatures ( I2C_parameters_t myI2Cparame
     
     
 
-    for ( i = 0U; i < ( 64U - 1U ); i++ )
+    for ( i = 0U; i < ( 64U ); i++ )
     {
-      myPixelRawTemperatureData->pixelOutputRawValues[i]    = cmd[i + 1U];
+      myPixelRawTemperatureData->pixelOutputRawValues[i]    = cmd[( i << 1U ) + 1U];
       myPixelRawTemperatureData->pixelOutputRawValues[i]  <<= 8U;
-      myPixelRawTemperatureData->pixelOutputRawValues[i]   |= cmd[i];
+      myPixelRawTemperatureData->pixelOutputRawValues[i]   |= cmd[( i << 1U )];
     }
 
 
