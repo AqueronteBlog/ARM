@@ -575,25 +575,18 @@ AMG8833_status_t  AMG8833_SetHysteresisLevel ( I2C_parameters_t myI2Cparameters,
  */
 AMG8833_status_t  AMG8833_GetThermistorRawData ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myThermistorRawData )
 {
-    uint8_t      cmd  =  0U;
+    uint8_t      cmd[2]  =  { 0U };
     i2c_status_t aux;
 
-    /* Read the register: TTHH */
-    cmd   =   AMG8833_TTHH;
-    aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-    aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+    /* Read the register */
+    cmd[0]   =   AMG8833_TTHL;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
     /* Parse the data  */
-    myThermistorRawData->termistorOutputRawValue   =   cmd;
+    myThermistorRawData->termistorOutputRawValue   =   cmd[1];
     myThermistorRawData->termistorOutputRawValue <<=   8U;
-
-    /* Read the register: TTHL */
-    cmd   =   AMG8833_TTHL;
-    aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-    aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
-
-    /* Parse the data  */
-    myThermistorRawData->termistorOutputRawValue  |=   cmd;
+    myThermistorRawData->termistorOutputRawValue  |=   cmd[0];
 
 
 
@@ -732,30 +725,22 @@ AMG8833_status_t  AMG8833_GetPixelInterruptTable ( I2C_parameters_t myI2Cparamet
  */
 AMG8833_status_t  AMG8833_GetPixelRawTemperatures ( I2C_parameters_t myI2Cparameters, AMG8833_data_t* myPixelRawTemperatureData )
 {
-    uint8_t     cmd           =  0U;
+    uint8_t     cmd[128]      =  { 0U };
     uint8_t     i             =  0U;
-    uint8_t     myPixels[128] = { 0U };
-    uint8_t*    myPixelsPtr;
     i2c_status_t aux;
 
-    myPixelsPtr  =   &myPixels[127];
-
     /* Get pixel raw temperature value */
-    for ( i = AMG8833_T64H; i >= AMG8833_T01L; i-- )
-    {
-      aux   =   i2c_write ( myI2Cparameters, &i, 1U, I2C_NO_STOP_BIT );
-      aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+    cmd[0]   =   AMG8833_T01L;
+    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+    
+    
 
-      *myPixelsPtr  =   cmd;
-      myPixelsPtr--;
-    }
-    
-    
     for ( i = 0U; i < ( 64U - 1U ); i++ )
     {
-      myPixelRawTemperatureData->pixelOutputRawValues[i]    = myPixels[i + 1U];
+      myPixelRawTemperatureData->pixelOutputRawValues[i]    = cmd[i + 1U];
       myPixelRawTemperatureData->pixelOutputRawValues[i]  <<= 8U;
-      myPixelRawTemperatureData->pixelOutputRawValues[i]   |= myPixels[i];
+      myPixelRawTemperatureData->pixelOutputRawValues[i]   |= cmd[i];
     }
 
 
