@@ -78,18 +78,25 @@ int main(void)
   aux  =   AMG8833_SetOperationMode ( myAMG8833_I2C_parameters, myAMG8833_Data );
   
   /* Reset the device by software  */
-//  aux  =   AMG8833_SoftwareReset  ( myAMG8833_I2C_parameters, RST_FLAG_RESET );
-//  nrf_delay_ms ( 500 );
+  aux  =   AMG8833_SoftwareReset  ( myAMG8833_I2C_parameters, RST_INITIAL_RESET );
+  nrf_delay_ms ( 500 );
 
   /* Set frame rate: 10 FPSC   */
   aux  =   AMG8833_SetFrameMode     ( myAMG8833_I2C_parameters, FPSC_10FPS );
 
-//  /* Set moving average Output Mode: OFF   */
-//  aux  =   AMG8833_SetAverageOutputMode ( myAMG8833_I2C_parameters, MAMOD_WICE_MOVING_AVERAGE_OUTPUT_MODE_OFF );
-//  
-//  /* Clear all flags   */
-//  aux  =   AMG8833_ClearFlags       ( myAMG8833_I2C_parameters, ( OVT_CLR_THERMISTOR_TEMPERATURE_OVERFLOW_CLEAR_FLAG | OVS_CLR_TEMPERATURE_OVERFLOW_CLEAR_FLAG | INTCLR_INTERRUPT_OUTBREAK_CLEAR_FLAG ) );
-//  
+  /* Set moving average Output Mode: OFF   */
+  aux  =   AMG8833_SetAverageOutputMode ( myAMG8833_I2C_parameters, MAMOD_WICE_MOVING_AVERAGE_OUTPUT_MODE_OFF );
+  
+  /* Clear all flags   */
+  aux  =   AMG8833_ClearFlags       ( myAMG8833_I2C_parameters, ( OVT_CLR_THERMISTOR_TEMPERATURE_OVERFLOW_CLEAR_FLAG | OVS_CLR_TEMPERATURE_OVERFLOW_CLEAR_FLAG | INTCLR_INTERRUPT_OUTBREAK_CLEAR_FLAG ) );
+  
+  /* Resume from reset state  */
+  aux  =   AMG8833_SoftwareReset  ( myAMG8833_I2C_parameters, RST_RESUME_FROM_RESET );
+  nrf_delay_ms ( 500 );
+
+  /* Put the device in Stand-by ( new data every 10 seconds ) mode  */
+  myAMG8833_Data.operationMode   =   PCTL_STANDBY_10SEC_MODE;
+  aux  =   AMG8833_SetOperationMode ( myAMG8833_I2C_parameters, myAMG8833_Data );
   
     
   myState  =   0;                             // Reset the variable
