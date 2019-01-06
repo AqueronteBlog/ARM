@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     This example shows how to work with the external device: AMG8833. Every 1 seconds, a new
+ * @details     This example shows how to work with the external device: AMG8833. Every 10 seconds, a new
  *              sample is performed and transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
