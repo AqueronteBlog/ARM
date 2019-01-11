@@ -3,6 +3,9 @@
  * @details     This example shows how to work with the external device: AMG8833. Every 10 seconds, a new
  *              sample is performed and transmitted through the UART ( Baud Rate: 230400 ).
  *
+ *              NOTE:
+ *                Thermistor temperature is transmitted through the UART, use breakpoint to see pixels temperature.
+ *
  *              The microcontroller is in low power the rest of the time.
  *
  *
@@ -126,7 +129,7 @@ int main(void)
 
 
       /* Transmit result through the UART  */
-      sprintf ( (char*)myMessage, "Temp: %d C\r\n", (int32_t)( myAMG8833_Data.termistorOutputValue ) );
+      sprintf ( (char*)myMessage, "Temp: %d C\r\n", (int16_t)( myAMG8833_Data.termistorOutputValue ) );
 
       NRF_UART0->TASKS_STOPRX  =   1UL;
       NRF_UART0->TASKS_STOPTX  =   1UL;
