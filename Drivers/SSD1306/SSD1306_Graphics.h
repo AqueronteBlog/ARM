@@ -1,6 +1,6 @@
 /**
  * @brief       SSD1306_Graphics.h
- * @details     Graphics functionalities fro 128 x 64 Dot Matrix OLED/PLED Segment/Common Driver with Controller.
+ * @details     Graphics functionalities for 128 x 64 Dot Matrix OLED/PLED Segment/Common Driver with Controller.
  *              Header file.
  *
  *

@@ -813,8 +813,8 @@ SSD1306_status_t  SSD1306_SetHorizontalScrollSetup ( I2C_parameters_t myI2Cparam
     cmd[3]   =   myStartPageAddr;                                                                           // Data byte ( start page )
     cmd[4]   =   myFrames;                                                                                  // Data byte ( frame frequency )
     cmd[5]   =   myEndPageAddr;                                                                             // Data byte ( end page )
-    cmd[6]  =   0x00;                                                                                      // Data byte ( dummy byte ) 
-    cmd[7]  =   0xFF;                                                                                      // Data byte ( dummy byte ) 
+    cmd[6]   =   0x00;                                                                                      // Data byte ( dummy byte ) 
+    cmd[7]   =   0xFF;                                                                                      // Data byte ( dummy byte ) 
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -868,7 +868,7 @@ SSD1306_status_t  SSD1306_SetContinuousHorizontalVerticalScrollSetup ( I2C_param
     cmd[3]   =   myStartPageAddr;                                                                           // Data byte ( start page )
     cmd[4]   =   myFrames;                                                                                  // Data byte ( frame frequency )
     cmd[5]   =   myEndPageAddr;                                                                             // Data byte ( end page )
-    cmd[6]  =   myVerticalScrollingOffset;                                                                 // Data byte ( Vertical scrolling offset )  
+    cmd[6]   =   myVerticalScrollingOffset;                                                                 // Data byte ( Vertical scrolling offset )  
     aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
