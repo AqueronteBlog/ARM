@@ -279,7 +279,9 @@ typedef enum
  */
 typedef enum
 {
-    HOURS_AMPM_MASK                           =   ( 1U << 5U )      /*!<  AMPM mask                                             */
+    HOURS_AMPM_MASK                           =   ( 1U << 5U ),     /*!<  AMPM mask                                             */
+    HOURS_AMPM_AM                             =   ( 0U << 5U ),     /*!<  AMPM: AM mode                                         */
+    HOURS_AMPM_PM                             =   ( 1U << 5U )      /*!<  AMPM: PM mode                                         */
 } PCF85063_hours_ampm_t;
 
 
@@ -407,26 +409,19 @@ typedef enum
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef PCF85063_VECTOR_STRUCT_H
 #define PCF85063_VECTOR_STRUCT_H
 typedef struct
 {
-    uint8_t data;
-} PCF85063_vector_data_t;
+    PCF85063_control_1_12_24_t    Time12H_24HMode;                    /*!<  Time mode: 12-hour or 24-hour mode                    */
+    PCF85063_hours_ampm_t         TimeAM_PM_Mode;                     /*!<  AM/PM mode ( only for 12-hour mode )                  */
+
+    uint32_t                      BCDtime;                            /*!<  Time ( HHMMSS ) in BCD format                         */
+    uint8_t                       BCDday;                             /*!<  Day number in BCD format                              */
+    PCF85063_weekdays_weekdays_t  weekday;                            /*!<  Weekday                                               */
+    PCF85063_months_months_t      BCDmonth;                           /*!<  Month  in BCD format                                  */
+    uint8_t                       BCDyear;                            /*!<  Year in BCD format                                    */
+} PCF85063_data_t;
 #endif
 
 
@@ -447,6 +442,114 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-PCF85063_status_t  PCF85063_Init      ( I2C_parameters_t myI2Cparameters );
-PCF85063_status_t  PCF85063_SetPins   ( I2C_parameters_t myI2Cparameters, PCF85063_vector_data_t  myConfDATA );
-PCF85063_status_t  PCF85063_ReadPins  ( I2C_parameters_t myI2Cparameters, PCF85063_vector_data_t* myReadDATA );
+/** It configures the I2C peripheral.
+  */
+PCF85063_status_t  PCF85063_Init                              ( I2C_parameters_t myI2Cparameters                                                                );
+
+/** It sets the external clock test mode.
+  */
+PCF85063_status_t  PCF85063_SetTestMode                       ( I2C_parameters_t myI2Cparameters, PCF85063_control_1_ext_test_t myEXT_TEST                      );
+
+/** It sets the RTC clock mode.
+  */
+PCF85063_status_t  PCF85063_SetRTCMode                        ( I2C_parameters_t myI2Cparameters, PCF85063_control_1_stop_t mySTOP                              );
+
+/** It performs a software reset.
+  */
+PCF85063_status_t  PCF85063_SoftwareReset                     ( I2C_parameters_t myI2Cparameters                                                                );
+
+/** It sets the correction interrupt mode.
+  */
+PCF85063_status_t  PCF85063_SetCorrectionInterruptMode        ( I2C_parameters_t myI2Cparameters, PCF85063_control_1_cie_t myCIE                                );
+
+/** It sets 12 or 24 hour mode.
+  */
+PCF85063_status_t  PCF85063_Set12_24_HourMode                 ( I2C_parameters_t myI2Cparameters, PCF85063_control_1_12_24_t my12_24                            );
+
+/** It sets the internal oscillator capacitor.
+  */
+PCF85063_status_t  PCF85063_SetInternalOscillatorCapacitor    ( I2C_parameters_t myI2Cparameters, PCF85063_control_1_cap_sel_t myCAP_SEL                        );
+
+/** It enables/disables minute/half minute interrupt.
+  */
+PCF85063_status_t  PCF85063_SetMinuteInterrupts               ( I2C_parameters_t myI2Cparameters, PCF85063_control_2_mi_t myMI, PCF85063_control_2_hmi_t myHMI  );
+
+/** It gets the status of the timer flag.
+  */
+PCF85063_status_t  PCF85063_GetTimerFlag                      ( I2C_parameters_t myI2Cparameters, PCF85063_control_2_tf_t* myTF                                 );
+
+/** It resets the status of the timer flag.
+  */
+PCF85063_status_t  PCF85063_ClearTimerFlag                    ( I2C_parameters_t myI2Cparameters                                                                );
+
+/** It sets the clock output frequency.
+  */
+PCF85063_status_t  PCF85063_SetClockOutputFrequency           ( I2C_parameters_t myI2Cparameters, PCF85063_control_2_cof_t myCOF                                );
+
+/** It sets the offset.
+  */
+PCF85063_status_t  PCF85063_SetOffset                         ( I2C_parameters_t myI2Cparameters, PCF85063_offset_mode_t myMODE, int8_t myOFFSET                );
+
+/** It writes into the RAM byte register.
+  */
+PCF85063_status_t  PCF85063_WriteByteRAM                      ( I2C_parameters_t myI2Cparameters, int8_t myData                                                 );
+
+/** It reads the RAM byte register.
+  */
+PCF85063_status_t  PCF85063_ReadByteRAM                       ( I2C_parameters_t myI2Cparameters, int8_t* myData                                                );
+
+/** It checks oscillator clock integrity flag.
+  */
+PCF85063_status_t  PCF85063_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters, PCF85063_seconds_os_t* myOS                                   );
+
+/** It clears oscillator clock integrity flag.
+  */
+PCF85063_status_t  PCF85063_ClearOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters                                                                );
+
+/** It sets the AM/PM indicator ( only for 12-hour mode ).
+  */
+PCF85063_status_t  PCF85063_SetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myAM_PM_Indicator                             );
+
+/** It gets the AM/PM indicator ( only for 12-hour mode ).
+  */
+PCF85063_status_t  PCF85063_GetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myAM_PM_Indicator                            );
+
+/** It gets the day ( BCD format ).
+  */
+PCF85063_status_t  PCF85063_GetDay                            ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myActualDay                                  );
+
+/** It sets the day ( BCD format ).
+  */
+PCF85063_status_t  PCF85063_SetDay                            ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myNewDay                                      );
+
+/** It gets the weekday.
+  */
+PCF85063_status_t  PCF85063_GetWeekday                        ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myActualWeekday                              );
+
+/** It sets the weekday.
+  */
+PCF85063_status_t  PCF85063_SetWeekday                        ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myNewWeekday                                  );
+
+/** It gets the month ( BCD format ).
+  */
+PCF85063_status_t  PCF85063_GetMonth                          ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myActualMonth                                );
+
+/** It sets the month ( BCD format ).
+  */
+PCF85063_status_t  PCF85063_SetMonth                          ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myNewMonth                                    );
+
+/** It gets the time ( BCD format ).
+  */
+PCF85063_status_t  PCF85063_GetTime                           ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myActualTime                                 );
+
+/** It sets the time ( BCD format ).
+  */
+PCF85063_status_t  PCF85063_SetTime                           ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myNewTime                                     );
+
+/** It gets the year ( BCD format ).
+  */
+PCF85063_status_t  PCF85063_GetYear                           ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myActualYear                                 );
+
+/** It sets the year ( BCD format ).
+  */
+PCF85063_status_t  PCF85063_SetYear                           ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myNewYear                                     );
