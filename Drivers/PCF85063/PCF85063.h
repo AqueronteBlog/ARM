@@ -421,6 +421,9 @@ typedef struct
     PCF85063_weekdays_weekdays_t  weekday;                            /*!<  Weekday                                               */
     PCF85063_months_months_t      BCDmonth;                           /*!<  Month  in BCD format                                  */
     uint8_t                       BCDyear;                            /*!<  Year in BCD format                                    */
+
+    int8_t                        ramByte;                            /*!<  RAM byte                                              */
+    PCF85063_seconds_os_t         os;                                 /*!<  Oscillator flag                                       */
 } PCF85063_data_t;
 #endif
 
@@ -464,7 +467,7 @@ PCF85063_status_t  PCF85063_SetCorrectionInterruptMode        ( I2C_parameters_t
 
 /** It sets 12 or 24 hour mode.
   */
-PCF85063_status_t  PCF85063_Set12_24_HourMode                 ( I2C_parameters_t myI2Cparameters, PCF85063_control_1_12_24_t my12_24                            );
+PCF85063_status_t  PCF85063_Set12_24_HourMode                 ( I2C_parameters_t myI2Cparameters, PCF85063_data_t my12_24                                       );
 
 /** It sets the internal oscillator capacitor.
   */
@@ -492,15 +495,15 @@ PCF85063_status_t  PCF85063_SetOffset                         ( I2C_parameters_t
 
 /** It writes into the RAM byte register.
   */
-PCF85063_status_t  PCF85063_WriteByteRAM                      ( I2C_parameters_t myI2Cparameters, int8_t myData                                                 );
+PCF85063_status_t  PCF85063_WriteByteRAM                      ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myData                                        );
 
 /** It reads the RAM byte register.
   */
-PCF85063_status_t  PCF85063_ReadByteRAM                       ( I2C_parameters_t myI2Cparameters, int8_t* myData                                                );
+PCF85063_status_t  PCF85063_ReadByteRAM                       ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myData                                       );
 
 /** It checks oscillator clock integrity flag.
   */
-PCF85063_status_t  PCF85063_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters, PCF85063_seconds_os_t* myOS                                   );
+PCF85063_status_t  PCF85063_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myOS                                         );
 
 /** It clears oscillator clock integrity flag.
   */
