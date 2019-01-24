@@ -891,3 +891,371 @@ PCF85063_status_t  PCF85063_GetAM_PM_Indicator ( I2C_parameters_t myI2Cparameter
     return   PCF85063_FAILURE;
   }
 }
+
+
+
+/**
+ * @brief       PCF85063_GetDay ( I2C_parameters_t , PCF85063_data_t* )
+ *
+ * @details     It gets the day ( BCD format ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myActualDay:     Current day.
+ *
+ *
+ * @return       Status of PCF85063_GetDay.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/January/2019
+ * @version     24/January/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF85063_status_t  PCF85063_GetDay ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myActualDay )
+{
+  uint8_t      cmd  =  0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd      =   PCF85063_DAYS;
+  aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
+  
+  /* Parse the data  */
+  myActualDay->BCDday  =   ( cmd & ( DAYS_DAYS_TEN_PLACE_MASK | DAYS_DAYS_UNIT_PLACE_MASK ) );
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF85063_SUCCESS;
+  }
+  else
+  {
+    return   PCF85063_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       PCF85063_SetDay ( I2C_parameters_t , PCF85063_data_t )
+ *
+ * @details     It sets the day ( BCD format ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myNewDay:        New day ( BCD format ).
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of PCF85063_SetDay.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/January/2019
+ * @version     24/January/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF85063_status_t  PCF85063_SetDay ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myNewDay )
+{
+  uint8_t      cmd[2]  =  { 0U };
+  i2c_status_t aux;
+
+  /* Update the register   */
+  cmd[0]   =   PCF85063_DAYS;
+  cmd[1]   =   ( myNewDay.BCDday & ( DAYS_DAYS_TEN_PLACE_MASK | DAYS_DAYS_UNIT_PLACE_MASK ) );
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF85063_SUCCESS;
+  }
+  else
+  {
+    return   PCF85063_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       PCF85063_GetWeekday ( I2C_parameters_t , PCF85063_data_t* )
+ *
+ * @details     It gets the weekday.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myActualWeekday: Current weekday.
+ *
+ *
+ * @return       Status of PCF85063_GetWeekday.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/January/2019
+ * @version     24/January/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF85063_status_t  PCF85063_GetWeekday ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myActualWeekday )
+{
+  uint8_t      cmd  =  0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd      =   PCF85063_WEEKDAYS;
+  aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
+  
+  /* Parse the data  */
+  myActualWeekday->weekday  =   ( cmd & WEEKDAYS_WEEKDAYS_MASK );
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF85063_SUCCESS;
+  }
+  else
+  {
+    return   PCF85063_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       PCF85063_SetWeekday ( I2C_parameters_t , PCF85063_data_t )
+ *
+ * @details     It sets the weekday.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myNewWeekday:    New weekday.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of PCF85063_SetWeekday.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/January/2019
+ * @version     24/January/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF85063_status_t  PCF85063_SetWeekday ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myNewWeekday )
+{
+  uint8_t      cmd[2]  =  { 0U };
+  i2c_status_t aux;
+
+  /* Update the register   */
+  cmd[0]   =   PCF85063_WEEKDAYS;
+  cmd[1]   =   myNewWeekday.weekday;
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF85063_SUCCESS;
+  }
+  else
+  {
+    return   PCF85063_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       PCF85063_GetMonth ( I2C_parameters_t , PCF85063_data_t* )
+ *
+ * @details     It gets the month ( BCD format ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myActualMonth:   Current month.
+ *
+ *
+ * @return       Status of PCF85063_GetMonth.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/January/2019
+ * @version     24/January/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF85063_status_t  PCF85063_GetMonth ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myActualMonth )
+{
+  uint8_t      cmd  =  0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd      =   PCF85063_MONTHS;
+  aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
+  
+  /* Parse the data  */
+  myActualMonth->BCDmonth  =   ( cmd & MONTHS_MONTHS_MASK );
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF85063_SUCCESS;
+  }
+  else
+  {
+    return   PCF85063_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       PCF85063_SetMonth ( I2C_parameters_t , PCF85063_data_t )
+ *
+ * @details     It sets the month ( BCD format ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myNewMonth:      New month.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of PCF85063_SetMonth.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/January/2019
+ * @version     24/January/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF85063_status_t  PCF85063_SetMonth ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myNewMonth )
+{
+  uint8_t      cmd[2]  =  { 0U };
+  i2c_status_t aux;
+
+  /* Update the register   */
+  cmd[0]   =   PCF85063_MONTHS;
+  cmd[1]   =   myNewMonth.BCDmonth;
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF85063_SUCCESS;
+  }
+  else
+  {
+    return   PCF85063_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       PCF85063_GetYear ( I2C_parameters_t , PCF85063_data_t* )
+ *
+ * @details     It gets the year ( BCD format ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myActualYear:    Current year.
+ *
+ *
+ * @return       Status of PCF85063_GetYear.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/January/2019
+ * @version     24/January/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF85063_status_t  PCF85063_GetYear ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myActualYear )
+{
+  uint8_t      cmd  =  0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd      =   PCF85063_YEARS;
+  aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
+  
+  /* Parse the data  */
+  myActualYear->BCDyear  =   cmd;
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF85063_SUCCESS;
+  }
+  else
+  {
+    return   PCF85063_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       PCF85063_SetYear ( I2C_parameters_t , PCF85063_data_t )
+ *
+ * @details     It sets the year ( BCD format ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myNewYear:       New year.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of PCF85063_SetYear.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/January/2019
+ * @version     24/January/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF85063_status_t  PCF85063_SetYear ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myNewYear )
+{
+  uint8_t      cmd[2]  =  { 0U };
+  i2c_status_t aux;
+
+  /* Update the register   */
+  cmd[0]   =   PCF85063_YEARS;
+  cmd[1]   =   myNewYear.BCDyear;
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF85063_SUCCESS;
+  }
+  else
+  {
+    return   PCF85063_FAILURE;
+  }
+}
