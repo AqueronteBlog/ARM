@@ -1259,3 +1259,123 @@ PCF85063_status_t  PCF85063_SetYear ( I2C_parameters_t myI2Cparameters, PCF85063
     return   PCF85063_FAILURE;
   }
 }
+
+
+
+/**
+ * @brief       PCF85063_GetTime ( I2C_parameters_t , PCF85063_data_t* )
+ *
+ * @details     It gets the time ( BCD format ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myActualTime:    Current time ( BCD format: HHMMSS ).
+ *
+ *
+ * @return       Status of PCF85063_GetTime.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/January/2019
+ * @version     24/January/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF85063_status_t  PCF85063_GetTime ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myActualTime )
+{
+  uint8_t      cmd[3]  =  { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]   =   PCF85063_SECONDS;
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+  
+  /* Parse the data  */
+  if ( myActualTime->Time12H_24HMode == CONTROL_1_12_24_24_HOUR_MODE )
+  {
+    myActualTime->BCDtime   =   ( cmd[2] & ( HOURS_24_HOUR_MODE_TEN_PLACE_MASK | HOURS_HOURS_UNIT_PLACE_MASK ) );
+  }
+  else
+  {
+    myActualTime->BCDtime   =   ( cmd[2] & ( HOURS_12_HOUR_MODE_TEN_PLACE_MASK | HOURS_HOURS_UNIT_PLACE_MASK ) );
+  }
+
+  myActualTime->BCDtime <<=   8U;
+  myActualTime->BCDtime  |=   ( cmd[1] & ( MINUTES_MINUTES_TEN_PLACE_MASK | MINUTES_MINUTES_UNIT_PLACE_MASK ) );
+  myActualTime->BCDtime <<=   8U;
+  myActualTime->BCDtime  |=   ( cmd[0] & ( SECONDS_SECONDS_TEN_PLACE_MASK | SECONDS_SECONDS_UNIT_PLACE_MASK ) );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF85063_SUCCESS;
+  }
+  else
+  {
+    return   PCF85063_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       PCF85063_SetTime ( I2C_parameters_t , PCF85063_data_t )
+ *
+ * @details     It sets the time ( BCD format ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myNewTime:       New current time ( BCD format: HHMMSS ).
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of PCF85063_SetTime.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/January/2019
+ * @version     24/January/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF85063_status_t  PCF85063_SetTime ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myNewTime )
+{
+  uint8_t      cmd[4]  =  { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]   =   PCF85063_SECONDS;
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 3U );
+  
+  /* Mask it and update the register  */
+  cmd[1]  &=  ~( SECONDS_SECONDS_TEN_PLACE_MASK | SECONDS_SECONDS_UNIT_PLACE_MASK );
+  cmd[1]  |=   (uint8_t)( myNewTime.BCDtime & 0x0000FF );
+  cmd[2]  &=  ~( MINUTES_MINUTES_TEN_PLACE_MASK | MINUTES_MINUTES_UNIT_PLACE_MASK );
+  cmd[2]  |=   (uint8_t)( ( myNewTime.BCDtime & 0x00FF00 ) >> 8U );
+
+  if ( myNewTime.Time12H_24HMode == CONTROL_1_12_24_24_HOUR_MODE )
+  {
+    cmd[3]  &=  ~( HOURS_24_HOUR_MODE_TEN_PLACE_MASK | HOURS_HOURS_UNIT_PLACE_MASK );
+  }
+  else
+  {
+    cmd[3]  &=  ~( HOURS_12_HOUR_MODE_TEN_PLACE_MASK | HOURS_HOURS_UNIT_PLACE_MASK );
+  }
+  cmd[3]  |=   (uint8_t)( ( myNewTime.BCDtime & 0xFF0000 ) >> 16U );
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF85063_SUCCESS;
+  }
+  else
+  {
+    return   PCF85063_FAILURE;
+  }
+}
