@@ -250,7 +250,7 @@ PCF85063_status_t  PCF85063_SetCorrectionInterruptMode ( I2C_parameters_t myI2Cp
 
 
 /**
- * @brief       PCF85063_Set12_24_HourMode ( I2C_parameters_t , PCF85063_control_1_12_24_t )
+ * @brief       PCF85063_Set12_24_HourMode ( I2C_parameters_t , PCF85063_data_t )
  *
  * @details     It sets 12 or 24 hour mode.
  *
@@ -269,7 +269,7 @@ PCF85063_status_t  PCF85063_SetCorrectionInterruptMode ( I2C_parameters_t myI2Cp
  * @pre         N/A
  * @warning     N/A.
  */
-PCF85063_status_t  PCF85063_Set12_24_HourMode ( I2C_parameters_t myI2Cparameters, PCF85063_control_1_12_24_t my12_24 )
+PCF85063_status_t  PCF85063_Set12_24_HourMode ( I2C_parameters_t myI2Cparameters, PCF85063_data_t my12_24 )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
@@ -280,7 +280,7 @@ PCF85063_status_t  PCF85063_Set12_24_HourMode ( I2C_parameters_t myI2Cparameters
   aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
   
   /* Mask it and update it with the new value  */
-  cmd[1]   =   ( ( cmd[1] & ~CONTROL_1_12_24_MASK ) | my12_24 );
+  cmd[1]   =   ( ( cmd[1] & ~CONTROL_1_12_24_MASK ) | my12_24.Time12H_24HMode );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -596,7 +596,7 @@ PCF85063_status_t  PCF85063_SetOffset ( I2C_parameters_t myI2Cparameters, PCF850
 
 
 /**
- * @brief       PCF85063_WriteByteRAM ( I2C_parameters_t , int8_t )
+ * @brief       PCF85063_WriteByteRAM ( I2C_parameters_t , PCF85063_data_t )
  *
  * @details     It writes into the RAM byte register.
  *
@@ -615,14 +615,14 @@ PCF85063_status_t  PCF85063_SetOffset ( I2C_parameters_t myI2Cparameters, PCF850
  * @pre         N/A
  * @warning     N/A.
  */
-PCF85063_status_t  PCF85063_WriteByteRAM ( I2C_parameters_t myI2Cparameters, int8_t myData )
+PCF85063_status_t  PCF85063_WriteByteRAM ( I2C_parameters_t myI2Cparameters, PCF85063_data_t myData )
 {
   uint8_t      cmd[2]  =  { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
   cmd[0]   =   PCF85063_RAM_BYTE;
-  cmd[1]   =   myData;
+  cmd[1]   =   myData.ramByte;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -641,7 +641,7 @@ PCF85063_status_t  PCF85063_WriteByteRAM ( I2C_parameters_t myI2Cparameters, int
 
 
 /**
- * @brief       PCF85063_ReadByteRAM ( I2C_parameters_t , int8_t* )
+ * @brief       PCF85063_ReadByteRAM ( I2C_parameters_t , PCF85063_data_t* )
  *
  * @details     It writes into the RAM byte register.
  *
@@ -659,7 +659,7 @@ PCF85063_status_t  PCF85063_WriteByteRAM ( I2C_parameters_t myI2Cparameters, int
  * @pre         N/A
  * @warning     N/A.
  */
-PCF85063_status_t  PCF85063_ReadByteRAM ( I2C_parameters_t myI2Cparameters, int8_t* myData )
+PCF85063_status_t  PCF85063_ReadByteRAM ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myData )
 {
   uint8_t      cmd  =  0U;
   i2c_status_t aux;
@@ -670,7 +670,7 @@ PCF85063_status_t  PCF85063_ReadByteRAM ( I2C_parameters_t myI2Cparameters, int8
   aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
   
   /* Parse the data  */
-  *myData   =   cmd;
+  myData->ramByte   =   cmd;
 
 
 
@@ -688,7 +688,7 @@ PCF85063_status_t  PCF85063_ReadByteRAM ( I2C_parameters_t myI2Cparameters, int8
 
 
 /**
- * @brief       PCF85063_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t , PCF85063_seconds_os_t* )
+ * @brief       PCF85063_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t , PCF85063_data_t* )
  *
  * @details     It checks oscillator clock integrity flag.
  *
@@ -706,7 +706,7 @@ PCF85063_status_t  PCF85063_ReadByteRAM ( I2C_parameters_t myI2Cparameters, int8
  * @pre         N/A
  * @warning     N/A.
  */
-PCF85063_status_t  PCF85063_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters, PCF85063_seconds_os_t* myOS )
+PCF85063_status_t  PCF85063_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters, PCF85063_data_t* myOS )
 {
   uint8_t      cmd  =  0U;
   i2c_status_t aux;
@@ -717,7 +717,7 @@ PCF85063_status_t  PCF85063_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t
   aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
   
   /* Parse the data  */
-  *myOS   =   cmd;
+  myOS->os   =   cmd;
 
 
 
