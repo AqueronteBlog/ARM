@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: PCF85063. Every 10 seconds, a new
- *              sample is performed and transmitted through the UART ( Baud Rate: 230400 ).
+ * @details     [TODO]This example shows how to work with the external device: PCF85063. Every 1 seconds, a new
+ *              time and date is read from the device and the data is transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
  *
