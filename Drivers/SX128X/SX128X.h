@@ -21,35 +21,22 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESS
+  * @brief   LIST OF COMMANDS
   */
 typedef enum
 {
-  SX128X_ADDRESS     =   0b1010001                                  /*!<   I2C slave address byte                       */
-} SX128X_address_t;
-
-
-
-/**
-  * @brief   REGISTERS ORGANIZATION
-  */
-typedef enum
-{
-  /* CONTROL AND STATUS REGISTERS  */
-  SX128X_CONTROL_1  =   0x00,                                       /*!<  Control and status register 1                 */
-  SX128X_CONTROL_2  =   0x01,                                       /*!<  Control and status register 2                 */
-  SX128X_OFFSET     =   0x02,                                       /*!<  Offset register                               */
-  SX128X_RAM_BYTE   =   0x03,                                       /*!<  RAM byte register                             */
-
-  /* TIME AND DATE REGISTERS  */
-  SX128X_SECONDS    =   0x04,                                       /*!<  Seconds register                              */
-  SX128X_MINUTES    =   0x05,                                       /*!<  Minutes register                              */
-  SX128X_HOURS      =   0x06,                                       /*!<  Hours register                                */
-  SX128X_DAYS       =   0x07,                                       /*!<  Days register                                 */
-  SX128X_WEEKDAYS   =   0x08,                                       /*!<  Weekdays register                             */
-  SX128X_MONTHS     =   0x09,                                       /*!<  Months register                               */
-  SX128X_YEARS      =   0x0A                                        /*!<  Years register                                */
-} SX128X_registers_organization_t;
+  SX128X_GET_STATUS     =   0x00,                                       /*!<  Control and status register 1                 */
+  SX128X_WRITE_REGISTER =   0x01,                                       /*!<  Control and status register 2                 */
+  SX128X_READ_REGISTER  =   0x02,                                       /*!<  Offset register                               */
+  SX128X_WRITE_BUFFER   =   0x03,                                       /*!<  RAM byte register                             */
+  SX128X_READ_BUFFER    =   0x04,                                       /*!<  Seconds register                              */
+  SX128X_SET_SLEEP      =   0x05,                                       /*!<  Minutes register                              */
+  SX128X_SET_STANDBY    =   0x06,                                       /*!<  Hours register                                */
+  SX128X_SET_FS         =   0x07,                                       /*!<  Days register                                 */
+  SX128X_SET_TX             =   0x08,                                       /*!<  Weekdays register                             */
+  SX128X_SET_RX             =   0x09,                                       /*!<  Months register                               */
+  SX128X_SET_RX_DUTY_CYCLE      =   0x0A                                        /*!<  Years register                                */
+} SX128X_commands_t;
 
 
 
