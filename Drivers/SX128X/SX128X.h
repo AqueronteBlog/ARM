@@ -504,27 +504,3 @@ SX128X_status_t  SX128X_SetClockOutputFrequency           ( SPI_parameters_t myS
 /** It sets the offset.
   */
 SX128X_status_t  SX128X_SetOffset                         ( SPI_parameters_t mySPI_parameters, SX128X_offset_mode_t myMODE, int8_t myOFFSET                );
-
-/** It writes into the RAM byte register.
-  */
-SX128X_status_t  SX128X_WriteByteRAM                      ( SPI_parameters_t mySPI_parameters, SX128X_data_t myData                                        );
-
-/** It reads the RAM byte register.
-  */
-SX128X_status_t  SX128X_ReadByteRAM                       ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myData                                       );
-
-/** It checks oscillator clock integrity flag.
-  */
-SX128X_status_t  SX128X_CheckOscillatorClockIntegrityFlag ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myOS                                         );
-
-/** It clears oscillator clock integrity flag.
-  */
-SX128X_status_t  SX128X_ClearOscillatorClockIntegrityFlag ( SPI_parameters_t mySPI_parameters                                                                );
-
-/** It sets the AM/PM indicator ( only for 12-hour mode ).
-  */
-SX128X_status_t  SX128X_SetAM_PM_Indicator                ( SPI_parameters_t mySPI_parameters, SX128X_data_t myAM_PM_Indicator                             );
-
-/** It gets the AM/PM indicator ( only for 12-hour mode ).
-  */
-SX128X_status_t  SX128X_GetAM_PM_Indicator                ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myAM_PM_Indicator                            );
