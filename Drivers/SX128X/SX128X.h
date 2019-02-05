@@ -463,44 +463,56 @@ SX128X_status_t  SX128X_Init                              ( SPI_parameters_t myS
 
 /** It sets the external clock test mode.
   */
-SX128X_status_t  SX128X_SetTestMode                       ( SPI_parameters_t mySPI_parameters, SX128X_control_1_ext_test_t myEXT_TEST                      );
+// SX128X_status_t  SetTx                                   ( SPI_parameters_t mySPI_parameters, periodBase, periodBaseCount );
 
 /** It sets the RTC clock mode.
   */
-SX128X_status_t  SX128X_SetRTCMode                        ( SPI_parameters_t mySPI_parameters, SX128X_control_1_stop_t mySTOP                              );
+// SX128X_status_t  SetTxParam                               ( SPI_parameters_t mySPI_parameters, power, rampTime               );
 
 /** It performs a software reset.
   */
-SX128X_status_t  SX128X_SoftwareReset                     ( SPI_parameters_t mySPI_parameters                                                                );
+// SX128X_status_t  SetTxContinuousWave                ( SPI_parameters_t mySPI_parameters                                                                );
 
 /** It sets the correction interrupt mode.
   */
-SX128X_status_t  SX128X_SetCorrectionInterruptMode        ( SPI_parameters_t mySPI_parameters, SX128X_control_1_cie_t myCIE                                );
+// SX128X_status_t  SetTxContinuousPreamble        ( SPI_parameters_t mySPI_parameters                              );
 
 /** It sets 12 or 24 hour mode.
   */
-SX128X_status_t  SX128X_Set12_24_HourMode                 ( SPI_parameters_t mySPI_parameters, SX128X_data_t my12_24                                       );
+// SX128X_status_t  SetRx                 ( SPI_parameters_t mySPI_parameters, periodBase, periodBaseCount                   );
 
 /** It sets the internal oscillator capacitor.
   */
-SX128X_status_t  SX128X_SetInternalOscillatorCapacitor    ( SPI_parameters_t mySPI_parameters, SX128X_control_1_cap_sel_t myCAP_SEL                        );
+// SX128X_status_t   GetPacketStatus   ( SPI_parameters_t mySPI_parameters                     );
 
 /** It enables/disables minute/half minute interrupt.
   */
-SX128X_status_t  SX128X_SetMinuteInterrupts               ( SPI_parameters_t mySPI_parameters, SX128X_control_2_mi_t myMI, SX128X_control_2_hmi_t myHMI  );
+// SX128X_status_t  SetRFFrequency           ( SPI_parameters_t mySPI_parameters );
 
 /** It gets the status of the timer flag.
   */
-SX128X_status_t  SX128X_GetTimerFlag                      ( SPI_parameters_t mySPI_parameters, SX128X_control_2_tf_t* myTF                                 );
+// SX128X_status_t  SetFS                      ( SPI_parameters_t mySPI_parameters                               );
 
 /** It resets the status of the timer flag.
   */
-SX128X_status_t  SX128X_ClearTimerFlag                    ( SPI_parameters_t mySPI_parameters                                                                );
+// SX128X_status_t  SetRegulatorType                   ( SPI_parameters_t mySPI_parameters, regulatorType                                                                );
 
 /** It sets the clock output frequency.
   */
-SX128X_status_t  SX128X_SetClockOutputFrequency           ( SPI_parameters_t mySPI_parameters, SX128X_control_2_cof_t myCOF                                );
+// SX128X_status_t  SetModulationParam           ( SPI_parameters_t mySPI_parameters                               );
 
 /** It sets the offset.
   */
-SX128X_status_t  SX128X_SetOffset                         ( SPI_parameters_t mySPI_parameters, SX128X_offset_mode_t myMODE, int8_t myOFFSET                );
+// SX128X_status_t  SetPacketType                         ( SPI_parameters_t mySPI_parameters          );
+
+/** It sets the offset.
+  */
+// SX128X_status_t  codingRate                          ( SPI_parameters_t mySPI_parameters, CR          );
+
+/** It sets the offset.
+  */
+// SX128X_status_t  SetPacketParam                          ( SPI_parameters_t mySPI_parameters          );
+
+/** It sets the offset.
+  */
+// SX128X_status_t  setModulationParams                          ( SPI_parameters_t mySPI_parameters, SF, BW, Coding rate         );
