@@ -36,7 +36,7 @@
  * @pre         N/A
  * @warning     N/A.
  */
-SX128X_status_t  SX128X_Init ( SPI_parameters_t mySPI_parameters )
+SX128X_status_t SX128X_Init ( SPI_parameters_t mySPI_parameters )
 {
     spi_status_t aux;
 
@@ -75,7 +75,7 @@ SX128X_status_t  SX128X_Init ( SPI_parameters_t mySPI_parameters )
  * @pre         N/A
  * @warning     N/A.
  */
-SX128X_status_t  GetStatus ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myStatus )
+SX128X_status_t GetStatus ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myStatus )
 {
     uint8_t      cmd   =    0U;
     spi_status_t aux;
@@ -86,6 +86,53 @@ SX128X_status_t  GetStatus ( SPI_parameters_t mySPI_parameters, SX128X_data_t* m
 
     /* Parse the data    */
     myStatus->status     =   cmd;
+
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetSleep ( SPI_parameters_t , SX128X_set_sleep_sleep_config0_t , SX128X_set_sleep_sleep_config1_t , SX128X_set_sleep_sleep_config2_t )
+ *
+ * @details     It sets the transceiver to Sleep mode with the lowest current consumption possible.
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myDataRAM:         Data RAM behavior.
+ * @param[in]    myDataBuffer:      Data Buffer behavior.
+ * @param[in]    myInstructionRAM:  Instruction RAM behavior.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetSleep.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/February/2019
+ * @version     10/February/2019   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+SX128X_status_t SetSleep ( SPI_parameters_t mySPI_parameters, SX128X_set_sleep_sleep_config0_t myDataRAM, SX128X_set_sleep_sleep_config1_t myDataBuffer, SX128X_set_sleep_sleep_config2_t myInstructionRAM )
+{
+    uint8_t      cmd[2]   =    { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]  =   SX128X_SET_SLEEP;
+    cmd[1]  =   ( myDataRAM | myDataBuffer | myInstructionRAM );
+    aux     =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
 
 
