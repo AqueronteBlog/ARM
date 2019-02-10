@@ -104,10 +104,49 @@ typedef enum
  */
 typedef enum
 {
-    GET_STATUS_BUSY_MASK                =   ( 0b1 << 0U ),              /*!<  BUSY mask                                                     */
-    GET_STATUS_BUSY_BUSY                =   ( 0b1 << 0U ),              /*!<  Transceiver is processing command or doing internal operation */
-    GET_STATUS_BUSY_NOT_BUSY            =   ( 0b0 << 0U )               /*!<  Transceiver is released                                       */
+    GET_STATUS_BUSY_MASK                =   ( 0b1 << 0U ),                      /*!<  BUSY mask                                                     */
+    GET_STATUS_BUSY_BUSY                =   ( 0b1 << 0U ),                      /*!<  Transceiver is processing command or doing internal operation */
+    GET_STATUS_BUSY_NOT_BUSY            =   ( 0b0 << 0U )                       /*!<  Transceiver is released                                       */
 } SX128X_get_status_busy_t;
+
+
+
+/**
+  * @brief   SET_SLEEP
+  */
+/* SLEEP CONFIG 0 <0>: DATA RAM
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    SET_SLEEP_SLEEP_CONFIG0_MASK                                =   ( 0b1 << 0U ),   /*!<  SleepConfig[0] mask                                           */
+    SET_SLEEP_SLEEP_CONFIG0_DATA_RAM_FLUSHED                    =   ( 0b0 << 0U ),   /*!<  SleepConfig[0] Data RAM is flushed during Sleep Mode          */
+    SET_SLEEP_SLEEP_CONFIG0_DATA_RAM_IN_RETENTION_MODE          =   ( 0b1 << 0U )    /*!<  SleepConfig[0] Data RAM in retention mode                     */
+} SX128X_set_sleep_sleep_config0_t;
+
+
+
+/* SLEEP CONFIG 1 <1>: DATA BUFFER
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    SET_SLEEP_SLEEP_CONFIG1_MASK                                =   ( 0b1 << 1U ),  /*!<  SleepConfig[1] mask                                           */
+    SET_SLEEP_SLEEP_CONFIG1_DATA_BUFFER_FLUSHED                 =   ( 0b0 << 1U ),  /*!<  SleepConfig[1] Data buffer is flushed during Sleep Mode       */
+    SET_SLEEP_SLEEP_CONFIG1_DATA_BUFFER_IN_RETENTION_MODE       =   ( 0b1 << 1U )   /*!<  SleepConfig[1] Data buffer in retention mode                  */
+} SX128X_set_sleep_sleep_config1_t;
+
+
+
+/* SLEEP CONFIG 2 <2>: INSTRUCTION RAM
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    SET_SLEEP_SLEEP_CONFIG2_MASK                                =   ( 0b1 << 2U ),  /*!<  SleepConfig[2] mask                                           */
+    SET_SLEEP_SLEEP_CONFIG2_INSTRUCTION_RAM_FLUSHED             =   ( 0b0 << 2U ),  /*!<  SleepConfig[2] Instruction RAM is flushed during Sleep Mode   */
+    SET_SLEEP_SLEEP_CONFIG2_INSTRUCTION_RAM_IN_RETENTION_MODE   =   ( 0b1 << 2U )   /*!<  SleepConfig[2] Instruction RAM in retention mode              */
+} SX128X_set_sleep_sleep_config2_t;
 
 
 
@@ -145,60 +184,14 @@ typedef enum
   */
 /** It configures the SPI peripheral.
   */
-SX128X_status_t  SX128X_Init    ( SPI_parameters_t mySPI_parameters                             );
+SX128X_status_t  SX128X_Init    ( SPI_parameters_t mySPI_parameters                                                                                                                                                 );
 
 /** It gets the transceiver status.
   */
-SX128X_status_t  GetStatus      ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myStatus    );
+SX128X_status_t  GetStatus      ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myStatus                                                                                                                        );
 
-/** It sets the RTC clock mode.
-  */
-// SX128X_status_t  SetTxParam                               ( SPI_parameters_t mySPI_parameters, power, rampTime               );
+// WriteCommand, ReadCommand, WriteBuffer, ReadBuffer
 
-/** It performs a software reset.
+/** It sets the transceiver to Sleep mode with the lowest current consumption possible.
   */
-// SX128X_status_t  SetTxContinuousWave                ( SPI_parameters_t mySPI_parameters                                                                );
-
-/** It sets the correction interrupt mode.
-  */
-// SX128X_status_t  SetTxContinuousPreamble        ( SPI_parameters_t mySPI_parameters                              );
-
-/** It sets 12 or 24 hour mode.
-  */
-// SX128X_status_t  SetRx                 ( SPI_parameters_t mySPI_parameters, periodBase, periodBaseCount                   );
-
-/** It sets the internal oscillator capacitor.
-  */
-// SX128X_status_t   GetPacketStatus   ( SPI_parameters_t mySPI_parameters                     );
-
-/** It enables/disables minute/half minute interrupt.
-  */
-// SX128X_status_t  SetRFFrequency           ( SPI_parameters_t mySPI_parameters );
-
-/** It gets the status of the timer flag.
-  */
-// SX128X_status_t  SetFS                      ( SPI_parameters_t mySPI_parameters                               );
-
-/** It resets the status of the timer flag.
-  */
-// SX128X_status_t  SetRegulatorType                   ( SPI_parameters_t mySPI_parameters, regulatorType                                                                );
-
-/** It sets the clock output frequency.
-  */
-// SX128X_status_t  SetModulationParam           ( SPI_parameters_t mySPI_parameters                               );
-
-/** It sets the offset.
-  */
-// SX128X_status_t  SetPacketType                         ( SPI_parameters_t mySPI_parameters          );
-
-/** It sets the offset.
-  */
-// SX128X_status_t  codingRate                          ( SPI_parameters_t mySPI_parameters, CR          );
-
-/** It sets the offset.
-  */
-// SX128X_status_t  SetPacketParam                          ( SPI_parameters_t mySPI_parameters          );
-
-/** It sets the offset.
-  */
-// SX128X_status_t  setModulationParams                          ( SPI_parameters_t mySPI_parameters, SF, BW, Coding rate         );
+SX128X_status_t  SetSleep       ( SPI_parameters_t mySPI_parameters, SX128X_set_sleep_sleep_config0_t myDataRAM, SX128X_set_sleep_sleep_config1_t myDataBuffer, SX128X_set_sleep_sleep_config2_t myInstructionRAM   );
