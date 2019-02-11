@@ -146,3 +146,48 @@ SX128X_status_t SetSleep ( SPI_parameters_t mySPI_parameters, SX128X_set_sleep_s
         return   SX128X_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       SetStandby ( SPI_parameters_t , SX128X_set_standby_standbyconfig_t )
+ *
+ * @details     It sets the transceiver to Stand-by mode.
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myDataRAM:         Data RAM behavior.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetStandby.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        11/February/2019
+ * @version     11/February/2019   The ORIGIN
+ * @pre         After power on or application of a reset, the transceiver will enter in STDBY_RC mode running with a 13 MHz RC clock.
+ * @warning     N/A.
+ */
+SX128X_status_t SetStandby ( SPI_parameters_t mySPI_parameters, SX128X_set_standby_standbyconfig_t myStandbyConfig )
+{
+    uint8_t      cmd[2]   =    { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]  =   SX128X_SET_STANDBY;
+    cmd[1]  =   myStandbyConfig;
+    aux     =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
