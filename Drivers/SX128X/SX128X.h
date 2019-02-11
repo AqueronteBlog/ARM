@@ -150,6 +150,21 @@ typedef enum
 
 
 
+/**
+  * @brief   SET_STANDBY
+  */
+/* STANDBYCONFIG <0>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    SET_STANDBY_MASK                                            =   ( 0b1 << 0U ),  /*!<  StandbyConfig mask                                            */
+    SET_STANDBY_STANDBY_CONFIG_STDBY_RC                         =   ( 0b0 << 0U ),  /*!<  Device running on RC 13MHz, set STDBY_RC mode                 */
+    SET_STANDBY_STANDBY_CONFIG_STDBY_XOSC                       =   ( 0b1 << 0U )   /*!<  Device running on XTAL 52MHz, set STDBY_XOSC mode             */
+} SX128X_set_standby_standbyconfig_t;
+
+
+
 
 
 
@@ -195,3 +210,7 @@ SX128X_status_t  GetStatus      ( SPI_parameters_t mySPI_parameters, SX128X_data
 /** It sets the transceiver to Sleep mode with the lowest current consumption possible.
   */
 SX128X_status_t  SetSleep       ( SPI_parameters_t mySPI_parameters, SX128X_set_sleep_sleep_config0_t myDataRAM, SX128X_set_sleep_sleep_config1_t myDataBuffer, SX128X_set_sleep_sleep_config2_t myInstructionRAM   );
+
+/** It sets the transceiver to Stand-by mode.
+  */
+SX128X_status_t  SetStandby     ( SPI_parameters_t mySPI_parameters, SX128X_set_standby_standbyconfig_t myStandbyConfig                                                                                             );
