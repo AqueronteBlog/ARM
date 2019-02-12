@@ -165,6 +165,23 @@ typedef enum
 
 
 
+/**
+  * @brief   SET_TX/SET_RX
+  */
+/* TIME-OUT DEFINITION <7:0>:
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    SET_TX_RX_TIMEOUT_STEP_MASK                                 =   0xFF,           /*!<  Time-out step mask                                            */
+    SET_TX_RX_TIMEOUT_STEP_15_625_US                            =   0x00,           /*!<  Time-out step: 15.625us                                       */
+    SET_TX_RX_TIMEOUT_STEP_62_5_US                              =   0x01,           /*!<  Time-out step: 62.5us                                         */
+    SET_TX_RX_TIMEOUT_STEP_1_MS                                 =   0x02,           /*!<  Time-out step:  1ms                                           */
+    SET_TX_RX_TIMEOUT_STEP_4_MS                                 =   0x03            /*!<  Time-out step:  4ms                                           */
+} SX128X_set_tx_rx_timeout_definition_t;
+
+
+
 
 
 
@@ -214,3 +231,15 @@ SX128X_status_t  SetSleep       ( SPI_parameters_t mySPI_parameters, SX128X_set_
 /** It sets the transceiver to Stand-by mode.
   */
 SX128X_status_t  SetStandby     ( SPI_parameters_t mySPI_parameters, SX128X_set_standby_standbyconfig_t myStandbyConfig                                                                                             );
+
+/** It sets the device in Frequency Synthesizer mode where the PLL is locked to the carrier frequency.
+  */
+SX128X_status_t  SetFs          ( SPI_parameters_t mySPI_parameters                                                                                                                                                 );
+
+/** It sets the device in Transmit mode.
+  */
+SX128X_status_t  SetTx          ( SPI_parameters_t mySPI_parameters, SX128X_set_tx_rx_timeout_definition_t myTimeoutStep, uint16_t myperiodBaseCount                                                                );
+
+/** It sets the device in Receiver mode.
+  */
+SX128X_status_t  SetRx          ( SPI_parameters_t mySPI_parameters, SX128X_set_tx_rx_timeout_definition_t myTimeoutStep, uint16_t myperiodBaseCount                                                                );
