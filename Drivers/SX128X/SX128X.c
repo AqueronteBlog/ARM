@@ -191,3 +191,157 @@ SX128X_status_t SetStandby ( SPI_parameters_t mySPI_parameters, SX128X_set_stand
         return   SX128X_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       SetFs ( SPI_parameters_t )
+ *
+ * @details     It sets the device in Frequency Synthesizer mode where the PLL is locked to the carrier frequency.
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetFs.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        11/February/2019
+ * @version     11/February/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX128X_status_t SetFs ( SPI_parameters_t mySPI_parameters )
+{
+    uint8_t      cmd   =    0U;
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd  =   SX128X_SET_FS;
+    aux  =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 0U );
+
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetTx ( SPI_parameters_t , SX128X_set_tx_rx_timeout_definition_t, uint16_t )
+ *
+ * @details     It sets the device in Transmit mode.
+ *
+ *                  Time-out duration = periodBase * periodBaseCount
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myTimeoutStep:     periodBase.
+ * @param[in]    myperiodBaseCount: periodBaseCount.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetTx.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/February/2019
+ * @version     12/February/2019   The ORIGIN
+ * @pre         If myperiodBaseCount = 0x0000, No time-out, Tx Single mode, the device will stay in Tx Mode until the packet is
+ *              transmitted and returns in STDBY_RC mode upon completion.
+ * @pre         If myperiodBaseCount = Others, Time-out active. The device remains in Rx mode, it returns automatically to STDBY_RC mode
+ *              on timer end-of-count or when a packet has been received. As soon as a packet is detected, the timer is automatically
+ *              disabled to allow complete reception of the packet.
+ * @warning     Clear IRQ status before using this command.
+ */
+SX128X_status_t SetTx ( SPI_parameters_t mySPI_parameters, SX128X_set_tx_rx_timeout_definition_t myTimeoutStep, uint16_t myperiodBaseCount )
+{
+    uint8_t      cmd[4]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_TX;
+    cmd[1]   =   myTimeoutStep;
+    cmd[2]   =   (uint8_t)( ( myperiodBaseCount & 0xFF00 ) >> 8U );
+    cmd[3]   =   (uint8_t)( myperiodBaseCount & 0x00FF );
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetRx ( SPI_parameters_t , SX128X_set_tx_rx_timeout_definition_t, uint16_t )
+ *
+ * @details     It sets the device in Receiver mode.
+ *
+ *                  Time-out duration = periodBase * periodBaseCount
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myTimeoutStep:     periodBase.
+ * @param[in]    myperiodBaseCount: periodBaseCount.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetRx.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/February/2019
+ * @version     12/February/2019   The ORIGIN
+ * @pre         If myperiodBaseCount = 0x0000, No time-out. Rx Single mode. The device will stay in Rx mode until a
+ *              reception occurs and the devices return in STDBY_RC mode upon completion.
+ * @pre         If myperiodBaseCount = 0xFFFF, Rx Continuous mode. The device remains in Rx mode until the host sends
+ *              a command to change the operation mode. The device can receive several packets. Each time a packet is
+ *              received, a 'packet received' indication is given to the host and the device will continue to search for a new packet.
+ * @pre         If myperiodBaseCount = Others, Time-out active. The device remains in Rx mode, it returns automatically to STDBY_RC mode
+ *              on timer end-of-count or when a packet has been received. As soon as a packet is detected, the timer is automatically
+ *              disabled to allow complete reception of the packet.
+ * @warning     The IRQ status should be cleared prior to using this command.
+ */
+SX128X_status_t SetRx ( SPI_parameters_t mySPI_parameters, SX128X_set_tx_rx_timeout_definition_t myTimeoutStep, uint16_t myperiodBaseCount )
+{
+    uint8_t      cmd[4]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_RX;
+    cmd[1]   =   myTimeoutStep;
+    cmd[2]   =   (uint8_t)( ( myperiodBaseCount & 0xFF00 ) >> 8U );
+    cmd[3]   =   (uint8_t)( myperiodBaseCount & 0x00FF );
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
