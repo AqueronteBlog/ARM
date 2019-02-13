@@ -182,6 +182,36 @@ typedef enum
 
 
 
+/**
+  * @brief   SET_LONG_PREAMBLE
+  */
+/* ENABLE/DISABLE <7:0>:
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    SET_LONG_PREAMBLE_MASK                                      =   0x01,           /*!<  Long preamble mask                                            */
+    SET_LONG_PREAMBLE_ENABLE                                    =   0x01,           /*!<  Long preamble: Enabled                                        */
+    SET_LONG_PREAMBLE_DISABLE                                   =   0x00            /*!<  Long preamble: Disabled                                       */
+} SX128X_set_long_preamble_t;
+
+
+
+/**
+  * @brief   SET_AUTO_FS
+  */
+/* ENABLE/DISABLE <7:0>:
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    SET_AUTO_FS_MASK                                            =   0x01,           /*!<  Auto FS mask                                                  */
+    SET_AUTO_FS_ENABLE                                          =   0x01,           /*!<  Auto FS: Enabled                                              */
+    SET_AUTO_FS_DISABLE                                         =   0x00            /*!<  Auto FS: Disabled                                             */
+} SX128X_set_auto_fs_t;
+
+
+
 
 
 
@@ -216,30 +246,61 @@ typedef enum
   */
 /** It configures the SPI peripheral.
   */
-SX128X_status_t  SX128X_Init    ( SPI_parameters_t mySPI_parameters                                                                                                                                                 );
+SX128X_status_t  SX128X_Init                ( SPI_parameters_t mySPI_parameters                                                                                                                                                 );
 
 /** It gets the transceiver status.
   */
-SX128X_status_t  GetStatus      ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myStatus                                                                                                                        );
+SX128X_status_t  GetStatus                  ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myStatus                                                                                                                        );
 
 // WriteCommand, ReadCommand, WriteBuffer, ReadBuffer
 
 /** It sets the transceiver to Sleep mode with the lowest current consumption possible.
   */
-SX128X_status_t  SetSleep       ( SPI_parameters_t mySPI_parameters, SX128X_set_sleep_sleep_config0_t myDataRAM, SX128X_set_sleep_sleep_config1_t myDataBuffer, SX128X_set_sleep_sleep_config2_t myInstructionRAM   );
+SX128X_status_t  SetSleep                   ( SPI_parameters_t mySPI_parameters, SX128X_set_sleep_sleep_config0_t myDataRAM, SX128X_set_sleep_sleep_config1_t myDataBuffer, SX128X_set_sleep_sleep_config2_t myInstructionRAM   );
 
 /** It sets the transceiver to Stand-by mode.
   */
-SX128X_status_t  SetStandby     ( SPI_parameters_t mySPI_parameters, SX128X_set_standby_standbyconfig_t myStandbyConfig                                                                                             );
+SX128X_status_t  SetStandby                 ( SPI_parameters_t mySPI_parameters, SX128X_set_standby_standbyconfig_t myStandbyConfig                                                                                             );
 
 /** It sets the device in Frequency Synthesizer mode where the PLL is locked to the carrier frequency.
   */
-SX128X_status_t  SetFs          ( SPI_parameters_t mySPI_parameters                                                                                                                                                 );
+SX128X_status_t  SetFs                      ( SPI_parameters_t mySPI_parameters                                                                                                                                                 );
 
 /** It sets the device in Transmit mode.
   */
-SX128X_status_t  SetTx          ( SPI_parameters_t mySPI_parameters, SX128X_set_tx_rx_timeout_definition_t myTimeoutStep, uint16_t myperiodBaseCount                                                                );
+SX128X_status_t  SetTx                      ( SPI_parameters_t mySPI_parameters, SX128X_set_tx_rx_timeout_definition_t myPeriodBase, uint16_t myperiodBaseCount                                                                 );
 
 /** It sets the device in Receiver mode.
   */
-SX128X_status_t  SetRx          ( SPI_parameters_t mySPI_parameters, SX128X_set_tx_rx_timeout_definition_t myTimeoutStep, uint16_t myperiodBaseCount                                                                );
+SX128X_status_t  SetRx                      ( SPI_parameters_t mySPI_parameters, SX128X_set_tx_rx_timeout_definition_t myPeriodBase, uint16_t myperiodBaseCount                                                                 );
+
+/** It sets the transceiver in sniff mode, so that it regularly looks for new packets ( duty cycled operation ).
+  */
+SX128X_status_t  SetRxDutyCycle             ( SPI_parameters_t mySPI_parameters, SX128X_set_tx_rx_timeout_definition_t myPeriodBase, uint16_t myRxPeriodBaseCount, uint16_t mySleepPeriodBaseCount                              );
+
+/** It sets the transceiver into Long Preamble mode, and can only be used with either the LoRa mode and GFSK mode.
+  */
+SX128X_status_t  SetLongPreamble            ( SPI_parameters_t mySPI_parameters, SX128X_set_long_preamble_t myLongPreambleStatus                                                                                                );
+
+/** ( Channel Activity Detection ) can be used only in LoRa packet type. The Channel Activity Detection is a LoRa specific mode of operation where the device searches for a LoRa.
+  */
+SX128X_status_t  SetCAD                     ( SPI_parameters_t mySPI_parameters                                                                                                                                                 );
+
+/** It is a test command to generate a Continuous Wave (RF tone) at a selected frequency and output power.
+  */
+SX128X_status_t  SetTxContinuousWave        ( SPI_parameters_t mySPI_parameters                                                                                                                                                 );
+
+/** It is a test command to generate an infinite sequence of alternating '0's and '1's in GFSK, BLE, or FLRC modulation and symbol 0 in LoRa.
+  */
+SX128X_status_t  SetTxContinuousPreamble    ( SPI_parameters_t mySPI_parameters                                                                                                                                                 );
+
+/** It sets the auto-Tx ( BLE requires sending back a response after a packet reception ).
+  */
+SX128X_status_t  SetAutoTx                  ( SPI_parameters_t mySPI_parameters, uint16_t myTime                                                                                                                                );
+
+/** This feature modifies the chip behavior so that the state following a Rx or Tx operation is FS and not STDBY.
+  */
+SX128X_status_t  SetAutoFs                  ( SPI_parameters_t mySPI_parameters, SX128X_set_auto_fs_t myAutoFsStatus                                                                                                            );
+
+
+
