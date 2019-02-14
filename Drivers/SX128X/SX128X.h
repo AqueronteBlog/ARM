@@ -212,6 +212,24 @@ typedef enum
 
 
 
+/**
+  * @brief   SET_PACKET_TIME
+  */
+/* PACKET TYPE DEFINITION <7:0>: MODEM MODE OF OPERATION
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    SET_PACKET_TIME_MASK                                        =   0x0F,           /*!<  Packet type mask                                              */
+    SET_PACKET_TIME_PACKET_TYPE_GFSK                            =   0x00,           /*!<  Packet type: GFSK mode                              [default] */
+    SET_PACKET_TIME_PACKET_TYPE_LORA                            =   0x01,           /*!<  Packet type: LoRa mode                                        */
+    SET_PACKET_TIME_PACKET_TYPE_RANGING                         =   0x02,           /*!<  Packet type: Ranging Engine mode                              */
+    SET_PACKET_TIME_PACKET_TYPE_FLRC                            =   0x03,           /*!<  Packet type: FLRC mode                                        */
+    SET_PACKET_TIME_PACKET_TYPE_BLE                             =   0x04            /*!<  Packet type: BLE mode                                         */
+} SX128X_set_packet_time_t;
+
+
+
 
 
 
@@ -222,7 +240,9 @@ typedef enum
 #define SX128X_VECTOR_STRUCT_H
 typedef struct
 {
-    uint8_t status;             /*!<  Status            */
+    uint8_t                     status;             /*!<  Status            */
+
+    SX128X_set_packet_time_t    packetType;         /*!<  Packet type       */
 } SX128X_data_t;
 #endif
 
@@ -302,5 +322,14 @@ SX128X_status_t  SetAutoTx                  ( SPI_parameters_t mySPI_parameters,
   */
 SX128X_status_t  SetAutoFs                  ( SPI_parameters_t mySPI_parameters, SX128X_set_auto_fs_t myAutoFsStatus                                                                                                            );
 
+/** It sets the transceiver radio frame out of a choice of 6 different packet types.
+  */
+SX128X_status_t  SetPacketType              ( SPI_parameters_t mySPI_parameters, SX128X_set_packet_time_t myPacketType                                                                                                          );
 
+/** It returns the current operating packet type of the radio.
+  */
+SX128X_status_t  GetPacketType              ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myPacketType                                                                                                                    );
 
+/** It is used to set the frequency of the RF frequency mode.
+  */
+SX128X_status_t  SetRfFrequency             ( SPI_parameters_t mySPI_parameters, uint32_t myRfFrequency                                                                                                                         );
