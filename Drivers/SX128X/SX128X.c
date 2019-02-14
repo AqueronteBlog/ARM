@@ -649,8 +649,8 @@ SX128X_status_t SetAutoTx ( SPI_parameters_t mySPI_parameters, uint16_t myTime )
 
     /* Send command  */
     cmd[0]   =   SX128X_SET_AUTO_TX;
-    cmd[2]   =   (uint8_t)( ( myTime & 0xFF00 ) >> 8U );
-    cmd[3]   =   (uint8_t)( myTime & 0x00FF );
+    cmd[1]   =   (uint8_t)( ( myTime & 0xFF00 ) >> 8U );
+    cmd[2]   =   (uint8_t)( myTime & 0x00FF );
     aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
 
@@ -697,8 +697,166 @@ SX128X_status_t SetAutoFs ( SPI_parameters_t mySPI_parameters, SX128X_set_auto_f
 
     /* Send command  */
     cmd[0]   =   SX128X_SET_AUTO_FS;
-    cmd[2]   =   myAutoFsStatus;
+    cmd[1]   =   myAutoFsStatus;
     aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetPacketType ( SPI_parameters_t , SX128X_set_packet_time_t )
+ *
+ * @details     It sets the transceiver radio frame out of a choice of 6 different packet types.
+ *              Despite some of them using the same physical modem, they do not all share the same parameters.
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myPacketType:      Packet type.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetPacketType.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/February/2019
+ * @version     14/February/2019   The ORIGIN
+ * @pre         Changing from one mode of operation to another is performed by sending the SetPacketType() command.
+ *              The parameters from the previous mode are not kept internally. The transition must be performed in STDBY_RC mode.
+ * @warning     The command SetPacketType() must be the first in a radio configuration sequence.
+ */
+SX128X_status_t SetPacketType ( SPI_parameters_t mySPI_parameters, SX128X_set_packet_time_t myPacketType )
+{
+    uint8_t      cmd[2]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_PACKET_TYPE;
+    cmd[1]   =   myPacketType;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       GetPacketType ( SPI_parameters_t , SX128X_data_t* )
+ *
+ * @details     It returns the current operating packet type of the radio.
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ *
+ * @param[out]   myPacketType:      Packet type.
+ * @param[out]   myStatus:          Transceiver status.
+ *
+ *
+ * @return       Status of GetPacketType.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/February/2019
+ * @version     14/February/2019   The ORIGIN
+ * @pre         It returns the transceiver status as well.
+ * @warning     N/A.
+ */
+SX128X_status_t GetPacketType ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myPacketType )
+{
+    uint8_t      cmd[2]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_GET_PACKET_TYPE;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    /* Parse the data    */
+    myPacketType->status     =   cmd[0];
+    myPacketType->packetType =   (SX128X_set_packet_time_t)cmd[1];
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetRfFrequency ( SPI_parameters_t , uint32_t )
+ *
+ * @details     It is used to set the frequency of the RF frequency mode.
+ *
+ *                  F_RF = ( F_Xosc / 2^8 ) * rfFrequency
+ *
+ *              Note:
+ *                  - F_Xosc = 52MHz ( PLL frequency is derived from the external crystal oscillator )
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myRfFrequency:     Frequency.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetRfFrequency.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        14/February/2019
+ * @version     14/February/2019   The ORIGIN
+ * @pre         myRfFrequency is 24-bit number.
+ * @warning     N/A.
+ */
+SX128X_status_t SetRfFrequency ( SPI_parameters_t mySPI_parameters, uint32_t myRfFrequency )
+{
+    uint8_t      cmd[4]  =   { 0U };
+    spi_status_t aux;
+
+
+    /* Check if the data is correct  */
+    if ( myRfFrequency > 16777215 )
+    {
+        return   SX128X_FAILURE;
+    }
+    else
+    {
+        /* Send command  */
+        cmd[0]   =   SX128X_SET_RF_FREQUENCY;
+        cmd[1]   =   (uint8_t)( ( myRfFrequency >> 16U ) & 0xFF );
+        cmd[2]   =   (uint8_t)( ( myRfFrequency >> 8U ) & 0xFF );
+        cmd[4]   =   (uint8_t)( myRfFrequency & 0xFF );
+        aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 1U );
+    }
 
 
 
