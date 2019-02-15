@@ -870,3 +870,147 @@ SX128X_status_t SetRfFrequency ( SPI_parameters_t mySPI_parameters, uint32_t myR
         return   SX128X_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       SetTxParams ( SPI_parameters_t , uint8_t , SX128X_set_tx_params_ramp_time_time_t )
+ *
+ * @details     It sets the Tx output power using parameter power and the Tx ramp time using parameter rampTime.
+ *              This command is available for all packetType.
+ *
+ *              The output power ( P_out ) is defined by parameter power:
+ *
+ *                  - P_out = - 18 + power
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myPower:           SPI parameters.
+ * @param[in]    myRampTime:        SPI parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetTxParams.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        15/February/2019
+ * @version     15/February/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX128X_status_t SetTxParams ( SPI_parameters_t mySPI_parameters, uint8_t myPower, SX128X_set_tx_params_ramp_time_time_t myRampTime )
+{
+    uint8_t      cmd[3]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_TX_PARAMS;
+    cmd[1]   =   myPower;
+    cmd[2]   =   myRampTime;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetCadParams ( SPI_parameters_t , SX128X_set_cad_params_cad_symbol_num_t )
+ *
+ * @details     It defines the number of symbols on which Channel Activity Detected ( CAD ) operates.
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myCadSymbolNum:    CAD symbol number.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetCadParams.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        15/February/2019
+ * @version     15/February/2019   The ORIGIN
+ * @pre         For symbols 1 and 2, there are higher risks of false detection.
+ * @warning     N/A.
+ */
+SX128X_status_t SetCadParams ( SPI_parameters_t mySPI_parameters, SX128X_set_cad_params_cad_symbol_num_t myCadSymbolNum )
+{
+    uint8_t      cmd[2]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_CAD_PARAMS;
+    cmd[1]   =   myCadSymbolNum;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetBufferBaseAddress ( SPI_parameters_t , uint8_t , uint8_t )
+ *
+ * @details     It fixes the base address for the packet handing operation in Tx and Rx mode for all packet types.
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myTxBaseAdress:    Tx base address.
+ * @param[in]    myRxBaseAdress:    Rx base address.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetBufferBaseAddress.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        15/February/2019
+ * @version     15/February/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX128X_status_t SetBufferBaseAddress ( SPI_parameters_t mySPI_parameters, uint8_t myTxBaseAdress, uint8_t myRxBaseAdress )
+{
+    uint8_t      cmd[3]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_BUFFER_BASE_ADDRESS;
+    cmd[1]   =   myTxBaseAdress;
+    cmd[2]   =   myRxBaseAdress;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
