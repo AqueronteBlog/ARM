@@ -230,6 +230,87 @@ typedef enum
 
 
 
+/**
+  * @brief   SET_TX_PARAMS
+  */
+/* RAMP TIME <7:0>:
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    SET_RAMP_TIME_MASK                                          =   0x0F,           /*!<  Ramp time mask                                                */
+    SET_RAMP_TIME_RADIO_RAMP_02_US                              =   0x00,           /*!<  Ramp time:  2us                                               */
+    SET_RAMP_TIME_RADIO_RAMP_04_US                              =   0x20,           /*!<  Ramp time:  4us                                               */
+    SET_RAMP_TIME_RADIO_RAMP_06_US                              =   0x40,           /*!<  Ramp time:  6us                                               */
+    SET_RAMP_TIME_RADIO_RAMP_08_US                              =   0x60,           /*!<  Ramp time:  8us                                               */
+    SET_RAMP_TIME_RADIO_RAMP_10_US                              =   0x80,           /*!<  Ramp time: 10us                                               */
+    SET_RAMP_TIME_RADIO_RAMP_12_US                              =   0xA0,           /*!<  Ramp time: 12us                                               */
+    SET_RAMP_TIME_RADIO_RAMP_16_US                              =   0xC0,           /*!<  Ramp time: 16us                                               */
+    SET_RAMP_TIME_RADIO_RAMP_20_US                              =   0xE0            /*!<  Ramp time: 20us                                               */
+} SX128X_set_tx_params_ramp_time_time_t;
+
+
+
+/**
+  * @brief   SET_CAD_PARAMS
+  */
+/* CAD PARAMS <7:0>: NUMBER OF SYMBOLS USED FOR CAD
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    SET_CAD_PARAMS_MASK                                         =   0x0F,           /*!<  CAD params mask                                               */
+    SET_CAD_PARAMS_LORA_CAD_01_SYMBOL                           =   0x00,           /*!<  CAD params:  1                                                */
+    SET_CAD_PARAMS_LORA_CAD_02_SYMBOLS                          =   0x20,           /*!<  CAD params:  4                                                */
+    SET_CAD_PARAMS_LORA_CAD_04_SYMBOLS                          =   0x40,           /*!<  CAD params:  8                                                */
+    SET_CAD_PARAMS_LORA_CAD_08_SYMBOLS                          =   0x60,           /*!<  CAD params:  8                                                */
+    SET_CAD_PARAMS_LORA_CAD_16_SYMBOLS                          =   0x80            /*!<  CAD params: 10                                                */
+} SX128X_set_cad_params_cad_symbol_num_t;
+
+
+
+/**
+  * @brief   MODULATION PARAMETERS
+  */
+/* MODULATION PARAMETERS 1 <7:0>: GFSK MODE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    MOD_PARAM_1_GFSK_MASK                                       =   0x0F,           /*!<  Mod param 1 GFSK mode mask                                    */
+    MOD_PARAM_1_GFSK_BLE_BR_2_000_BW_2_4                        =   0x04,           /*!<  2     Mb/s Bitrate | 2.5 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_1_600_BW_2_4                        =   0x28,           /*!<  1.6   Mb/s Bitrate | 2.4 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_1_000_BW_2_4                        =   0x4C,           /*!<  1     Mb/s Bitrate | 2.4 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_1_000_BW_1_2                        =   0x45,           /*!<  1     Mb/s Bitrate | 1.2 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_0_800_BW_2_4                        =   0x70,           /*!<  0.8   Mb/s Bitrate | 2.4 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_0_800_BW_1_2                        =   0x69,           /*!<  0.8   Mb/s Bitrate | 1.2 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_0_500_BW_1_2                        =   0x8D,           /*!<  0.5   Mb/s Bitrate | 1.2 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_0_500_BW_0_6                        =   0x86,           /*!<  0.5   Mb/s Bitrate | 0.6 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_0_400_BW_1_2                        =   0xB1,           /*!<  0.4   Mb/s Bitrate | 1.2 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_0_400_BW_0_6                        =   0xAA,           /*!<  0.4   Mb/s Bitrate | 0.6 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_0_250_BW_0_6                        =   0xCE,           /*!<  0.25  Mb/s Bitrate | 0.6 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_0_250_BW_0_3                        =   0xC7,           /*!<  0.25  Mb/s Bitrate | 0.3 MHz Bandwidth                        */
+    MOD_PARAM_1_GFSK_BLE_BR_0_125_BW_0_3                        =   0xEF            /*!<  0.125 Mb/s Bitrate | 0.3 MHz Bandwidth                        */
+} SX128X_modulation_parameter_gfsk_modparam1_t;
+
+
+
+/* MODULATION PARAMETERS 1 <7:0>: FLRC MODE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    MOD_PARAM_1_FLRC_MASK                                       =   0x0F,           /*!<  Mod param 1 FLRC mode mask                                    */
+    MOD_PARAM_1_FLRC_BR_1_300_BW_1_2                            =   0x45,           /*!<  1.3    Mb/s Bitrate | 1.2 MHz Bandwidth                       */
+    MOD_PARAM_1_FLRC_BR_1_000_BW_1_2                            =   0x69,           /*!<  1.04   Mb/s Bitrate | 1.2 MHz Bandwidth                       */
+    MOD_PARAM_1_FLRC_BR_0_650_BW_0_6                            =   0x86,           /*!<  0.65   Mb/s Bitrate | 0.6 MHz Bandwidth                       */
+    MOD_PARAM_1_FLRC_BR_0_520_BW_0_6                            =   0xAA,           /*!<  0.52   Mb/s Bitrate | 0.6 MHz Bandwidth                       */
+    MOD_PARAM_1_FLRC_BR_0_325_BW_0_3                            =   0xC7,           /*!<  0.325  Mb/s Bitrate | 20.3 MHz Bandwidth                      */
+    MOD_PARAM_1_FLRC_BR_0_260_BW_0_3                            =   0xEB            /*!<  0.26   Mb/s Bitrate | 0.3 MHz Bandwidth                       */
+} SX128X_modulation_parameter_flrc_modparam1_t;
+
+
+
 
 
 
@@ -333,3 +414,23 @@ SX128X_status_t  GetPacketType              ( SPI_parameters_t mySPI_parameters,
 /** It is used to set the frequency of the RF frequency mode.
   */
 SX128X_status_t  SetRfFrequency             ( SPI_parameters_t mySPI_parameters, uint32_t myRfFrequency                                                                                                                         );
+
+/** It sets the Tx output power using parameter power and the Tx ramp time using parameter rampTime.
+  */
+SX128X_status_t  SetTxParams                ( SPI_parameters_t mySPI_parameters, uint8_t myPower, SX128X_set_tx_params_ramp_time_time_t myRampTime                                                                              );
+
+/** It defines the number of symbols on which Channel Activity Detected ( CAD ) operates.
+  */
+SX128X_status_t  SetCadParams               ( SPI_parameters_t mySPI_parameters, SX128X_set_cad_params_cad_symbol_num_t myCadSymbolNum                                                                                          );
+
+/** It fixes the base address for the packet handing operation in Tx and Rx mode for all packet types.
+  */
+SX128X_status_t  SetBufferBaseAddress       ( SPI_parameters_t mySPI_parameters, uint8_t myTxBaseAdress, uint8_t myRxBaseAdress                                                                                                 );
+
+/** It configures the modulation parameters of the radio ( GFSK mode ).
+  */
+SX128X_status_t  SetModulationParams        ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_gfsk_modparam1_t myModParam1                                                                                                 );
+
+/** It configures the modulation parameters of the radio ( FLRC mode ).
+  */
+SX128X_status_t  SetModulationParams        ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_flrc_modparam1_t myModParam1                                                                                                 );
