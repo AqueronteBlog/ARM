@@ -238,7 +238,7 @@ typedef enum
  */
 typedef enum
 {
-    SET_RAMP_TIME_MASK                                          =   0x0F,           /*!<  Ramp time mask                                                */
+    SET_RAMP_TIME_MASK                                          =   0xFF,           /*!<  Ramp time mask                                                */
     SET_RAMP_TIME_RADIO_RAMP_02_US                              =   0x00,           /*!<  Ramp time:  2us                                               */
     SET_RAMP_TIME_RADIO_RAMP_04_US                              =   0x20,           /*!<  Ramp time:  4us                                               */
     SET_RAMP_TIME_RADIO_RAMP_06_US                              =   0x40,           /*!<  Ramp time:  6us                                               */
@@ -259,7 +259,7 @@ typedef enum
  */
 typedef enum
 {
-    SET_CAD_PARAMS_MASK                                         =   0x0F,           /*!<  CAD params mask                                               */
+    SET_CAD_PARAMS_MASK                                         =   0xFF,           /*!<  CAD params mask                                               */
     SET_CAD_PARAMS_LORA_CAD_01_SYMBOL                           =   0x00,           /*!<  CAD params:  1                                                */
     SET_CAD_PARAMS_LORA_CAD_02_SYMBOLS                          =   0x20,           /*!<  CAD params:  4                                                */
     SET_CAD_PARAMS_LORA_CAD_04_SYMBOLS                          =   0x40,           /*!<  CAD params:  8                                                */
@@ -272,12 +272,12 @@ typedef enum
 /**
   * @brief   MODULATION PARAMETERS
   */
-/* MODULATION PARAMETERS 1 <7:0>: GFSK MODE
+/* MODULATION PARAMETERS 1 <7:0>: GFSK AND BLE MODE
  *    NOTE: N/A.
  */
 typedef enum
 {
-    MOD_PARAM_1_GFSK_MASK                                       =   0x0F,           /*!<  Mod param 1 GFSK mode mask                                    */
+    MOD_PARAM_1_GFSK_BLE_MASK                                   =   0xFF,           /*!<  Mod param 1 GFSK and BLE mode mask                            */
     MOD_PARAM_1_GFSK_BLE_BR_2_000_BW_2_4                        =   0x04,           /*!<  2     Mb/s Bitrate | 2.5 MHz Bandwidth                        */
     MOD_PARAM_1_GFSK_BLE_BR_1_600_BW_2_4                        =   0x28,           /*!<  1.6   Mb/s Bitrate | 2.4 MHz Bandwidth                        */
     MOD_PARAM_1_GFSK_BLE_BR_1_000_BW_2_4                        =   0x4C,           /*!<  1     Mb/s Bitrate | 2.4 MHz Bandwidth                        */
@@ -291,7 +291,7 @@ typedef enum
     MOD_PARAM_1_GFSK_BLE_BR_0_250_BW_0_6                        =   0xCE,           /*!<  0.25  Mb/s Bitrate | 0.6 MHz Bandwidth                        */
     MOD_PARAM_1_GFSK_BLE_BR_0_250_BW_0_3                        =   0xC7,           /*!<  0.25  Mb/s Bitrate | 0.3 MHz Bandwidth                        */
     MOD_PARAM_1_GFSK_BLE_BR_0_125_BW_0_3                        =   0xEF            /*!<  0.125 Mb/s Bitrate | 0.3 MHz Bandwidth                        */
-} SX128X_modulation_parameter_gfsk_modparam1_t;
+} SX128X_modulation_parameter_gfsk_ble_modparam1_t;
 
 
 
@@ -300,7 +300,7 @@ typedef enum
  */
 typedef enum
 {
-    MOD_PARAM_1_FLRC_MASK                                       =   0x0F,           /*!<  Mod param 1 FLRC mode mask                                    */
+    MOD_PARAM_1_FLRC_MASK                                       =   0xFF,           /*!<  Mod param 1 FLRC mode mask                                    */
     MOD_PARAM_1_FLRC_BR_1_300_BW_1_2                            =   0x45,           /*!<  1.3    Mb/s Bitrate | 1.2 MHz Bandwidth                       */
     MOD_PARAM_1_FLRC_BR_1_000_BW_1_2                            =   0x69,           /*!<  1.04   Mb/s Bitrate | 1.2 MHz Bandwidth                       */
     MOD_PARAM_1_FLRC_BR_0_650_BW_0_6                            =   0x86,           /*!<  0.65   Mb/s Bitrate | 0.6 MHz Bandwidth                       */
@@ -308,6 +308,107 @@ typedef enum
     MOD_PARAM_1_FLRC_BR_0_325_BW_0_3                            =   0xC7,           /*!<  0.325  Mb/s Bitrate | 20.3 MHz Bandwidth                      */
     MOD_PARAM_1_FLRC_BR_0_260_BW_0_3                            =   0xEB            /*!<  0.26   Mb/s Bitrate | 0.3 MHz Bandwidth                       */
 } SX128X_modulation_parameter_flrc_modparam1_t;
+
+
+
+/* MODULATION PARAMETERS 1 <7:0>: LORA MODE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    MOD_PARAM_1_LORA_MASK                                       =   0xFF,           /*!<  Mod param 1 LoRa mode mask                                    */
+    MOD_PARAM_1_LORA_SF_5                                       =   0x50,           /*!<  Spreading factor:  5                                          */
+    MOD_PARAM_1_LORA_SF_6                                       =   0x60,           /*!<  Spreading factor:  6                                          */
+    MOD_PARAM_1_LORA_SF_7                                       =   0x70,           /*!<  Spreading factor:  7                                          */
+    MOD_PARAM_1_LORA_SF_8                                       =   0x80,           /*!<  Spreading factor:  8                                          */
+    MOD_PARAM_1_LORA_SF_9                                       =   0x90,           /*!<  Spreading factor:  9                                          */
+    MOD_PARAM_1_LORA_SF_10                                      =   0xA0,           /*!<  Spreading factor: 10                                          */
+    MOD_PARAM_1_LORA_SF_11                                      =   0xB0,           /*!<  Spreading factor: 11                                          */
+    MOD_PARAM_1_LORA_SF_12                                      =   0xC0            /*!<  Spreading factor: 12                                          */
+} SX128X_modulation_parameter_lora_modparam1_t;
+
+
+
+/* MODULATION PARAMETERS 2 <7:0>: GFSK AND BLE MODE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    MOD_PARAM_2_GFSK_BLE_MASK                                   =   0xFF,           /*!<  Mod param 2 GFSK and BLE mode mask                            */
+    MOD_PARAM_2_MOD_IND_0_35                                    =   0x00,           /*!<  Modindex: 0.35                                                */
+    MOD_PARAM_2_MOD_IND_0_5                                     =   0x01,           /*!<  Modindex: 0.5                                                 */
+    MOD_PARAM_2_MOD_IND_0_75                                    =   0x02,           /*!<  Modindex: 0.75                                                */
+    MOD_PARAM_2_MOD_IND_1_00                                    =   0x03,           /*!<  Modindex: 1                                                   */
+    MOD_PARAM_2_MOD_IND_1_25                                    =   0x04,           /*!<  Modindex: 1.25                                                */
+    MOD_PARAM_2_MOD_IND_1_50                                    =   0x05,           /*!<  Modindex: 1.5                                                 */
+    MOD_PARAM_2_MOD_IND_1_75                                    =   0x06,           /*!<  Modindex: 1.75                                                */
+    MOD_PARAM_2_MOD_IND_2_00                                    =   0x07,           /*!<  Modindex: 2                                                   */
+    MOD_PARAM_2_MOD_IND_2_25                                    =   0x08,           /*!<  Modindex: 2.25                                                */
+    MOD_PARAM_2_MOD_IND_2_50                                    =   0x09,           /*!<  Modindex: 2.5                                                 */
+    MOD_PARAM_2_MOD_IND_2_75                                    =   0x0A,           /*!<  Modindex: 2.75                                                */
+    MOD_PARAM_2_MOD_IND_3_00                                    =   0x0B,           /*!<  Modindex: 3                                                   */
+    MOD_PARAM_2_MOD_IND_3_25                                    =   0x0C,           /*!<  Modindex: 3.25                                                */
+    MOD_PARAM_2_MOD_IND_3_50                                    =   0x0D,           /*!<  Modindex: 3.5                                                 */
+    MOD_PARAM_2_MOD_IND_3_75                                    =   0x0E,           /*!<  Modindex: 3.75                                                */
+    MOD_PARAM_2_MOD_IND_4_00                                    =   0x0F            /*!<  Modindex: 4                                                   */
+} SX128X_modulation_parameter_gfsk_ble_modparam2_t;
+
+
+
+/* MODULATION PARAMETERS 2 <7:0>: FLRC MODE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    MOD_PARAM_2_FLRC_MASK                                       =   0xFF,           /*!<  Mod param 2 FLRC mode mask                                    */
+    MOD_PARAM_2_FLRC_CR_1_2                                     =   0x00,           /*!<  Coding rate: 1/2                                              */
+    MOD_PARAM_2_FLRC_CR_3_4                                     =   0x02,           /*!<  Coding rate: 3/4                                              */
+    MOD_PARAM_2_FLRC_CR_1_0                                     =   0x04            /*!<  Coding rate: 1                                                */
+} SX128X_modulation_parameter_flrc_modparam2_t;
+
+
+
+/* MODULATION PARAMETERS 2 <7:0>: LORA MODE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    MOD_PARAM_2_LORA_MASK                                       =   0xFF,           /*!<  Mod param 2 LoRa mode mask                                    */
+    MOD_PARAM_2_LORA_BW_1600                                    =   0x0A,           /*!<  Bandwidth:  1625.0   kHz                                      */
+    MOD_PARAM_2_LORA_BW_800                                     =   0x18,           /*!<  Bandwidth:   812.5   kHz                                      */
+    MOD_PARAM_2_LORA_BW_400                                     =   0x26,           /*!<  Bandwidth:   406.25  kHz                                      */
+    MOD_PARAM_2_LORA_BW_200                                     =   0x34            /*!<  Bandwidth:   203.125 kHz                                      */
+} SX128X_modulation_parameter_lora_modparam2_t;
+
+
+
+/* MODULATION PARAMETERS 3 <7:0>: GFSK, BLE AND FLRC MODE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    MOD_PARAM_3_GFSK_BLE_FLRC_MASK                              =   0xFF,           /*!<  Mod param 3 GFSK, BLE and FLRC mode mask                      */
+    MOD_PARAM_3_BT_OFF                                          =   0x00,           /*!<  BT: No filtering                                              */
+    MOD_PARAM_3_BT_1_0                                          =   0x10,           /*!<  BT: 1                                                         */
+    MOD_PARAM_3_BT_0_5                                          =   0x20            /*!<  BT: 0.5                                                       */
+} SX128X_modulation_parameter_gfsk_ble_flrc_modparam3_t;
+
+
+
+/* MODULATION PARAMETERS 3 <7:0>: LORA MODE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    MOD_PARAM_3_LORA_MASK                                       =   0xFF,           /*!<  Mod param 3 LoRa mode mask                                    */
+    MOD_PARAM_3_LORA_CR_4_5                                     =   0x01,           /*!<  Coding rate:  4/5                                             */
+    MOD_PARAM_3_LORA_CR_4_6                                     =   0x02,           /*!<  Coding rate:  4/6                                             */
+    MOD_PARAM_3_LORA_CR_4_7                                     =   0x03,           /*!<  Coding rate:  4/7                                             */
+    MOD_PARAM_3_LORA_CR_4_8                                     =   0x04,           /*!<  Coding rate:  4/8                                             */
+    MOD_PARAM_3_LORA_CR_LI_4_5                                  =   0x05,           /*!<  Coding rate:  4/5                                             */
+    MOD_PARAM_3_LORA_CR_LI_4_6                                  =   0x06,           /*!<  Coding rate:  4/6                                             */
+    MOD_PARAM_3_LORA_CR_LI_4_7                                  =   0x07            /*!<  Coding rate:  4/8                                             */
+} SX128X_modulation_parameter_lora_modparam3_t;
 
 
 
@@ -427,10 +528,14 @@ SX128X_status_t  SetCadParams               ( SPI_parameters_t mySPI_parameters,
   */
 SX128X_status_t  SetBufferBaseAddress       ( SPI_parameters_t mySPI_parameters, uint8_t myTxBaseAdress, uint8_t myRxBaseAdress                                                                                                 );
 
-/** It configures the modulation parameters of the radio ( GFSK mode ).
+/** It configures the modulation parameters of the radio ( GFSK and BLE mode ).
   */
-SX128X_status_t  SetModulationParams        ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_gfsk_modparam1_t myModParam1                                                                                                 );
+SX128X_status_t  SetModulationParams_GFSK_BLE   ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_gfsk_ble_modparam1_t myModParam1, SX128X_modulation_parameter_gfsk_ble_modparam2_t myModParam2, SX128X_modulation_parameter_gfsk_ble_flrc_modparam3_t myModParam3  );
 
 /** It configures the modulation parameters of the radio ( FLRC mode ).
   */
-SX128X_status_t  SetModulationParams        ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_flrc_modparam1_t myModParam1                                                                                                 );
+SX128X_status_t  SetModulationParams_FLRC   ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_flrc_modparam1_t myModParam1, SX128X_modulation_parameter_flrc_modparam2_t myModParam2, SX128X_modulation_parameter_gfsk_ble_flrc_modparam3_t myModParam3              );
+
+/** It configures the modulation parameters of the radio ( LoRa mode ).
+  */
+SX128X_status_t  SetModulationParams_LORA   ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_lora_modparam1_t myModParam1, SX128X_modulation_parameter_lora_modparam2_t myModParam2, SX128X_modulation_parameter_lora_modparam3_t myModParam3                       );
