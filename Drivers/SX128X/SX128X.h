@@ -539,3 +539,4 @@ SX128X_status_t  SetModulationParams_FLRC   ( SPI_parameters_t mySPI_parameters,
 /** It configures the modulation parameters of the radio ( LoRa mode ).
   */
 SX128X_status_t  SetModulationParams_LORA   ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_lora_modparam1_t myModParam1, SX128X_modulation_parameter_lora_modparam2_t myModParam2, SX128X_modulation_parameter_lora_modparam3_t myModParam3                       );
+
