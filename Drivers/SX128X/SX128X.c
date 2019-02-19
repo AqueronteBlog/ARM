@@ -1014,3 +1014,150 @@ SX128X_status_t SetBufferBaseAddress ( SPI_parameters_t mySPI_parameters, uint8_
         return   SX128X_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       SetModulationParams_GFSK_BLE ( SPI_parameters_t , SX128X_modulation_parameter_gfsk_ble_modparam1_t , SX128X_modulation_parameter_gfsk_ble_modparam2_t , SX128X_modulation_parameter_gfsk_ble_flrc_modparam3_t )
+ *
+ * @details     It configures the modulation parameters of the radio ( GFSK and BLE mode ).
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myModParam1:       BitrateBandwidth.
+ * @param[in]    myModParam2:       ModulationIndex.
+ * @param[in]    myModParam3:       ModulationShaping.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetModulationParams_GFSK_BLE.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/February/2019
+ * @version     19/February/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX128X_status_t SetModulationParams_GFSK_BLE ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_gfsk_ble_modparam1_t myModParam1, SX128X_modulation_parameter_gfsk_ble_modparam2_t myModParam2, SX128X_modulation_parameter_gfsk_ble_flrc_modparam3_t myModParam3 )
+{
+    uint8_t      cmd[4]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_MODULATION_PARAMS;
+    cmd[1]   =   myModParam1;
+    cmd[2]   =   myModParam2;
+    cmd[3]   =   myModParam3;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetModulationParams_FLRC ( SPI_parameters_t , SX128X_modulation_parameter_flrc_modparam1_t , SX128X_modulation_parameter_flrc_modparam2_t , SX128X_modulation_parameter_gfsk_ble_flrc_modparam3_t )
+ *
+ * @details     It configures the modulation parameters of the radio ( FLRC mode ).
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myModParam1:       BitrateBandwidth.
+ * @param[in]    myModParam2:       CodingRate.
+ * @param[in]    myModParam3:       ModulationShaping.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetModulationParams_FLRC.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/February/2019
+ * @version     19/February/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX128X_status_t SetModulationParams_FLRC ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_flrc_modparam1_t myModParam1, SX128X_modulation_parameter_flrc_modparam2_t myModParam2, SX128X_modulation_parameter_gfsk_ble_flrc_modparam3_t myModParam3 )
+{
+    uint8_t      cmd[4]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_MODULATION_PARAMS;
+    cmd[1]   =   myModParam1;
+    cmd[2]   =   myModParam2;
+    cmd[3]   =   myModParam3;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetModulationParams_LORA ( SPI_parameters_t , SX128X_modulation_parameter_lora_modparam1_t , SX128X_modulation_parameter_lora_modparam2_t , SX128X_modulation_parameter_lora_modparam3_t )
+ *
+ * @details     It configures the modulation parameters of the radio ( LoRa mode ).
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myModParam1:       SpreadingFactor.
+ * @param[in]    myModParam2:       Bandwidth.
+ * @param[in]    myModParam3:       CodingRate.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetModulationParams_LORA.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/February/2019
+ * @version     19/February/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX128X_status_t SetModulationParams_LORA ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_lora_modparam1_t myModParam1, SX128X_modulation_parameter_lora_modparam2_t myModParam2, SX128X_modulation_parameter_lora_modparam3_t myModParam3 )
+{
+    uint8_t      cmd[4]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_MODULATION_PARAMS;
+    cmd[1]   =   myModParam1;
+    cmd[2]   =   myModParam2;
+    cmd[3]   =   myModParam3;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
