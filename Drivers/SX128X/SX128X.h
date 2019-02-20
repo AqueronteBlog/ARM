@@ -412,6 +412,116 @@ typedef enum
 
 
 
+/**
+  * @brief   SET PACKET PARAMS
+  */
+/* SET PACKET PARAMS 1 <7:0>: PREAMBLE LENGTH
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_1_PREAMBLE_LENGTH_MASK                         =   0xFF,           /*!<  packetParam1: PreambleLength mask                             */
+    PACKET_PARAM_1_PREAMBLE_LENGTH_04_BITS                      =   0x00,           /*!<  packetParam1, PreambleLength  4 bits                          */
+    PACKET_PARAM_1_PREAMBLE_LENGTH_08_BITS                      =   0x10,           /*!<  packetParam1, PreambleLength  8 bits                          */
+    PACKET_PARAM_1_PREAMBLE_LENGTH_12_BITS                      =   0x20,           /*!<  packetParam1, PreambleLength 12 bits                          */
+    PACKET_PARAM_1_PREAMBLE_LENGTH_16_BITS                      =   0x30,           /*!<  packetParam1, PreambleLength 16 bits                          */
+    PACKET_PARAM_1_PREAMBLE_LENGTH_20_BITS                      =   0x40,           /*!<  packetParam1, PreambleLength 20 bits                          */
+    PACKET_PARAM_1_PREAMBLE_LENGTH_24_BITS                      =   0x50,           /*!<  packetParam1, PreambleLength 24 bits                          */
+    PACKET_PARAM_1_PREAMBLE_LENGTH_28_BITS                      =   0x60,           /*!<  packetParam1, PreambleLength 28 bits                          */
+    PACKET_PARAM_1_PREAMBLE_LENGTH_32_BITS                      =   0x70            /*!<  packetParam1, PreambleLength 32 bits                          */
+} SX128X_packet_param1_preamble_length_t;
+
+
+
+/* SET PACKET PARAMS 1 <7:0>: CONNECTION STATE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_1_CONN_STATE_MASK                              =   0xFF,           /*!<  packetParam1: ConnectionState mask                            */
+    PACKET_PARAM_1_CONN_STATE_BLE_PAYLOAD_LENGTH_MAX_31_BYTES   =   0x00,           /*!<  packetParam1, Maximum Payload Size:  31 bytes                 */
+    PACKET_PARAM_1_CONN_STATE_BLE_PAYLOAD_LENGTH_MAX_37_BYTES   =   0x20,           /*!<  packetParam1, Maximum Payload Size:  37 bytes                 */
+    PACKET_PARAM_1_CONN_STATE_BLE_TX_TEST_MODE                  =   0x40,           /*!<  packetParam1, Maximum Payload Size:  63 bytes                 */
+    PACKET_PARAM_1_CONN_STATE_BLE_PAYLOAD_LENGTH_MAX_255_BYTES  =   0x80            /*!<  packetParam1, Maximum Payload Size: 255 bytes                 */
+} SX128X_packet_param1_connection_state_t;
+
+
+
+/* SET PACKET PARAMS 2 <7:0>: SYNC WORD LENGTH
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_2_SYNC_WORD_MASK                               =   0xFF,           /*!<  packetParam2: SyncWordLength mask                             */
+    PACKET_PARAM_2_SYNC_WORD_LEN_1_B                            =   0x00,           /*!<  packetParam2, SyncWordLength: 1 bytes                         */
+    PACKET_PARAM_2_SYNC_WORD_LEN_2_B                            =   0x02,           /*!<  packetParam2, SyncWordLength: 2 bytes                         */
+    PACKET_PARAM_2_SYNC_WORD_LEN_3_B                            =   0x04,           /*!<  packetParam2, SyncWordLength: 3 bytes                         */
+    PACKET_PARAM_2_SYNC_WORD_LEN_4_B                            =   0x06,           /*!<  packetParam2, SyncWordLength: 4 bytes                         */
+    PACKET_PARAM_2_SYNC_WORD_LEN_5_B                            =   0x08            /*!<  packetParam2, SyncWordLength: 5 bytes                         */
+} SX128X_packet_param2_sync_word_length_t;
+
+
+
+/* SET PACKET PARAMS 2 <7:0>: CRC
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_2_BLE_CRC_MASK                                 =   0xFF,           /*!<  packetParam2: CRC mask                                        */
+    PACKET_PARAM_2_BLE_CRC_OFF                                  =   0x00,           /*!<  packetParam2, No CRC                                          */
+    PACKET_PARAM_2_BLE_CRC_3B                                   =   0x10            /*!<  packetParam2, CRC field used 3bytes                           */
+} SX128X_packet_param2_crc_t;
+
+
+
+/* SET PACKET PARAMS 2 <7:0>: HEADER TYPE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_2_HEADER_TYPE_MASK                             =   0xFF,           /*!<  packetParam2: HeaderType mask                                 */
+    PACKET_PARAM_2_HEADER_TYPE_EXPLICIT_HEADER                  =   0x00,           /*!<  packetParam2, HeaderType: EXPLICIT HEADER                     */
+    PACKET_PARAM_2_HEADER_TYPE_IMPLICIT_HEADER                  =   0x80            /*!<  packetParam2, HeaderType: IMPLICIT HEADER                     */
+} SX128X_packet_param2_header_type_t;
+
+
+
+/* SET PACKET PARAMS 3 <7:0>: SYNC WORD MATCH
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_MASK                 =   0xFF,           /*!<  packetParam3: SyncWordMatch mask                              */
+    PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_OFF                  =   0x00,           /*!<  packetParam3, Disable Sync Word                               */
+    PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_1                    =   0x10,           /*!<  packetParam3, SyncWord1                                       */
+    PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_2                    =   0x20,           /*!<  packetParam3, SyncWord2                                       */
+    PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_1_2                  =   0x30,           /*!<  packetParam3, SyncWord1 or SyncWord2                          */
+    PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_3                    =   0x40,           /*!<  packetParam3, SyncWord3                                       */
+    PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_1_3                  =   0x50,           /*!<  packetParam3, SyncWord1 or SyncWord3                          */
+    PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_2_3                  =   0x60,           /*!<  packetParam3, SyncWord2 or SyncWord3                          */
+    PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_1_2_3                =   0x70            /*!<  packetParam3, SyncWord1, SyncWord2 or SyncWord3               */
+} SX128X_packet_param3_header_type_t;
+
+
+
+/* SET PACKET PARAMS 3 <7:0>: BLE TEST PAYLOAD
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_3_BLE_TEST_PAYLOAD_MASK                        =   0xFF,           /*!<  packetParam3: BleTestPayload mask                                                                                                                                 */
+    PACKET_PARAM_3_BLE_TEST_PAYLOAD_BLE_PRBS_9                  =   0x00,           /*!<  packetParam3, Pseudo Random Binary Sequence based on 9th degree polynomial P7(x) = x9+ x5+ 1 PRBS9 sequence '1111111110000011110 1...' ( in transmission order )  */
+    PACKET_PARAM_3_BLE_TEST_PAYLOAD_BLE_EYELONG_1_0             =   0x04,           /*!<  packetParam3, Repeated '11110000' ( in transmission order ) sequence                                                                                              */
+    PACKET_PARAM_3_BLE_TEST_PAYLOAD_BLE_EYESHORT_1_0            =   0x08,           /*!<  packetParam3, Repeated '10101010' ( in transmission order ) sequence                                                                                              */
+    PACKET_PARAM_3_BLE_TEST_PAYLOAD_BLE_PRBS_15                 =   0x0C,           /*!<  packetParam3, Pseudo Random Binary Sequence based on 15th degree polynomial P15(x) = x15 + x14 + x13 + x12 + x2 + x + 1                                           */
+    PACKET_PARAM_3_BLE_TEST_PAYLOAD_BLE_ALL_1                   =   0x10,           /*!<  packetParam3, Repeated '11111111' ( in transmission order ) sequence                                                                                              */
+    PACKET_PARAM_3_BLE_TEST_PAYLOAD_BLE_ALL_0                   =   0x14,           /*!<  packetParam3, Repeated '11111111' ( in transmission order ) sequence                                                                                              */
+    PACKET_PARAM_3_BLE_TEST_PAYLOAD_BLE_EYELONG_0_1             =   0x18,           /*!<  packetParam3, Repeated '00001111' ( in transmission order ) sequence                                                                                              */
+    PACKET_PARAM_3_BLE_TEST_PAYLOAD_BLE_EYESHORT_0_1            =   0x1C            /*!<  packetParam3, Repeated '01010101' ( in transmission order ) sequence                                                                                              */
+} SX128X_packet_param3_ble_test_payload_t;
+
+
+
 
 
 
