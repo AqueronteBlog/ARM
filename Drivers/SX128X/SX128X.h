@@ -522,6 +522,42 @@ typedef enum
 
 
 
+/* SET PACKET PARAMS 4 <7:0>: HEADER TYPE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_4_RADIO_PACKET_MASK                            =   0xFF,           /*!<  packetParam4: HeaderType mask                                 */
+    PACKET_PARAM_4_RADIO_PACKET_FIXED_LENGTH                    =   0x00,           /*!<  packetParam4, FIXED LENGTH MODE                               */
+    PACKET_PARAM_4_RADIO_PACKET_VARIABLE_LENGTH                 =   0x20            /*!<  packetParam4, VARIABLE LENGTH MODE                            */
+} SX128X_packet_param4_header_type_t;
+
+
+
+/* SET PACKET PARAMS 4 <7:0>: WHITENING ENABLING IN BLE PACKET
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_4_BLE_WHITENING_MASK                           =   0xFF,           /*!<  packetParam4: BLE WHITENING mask                              */
+    PACKET_PARAM_4_BLE_WHITENING_ENABLE                         =   0x00,           /*!<  packetParam4, WHITENING ENABLE                                */
+    PACKET_PARAM_4_BLE_WHITENING_DISABLE                        =   0x08            /*!<  packetParam4, WHITENING DISABLE                               */
+} SX128X_packet_param4_whitening_t;
+
+
+
+/* SET PACKET PARAMS 4 <7:0>: LORA CRC
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_4_LORA_CRC_MASK                                =   0xFF,           /*!<  packetParam4: LoRa CRC mask                                   */
+    PACKET_PARAM_4_LORA_CRC_ENABLE                              =   0x20,           /*!<  packetParam4, CRC ENABLE                                      */
+    PACKET_PARAM_4_LORA_CRC_DISABLE                             =   0x00            /*!<  packetParam4, CRC DISABLE                                     */
+} SX128X_packet_param4_lora_crc_t;
+
+
+
 
 
 
