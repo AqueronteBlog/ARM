@@ -558,6 +558,43 @@ typedef enum
 
 
 
+/* SET PACKET PARAMS 5 <7:0>: INVERTIQ/CHIRP
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_5_LORA_IQ_MASK                                 =   0xFF,           /*!<  packetParam5: InvertIQ/chirp invert mask                      */
+    PACKET_PARAM_5_LORA_IQ_STD                                  =   0x40,           /*!<  packetParam5, IQ as defined                                   */
+    PACKET_PARAM_5_LORA_IQ_INVERTED                             =   0x00            /*!<  packetParam5, IQ swapped                                      */
+} SX128X_packet_param5_lora_iq_t;
+
+
+
+/* SET PACKET PARAMS 6 <7:0>: CRC LENGTH
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_6_RADIO_CRC_MASK                               =   0xFF,           /*!<  packetParam6: InvertIQ/chirp invert mask                      */
+    PACKET_PARAM_6_RADIO_CRC_OFF                                =   0x00,           /*!<  packetParam6, No CRC                                          */
+    PACKET_PARAM_6_RADIO_CRC_1_BYTES                            =   0x10,           /*!<  packetParam6, CRC field used 1 byte                           */
+    PACKET_PARAM_6_RADIO_CRC_2_BYTES                            =   0x20            /*!<  packetParam6, CRC field uses 2 bytes                          */
+} SX128X_packet_param6_crc_length_t;
+
+
+
+/* SET PACKET PARAMS 7 <7:0>: WHITENING
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PACKET_PARAM_7_WHITENING_MASK                               =   0xFF,           /*!<  packetParam7: WHITENING mask                                  */
+    PACKET_PARAM_7_WHITENING_ENABLE                             =   0x00,           /*!<  packetParam7, WHITENING ENABLE                                */
+    PACKET_PARAM_7_WHITENING_DISABLE                            =   0x08            /*!<  packetParam7, WHITENING DISABLE                               */
+} SX128X_packet_param7_whitening_t;
+
+
+
 
 
 
