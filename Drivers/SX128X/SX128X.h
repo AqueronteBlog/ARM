@@ -462,7 +462,7 @@ typedef enum
 
 
 
-/* SET PACKET PARAMS 2 <7:0>: CRC
+/* SET PACKET PARAMS 2 <7:0>: CRC LENGHT
  *    NOTE: N/A.
  */
 typedef enum
@@ -500,7 +500,7 @@ typedef enum
     PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_1_3                  =   0x50,           /*!<  packetParam3, SyncWord1 or SyncWord3                          */
     PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_2_3                  =   0x60,           /*!<  packetParam3, SyncWord2 or SyncWord3                          */
     PACKET_PARAM_3_RADIO_RX_MATCH_SYNCWORD_1_2_3                =   0x70            /*!<  packetParam3, SyncWord1, SyncWord2 or SyncWord3               */
-} SX128X_packet_param3_header_type_t;
+} SX128X_packet_param3_sync_word_match_t;
 
 
 
@@ -605,9 +605,13 @@ typedef enum
 #define SX128X_VECTOR_STRUCT_H
 typedef struct
 {
-    uint8_t                     status;             /*!<  Status            */
+    /* Status variables  */
+    uint8_t                     status;                 /*!<  Status                                    */
+    uint8_t                     rxPayloadLength;        /*!<  The length of the last received packet    */
+    uint8_t                     rxStartBufferPointer;   /*!<  The address of the first byte received    */
 
-    SX128X_set_packet_time_t    packetType;         /*!<  Packet type       */
+    /* Packet type    */
+    SX128X_set_packet_time_t    packetType;             /*!<  Packet type                               */
 } SX128X_data_t;
 #endif
 
@@ -723,3 +727,22 @@ SX128X_status_t  SetModulationParams_FLRC   ( SPI_parameters_t mySPI_parameters,
   */
 SX128X_status_t  SetModulationParams_LORA   ( SPI_parameters_t mySPI_parameters, SX128X_modulation_parameter_lora_modparam1_t myModParam1, SX128X_modulation_parameter_lora_modparam2_t myModParam2, SX128X_modulation_parameter_lora_modparam3_t myModParam3                       );
 
+/** It sets the parameters of the packet handling block ( GFSK mode ).
+  */
+SX128X_status_t  SetPacketParams_GFSK       ( SPI_parameters_t mySPI_parameters, SX128X_packet_param1_preamble_length_t myPreambleLength, SX128X_packet_param2_sync_word_length_t mySyncWordLength, SX128X_packet_param3_sync_word_match_t mySyncWordMatch, SX128X_packet_param4_header_type_t myHeaderType, uint8_t myPayloadLength, SX128X_packet_param6_crc_length_t myCrcLength, SX128X_packet_param7_whitening_t myWhitening   );
+
+/** It sets the parameters of the packet handling block ( FLRC mode ).
+  */
+SX128X_status_t  SetPacketParams_FLRC       ( SPI_parameters_t mySPI_parameters, SX128X_packet_param1_preamble_length_t myPreambleLength, SX128X_packet_param2_sync_word_length_t mySyncWordLength, SX128X_packet_param3_sync_word_match_t mySyncWordMatch, SX128X_packet_param4_header_type_t myHeaderType, uint8_t myPayloadLength, SX128X_packet_param6_crc_length_t myCrcLength, SX128X_packet_param7_whitening_t myWhitening   );
+
+/** It sets the parameters of the packet handling block ( BLE mode ).
+  */
+SX128X_status_t  SetPacketParams_BLE        ( SPI_parameters_t mySPI_parameters, SX128X_packet_param1_connection_state_t myConnectionState, SX128X_packet_param2_crc_t myCrcLength, SX128X_packet_param3_ble_test_payload_t myBleTestPayload, SX128X_packet_param4_whitening_t myWhitening              );
+
+/** It sets the parameters of the packet handling block ( LoRa and Ranging Engine mode ).
+  */
+SX128X_status_t  SetPacketParams_LORA       ( SPI_parameters_t mySPI_parameters, uint8_t myLORA_PBLE_LEN_MANT, uint8_t myLORA_PBLE_LEN_EXP, SX128X_packet_param2_header_type_t myHeaderType, uint8_t myPayloadLength, SX128X_packet_param4_lora_crc_t myCRC, SX128X_packet_param5_lora_iq_t myInvertIQ    );
+
+/** It returns the length of the last received packet ( payloadLengthRx ) and the address of the first byte received ( rxBufferOffset ), it is applicable to all modems.
+  */
+SX128X_status_t  GetRxBufferStatus          ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myBufferStatus                                                                                                                  );
