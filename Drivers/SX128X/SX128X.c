@@ -1161,3 +1161,294 @@ SX128X_status_t SetModulationParams_LORA ( SPI_parameters_t mySPI_parameters, SX
         return   SX128X_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       SetPacketParams_GFSK ( SPI_parameters_t , SX128X_packet_param1_preamble_length_t , SX128X_packet_param2_sync_word_length_t , SX128X_packet_param3_sync_word_match_t , SX128X_packet_param4_header_type_t , uint8_t , SX128X_packet_param6_crc_length_t , SX128X_packet_param7_whitening_t )
+ *
+ * @details     It sets the parameters of the packet handling block ( GFSK mode ).
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myPreambleLength:  Preamble Length     ( SetPacketParam1 ).
+ * @param[in]    mySyncWordLength:  Sync Word Length    ( SetPacketParam2 ).
+ * @param[in]    mySyncWordMatch:   Sync Word Match     ( SetPacketParam3 ).
+ * @param[in]    myHeaderType:      Header Type         ( SetPacketParam4 ).
+ * @param[in]    myPayloadLength:   Payload Length      ( SetPacketParam5 ).
+ * @param[in]    myCrcLength:       CRC Length          ( SetPacketParam6 ).
+ * @param[in]    myWhitening:       Whitening           ( SetPacketParam7 ).
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetPacketParams_GFSK.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        23/February/2019
+ * @version     23/February/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX128X_status_t SetPacketParams_GFSK ( SPI_parameters_t mySPI_parameters, SX128X_packet_param1_preamble_length_t myPreambleLength, SX128X_packet_param2_sync_word_length_t mySyncWordLength, SX128X_packet_param3_sync_word_match_t mySyncWordMatch, SX128X_packet_param4_header_type_t myHeaderType, uint8_t myPayloadLength, SX128X_packet_param6_crc_length_t myCrcLength, SX128X_packet_param7_whitening_t myWhitening )
+{
+    uint8_t      cmd[8]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_PACKET_PARAMS;
+    cmd[1]   =   myPreambleLength;
+    cmd[2]   =   mySyncWordLength;
+    cmd[3]   =   mySyncWordMatch;
+    cmd[4]   =   myHeaderType;
+    cmd[5]   =   myPayloadLength;
+    cmd[6]   =   myCrcLength;
+    cmd[7]   =   myWhitening;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetPacketParams_FLRC ( SPI_parameters_t , SX128X_packet_param1_preamble_length_t , SX128X_packet_param2_sync_word_length_t , SX128X_packet_param3_sync_word_match_t , SX128X_packet_param4_header_type_t , uint8_t , SX128X_packet_param6_crc_length_t , SX128X_packet_param7_whitening_t )
+ *
+ * @details     It sets the parameters of the packet handling block ( FLRC mode ).
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myPreambleLength:  Preamble Length     ( SetPacketParam1 ).
+ * @param[in]    mySyncWordLength:  Sync Word Length    ( SetPacketParam2 ).
+ * @param[in]    mySyncWordMatch:   Sync Word Match     ( SetPacketParam3 ).
+ * @param[in]    myHeaderType:      Header Type         ( SetPacketParam4 ).
+ * @param[in]    myPayloadLength:   Payload Length      ( SetPacketParam5 ).
+ * @param[in]    myCrcLength:       CRC Length          ( SetPacketParam6 ).
+ * @param[in]    myWhitening:       Whitening           ( SetPacketParam7 ).
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetPacketParams_FLRC.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        23/February/2019
+ * @version     23/February/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX128X_status_t SetPacketParams_FLRC ( SPI_parameters_t mySPI_parameters, SX128X_packet_param1_preamble_length_t myPreambleLength, SX128X_packet_param2_sync_word_length_t mySyncWordLength, SX128X_packet_param3_sync_word_match_t mySyncWordMatch, SX128X_packet_param4_header_type_t myHeaderType, uint8_t myPayloadLength, SX128X_packet_param6_crc_length_t myCrcLength, SX128X_packet_param7_whitening_t myWhitening )
+{
+    uint8_t      cmd[8]  =   { 0U };
+    spi_status_t aux;
+
+    /* myPayloadLength must be [ 6:127 ]   */
+    if ( ( myPayloadLength < 6U ) || ( myPayloadLength > 127U ) )
+    {
+        return SX128X_FAILURE;
+    }
+    else
+    {
+        /* Send command  */
+        cmd[0]   =   SX128X_SET_PACKET_PARAMS;
+        cmd[1]   =   myPreambleLength;
+        cmd[2]   =   mySyncWordLength;
+        cmd[3]   =   mySyncWordMatch;
+        cmd[4]   =   myHeaderType;
+        cmd[5]   =   myPayloadLength;
+        cmd[6]   =   myCrcLength;
+        cmd[7]   =   myWhitening;
+        aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+    }
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetPacketParams_BLE ( SPI_parameters_t , SX128X_packet_param1_connection_state_t , SX128X_packet_param2_crc_t , SX128X_packet_param3_ble_test_payload_t , SX128X_packet_param4_whitening_t )
+ *
+ * @details     It sets the parameters of the packet handling block ( BLE mode ).
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myConnectionState: Connection State    ( SetPacketParam1 ).
+ * @param[in]    myCrcLength:       CRC Length          ( SetPacketParam2 ).
+ * @param[in]    myBleTestPayload:  BLE Test Payload    ( SetPacketParam3 ).
+ * @param[in]    myWhitening:       Whitening           ( SetPacketParam4 ).
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetPacketParams_BLE.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        23/February/2019
+ * @version     23/February/2019   The ORIGIN
+ * @pre         SetPacketParam5, SetPacketParam6 and SetPacketParam7 are NOT used.
+ * @warning     N/A.
+ */
+SX128X_status_t SetPacketParams_BLE ( SPI_parameters_t mySPI_parameters, SX128X_packet_param1_connection_state_t myConnectionState, SX128X_packet_param2_crc_t myCrcLength, SX128X_packet_param3_ble_test_payload_t myBleTestPayload, SX128X_packet_param4_whitening_t myWhitening )
+{
+    uint8_t      cmd[8]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_PACKET_PARAMS;
+    cmd[1]   =   myConnectionState;
+    cmd[2]   =   myCrcLength;
+    cmd[3]   =   myBleTestPayload;
+    cmd[4]   =   myWhitening;
+    cmd[5]   =   0x00;                          // Not used
+    cmd[6]   =   0x00;                          // Not used
+    cmd[7]   =   0x00;                          // Not used
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetPacketParams_LORA ( SPI_parameters_t , uint8_t , uint8_t , SX128X_packet_param2_header_type_t , uint8_t , SX128X_packet_param4_lora_crc_t , SX128X_packet_param5_lora_iq_t )
+ *
+ * @details     It sets the parameters of the packet handling block ( LoRa and Ranging Engine mode ).
+ *
+ *
+ * @param[in]    mySPI_parameters:      SPI parameters.
+ * @param[in]    myLORA_PBLE_LEN_MANT:  Connection State    ( SetPacketParam1 ).
+ * @param[in]    myLORA_PBLE_LEN_EXP:   CRC Length          ( SetPacketParam1 ).
+ * @param[in]    myHeaderType:          BLE Test Payload    ( SetPacketParam2 ).
+ * @param[in]    myPayloadLength:       Whitening           ( SetPacketParam3 ).
+ * @param[in]    myCRC:                 Whitening           ( SetPacketParam4 ).
+ * @param[in]    myInvertIQ:            Whitening           ( SetPacketParam5 ).
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetPacketParams_LORA.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        23/February/2019
+ * @version     23/February/2019   The ORIGIN
+ * @pre         SetPacketParam6 and SetPacketParam7 are NOT used.
+ * @warning     N/A.
+ */
+SX128X_status_t SetPacketParams_LORA ( SPI_parameters_t mySPI_parameters, uint8_t myLORA_PBLE_LEN_MANT, uint8_t myLORA_PBLE_LEN_EXP, SX128X_packet_param2_header_type_t myHeaderType, uint8_t myPayloadLength, SX128X_packet_param4_lora_crc_t myCRC, SX128X_packet_param5_lora_iq_t myInvertIQ )
+{
+    uint8_t      cmd[8]  =   { 0U };
+    spi_status_t aux;
+
+    /* myLORA_PBLE_LEN_MANT and myLORA_PBLE_LEN_EXP must be [ 1:15 ]   */
+    if ( ( ( myLORA_PBLE_LEN_MANT < 1U ) || ( myLORA_PBLE_LEN_MANT > 15U ) ) || ( ( myLORA_PBLE_LEN_EXP < 1U ) || ( myLORA_PBLE_LEN_EXP > 15U ) ) )
+    {
+        return SX128X_FAILURE;
+    }
+    else
+    {
+        /* Send command  */
+        cmd[0]   =   SX128X_SET_PACKET_PARAMS;
+        cmd[1]   =   myLORA_PBLE_LEN_EXP;
+        cmd[1] <<=   4U;
+        cmd[1]  |=   myLORA_PBLE_LEN_MANT;
+        cmd[2]   =   myHeaderType;
+        cmd[3]   =   myPayloadLength;
+        cmd[4]   =   myCRC;
+        cmd[5]   =   myInvertIQ;
+        cmd[6]   =   0x00;                          // Not used
+        cmd[7]   =   0x00;                          // Not used
+        aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+    }
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       GetRxBufferStatus ( SPI_parameters_t , SX128X_data_t* )
+ *
+ * @details     It returns the length of the last received packet ( payloadLengthRx ) and the address of the first byte received ( rxBufferOffset ),
+ *              it is applicable to all modems. The address is an offset relative to the first byte of the data buffer.
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ *
+ * @param[out]   myBufferStatus:    Status, rxPayloadLength and rxStartBufferPointer.
+ *
+ *
+ * @return       Status of GetRxBufferStatus.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        23/February/2019
+ * @version     23/February/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX128X_status_t GetRxBufferStatus   ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myBufferStatus )
+{
+    uint8_t      cmd[3]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_GET_RX_BUFFER_STATUS;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    /* Parse the data    */
+    myBufferStatus->status                   =   cmd[0];
+    myBufferStatus->rxPayloadLength          =   cmd[1];
+    myBufferStatus->rxStartBufferPointer     =   cmd[2];
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
