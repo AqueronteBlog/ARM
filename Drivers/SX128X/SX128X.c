@@ -1452,4 +1452,3 @@ SX128X_status_t GetRxBufferStatus   ( SPI_parameters_t mySPI_parameters, SX128X_
         return   SX128X_FAILURE;
     }
 }
-
