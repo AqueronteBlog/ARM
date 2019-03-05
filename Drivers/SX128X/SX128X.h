@@ -606,12 +606,15 @@ typedef enum
 typedef struct
 {
     /* Status variables  */
-    uint8_t                     status;                 /*!<  Status                                    */
-    uint8_t                     rxPayloadLength;        /*!<  The length of the last received packet    */
-    uint8_t                     rxStartBufferPointer;   /*!<  The address of the first byte received    */
+    uint8_t                     status;                 /*!<  Status                                                    */
+    uint8_t                     rxPayloadLength;        /*!<  The length of the last received packet                    */
+    uint8_t                     rxStartBufferPointer;   /*!<  The address of the first byte received                    */
 
     /* Packet type    */
-    SX128X_set_packet_time_t    packetType;             /*!<  Packet type                               */
+    SX128X_set_packet_time_t    packetType;             /*!<  Packet type                                               */
+
+    /* GetRssiInst   */
+    int8_t                      rssiInst;               /*!<  Instantaneous RSSI value during reception of the packet   */
 } SX128X_data_t;
 #endif
 
@@ -746,3 +749,9 @@ SX128X_status_t  SetPacketParams_LORA       ( SPI_parameters_t mySPI_parameters,
 /** It returns the length of the last received packet ( payloadLengthRx ) and the address of the first byte received ( rxBufferOffset ), it is applicable to all modems.
   */
 SX128X_status_t  GetRxBufferStatus          ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myBufferStatus                                                                                                                  );
+
+// GetPacketStatus
+
+/** It returns the instantaneous RSSI value during reception of the packet.
+  */
+SX128X_status_t  GetRssiInst                ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myBufferStatus                                                                                                                  );
