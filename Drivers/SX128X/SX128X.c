@@ -1452,3 +1452,53 @@ SX128X_status_t GetRxBufferStatus   ( SPI_parameters_t mySPI_parameters, SX128X_
         return   SX128X_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       GetRssiInst ( SPI_parameters_t , SX128X_data_t* )
+ *
+ * @details     It returns the instantaneous RSSI value during reception of the packet. The command is valid for all frames. In
+ *              LoRa operation, the instantaneous RSSI is updated at every symbol received.
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ *
+ * @param[out]   myBufferStatus:    rssiInst.
+ *
+ *
+ * @return       Status of GetRssiInst.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        5/March/2019
+ * @version     5/March/2019   The ORIGIN
+ * @pre         rssiInst is processed according to datasheet: Table 11-70: RssiInst Definition p.86.
+ * @pre         This function updates the status mode as well.
+ * @warning     N/A.
+ */
+SX128X_status_t GetRssiInst   ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myBufferStatus )
+{
+    uint8_t      cmd[2]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_GET_RSSI_INST;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    /* Parse the data    */
+    myBufferStatus->status   =   cmd[0];
+    myBufferStatus->rssiInst =   ( -cmd[1] )/2;
+
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
