@@ -595,6 +595,35 @@ typedef enum
 
 
 
+/**
+  * @brief   IRQ REGISTER
+  */
+/* SIRQ REGISTER <15:0>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    IRQ_REGISTER_MASK                                           =   0xFFFF,         /*!<  IRQ register mask                                                                 */
+    IRQ_REGISTER_TXDONE                                         =   ( 1U << 0U ),   /*!<  IRQ register: Tx complete ( all packet )                                          */
+    IRQ_REGISTER_RXDONE                                         =   ( 1U << 1U ),   /*!<  IRQ register: Rx complete ( all packet )                                          */
+    IRQ_REGISTER_SYNCWORDVALID                                  =   ( 1U << 2U ),   /*!<  IRQ register: Sync. word valid ( GFSK/BLE/FLRC packet )                           */
+    IRQ_REGISTER_SYNCWORDERROR                                  =   ( 1U << 3U ),   /*!<  IRQ register: Sync. word error ( FLRC packet )                                    */
+    IRQ_REGISTER_HEADERVALID                                    =   ( 1U << 4U ),   /*!<  IRQ register: Header Valid ( LoRa/Ranging Engine packet )                         */
+    IRQ_REGISTER_HEADERERROR                                    =   ( 1U << 5U ),   /*!<  IRQ register: Header Error( LoRa/Ranging Engine packet )                          */
+    IRQ_REGISTER_CRCERROR                                       =   ( 1U << 6U ),   /*!<  IRQ register: CRC error ( GFSK/BLE/FLRC/LoRa packet )                             */
+    IRQ_REGISTER_RANGING_SLAVE_RESPONSEDONE                     =   ( 1U << 7U ),   /*!<  IRQ register: Ranging response complete (Slave) ( Ranging Engine packet )         */
+    IRQ_REGISTER_RANGING_SLAVE_REQUEST_DISCARD                  =   ( 1U << 8U ),   /*!<  IRQ register: Ranging request discarded (Slave) ( LoRa/Ranging Engine packet )    */
+    IRQ_REGISTER_RANGING_MASTER_RESULT_VALID                    =   ( 1U << 9U ),   /*!<  IRQ register: Ranging result valid (Master) ( Ranging Engine packet )             */
+    IRQ_REGISTER_RANGING_MASTER_TIMEOUT                         =   ( 1U << 10U ),  /*!<  IRQ register: Ranging timeout (Master) ( Ranging Engine packet )                  */
+    IRQ_REGISTER_RANGING_MASTER_REQUEST_VALID                   =   ( 1U << 11U ),  /*!<  IRQ register: Ranging Request valid (Slave) ( Ranging Engine packet )             */
+    IRQ_REGISTER_CADDONE                                        =   ( 1U << 12U ),  /*!<  IRQ register: Channel activity check complete ( LoRa/Ranging Engine packet )      */
+    IRQ_REGISTER_CADDETECTED                                    =   ( 1U << 13U ),  /*!<  IRQ register: Channel activity detected ( LoRa/Ranging Engine packet )            */
+    IRQ_REGISTER_RXTXTIMEOUT                                    =   ( 1U << 14U ),  /*!<  IRQ register: Rx or Tx timeout ( all packet )                                     */
+    IRQ_REGISTER_PREAMBLEDETECTED                               =   ( 1U << 15U )   /*!<  IRQ register: Preamble Detected ( All if SetLongPreamble is activate packet )     */
+} SX128X_irq_register_t;
+
+
+
 
 
 
@@ -615,6 +644,9 @@ typedef struct
 
     /* GetRssiInst   */
     int8_t                      rssiInst;               /*!<  Instantaneous RSSI value during reception of the packet   */
+
+    /* IRQ Status   */
+    uint16_t                    irqStatus;              /*!<  Current IRQ flags                                         */
 } SX128X_data_t;
 #endif
 
@@ -755,3 +787,15 @@ SX128X_status_t  GetRxBufferStatus          ( SPI_parameters_t mySPI_parameters,
 /** It returns the instantaneous RSSI value during reception of the packet.
   */
 SX128X_status_t  GetRssiInst                ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myBufferStatus                                                                                                                  );
+
+/** It enables IRQs and routes IRQs to DIO pins.
+  */
+SX128X_status_t  SetDioIrqParams            ( SPI_parameters_t mySPI_parameters, uint16_t myIrqMask, uint16_t myDIO1Mask, uint16_t myDIO2Mask, uint16_t myDIO3Mask                                                              );
+
+/** It returns the value of the IRQ register.
+  */
+SX128X_status_t  GetIrqStatus               ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myIRQ_Status                                                                                                                    );
+
+/** It clears an IRQ flag in IRQ register.
+  */
+SX128X_status_t  ClearIrqStatus             ( SPI_parameters_t mySPI_parameters, uint16_t myIrqMask                                                                                                                             );
