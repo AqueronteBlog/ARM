@@ -1502,3 +1502,159 @@ SX128X_status_t GetRssiInst   ( SPI_parameters_t mySPI_parameters, SX128X_data_t
         return   SX128X_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       SetDioIrqParams ( SPI_parameters_t , uint16_t , uint16_t , uint16_t )
+ *
+ * @details     It enables IRQs and routes IRQs to DIO pins.
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myIrqMask:         IRQ mask.
+ * @param[in]    myDIO1Mask:        DO1 pin mask.
+ * @param[in]    myDIO2Mask:        DO2 pin mask.
+ * @param[in]    myDIO3Mask:        DO3 pin mask.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetDioIrqParams.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/March/2019
+ * @version     6/March/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX128X_status_t SetDioIrqParams ( SPI_parameters_t mySPI_parameters, uint16_t myIrqMask, uint16_t myDIO1Mask, uint16_t myDIO2Mask, uint16_t myDIO3Mask )
+{
+    uint8_t      cmd[9]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_DIO_IRQ_PARAMS;
+    cmd[1]   =   (uint8_t)( ( myIrqMask >> 8U ) & 0xFF );
+    cmd[2]   =   (uint8_t)( myIrqMask & 0xFF );
+    cmd[3]   =   (uint8_t)( ( myDIO1Mask >> 8U ) & 0xFF );
+    cmd[4]   =   (uint8_t)( myDIO1Mask & 0xFF );
+    cmd[5]   =   (uint8_t)( ( myDIO2Mask >> 8U ) & 0xFF );
+    cmd[6]   =   (uint8_t)( myDIO2Mask & 0xFF );
+    cmd[7]   =   (uint8_t)( ( myDIO3Mask >> 8U ) & 0xFF );
+    cmd[8]   =   (uint8_t)( myDIO3Mask & 0xFF );
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       GetIrqStatus ( SPI_parameters_t , SX128X_data_t* )
+ *
+ * @details     It returns the value of the IRQ register.
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ *
+ * @param[out]   myIRQ_Status:      irqStatus flags.
+ *
+ *
+ * @return       Status of GetIrqStatus.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/March/2019
+ * @version     6/March/2019   The ORIGIN
+ * @pre         This function updates the status mode as well.
+ * @warning     N/A.
+ */
+SX128X_status_t GetIrqStatus  ( SPI_parameters_t mySPI_parameters, SX128X_data_t* myIRQ_Status )
+{
+    uint8_t      cmd[3]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_GET_IRQ_STATUS;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    /* Parse the data    */
+    myIRQ_Status->status      =   cmd[0];
+    myIRQ_Status->irqStatus   =   cmd[1];
+    myIRQ_Status->irqStatus <<=   8U;
+    myIRQ_Status->irqStatus  |=   cmd[2];
+
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       ClearIrqStatus ( SPI_parameters_t , uint16_t )
+ *
+ * @details     It clears an IRQ flag in IRQ register.
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myIrqMask:         IRQ flags to be cleared.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of ClearIrqStatus.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        6/March/2019
+ * @version     6/March/2019   The ORIGIN
+ * @pre         To clear an IRQ flag in IRQ register, one should set to 1 the bit of irqMask corresponding to the same
+ *              position as the IRQ flag to be cleared. As an example, if bit 0 of irqMask is set to 1 then the IRQ flag
+ *              at bit 0 for IRQ register is cleared.
+ * @pre         If a DIO is mapped to one single IRQ source, the DIO is cleared if the corresponding bit in the IRQ register
+ *              is cleared. If DIO is the ORed with several IRQ sources, then the DIO remains set to 1 until all bits mapped
+ *              to the DIO in the IRQ register are cleared.
+ * @warning     N/A.
+ */
+SX128X_status_t ClearIrqStatus ( SPI_parameters_t mySPI_parameters, uint16_t myIrqMask )
+{
+    uint8_t      cmd[3]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_CLR_IRQ_STATUS;
+    cmd[1]   =   (uint8_t)( ( myIrqMask >> 8U ) & 0xFF );
+    cmd[2]   =   (uint8_t)( myIrqMask & 0xFF );
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
