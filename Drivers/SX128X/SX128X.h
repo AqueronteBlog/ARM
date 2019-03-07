@@ -799,3 +799,4 @@ SX128X_status_t  GetIrqStatus               ( SPI_parameters_t mySPI_parameters,
 /** It clears an IRQ flag in IRQ register.
   */
 SX128X_status_t  ClearIrqStatus             ( SPI_parameters_t mySPI_parameters, uint16_t myIrqMask                                                                                                                             );
+
