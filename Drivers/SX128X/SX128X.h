@@ -624,6 +624,21 @@ typedef enum
 
 
 
+/**
+  * @brief   MISCELLANEOUS FUNCTIONS
+  */
+/* REGMODEPARAM <7:0>: REGULATOR USED
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    REGMODEPARAM_MASK                                           =   0xFF,           /*!<  RegModeParam mask                                                                 */
+    REGMODEPARAM_ONLY_LDO_IS_USED                               =   0x00,           /*!<  Only LDO used for all modes                                                       */
+    REGMODEPARAM_DC_DC_AND_LDO_ARE_USED                         =   0x01            /*!<  DC-DC used for STDBY_XOSC, FS, Rx and Tx modes LDO used for STDBY_RC              */
+} SX128X_regModeParam_t;
+
+
+
 
 
 
@@ -800,3 +815,12 @@ SX128X_status_t  GetIrqStatus               ( SPI_parameters_t mySPI_parameters,
   */
 SX128X_status_t  ClearIrqStatus             ( SPI_parameters_t mySPI_parameters, uint16_t myIrqMask                                                                                                                             );
 
+//
+
+/** It allows the user to specify if DC-DC or LDO is used for power regulation.
+  */
+SX128X_status_t  SetRegulatorMode           ( SPI_parameters_t mySPI_parameters, SX128X_regModeParam_t myRegModeParam                                                                                                           );
+
+/** It stores the present context of the radio register values to the Data RAM within the Protocol Engine for restoration upon wake-up.
+  */
+SX128X_status_t  SetSaveContext             ( SPI_parameters_t mySPI_parameters                                                                                                                                                 );
