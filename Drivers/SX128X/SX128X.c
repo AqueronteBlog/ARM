@@ -1658,3 +1658,94 @@ SX128X_status_t ClearIrqStatus ( SPI_parameters_t mySPI_parameters, uint16_t myI
         return   SX128X_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       SetRegulatorMode ( SPI_parameters_t , SX128X_regModeParam_t )
+ *
+ * @details     It allows the user to specify if DC-DC or LDO is used for power regulation.
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ * @param[in]    myRegModeParam:    Regulator used.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetRegulatorMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        11/March/2019
+ * @version     11/March/2019   The ORIGIN
+ * @pre         By default the LDO is enabled. This is useful in low cost applications where the cost of an extra inductor needed for DC-DC
+ *              converter is prohibitive. The penalty for using the LDO is a doubling of current consumption. This command allows the user
+ *              to specify if DC-DC or LDO is used for power regulation.
+ * @warning     N/A.
+ */
+SX128X_status_t SetRegulatorMode ( SPI_parameters_t mySPI_parameters, SX128X_regModeParam_t myRegModeParam )
+{
+    uint8_t      cmd[2]  =   { 0U };
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd[0]   =   SX128X_SET_REGULATOR_MODE;
+    cmd[1]   =   myRegModeParam;
+    aux      =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       SetSaveContext ( SPI_parameters_t )
+ *
+ * @details     It stores the present context of the radio register values to the Data RAM within the Protocol Engine for restoration upon wake-up.
+ *
+ *
+ * @param[in]    mySPI_parameters:  SPI parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SetSaveContext.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        11/March/2019
+ * @version     11/March/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     Upon transition to Sleep mode the contents of the transceiver registers will be lost. The configuration of the radio can be automatically restored
+ *              using the SetSaveContext() command.
+ */
+SX128X_status_t SetSaveContext ( SPI_parameters_t mySPI_parameters )
+{
+    uint8_t      cmd  =   0U;
+    spi_status_t aux;
+
+    /* Send command  */
+    cmd   =   SX128X_SET_SAVE_CONTEXT;
+    aux   =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 0U );
+
+
+
+    if ( aux == SPI_SUCCESS )
+    {
+        return   SX128X_SUCCESS;
+    }
+    else
+    {
+        return   SX128X_FAILURE;
+    }
+}
