@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: PCF85063. Every 1 seconds, a new
+ * @details     This example shows how to work with the external device: PCF85063. Every 1 seconds, a new
  *              time and date is read from the device and the data is transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
@@ -193,7 +193,7 @@ int main(void)
 
 
       /* Transmit result through the UART  */
-      sprintf ( (char*)myMessage, "Time: %x:%x:%x, Month %x Day %x %s 20%x\r\n", ( ( myPCF85063_Data.BCDtime & 0xFF0000 ) >> 16U ), ( ( myPCF85063_Data.BCDtime & 0x00FF00 ) >> 8U ), 
+      sprintf ( (char*)myMessage, "Time: %0.2x:%0.2x:%0.2x, Month %x Day %x %s 20%x\r\n", ( ( myPCF85063_Data.BCDtime & 0xFF0000 ) >> 16U ), ( ( myPCF85063_Data.BCDtime & 0x00FF00 ) >> 8U ), 
                                                               ( myPCF85063_Data.BCDtime & 0x0000FF ), myPCF85063_Data.BCDmonth, myPCF85063_Data.BCDday, MY_WEEK_DAY_STRING[myPCF85063_Data.weekday], myPCF85063_Data.BCDyear );
 
       NRF_UART0->TASKS_STOPRX  =   1UL;
