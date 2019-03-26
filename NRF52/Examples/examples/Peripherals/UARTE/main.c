@@ -69,7 +69,7 @@ int main(void)
     myMessage[ 8 ]   =  '\n';
 
     conf_GPIO   ();
-    conf_UART0  ();
+    conf_UARTE  ();
 
 
     while( 1 )
