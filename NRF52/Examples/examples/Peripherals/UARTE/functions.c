@@ -47,55 +47,57 @@ void conf_GPIO  ( void )
 
 
 /**
- * @brief       void conf_Uart0  ( void )
- * @details     Uart0 with the following features:
+ * @brief       void conf_UARTE  ( void )
+ * @details     UartE with the following features:
  *
- *                  * Baud Rate:    115200
+ *                  * Baud Rate:    230400 ( actual rate: 231884 )
  *                  * No Parity.
  *                  * No Flow Control.
- *                  * RX Interrupt ENABLE.
+ *                  * ENDTX and ENDRX Interrupts ENABLED.
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        25/March/2019
- * @version     25/March/2019   The ORIGIN
+ * @version     26/March/2019   Most of the configuration is done, pointers must
+ *                              still be defined.
+ *              25/March/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-void conf_UART0  ( void )
+void conf_UARTE  ( void )
 {
-    /* GPIO according to Table 128: GPIO configuration ( Product Specification p.531 ) */
-    NRF_P0->OUTSET               =   ( 1 << UART0_TX );
-    NRF_P0->DIRCLR               =   ( 1 << UART0_RX );
-    NRF_P0->DIRSET               =   ( 1 << UART0_TX );
+    /* GPIO according to Table 81: GPIO configuration before enabling peripheral ( Product Specification p.337 ) */
+    NRF_P0->OUTSET               =   ( 1UL << UART0_TX );
+    NRF_P0->DIRCLR               =   ( 1UL << UART0_RX );
+    NRF_P0->DIRSET               =   ( 1UL << UART0_TX );
 
-    /* Stop UART0 */
-    NRF_UART0->TASKS_STOPRX      =   1;
-    NRF_UART0->TASKS_STOPTX      =   1;
+    /* Stop UARTE */
+    NRF_UARTE0->TASKS_STOPRX     =   1UL;
+    NRF_UARTE0->TASKS_STOPTX     =   1UL;
 
-    NRF_UART0->ENABLE            =   UART_ENABLE_ENABLE_Disabled << UART_ENABLE_ENABLE_Pos;
+    NRF_UARTE0->ENABLE           =   ( UARTE_ENABLE_ENABLE_Disabled << UARTE_ENABLE_ENABLE_Pos );
 
     /* Configure the pins */
-    NRF_UART0->PSELRTS           =   0xFFFFFFFF;
-    NRF_UART0->PSELCTS           =   0xFFFFFFFF;
-    NRF_UART0->PSELTXD           =   UART0_TX;
-    NRF_UART0->PSELRXD           =   UART0_RX;
+    NRF_UARTE0->PSEL.RTS         =   0xFFFFFFFF;
+    NRF_UARTE0->PSEL.CTS         =   0xFFFFFFFF;
+    NRF_UARTE0->PSEL.TXD         =   UART0_TX;
+    NRF_UARTE0->PSEL.RXD         =   UART0_RX;
 
     /* BaudRate & Configuration */
-    NRF_UART0->BAUDRATE          =   ( UART_BAUDRATE_BAUDRATE_Baud115200 << UART_BAUDRATE_BAUDRATE_Pos );
-    NRF_UART0->CONFIG            =   ( UART_CONFIG_HWFC_Disabled   << UART_CONFIG_HWFC_Pos   ) |
-                                     ( UART_CONFIG_PARITY_Excluded << UART_CONFIG_PARITY_Pos );
+    NRF_UARTE0->BAUDRATE         =   ( UARTE_BAUDRATE_BAUDRATE_Baud230400 << UARTE_BAUDRATE_BAUDRATE_Pos );
+    NRF_UARTE0->CONFIG           =   ( UARTE_CONFIG_HWFC_Disabled   << UARTE_CONFIG_HWFC_Pos   ) |
+                                     ( UARTE_CONFIG_PARITY_Excluded << UARTE_CONFIG_PARITY_Pos );
     /* Configure Interrupts */
-    NRF_UART0->INTENSET          =   ( UART_INTENSET_RXDRDY_Enabled << UART_INTENSET_RXDRDY_Pos ) |
-                                     ( UART_INTENSET_TXDRDY_Enabled << UART_INTENSET_TXDRDY_Pos );
+    NRF_UARTE0->INTENSET         =   ( UARTE_INTENSET_ENDRX_Enabled << UARTE_INTENSET_ENDRX_Pos ) |
+                                     ( UARTE_INTENSET_ENDTX_Enabled << UARTE_INTENSET_ENDTX_Pos );
 
-    NVIC_ClearPendingIRQ    ( UART0_IRQn );
-    NVIC_SetPriority        ( UART0_IRQn, 0 );                                                              // Maximum priority
-    NVIC_EnableIRQ          ( UART0_IRQn );                                                                 // Enable Interrupt for the UART0 in the core.
+    NVIC_ClearPendingIRQ    ( UARTE0_UART0_IRQn );
+    NVIC_SetPriority        ( UARTE0_UART0_IRQn, 0 );                                                      // Maximum priority
+    NVIC_EnableIRQ          ( UARTE0_UART0_IRQn );                                                         // Enable Interrupt for the UART0 in the core.
 
-    /* Enable UART0 */
-    NRF_UART0->ENABLE            =   ( UART_ENABLE_ENABLE_Enabled << UART_ENABLE_ENABLE_Pos );              // UART0 ENABLED
-    // NRF_UART0->TASKS_STARTTX     =   1;
-    NRF_UART0->TASKS_STARTRX     =   1;                                                                     // Enable reception
+    /* Enable UARTE */
+    NRF_UARTE0->ENABLE          =   ( UARTE_ENABLE_ENABLE_Enabled << UARTE_ENABLE_ENABLE_Pos );             
+    // NRF_UARTE0->TASKS_STARTTX    =   1UL;
+    NRF_UARTE0->TASKS_STARTRX   =   1UL;                                                                   // Enable reception
 }
