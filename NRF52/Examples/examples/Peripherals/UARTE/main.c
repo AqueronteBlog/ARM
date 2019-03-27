@@ -39,15 +39,15 @@
  */
 #define TX_BUFF_SIZE  32                /*!<   UART buffer size                               */
 
-const uint32_t  NO   = 0;               /*!<   Constant to control the UART0                  */
-const uint32_t  YES  = 1;               /*!<   Constant to control the UART0                  */
+const uint32_t  NO   = 0UL;             /*!<   Constant to control the UART0                  */
+const uint32_t  YES  = 1UL;             /*!<   Constant to control the UART0                  */
 
 /**@brief Variables.
  */
-uint8_t myRX_buff;                      /*!<   It collects the data from the UART             */
-uint8_t myMessage[ TX_BUFF_SIZE ];      /*!<   Message to be transmitted through the UART     */
-uint8_t *myPtr;                         /*!<   Pointer to point out myMessage                 */
-uint8_t TX_inProgress;                  /*!<   It indicates if a transmission is in progress  */
+static uint8_t txBuffer[ TX_BUFF_SIZE ];  /*!<   TX buffer to be transmitted through the UART   */
+static uint8_t rxBuffer[ TX_BUFF_SIZE ];  /*!<   RX buffer to be received through the UART      */
+uint8_t *myPtr;                           /*!<   Pointer to point out myMessage                 */
+uint8_t TX_inProgress;                    /*!<   It indicates if a transmission is in progress  */
 
 
 
@@ -55,107 +55,101 @@ uint8_t TX_inProgress;                  /*!<   It indicates if a transmission is
  */
 int main(void)
 {
-    uint32_t TX_dataEnable   =   NO;
+  uint32_t TX_dataEnable   =   NO;
 
-    // Initialized the message
-    myMessage[ 0 ]   =  'L';
-    myMessage[ 1 ]   =  'E';
-    myMessage[ 2 ]   =  'D';
-    myMessage[ 3 ]   =  ' ';
-    myMessage[ 4 ]   =  ' ';
-    myMessage[ 5 ]   =  ' ';
-    myMessage[ 6 ]   =  'O';
-    myMessage[ 7 ]   =  'N';
-    myMessage[ 8 ]   =  '\n';
+  /* Initialized the message  */
+  txBuffer[ 0 ]   =  'L';
+  txBuffer[ 1 ]   =  'E';
+  txBuffer[ 2 ]   =  'D';
+  txBuffer[ 3 ]   =  ' ';
+  txBuffer[ 4 ]   =  ' ';
+  txBuffer[ 5 ]   =  ' ';
+  txBuffer[ 6 ]   =  'O';
+  txBuffer[ 7 ]   =  'N';
+  txBuffer[ 8 ]   =  '\n';
 
-    conf_GPIO   ();
-    conf_UARTE  ();
-
-
-    while( 1 )
-    {
-        //NRF_POWER->SYSTEMOFF = 1;
-        NRF_POWER->TASKS_LOWPWR = 1;        // Sub power mode: Low power.
-
-        // Enter System ON sleep mode
-        __WFE();
-	// Make sure any pending events are cleared
-	__SEV();
-	__WFE();
-
-        __NOP();
+  conf_GPIO   ();
+  conf_UARTE  ( &txBuffer[0], 9U, &rxBuffer[0], 1U );
 
 
-        // Reset and re-start conditions before evaluating the collected data from UART.
-        NRF_UART0->TASKS_STOPRX      =   1;
-        NRF_UART0->TASKS_STOPTX      =   1;
-        myPtr                        =   &myMessage[0];
+  while( 1UL )
+  {
+      //NRF_POWER->SYSTEMOFF = 1UL;
+      NRF_POWER->TASKS_LOWPWR = 1UL;        // Sub power mode: Low power.
 
-        // Evaluate the data
-        switch ( myRX_buff )
-        {
-        // Character '1': Turn LED1 ON and send a message through the UART
-        case 0x31:
-            NRF_P0->OUTCLR          =   ( 1 << LED1 );
-            myMessage [ 4 ]         =   '1';
-            TX_dataEnable           =   YES;
-            break;
+      // Enter System ON sleep mode
+      __WFE();
+      // Make sure any pending events are cleared
+      __SEV();
+      __WFE();
 
-        // Character '2': Turn LED2 ON and send a message through the UART
-        case 0x32:  
-            NRF_P0->OUTCLR          =   ( 1 << LED2 );
-            myMessage [ 4 ]         =   '2';
-            TX_dataEnable           =   YES;
-            break;
-
-        // Character '3': Turn LED3 ON and send a message through the UART
-        case 0x33:
-            NRF_P0->OUTCLR          =   ( 1 << LED3 );
-            myMessage [ 4 ]         =   '3';
-            TX_dataEnable           =   YES;
-            break;
-
-        // Character '4': Turn LED4 ON and send a message through the UART
-        case 0x34:
-            NRF_P0->OUTCLR          =   ( 1 << LED4 );
-            myMessage [ 4 ]         =   '4';
-            TX_dataEnable           =   YES;
-            break;
-
-        // Turn all LEDs OFF: DO NOT send anything through the UART
-        default:
-            for ( uint32_t ii = LED1; ii < ( LED4 + 1 ); ii++ )
-                NRF_P0->OUTSET        =   ( 1 << ii );
-
-            TX_dataEnable                =   NO;
-            NRF_UART0->TASKS_STARTRX     =   1;
-            break;
-
-        }
+      __NOP();
 
 
-        // Send which LED was turned ON back through the UART
-        if ( TX_dataEnable == YES )
-        {
-            TX_inProgress                =   YES;
-            NRF_UART0->TASKS_STARTTX     =   1;
-            NRF_UART0->TXD               =   *myPtr;
+      /* Reset and re-start conditions before evaluating the collected data from UART.   */
+      NRF_UARTE0->TASKS_STOPRX     =   1UL;
+      NRF_UARTE0->TASKS_STOPTX     =   1UL;
 
-            // Wait until the message is transmitted
-            while ( TX_inProgress == YES ){
-                __WFE();
-                // Make sure any pending events are cleared
-                __SEV();
-                __WFE();
-            }
+      /* Evaluate the data   */
+      switch ( rxBuffer[0] )
+      {
+      /* Character '1': Turn LED1 ON and send a message through the UART   */
+      case '1':
+          NRF_P0->OUTCLR   =   ( 1UL << LED1 );
+          txBuffer [ 4 ]   =   '1';
+          TX_dataEnable    =   YES;
+          break;
 
-            NRF_UART0->TASKS_STARTRX     =   1;             // Enable reception from UART
-        }
+      /* Character '2': Turn LED2 ON and send a message through the UART   */
+      case '2':  
+          NRF_P0->OUTCLR   =   ( 1UL << LED2 );
+          txBuffer [ 4 ]   =   '2';
+          TX_dataEnable    =   YES;
+          break;
 
-    }
+      /* Character '3': Turn LED3 ON and send a message through the UART  */
+      case '3':
+          NRF_P0->OUTCLR   =   ( 1UL << LED3 );
+          txBuffer [ 4 ]   =   '3';
+          TX_dataEnable    =   YES;
+          break;
+
+      /* Character '4': Turn LED4 ON and send a message through the UART  */
+      case '4':
+          NRF_P0->OUTCLR   =   ( 1UL << LED4 );
+          txBuffer [ 4 ]   =   '4';
+          TX_dataEnable    =   YES;
+          break;
+
+      /* Turn all LEDs OFF: DO NOT send anything through the UART */
+      default:
+          for ( uint32_t ii = LED1; ii < ( LED4 + 1 ); ii++ )
+              NRF_P0->OUTSET        =   ( 1UL << ii );
+
+          TX_dataEnable                =   NO;
+          NRF_UARTE0->TASKS_STARTRX    =   1UL;
+          break;
+       }
+
+
+      /* Send which LED was turned ON back through the UART */
+      if ( TX_dataEnable == YES )
+      {
+          TX_inProgress                =   YES;
+          NRF_UARTE0->TASKS_STARTTX    =   1UL;
+
+          /* Wait until the message is transmitted  */
+          while ( TX_inProgress == YES ){
+             __WFE();
+             /* Make sure any pending events are cleared  */
+             __SEV();
+             __WFE();
+          }
+
+          NRF_UARTE0->TASKS_STARTRX    =   1UL;             // Enable reception from UART
+      }
+  }
 }
-
-
 /**
  * @}
  */
