@@ -25,7 +25,7 @@ extern "C" {
 
 /* FUNCTION PROTOTYPES */
 void conf_GPIO    ( void );
-void conf_UARTE   ( void );
+void conf_UARTE   ( uint8_t* TX_buff, uint32_t TX_lenght, uint8_t* RX_buff, uint32_t RX_lenght );
 
 
 #ifdef __cplusplus

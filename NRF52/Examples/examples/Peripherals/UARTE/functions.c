@@ -47,13 +47,21 @@ void conf_GPIO  ( void )
 
 
 /**
- * @brief       void conf_UARTE  ( void )
+ * @brief       void conf_UARTE  ( uint8_t* TX_buff, uint32_t TX_lenght, uint8_t* RX_buff, uint32_t RX_lenght )
  * @details     UartE with the following features:
  *
  *                  * Baud Rate:    230400 ( actual rate: 231884 )
  *                  * No Parity.
  *                  * No Flow Control.
  *                  * ENDTX and ENDRX Interrupts ENABLED.
+ *
+ * @param[in]    TX_buff:   TX buffer.
+ * @param[in]    TX_lenght: Max TX data.
+ * @param[in]    RX_buff:   RX buffer .
+ * @param[in]    RX_lenght: Max RX data.
+ *
+ * @param[out]   N/A.
+ *
  *
  * @return      N/A
  *
@@ -65,7 +73,7 @@ void conf_GPIO  ( void )
  * @pre         N/A
  * @warning     N/A.
  */
-void conf_UARTE  ( void )
+void conf_UARTE  ( uint8_t* TX_buff, uint32_t TX_lenght, uint8_t* RX_buff, uint32_t RX_lenght )
 {
     /* GPIO according to Table 81: GPIO configuration before enabling peripheral ( Product Specification p.337 ) */
     NRF_P0->OUTSET               =   ( 1UL << UART0_TX );
@@ -88,6 +96,14 @@ void conf_UARTE  ( void )
     NRF_UARTE0->BAUDRATE         =   ( UARTE_BAUDRATE_BAUDRATE_Baud230400 << UARTE_BAUDRATE_BAUDRATE_Pos );
     NRF_UARTE0->CONFIG           =   ( UARTE_CONFIG_HWFC_Disabled   << UARTE_CONFIG_HWFC_Pos   ) |
                                      ( UARTE_CONFIG_PARITY_Excluded << UARTE_CONFIG_PARITY_Pos );
+    
+    /* Set EasyDMA for TX and RX   */
+    NRF_UARTE0->TXD.PTR          =   (uint32_t)( (uint8_t *) TX_buff );
+    NRF_UARTE0->TXD.MAXCNT       =   TX_lenght;
+
+    NRF_UARTE0->RXD.PTR          =   (uint32_t)( (uint8_t *) RX_buff );
+    NRF_UARTE0->RXD.MAXCNT       =   RX_lenght;
+
     /* Configure Interrupts */
     NRF_UARTE0->INTENSET         =   ( UARTE_INTENSET_ENDRX_Enabled << UARTE_INTENSET_ENDRX_Pos ) |
                                      ( UARTE_INTENSET_ENDTX_Enabled << UARTE_INTENSET_ENDTX_Pos );
