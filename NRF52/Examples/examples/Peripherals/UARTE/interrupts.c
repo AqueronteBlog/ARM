@@ -30,30 +30,20 @@
  * @pre         N/A.
  * @warning     N/A
  */
-void UART0_IRQHandler(void)
+void UARTE0_UART0_IRQHandler ( void )
 {
-    /* Reception */
-    if ( ( NRF_UART0->EVENTS_RXDRDY != 0 ) && ( NRF_UART0->INTENSET & UART_INTENSET_RXDRDY_Msk ) )
-    {
-        NRF_UART0->EVENTS_RXDRDY  = 0;
-        myRX_buff = ( uint8_t )( NRF_UART0->RXD & 0xFF );
-    }
+  /* Reception */
+  if ( ( NRF_UARTE0->EVENTS_ENDRX != 0 ) && ( NRF_UARTE0->INTENSET & UARTE_INTENSET_ENDRX_Msk ) )
+  {
+      NRF_UARTE0->EVENTS_RXDRDY  = 0;
+  }
 
-    /* Transmission */
-    if ( ( NRF_UART0->EVENTS_TXDRDY != 0 ) && ( NRF_UART0->INTENSET & UART_INTENSET_TXDRDY_Msk ) )
-    {
-        // Clear UART TX event flag.
-        NRF_UART0->EVENTS_TXDRDY = 0;
-
-        // Stop transmitting data when that character is found
-        if ( *myPtr  == '\n' )
-        {
-            NRF_UART0->TASKS_STOPTX      =   1;
-            TX_inProgress                =   NO;
-        }
-        else
-        {
-            NRF_UART0->TXD   =   *++myPtr;
-        }
-    }
+  /* Transmission */
+  if ( ( NRF_UARTE0->EVENTS_ENDTX != 0 ) && ( NRF_UARTE0->INTENSET & UARTE_INTENSET_ENDTX_Msk ) )
+  {
+    TX_inProgress  =   NO;
+    
+    // Clear UARTE TX event flag.
+    NRF_UARTE0->EVENTS_TXDRDY = 0;
+  }
 }
