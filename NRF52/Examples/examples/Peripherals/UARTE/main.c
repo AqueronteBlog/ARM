@@ -87,8 +87,8 @@ int main(void)
 
 
       /* Reset and re-start conditions before evaluating the collected data from UART.   */
-      NRF_UARTE0->TASKS_STOPRX     =   1UL;
-      NRF_UARTE0->TASKS_STOPTX     =   1UL;
+      //NRF_UARTE0->TASKS_STOPRX     =   1UL;
+      //NRF_UARTE0->TASKS_STOPTX     =   1UL;
 
       /* Evaluate the data   */
       switch ( rxBuffer[0] )
@@ -127,7 +127,7 @@ int main(void)
               NRF_P0->OUTSET        =   ( 1UL << ii );
 
           TX_dataEnable                =   NO;
-          NRF_UARTE0->TASKS_STARTRX    =   1UL;
+          NRF_UARTE0->TASKS_STARTRX    =   1UL;             // Enable reception from UART
           break;
        }
 
