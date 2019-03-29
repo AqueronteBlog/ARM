@@ -105,6 +105,7 @@ void conf_UARTE  ( uint8_t* TX_buff, uint32_t TX_lenght, uint8_t* RX_buff, uint3
     NRF_UARTE0->RXD.MAXCNT       =   RX_lenght;
 
     /* Configure Interrupts */
+    //NRF_UARTE0->SHORTS           =   ( UARTE_SHORTS_ENDRX_STARTRX_Enabled << UARTE_SHORTS_ENDRX_STARTRX_Pos );
     NRF_UARTE0->INTENSET         =   ( UARTE_INTENSET_ENDRX_Enabled << UARTE_INTENSET_ENDRX_Pos ) |
                                      ( UARTE_INTENSET_ENDTX_Enabled << UARTE_INTENSET_ENDTX_Pos );
 
