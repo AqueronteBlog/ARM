@@ -35,7 +35,8 @@ void UARTE0_UART0_IRQHandler ( void )
   /* Reception */
   if ( ( NRF_UARTE0->EVENTS_ENDRX != 0 ) && ( NRF_UARTE0->INTENSET & UARTE_INTENSET_ENDRX_Msk ) )
   {
-      NRF_UARTE0->EVENTS_RXDRDY  = 0;
+    NRF_UARTE0->EVENTS_ENDRX = 0;
+    NRF_UARTE0->EVENTS_RXDRDY = 0;
   }
 
   /* Transmission */
@@ -44,6 +45,7 @@ void UARTE0_UART0_IRQHandler ( void )
     TX_inProgress  =   NO;
     
     // Clear UARTE TX event flag.
+    NRF_UARTE0->EVENTS_ENDTX = 0;
     NRF_UARTE0->EVENTS_TXDRDY = 0;
   }
 }
