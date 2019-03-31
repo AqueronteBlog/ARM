@@ -35,17 +35,32 @@ void UARTE0_UART0_IRQHandler ( void )
   /* Reception */
   if ( ( NRF_UARTE0->EVENTS_ENDRX != 0 ) && ( NRF_UARTE0->INTENSET & UARTE_INTENSET_ENDRX_Msk ) )
   {
-    NRF_UARTE0->EVENTS_ENDRX = 0;
-    NRF_UARTE0->EVENTS_RXDRDY = 0;
+    if ( NRF_UARTE0->RXD.AMOUNT == 1U )
+    {
+      myLedFlag  =   1UL;   // Make a new change on the LEDs
+    }
+    else
+    {
+      myLedFlag  =   0UL;
+    }
+    
+    /* Clear UARTE RX event flag.  */
+    NRF_UARTE0->EVENTS_ENDRX       = 0;
   }
 
   /* Transmission */
   if ( ( NRF_UARTE0->EVENTS_ENDTX != 0 ) && ( NRF_UARTE0->INTENSET & UARTE_INTENSET_ENDTX_Msk ) )
   {
-    TX_inProgress  =   NO;
-    
-    // Clear UARTE TX event flag.
-    NRF_UARTE0->EVENTS_ENDTX = 0;
-    NRF_UARTE0->EVENTS_TXDRDY = 0;
+    if ( NRF_UARTE0->TXD.AMOUNT == 9U )
+    {
+      TX_inProgress  =   NO;  // TX transmission was completed
+    }
+    else
+    {
+      TX_inProgress  =   YES;
+    }
+
+    /* Clear UARTE TX event flag.  */
+    NRF_UARTE0->EVENTS_ENDTX       =   0;
   }
 }

@@ -33,10 +33,8 @@ extern const uint32_t  NO;
 extern const uint32_t  YES;
 
 /* VARIABLES */
-extern uint8_t myMessage[];
-extern uint8_t *myPtr;
-extern uint8_t TX_inProgress;
-
+extern uint8_t  TX_inProgress;
+extern uint32_t myLedFlag;
 
 #ifdef __cplusplus
 }
