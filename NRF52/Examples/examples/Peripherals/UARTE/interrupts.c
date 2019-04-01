@@ -26,7 +26,8 @@
  *
  * @author      Manuel Caballero
  * @date        25/March/2019
- * @version     25/March/2019   The ORIGIN
+ * @version     31/March/2019   Amount for both TX and RX were added
+ *              25/March/2019   The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  */
