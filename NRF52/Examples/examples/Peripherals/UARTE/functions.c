@@ -67,7 +67,8 @@ void conf_GPIO  ( void )
  *
  * @author      Manuel Caballero
  * @date        25/March/2019
- * @version     26/March/2019   Most of the configuration is done, pointers must
+ * @version     31/March/2019   Comments were updated.
+ *              26/March/2019   Most of the configuration is done, pointers must
  *                              still be defined.
  *              25/March/2019   The ORIGIN
  * @pre         N/A
