@@ -1,8 +1,8 @@
 /**
  * @brief       main.c
- * @details     [todo]It changes the state of the LEDs using the UARTE.
+ * @details     It changes the state of the LEDs using the UARTE.
  *
- *              It will depend on what character the user sends through the UART:
+ *              It will depend on what character the user sends through the UART ( 230400 baudrate ):
  *                  - '1':  LED1 ON. Message replay: "LED 1 ON".
  *                  - '2':  LED2 ON. Message replay: "LED 2 ON".
  *                  - '3':  LED3 ON. Message replay: "LED 3 ON".
@@ -10,8 +10,8 @@
  *                  - Another character will turn all the LEDs OFF without any message back through the UART.
  *
  *
- *              This firmware is just an example about how to use the UART on the nrf52832. The system
- *              will handle everything on the Interrupts ( Low power mode selected ).
+ *              This firmware is just an example about how to use the UARTE on the nrf52832. The system will
+ *              remain in low power otherwise..
  *
  *
  * @return      N/A
