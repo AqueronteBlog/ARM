@@ -21,102 +21,110 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESS
+  * @brief   DEFAULT ADDRESSES
   */
 typedef enum
 {
-  MCP9808_ADDRESS     =   0b1010001                                  /*!<   I2C slave address byte                       */
-} MCP9808_address_t;
+  MCP9808_ADDRESS_0     =   0b0011000,        /*!<   I2C slave address byte: A2A1A0: 000          */
+  MCP9808_ADDRESS_1     =   0b0011001,        /*!<   I2C slave address byte: A2A1A0: 001          */
+  MCP9808_ADDRESS_2     =   0b0011010,        /*!<   I2C slave address byte: A2A1A0: 010          */
+  MCP9808_ADDRESS_3     =   0b0011011,        /*!<   I2C slave address byte: A2A1A0: 011          */
+  MCP9808_ADDRESS_4     =   0b0011100,        /*!<   I2C slave address byte: A2A1A0: 100          */
+  MCP9808_ADDRESS_5     =   0b0011101,        /*!<   I2C slave address byte: A2A1A0: 101          */
+  MCP9808_ADDRESS_6     =   0b0011110,        /*!<   I2C slave address byte: A2A1A0: 110          */
+  MCP9808_ADDRESS_7     =   0b0011111         /*!<   I2C slave address byte: A2A1A0: 111          */
+} MCP9808_addresses_t;
 
 
 
 /**
-  * @brief   REGISTERS ORGANIZATION
+  * @brief   REGISTERS
   */
 typedef enum
 {
-  /* CONTROL AND STATUS REGISTERS  */
-  MCP9808_CONTROL_1  =   0x00,                                       /*!<  Control and status register 1                 */
-  MCP9808_CONTROL_2  =   0x01,                                       /*!<  Control and status register 2                 */
-  MCP9808_OFFSET     =   0x02,                                       /*!<  Offset register                               */
-  MCP9808_RAM_BYTE   =   0x03,                                       /*!<  RAM byte register                             */
-
-  /* TIME AND DATE REGISTERS  */
-  MCP9808_SECONDS    =   0x04,                                       /*!<  Seconds register                              */
-  MCP9808_MINUTES    =   0x05,                                       /*!<  Minutes register                              */
-  MCP9808_HOURS      =   0x06,                                       /*!<  Hours register                                */
-  MCP9808_DAYS       =   0x07,                                       /*!<  Days register                                 */
-  MCP9808_WEEKDAYS   =   0x08,                                       /*!<  Weekdays register                             */
-  MCP9808_MONTHS     =   0x09,                                       /*!<  Months register                               */
-  MCP9808_YEARS      =   0x0A                                        /*!<  Years register                                */
-} MCP9808_registers_organization_t;
+  MCP9808_CONFIG          =   0x00,           /*!<  CONFIG register                               */
+  MCP9808_TUPPER          =   0x02,           /*!<  T_UPPER register                              */
+  MCP9808_TLOWER          =   0x03,           /*!<  T_LOWER register                              */
+  MCP9808_TCRIT           =   0x04,           /*!<  T_CRIT register                               */
+  MCP9808_TA              =   0x05,           /*!<  T_A register                                  */
+  MCP9808_MANUFACTURER_ID =   0x06,           /*!<  Manufacturer ID register                      */
+  MCP9808_DEVICE_ID       =   0x07,           /*!<  Device ID/Revision register                   */
+  MCP9808_RESOLUTION      =   0x08            /*!<  Resolution register                           */
+} MCP9808_registers_t;
 
 
 
 /**
-  * @brief   Register Control_1
+  * @brief   CONFIG Register
   */
-/* EXT_TEST <7>: EXTERNAL CLOCK TEST MODE
+/* T_HYST <9:10>: TUPPER AND TLOWER LIMIT HYSTERESIS BITS
+ *    NOTE:
+ *      � This bit can not be altered when either of the Lock bits are set ( bit 6 and bit 7 )
+ *      � This bit can be programmed in Shutdown mode
+ */
+typedef enum
+{
+    CONFIG_T_HYST_MASK                =   ( 0b11 << 9U ),   /*!<  T_HYST mask                                     */
+    CONFIG_T_HYST_0_C                 =   ( 0b00 << 9U ),   /*!<  T_HYST: 0C                          [ Default ] */
+    CONFIG_T_HYST_1_5_C               =   ( 0b01 << 9U ),   /*!<  T_HYST: +1.5C                                   */
+    CONFIG_T_HYST_3_0_C               =   ( 0b10 << 9U ),   /*!<  T_HYST: +3.0C                                   */
+    CONFIG_T_HYST_6_0_C               =   ( 0b11 << 9U ),   /*!<  T_HYST: +6.0C                                   */
+} MCP9808_config_thyst_t;
+
+
+
+/* SHDN <8>: SHUTDOWN MODE BIT
+ *    NOTE: 
+ *      � This bit can not be set to '1' when either of the Lock bits are set ( bit 6 and bit 7 ), however,
+ *        it can be cleared to '0' for continuous conversion while locked.
+ */
+typedef enum
+{
+    CONFIG_SHDN_MASK                  =   ( 1U << 8U ),     /*!<  SHDN mask                                       */
+    CONFIG_SHDN_CONTINUOUS_CONVERSION =   ( 0U << 8U ),     /*!<  SHDN: Continuous conversion         [ Default ] */
+    CONFIG_SHDN_SHUTDOWN              =   ( 1U << 8U )      /*!<  SHDN: Shutdown ( Low-power mode )               */
+} MCP9808_config_shdn_t;
+
+
+
+/* CRIT_LOCK <7>: T_CRIT LOCKED BIT
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_1_EXT_TEST_MASK                     =   ( 1U << 7U ),     /*!<  EXT_TEST mask                                   */
-    CONTROL_1_EXT_TEST_NORMAL_MODE              =   ( 0U << 7U ),     /*!<  EXT_TEST: normal mode               [ Default ] */
-    CONTROL_1_EXT_TEST_EXTERNAL_CLOCK_TEST_MODE =   ( 1U << 7U )      /*!<  EXT_TEST: external clock test mode              */
-} MCP9808_control_1_ext_test_t;
+    CONFIG_CRIT_LOCK_MASK             =   ( 1U << 7U ),     /*!<  CRIT_LOCK mask                                  */
+    CONFIG_CRIT_LOCK_UNLOCKED         =   ( 0U << 7U ),     /*!<  T_CRIT register can be written      [ Default ] */
+    CONFIG_CRIT_LOCK_LOCKED           =   ( 1U << 7U )      /*!<  T_CRIT register can not be written              */
+} MCP9808_config_crit_lock_t;
 
 
 
-/* STOP <5>: STOP BIT
+/* WIN_LOCK <6>: CORRECTION INTERRUPT ENABLE 
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_1_STOP_MASK                         =   ( 1U << 5U ),     /*!<  STOP mask                                       */
-    CONTROL_1_STOP_RTC_CLOCK_RUNS               =   ( 0U << 5U ),     /*!<  STOP: RTC clock runs                [ Default ] */
-    CONTROL_1_STOP_RTC_CLOCK_STOPPED            =   ( 1U << 5U )      /*!<  STOP: RTC clock is stopped                      */
-} MCP9808_control_1_stop_t;
+    CONFIG_WIN_LOCK_MASK              =   ( 1U << 6U ),     /*!<  WIN_LOCK mask                                   */
+    CONFIG_WIN_LOCK_UNLOCKED          =   ( 0U << 6U ),     /*!<  TUPPER and TLOWER can be written    [ Default ] */
+    CONFIG_WIN_LOCK_LOCKED            =   ( 1U << 6U )      /*!<  TUPPER and TLOWER can not be written            */
+} MCP9808_config_win_lock_t;
 
 
 
-/* SR <4>: SOFTWARE RESET 
- *    NOTE: N/A.
+/* INT_CLEAR <5>: INTERRUPT CLEAR BIT 
+ *    NOTE: 
+ *      � This bit can not be set to '1' in Shutdown mode, but it can be cleared after the device enters Shutdown mode
  */
 typedef enum
 {
-    CONTROL_1_SR_MASK                           =   ( 1U << 4U ),     /*!<  SR mask                                         */
-    CONTROL_1_SR_NO_SOFTWARE_RESET              =   ( 0U << 4U ),     /*!<  SR: no software reset               [ Default ] */
-    CONTROL_1_SR_SOFTWARE_RESET                 =   ( 1U << 4U )      /*!<  SR: initiate software reset                     */
-} MCP9808_control_1_sr_t;
+    CONFIG_INT_CLEAR_MASK              =   ( 1U << 5U ),     /*!<  INT_CLEAR mask                                 */
+    CONFIG_INT_CLEAR_NO_EFFECT         =   ( 0U << 5U ),     /*!<  No effect                          [ Default ] */
+    CONFIG_INT_CLEAR_CLEAR_INT_OUTPUT  =   ( 1U << 5U )      /*!<  Clear interrupt output, when read, returns '0' */
+} MCP9808_conf_int_clear_t;
 
 
 
-/* CIE <2>: CORRECTION INTERRUPT ENABLE 
- *    NOTE: N/A.
- */
-typedef enum
-{
-    CONTROL_1_CIE_MASK                              =   ( 1U << 2U ), /*!<  CIE mask                                                      */
-    CONTROL_1_CIE_NO_CORRECTION_INTERRUPT_GENERATED =   ( 0U << 2U ), /*!<  CIE: no correction interrupt generated [ Default ]            */
-    CONTROL_1_CIE_INTERRUPT_PULSES_GENERATED        =   ( 1U << 2U )  /*!<  CIE: interrupt pulses are generated at every correction cycle */
-} MCP9808_control_1_cie_t;
-
-
-
-/* 12_24 <1>: SOFTWARE RESET 
- *    NOTE: N/A.
- */
-typedef enum
-{
-    CONTROL_1_12_24_MASK                        =   ( 1U << 1U ),     /*!<  12_24 mask                                      */
-    CONTROL_1_12_24_24_HOUR_MODE                =   ( 0U << 1U ),     /*!<  12_24: 24 hour mode is selected     [ Default ] */
-    CONTROL_1_12_24_12_HOUR_MODE                =   ( 1U << 1U )      /*!<  12_24: 12 hour mode is selected                 */
-} MCP9808_control_1_12_24_t;
-
-
-
-/* CAP_SEL <0>: INTERNAL OSCILLATOR CAPACITOR SELECTION 
+/* HOLAHOLAHOLAHOLAHOLACAP_SEL <0>: INTERNAL OSCILLATOR CAPACITOR SELECTION 
  *    NOTE: N/A.
  */
 typedef enum
