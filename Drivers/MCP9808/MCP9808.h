@@ -124,15 +124,70 @@ typedef enum
 
 
 
-/* HOLAHOLAHOLAHOLAHOLACAP_SEL <0>: INTERNAL OSCILLATOR CAPACITOR SELECTION 
+/* ALERT_STAT <4>: ALERT OUTPUT STATUS BIT 
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_1_CAP_SEL_MASK                      =   ( 1U << 0U ),     /*!<  CAP_SEL mask                                    */
-    CONTROL_1_CAP_SEL_7_PF                      =   ( 0U << 0U ),     /*!<  CAP_SEL: 7 pF                       [ Default ] */
-    CONTROL_1_CAP_SEL_12_5_PF                   =   ( 1U << 0U )      /*!<  CAP_SEL: 12.5 pF                                */
-} MCP9808_control_1_cap_sel_t;
+    CONFIG_ALERT_STAT_MASK              =   ( 1U << 4U ),     /*!<  ALERT_STAT mask                               */
+    CONFIG_ALERT_STAT_NOT_ASSERTED      =   ( 0U << 4U ),     /*!<  ALERT_STAT is not asserted        [ Default ] */
+    CONFIG_ALERT_STAT_ASSERTED          =   ( 1U << 4U )      /*!<  ALERT_STAT is asserted                        */
+} MCP9808_config_alert_stat_t;
+
+
+
+/* ALERT_CNT <3>: ALERT OUTPUT CONTROL BIT 
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    CONFIG_ALERT_CNT_MASK               =   ( 1U << 3U ),     /*!<  ALERT_CNT mask                               */
+    CONFIG_ALERT_CNT_DISABLED           =   ( 0U << 3U ),     /*!<  ALERT_CNT disabled               [ Default ] */
+    CONFIG_ALERT_CNT_ENABLED            =   ( 1U << 3U )      /*!<  ALERT_CNT enabled                            */
+} MCP9808_config_alert_cnt_t;
+
+
+
+/* ALERT_SEL <2>: ALERT OUTPUT SELECT BIT 
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    CONFIG_ALERT_SEL_MASK                 =   ( 1U << 2U ),   /*!<  ALERT_SEL mask                                            */
+    CONFIG_ALERT_SEL_TUPPER_TLOWER_TCRIT  =   ( 0U << 2U ),   /*!<  Alert output for T_UPPER, T_LOWER and T_CRIT  [ Default ] */
+    CONFIG_ALERT_SEL_TA_GREATER_TCRIT     =   ( 1U << 2U )    /*!<  Alert output for T_A greater T_CRIT                       */
+} MCP9808_config_alert_sel_t;
+
+
+
+/* ALERT_POL <1>: ALERT OUTPUT POLARITY BIT 
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    CONFIG_ALERT_POL_MASK               =   ( 1U << 1U ),     /*!<  ALERT_POL mask                               */
+    CONFIG_ALERT_POL_ACTIVE_LOW         =   ( 0U << 1U ),     /*!<  ALERT_POL active-low             [ Default ] */
+    CONFIG_ALERT_POL_ACTIVE_HIGH        =   ( 1U << 1U )      /*!<  ALERT_POL active-high                        */
+} MCP9808_config_alert_pol_t;
+
+
+
+/* ALERT_MOD <0>: ALERT OUTPUT MODE BIT 
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    CONFIG_ALERT_MOD_MASK               =   ( 1U << 0U ),     /*!<  ALERT_MOD mask                               */
+    CONFIG_ALERT_MOD_COMPARATOR_OUTPUT  =   ( 0U << 0U ),     /*!<  ALERT_MOD comparator output      [ Default ] */
+    CONFIG_ALERT_MOD_INTERRUPT_OUTPUT   =   ( 1U << 0U )      /*!<  ALERT_MOD interrupt output                   */
+} MCP9808_config_alert_mod_t;
+
+
+
+
+
+
+
 
 
 
