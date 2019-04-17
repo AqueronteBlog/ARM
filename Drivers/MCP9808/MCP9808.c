@@ -1,14 +1,14 @@
 /**
  * @brief       MCP9808.c
- * @details     Tiny Real-Time Clock/calendar.
+ * @details     ±0.5°C Maximum Accuracy Digital Temperature Sensor.
  *              Functions file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        22/January/2019
- * @version     22/January/2019    The ORIGIN
+ * @date        15/April/2019
+ * @version     15/April/2019    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ). All rights reserved.
@@ -31,8 +31,8 @@
  *
  *
  * @author      Manuel Caballero
- * @date        22/January/2019
- * @version     22/January/2019   The ORIGIN
+ * @date        15/April/2019
+ * @version     15/April/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -57,37 +57,43 @@ MCP9808_status_t  MCP9808_Init ( I2C_parameters_t myI2Cparameters )
 
 
 /**
- * @brief       MCP9808_SetTestMode ( I2C_parameters_t , MCP9808_control_1_ext_test_t )
+ * @brief       MCP9808_SetT_HYST ( I2C_parameters_t , MCP9808_config_thyst_t )
  *
- * @details     It sets the external clock test mod.
+ * @details     It sets T_UPPER and T_LOWER Limit Hysteresis.
  *
- * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myEXT_TEST:        External clock test mode.
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myT_HYST:        Limit hysteresis.
  *
  * @param[out]   N/A.
  *
  *
- * @return       Status of MCP9808_SetTestMode.
+ * @return       Status of MCP9808_SetT_HYST.
  *
  *
  * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
+ * @date        15/April/2019
+ * @version     15/April/2019     The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-MCP9808_status_t  MCP9808_SetTestMode ( I2C_parameters_t myI2Cparameters, MCP9808_control_1_ext_test_t myEXT_TEST )
+MCP9808_status_t  MCP9808_SetT_HYST ( I2C_parameters_t myI2Cparameters, MCP9808_config_thyst_t myT_HYST )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   MCP9808_CONTROL_1;
+  cmd[0]   =   MCP9808_CONFIG;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
+  aux      =   i2c_read  ( myI2Cparameters, &cmd[1], sizeof( cmd )/sizeof( cmd[0] ) );
   
+  /* T_HYSTT can NOT be altered when either of the Lock bits are set ( bit 6 and bit 7 )   */
+  if ( ( ( cmd[1] & CONFIG_CRIT_LOCK_MASK ) == CONFIG_CRIT_LOCK_LOCKED ) || ( ( cmd[1] & CONFIG_WIN_LOCK_MASK ) == CONFIG_WIN_LOCK_LOCKED ) )
+  {
+    return   MCP9808_FAILURE;
+  }
+
   /* Mask it and update it with the new value  */
-  cmd[1]   =   ( ( cmd[1] & ~CONTROL_1_EXT_TEST_MASK ) | myEXT_TEST );
+  cmd[1]   =   ( ( cmd[1] & ~CONFIG_T_HYST_MASK ) | myT_HYST );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -105,37 +111,45 @@ MCP9808_status_t  MCP9808_SetTestMode ( I2C_parameters_t myI2Cparameters, MCP980
 
 
 /**
- * @brief       MCP9808_SetRTCMode ( I2C_parameters_t , MCP9808_control_1_stop_t )
+ * @brief       MCP9808_SetPowerMode ( I2C_parameters_t , MCP9808_config_shdn_t )
  *
- * @details     It sets the RTC clock mode.
+ * @details     It sets device power mode.
  *
  * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    mySTOP:          External clock test mode.
+ * @param[in]    mySHDN:          Power mode.
  *
  * @param[out]   N/A.
  *
  *
- * @return       Status of MCP9808_SetRTCMode.
+ * @return       Status of MCP9808_SetPowerMode.
  *
  *
  * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
+ * @date        15/April/2019
+ * @version     15/April/2019     The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-MCP9808_status_t  MCP9808_SetRTCMode ( I2C_parameters_t myI2Cparameters, MCP9808_control_1_stop_t mySTOP )
+MCP9808_status_t  MCP9808_SetPowerMode ( I2C_parameters_t myI2Cparameters, MCP9808_config_shdn_t mySHDN )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   MCP9808_CONTROL_1;
+  cmd[0]   =   MCP9808_CONFIG;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
+  aux      =   i2c_read  ( myI2Cparameters, &cmd[1], sizeof( cmd )/sizeof( cmd[0] ) );
   
+  /* SHDN This bit cannot be set to '1' when either of the Lock bits is set ( bit 6 and bit 7 ). However, it can be
+   * cleared to '0' for continuous conversion while locked   
+   */
+  if ( ( ( ( cmd[1] & CONFIG_CRIT_LOCK_MASK ) == CONFIG_CRIT_LOCK_LOCKED ) || ( ( cmd[1] & CONFIG_WIN_LOCK_MASK ) == CONFIG_WIN_LOCK_LOCKED ) ) && ( mySHDN == CONFIG_SHDN_SHUTDOWN ) )
+  {
+    return   MCP9808_FAILURE;
+  }
+
   /* Mask it and update it with the new value  */
-  cmd[1]   =   ( ( cmd[1] & ~CONTROL_1_STOP_MASK ) | mySTOP );
+  cmd[1]   =   ( ( cmd[1] & ~CONFIG_SHDN_MASK ) | mySHDN );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -153,1220 +167,44 @@ MCP9808_status_t  MCP9808_SetRTCMode ( I2C_parameters_t myI2Cparameters, MCP9808
 
 
 /**
- * @brief       MCP9808_SoftwareReset ( I2C_parameters_t )
+ * @brief       MCP9808_SetT_CRIT_Lock ( I2C_parameters_t , MCP9808_config_crit_lock_t )
  *
- * @details     It performs a software reset.
+ * @details     It sets T_CRIT lock bit.
  *
  * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myT_CRIT_Lock    Power mode.
  *
  * @param[out]   N/A.
  *
  *
- * @return       Status of MCP9808_SoftwareReset.
+ * @return       Status of MCP9808_SetT_CRIT_Lock.
  *
  *
  * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         For a software reset, 01011000 (58h) must be sent to register Control_1. Datasheet p6, 
- *              Table 6. Control_1 - control and status register 1 (address 00h) bit description.
- *
- *              The MCP9808TP resets to:
- *                -Time    — 00:00:00
- *                -Date    — 20000101
- *                -Weekday — Saturday
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_SoftwareReset ( I2C_parameters_t myI2Cparameters )
-{
-  uint8_t      cmd[2]  = { 0U };
-  i2c_status_t aux;
-
-  /* Update the register   */
-  cmd[0]   =   MCP9808_CONTROL_1;
-  cmd[1]   =   0x58;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_SetCorrectionInterruptMode ( I2C_parameters_t , MCP9808_control_1_cie_t )
- *
- * @details     It sets the correction interrupt mode.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myCIE:           Correction interrupt enable.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_SetCorrectionInterruptMode.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
+ * @date        15/April/2019
+ * @version     15/April/2019     The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-MCP9808_status_t  MCP9808_SetCorrectionInterruptMode ( I2C_parameters_t myI2Cparameters, MCP9808_control_1_cie_t myCIE )
+MCP9808_status_t  MCP9808_SetT_CRIT_Lock ( I2C_parameters_t myI2Cparameters, MCP9808_config_crit_lock_t myT_CRIT_Lock )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   MCP9808_CONTROL_1;
+  cmd[0]   =   MCP9808_CONFIG;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
+  aux      =   i2c_read  ( myI2Cparameters, &cmd[1], sizeof( cmd )/sizeof( cmd[0] ) );
   
+  /* When enabled, this bit remains set to ‘1’ or locked until cleared by an internal Reset  */
+  if ( ( cmd[1] & CONFIG_CRIT_LOCK_MASK ) == CONFIG_CRIT_LOCK_LOCKED )
+  {
+    return   MCP9808_FAILURE;
+  }
+
   /* Mask it and update it with the new value  */
-  cmd[1]   =   ( ( cmd[1] & ~CONTROL_1_CIE_MASK ) | myCIE );
+  cmd[1]   =   ( ( cmd[1] & ~CONFIG_CRIT_LOCK_MASK ) | myT_CRIT_Lock );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_Set12_24_HourMode ( I2C_parameters_t , MCP9808_data_t )
- *
- * @details     It sets 12 or 24 hour mode.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    my12_24:         12 or 24 hour mode.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_Set12_24_HourMode.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_Set12_24_HourMode ( I2C_parameters_t myI2Cparameters, MCP9808_data_t my12_24 )
-{
-  uint8_t      cmd[2]  = { 0U };
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd[0]   =   MCP9808_CONTROL_1;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
-  
-  /* Mask it and update it with the new value  */
-  cmd[1]   =   ( ( cmd[1] & ~CONTROL_1_12_24_MASK ) | my12_24.Time12H_24HMode );
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_SetInternalOscillatorCapacitor ( I2C_parameters_t , MCP9808_control_1_cap_sel_t )
- *
- * @details     It sets the internal oscillator capacitor.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myCAP_SEL:       Internal oscillator capacitor selection.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_SetInternalOscillatorCapacitor.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_SetInternalOscillatorCapacitor ( I2C_parameters_t myI2Cparameters, MCP9808_control_1_cap_sel_t myCAP_SEL )
-{
-  uint8_t      cmd[2]  = { 0U };
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd[0]   =   MCP9808_CONTROL_1;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
-  
-  /* Mask it and update it with the new value  */
-  cmd[1]   =   ( ( cmd[1] & ~CONTROL_1_CAP_SEL_MASK ) | myCAP_SEL );
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_SetMinuteInterrupts ( I2C_parameters_t , MCP9808_control_2_mi_t , MCP9808_control_2_hmi_t )
- *
- * @details     It enables/disables minute/half minute interrupt.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myMI:            Minute interrupt.
- * @param[in]    myHMI:           Half minute interrupt.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_SetMinuteInterrupts.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_SetMinuteInterrupts ( I2C_parameters_t myI2Cparameters, MCP9808_control_2_mi_t myMI, MCP9808_control_2_hmi_t myHMI )
-{
-  uint8_t      cmd[2]  = { 0U };
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd[0]   =   MCP9808_CONTROL_2;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
-  
-  /* Mask it and update it with the new value  */
-  cmd[1]   =   ( ( cmd[1] & ~( CONTROL_2_MI_MASK | CONTROL_2_HMI_MASK ) ) | myMI | myHMI );
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_GetTimerFlag ( I2C_parameters_t , MCP9808_control_2_tf_t* )
- *
- * @details     It gets the status of the timer flag.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   myTF:            Timer flag.
- *
- *
- * @return       Status of MCP9808_GetTimerFlag.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_GetTimerFlag ( I2C_parameters_t myI2Cparameters, MCP9808_control_2_tf_t* myTF )
-{
-  uint8_t      cmd  = 0U;
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd      =   MCP9808_CONTROL_2;
-  aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
-  
-  /* Parse the data  */
-  *myTF  =   ( cmd & CONTROL_2_TF_MASK );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_ClearTimerFlag ( I2C_parameters_t )
- *
- * @details     It resets the status of the timer flag.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_ClearTimerFlag.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_ClearTimerFlag ( I2C_parameters_t myI2Cparameters )
-{
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd[0]   =   MCP9808_CONTROL_2;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
-  
-  /* Mask it and update it with the new value  */
-  cmd[1]   =   ( cmd[1] & ~CONTROL_2_TF_MASK );
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_SetClockOutputFrequency ( I2C_parameters_t , MCP9808_control_2_cof_t )
- *
- * @details     It sets the clock output frequency.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myCOF:           CLKOUT control.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_SetClockOutputFrequency.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_SetClockOutputFrequency ( I2C_parameters_t myI2Cparameters, MCP9808_control_2_cof_t myCOF )
-{
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd[0]   =   MCP9808_CONTROL_2;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
-  
-  /* Mask it and update it with the new value  */
-  cmd[1]   =   ( cmd[1] & ~CONTROL_2_COF_MASK ) | myCOF;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_SetOffset ( I2C_parameters_t , MCP9808_offset_mode_t , int8_t )
- *
- * @details     It sets the offset.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myMODE:          Offset mode.
- * @param[in]    myOFFSET:        from +63 to -64.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_SetOffset.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_SetOffset ( I2C_parameters_t myI2Cparameters, MCP9808_offset_mode_t myMODE, int8_t myOFFSET )
-{
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
-  
-  /*  Check offset values  */
-  if ( ( myOFFSET < -64 ) || ( myOFFSET > 63 ) )
-  {
-    return   MCP9808_FAILURE;
-  }
-  else
-  {
-    /* Read the register   */
-    cmd[0]   =   MCP9808_OFFSET;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-    aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
-  
-    /* Mask it and update it with the new value  */
-    cmd[1]   =   ( cmd[1] & ~( OFFSET_MODE_MASK | 0b01111111 ) ) | ( myMODE | myOFFSET );
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-  }
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_WriteByteRAM ( I2C_parameters_t , MCP9808_data_t )
- *
- * @details     It writes into the RAM byte register.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myData:          Data to be written in the RAM byte register.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_WriteByteRAM.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_WriteByteRAM ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myData )
-{
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
-
-  /* Update the register   */
-  cmd[0]   =   MCP9808_RAM_BYTE;
-  cmd[1]   =   myData.ramByte;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_ReadByteRAM ( I2C_parameters_t , MCP9808_data_t* )
- *
- * @details     It writes into the RAM byte register.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   myData:          Data to be read from the RAM byte register.
- *
- *
- * @return       Status of MCP9808_ReadByteRAM.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_ReadByteRAM ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myData )
-{
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd      =   MCP9808_RAM_BYTE;
-  aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
-  
-  /* Parse the data  */
-  myData->ramByte   =   cmd;
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t , MCP9808_data_t* )
- *
- * @details     It checks oscillator clock integrity flag.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   myOS:            CLKOUT control.
- *
- *
- * @return       Status of MCP9808_CheckOscillatorClockIntegrityFlag.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myOS )
-{
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd      =   MCP9808_SECONDS;
-  aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
-  
-  /* Parse the data  */
-  myOS->os   =   cmd;
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_ClearOscillatorClockIntegrityFlag ( I2C_parameters_t )
- *
- * @details     It clears oscillator clock integrity flag.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_ClearOscillatorClockIntegrityFlag.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_ClearOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters )
-{
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd[0]   =   MCP9808_SECONDS;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
-  
-  /* Mask it and update it with the new value  */
-  cmd[1]   =   ( cmd[1] & ~SECONDS_OS_MASK );
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_SetAM_PM_Indicator ( I2C_parameters_t , MCP9808_data_t )
- *
- * @details     It sets the AM/PM indicator ( only for 12-hour mode ).
- *
- * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myAM_PM_Indicator: AM/PM indicator.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_SetAM_PM_Indicator.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     This function only works when the device is set for 12-hour mode, otherwise it
- *              will return FAILURE.
- */
-MCP9808_status_t  MCP9808_SetAM_PM_Indicator ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myAM_PM_Indicator )
-{
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
-  
-  /* This function only works when the device is set for 12-hour mode  */
-  if ( myAM_PM_Indicator.Time12H_24HMode == CONTROL_1_12_24_24_HOUR_MODE )
-  {
-    return   MCP9808_FAILURE;
-  }
-  else
-  {
-    /* Read the register   */
-    cmd[0]   =   MCP9808_HOURS;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-    aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
-  
-    /* Mask it and update it with the new value  */
-    cmd[1]   =   ( cmd[1] & ~HOURS_AMPM_MASK ) | myAM_PM_Indicator.TimeAM_PM_Mode;
-    aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-  }
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_GetAM_PM_Indicator ( I2C_parameters_t , MCP9808_data_t* )
- *
- * @details     It gets the AM/PM indicator ( only for 12-hour mode ).
- *
- * @param[in]    myI2Cparameters:   I2C parameters.
- *
- * @param[out]   myAM_PM_Indicator: AM/PM indicator.
- *
- *
- * @return       Status of MCP9808_GetAM_PM_Indicator.
- *
- *
- * @author      Manuel Caballero
- * @date        23/January/2019
- * @version     23/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     This function only works when the device is set for 12-hour mode, otherwise it
- *              will return FAILURE.
- */
-MCP9808_status_t  MCP9808_GetAM_PM_Indicator ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myAM_PM_Indicator )
-{
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
-  
-  /* This function only works when the device is set for 12-hour mode  */
-  if ( myAM_PM_Indicator->Time12H_24HMode == CONTROL_1_12_24_24_HOUR_MODE )
-  {
-    return   MCP9808_FAILURE;
-  }
-  else
-  {
-    /* Read the register   */
-    cmd      =   MCP9808_HOURS;
-    aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-    aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
-  
-    /* Parse the data  */
-    myAM_PM_Indicator->TimeAM_PM_Mode  =   cmd;
-  }
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_GetDay ( I2C_parameters_t , MCP9808_data_t* )
- *
- * @details     It gets the day ( BCD format ).
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   myActualDay:     Current day.
- *
- *
- * @return       Status of MCP9808_GetDay.
- *
- *
- * @author      Manuel Caballero
- * @date        24/January/2019
- * @version     24/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_GetDay ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myActualDay )
-{
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd      =   MCP9808_DAYS;
-  aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
-  
-  /* Parse the data  */
-  myActualDay->BCDday  =   ( cmd & ( DAYS_DAYS_TEN_PLACE_MASK | DAYS_DAYS_UNIT_PLACE_MASK ) );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_SetDay ( I2C_parameters_t , MCP9808_data_t )
- *
- * @details     It sets the day ( BCD format ).
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myNewDay:        New day ( BCD format ).
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_SetDay.
- *
- *
- * @author      Manuel Caballero
- * @date        24/January/2019
- * @version     24/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_SetDay ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myNewDay )
-{
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
-
-  /* Update the register   */
-  cmd[0]   =   MCP9808_DAYS;
-  cmd[1]   =   ( myNewDay.BCDday & ( DAYS_DAYS_TEN_PLACE_MASK | DAYS_DAYS_UNIT_PLACE_MASK ) );
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_GetWeekday ( I2C_parameters_t , MCP9808_data_t* )
- *
- * @details     It gets the weekday.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   myActualWeekday: Current weekday.
- *
- *
- * @return       Status of MCP9808_GetWeekday.
- *
- *
- * @author      Manuel Caballero
- * @date        24/January/2019
- * @version     24/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_GetWeekday ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myActualWeekday )
-{
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd      =   MCP9808_WEEKDAYS;
-  aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
-  
-  /* Parse the data  */
-  myActualWeekday->weekday  =   ( cmd & WEEKDAYS_WEEKDAYS_MASK );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_SetWeekday ( I2C_parameters_t , MCP9808_data_t )
- *
- * @details     It sets the weekday.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myNewWeekday:    New weekday.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_SetWeekday.
- *
- *
- * @author      Manuel Caballero
- * @date        24/January/2019
- * @version     24/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_SetWeekday ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myNewWeekday )
-{
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
-
-  /* Update the register   */
-  cmd[0]   =   MCP9808_WEEKDAYS;
-  cmd[1]   =   myNewWeekday.weekday;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_GetMonth ( I2C_parameters_t , MCP9808_data_t* )
- *
- * @details     It gets the month ( BCD format ).
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   myActualMonth:   Current month.
- *
- *
- * @return       Status of MCP9808_GetMonth.
- *
- *
- * @author      Manuel Caballero
- * @date        24/January/2019
- * @version     24/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_GetMonth ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myActualMonth )
-{
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd      =   MCP9808_MONTHS;
-  aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
-  
-  /* Parse the data  */
-  myActualMonth->BCDmonth  =   ( cmd & MONTHS_MONTHS_MASK );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_SetMonth ( I2C_parameters_t , MCP9808_data_t )
- *
- * @details     It sets the month ( BCD format ).
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myNewMonth:      New month.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_SetMonth.
- *
- *
- * @author      Manuel Caballero
- * @date        24/January/2019
- * @version     24/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_SetMonth ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myNewMonth )
-{
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
-
-  /* Update the register   */
-  cmd[0]   =   MCP9808_MONTHS;
-  cmd[1]   =   myNewMonth.BCDmonth;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_GetYear ( I2C_parameters_t , MCP9808_data_t* )
- *
- * @details     It gets the year ( BCD format ).
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   myActualYear:    Current year.
- *
- *
- * @return       Status of MCP9808_GetYear.
- *
- *
- * @author      Manuel Caballero
- * @date        24/January/2019
- * @version     24/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_GetYear ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myActualYear )
-{
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd      =   MCP9808_YEARS;
-  aux      =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd, 1U );
-  
-  /* Parse the data  */
-  myActualYear->BCDyear  =   cmd;
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_SetYear ( I2C_parameters_t , MCP9808_data_t )
- *
- * @details     It sets the year ( BCD format ).
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myNewYear:       New year.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_SetYear.
- *
- *
- * @author      Manuel Caballero
- * @date        24/January/2019
- * @version     24/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_SetYear ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myNewYear )
-{
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
-
-  /* Update the register   */
-  cmd[0]   =   MCP9808_YEARS;
-  cmd[1]   =   myNewYear.BCDyear;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_GetTime ( I2C_parameters_t , MCP9808_data_t* )
- *
- * @details     It gets the time ( BCD format ).
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   myActualTime:    Current time ( BCD format: HHMMSS ).
- *
- *
- * @return       Status of MCP9808_GetTime.
- *
- *
- * @author      Manuel Caballero
- * @date        24/January/2019
- * @version     24/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_GetTime ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myActualTime )
-{
-  uint8_t      cmd[3]  =  { 0U };
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd[0]   =   MCP9808_SECONDS;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
-  
-  /* Parse the data  */
-  if ( myActualTime->Time12H_24HMode == CONTROL_1_12_24_24_HOUR_MODE )
-  {
-    myActualTime->BCDtime   =   ( cmd[2] & ( HOURS_24_HOUR_MODE_TEN_PLACE_MASK | HOURS_HOURS_UNIT_PLACE_MASK ) );
-  }
-  else
-  {
-    myActualTime->BCDtime   =   ( cmd[2] & ( HOURS_12_HOUR_MODE_TEN_PLACE_MASK | HOURS_HOURS_UNIT_PLACE_MASK ) );
-  }
-
-  myActualTime->BCDtime <<=   8U;
-  myActualTime->BCDtime  |=   ( cmd[1] & ( MINUTES_MINUTES_TEN_PLACE_MASK | MINUTES_MINUTES_UNIT_PLACE_MASK ) );
-  myActualTime->BCDtime <<=   8U;
-  myActualTime->BCDtime  |=   ( cmd[0] & ( SECONDS_SECONDS_TEN_PLACE_MASK | SECONDS_SECONDS_UNIT_PLACE_MASK ) );
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   MCP9808_SUCCESS;
-  }
-  else
-  {
-    return   MCP9808_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       MCP9808_SetTime ( I2C_parameters_t , MCP9808_data_t )
- *
- * @details     It sets the time ( BCD format ).
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myNewTime:       New current time ( BCD format: HHMMSS ).
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of MCP9808_SetTime.
- *
- *
- * @author      Manuel Caballero
- * @date        24/January/2019
- * @version     24/January/2019     The ORIGIN
- * @pre         N/A
- * @warning     N/A.
- */
-MCP9808_status_t  MCP9808_SetTime ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myNewTime )
-{
-  uint8_t      cmd[4]  =  { 0U };
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd[0]   =   MCP9808_SECONDS;
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 3U );
-  
-  /* Mask it and update the register  */
-  cmd[1]  &=  ~( SECONDS_SECONDS_TEN_PLACE_MASK | SECONDS_SECONDS_UNIT_PLACE_MASK );
-  cmd[1]  |=   (uint8_t)( myNewTime.BCDtime & 0x0000FF );
-  cmd[2]  &=  ~( MINUTES_MINUTES_TEN_PLACE_MASK | MINUTES_MINUTES_UNIT_PLACE_MASK );
-  cmd[2]  |=   (uint8_t)( ( myNewTime.BCDtime & 0x00FF00 ) >> 8U );
-
-  if ( myNewTime.Time12H_24HMode == CONTROL_1_12_24_24_HOUR_MODE )
-  {
-    cmd[3]  &=  ~( HOURS_24_HOUR_MODE_TEN_PLACE_MASK | HOURS_HOURS_UNIT_PLACE_MASK );
-  }
-  else
-  {
-    cmd[3]  &=  ~( HOURS_12_HOUR_MODE_TEN_PLACE_MASK | HOURS_HOURS_UNIT_PLACE_MASK );
-  }
-  cmd[3]  |=   (uint8_t)( ( myNewTime.BCDtime & 0xFF0000 ) >> 16U );
-  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
 
 
 
