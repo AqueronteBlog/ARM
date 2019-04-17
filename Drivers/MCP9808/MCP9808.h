@@ -1,14 +1,14 @@
 /**
  * @brief       MCP9808.h
- * @details     Tiny Real-Time Clock/calendar.
+ * @details     ±0.5°C Maximum Accuracy Digital Temperature Sensor.
  *              Header file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        22/January/2019
- * @version     22/January/2019    The ORIGIN
+ * @date        15/April/2019
+ * @version     15/April/2019    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ). All rights reserved.
@@ -42,7 +42,7 @@ typedef enum
   */
 typedef enum
 {
-  MCP9808_CONFIG          =   0x00,           /*!<  CONFIG register                               */
+  MCP9808_CONFIG          =   0x01,           /*!<  CONFIG register                               */
   MCP9808_TUPPER          =   0x02,           /*!<  T_UPPER register                              */
   MCP9808_TLOWER          =   0x03,           /*!<  T_LOWER register                              */
   MCP9808_TCRIT           =   0x04,           /*!<  T_CRIT register                               */
@@ -185,288 +185,130 @@ typedef enum
 
 
 
-
-
-
-
-
-
 /**
-  * @brief   Register Control_2
+  * @brief   T_UPPER/T_LOWER/T_CRIT TEMPERATURE LIMIT REGISTERS
   */
-/* MI <5>: MINUTE INTERRUPT
+/* SIGN <12>: SIGN BIT
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_2_MI_MASK                           =   ( 1U << 5U ),     /*!<  MI mask                                         */
-    CONTROL_2_MI_MINUTE_INTERRUPT_DISABLED      =   ( 0U << 5U ),     /*!<  Minute interrupt disabled           [ Default ] */
-    CONTROL_2_MI_MINUTE_INTERRUPT_ENABLED       =   ( 1U << 5U )      /*!<  Minute interrupt enabled                        */
-} MCP9808_control_2_mi_t;
+    TEMPERATURE_LIMIT_SIGN_MASK         =   ( 1U << 12U ),    /*!<  SIGN mask                                   */
+    TEMPERATURE_LIMIT_SIGN_TA_POSITIVE  =   ( 0U << 12U ),    /*!<  T_A greater or iqual 0C         [ Default ] */
+    TEMPERATURE_LIMIT_SIGN_TA_NEGATIVE  =   ( 1U << 12U )     /*!<  T_A lower 0C                                */
+} MCP9808_temperature_limit_sign_t;
 
 
 
-/* HMI <4>: HALF MINUTE INTERRUPT
+/* INTEGRAL <8:4>: TEMPERATURE INTEGRAL BOUNDARY PART
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_2_HMI_MASK                            =   ( 1U << 4U ),   /*!<  HMI mask                                        */
-    CONTROL_2_HMI_HALF_MINUTE_INTERRUPT_DISABLED  =   ( 0U << 4U ),   /*!<  Half Minute interrupt disabled      [ Default ] */
-    CONTROL_2_HMI_HALF_MINUTE_INTERRUPT_ENABLED   =   ( 1U << 4U )    /*!<  Half Minute interrupt enabled                   */
-} MCP9808_control_2_hmi_t;
+    TEMPERATURE_LIMIT_INTEGRAL_PART_MASK  =   ( 0b11111111 << 4U ) /*!<  Temperature limit, integral part      */
+} MCP9808_temperature_limit_integral_boundary_t;
 
 
 
-/* TF <3>: TIMER FLAG
+/* DECIMAL <3:2>: TEMPERATURE DECIMAL BOUNDARY PART
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_2_TF_MASK                           =   ( 1U << 3U ),     /*!<  TF mask                                         */
-    CONTROL_2_TF_TIMER_INTERRUPT_NOT_GENERATED  =   ( 0U << 3U ),     /*!<  No Timer interrupt generated        [ Default ] */
-    CONTROL_2_TF_TIMER_INTERRUPT_GENERATED      =   ( 1U << 3U )      /*!<  Timer interrupt generated                       */
-} MCP9808_control_2_tf_t;
+    TEMPERATURE_LIMIT_DECIMAL_PART        =   ( 0b11 << 2U )  /*!<  Temperature limit, decimal part             */
+} MCP9808_temperature_limit_decimal_boundary_t;
 
 
 
-/* COF <2:0>: CLKOUT CONTROL
+
+/**
+  * @brief   T_A AMBIENT TEMPERATURE REGISTERS
+  */
+/* TA_VS_TCRIT <15>
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_2_COF_MASK                          =   ( 0b111 << 0U ),  /*!<  COF mask                                        */
-    CONTROL_2_COF_CLKOUT_32768_HZ               =   ( 0b000 << 0U ),  /*!<  CLKOUT: 32768 Hz                    [ Default ] */
-    CONTROL_2_COF_CLKOUT_16384_HZ               =   ( 0b001 << 0U ),  /*!<  CLKOUT: 16384 Hz                                */
-    CONTROL_2_COF_CLKOUT_8192_HZ                =   ( 0b010 << 0U ),  /*!<  CLKOUT: 8192  Hz                                */
-    CONTROL_2_COF_CLKOUT_4096_HZ                =   ( 0b011 << 0U ),  /*!<  CLKOUT: 4096  Hz                                */
-    CONTROL_2_COF_CLKOUT_2048_HZ                =   ( 0b100 << 0U ),  /*!<  CLKOUT: 2048  Hz                                */
-    CONTROL_2_COF_CLKOUT_1024_HZ                =   ( 0b101 << 0U ),  /*!<  CLKOUT: 1024  Hz                                */
-    CONTROL_2_COF_CLKOUT_1_HZ                   =   ( 0b110 << 0U ),  /*!<  CLKOUT: 1     Hz                                */
-    CONTROL_2_COF_CLKOUT_LOW                    =   ( 0b111 << 0U )   /*!<  CLKOUT: LOW                                     */
-} MCP9808_control_2_cof_t;
+    T_A_TA_VS_TCRIT_MASK                    =   ( 1U << 15U ),  /*!<  T_A mask                                    */
+    T_A_TA_VS_TCRIT_TA_LOWER_TCRIT          =   ( 0U << 15U ),  /*!<  T_A lower T_CRIT                            */
+    T_A_TA_VS_TCRIT_TA_GREATER_EQUAL_TCRIT  =   ( 1U << 15U )   /*!<  T_A greater or equal T_CRIT                 */
+} MCP9808_t_a_ta_vs_tcrit_t;
 
 
 
-/**
-  * @brief   Register Offset
-  */
-/* MODE <7>: OFFSET MODE
+/* TA_VS_TUPPER <14>
  *    NOTE: N/A.
  */
 typedef enum
 {
-    OFFSET_MODE_MASK                            =   ( 1U << 7U ),     /*!<  MODE mask                                                   */
-    OFFSET_MODE_NORMAL_MODE                     =   ( 0U << 7U ),     /*!<  Normal mode: offset is made once every two hours[ Default ] */
-    OFFSET_MODE_COURSE_MODE                     =   ( 1U << 7U )      /*!<  Course mode: offset is made every 4 minutes                 */
-} MCP9808_offset_mode_t;
+    T_A_TA_VS_TUPPER_MASK                     =   ( 1U << 14U ),  /*!<  T_A mask                                    */
+    T_A_TA_VS_TUPPER_TA_LOWER__IQUAL_TUPPER   =   ( 0U << 14U ),  /*!<  T_A lower or equal T_UPPER                  */
+    T_A_TA_VS_TUPPER_TA_GREATER_TUPPER        =   ( 1U << 14U )   /*!<  T_A greater T_UPPER                         */
+} MCP9808_t_a_ta_vs_tupper_t;
 
 
 
-/**
-  * @brief   Register RAM_byte
-  */
-/* B <7:0>: RAM CONTENT
+/* TA_VS_LOWER <13>
  *    NOTE: N/A.
  */
 typedef enum
 {
-    RAM_BYTE_B_MASK                             =   0xFF              /*!<  RAM_byte mask                                     */
-} MCP9808_ram_byte_b_t;
+    T_A_TA_VS_TLOWER_MASK                     =   ( 1U << 13U ),  /*!<  T_A mask                                    */
+    T_A_TA_VS_TLOWER_TA_LOWER_TLOWER          =   ( 1U << 13U ),  /*!<  T_A lower or equal T_LOWER                  */
+    T_A_TA_VS_TLOWER_TA_GREATER_EQUAL_TLOWER  =   ( 0U << 13U )   /*!<  T_A greater T_LOWER                         */
+} MCP9808_t_a_ta_vs_tlower_t;
 
 
 
-/**
-  * @brief   Register Seconds
-  */
-/* OS <7>: OSCILLATOR STOP
+/* TA_SIGN <12>
  *    NOTE: N/A.
  */
 typedef enum
 {
-    SECONDS_OS_MASK                           =   ( 1U << 7U ),     /*!<  OS mask                                                                                         */
-    SECONDS_OS_CLOCK_INTEGRITY_IS_GUARANTEED  =   ( 0U << 7U ),     /*!<  Clock integrity is guaranteed                                                                   */
-    SECONDS_OS_CLOCK_INTEGRITY_NOT_GUARANTEED =   ( 1U << 7U )      /*!<  Clock integrity is not guaranteed, oscillator has stopped or has been interrupted  [ Default ]  */
-} MCP9808_seconds_os_t;
+    T_A_TA_SIGN_MASK                          =   ( 1U << 12U ),  /*!<  T_A SIGN mask                               */
+    T_A_TA_SIGN_POSITIVE                      =   ( 0U << 12U ),  /*!<  T_A positive                                */
+    T_A_TA_SIGN_NEGATIVE                      =   ( 1U << 12U )   /*!<  T_A negative                                */
+} MCP9808_t_a_sign_t;
 
 
 
-/* SECONDS, TEN'S PLACE <6:4>: ACTUAL SECONDS, TEN'S PLACE
- *    NOTE: CODED IN BCD FORMAT.
- */
-typedef enum
-{
-    SECONDS_SECONDS_TEN_PLACE_MASK            =   ( 0b111 << 4U )   /*!<  SECONDS TEN'S PLACE mask                              */
-} MCP9808_seconds_ten_place_t;
-
-
-
-/* SECONDS, UNIT PLACE <3:0>: ACTUAL SECONDS, UNIT PLACE
- *    NOTE: CODED IN BCD FORMAT.
- */
-typedef enum
-{
-    SECONDS_SECONDS_UNIT_PLACE_MASK           =   ( 0b1111 << 0U )  /*!<  SECONDS UNIT PLACE mask                               */
-} MCP9808_seconds_unit_place_t;
-
-
-
-/**
-  * @brief   Register Minutes
-  */
-/* MINUTES, TEN'S PLACE <6:4>: ACTUAL MINUTES, TEN'S PLACE
- *    NOTE: CODED IN BCD FORMAT.
- */
-typedef enum
-{
-    MINUTES_MINUTES_TEN_PLACE_MASK            =   ( 0b111 << 4U )   /*!<  MINUTES TEN'S PLACE mask                              */
-} MCP9808_minutes_ten_place_t;
-
-
-
-/* MINUTES, UNIT PLACE <3:0>: ACTUAL MINUTES, UNIT PLACE
- *    NOTE: CODED IN BCD FORMAT.
- */
-typedef enum
-{
-    MINUTES_MINUTES_UNIT_PLACE_MASK           =   ( 0b1111 << 0U )  /*!<  MINUTES UNIT PLACE mask                               */
-} MCP9808_minutes_unit_place_t;
-
-
-
-/**
-  * @brief   Register HOURS
-  */
-/* AMPM <5>: AM/PM INDICATOR
- *    NOTE: ONLY FOR 12-HOUR MODE.
- */
-typedef enum
-{
-    HOURS_AMPM_MASK                           =   ( 1U << 5U ),     /*!<  AMPM mask                                             */
-    HOURS_AMPM_AM                             =   ( 0U << 5U ),     /*!<  AMPM: AM mode                                         */
-    HOURS_AMPM_PM                             =   ( 1U << 5U )      /*!<  AMPM: PM mode                                         */
-} MCP9808_hours_ampm_t;
-
-
-
-/* HOURS, TEN'S PLACE <4>: ACTUAL HOURS, TEN'S PLACE
- *    NOTE: ONLY FOR 12-HOUR MODE, CODED IN BCD FORMAT.
- */
-typedef enum
-{
-    HOURS_12_HOUR_MODE_TEN_PLACE_MASK         =   ( 1U << 4U )      /*!<  Hours TEN'S PLACE mask                                */
-} MCP9808_12_hour_mode_ten_place_t;
-
-
-
-/* HOURS, TEN'S PLACE <5:4>: ACTUAL HOURS, TEN'S PLACE
- *    NOTE: ONLY FOR 24-HOUR MODE, CODED IN BCD FORMAT.
- */
-typedef enum
-{
-    HOURS_24_HOUR_MODE_TEN_PLACE_MASK         =   ( 0b11 << 4U )    /*!<  Hours TEN'S PLACE mask                                */
-} MCP9808_24_hour_mode_ten_place_t;
-
-
-
-/* HOURS, UNIT PLACE <3:0>: ACTUAL HOURS, UNIT PLACE
- *    NOTE: CODED IN BCD FORMAT.
- */
-typedef enum
-{
-    HOURS_HOURS_UNIT_PLACE_MASK               =   ( 0b1111 << 0U )  /*!<  HOURS UNIT PLACE mask                                 */
-} MCP9808_hours_unit_place_t;
-
-
-
-/**
-  * @brief   Register Days
-  */
-/* DAYS, TEN'S PLACE <5:4>: ACTUAL DAYS, TEN'S PLACE
- *    NOTE: CODED IN BCD FORMAT.
- */
-typedef enum
-{
-    DAYS_DAYS_TEN_PLACE_MASK                  =   ( 0b11 << 4U )    /*!<  DAYS TEN'S PLACE mask                                 */
-} MCP9808_days_ten_place_t;
-
-
-
-/* DAYS, UNIT PLACE <3:0>: ACTUAL DAYS, UNIT PLACE
- *    NOTE: CODED IN BCD FORMAT.
- */
-typedef enum
-{
-    DAYS_DAYS_UNIT_PLACE_MASK                 =   ( 0b1111 << 0U )  /*!<  DAYS UNIT PLACE mask                                  */
-} MCP9808_days_unit_place_t;
-
-
-
-/**
-  * @brief   Register Weekdays
-  */
-/* WEEKDAYS <2:0>: ACTUAL WEEKDAY
+/* TA_INTEGRAL <11:4>
  *    NOTE: N/A.
  */
 typedef enum
 {
-    WEEKDAYS_WEEKDAYS_MASK                    =   ( 0b111 << 0U ),  /*!<  WEEKDAYS mask                                          */
-    WEEKDAYS_WEEKDAYS_SUNDAY                  =   ( 0b000 << 0U ),  /*!<  WEEKDAYS Sunday                                        */
-    WEEKDAYS_WEEKDAYS_MONDAY                  =   ( 0b001 << 0U ),  /*!<  WEEKDAYS Monday                                        */
-    WEEKDAYS_WEEKDAYS_TUESDAY                 =   ( 0b010 << 0U ),  /*!<  WEEKDAYS Tuesday                                       */
-    WEEKDAYS_WEEKDAYS_WEDNESDAY               =   ( 0b011 << 0U ),  /*!<  WEEKDAYS Wednesday                                     */
-    WEEKDAYS_WEEKDAYS_THURSDAY                =   ( 0b100 << 0U ),  /*!<  WEEKDAYS Thursday                                      */
-    WEEKDAYS_WEEKDAYS_FRIDAY                  =   ( 0b101 << 0U ),  /*!<  WEEKDAYS Friday                                        */
-    WEEKDAYS_WEEKDAYS_SATURDAY                =   ( 0b111 << 0U )   /*!<  WEEKDAYS Saturday                          [ Default ] */
-} MCP9808_weekdays_weekdays_t;
+    T_A_TA_INTEGRAL_PART_MASK         =   ( 0b11111111 << 4U )    /*!<  T_A integral part                         */
+} MCP9808_t_a_integral_t;
+
+
+
+/* TA_DECIMAL <3:0>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    T_A_TA_DECIMAL_PART_MASK         =   ( 0b1111 << 0U )         /*!<  T_A decimal part                         */
+} MCP9808_t_a_decimal_t;
+
 
 
 
 /**
-  * @brief   Register Months
+  * @brief   RESOLUTION REGISTER
   */
-/* MONTHS <4:0>: ACTUAL MONTH
- *    NOTE: CODED IN BCD FORMAT.
+/* RESOLUTION <1:0>
+ *    NOTE: N/A.
  */
 typedef enum
 {
-   MONTHS_MONTHS_MASK                        =   ( 0b11111 << 0U ),  /*!<  MONTHS mask                                            */
-   MONTHS_MONTHS_JANUARY                     =   ( 0b00001 << 0U ),  /*!<  MONTHS January                             [ Default ] */
-   MONTHS_MONTHS_FEBRUARY                    =   ( 0b00010 << 0U ),  /*!<  MONTHS February                                        */
-   MONTHS_MONTHS_MARCH                       =   ( 0b00011 << 0U ),  /*!<  MONTHS March                                           */
-   MONTHS_MONTHS_APRIL                       =   ( 0b00100 << 0U ),  /*!<  MONTHS April                                           */
-   MONTHS_MONTHS_MAY                         =   ( 0b00101 << 0U ),  /*!<  MONTHS May                                             */
-   MONTHS_MONTHS_JUNE                        =   ( 0b00110 << 0U ),  /*!<  MONTHS June                                            */
-   MONTHS_MONTHS_JULY                        =   ( 0b00111 << 0U ),  /*!<  MONTHS July                                            */
-   MONTHS_MONTHS_AUGUST                      =   ( 0b01000 << 0U ),  /*!<  MONTHS August                                          */
-   MONTHS_MONTHS_SEPTEMBER                   =   ( 0b01001 << 0U ),  /*!<  MONTHS September                                       */
-   MONTHS_MONTHS_OCTOBER                     =   ( 0b10000 << 0U ),  /*!<  MONTHS October                                         */
-   MONTHS_MONTHS_NOVEMBER                    =   ( 0b10001 << 0U ),  /*!<  MONTHS November                                        */
-   MONTHS_MONTHS_DECEMBER                    =   ( 0b10010 << 0U )   /*!<  MONTHS December                                        */
-} MCP9808_months_months_t;
+    RESOLUTION_MASK                   =   ( 0b11 << 0U ),         /*!<  Resolution mask                       */
+    RESOLUTION_0_5_C                  =   ( 0b00 << 0U ),         /*!<  Resolution: +0.5C                     */
+    RESOLUTION_0_25_C                 =   ( 0b01 << 0U ),         /*!<  Resolution: +0.25C                    */
+    RESOLUTION_0_125_C                =   ( 0b10 << 0U ),         /*!<  Resolution: +0.125C                   */
+    RESOLUTION_0_0625_C               =   ( 0b11 << 0U )          /*!<  Resolution: +0.0625C      [ Default ] */
+} MCP9808_resolution_t;
 
 
-
-/**
-  * @brief   Register Years
-  */
-/* YEARS, TEN'S PLACE <7:4>: ACTUAL YEARS, TEN'S PLACE
- *    NOTE: CODED IN BCD FORMAT.
- */
-typedef enum
-{
-    YEARS_YEARS_TEN_PLACE_MASK                =   ( 0b1111 << 4U )   /*!<  YEARS TEN'S PLACE mask                                 */
-} MCP9808_years_ten_place_t;
-
-
-
-/* YEARS, UNIT PLACE <3:0>: ACTUAL YEARS, UNIT PLACE
- *    NOTE: CODED IN BCD FORMAT.
- */
-typedef enum
-{
-    YEARS_YEARS_UNIT_PLACE_MASK               =   ( 0b1111 << 0U )   /*!<  YEARS UNIT PLACE mask                                  */
-} MCP9808_years_unit_place_t;
 
 
 
@@ -476,17 +318,21 @@ typedef enum
 #define MCP9808_VECTOR_STRUCT_H
 typedef struct
 {
-    MCP9808_control_1_12_24_t    Time12H_24HMode;                    /*!<  Time mode: 12-hour or 24-hour mode                    */
-    MCP9808_hours_ampm_t         TimeAM_PM_Mode;                     /*!<  AM/PM mode ( only for 12-hour mode )                  */
+    float                       t_a;              /*!<  Ambient temperature value     */
+    uint8_t                     t_a_raw;          /*!<  Raw ambient temperature value */
 
-    uint32_t                      BCDtime;                            /*!<  Time ( HHMMSS ) in BCD format                         */
-    uint8_t                       BCDday;                             /*!<  Day number in BCD format                              */
-    MCP9808_weekdays_weekdays_t  weekday;                            /*!<  Weekday                                               */
-    MCP9808_months_months_t      BCDmonth;                           /*!<  Month  in BCD format                                  */
-    uint8_t                       BCDyear;                            /*!<  Year in BCD format                                    */
+    MCP9808_t_a_sign_t          t_a_sign;         /*!<  Ambient temperature sign      */
+    MCP9808_t_a_ta_vs_tcrit_t   ta_vs_tcrit;      /*!<  T_A vs T_CRIT  result         */
+    MCP9808_t_a_ta_vs_tupper_t  ta_vs_tupper;     /*!<  T_A vs T_UPPER result         */
+    MCP9808_t_a_ta_vs_tlower_t  ta_vs_tlower;     /*!<  T_A vs T_LOWER result         */
 
-    int8_t                        ramByte;                            /*!<  RAM byte                                              */
-    MCP9808_seconds_os_t         os;                                 /*!<  Oscillator flag                                       */
+    float                       t_upper;          /*!<  T_UPPER limit                 */
+    float                       t_lower;          /*!<  T_LOWER limit                 */
+    float                       t_crit;           /*!<  T_CRIT limit                  */
+
+    uint16_t                    manufacturerID;   /*!<  Manufacturer ID               */
+    uint8_t                     deviceID;         /*!<  Device ID                     */
+    uint8_t                     deviceRevision;   /*!<  Device Revision               */
 } MCP9808_data_t;
 #endif
 
@@ -510,112 +356,16 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-MCP9808_status_t  MCP9808_Init                              ( I2C_parameters_t myI2Cparameters                                                                );
+MCP9808_status_t  MCP9808_Init            ( I2C_parameters_t myI2Cparameters                                            );
 
-/** It sets the external clock test mode.
+/** It sets T_UPPER and T_LOWER Limit Hysteresis.
   */
-MCP9808_status_t  MCP9808_SetTestMode                       ( I2C_parameters_t myI2Cparameters, MCP9808_control_1_ext_test_t myEXT_TEST                      );
+MCP9808_status_t  MCP9808_SetT_HYST       ( I2C_parameters_t myI2Cparameters, MCP9808_config_thyst_t myT_HYST           );
 
-/** It sets the RTC clock mode.
+/** It sets device power mode.
   */
-MCP9808_status_t  MCP9808_SetRTCMode                        ( I2C_parameters_t myI2Cparameters, MCP9808_control_1_stop_t mySTOP                              );
+MCP9808_status_t  MCP9808_SetPowerMode    ( I2C_parameters_t myI2Cparameters, MCP9808_config_shdn_t mySHDN              );
 
-/** It performs a software reset.
+/** It sets T_CRIT lock bit.
   */
-MCP9808_status_t  MCP9808_SoftwareReset                     ( I2C_parameters_t myI2Cparameters                                                                );
-
-/** It sets the correction interrupt mode.
-  */
-MCP9808_status_t  MCP9808_SetCorrectionInterruptMode        ( I2C_parameters_t myI2Cparameters, MCP9808_control_1_cie_t myCIE                                );
-
-/** It sets 12 or 24 hour mode.
-  */
-MCP9808_status_t  MCP9808_Set12_24_HourMode                 ( I2C_parameters_t myI2Cparameters, MCP9808_data_t my12_24                                       );
-
-/** It sets the internal oscillator capacitor.
-  */
-MCP9808_status_t  MCP9808_SetInternalOscillatorCapacitor    ( I2C_parameters_t myI2Cparameters, MCP9808_control_1_cap_sel_t myCAP_SEL                        );
-
-/** It enables/disables minute/half minute interrupt.
-  */
-MCP9808_status_t  MCP9808_SetMinuteInterrupts               ( I2C_parameters_t myI2Cparameters, MCP9808_control_2_mi_t myMI, MCP9808_control_2_hmi_t myHMI  );
-
-/** It gets the status of the timer flag.
-  */
-MCP9808_status_t  MCP9808_GetTimerFlag                      ( I2C_parameters_t myI2Cparameters, MCP9808_control_2_tf_t* myTF                                 );
-
-/** It resets the status of the timer flag.
-  */
-MCP9808_status_t  MCP9808_ClearTimerFlag                    ( I2C_parameters_t myI2Cparameters                                                                );
-
-/** It sets the clock output frequency.
-  */
-MCP9808_status_t  MCP9808_SetClockOutputFrequency           ( I2C_parameters_t myI2Cparameters, MCP9808_control_2_cof_t myCOF                                );
-
-/** It sets the offset.
-  */
-MCP9808_status_t  MCP9808_SetOffset                         ( I2C_parameters_t myI2Cparameters, MCP9808_offset_mode_t myMODE, int8_t myOFFSET                );
-
-/** It writes into the RAM byte register.
-  */
-MCP9808_status_t  MCP9808_WriteByteRAM                      ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myData                                        );
-
-/** It reads the RAM byte register.
-  */
-MCP9808_status_t  MCP9808_ReadByteRAM                       ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myData                                       );
-
-/** It checks oscillator clock integrity flag.
-  */
-MCP9808_status_t  MCP9808_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myOS                                         );
-
-/** It clears oscillator clock integrity flag.
-  */
-MCP9808_status_t  MCP9808_ClearOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters                                                                );
-
-/** It sets the AM/PM indicator ( only for 12-hour mode ).
-  */
-MCP9808_status_t  MCP9808_SetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myAM_PM_Indicator                             );
-
-/** It gets the AM/PM indicator ( only for 12-hour mode ).
-  */
-MCP9808_status_t  MCP9808_GetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myAM_PM_Indicator                            );
-
-/** It gets the day ( BCD format ).
-  */
-MCP9808_status_t  MCP9808_GetDay                            ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myActualDay                                  );
-
-/** It sets the day ( BCD format ).
-  */
-MCP9808_status_t  MCP9808_SetDay                            ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myNewDay                                      );
-
-/** It gets the weekday.
-  */
-MCP9808_status_t  MCP9808_GetWeekday                        ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myActualWeekday                              );
-
-/** It sets the weekday.
-  */
-MCP9808_status_t  MCP9808_SetWeekday                        ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myNewWeekday                                  );
-
-/** It gets the month ( BCD format ).
-  */
-MCP9808_status_t  MCP9808_GetMonth                          ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myActualMonth                                );
-
-/** It sets the month ( BCD format ).
-  */
-MCP9808_status_t  MCP9808_SetMonth                          ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myNewMonth                                    );
-
-/** It gets the time ( BCD format ).
-  */
-MCP9808_status_t  MCP9808_GetTime                           ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myActualTime                                 );
-
-/** It sets the time ( BCD format ).
-  */
-MCP9808_status_t  MCP9808_SetTime                           ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myNewTime                                     );
-
-/** It gets the year ( BCD format ).
-  */
-MCP9808_status_t  MCP9808_GetYear                           ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myActualYear                                 );
-
-/** It sets the year ( BCD format ).
-  */
-MCP9808_status_t  MCP9808_SetYear                           ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myNewYear                                     );
+MCP9808_status_t  MCP9808_SetT_CRIT_Lock  ( I2C_parameters_t myI2Cparameters, MCP9808_config_crit_lock_t myT_CRIT_Lock  );
