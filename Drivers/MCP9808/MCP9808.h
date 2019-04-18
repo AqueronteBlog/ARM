@@ -326,6 +326,8 @@ typedef struct
     MCP9808_t_a_ta_vs_tupper_t  ta_vs_tupper;     /*!<  T_A vs T_UPPER result         */
     MCP9808_t_a_ta_vs_tlower_t  ta_vs_tlower;     /*!<  T_A vs T_LOWER result         */
 
+    MCP9808_config_alert_stat_t alert_stat;       /*!<  Alert Output Status bit       */
+
     float                       t_upper;          /*!<  T_UPPER limit                 */
     float                       t_lower;          /*!<  T_LOWER limit                 */
     float                       t_crit;           /*!<  T_CRIT limit                  */
@@ -356,16 +358,45 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-MCP9808_status_t  MCP9808_Init            ( I2C_parameters_t myI2Cparameters                                            );
+MCP9808_status_t MCP9808_Init            ( I2C_parameters_t myI2Cparameters                                            );
 
 /** It sets T_UPPER and T_LOWER Limit Hysteresis.
   */
-MCP9808_status_t  MCP9808_SetT_HYST       ( I2C_parameters_t myI2Cparameters, MCP9808_config_thyst_t myT_HYST           );
+MCP9808_status_t MCP9808_SetT_HYST       ( I2C_parameters_t myI2Cparameters, MCP9808_config_thyst_t myT_HYST           );
 
 /** It sets device power mode.
   */
-MCP9808_status_t  MCP9808_SetPowerMode    ( I2C_parameters_t myI2Cparameters, MCP9808_config_shdn_t mySHDN              );
+MCP9808_status_t MCP9808_SetPowerMode    ( I2C_parameters_t myI2Cparameters, MCP9808_config_shdn_t mySHDN              );
 
 /** It sets T_CRIT lock bit.
   */
-MCP9808_status_t  MCP9808_SetT_CRIT_Lock  ( I2C_parameters_t myI2Cparameters, MCP9808_config_crit_lock_t myT_CRIT_Lock  );
+MCP9808_status_t MCP9808_SetCRITLock     ( I2C_parameters_t myI2Cparameters, MCP9808_config_crit_lock_t myT_CRIT_Lock  );
+
+/** It sets T_UPPER and T_LOWER window lock bit.
+  */
+MCP9808_status_t MCP9808_SetWinLock      ( I2C_parameters_t myI2Cparameters, MCP9808_config_win_lock_t myWinLock       );
+
+/** It sets interrupt Clear bit.
+  */
+MCP9808_status_t MCP9808_SetIntClear     ( I2C_parameters_t myI2Cparameters, MCP9808_conf_int_clear_t myIntClear       );
+
+/** It gets alert output status bit.
+  */
+MCP9808_status_t MCP9808_GetAlertStat    ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myAlertStat               );
+
+/** It sets alert output control bit.
+  */
+MCP9808_status_t MCP9808_SetAlertCnt     ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_cnt_t myAlertCnt     );
+
+/** It sets alert output select bit.
+  */
+MCP9808_status_t MCP9808_SetAlertSel     ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_sel_t myAlertSel     );
+
+/** It sets alert output polarity bit.
+  */
+MCP9808_status_t MCP9808_SetAlertPol     ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_pol_t myAlertPol     );
+
+/** It sets alert output mode bit.
+  */
+MCP9808_status_t MCP9808_SetAlertMod     ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_mod_t myAlertMod     );
+
