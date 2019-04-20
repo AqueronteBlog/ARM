@@ -205,7 +205,7 @@ typedef enum
  */
 typedef enum
 {
-    TEMPERATURE_LIMIT_INTEGRAL_PART_MASK  =   ( 0b11111111 << 4U ) /*!<  Temperature limit, integral part      */
+    TEMPERATURE_LIMIT_INTEGRAL_PART_MASK  =   ( 0b11111111 << 4U ) /*!<  Temperature limit, integral part mask    */
 } MCP9808_temperature_limit_integral_boundary_t;
 
 
@@ -215,7 +215,11 @@ typedef enum
  */
 typedef enum
 {
-    TEMPERATURE_LIMIT_DECIMAL_PART        =   ( 0b11 << 2U )  /*!<  Temperature limit, decimal part             */
+    TEMPERATURE_LIMIT_DECIMAL_PART_MASK   =   ( 0b11 << 2U ),   /*!<  Temperature limit, decimal part mask       */
+    TEMPERATURE_LIMIT_DECIMAL_PART_0_00C  =   ( 0b00 << 2U ),   /*!<  Temperature limit, decimal part: 0.00C     */
+    TEMPERATURE_LIMIT_DECIMAL_PART_0_25C  =   ( 0b01 << 2U ),   /*!<  Temperature limit, decimal part: 0.25C     */
+    TEMPERATURE_LIMIT_DECIMAL_PART_0_50C  =   ( 0b10 << 2U ),   /*!<  Temperature limit, decimal part: 0.50C     */
+    TEMPERATURE_LIMIT_DECIMAL_PART_0_75C  =   ( 0b11 << 2U )    /*!<  Temperature limit, decimal part: 0.75C     */
 } MCP9808_temperature_limit_decimal_boundary_t;
 
 
@@ -313,7 +317,6 @@ typedef enum
 
 
 
-
 #ifndef MCP9808_VECTOR_STRUCT_H
 #define MCP9808_VECTOR_STRUCT_H
 typedef struct
@@ -359,70 +362,76 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-MCP9808_status_t MCP9808_Init               ( I2C_parameters_t myI2Cparameters                                            );
+MCP9808_status_t MCP9808_Init               ( I2C_parameters_t myI2Cparameters                                                              );
 
 /** It sets T_UPPER and T_LOWER Limit Hysteresis.
   */
-MCP9808_status_t MCP9808_SetT_HYST          ( I2C_parameters_t myI2Cparameters, MCP9808_config_thyst_t myT_HYST           );
+MCP9808_status_t MCP9808_SetT_HYST          ( I2C_parameters_t myI2Cparameters, MCP9808_config_thyst_t myT_HYST                             );
 
 /** It sets device power mode.
   */
-MCP9808_status_t MCP9808_SetPowerMode       ( I2C_parameters_t myI2Cparameters, MCP9808_config_shdn_t mySHDN              );
+MCP9808_status_t MCP9808_SetPowerMode       ( I2C_parameters_t myI2Cparameters, MCP9808_config_shdn_t mySHDN                                );
 
 /** It sets T_CRIT lock bit.
   */
-MCP9808_status_t MCP9808_SetCRITLock        ( I2C_parameters_t myI2Cparameters, MCP9808_config_crit_lock_t myT_CRIT_Lock  );
+MCP9808_status_t MCP9808_SetCRITLock        ( I2C_parameters_t myI2Cparameters, MCP9808_config_crit_lock_t myT_CRIT_Lock                    );
 
 /** It sets T_UPPER and T_LOWER window lock bit.
   */
-MCP9808_status_t MCP9808_SetWinLock         ( I2C_parameters_t myI2Cparameters, MCP9808_config_win_lock_t myWinLock       );
+MCP9808_status_t MCP9808_SetWinLock         ( I2C_parameters_t myI2Cparameters, MCP9808_config_win_lock_t myWinLock                         );
 
 /** It sets interrupt Clear bit.
   */
-MCP9808_status_t MCP9808_SetIntClear        ( I2C_parameters_t myI2Cparameters, MCP9808_conf_int_clear_t myIntClear       );
+MCP9808_status_t MCP9808_SetIntClear        ( I2C_parameters_t myI2Cparameters, MCP9808_conf_int_clear_t myIntClear                         );
 
 /** It gets alert output status bit.
   */
-MCP9808_status_t MCP9808_GetAlertStat       ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myAlertStat               );
+MCP9808_status_t MCP9808_GetAlertStat       ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myAlertStat                                 );
 
 /** It sets alert output control bit.
   */
-MCP9808_status_t MCP9808_SetAlertCnt        ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_cnt_t myAlertCnt     );
+MCP9808_status_t MCP9808_SetAlertCnt        ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_cnt_t myAlertCnt                       );
 
 /** It sets alert output select bit.
   */
-MCP9808_status_t MCP9808_SetAlertSel        ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_sel_t myAlertSel     );
+MCP9808_status_t MCP9808_SetAlertSel        ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_sel_t myAlertSel                       );
 
 /** It sets alert output polarity bit.
   */
-MCP9808_status_t MCP9808_SetAlertPol        ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_pol_t myAlertPol     );
+MCP9808_status_t MCP9808_SetAlertPol        ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_pol_t myAlertPol                       );
 
 /** It sets alert output mode bit.
   */
-MCP9808_status_t MCP9808_SetAlertMod        ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_mod_t myAlertMod     );
+MCP9808_status_t MCP9808_SetAlertMod        ( I2C_parameters_t myI2Cparameters, MCP9808_config_alert_mod_t myAlertMod                       );
 
-// Temperature limits T_UPPER T_LOWER T_CRIT
+/** It sets temperature limit for: T_UPPER, T_LOWER or T_CRIT.
+  */
+MCP9808_status_t MCP9808_SetT_Limit         ( I2C_parameters_t myI2Cparameters, MCP9808_registers_t myTLimit, MCP9808_data_t myTValue_Limit );
+
+/** It gets temperature limit for: T_UPPER, T_LOWER or T_CRIT.
+  */
+MCP9808_status_t MCP9808_GetT_Limit         ( I2C_parameters_t myI2Cparameters, MCP9808_registers_t myTLimit, MCP9808_data_t* myTValue_Limit);
 
 /** It gets ambient temperature register ( raw value ).
   */
-MCP9808_status_t MCP9808_GetRawTA           ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myRawTA                   );
+MCP9808_status_t MCP9808_GetRawTA           ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myRawTA                                     );
 
 /** It gets ambient temperature register ( Celsius degrees ).
   */
-MCP9808_status_t MCP9808_GetTA              ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myTA                      );
+MCP9808_status_t MCP9808_GetTA              ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myTA                                        );
 
 /** It gets manufacturer ID.
   */
-MCP9808_status_t MCP9808_GetManufacturerID  ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myManufacturerID          );
+MCP9808_status_t MCP9808_GetManufacturerID  ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myManufacturerID                            );
 
 /** It gets both device ID and device revision.
   */
-MCP9808_status_t MCP9808_GetDeviceID        ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myDeviceID                );
+MCP9808_status_t MCP9808_GetDeviceID        ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myDeviceID                                  );
 
 /** It sets the sensor resolution.
   */
-MCP9808_status_t MCP9808_SetResolution      ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myResolution               );
+MCP9808_status_t MCP9808_SetResolution      ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myResolution                                 );    
 
 /** It gets the sensor resolution.
   */
-MCP9808_status_t MCP9808_GetResolution      ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myResolution              );
+MCP9808_status_t MCP9808_GetResolution      ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myResolution                                );
