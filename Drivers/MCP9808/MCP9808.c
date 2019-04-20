@@ -891,3 +891,156 @@ MCP9808_status_t MCP9808_GetResolution ( I2C_parameters_t myI2Cparameters, MCP98
     return   MCP9808_FAILURE;
   }
 }
+
+
+
+/**
+ * @brief       MCP9808_SetT_Limit ( I2C_parameters_t , MCP9808_registers_t, MCP9808_data_t )
+ *
+ * @details     It sets temperature limit for: T_UPPER, T_LOWER or T_CRIT.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myTLimit:        Temperature limit register: T_UPPER, T_LOWER or T_CRIT.
+ * @param[in]    myTValue_Limit:  Temperature limit value.
+ *
+ * @param[out]   N/A. 
+ *
+ *
+ * @return       Status of MCP9808_SetT_Limit.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/April/2019
+ * @version     20/April/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+MCP9808_status_t MCP9808_SetT_Limit ( I2C_parameters_t myI2Cparameters, MCP9808_registers_t myTLimit, MCP9808_data_t myTValue_Limit )
+{
+  uint8_t      cmd[2]     = { 0U };
+  int8_t       myDecimal  = 0U;
+  uint8_t      myIntegral = 0U;
+  i2c_status_t aux;
+  
+  /* Only temperature limit registers can keep going   */
+  if ( ( myTLimit != MCP9808_TUPPER ) || ( myTLimit != MCP9808_TLOWER ) || ( myTLimit != MCP9808_TCRIT ) )
+  {
+    return  MCP9808_FAILURE;
+  }
+  else
+  {
+    /* Parse the data  */
+    myIntegral =   (int8_t)myTValue_Limit.t_upper;
+    myDecimal  =   (uint8_t)( ( myTValue_Limit.t_upper - myIntegral ) * 100.0f );
+  
+    /* Check the decimal part is correct; Valid decimal values: 0.00, 0.25, 0.50 or 0.75   */
+    myIntegral <<=  4U;
+    myDecimal  <<=  2U;
+    if( ( myDecimal != TEMPERATURE_LIMIT_DECIMAL_PART_0_00C ) || ( myDecimal != TEMPERATURE_LIMIT_DECIMAL_PART_0_25C ) || 
+        ( myDecimal != TEMPERATURE_LIMIT_DECIMAL_PART_0_50C ) || ( myDecimal != TEMPERATURE_LIMIT_DECIMAL_PART_0_50C ) )
+    {
+      return  MCP9808_FAILURE;
+    }
+    else
+    {
+      /* Update the register with the new value  */
+      cmd[0]  =   myTLimit;
+      cmd[1]  =   ( myIntegral | myDecimal );
+      aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+  
+
+      if ( aux == I2C_SUCCESS )
+      {
+        return   MCP9808_SUCCESS;
+      }
+      else
+      {
+        return   MCP9808_FAILURE;
+      }
+    }
+  }
+}
+
+
+
+/**
+ * @brief       MCP9808_GetT_Limit ( I2C_parameters_t , MCP9808_registers_t, MCP9808_data_t* )
+ *
+ * @details     It gets temperature limit for: T_UPPER, T_LOWER or T_CRIT.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myTLimit:        Temperature limit register: T_UPPER, T_LOWER or T_CRIT.
+ *
+ * @param[out]   myTValue_Limit:  Temperature limit value for the chosen register. 
+ *
+ *
+ * @return       Status of MCP9808_GetT_Limit.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/April/2019
+ * @version     20/April/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+MCP9808_status_t MCP9808_GetT_Limit ( I2C_parameters_t myI2Cparameters, MCP9808_registers_t myTLimit, MCP9808_data_t* myTValue_Limit )
+{
+  uint8_t      cmd        = 0U;
+  uint8_t      myDecimal  = 0U;
+  float        myAuxValue = 0U;
+  i2c_status_t aux;
+  
+  /* Only temperature limit registers can keep going   */
+  if ( ( myTLimit != MCP9808_TUPPER ) || ( myTLimit != MCP9808_TLOWER ) || ( myTLimit != MCP9808_TCRIT ) )
+  {
+    return  MCP9808_FAILURE;
+  }
+  else
+  {
+    /* Read the register   */
+    cmd  =   myTLimit;
+    aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+    aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+    
+    /* Process the data  */
+    myAuxValue =   (float)( ( cmd & TEMPERATURE_LIMIT_INTEGRAL_PART_MASK ) >> 4U );
+    myDecimal  =   ( ( cmd & TEMPERATURE_LIMIT_DECIMAL_PART_MASK ) >> 2U );
+    
+    /* Process the decimal part  */
+    for( cmd = ( TEMPERATURE_LIMIT_DECIMAL_PART_0_00C >> 2U ); cmd < myDecimal; cmd++ )
+    {
+      myAuxValue  +=   0.25f;
+    }
+
+    /* Parse the data   */
+    switch( myTLimit )
+    {
+      case MCP9808_TUPPER:
+        myTValue_Limit->t_upper  =   (float)myAuxValue;
+        break;
+      
+      case MCP9808_TLOWER:
+        myTValue_Limit->t_lower  =   (float)myAuxValue;
+        break;
+
+      case MCP9808_TCRIT:
+        myTValue_Limit->t_crit  =   (float)myAuxValue;
+        break;
+
+      default:
+        return  MCP9808_FAILURE;
+        break;
+    }
+
+  
+
+    if ( aux == I2C_SUCCESS )
+    {
+      return   MCP9808_SUCCESS;
+    }
+    else
+    {
+      return   MCP9808_FAILURE;
+    }
+  }
+}
