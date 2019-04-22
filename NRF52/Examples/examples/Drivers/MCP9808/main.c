@@ -100,7 +100,7 @@ int main(void)
 
   
     
-  myState  =   0;                             // Reset the variable
+  myState  =   0;                             /// Reset the variable
   NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
 
   //NRF_POWER->SYSTEMOFF = 1;
