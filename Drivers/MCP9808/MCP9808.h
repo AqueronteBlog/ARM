@@ -321,6 +321,21 @@ typedef enum
 #define MCP9808_VECTOR_STRUCT_H
 typedef struct
 {
+    MCP9808_config_thyst_t      t_hyst;           /*!<  Temperature Limit Hysteresis  */
+    MCP9808_config_shdn_t       shdn;             /*!<  Shutdown mode                 */
+    MCP9808_config_crit_lock_t  t_crit;           /*!<  T_CRIT lock bit               */
+    MCP9808_config_win_lock_t   t_win_lock;       /*!<  Win. Lock bit                 */
+    MCP9808_conf_int_clear_t    int_clear;        /*!<  Interrupt clear bit           */
+    MCP9808_config_alert_stat_t alert_stat;       /*!<  Alert output status bit       */
+    MCP9808_config_alert_cnt_t  alert_cnt;        /*!<  Alert Output control bit      */
+    MCP9808_config_alert_sel_t  alert_sel;        /*!<  Alert Output select bit       */
+    MCP9808_config_alert_pol_t  alert_pol;        /*!<  Alert Output polarity bit     */
+    MCP9808_config_alert_mod_t  alert_mod;        /*!<  Alert Output mode bit         */
+} MCP9808_config_reg_t;
+
+
+typedef struct
+{
     float                       t_a;              /*!<  Ambient temperature value     */
     uint16_t                    t_a_raw;          /*!<  Raw ambient temperature value */
 
@@ -363,6 +378,14 @@ typedef enum
 /** It configures the I2C peripheral.
   */
 MCP9808_status_t MCP9808_Init               ( I2C_parameters_t myI2Cparameters                                                              );
+
+/** It gets CONFIG register value.
+  */
+MCP9808_status_t MCP9808_GetCONFIG          ( I2C_parameters_t myI2Cparameters, MCP9808_config_reg_t* myCONFIG                              );
+
+/** It sets CONFIG register value.
+  */
+MCP9808_status_t MCP9808_SetCONFIG          ( I2C_parameters_t myI2Cparameters, MCP9808_config_reg_t myCONFIG                               );
 
 /** It sets T_UPPER and T_LOWER Limit Hysteresis.
   */
