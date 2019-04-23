@@ -49,9 +49,10 @@ int main(void)
 {
   uint8_t  myMessage[ TX_BUFF_SIZE ];
 
-//  I2C_parameters_t   myMCP9808_I2C_parameters;
-//  MCP9808_status_t  aux;
-//  MCP9808_data_t    myMCP9808_Data;
+  I2C_parameters_t      myMCP9808_I2C_parameters;
+  MCP9808_status_t      aux;
+  MCP9808_config_reg_t  myMCP9808_Config;
+  MCP9808_data_t        myMCP9808_Data;
 
 
   conf_CLK    ();
@@ -61,43 +62,46 @@ int main(void)
 
   
 
-//  /* I2C definition   */
-//  myMCP9808_I2C_parameters.TWIinstance =    NRF_TWI0;
-//  myMCP9808_I2C_parameters.SDA         =    TWI0_SDA;
-//  myMCP9808_I2C_parameters.SCL         =    TWI0_SCL;
-//  myMCP9808_I2C_parameters.ADDR        =    MCP9808_ADDRESS;
-//  myMCP9808_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-//  myMCP9808_I2C_parameters.SDAport     =    NRF_P0;
-//  myMCP9808_I2C_parameters.SCLport     =    NRF_P0;
-//
-//  /* Configure I2C peripheral  */
-//  aux  =   MCP9808_Init           ( myMCP9808_I2C_parameters );
-//
-//  /* Perform a software reset  */
-//  aux  =   MCP9808_SoftwareReset ( myMCP9808_I2C_parameters );
-//
-//  /* Wait until the oscillator is stable   */
-//  do{ 
-//    /* Clear Clock integrity flag.  */
-//    aux  =   MCP9808_ClearOscillatorClockIntegrityFlag ( myMCP9808_I2C_parameters );
-//
-//    /* Clear Clock integrity flag.  */
-//    aux  =   MCP9808_CheckOscillatorClockIntegrityFlag ( myMCP9808_I2C_parameters, &myMCP9808_Data );
-//  }while( myMCP9808_Data.os == SECONDS_OS_CLOCK_INTEGRITY_NOT_GUARANTEED );
-//  
-//  /* External clock test mode: Normal mode ( no test at all )  */
-//  aux  =   MCP9808_SetTestMode ( myMCP9808_I2C_parameters, CONTROL_1_EXT_TEST_NORMAL_MODE );
-//
-//  /* RTC clock is enabled  */
-//  aux  =   MCP9808_SetRTCMode ( myMCP9808_I2C_parameters, CONTROL_1_STOP_RTC_CLOCK_RUNS );
-//
-//  /* No correction interrupt generated  */
-//  aux  =   MCP9808_SetCorrectionInterruptMode ( myMCP9808_I2C_parameters, CONTROL_1_CIE_NO_CORRECTION_INTERRUPT_GENERATED );
-//
-//  /* 24 hour mode is selected  */
-//  myMCP9808_Data.Time12H_24HMode  =   CONTROL_1_12_24_24_HOUR_MODE;
-//  aux  =   MCP9808_Set12_24_HourMode ( myMCP9808_I2C_parameters, myMCP9808_Data );
+  /* I2C definition   */
+  myMCP9808_I2C_parameters.TWIinstance =    NRF_TWI0;
+  myMCP9808_I2C_parameters.SDA         =    TWI0_SDA;
+  myMCP9808_I2C_parameters.SCL         =    TWI0_SCL;
+  myMCP9808_I2C_parameters.ADDR        =    MCP9808_ADDRESS_0;
+  myMCP9808_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+  myMCP9808_I2C_parameters.SDAport     =    NRF_P0;
+  myMCP9808_I2C_parameters.SCLport     =    NRF_P0;
 
+  /* Configure I2C peripheral  */
+  aux  =   MCP9808_Init  ( myMCP9808_I2C_parameters );
+
+  /* Shutdown the device, low-power mode enabled  */
+  aux  =   MCP9808_GetCONFIG ( myMCP9808_I2C_parameters, &myMCP9808_Config );
+  
+  myMCP9808_Config.shdn  =   CONFIG_SHDN_SHUTDOWN;
+  aux  =   MCP9808_SetCONFIG ( myMCP9808_I2C_parameters, myMCP9808_Config );
+  
+  /* Configure the device
+   *  - T_UPPER and T_LOWER limit hysteresis at 0C
+   *  - Continuous conversion mode
+   *  - T_CRIT unlocked
+   *  - Window lock unlocked
+   *  - Alert output control disabled
+   *  - Alert output select: Alert for T_UPPER, T_LOWER and T_CRIT
+   *  - Alert output polaruty: Active-low
+   *  - Alert output mode: Comparator output
+   */
+  myMCP9808_Config.t_hyst      =   CONFIG_T_HYST_0_C;
+  myMCP9808_Config.shdn        =   CONFIG_SHDN_CONTINUOUS_CONVERSION;
+  myMCP9808_Config.t_crit      =   CONFIG_CRIT_LOCK_UNLOCKED;
+  myMCP9808_Config.t_win_lock  =   CONFIG_WIN_LOCK_UNLOCKED;
+  myMCP9808_Config.alert_cnt   =   CONFIG_ALERT_CNT_DISABLED;
+  myMCP9808_Config.alert_sel   =   CONFIG_ALERT_SEL_TUPPER_TLOWER_TCRIT;
+  myMCP9808_Config.alert_pol   =   CONFIG_ALERT_POL_ACTIVE_LOW;
+  myMCP9808_Config.alert_mod   =   CONFIG_ALERT_MOD_COMPARATOR_OUTPUT;
+  aux  =   MCP9808_SetCONFIG ( myMCP9808_I2C_parameters, myMCP9808_Config );
+
+
+  
   
     
   myState  =   0;                             /// Reset the variable
