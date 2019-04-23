@@ -57,6 +57,116 @@ MCP9808_status_t MCP9808_Init ( I2C_parameters_t myI2Cparameters )
 
 
 /**
+ * @brief       MCP9808_GetCONFIG ( I2C_parameters_t , MCP9808_config_reg_t* )
+ *
+ * @details     It gets CONFIG register value.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myCONFIG:        CONFIG register value.
+ *
+ *
+ * @return       Status of MCP9808_GetCONFIG.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        23/April/2019
+ * @version     23/April/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+MCP9808_status_t MCP9808_GetCONFIG ( I2C_parameters_t myI2Cparameters, MCP9808_config_reg_t* myCONFIG )
+{
+  uint8_t      cmd[2]       = { 0U };
+  uint16_t     myConfigAux  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]   =   MCP9808_CONFIG;
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+  /* Mask it and update it with the new value  */
+  myConfigAux   =   cmd[0];
+  myConfigAux <<=   8U;
+  myConfigAux  |=   cmd[1];
+
+  myCONFIG->t_hyst       =   (MCP9808_config_thyst_t)( myConfigAux & CONFIG_T_HYST_MASK );
+  myCONFIG->shdn         =   (MCP9808_config_shdn_t)( myConfigAux & CONFIG_SHDN_MASK );
+  myCONFIG->t_crit       =   (MCP9808_config_crit_lock_t)( myConfigAux & CONFIG_CRIT_LOCK_MASK );
+  myCONFIG->t_win_lock   =   (MCP9808_config_win_lock_t)( myConfigAux & CONFIG_WIN_LOCK_MASK );
+  myCONFIG->int_clear    =   (MCP9808_conf_int_clear_t)( myConfigAux & CONFIG_INT_CLEAR_MASK );
+  myCONFIG->alert_stat   =   (MCP9808_config_alert_stat_t)( myConfigAux & CONFIG_ALERT_STAT_MASK );
+  myCONFIG->alert_cnt    =   (MCP9808_config_alert_cnt_t)( myConfigAux & CONFIG_ALERT_CNT_MASK );
+  myCONFIG->alert_sel    =   (MCP9808_config_alert_sel_t)( myConfigAux & CONFIG_ALERT_SEL_MASK );
+  myCONFIG->alert_pol    =   (MCP9808_config_alert_pol_t)( myConfigAux & CONFIG_ALERT_POL_MASK );
+  myCONFIG->alert_mod    =   (MCP9808_config_alert_mod_t)( myConfigAux & CONFIG_ALERT_MOD_MASK );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   MCP9808_SUCCESS;
+  }
+  else
+  {
+    return   MCP9808_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       MCP9808_SetCONFIG ( I2C_parameters_t , MCP9808_config_reg_t )
+ *
+ * @details     It sets CONFIG register value.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myCONFIG:        CONFIG register value.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of MCP9808_SetCONFIG.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        23/April/2019
+ * @version     23/April/2019     The ORIGIN
+ * @pre         MCP9808_GetCONFIG function should be called first to mask the bits.
+ * @warning     Be aware that some commands can NOT be written depending on Crit.Lock and/or Win.Lock values.
+ */
+MCP9808_status_t MCP9808_SetCONFIG ( I2C_parameters_t myI2Cparameters, MCP9808_config_reg_t myCONFIG )
+{
+  uint8_t      cmd[3]       = { 0U };
+  uint16_t     myConfigAux  = 0U;
+  i2c_status_t aux;
+
+  /* Update CONFI register  */
+  myConfigAux   =   ( myCONFIG.t_hyst | myCONFIG.shdn | myCONFIG.t_crit | myCONFIG.t_win_lock | myCONFIG.int_clear |
+                      myCONFIG.alert_stat | myCONFIG.alert_cnt | myCONFIG.alert_sel | myCONFIG.alert_pol | myCONFIG.alert_mod );
+  
+  cmd[0]   =   MCP9808_CONFIG;
+  cmd[1]   =   (uint8_t)( myConfigAux >> 8U );
+  cmd[2]   =   (uint8_t)( myConfigAux & 0xFF );
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   MCP9808_SUCCESS;
+  }
+  else
+  {
+    return   MCP9808_FAILURE;
+  }
+}
+
+
+
+/**
  * @brief       MCP9808_SetT_HYST ( I2C_parameters_t , MCP9808_config_thyst_t )
  *
  * @details     It sets T_UPPER and T_LOWER Limit Hysteresis.
