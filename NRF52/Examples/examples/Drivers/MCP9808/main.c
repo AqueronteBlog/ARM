@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: MCP9808. Every 1 seconds, a new
- *              time and date is read from the device and the data is transmitted through the UART ( Baud Rate: 230400 ).
+ * @details     This example shows how to work with the external device: MCP9808. Every 1 seconds, a new
+ *              temperature value is read and the data is transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
  *
@@ -80,6 +80,12 @@ int main(void)
   myMCP9808_Config.shdn  =   CONFIG_SHDN_SHUTDOWN;
   aux  =   MCP9808_SetCONFIG ( myMCP9808_I2C_parameters, myMCP9808_Config );
   
+  /* Get manufacturer ID  */
+  aux  =   MCP9808_GetManufacturerID ( myMCP9808_I2C_parameters, &myMCP9808_Data );
+
+  /* Get device ID and device revision  */
+  aux  =   MCP9808_GetDeviceID ( myMCP9808_I2C_parameters, &myMCP9808_Data );
+  
   /* Configure the device
    *  - T_UPPER and T_LOWER limit hysteresis at 0C
    *  - Continuous conversion mode
@@ -100,11 +106,13 @@ int main(void)
   myMCP9808_Config.alert_mod   =   CONFIG_ALERT_MOD_COMPARATOR_OUTPUT;
   aux  =   MCP9808_SetCONFIG ( myMCP9808_I2C_parameters, myMCP9808_Config );
 
-
+  /* Set resolution: +0.0625C ( t_CON ~ 250ms )  */
+  myMCP9808_Data.resolution  =   RESOLUTION_0_0625_C;
+  aux  =   MCP9808_SetResolution ( myMCP9808_I2C_parameters, myMCP9808_Data );
   
   
     
-  myState  =   0;                             /// Reset the variable
+  myState  =   0;                             // Reset the variable
   NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
 
   //NRF_POWER->SYSTEMOFF = 1;
@@ -123,43 +131,27 @@ int main(void)
     {
       NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );          // Turn all the LEDs on
 
-//      /* Get time  */
-//      aux  =   MCP9808_GetTime ( myMCP9808_I2C_parameters, &myMCP9808_Data );
-//
-//      /* Get day  */
-//      aux  =   MCP9808_GetDay ( myMCP9808_I2C_parameters, &myMCP9808_Data );
-//
-//      /* Get month  */
-//      aux  =   MCP9808_GetMonth ( myMCP9808_I2C_parameters, &myMCP9808_Data );
-//
-//      /* Get weekday  */
-//      aux  =   MCP9808_GetWeekday ( myMCP9808_I2C_parameters, &myMCP9808_Data );
-//
-//      /* Get year  */
-//      aux  =   MCP9808_GetYear ( myMCP9808_I2C_parameters, &myMCP9808_Data );
-//
-//
-//      /* Transmit result through the UART  */
-//      sprintf ( (char*)myMessage, "Time: %0.2x:%0.2x:%0.2x, Month %x Day %x %s 20%x\r\n", ( ( myMCP9808_Data.BCDtime & 0xFF0000 ) >> 16U ), ( ( myMCP9808_Data.BCDtime & 0x00FF00 ) >> 8U ), 
-//                                                              ( myMCP9808_Data.BCDtime & 0x0000FF ), myMCP9808_Data.BCDmonth, myMCP9808_Data.BCDday, MY_WEEK_DAY_STRING[myMCP9808_Data.weekday], myMCP9808_Data.BCDyear );
-//
-//      NRF_UART0->TASKS_STOPRX  =   1UL;
-//      NRF_UART0->TASKS_STOPTX  =   1UL;
-//      myPtr                    =   &myMessage[0];
-//
-//      NRF_UART0->TASKS_STARTTX =   1UL;
-//      NRF_UART0->TXD           =   *myPtr;
-//
-//      
-//      /* Reset the variables   */
-//      myState          =   0UL;
+      /* Get ambient temperature  */
+      aux  =   MCP9808_GetTA ( myMCP9808_I2C_parameters, &myMCP9808_Data );
+
+      /* Transmit result through the UART  */
+      sprintf ( (char*)myMessage, "T: %d.%d C\r\n", (int32_t)myMCP9808_Data.t_a, (int32_t)( ( myMCP9808_Data.t_a - (uint32_t)myMCP9808_Data.t_a ) * 10000.0f ) );
+
+      NRF_UART0->TASKS_STOPRX  =   1UL;
+      NRF_UART0->TASKS_STOPTX  =   1UL;
+      myPtr                    =   &myMessage[0];
+
+      NRF_UART0->TASKS_STARTTX =   1UL;
+      NRF_UART0->TXD           =   *myPtr;
+
+      
+      /* Reset the variables   */
+      myState          =   0UL;
       NRF_P0->OUTSET  |=   ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );          // Turn all the LEDs off
     }
     //__NOP();
   }
 }
-
-
 /**
  * @}
  */
