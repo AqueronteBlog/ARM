@@ -17,7 +17,7 @@
 
 #include "stdint.h"
 #include "stdbool.h"
-#include "i2c.h"
+#include "spi.h"
 
 
 /**
@@ -376,44 +376,44 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-MCP9808_status_t MCP9808_Init               ( I2C_parameters_t myI2Cparameters                                                              );
+MCP9808_status_t MCP9808_Init               ( SPI_parameters_t myI2Cparameters                                                              );
 
 /** It gets CONFIG register value.
   */
-MCP9808_status_t MCP9808_GetCONFIG          ( I2C_parameters_t myI2Cparameters, MCP9808_config_reg_t* myCONFIG                              );
+MCP9808_status_t MCP9808_GetCONFIG          ( SPI_parameters_t myI2Cparameters, MCP9808_config_reg_t* myCONFIG                              );
 
 /** It sets CONFIG register value.
   */
-MCP9808_status_t MCP9808_SetCONFIG          ( I2C_parameters_t myI2Cparameters, MCP9808_config_reg_t myCONFIG                               );
+MCP9808_status_t MCP9808_SetCONFIG          ( SPI_parameters_t myI2Cparameters, MCP9808_config_reg_t myCONFIG                               );
 
 /** It sets temperature limit for: T_UPPER, T_LOWER or T_CRIT.
   */
-MCP9808_status_t MCP9808_SetT_Limit         ( I2C_parameters_t myI2Cparameters, MCP9808_registers_t myTLimit, MCP9808_data_t myTValue_Limit );
+MCP9808_status_t MCP9808_SetT_Limit         ( SPI_parameters_t myI2Cparameters, MCP9808_registers_t myTLimit, MCP9808_data_t myTValue_Limit );
 
 /** It gets temperature limit for: T_UPPER, T_LOWER or T_CRIT.
   */
-MCP9808_status_t MCP9808_GetT_Limit         ( I2C_parameters_t myI2Cparameters, MCP9808_registers_t myTLimit, MCP9808_data_t* myTValue_Limit);
+MCP9808_status_t MCP9808_GetT_Limit         ( SPI_parameters_t myI2Cparameters, MCP9808_registers_t myTLimit, MCP9808_data_t* myTValue_Limit);
 
 /** It gets ambient temperature register ( raw value ).
   */
-MCP9808_status_t MCP9808_GetRawTA           ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myRawTA                                     );
+MCP9808_status_t MCP9808_GetRawTA           ( SPI_parameters_t myI2Cparameters, MCP9808_data_t* myRawTA                                     );
 
 /** It gets ambient temperature register ( Celsius degrees ).
   */
-MCP9808_status_t MCP9808_GetTA              ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myTA                                        );
+MCP9808_status_t MCP9808_GetTA              ( SPI_parameters_t myI2Cparameters, MCP9808_data_t* myTA                                        );
 
 /** It gets manufacturer ID.
   */
-MCP9808_status_t MCP9808_GetManufacturerID  ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myManufacturerID                            );
+MCP9808_status_t MCP9808_GetManufacturerID  ( SPI_parameters_t myI2Cparameters, MCP9808_data_t* myManufacturerID                            );
 
 /** It gets both device ID and device revision.
   */
-MCP9808_status_t MCP9808_GetDeviceID        ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myDeviceID                                  );
+MCP9808_status_t MCP9808_GetDeviceID        ( SPI_parameters_t myI2Cparameters, MCP9808_data_t* myDeviceID                                  );
 
 /** It sets the sensor resolution.
   */
-MCP9808_status_t MCP9808_SetResolution      ( I2C_parameters_t myI2Cparameters, MCP9808_data_t myResolution                                 );    
+MCP9808_status_t MCP9808_SetResolution      ( SPI_parameters_t myI2Cparameters, MCP9808_data_t myResolution                                 );    
 
 /** It gets the sensor resolution.
   */
-MCP9808_status_t MCP9808_GetResolution      ( I2C_parameters_t myI2Cparameters, MCP9808_data_t* myResolution                                );
+MCP9808_status_t MCP9808_GetResolution      ( SPI_parameters_t myI2Cparameters, MCP9808_data_t* myResolution                                );
