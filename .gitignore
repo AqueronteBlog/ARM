@@ -63,3 +63,4 @@ NRF51/Examples/Drivers/SX128X_TX/bin/
 NRF51/Examples/Drivers/SX128X_TX/obj/
 NRF52/Examples/examples/Peripherals/UARTE/pca10040/s132/ses/Output/
 NRF52/Examples/examples/Drivers/MCP9808/pca10040/s132/ses/Output/
+NRF52/Examples/examples/Drivers/SX1272_SX1273/pca10040/s132/ses/Output/
