@@ -98,7 +98,6 @@ typedef enum
 
 
 
-
 #ifndef SX1272_SX1273_VECTOR_STRUCT_H
 #define SX1272_SX1273_VECTOR_STRUCT_H
 typedef struct
