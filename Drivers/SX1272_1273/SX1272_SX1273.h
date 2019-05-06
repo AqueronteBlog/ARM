@@ -117,7 +117,6 @@ typedef struct
 
 
 
-
 /**
   * @brief   INTERNAL CONSTANTS
   */
