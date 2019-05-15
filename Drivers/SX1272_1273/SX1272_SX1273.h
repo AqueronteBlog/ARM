@@ -153,6 +153,170 @@ typedef enum
 
 
 
+/**
+  * @brief   REGISTER MAP, LORA MODE
+  */
+/**
+  * @brief   REG_FIFO
+  */
+typedef enum
+{
+  LORA_REGFIFO_FIFO_MASK                        =   0xFF         /*!<  LoRa base-band FIFO data input/output. FIFO is cleared an not accessible when device is in SLEEP mode */
+} lora_regreg_fifo_t;
+
+
+/**
+  * @brief   REG_OP_MODE
+  */
+/**
+  * LongRangeMode <7>
+  *
+  *   NOTE: This bit can be modified only in Sleep mode. A write operation on other device modes is ignored.
+  */
+typedef enum
+{
+  LORA_REGOPMODE_LONG_RANGE_MODE_MASK           =   ( 1U << 7U ),   /*!<  LongRangeMode Mask                                              */
+  LORA_REGOPMODE_LONG_RANGE_MODE_FSK_OOK_MODE   =   ( 0U << 7U ),   /*!<  LongRangeMode FSK/OOK mode                          [ Default ] */
+  LORA_REGOPMODE_LONG_RANGE_MODE_LORA_MODE      =   ( 1U << 7U )    /*!<  LongRangeMode LoRa mode                                         */
+} lora_regopmode_long_range_mode_t;
+
+
+/**
+  * AccesSharedReg <6>
+  *
+  *   NOTE: This bit operates when device is in Lora mode; if set it allows access to FSK registers page located in address space (0x0D:0x3F) 
+  *         while in LoRa mode.
+  */
+typedef enum
+{
+  LORA_REGOPMODE_ACCESS_SHARED_REG_MASK           =   ( 1U << 6U ),   /*!<  AccesSharedReg Mask                                             */
+  LORA_REGOPMODE_ACCESS_SHARED_REG_LORA_REGISTERS =   ( 0U << 6U ),   /*!<  Access LoRa registers page 0x0D: 0x3F               [ Default ] */
+  LORA_REGOPMODE_ACCESS_SHARED_REG_FSK_REGISTERS  =   ( 1U << 6U )    /*!<  Access FSK registers page (in mode LoRa) 0x0D: 0x3F             */
+} lora_regopmode_access_shared_reg_t;
+
+
+/**
+  * Mode <2:0>
+  *
+  *   NOTE: This bit operates when device is in Lora mode; if set it allows access to FSK registers page located in address space (0x0D:0x3F) 
+  *         while in LoRa mode.
+  */
+typedef enum
+{
+  LORA_REGOPMODE_MODE_MASK                        =   ( 0b111 << 0U ),  /*!<  Mode Mask                                                       */
+  LORA_REGOPMODE_MODE_SLEEP                       =   ( 0b000 << 0U ),  /*!<  SLEEP                                                           */
+  LORA_REGOPMODE_MODE_STDBY                       =   ( 0b001 << 0U ),  /*!<  STDBY                                               [ Default ] */
+  LORA_REGOPMODE_MODE_FSTX                        =   ( 0b010 << 0U ),  /*!<  Frequency synthesis TX (FSTX)                                   */
+  LORA_REGOPMODE_MODE_TX                          =   ( 0b011 << 0U ),  /*!<  Transmit (TX)                                                   */
+  LORA_REGOPMODE_MODE_FSRX                        =   ( 0b100 << 0U ),  /*!<  Frequency synthesis RX (FSRX)                                   */
+  LORA_REGOPMODE_MODE_RXCONTINUOUS                =   ( 0b101 << 0U ),  /*!<  Receive continuous (RXCONTINUOUS)                               */
+  LORA_REGOPMODE_MODE_RXSINGLE                    =   ( 0b110 << 0U ),  /*!<  Receive single (RXSINGLE)                                       */
+  LORA_REGOPMODE_MODE_CAD                         =   ( 0b111 << 0U )   /*!<  Channel activity detection (CAD)                                */
+} lora_regopmode_mode_t;
+
+
+/**
+  * @brief   REG_PA_CONFIG
+  */
+/**
+  * PaSelect <7>
+  *
+  *   NOTE: Selects PA output pin.
+  */
+typedef enum
+{
+  LORA_REGPACONFIG_PA_SELECT_MASK                 =   ( 1U << 7U ),     /*!<  PaSelect Mask                                                   */
+  LORA_REGPACONFIG_PA_SELECT_RFIO_PIN             =   ( 0U << 7U ),     /*!<  Output power is limited to 13 dBm                   [ Default ] */
+  LORA_REGPACONFIG_PA_SELECT_PA_BOOST_PIN         =   ( 1U << 7U )      /*!<  Output power is limited to 20 dBm                               */
+} lora_regpaconfig_pa_select_t;
+
+
+/**
+  * OutputPower <3:0>
+  *
+  *   NOTE: Power amplifier max output power.
+  *           - Pout =  2 + OutputPower(3:0) on PA_BOOST
+  *           - Pout = -1 + OutputPower(3:0) on RFIO
+  */
+typedef enum
+{
+  LORA_REGPACONFIG_OUTPUT_POWER_MASK              =   ( 0b1111 << 7U )    /*!<  OutputPower Mask                                                */
+} lora_regpaconfig_output_power_t;
+
+
+/**
+  * @brief   REG_PA_RAMP
+  */
+/**
+  * LowPnTxPllOff <4>
+  *
+  *   NOTE: Selects PA output pin.
+  */
+typedef enum
+{
+  LORA_REGPARAMP_LOW_PN_TX_PLL_OFF_MASK                 =   ( 1U << 4U ),   /*!<  LowPnTxPllOff Mask                                                        */
+  LORA_REGPARAMP_LOW_PN_TX_PLL_OFF_RX_AND_TX            =   ( 1U << 4U ),   /*!<  Low consumption PLL is used in receive and transmit mode      [ Default ] */
+  LORA_REGPARAMP_LOW_PN_TX_PLL_OFF_RX_AND_LOW_PHASE_TX  =   ( 0U << 4U )    /*!<  Low consumption PLL in receive mode, low phase noise PLL in transmit mode */
+} lora_regparamp_low_pn_tx_pll_off_t;
+
+
+/**
+  * PaRamp <3:0>
+  *
+  *   NOTE: Rise/Fall time of ramp up/down in FSK.
+  */
+typedef enum
+{
+  LORA_REGPARAMP_PA_RAMP_MASK                       =   ( 0b1111 << 0U ),   /*!<  PaRamp Mask                                                   */
+  LORA_REGPARAMP_PA_RAMP_3_4_MS                     =   ( 0b0000 << 0U ),   /*!<  3.4 ms                                                        */
+  LORA_REGPARAMP_PA_RAMP_2_MS                       =   ( 0b0001 << 0U ),   /*!<  2 ms                                                          */
+  LORA_REGPARAMP_PA_RAMP_1_MS                       =   ( 0b0010 << 0U ),   /*!<  1 ms                                                          */
+  LORA_REGPARAMP_PA_RAMP_500_US                     =   ( 0b0011 << 0U ),   /*!<  500 us                                                        */
+  LORA_REGPARAMP_PA_RAMP_250_US                     =   ( 0b0100 << 0U ),   /*!<  250 us                                                        */
+  LORA_REGPARAMP_PA_RAMP_125_US                     =   ( 0b0101 << 0U ),   /*!<  125 us                                                        */
+  LORA_REGPARAMP_PA_RAMP_100_US                     =   ( 0b0110 << 0U ),   /*!<  100 us                                                        */
+  LORA_REGPARAMP_PA_RAMP_62_US                      =   ( 0b0111 << 0U ),   /*!<  62 us                                                         */
+  LORA_REGPARAMP_PA_RAMP_50_US                      =   ( 0b1000 << 0U ),   /*!<  50 us                                                         */
+  LORA_REGPARAMP_PA_RAMP_40_US                      =   ( 0b1001 << 0U ),   /*!<  40 us                                                         */
+  LORA_REGPARAMP_PA_RAMP_31_US                      =   ( 0b1010 << 0U ),   /*!<  31 us                                                         */
+  LORA_REGPARAMP_PA_RAMP_25_US                      =   ( 0b1011 << 0U ),   /*!<  25 us                                                         */
+  LORA_REGPARAMP_PA_RAMP_20_US                      =   ( 0b1100 << 0U ),   /*!<  20 us                                                         */
+  LORA_REGPARAMP_PA_RAMP_15_US                      =   ( 0b1101 << 0U ),   /*!<  15 us                                                         */
+  LORA_REGPARAMP_PA_RAMP_12_US                      =   ( 0b1110 << 0U ),   /*!<  12 us                                                         */
+  LORA_REGPARAMP_PA_RAMP_10_US                      =   ( 0b1111 << 0U )    /*!<  10 us                                                         */
+} lora_regparamp_pa_ramp_t;
+
+
+/**
+  * @brief   REG_OCP
+  */
+/**
+  * OcpOn <5>
+  *
+  *   NOTE: Enables overload current protection (OCP) for PA.
+  */
+typedef enum
+{
+  LORA_REGOCP_OCP_ON_MASK                           =   ( 1U << 5U ),   /*!<  OcpOn Mask                                                    */
+  LORA_REGOCP_OCP_ON_DISABLED                       =   ( 0U << 5U ),   /*!<  OCP disabled                                                  */
+  LORA_REGOCP_OCP_ON_ENABLED                        =   ( 1U << 5U )    /*!<  OCP enabled                                       [ Default ] */
+} lora_regocp_ocp_on_t;
+
+
+/**
+  * OcpTrim <4:0>
+  *
+  *   NOTE: Trimming of OCP current ( Default I_max = 100mA ).
+  *           - I_max =  45+5*OcpTrim  [mA] if OcpTrim <= 15      (120 mA) 
+  *           - I_max = -30+10*OcpTrim [mA] if 15 < OcpTrim <= 27 (130 to 240 mA)
+  *           - I_max =  240mA for higher settings
+  */
+typedef enum
+{
+  LORA_REGOCP_OCP_TRIM_MASK                         =   ( 0b11111 << 0U ) /*!<  OcpTrim Mask                                                  */
+} lora_regocp_ocp_trim_t;
+
+
 
 
 #ifndef SX1272_SX1273_VECTOR_STRUCT_H
