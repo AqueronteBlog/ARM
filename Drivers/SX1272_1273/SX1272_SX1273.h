@@ -154,6 +154,848 @@ typedef enum
 
 
 /**
+  * @brief   REGISTER MAP, FSK/OOK MODE
+  */
+/**
+  * @brief   REG_FIFO
+  */
+typedef enum
+{
+  FSK_OOK_REGFIFO_FIFO_MASK                     =   0xFF         /*!<  FIFO data input/output                                             */
+} fsk_ook_reg_fifo_t;
+
+
+/* FSK/OOK: Registers for Common settings   */
+/**
+  * @brief   REG_OP_MODE
+  */
+/**
+  * LongRangeMode <7>
+  *
+  *   NOTE: This bit can be modified only in Sleep mode. A write operation on other device modes is ignored.
+  */
+typedef enum
+{
+  FSK_OOK_REGOPMODE_LONG_RANGE_MODE_MASK          =   ( 1U << 7U ), /*!<  LongRangeMode Mask                                              */
+  FSK_OOK_REGOPMODE_LONG_RANGE_MODE_FSK_OOK_MODE  =   ( 0U << 7U ), /*!<  LongRangeMode FSK/OOK mode                          [ Default ] */
+  FSK_OOK_REGOPMODE_LONG_RANGE_MODE_LORA_MODE     =   ( 1U << 7U )  /*!<  LongRangeMode LoRa mode                                         */
+} fsk_ook_regopmode_long_range_mode_t;
+
+
+/**
+  * ModulationType <6:5>
+  *
+  *   NOTE: Modulation scheme.
+  */
+typedef enum
+{
+  FSK_OOK_REGOPMODE_MODULATION_TYPE_MASK        =   ( 0b11 << 5U ), /*!<  ModulationType Mask                                             */
+  FSK_OOK_REGOPMODE_MODULATION_TYPE_FSK         =   ( 0b00 << 5U ), /*!<  FSK                                                 [ Default ] */
+  FSK_OOK_REGOPMODE_MODULATION_TYPE_OOK         =   ( 0b01 << 5U )  /*!<  OOK                                                             */
+} fsk_ook_regopmode_modulation_type_t;
+
+
+/**
+  * ModulationShaping <4:3>
+  *
+  *   NOTE: Data shaping.
+  */
+typedef enum
+{
+  FSK_OOK_REGOPMODE_MODULATION_SHAPING_MASK           =   ( 0b11 << 3U ), /*!<  ModulationShaping Mask                                                */
+  FSK_OOK_REGOPMODE_FSK_MODULATION_SHAPING_NO_SHAPING =   ( 0b00 << 3U ), /*!<  FSK:  no shaping                                    [ Default ]       */
+  FSK_OOK_REGOPMODE_FSK_MODULATION_SHAPING_BT_1_0     =   ( 0b01 << 3U ), /*!<  FSK:  Gaussian filter BT = 1.0                                        */
+  FSK_OOK_REGOPMODE_FSK_MODULATION_SHAPING_BT_0_5     =   ( 0b10 << 3U ), /*!<  FSK:  Gaussian filter BT = 0.5                                        */
+  FSK_OOK_REGOPMODE_FSK_MODULATION_SHAPING_BT_0_3     =   ( 0b11 << 3U ), /*!<  FSK:  Gaussian filter BT = 0.3                                        */
+  FSK_OOK_REGOPMODE_OOK_MODULATION_SHAPING_NO_SHAPING =   ( 0b00 << 3U ), /*!<  OOK:  no shaping                                    [ Default ]       */
+  FSK_OOK_REGOPMODE_OOK_MODULATION_SHAPING_1          =   ( 0b01 << 3U ), /*!<  OOK:  filtering with f_cutoff = bit_rate                              */
+  FSK_OOK_REGOPMODE_OOK_MODULATION_SHAPING_2          =   ( 0b10 << 3U )  /*!<  OOK:  filtering with f_cutoff = 2*bit_rate (for bit_rate < 125 kbps)  */
+} fsk_ook_regopmode_modulation_shaping_t;
+
+
+/**
+  * Mode <2:0>
+  *
+  *   NOTE: Transceiver modes.
+  */
+typedef enum
+{
+  FSK_OOK_REGOPMODE_MODE_MASK                   =   ( 0b111 << 0U ),  /*!<  Mode Mask                                                       */
+  FSK_OOK_REGOPMODE_MODE_SLEEP_MODE             =   ( 0b000 << 0U ),  /*!<  Sleep mode                                                      */
+  FSK_OOK_REGOPMODE_MODE_STDBY_MODE             =   ( 0b001 << 0U ),  /*!<  Stdby mode                                          [ Default ] */
+  FSK_OOK_REGOPMODE_MODE_FSTX_MODE              =   ( 0b010 << 0U ),  /*!<  FS mode TX (FSTx)                                               */
+  FSK_OOK_REGOPMODE_MODE_TX_MODE                =   ( 0b011 << 0U ),  /*!<  Transmitter mode (Tx)                                           */
+  FSK_OOK_REGOPMODE_MODE_FSRX_MODE              =   ( 0b100 << 0U ),  /*!<  FS mode RX (FSRx)                                               */
+  FSK_OOK_REGOPMODE_MODE_RX_MODE                =   ( 0b101 << 0U )   /*!<  Receiver mode (Rx)                                              */
+} fsk_ook_regopmode_mode_t;
+
+
+/**
+  * @brief   REG_BITRATE_MSB (Default: 0x1A)
+  *
+  *   NOTE: MSB of Bit Rate (chip rate if Manchester encoding is enabled).
+  */
+typedef enum
+{
+  FSK_OOK_REGBITRATEMSB_BIT_RATE_MASK           =   0xFF         /*!<  BitRate mask                                                      */
+} fsk_ook_regbitratemsb_bit_rate_t;
+
+
+/**
+  * @brief   REG_BITRATE_LSB (Default: 0x1B)
+  *
+  *   NOTE: LSB of bit rate (chip rate if Manchester encoding is enabled).
+  */
+typedef enum
+{
+  FSK_OOK_REGBITRATELSB_BIT_RATE_MASK           =   0xFF         /*!<  BitRate mask                                                      */
+} fsk_ook_regbitratelsb_bit_rate_t;
+
+
+/**
+  * @brief   REG_FDEV_MSB
+  */
+/**
+  * Fdev <5:0>
+  *
+  *   NOTE: MSB of the frequency deviation (Default: 0x00).
+  */
+typedef enum
+{
+  FSK_OOK_REGFDEVMSB_FDEV_MASK                  =   ( 0b111111 << 0U )  /*!<  Fdev mask                                                      */
+} fsk_ook_regfdevmsb_fdev_t;
+
+
+/**
+  * @brief   REG_FDEV_LSB (Default: 0x52)
+  *
+  *   NOTE: LSB of the frequency deviation.
+  */
+typedef enum
+{
+  FSK_OOK_REGFDEVLSB_FDEV_MASK                  =   0xFF                /*!<  Fdev mask                                                      */
+} fsk_ook_regfdevlsb_fdev_t;
+
+
+/**
+  * @brief   REG_FRF_MSB (Default: 0xE4)
+  *
+  *   NOTE: MSB of the RF carrier frequency.
+  */
+typedef enum
+{
+  FSK_OOK_REGFRFMSB_FRF_MASK                    =   0xFF                /*!<  Frf mask                                                      */
+} fsk_ook_regfrfmsb_frf_t;
+
+
+/**
+  * @brief   REG_FRF_MIB (Default: 0xC0)
+  *
+  *   NOTE: MIB of the RF carrier frequency.
+  */
+typedef enum
+{
+  FSK_OOK_REGFRFMIB_FRF_MASK                    =   0xFF                /*!<  Frf mask                                                      */
+} fsk_ook_regfrfmib_frf_t;
+
+
+/**
+  * @brief   REG_FRF_LSB (Default: 0x00)
+  *
+  *   NOTE: LSB of RF carrier frequency.
+  */
+typedef enum
+{
+  FSK_OOK_REGFRFLSB_FRF_MASK                    =   0xFF                /*!<  Frf mask                                                      */
+} fsk_ook_regfrflsb_frf_t;
+
+
+/* FSK/OOK: Registers for the Transmitter   */
+/**
+  * @brief   REG_PA_CONFIG
+  */
+/**
+  * PaSelect <7>
+  *
+  *   NOTE: Selects PA output pin.
+  */
+typedef enum
+{
+  FSK_OOK_REGPACONFIG_PA_SELECT_MASK            =   ( 1U << 7U ),       /*!<  PaSelect mask                                                 */
+  FSK_OOK_REGPACONFIG_PA_SELECT_RFO_PIN         =   ( 0U << 7U ),       /*!<  RFO pin. Maximum power of +13 dBm                 [ Default ] */
+  FSK_OOK_REGPACONFIG_PA_SELECT_PA_BOOST        =   ( 1U << 7U )        /*!<  PA_BOOST pin. Maximum power of +20 dBm                        */
+} fsk_ook_regpaconfig_pa_select_t;
+
+
+/**
+  * OutputPower <3:0>
+  *
+  *   NOTE: Output power setting, with 1dB steps
+  *           - Pout = 2 + OutputPower  [dBm], on PA_BOOST pin
+  *           - Pout = -1 + OutputPower [dBm], on RFO pin
+  */
+typedef enum
+{
+  FSK_OOK_REGPACONFIG_OUTPUT_POWER_MASK         =   ( 0b1111 << 0U )    /*!<  OutputPower mask                                              */
+} fsk_ook_regpaconfig_output_power_t;
+
+
+/**
+  * @brief   REG_PA_RAMP
+  */
+/**
+  * LowPnTxPllOff <4>
+  *
+  *   NOTE: Select a higher power, lower phase noise PLL only when the transmitter is used.
+  */
+typedef enum
+{
+  FSK_OOK_REGPARAMP_LOW_PN_TX_PLL_OFF_MASK    =   ( 1U << 4U ),       /*!<  LowPnTxPllOff mask                                            */
+  FSK_OOK_REGPARAMP_LOW_PN_TX_PLL_OFF_0       =   ( 0U << 4U ),       /*!<  Standard PLL used in Rx mode, Lower PN PLL in Tx              */
+  FSK_OOK_REGPARAMP_LOW_PN_TX_PLL_OFF_1       =   ( 1U << 4U )        /*!<  Standard PLL used in both Tx and Rx modes         [ Default ] */
+} fsk_ook_regparamp_low_pn_tx_pll_off_t;
+
+
+/**
+  * PaRamp <3:0>
+  *
+  *   NOTE: Select a higher power, lower phase noise PLL only when the transmitter is used.
+  */
+typedef enum
+{
+  FSK_OOK_REGPARAMP_PA_RAMP_MASK              =   ( 0b1111 << 0U ),   /*!<  PaRamp mask                                                   */
+  FSK_OOK_REGPARAMP_PA_RAMP_3_4_MS            =   ( 0b0000 << 0U ),   /*!<  PaRamp 3.4 ms                                                 */
+  FSK_OOK_REGPARAMP_PA_RAMP_2_MS              =   ( 0b0001 << 0U ),   /*!<  PaRamp 2 ms                                                   */
+  FSK_OOK_REGPARAMP_PA_RAMP_1_MS              =   ( 0b0010 << 0U ),   /*!<  PaRamp 1 ms                                                   */
+  FSK_OOK_REGPARAMP_PA_RAMP_500_US            =   ( 0b0011 << 0U ),   /*!<  PaRamp 500 us                                                 */
+  FSK_OOK_REGPARAMP_PA_RAMP_250_US            =   ( 0b0100 << 0U ),   /*!<  PaRamp 250 us                                                 */
+  FSK_OOK_REGPARAMP_PA_RAMP_125_US            =   ( 0b0101 << 0U ),   /*!<  PaRamp 125 us                                                 */
+  FSK_OOK_REGPARAMP_PA_RAMP_100_US            =   ( 0b0110 << 0U ),   /*!<  PaRamp 100 us                                                 */
+  FSK_OOK_REGPARAMP_PA_RAMP_62_US             =   ( 0b0111 << 0U ),   /*!<  PaRamp 62 us                                                  */
+  FSK_OOK_REGPARAMP_PA_RAMP_50_US             =   ( 0b1000 << 0U ),   /*!<  PaRamp 50 us                                                  */
+  FSK_OOK_REGPARAMP_PA_RAMP_40_US             =   ( 0b1001 << 0U ),   /*!<  PaRamp 40 us                                      [ Default ] */
+  FSK_OOK_REGPARAMP_PA_RAMP_31_US             =   ( 0b1010 << 0U ),   /*!<  PaRamp 31 us                                                  */
+  FSK_OOK_REGPARAMP_PA_RAMP_25_US             =   ( 0b1011 << 0U ),   /*!<  PaRamp 25 us                                                  */
+  FSK_OOK_REGPARAMP_PA_RAMP_20_US             =   ( 0b1100 << 0U ),   /*!<  PaRamp 20 us                                                  */
+  FSK_OOK_REGPARAMP_PA_RAMP_15_US             =   ( 0b1101 << 0U ),   /*!<  PaRamp 15 us                                                  */
+  FSK_OOK_REGPARAMP_PA_RAMP_12_US             =   ( 0b1110 << 0U ),   /*!<  PaRamp 12 us                                                  */
+  FSK_OOK_REGPARAMP_PA_RAMP_10_US             =   ( 0b1111 << 0U )    /*!<  PaRamp 10 us                                                  */
+} fsk_ook_regparamp_pa_ramp_t;
+
+
+/**
+  * @brief   REG_OCP
+  */
+/**
+  * OcpOn <5>
+  *
+  *   NOTE: Enables overload current protection (OCP) for the PA.
+  */
+typedef enum
+{
+  FSK_OOK_REGOCP_OCP_ON_MASK              =   ( 1U << 5U ),       /*!<  OcpOn mask                                                    */
+  FSK_OOK_REGOCP_OCP_ON_OCP_DISABLED      =   ( 0U << 5U ),       /*!<  OCP disabled                                                  */
+  FSK_OOK_REGOCP_OCP_ON_OCP_ENABLED       =   ( 1U << 5U )        /*!<  OCP enabled                                       [ Default ] */
+} fsk_ook_regocp_ocp_on_t;
+
+
+/**
+  * OcpTrim <4:0> (Default: 0x0B)
+  *
+  *   NOTE: Trimming of OCP current:
+  *           - I_max = 45+5*OcpTrim [mA]   if OcpTrim <= 15 (120 mA) 
+  *           - I_max = -30+10*OcpTrim [mA] if 15 < OcpTrim <= 27 (130 to 240 mA)
+  *           - I_max = 240mA for higher settings
+  *         Default I_max = 100mA
+  */
+typedef enum
+{
+  FSK_OOK_REGOCP_OCP_TRIM_MASK            =   ( 0b11111 << 0U )   /*!<  OcpTrim mask                                                  */
+} fsk_ook_regocp_ocp_trim_t;
+
+
+/* FSK/OOK: Registers for the Receiver   */
+/**
+  * @brief   REG_LNA
+  */
+/**
+  * LnaGain <7:5>
+  *
+  *   NOTE: Selects PA output pin.
+  */
+typedef enum
+{
+  FSK_OOK_REGLNA_LNA_GAIN_MASK              =   ( 0b111 << 5U ),  /*!<  LnaGain mask                                                  */
+  FSK_OOK_REGLNA_LNA_GAIN_G1                =   ( 0b001 << 5U ),  /*!<  G1 = highest gain                                 [ Default ] */
+  FSK_OOK_REGLNA_LNA_GAIN_G2                =   ( 0b010 << 5U ),  /*!<  G2 = highest gain – 6 dB                                      */
+  FSK_OOK_REGLNA_LNA_GAIN_G3                =   ( 0b011 << 5U ),  /*!<  G3 = highest gain – 12 dB                                     */
+  FSK_OOK_REGLNA_LNA_GAIN_G4                =   ( 0b100 << 5U ),  /*!<  G4 = highest gain – 24 dB                                     */
+  FSK_OOK_REGLNA_LNA_GAIN_G5                =   ( 0b101 << 5U ),  /*!<  G5 = highest gain – 36 dB                                     */
+  FSK_OOK_REGLNA_LNA_GAIN_G6                =   ( 0b110 << 5U )   /*!<  G6 = highest gain – 48 dB                                     */
+} fsk_ook_reglna_lna_gain_t;
+
+
+/**
+  * LnaBoost <1:0>
+  *
+  *   NOTE: Improves the system Noise Figure at the expense of Rx current consumption.
+  */
+typedef enum
+{
+  FSK_OOK_REGLNA_LNA_BOOST_MASK                 =   ( 0b11 << 0U ), /*!<  LnaBoost mask                                                 */
+  FSK_OOK_REGLNA_LNA_BOOST_DEFAULT_SETTING      =   ( 0b00 << 0U ), /*!<  Default setting, meeting the specification        [ Default ] */
+  FSK_OOK_REGLNA_LNA_BOOST_IMPROVED_SENSITIVITY =   ( 0b11 << 0U )  /*!<  Improved sensitivity                                          */
+} fsk_ook_reglna_lna_boost_t;
+
+
+/**
+  * @brief   REG_RX_CONFIG
+  */
+/**
+  * RestartRxOnCollision <7>
+  *
+  *   NOTE: Turns on the mechanism restarting the receiver automatically if it gets saturated or a packet collision is detected.
+  */
+typedef enum
+{
+  FSK_OOK_REGRXCONFIG_RESTART_RX_ON_COLLISION_MASK                  =   ( 1U << 7U ), /*!<  RestartRxOnCollision mask                                                 */
+  FSK_OOK_REGRXCONFIG_RESTART_RX_ON_COLLISION_NO_AUTOMATIC_RESTART  =   ( 0U << 7U ), /*!<  No automatic Restart                                          [ Default ] */
+  FSK_OOK_REGRXCONFIG_RESTART_RX_ON_COLLISION_AUTOMATIC_RESTART_ON  =   ( 1U << 7U )  /*!<  Automatic restart On                                                      */
+} fsk_ook_regrxconfig_restart_rx_on_collision_t;
+
+
+/**
+  * RestartRxWithoutPllLock <6>
+  *
+  *   NOTE: Triggers a manual Restart of the Receiver chain when set to 1. Use this bit when there is no frequency change, RestartRxWithPllLock otherwise.
+  */
+typedef enum
+{
+  FSK_OOK_REGRXCONFIG_RESTART_RX_WITHOUT_PLL_LOCK_MASK  =   ( 1U << 6U ), /*!<  RestartRxWithoutPllLock mask                                              */
+  FSK_OOK_REGRXCONFIG_RESTART_RX_WITHOUT_PLL_LOCK       =   ( 1U << 6U )  /*!<  RestartRxWithoutPllLock                                                   */
+} fsk_ook_regrxconfig_restart_rx_without_pll_lock_t;
+
+
+/**
+  * RestartRxWithPllLock <5>
+  *
+  *   NOTE: Triggers a manual Restart of the Receiver chain when set to 1. Use this bit when there is a frequency change, requiring some time for the PLL to re-lock.
+  */
+typedef enum
+{
+  FSK_OOK_REGRXCONFIG_RESTART_RX_WITH_PLL_LOCK_MASK  =   ( 1U << 5U ), /*!<  RestartRxWithPllLock mask                                              */
+  FSK_OOK_REGRXCONFIG_RESTART_RX_WITH_PLL_LOCK       =   ( 1U << 5U )  /*!<  RestartRxWithPllLock                                                   */
+} fsk_ook_regrxconfig_restart_rx_with_pll_lock_t;
+
+
+/**
+  * AfcAutoOn <4>
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_REGRXCONFIG_AFC_AUTO_ON_MASK          =   ( 1U << 4U ), /*!<  AfcAutoOn mask                                                        */
+  FSK_OOK_REGRXCONFIG_AFC_AUTO_ON_NO_AFC        =   ( 0U << 4U ), /*!<  No AFC performed at receiver startup                      [ Default ] */
+  FSK_OOK_REGRXCONFIG_AFC_AUTO_ON_AFC           =   ( 1U << 4U )  /*!<  AFC is performed at each receiver startup                             */
+} fsk_ook_regrxconfig_afc_auto_on_t;
+
+
+/**
+  * AgcAutoOn <3>
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_REGRXCONFIG_AGC_AUTO_ON_MASK          =   ( 1U << 3U ), /*!<  AfcAutoOn mask                                                        */
+  FSK_OOK_REGRXCONFIG_AGC_AUTO_ON_0             =   ( 0U << 3U ), /*!<  LNA gain forced by the LnaGain Setting                                */
+  FSK_OOK_REGRXCONFIG_AGC_AUTO_ON_1             =   ( 1U << 3U )  /*!<  LNA gain is controlled by the AGC                         [ Default ] */
+} fsk_ook_regrxconfig_agc_auto_on_t;
+
+
+/**
+  * RxTrigger <2:0>
+  *
+  *   NOTE: Selects the event triggering AGC and/or AFC at receiver startup.
+  */
+typedef enum
+{
+  FSK_OOK_REGRXCONFIG_RX_TRIGGER_MASK           =   ( 0b111 << 0U ) /*!<  RxTrigger mask                                                      */
+} fsk_ook_regrxconfig_rx_trigger_t;
+
+
+/**
+  * @brief   REG_RSSI_CONFIG
+  */
+/**
+  * RssiOffset <7:3>
+  *
+  *   NOTE: Signed RSSI offset, to compensate for the possible losses/gains in the front-end (LNA, SAW filter...) 1dB / LSB, 2’s complement format.
+  */
+typedef enum
+{
+  FSK_OOK_REGRSSICONFIG_RSSI_OFFSET_MASK        =   ( 0b11111 << 3U ) /*!<  RssiOffset mask                                                   */
+} fsk_ook_regrssiconfig_rssi_offset_t;
+
+
+/**
+  * RssiSmoothing <2:0>
+  *
+  *   NOTE: Defines the number of samples taken to average the RSSI result.
+  */
+typedef enum
+{
+  FSK_OOK_REGRSSICONFIG_RSSI_SMOOTHING_MASK         =   ( 0b111 << 0U ),  /*!<  RssiSmoothing mask                                                */
+  FSK_OOK_REGRSSICONFIG_RSSI_SMOOTHING_2_SAMPLES    =   ( 0b000 << 0U ),  /*!<  2 samples used                                                    */
+  FSK_OOK_REGRSSICONFIG_RSSI_SMOOTHING_4_SAMPLES    =   ( 0b001 << 0U ),  /*!<  4 samples used                                                    */
+  FSK_OOK_REGRSSICONFIG_RSSI_SMOOTHING_8_SAMPLES    =   ( 0b010 << 0U ),  /*!<  8 samples used                                        [ Default ] */
+  FSK_OOK_REGRSSICONFIG_RSSI_SMOOTHING_16_SAMPLES   =   ( 0b011 << 0U ),  /*!<  16 samples used                                                   */
+  FSK_OOK_REGRSSICONFIG_RSSI_SMOOTHING_32_SAMPLES   =   ( 0b100 << 0U ),  /*!<  32 samples used                                                   */
+  FSK_OOK_REGRSSICONFIG_RSSI_SMOOTHING_64_SAMPLES   =   ( 0b101 << 0U ),  /*!<  64 samples used                                                   */
+  FSK_OOK_REGRSSICONFIG_RSSI_SMOOTHING_128_SAMPLES  =   ( 0b110 << 0U ),  /*!<  128 samples used                                                  */
+  FSK_OOK_REGRSSICONFIG_RSSI_SMOOTHING_256_SAMPLES  =   ( 0b111 << 0U )   /*!<  256 samples used                                                  */
+} fsk_ook_regrssiconfig_rssi_smoothing_t;
+
+
+/**
+  * @brief   REG_RSSI_COLLISION (Default: 0x0A)
+  *
+  *   NOTE: Sets the threshold used to consider that an interferer is detected, witnessing a packet collision. 1dB/LSB (only RSSI increase) Default: 10dB.
+  */
+typedef enum
+{
+  FSK_OOK_REGRSSICOLLISION_RSSI_COLLISION_THRESHOLD_MASK  =   0xFF        /*!<  RssiCollisionThreshold mask                                       */
+} fsk_ook_regrssicollision_rssi_collision_threshold_t;
+
+
+/**
+  * @brief   REG_RSSI_THRESH (Default: 0xFF)
+  *
+  *   NOTE: RSSI trigger level for the Rssi interrupt: - RssiThreshold / 2 [dBm].
+  */
+typedef enum
+{
+  FSK_OOK_REGRSSITHRESH_RSSI_THRESHOLD_MASK         =   0xFF              /*!<  RssiThreshold mask                                                */
+} fsk_ook_regrssithresh_rssi_threshold_t;
+
+
+/**
+  * @brief   REG_RSSI_VALUE 
+  *
+  *   NOTE: Absolute value of the RSSI in dBm, 0.5dB steps: - RssiThreshold / 2 [dBm].
+  */
+typedef enum
+{
+  FSK_OOK_REGRSSIVALUE_RSSI_VALUE_MASK              =   0xFF              /*!<  RssiValue mask                                                    */
+} fsk_ook_regrssivalue_rssi_value_t;
+
+
+/**
+  * @brief   REG_RX_BW
+  */
+/**
+  * RxBwMant <4:3>
+  *
+  *   NOTE: Channel filter bandwidth control.
+  */
+typedef enum
+{
+  FSK_OOK_REGRXBW_RX_BW_MANT_MASK                   =   ( 0b11 << 3U ),    /*!<  RxBwMant mask                                                     */
+  FSK_OOK_REGRXBW_RX_BW_MANT_16                     =   ( 0b00 << 3U ),    /*!<  RxBwMant = 16                                                     */
+  FSK_OOK_REGRXBW_RX_BW_MANT_20                     =   ( 0b01 << 3U ),    /*!<  RxBwMant = 20                                                     */
+  FSK_OOK_REGRXBW_RX_BW_MANT_24                     =   ( 0b10 << 3U )     /*!<  RxBwMant = 24                                         [ Default ] */
+} fsk_ook_regrxbw_rx_bw_mant_t;
+
+
+/**
+  * RxBwExp <2:0> (Default: 0x05)
+  *
+  *   NOTE: Channel filter bandwidth control.
+  */
+typedef enum
+{
+  FSK_OOK_REGRXBW_RX_BW_EXP_MASK                    =   ( 0b111 << 0U )    /*!<  RxBwExp mask                                                       */
+} fsk_ook_regrxbw_rx_bw_exp_t;
+
+
+/**
+  * @brief   REG_AFC_BW
+  */
+/**
+  * RxBwMantAfc <4:3> (Default: 0x01)
+  *
+  *   NOTE: RxBwMant parameter used during the AFC.
+  */
+typedef enum
+{
+  FSK_OOK_REGAFCBW_RX_BW_MANT_AFC_MASK                =   ( 0b11 << 3U )     /*!<  RxBwMantAfc mask                                                 */
+} fsk_ook_regafcbw_rx_bw_mant_afc_t;
+
+
+/**
+  * RxBwExpAfc <2:0> (Default: 0x03)
+  *
+  *   NOTE: RxBwExp parameter used during the AFC.
+  */
+typedef enum
+{
+  FSK_OOK_REGAFCBW_RX_BW_EXP_AFC_MASK                 =   ( 0b111 << 0U )    /*!<  RxBwMantAfc mask                                                 */
+} fsk_ook_regafcbw_rx_bw_exp_afc_t;
+
+
+/**
+  * @brief   REG_OOK_PEAK
+  */
+/**
+  * BitSyncOn <5>
+  *
+  *   NOTE: Enables the Bit Synchronizer.
+  */
+typedef enum
+{
+  FSK_OOK_REGOOKPEAK_BIT_SYNC_ON_MASK               =   ( 1U << 5U ),       /*!<  BitSyncOn mask                                                    */
+  FSK_OOK_REGOOKPEAK_BIT_SYNC_ON_DISABLED           =   ( 0U << 5U ),       /*!<  Bit Sync disabled (not possible in Packet mode)                   */
+  FSK_OOK_REGOOKPEAK_BIT_SYNC_ON_ENABLED            =   ( 1U << 5U )        /*!<  Bit Sync enabled                                      [ Default ] */
+} fsk_ook_regookpeak_bit_sync_on_t;
+
+
+/**
+  * OokThreshType <4:3>
+  *
+  *   NOTE: Selects the type of threshold in the OOK data slicer.
+  */
+typedef enum
+{
+  FSK_OOK_REGOOKPEAK_OOK_THRESH_TYPE_MASK           =   ( 0b11 << 3U ),     /*!<  OokThreshType mask                                                */
+  FSK_OOK_REGOOKPEAK_OOK_THRESH_TYPE_FIX_THRESHOLD  =   ( 0b00 << 3U ),     /*!<  fixed threshold                                                   */
+  FSK_OOK_REGOOKPEAK_OOK_THRESH_TYPE_PEAK_MODE      =   ( 0b01 << 3U ),     /*!<  peak mode                                             [ Default ] */
+  FSK_OOK_REGOOKPEAK_OOK_THRESH_TYPE_AVERAGE_MODE   =   ( 0b10 << 3U )      /*!<  average mode                                                      */
+} fsk_ook_regookpeak_ook_thresh_type_t;
+
+
+/**
+  * OokPeakTheshStep <2:0>
+  *
+  *   NOTE: Size of each decrement of the RSSI threshold in the OOK demodulator.
+  */
+typedef enum
+{
+  FSK_OOK_REGOOKPEAK_OOK_PEAK_THRESH_STEP_MASK      =   ( 0b111 << 0U ),    /*!<  OokPeakTheshStep mask                                             */
+  FSK_OOK_REGOOKPEAK_OOK_PEAK_THRESH_STEP_0_5_DB    =   ( 0b000 << 0U ),    /*!<  0.5 dB                                                [ Default ] */
+  FSK_OOK_REGOOKPEAK_OOK_PEAK_THRESH_STEP_1_0_DB    =   ( 0b001 << 0U ),    /*!<  1.0 dB                                                            */
+  FSK_OOK_REGOOKPEAK_OOK_PEAK_THRESH_STEP_1_5_DB    =   ( 0b010 << 0U ),    /*!<  1.5 dB                                                            */
+  FSK_OOK_REGOOKPEAK_OOK_PEAK_THRESH_STEP_2_0_DB    =   ( 0b011 << 0U ),    /*!<  2.0 dB                                                            */
+  FSK_OOK_REGOOKPEAK_OOK_PEAK_THRESH_STEP_3_0_DB    =   ( 0b100 << 0U ),    /*!<  3.0 dB                                                            */
+  FSK_OOK_REGOOKPEAK_OOK_PEAK_THRESH_STEP_4_0_DB    =   ( 0b101 << 0U ),    /*!<  4.0 dB                                                            */
+  FSK_OOK_REGOOKPEAK_OOK_PEAK_THRESH_STEP_5_0_DB    =   ( 0b110 << 0U ),    /*!<  5.0 dB                                                            */
+  FSK_OOK_REGOOKPEAK_OOK_PEAK_THRESH_STEP_6_0_DB    =   ( 0b111 << 0U )     /*!<  6.0 dB                                                            */
+} fsk_ook_regookpeak_ook_peak_thresh_step_t;
+
+
+/**
+  * @brief   REG_OOK_FIX (Default: 0x0C)
+  *
+  *   NOTE: Fixed threshold for the Data Slicer in OOK mode Floor threshold for the Data Slicer in OOK when Peak mode is used.
+  */
+typedef enum
+{
+  FSK_OOK_REGOOKFIX_OKK_FIXED_THRESHOLD_MASK          =   0xFF              /*!<  OokFixedThreshold mask                                            */
+} fsk_ook_regookfix_ook_fixed_threshold_t;
+
+
+/**
+  * @brief   REG_OOK_AVG
+  */
+/**
+  * OokPeakThreshDec <7:5>
+  *
+  *   NOTE: Enables the Bit Synchronizer.
+  */
+typedef enum
+{
+  FSK_OOK_REGOOKAVG_OOK_PEAK_THRESH_DEC_MASK        =   ( 0b111 << 5U ),    /*!<  OokPeakThreshDec mask                                             */
+  FSK_OOK_REGOOKAVG_OOK_PEAK_THRESH_DEC_0           =   ( 0b000 << 5U ),    /*!<  once per chip                                         [ Default ] */
+  FSK_OOK_REGOOKAVG_OOK_PEAK_THRESH_DEC_1           =   ( 0b001 << 5U ),    /*!<  once every 2 chips                                                */
+  FSK_OOK_REGOOKAVG_OOK_PEAK_THRESH_DEC_2           =   ( 0b010 << 5U ),    /*!<  once every 4 chips                                                */
+  FSK_OOK_REGOOKAVG_OOK_PEAK_THRESH_DEC_3           =   ( 0b011 << 5U ),    /*!<  once every 8 chips                                                */
+  FSK_OOK_REGOOKAVG_OOK_PEAK_THRESH_DEC_4           =   ( 0b100 << 5U ),    /*!<  twice in each chip                                                */
+  FSK_OOK_REGOOKAVG_OOK_PEAK_THRESH_DEC_5           =   ( 0b101 << 5U ),    /*!<  4 times in each chip                                              */
+  FSK_OOK_REGOOKAVG_OOK_PEAK_THRESH_DEC_6           =   ( 0b110 << 5U ),    /*!<  8 times in each chip                                              */
+  FSK_OOK_REGOOKAVG_OOK_PEAK_THRESH_DEC_7           =   ( 0b111 << 5U )     /*!<  16 times in each chip                                             */
+} fsk_ook_regookavg_ook_peak_thresh_dec_t;
+
+
+/**
+  * OokAverageOffset <3:2>
+  *
+  *   NOTE: Static offset added to the threshold in average mode in order to reduce glitching activity (OOK only).
+  */
+typedef enum
+{
+  FSK_OOK_REGOOKAVG_OOK_AVERAGE_OFFSET_MASK         =   ( 0b11 << 2U ),     /*!<  OokAverageOffset mask                                             */
+  FSK_OOK_REGOOKAVG_OOK_AVERAGE_OFFSET_0_0_DB       =   ( 0b00 << 2U ),     /*!<  0.0 dB                                                [ Default ] */
+  FSK_OOK_REGOOKAVG_OOK_AVERAGE_OFFSET_2_0_DB       =   ( 0b01 << 2U ),     /*!<  2.0 dB                                                            */
+  FSK_OOK_REGOOKAVG_OOK_AVERAGE_OFFSET_4_0_DB       =   ( 0b10 << 2U ),     /*!<  4.0 dB                                                            */
+  FSK_OOK_REGOOKAVG_OOK_AVERAGE_OFFSET_6_0_DB       =   ( 0b11 << 2U )     /*!<  6.0 dB                                                            */
+} fsk_ook_regookavg_ook_average_offset_t;
+
+
+/**
+  * OokAverageThreshFilt <1:0>
+  *
+  *   NOTE: Filter coefficients in average mode of the OOK demodulator.
+  */
+typedef enum
+{
+  FSK_OOK_REGOOKAVG_OOK_AVERAGE_THRESH_FILT_MASK    =   ( 0b11 << 0U ),     /*!<  OokAverageThreshFilt mask                                         */
+  FSK_OOK_REGOOKAVG_OOK_AVERAGE_THRESH_FILT_0       =   ( 0b00 << 0U ),     /*!<  f_C ˜ chip rate / 32.p                                            */
+  FSK_OOK_REGOOKAVG_OOK_AVERAGE_THRESH_FILT_1       =   ( 0b01 << 0U ),     /*!<  f_C ˜ chip rate / 8.p                                             */
+  FSK_OOK_REGOOKAVG_OOK_AVERAGE_THRESH_FILT_2       =   ( 0b10 << 0U ),     /*!<  f_C ˜ chip rate / 4.p                                 [ Default ] */
+  FSK_OOK_REGOOKAVG_OOK_AVERAGE_THRESH_FILT_3       =   ( 0b11 << 0U )      /*!<  f_C ˜ chip rate / 2.p                                             */
+} fsk_ook_regookavg_ook_average_thresh_filt_t;
+
+
+/**
+  * @brief   REG_AFC_FEI
+  */
+/**
+  * AgcStart <4> (Default: 0x00)
+  *
+  *   NOTE: Triggers an AGC sequence when set to 1.
+  */
+typedef enum
+{
+  FSK_OOK_REGAFCFEI_AGC_START_MASK                    =   ( 1U << 4U )      /*!<  AgcStart mask                                                    */
+} fsk_ook_regafcfei_agc_start_t;
+
+
+/**
+  * AfcClear <1> (Default: 0x00)
+  *
+  *   NOTE: Clear AFC register set in Rx mode. Always reads 0.
+  */
+typedef enum
+{
+  FSK_OOK_REGAFCFEI_AFC_CLEAR_MASK                    =   ( 1U << 1U )      /*!<  AfcClear mask                                                    */
+} fsk_ook_regafcfei_afc_clear_t;
+
+
+/**
+  * AfcAutoClearOn <0> 
+  *
+  *   NOTE: Only valid if AfcAutoOn is set.
+  */
+typedef enum
+{
+  FSK_OOK_REGAFCFEI_AFC_AUTO_CLEAR_ON_MASK            =   ( 1U << 0U ),     /*!<  AfcAutoClearOn mask                                                                 */
+  FSK_OOK_REGAFCFEI_AFC_AUTO_CLEAR_ON_NOT_CLEAR       =   ( 0U << 0U ),     /*!<  AFC register is not cleared at the beginning of the automatic AFC phase [ Default ] */
+  FSK_OOK_REGAFCFEI_AFC_AUTO_CLEAR_ON_CLEAR           =   ( 1U << 0U )      /*!<  AFC register is cleared at the beginning of the automatic AFC phase                 */
+} fsk_ook_regafcfei_afc_auto_clear_on_t;
+
+
+/**
+  * @brief   REG_AFC_MSB (Default: 0x00)
+  *
+  *   NOTE: MSB of the AfcValue, 2's complement format. Can be used to overwrite the current AFC value.
+  */
+typedef enum
+{
+  FSK_OOK_REGAFCMSB_AFC_VALUE_MASK                      =   0xFF            /*!<  AfcValue mask                                                   */
+} fsk_ook_regafcmsb_afc_value_t;
+
+
+/**
+  * @brief   REG_AFC_LSB (Default: 0x00)
+  *
+  *   NOTE: LSB of the AfcValue, 2's complement format. Can be used to overwrite the current AFC value.
+  */
+typedef enum
+{
+  FSK_OOK_REGAFCLSB_AFC_VALUE_MASK                      =   0xFF            /*!<  AfcValue mask                                                   */
+} fsk_ook_regafclsb_afc_value_t;
+
+
+/**
+  * @brief   REG_FEI_MSB 
+  *
+  *   NOTE: MSB of the measured frequency offset, 2's complement. Must be read before RegFeiLsb.
+  */
+typedef enum
+{
+  FSK_OOK_REGFEIMSB_FEI_VALUE_MASK                      =   0xFF            /*!<  FeiValue mask                                                   */
+} fsk_ook_regfeimsb_fei_value_t;
+
+
+/**
+  * @brief   REG_FEI_LSB 
+  *
+  *   NOTE: LSB of the measured frequency offset, 2's complement Frequency error = FeiValue x Fstep.
+  */
+typedef enum
+{
+  FSK_OOK_REGFEILSB_FEI_VALUE_MASK                      =   0xFF            /*!<  FeiValue mask                                                   */
+} fsk_ook_regfeilsb_fei_value_t;
+
+
+/**
+  * @brief   REG_PREAMBLE_DETECT
+  */
+/**
+  * PreambleDetectorOn <7>
+  *
+  *   NOTE: Enables Preamble detector when set to 1. The AGC settings supersede this bit during the startup / AGC phase.
+  */
+typedef enum
+{   
+  FSK_OOK_REGPREAMBLEDETECT_PREAMBLE_DETECTOR_ON_MASK       =   ( 1U << 7U ),     /*!<  PreambleDetectorOn mask                                           */
+  FSK_OOK_REGPREAMBLEDETECT_PREAMBLE_DETECTOR_ON_TURNED_OFF =   ( 0U << 7U ),     /*!<  Turned off                                                        */
+  FSK_OOK_REGPREAMBLEDETECT_PREAMBLE_DETECTOR_ON_TURNED_ON  =   ( 1U << 7U )      /*!<  Turned on                                             [ Default ] */
+} fsk_ook_regpreambledetect_preamble_detector_on_t;
+
+
+/**
+  * PreambleDetectorSize <6:5>
+  *
+  *   NOTE: Number of Preamble bytes to detect to trigger an interrupt.
+  */
+typedef enum
+{   
+  FSK_OOK_REGPREAMBLEDETECT_PREAMBLE_DETECTOR_SIZE_MASK     =   ( 0b11 << 5U ),   /*!<  PreambleDetectorSize mask                                         */
+  FSK_OOK_REGPREAMBLEDETECT_PREAMBLE_DETECTOR_SIZE_1_BYTE   =   ( 0b00 << 5U ),   /*!<  1 byte                                                            */
+  FSK_OOK_REGPREAMBLEDETECT_PREAMBLE_DETECTOR_SIZE_2_BYTE   =   ( 0b01 << 5U ),   /*!<  2 byte                                                [ Default ] */
+  FSK_OOK_REGPREAMBLEDETECT_PREAMBLE_DETECTOR_SIZE_3_BYTE   =   ( 0b10 << 5U )    /*!<  3 byte                                                            */
+} fsk_ook_regpreambledetect_preamble_detector_size_t;
+
+
+/**
+  * PreambleDetectorTol <4:0> (Default: 0x0A)
+  *
+  *   NOTE: Number or chip errors tolerated over PreambleDetectorSize. 4 chips per bit.
+  */
+typedef enum
+{   
+  FSK_OOK_REGPREAMBLEDETECT_PREAMBLE_DETECTOR_TOL_MASK      =   ( 0b11111 << 0U ) /*!<  PreambleDetectorTol mask                                          */
+} fsk_ook_regpreambledetect_preamble_detector_tol_t;
+
+
+/**
+  * @brief   REG_RX_TIMEOUT_1 (Default: 0x00)
+  *
+  *   NOTE: Timeout interrupt is generated TimeoutRxRssi *16*T bit after switching to Rx mode if Rssi interrupt doesn’t occur (i.e. RssiValue > RssiThreshold) 0x00: TimeoutRxRssi is disabled.
+  */
+typedef enum
+{
+  FSK_OOK_REGTIMEOUT1_TIMEOUT_RX_RSSI_MASK              =   0xFF            /*!<  TimeoutRxRssi mask                                              */
+} fsk_ook_regrxtimeout1_timeout_rx_rssi_t;
+
+
+/**
+  * @brief   REG_RX_TIMEOUT_2 (Default: 0x00)
+  *
+  *   NOTE: Timeout interrupt is generated TimeoutRxPreamble *16*T bit after switching to Rx mode if Preamble interrupt doesn’t occur 0x00: TimeoutRxPreamble is disabled.
+  */
+typedef enum
+{
+  FSK_OOK_REGTIMEOUT2_TIMEOUT_RX_PREAMBLE_MASK          =   0xFF            /*!<  TimeoutRxPreamble mask                                          */
+} fsk_ook_regrxtimeout2_timeout_rx_preamble_t;
+
+
+/**
+  * @brief   REG_RX_TIMEOUT_3 (Default: 0x00)
+  *
+  *   NOTE: Timeout interrupt is generated TimeoutRxPreamble *16*T bit after switching to Rx mode if Preamble interrupt doesn’t occur 0x00: TimeoutRxPreamble is disabled.
+  */
+typedef enum
+{
+  FSK_OOK_REGTIMEOUT3_TIMEOUT_SIGNAL_SYNC_MASK          =   0xFF            /*!<  TimeoutSignalSync mask                                          */
+} fsk_ook_regrxtimeout3_timeout_sygnal_sync_t;
+
+
+/**
+  * @brief   REG_RX_TIMEOUT_3 (Default: 0x00)
+  *
+  *   NOTE: Additional delay before an automatic receiver restart is launched: Delay = InterPacketRxDelay*4*Tbit.
+  */
+typedef enum
+{
+  FSK_OOK_REGTIMEOUT3_INTER_PACKET_RX_DELAY_MASK        =   0xFF            /*!<  InterPacketRxDelay mask                                        */
+} fsk_ook_regrxtimeout3_inter_packet_rx_delay_t;
+
+
+/* FSK/OOK: RC Oscillator registers   */
+/**
+  * @brief   REG_OSC
+  */
+/**
+  * RcCalStart <3>
+  *
+  *   NOTE: Triggers the calibration of the RC oscillator when set. Always reads 0. RC calibration must be triggered in Standby mode.
+  */
+typedef enum
+{
+  FSK_OOK_REGOSC_RC_CAL_START_MASK                      =   ( 1U << 3U )    /*!<  RcCalStart mask                                               */
+} fsk_ook_regosc_rc_cal_start_t;
+
+
+/**
+  * ClkOut <2:0>
+  *
+  *   NOTE: Selects CLKOUT frequency.
+  */
+typedef enum
+{
+  FSK_OOK_REGOSC_CLK_OUT_MASK                           =   ( 0b111 << 0U ),  /*!<  ClkOut mask                                                   */
+  FSK_OOK_REGOSC_CLK_OUT_0                              =   ( 0b000 << 0U ),  /*!<  FXOSC                                                         */
+  FSK_OOK_REGOSC_CLK_OUT_1                              =   ( 0b001 << 0U ),  /*!<  FXOSC / 2                                                     */
+  FSK_OOK_REGOSC_CLK_OUT_2                              =   ( 0b010 << 0U ),  /*!<  FXOSC / 4                                                     */
+  FSK_OOK_REGOSC_CLK_OUT_3                              =   ( 0b011 << 0U ),  /*!<  FXOSC / 8                                                     */
+  FSK_OOK_REGOSC_CLK_OUT_4                              =   ( 0b100 << 0U ),  /*!<  FXOSC / 16                                                    */
+  FSK_OOK_REGOSC_CLK_OUT_5                              =   ( 0b101 << 0U ),  /*!<  FXOSC / 32                                                    */
+  FSK_OOK_REGOSC_CLK_OUT_6                              =   ( 0b110 << 0U ),  /*!<  RC (automatically enabled)                                    */
+  FSK_OOK_REGOSC_CLK_OUT_7                              =   ( 0b111 << 0U )   /*!<  OFF                                               [ Default ] */
+} fsk_ook_regosc_clk_out_t;
+
+
+/* FSK/OOK: Packet Handling registers   */
+/**
+  * @brief   REG_PREAMBLE_MSB (Default: 0x00)
+  *
+  *   NOTE: Size of the preamble to be sent (from TxStartCondition fulfilled). (MSB byte).
+  */
+typedef enum
+{
+  FSK_OOK_REGPREAMBLEMSB_PREAMBLE_SIZE_MASK               =   0xFF            /*!<  PreambleSize mask                                             */
+} fsk_ook_regpreamblemsb_preamble_size_t;
+
+
+/**
+  * @brief   REG_PREAMBLE_LSB (Default: 0x00)
+  *
+  *   NOTE: Size of the preamble to be sent (from TxStartCondition fulfilled). (LSB byte).
+  */
+typedef enum
+{
+  FSK_OOK_REGPREAMBLELSB_PREAMBLE_SIZE_MASK               =   0xFF            /*!<  PreambleSize mask                                             */
+} fsk_ook_regpreamblelsb_preamble_size_t;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
   * @brief   REGISTER MAP, LORA MODE
   */
 /**
