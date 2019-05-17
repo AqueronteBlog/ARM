@@ -162,7 +162,7 @@ typedef enum
 typedef enum
 {
   LORA_REGFIFO_FIFO_MASK                        =   0xFF         /*!<  LoRa base-band FIFO data input/output. FIFO is cleared an not accessible when device is in SLEEP mode */
-} lora_regreg_fifo_t;
+} lora_reg_fifo_t;
 
 
 /**
@@ -213,6 +213,33 @@ typedef enum
   LORA_REGOPMODE_MODE_RXSINGLE                    =   ( 0b110 << 0U ),  /*!<  Receive single (RXSINGLE)                                       */
   LORA_REGOPMODE_MODE_CAD                         =   ( 0b111 << 0U )   /*!<  Channel activity detection (CAD)                                */
 } lora_regopmode_mode_t;
+
+
+/**
+  * @brief   REG_FR_MSB
+  */
+typedef enum
+{
+  LORA_REG_FR_MSB_MASK                            =   0xFF              /*!<  MSB of RF carrier frequency ( Default: 0xE4 )                   */
+} lora_reg_fr_msb_t;
+
+
+/**
+  * @brief   REG_FR_MIB
+  */
+typedef enum
+{
+  LORA_REG_FR_MIB_MASK                            =   0xFF              /*!<  MIB of RF carrier frequency ( Default: 0xC0 )                   */
+} lora_reg_fr_mib_t;
+
+
+/**
+  * @brief   REG_FR_LSB
+  */
+typedef enum
+{
+  LORA_REG_FR_LSB_MASK                            =   0xFF              /*!<  LSB of RF carrier frequency ( Default: 0x00 )                   */
+} lora_reg_fr_lsb_t;
 
 
 /**
@@ -315,6 +342,612 @@ typedef enum
 {
   LORA_REGOCP_OCP_TRIM_MASK                         =   ( 0b11111 << 0U ) /*!<  OcpTrim Mask                                                  */
 } lora_regocp_ocp_trim_t;
+
+
+/**
+  * @brief   REG_LNA
+  */
+/**
+  * LnaGain <7:5>
+  *
+  *   NOTE: LNA gain setting.
+  */
+typedef enum
+{
+  LORA_REGLNA_LNA_GAIN_MASK                         =   ( 0b111 << 5U ),  /*!<  LnaGain Mask                                                  */
+  LORA_REGLNA_LNA_GAIN_NOT_USED                     =   ( 0b000 << 5U ),  /*!<  LnaGain not used                                              */
+  LORA_REGLNA_LNA_GAIN_G1                           =   ( 0b001 << 5U ),  /*!<  LnaGain G1 maximum gain                           [ Default ] */
+  LORA_REGLNA_LNA_GAIN_G2                           =   ( 0b010 << 5U ),  /*!<  LnaGain G2                                                    */
+  LORA_REGLNA_LNA_GAIN_G3                           =   ( 0b011 << 5U ),  /*!<  LnaGain G3                                                    */
+  LORA_REGLNA_LNA_GAIN_G4                           =   ( 0b100 << 5U ),  /*!<  LnaGain G4                                                    */
+  LORA_REGLNA_LNA_GAIN_G5                           =   ( 0b101 << 5U ),  /*!<  LnaGain G5                                                    */
+  LORA_REGLNA_LNA_GAIN_G6                           =   ( 0b110 << 5U )   /*!<  LnaGain G6 minimum gain                                       */
+} lora_reglna_lna_gain_t;
+
+
+/**
+  * LnaBoost <1:0>
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  LORA_REGLNA_LNA_BOOST_MASK                        =   ( 0b11 << 0U ),   /*!<  LnaBoost Mask                                                 */
+  LORA_REGLNA_LNA_BOOST_DEFAULT_LNA_CURRENT         =   ( 0b00 << 0U ),   /*!<  LnaBoost Default LNA current                      [ Default ] */
+  LORA_REGLNA_LNA_BOOST_ON                          =   ( 0b11 << 0U )    /*!<  LnaBoost  Boost on, 150% LNA current                          */
+} lora_reglna_lna_boost_t;
+
+
+/**
+  * @brief   REG_FIFO_ADDR_PTR
+  */
+typedef enum
+{
+  LORA_REG_FIFO_ADDR_PTR_MASK                        =   0xFF              /*!<  SPI interface address pointer in FIFO data buffer ( Default: 0x00 )  */
+} lora_reg_fifo_addr_ptr_t;
+
+
+/**
+  * @brief   REG_FIFO_TX_BASE_ADDR
+  */
+typedef enum
+{
+  LORA_REG_FIFO_TX_BASE_ADDR_MASK                    =   0xFF              /*!<  Write base address in FIFO data buffer for TX modulator ( Default: 0x80 )  */
+} lora_reg_fifo_tx_base_addr_t;
+
+
+/**
+  * @brief   REG_FIFO_RX_BASE_ADDR
+  */
+typedef enum
+{
+  LORA_REG_FIFO_RX_BASE_ADDR_MASK                    =   0xFF              /*!<  Read base address in FIFO data buffer for RX demodulator ( Default: 0x00 )  */
+} lora_reg_fifo_rx_base_addr_t;
+
+
+/**
+  * @brief   REG_FIFO_RX_CURRENT_ADDR
+  */
+typedef enum
+{
+  LORA_REG_FIFO_RX_CURRENT_ADDR_MASK                 =   0xFF              /*!<  Start address (in data buffer) of last packet received         */
+} lora_reg_fifo_rx_current_addr_t;
+
+
+/**
+  * @brief   REG_IRQ_FLAGS_MASK
+  */
+typedef enum
+{
+  LORA_REG_IRQ_FLAGS_MASK_MASK                        =   0xFF,             /*!<  RegIrqFlagsMask Mask                                                                                            */
+  LORA_REG_IRQ_FLAGS_MASK_RX_TIMEOUT_MASK             =   ( 1U << 7U ),     /*!<  Timeout interrupt mask: setting this bit masks the corresponding IRQ in RegIrqFlags                             */
+  LORA_REG_IRQ_FLAGS_MASK_RX_DONE_MASK                =   ( 1U << 6U ),     /*!<  Packet reception complete interrupt mask: setting this bit masks the corresponding IRQ in RegIrqFlags           */
+  LORA_REG_IRQ_FLAGS_MASK_PAYLOAD_CRC_ERROR_MASK      =   ( 1U << 5U ),     /*!<  Payload CRC error interrupt mask: setting this bit masks the corresponding IRQ in RegIrqFlags                   */
+  LORA_REG_IRQ_FLAGS_MASK_VALID_HEADER_MASK           =   ( 1U << 4U ),     /*!<  Valid header received in Rx mask: setting this bit masks the corresponding IRQ in RegIrqFlags                   */
+  LORA_REG_IRQ_FLAGS_MASK_TX_DONE_MASK                =   ( 1U << 3U ),     /*!<  FIFO Payload transmission complete interrupt mask: setting this bit masks the corresponding IRQ in RegIrqFlags  */
+  LORA_REG_IRQ_FLAGS_MASK_CAD_DONE_MASK               =   ( 1U << 2U ),     /*!<  CAD complete interrupt mask: setting this bit masks the corresponding IRQ in RegIrqFlags                        */
+  LORA_REG_IRQ_FLAGS_MASK_FHSS_CHANGE_CHANNEL_MASK    =   ( 1U << 1U ),     /*!<  FHSS change channel interrupt mask: setting this bit masks the corresponding IRQ in RegIrqFlags                 */
+  LORA_REG_IRQ_FLAGS_MASK_CAD_DETECTED_MASK           =   ( 1U << 0U )      /*!<  Cad Detected Interrupt Mask: setting this bit masks the corresponding IRQ in RegIrqFlags                        */
+} lora_reg_irq_flags_mask_t;
+
+
+/**
+  * @brief   REG_IRQ_FLAGS
+  */
+typedef enum
+{
+  LORA_REG_IRQ_FLAGS_MASK                             =   0xFF,             /*!<  RegIrqFlags Mask                                                            */
+  LORA_REG_IRQ_FLAGS_RX_TIMEOUT                       =   ( 1U << 7U ),     /*!<  Timeout interrupt: writing a 1 clears the IRQ                               */
+  LORA_REG_IRQ_FLAGS_RX_DONE                          =   ( 1U << 6U ),     /*!<  Packet reception complete interrupt: writing a 1 clears the IRQ             */
+  LORA_REG_IRQ_FLAGS_PAYLOAD_CRC_ERROR                =   ( 1U << 5U ),     /*!<  Payload CRC error interrupt: writing a 1 clears the IRQ                     */
+  LORA_REG_IRQ_FLAGS_VALID_HEADER                     =   ( 1U << 4U ),     /*!<  Valid header received in Rx: writing a 1 clears the IRQ                     */
+  LORA_REG_IRQ_FLAGS_TX_DONE                          =   ( 1U << 3U ),     /*!<  FIFO Payload transmission complete interrupt: writing a 1 clears the IRQ    */
+  LORA_REG_IRQ_FLAGS_CAD_DONE                         =   ( 1U << 2U ),     /*!<  CAD complete: write to clear: writing a 1 clears the IRQ                    */
+  LORA_REG_IRQ_FLAGS_FHSS_CHANGE_CHANNEL              =   ( 1U << 1U ),     /*!<  FHSS change channel interrupt: writing a 1 clears the IRQ                   */
+  LORA_REG_IRQ_FLAGS_CAD_DETECTED                     =   ( 1U << 0U )      /*!<  Valid Lora signal detected during CAD operation: writing a 1 clears the IRQ */
+} lora_reg_irq_flags_t;
+
+
+/**
+  * @brief   REG_RX_NB_BYTES
+  */
+typedef enum
+{
+  LORA_REGRXNBBYTES_FIFO_RX_BYTES_NB_MASK             =   0xFF              /*!<  Number of payload bytes of latest packet received             */
+} lora_regrxnbbytes_fifo_rx_bytes_nb_t;
+
+
+/**
+  * @brief   REG_RX_HEADER_CNT_VALUE_MSB
+  */
+typedef enum
+{
+  LORA_REGRXHEADERCNTVALUEMSB_VALID_HEADER_CNT_MSB_MASK =   0xFF            /*!<  Number of valid headers received since last transition into Rx mode, MSB(15:8). Header and packet counters are reseted in Sleep mode  */
+} lora_regrxheadercntvaluemsb_valid_header_cnt_msb_t;
+
+
+/**
+  * @brief   REG_RX_HEADER_CNT_VALUE_LSB
+  */
+typedef enum
+{
+  LORA_REGRXHEADERCNTVALUELSB_VALID_HEADER_CNT_LSB_MASK =   0xFF            /*!<  Number of valid headers received since last transition into Rx mode, LSB(7:0). Header and packet counters are reseted in Sleep mode   */
+} lora_regrxheadercntvaluelsb_valid_header_cnt_lsb_t;
+
+
+/**
+  * @brief   REG_RX_PACKET_CNT_VALUE_MSB
+  */
+typedef enum
+{
+  LORA_REGRXPACKETCNTVALUEMSB_VALID_PACKET_CNT_MSB_MASK =   0xFF            /*!<  Number of valid packets received since last transition into Rx mode, MSB(15:8). Header and packet counters are reseted in Sleep mode  */
+} lora_regrxpacketcntvaluemsb_valid_packet_cnt_msb_t;
+
+
+/**
+  * @brief   REG_RX_PACKET_CNT_VALUE_LSB
+  */
+typedef enum
+{
+  LORA_REGRXPACKETCNTVALUEMSB_VALID_PACKET_CNT_LSB_MASK =   0xFF            /*!<  Number of valid packets received since last transition into Rx mode, LSB(7:0). Header and packet counters are reseted in Sleep mode */
+} lora_regrxpacketcntvaluemsb_valid_packet_cnt_lsb_t;
+
+
+/**
+  * @brief   REG_MODEM_STAT
+  */
+/**
+  * RxCodingRate <7:5>
+  *
+  *   NOTE: Coding rate of last header received.
+  */
+typedef enum
+{
+  LORA_REGMODEMSTAT_RX_CODING_RATE_MASK             =   ( 0b111 << 5U )     /*!<  RxCodingRate Mask                                             */
+} lora_regmodemstat_rx_coding_rate_t;
+
+
+/**
+  * ModemStatus <4:0>
+  *
+  *   NOTE: Coding rate of last header received.
+  */
+typedef enum
+{
+  LORA_REGMODEMSTAT_MODEM_STATUS_MASK                 =   ( 0b1111 << 0U ), /*!<  ModemStatus Mask                                              */
+  LORA_REGMODEMSTAT_MODEM_STATUS_MODEM_CLEAR          =   ( 1U << 4U ),     /*!<  Modem clear ( Default: '1' )                                  */
+  LORA_REGMODEMSTAT_MODEM_STATUS_HEADER_INFO_VALID    =   ( 1U << 3U ),     /*!<  Header info valid ( Default: '0' )                            */
+  LORA_REGMODEMSTAT_MODEM_STATUS_RX_ON_GOING          =   ( 1U << 2U ),     /*!<  RX on-going ( Default: '0' )                                  */
+  LORA_REGMODEMSTAT_MODEM_STATUS_SIGNAL_SYNCHRONIZED  =   ( 1U << 1U ),     /*!<  Signal synchronized ( Default: '0' )                          */
+  LORA_REGMODEMSTAT_MODEM_STATUS_SIGNAL_DETECTED      =   ( 1U << 0U )      /*!<  Signal detected ( Default: '0' )                              */
+} lora_regmodemstat_modem_status_t;
+
+
+/**
+  * @brief   REG_PKT_SNR_VALUE
+  */
+typedef enum
+{
+  LORA_REGPKTSNRVALUE_PACKET_SNR_MASK                 =   0xFF                /*!<  Estimation of SNR on last packet received.In two’s compliment format mutiplied by 4 */
+} lora_regpktsnrvaluet_packet_snr_t;
+
+
+/**
+  * @brief   REG_PKT_RSSI_VALUE
+  *
+  *   NOTE: 
+  *     - RSSI[dBm] = - 139 + PacketRssi                   (when SNR >= 0)
+  *     - RSSI[dBm] = - 139 + PacketRssi + PacketSnr*0.25  (when SNR < 0)
+  */
+typedef enum
+{
+  LORA_REGPKTRSSIVALUE_PACKET_RSSI_MASK             =   0xFF                /*!<  RSSI of the latest packet received (dBm)                      */
+} lora_regpktrssivalue_pkt_rssi_t;
+
+
+/**
+  * @brief   REG_RSSI_VALUE
+  *
+  *   NOTE: 
+  *     - RSSI[dBm] = -139 + Rssi
+  */
+typedef enum
+{
+  LORA_REGRSSIVALUE_RSSI_MASK                       =   0xFF                /*!<  Current RSSI value (dBm)                                      */
+} lora_regrssivalue_rssi_t;
+
+
+/**
+  * @brief   REG_HOP_CHANNEL
+  */
+/**
+  * PllTimeout <7>
+  *
+  *   NOTE: PLL failed to lock while attempting a TX/RX/CAD operation.
+  */
+typedef enum
+{
+  LORA_REGHOPCHANNEL_PLL_TIMEOUT_MASK               =   ( 1U << 7U ),      /*!<  PllTimeout Mask                                                */
+  LORA_REGHOPCHANNEL_PLL_TIMEOUT_PLL_DID_NOT_LOCK   =   ( 1U << 7U ),      /*!<  PLL did not lock                                               */
+  LORA_REGHOPCHANNEL_PLL_TIMEOUT_PLL_DID_LOCK       =   ( 0U << 7U )       /*!<  PLL did lock                                                   */
+} lora_reghopchannel_pll_timeout_t;
+
+
+/**
+  * CrcOnPayload <6>
+  *
+  *   NOTE: CRC Information extracted from the received packet header (Explicit header mode only).
+  */
+typedef enum
+{
+  LORA_REGHOPCHANNEL_CRC_ON_PAYLOAD_MASK            =   ( 1U << 6U ),      /*!<  CrcOnPayload Mask                                              */
+  LORA_REGHOPCHANNEL_CRC_ON_PAYLOAD_CRC_OFF         =   ( 0U << 6U ),      /*!<  Header indicates CRC off                                       */
+  LORA_REGHOPCHANNEL_CRC_ON_PAYLOAD_CRC_ON          =   ( 1U << 6U )       /*!<  Header indicates CRC on                                        */
+} lora_reghopchannel_crc_on_payload_t;
+
+
+/**
+  * FhssPresentChannel <5:0>
+  *
+  *   NOTE: Current value of frequency hopping channel in use.
+  */
+typedef enum
+{
+  LORA_REGHOPCHANNEL_FHSS_PRESENT_CHANNEL_MASK        =   ( 0b111111 << 0U ) /*!<  FhssPresentChannel Mask                                      */
+} lora_reghopchannel_fhss_present_channel_t;
+
+
+/**
+  * @brief   REG_MODEM_CONFIG_1
+  */
+/**
+  * Bw <7:6>
+  *
+  *   NOTE: Signal bandwidth.
+  */
+typedef enum
+{
+  LORA_REGMODEMCONFIG1_BW_MASK                      =   ( 0b11 << 6U ),    /*!<  Bw Mask                                                        */
+  LORA_REGMODEMCONFIG1_BW_125_KHZ                   =   ( 0b00 << 6U ),    /*!<  Bw 125 kHz                                         [ Default ] */
+  LORA_REGMODEMCONFIG1_BW_250_KHZ                   =   ( 0b01 << 6U ),    /*!<  Bw 250 kHz                                                     */
+  LORA_REGMODEMCONFIG1_BW_500_KHZ                   =   ( 0b10 << 6U )     /*!<  Bw 500 kHz                                                     */
+} lora_regmodemconfig1_bw_t;
+
+
+/**
+  * CodingRate <5:3>
+  *
+  *   NOTE: Error coding rate.
+  */
+typedef enum
+{
+  LORA_REGMODEMCONFIG1_CODING_RATE_MASK             =   ( 0b111 << 3U ),   /*!<  CodingRate Mask                                                */
+  LORA_REGMODEMCONFIG1_CODING_RATE_4_5              =   ( 0b001 << 3U ),   /*!<  CodingRate 4/5                                     [ Default ] */
+  LORA_REGMODEMCONFIG1_CODING_RATE_4_6              =   ( 0b010 << 3U ),   /*!<  CodingRate 4/6                                                 */
+  LORA_REGMODEMCONFIG1_CODING_RATE_4_7              =   ( 0b011 << 3U ),   /*!<  CodingRate 4/7                                                 */
+  LORA_REGMODEMCONFIG1_CODING_RATE_4_8              =   ( 0b100 << 3U )    /*!<  CodingRate 4/8                                                 */
+} lora_regmodemconfig1_coding_rate_t;
+
+
+/**
+  * ImplicitHeaderModeOn <2>
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  LORA_REGMODEMCONFIG1_IMPLICIT_HEADER_MODE_ON_MASK                 =   ( 1U << 2U ), /*!<  ImplicitHeaderModeOn Mask                            */
+  LORA_REGMODEMCONFIG1_IMPLICIT_HEADER_MODE_ON_EXPLICIT_HEADER_MODE =   ( 0U << 2U ), /*!<  Explicit Header mode                     [ Default ] */
+  LORA_REGMODEMCONFIG1_IMPLICIT_HEADER_MODE_ON_IMPLICIT_HEADER_MODE =   ( 1U << 2U )  /*!<  Implicit Header mode                                 */
+} lora_regmodemconfig1_implicit_header_mode_on_t;
+
+
+/**
+  * RxPayloadCrcOn <1>
+  *
+  *   NOTE: If CRC is needed, RxPayloadCrcOn should be set:
+  *           - in Implicit header mode: on Tx and Rx side
+  *           - in Explicit header mode: on the Tx side alone (recovered from the header in Rx side)
+  */
+typedef enum
+{
+  LORA_REGMODEMCONFIG1_RX_PAYLOAD_CRC_ON_MASK        =   ( 1U << 1U ),    /*!<  RxPayloadCrcOn Mask                                             */
+  LORA_REGMODEMCONFIG1_RX_PAYLOAD_CRC_ON_CRC_DISABLE =   ( 0U << 1U ),    /*!<  CRC disable                                         [ Default ] */
+  LORA_REGMODEMCONFIG1_RX_PAYLOAD_CRC_ON_CRC_ENABLE  =   ( 1U << 1U )     /*!<  CRC enable                                                      */
+} lora_regmodemconfig1_rx_payload_crc_on_t;
+
+
+/**
+  * LowDataRateOptimize <0>
+  *
+  *   NOTE: If CRC is needed, RxPayloadCrcOn should be set:
+  *           - in Implicit header mode: on Tx and Rx side
+  *           - in Explicit header mode: on the Tx side alone (recovered from the header in Rx side)
+  */
+typedef enum
+{
+  LORA_REGMODEMCONFIG1_LOW_DATA_RATE_OPTIMIZE_MASK    =   ( 1U << 0U ),    /*!<  LowDataRateOptimize Mask                                                 */
+  LORA_REGMODEMCONFIG1_LOW_DATA_RATE_OPTIMIZE_DISABLE =   ( 0U << 0U ),    /*!<  LowDataRateOptimize disable                                  [ Default ] */
+  LORA_REGMODEMCONFIG1_LOW_DATA_RATE_OPTIMIZE_ENABLE  =   ( 1U << 0U )     /*!<  LowDataRateOptimize enable; mandated for SF11 and SF12 with BW = 125 kHz */
+} lora_regmodemconfig1_low_data_rate_optimize_t;
+
+
+/**
+  * @brief   REG_MODEM_CONFIG_2
+  */
+/**
+  * SpreadingFactor <7:4>
+  *
+  *   NOTE: SF rate (expressed as a base-2 logarithm).
+  */
+typedef enum
+{
+  LORA_REGMODEMCONFIG2_SPREADING_FACTOR_MASK        =   ( 0b1111 << 4U ), /*!<  SpreadingFactor Mask                                            */
+  LORA_REGMODEMCONFIG2_SPREADING_FACTOR_6           =   ( 0b0110 << 4U ), /*!<  SpreadingFactor  6:   64 chips/symbol                           */
+  LORA_REGMODEMCONFIG2_SPREADING_FACTOR_7           =   ( 0b0111 << 4U ), /*!<  SpreadingFactor  7:  128 chips/symbol               [ Default ] */
+  LORA_REGMODEMCONFIG2_SPREADING_FACTOR_8           =   ( 0b1000 << 4U ), /*!<  SpreadingFactor  8:  256 chips/symbol                           */
+  LORA_REGMODEMCONFIG2_SPREADING_FACTOR_9           =   ( 0b1001 << 4U ), /*!<  SpreadingFactor  9:  542 chips/symbol                           */
+  LORA_REGMODEMCONFIG2_SPREADING_FACTOR_10          =   ( 0b1010 << 4U ), /*!<  SpreadingFactor 10: 1024 chips/symbol                           */
+  LORA_REGMODEMCONFIG2_SPREADING_FACTOR_11          =   ( 0b1011 << 4U ), /*!<  SpreadingFactor 11: 2048 chips/symbol                           */
+  LORA_REGMODEMCONFIG2_SPREADING_FACTOR_12          =   ( 0b1100 << 4U )  /*!<  SpreadingFactor 12: 4096 chips/symbol                           */
+} lora_regmodemconfig2_spreading_factor_t;
+
+
+/**
+  * TxContinuousMode <3>
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  LORA_REGMODEMCONFIG2_TX_CONTINUOUS_MODE_MASK            =   ( 1U << 3U ), /*!<  TxContinuousMode Mask                                                               */
+  LORA_REGMODEMCONFIG2_TX_CONTINUOUS_MODE_NORMAL_MODE     =   ( 0U << 3U ), /*!<  Normal mode, a single packet is sent                                    [ Default ] */
+  LORA_REGMODEMCONFIG2_TX_CONTINUOUS_MODE_CONTINUOUS_MODE =   ( 1U << 3U )  /*!<  Continuous mode, send multiple packets across the FIFO (used for spectral analysis) */
+} lora_regmodemconfig2_tx_continuous_mode_t;
+
+
+/**
+  * AgcAutoOn <2>
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  LORA_REGMODEMCONFIG2_AGC_AUTO_ON_MASK                     =   ( 1U << 2U ), /*!<  AgcAutoOn Mask                                                  */
+  LORA_REGMODEMCONFIG2_AGC_AUTO_ON_SET_BY_REGISTER_LNA_GAIN =   ( 0U << 2U ), /*!<  LNA gain set by register LnaGain                                */
+  LORA_REGMODEMCONFIG2_AGC_AUTO_ON_SET_BY_INTERNAL_AGC_LOOP =   ( 1U << 2U )  /*!<  LNA gain set by the internal AGC loop               [ Default ] */
+} lora_regmodemconfig2_agc_auto_on_t;
+
+
+/**
+  * SymbTimeout(9:8) <1:0>
+  *
+  *   NOTE: RX Time-Out MSB (Default: 0x00)
+  */
+typedef enum
+{
+  LORA_REGMODEMCONFIG2_SYM_TIMEOUT_MASK                     =   ( 0b11 << 0U )  /*!<  SymbTimeout Mask                                              */
+} lora_regmodemconfig2_symb_timeout_t;
+
+
+/**
+  * @brief   REG_SYMB_TIMEOUT_LSB (Default: 0x64)
+  *
+  *   NOTE: RX Time-Out LSB. RX operation time-out value expressed as number of symbols:
+  *           - TimeOut = SymbTimeout * Ts
+  */
+typedef enum
+{
+  LORA_REGSYMBTIMEOUTLSB_SYMB_TIMEOUT_MASK                  =   0xFF            /*!<  SymbTimeout LSB Mask                                          */
+} lora_regsymbtimeoutlsb_symb_timeout_t;
+
+
+/**
+  * @brief   REG_PREAMBLE_MSB (Default: 0x00)
+  *
+  *   NOTE: Preamble length MSB, = PreambleLength + 4.25 Symbols
+  */
+typedef enum
+{
+  LORA_REGPREAMBLEMSB_PREAMBLE_LENGTH_MASK                  =   0xFF            /*!<  RegPreambleMsb Mask                                           */
+} lora_regpreamblemsb_preamble_length_t;
+
+
+/**
+  * @brief   REG_PREAMBLE_LSB (Default: 0x08)
+  *
+  *   NOTE: Preamble Length LSB
+  */
+typedef enum
+{
+  LORA_REGPREAMBLELSB_PREAMBLE_LENGTH_MASK                  =   0xFF            /*!<  RegPreambleLsb Mask                                           */
+} lora_regpreamblelsb_preamble_length_t;
+
+
+/**
+  * @brief   REG_PAYLOAD_LENGTH (Default: 0x01)
+  *
+  *   NOTE: Payload length in bytes. The register needs to be set in implicit header mode for the expected packet length. A '0' value is not permitted
+  */
+typedef enum
+{
+  LORA_REGPAYLOADLENGTH_PAYLOAD_LENGTH_MASK                 =   0xFF            /*!<  PayloadLength Mask                                            */
+} lora_regpayloadlength_payload_length_t;
+
+
+/**
+  * @brief   REG_MAX_PAYLOAD_LENGTH (Default: 0xFF)
+  *
+  *   NOTE: Maximum payload length; if header payload length exceeds value a header CRC error is generated. Allows filtering of packet with a bad size
+  */
+typedef enum
+{
+  LORA_REGMAXPAYLOADLENGTH_PAYLOAD_MAX_LENGTH_MASK          =   0xFF            /*!<  PayloadMaxLength Mask                                         */
+} lora_regmaxpayloadlength_payload_max_length_t;
+
+
+/**
+  * @brief   REG_HOP_PERIOD (Default: 0x00)
+  *
+  *   NOTE: Symbol periods between frequency hops. (0 = disabled). 1st hop always happen after the 1st header symbol
+  */
+typedef enum
+{
+  LORA_REGHOPPERIOD_FREQ_HOPPING_PERIOD_MASK                =   0xFF            /*!<  FreqHoppingPeriod Mask                                        */
+} lora_reghopperiod_freq_hopping_period_t;
+
+
+/**
+  * @brief   REG_FIFO_RX_BYTE_ADDR 
+  *
+  *   NOTE: Current value of RX databuffer pointer (address of last byte written by Lora receiver)
+  */
+typedef enum
+{
+  LORA_REGFIFORXBYTEADDR_FIFO_RX_BYTE_ADDR_PTR_MASK         =   0xFF            /*!<  FifoRxByteAddrPtr Mask                                        */
+} lora_regfiforxbyteaddr_fifo_rx_byte_addr_ptr_t;
+
+
+/**
+  * @brief   REG_FEI_MSB (Default: 0x00)
+  *
+  *   NOTE: Estimated frequency error from modem in 2's compliment format. MSB of RF Frequency error
+  */
+typedef enum
+{
+  LORA_REGFEIMSB_FREQ_ERROR_MASK                            =   0xFF            /*!<  FreqError Mask                                                */
+} lora_regfeimsb_freq_error_t;
+
+
+/**
+  * @brief   REG_FEI_MIB (Default: 0x00)
+  *
+  *   NOTE: Middle byte of RF Frequency Error
+  */
+typedef enum
+{
+  LORA_REGFEIMIB_FREQ_ERROR_MASK                            =   0xFF            /*!<  FreqError Mask                                                */
+} lora_regfeimib_freq_error_t;
+
+
+/**
+  * @brief   REG_FEI_LSB (Default: 0x00)
+  *
+  *   NOTE: LSB of RF Frequency Error
+  */
+typedef enum
+{
+  LORA_REGFEILSB_FREQ_ERROR_MASK                            =   0xFF            /*!<  FreqError Mask                                                */
+} lora_regfeilsb_freq_error_t;
+
+
+/**
+  * @brief   REG_RSSI_WIDEBAND 
+  *
+  *   NOTE: Wideband RSSI measurement used to locally generate a random number
+  */
+typedef enum
+{
+  LORA_REGRSSIWIDEBAND_RSSI_WIDEBAND_MASK                   =   0xFF            /*!<  RegRssiWideband Mask                                          */
+} lora_regrssiwideband_rssi_wideband_t;
+
+
+/**
+  * @brief   REG_DETECT_OPTIMIZE
+  */
+/**
+  * AutomaticIFOn <7>
+  *
+  *   NOTE: Should be set to 0x0 after each reset (POR on manual) See errata note for more information.
+  */
+typedef enum
+{
+  LORA_REGDETECTOPTIMIZE_AUTOMATIC_IF_ON_MASK       =   ( 1U << 7U ),     /*!<  AutomaticIFOn Mask                                              */
+  LORA_REGDETECTOPTIMIZE_AUTOMATIC_IF_ON_HIGH       =   ( 1U << 7U ),     /*!<  AutomaticIFOn value: '1'                            [ Default ] */
+  LORA_REGDETECTOPTIMIZE_AUTOMATIC_IF_ON_LOW        =   ( 0U << 7U )      /*!<  AutomaticIFOn value: '0'                                        */
+} lora_regdetectoptimize_automatic_if_on_t;
+
+
+/**
+  * DetectionOptimize <2:0>
+  *
+  *   NOTE: LoRa detection Optimize.
+  */
+typedef enum
+{
+  LORA_REGDETECTOPTIMIZE_DETECTION_OPTIMIZE_MASK        =   ( 0b111 << 0U ),  /*!<  DetectionOptimize Mask                                          */
+  LORA_REGDETECTOPTIMIZE_DETECTION_OPTIMIZE_SF7_TO_SF12 =   ( 0b011 << 0U ),  /*!<  DetectionOptimize SF7 to SF12                       [ Default ] */
+  LORA_REGDETECTOPTIMIZE_DETECTION_OPTIMIZE_SF6         =   ( 0b101 << 0U )   /*!<  DetectionOptimize SF6                                           */
+} lora_regdetectoptimize_detection_optimize_t;
+
+
+/**
+  * @brief   REG_INVERT_IQ
+  */
+/**
+  * InvertIQRX <6>
+  *
+  *   NOTE: Invert the LoRa I and Q signals in RX path.
+  */
+typedef enum
+{
+  LORA_REGINVERTIQ_INVERT_IQ_RX_MASK                =   ( 1U << 6U ),     /*!<  InvertIQRX Mask                                                 */
+  LORA_REGINVERTIQ_INVERT_IQ_RX_NORMAL_MODE         =   ( 0U << 6U ),     /*!<  Normal mode                                         [ Default ] */
+  LORA_REGINVERTIQ_INVERT_IQ_RX_INVERTED_MODE       =   ( 1U << 6U )      /*!<  I and Q signals are inverted                                    */
+} lora_reginvertiq_invert_iq_rx_t;
+
+
+/**
+  * InvertIQTX <0>
+  *
+  *   NOTE: Invert the LoRa I and Q signals in TX path.
+  */
+typedef enum
+{
+  LORA_REGINVERTIQ_INVERT_IQ_TX_MASK                =   ( 1U << 0U ),     /*!<  InvertIQTX Mask                                                 */
+  LORA_REGINVERTIQ_INVERT_IQ_TX_NORMAL_MODE         =   ( 0U << 0U ),     /*!<  Normal mode                                         [ Default ] */
+  LORA_REGINVERTIQ_INVERT_IQ_TX_INVERTED_MODE       =   ( 1U << 0U )      /*!<  I and Q signals are inverted                                    */
+} lora_reginvertiq_invert_iq_tx_t;
+
+
+/**
+  * @brief   REG_SYNC_WORD (Default: 0x12)
+  *
+  *   NOTE: LoRa Sync Word Value 0x34 is reserved for LoRaWAN networks
+  */
+typedef enum
+{
+  LORA_REGSYNCWORD_SYNC_WORD_MASK                     =   0xFF,           /*!<  SyncWord Mask                                                   */
+  LORA_REGSYNCWORD_SYNC_WORD_LORAWAN_NETWORKS         =   0x34            /*!<  SyncWord LoRaWAN networks                                       */
+} lora_regsyncword_sync_word_t;
+
+
+/**
+  * @brief   REG_INVERT_IQ_2 (Default: 0x1D)
+  *
+  *   NOTE: Set to 0x19 when RX inverted IQ is set. See AN1200.24
+  */
+typedef enum
+{
+  LORA_REGINVERTIQ2_INVERT_IQ_2_MASK                  =   0xFF,           /*!<  InvertIQ2 Mask                                                  */
+  LORA_REGINVERTIQ2_INVERT_IQ_2_RX_INVERTED_IQ_SET    =   0x19            /*!<  InvertIQ2 RX inverted IQ is set                                 */
+} lora_reginvertiq2_invert_iq_2_t;
+
+
+/**
+  * @brief   REG_CHIRP_FILTER (Default: 0xA0)
+  *
+  *   NOTE: Set to 0x31 for ETSI-G1 compliance with 14 dBm RF output power when using bandwidth 500 kHz
+  */
+typedef enum
+{
+  LORA_REGCHIRPFILTER_MASK                            =   0xFF,           /*!<  RegChirpFilter Mask                                             */
+  LORA_REGCHIRPFILTER_ETSI_G1_COMPLIANCE              =   0x31            /*!<  RegChirpFilter ETSI-G1 compliance                               */
+} lora_regchirpfilter_t;
+
+
+
+
 
 
 
