@@ -980,8 +980,339 @@ typedef enum
 } fsk_ook_regpreamblelsb_preamble_size_t;
 
 
+/**
+  * @brief   REG_SYNC_CONFIG
+  */
+/**
+  * AutoRestartRxMode <7:6>
+  *
+  *   NOTE: Controls the automatic restart of the receiver after the reception of a valid packet (PayloadReady or CrcOk).
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCCONFIG_AUTO_RESTART_RX_MODE_MASK                               =   ( 0b11 << 6U ),   /*!<  AutoRestartRxMode mask                                      */
+  FSK_OOK_REGSYNCCONFIG_AUTO_RESTART_RX_MODE_OFF                                =   ( 0b00 << 6U ),   /*!<  Off                                                         */
+  FSK_OOK_REGSYNCCONFIG_AUTO_RESTART_RX_MODE_ON_WITHOUT_WAIT_FOR_PLL_TO_RELOCK  =   ( 0b01 << 6U ),   /*!<  On, without waiting for the PLL to re-lock      [ Default ] */
+  FSK_OOK_REGSYNCCONFIG_AUTO_RESTART_RX_MODE_ON_WAIT_FOR_PLL_TO_LOCK            =   ( 0b10 << 6U )    /*!<  On, wait for the PLL to lock (frequency changed)            */
+} fsk_ook_regsyncconfig_auto_restart_rx_mode_t;
 
 
+/**
+  * PreamblePolarity <5>
+  *
+  *   NOTE: Sets the polarity of the Preamble.
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCCONFIG_PREAMBLE_POLARITY_MASK            =   ( 1U << 5U ),   /*!<  PreamblePolarity mask                                        */
+  FSK_OOK_REGSYNCCONFIG_PREAMBLE_POLARITY_0XAA            =   ( 0U << 5U ),   /*!<  PreamblePolarity 0xAA                            [ Default ] */
+  FSK_OOK_REGSYNCCONFIG_PREAMBLE_POLARITY_0X55            =   ( 1U << 5U )    /*!<  PreamblePolarity 0x55                                        */
+} fsk_ook_regsyncconfig_preamble_polarity_t;
+
+
+/**
+  * SyncOn <4>
+  *
+  *   NOTE: Enables the Sync word generation and detection.
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCCONFIG_SYNC_ON_MASK                      =   ( 1U << 4U ),   /*!<  SyncOn mask                                                 */
+  FSK_OOK_REGSYNCCONFIG_SYNC_ON_OFF                       =   ( 0U << 4U ),   /*!<  SyncOn Off                                                  */
+  FSK_OOK_REGSYNCCONFIG_SYNC_ON_ON                        =   ( 1U << 4U )    /*!<  SyncOn On                                       [ Default ] */
+} fsk_ook_regsyncconfig_sync_on_t;
+
+
+/**
+  * FifoFillCondition <3>
+  *
+  *   NOTE: FIFO filling condition.
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCCONFIG_FIFO_FILL_CONDITION_MASK          =   ( 1U << 3U ),   /*!<  FifoFillCondition mask                                      */
+  FSK_OOK_REGSYNCCONFIG_FIFO_FILL_CONDITION_0             =   ( 0U << 3U ),   /*!<  if SyncAddress interrupt occurs                 [ Default ] */
+  FSK_OOK_REGSYNCCONFIG_FIFO_FILL_CONDITION_1             =   ( 1U << 3U )    /*!<  as long as FifoFillCondition is set                         */
+} fsk_ook_regsyncconfig_fifo_fill_condition_t;
+
+
+/**
+  * SyncSize <2:0> (Default: 0x03)
+  *
+  *   NOTE: Size of the Sync word:
+  *           - ( SyncSize + 1) bytes, ( SyncSize ) bytes if ioHomeOn =1
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCCONFIG_SYNC_SIZE_MASK                    =   ( 0b111 << 0U ) /*!<  SyncSize mask                                               */
+} fsk_ook_regsyncconfig_sync_size_t;
+
+
+/**
+  * @brief   REG_SYNC_VALUE_1 (Default: 0x01)
+  *
+  *   NOTE: 1st byte of Sync word. (MSB byte) Used if SyncOn is set.
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCVALUE1_SYNC_VALUE_MASK                   =   0xFF            /*!<  SyncValue mask                                              */
+} fsk_ook_regsyncvalue1_sync_value_t;
+
+
+/**
+  * @brief   REG_SYNC_VALUE_2 (Default: 0x01)
+  *
+  *   NOTE: 2nd byte of Sync word Used if SyncOn is set and (SyncSize +1) >= 2.
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCVALUE2_SYNC_VALUE_MASK                   =   0xFF            /*!<  SyncValue mask                                              */
+} fsk_ook_regsyncvalue2_sync_value_t;
+
+
+/**
+  * @brief   REG_SYNC_VALUE_3 (Default: 0x01)
+  *
+  *   NOTE: 3rd byte of Sync word. Used if SyncOn is set and (SyncSize +1) >= 3.
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCVALUE3_SYNC_VALUE_MASK                   =   0xFF            /*!<  SyncValue mask                                              */
+} fsk_ook_regsyncvalue3_sync_value_t;
+
+
+/**
+  * @brief   REG_SYNC_VALUE_4 (Default: 0x01)
+  *
+  *   NOTE: 4rd byte of Sync word. Used if SyncOn is set and (SyncSize +1) >= 4.
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCVALUE4_SYNC_VALUE_MASK                   =   0xFF            /*!<  SyncValue mask                                              */
+} fsk_ook_regsyncvalue4_sync_value_t;
+
+
+/**
+  * @brief   REG_SYNC_VALUE_5 (Default: 0x01)
+  *
+  *   NOTE: 5rd byte of Sync word. Used if SyncOn is set and (SyncSize +1) >= 5.
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCVALUE5_SYNC_VALUE_MASK                   =   0xFF            /*!<  SyncValue mask                                              */
+} fsk_ook_regsyncvalue5_sync_value_t;
+
+
+/**
+  * @brief   REG_SYNC_VALUE_6 (Default: 0x01)
+  *
+  *   NOTE: 6rd byte of Sync word. Used if SyncOn is set and (SyncSize +1) >= 6.
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCVALUE6_SYNC_VALUE_MASK                   =   0xFF            /*!<  SyncValue mask                                              */
+} fsk_ook_regsyncvalue6_sync_value_t;
+
+
+/**
+  * @brief   REG_SYNC_VALUE_7 (Default: 0x01)
+  *
+  *   NOTE: 7rd byte of Sync word. Used if SyncOn is set and (SyncSize +1) >= 7.
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCVALUE7_SYNC_VALUE_MASK                   =   0xFF            /*!<  SyncValue mask                                              */
+} fsk_ook_regsyncvalue7_sync_value_t;
+
+
+/**
+  * @brief   REG_SYNC_VALUE_8 (Default: 0x01)
+  *
+  *   NOTE: 8rd byte of Sync word. Used if SyncOn is set and (SyncSize +1) = 8.
+  */
+typedef enum
+{
+  FSK_OOK_REGSYNCVALUE8_SYNC_VALUE_MASK                   =   0xFF            /*!<  SyncValue mask                                              */
+} fsk_ook_regsyncvalue8_sync_value_t;
+
+
+/**
+  * @brief   REG_PACKET_CONFIG_1
+  */
+/**
+  * PacketFormat <7>
+  *
+  *   NOTE: Defines the packet format used.
+  */
+typedef enum
+{
+  FSK_OOK_REGPACKETCONFIG1_PACKET_FORMAT_MASK             =   ( 1U << 7U ),   /*!<  PacketFormat mask                                           */
+  FSK_OOK_REGPACKETCONFIG1_PACKET_FORMAT_FIXED_LENGTH     =   ( 0U << 7U ),   /*!<  Fixed length                                                */
+  FSK_OOK_REGPACKETCONFIG1_PACKET_FORMAT_VARIABLE_LENGTH  =   ( 1U << 7U )    /*!<  Variable length                                 [ Default ] */
+} fsk_ook_regpacketconfig1_packet_format_t;
+
+
+/**
+  * DcFree <6:5>
+  *
+  *   NOTE: Defines DC-free encoding/decoding performed.
+  */
+typedef enum
+{
+  FSK_OOK_REGPACKETCONFIG1_DC_FREE_MASK                   =   ( 0b11 << 5U ), /*!<  DcFree mask                                                 */
+  FSK_OOK_REGPACKETCONFIG1_DC_FREE_NONE                   =   ( 0b00 << 5U ), /*!<  None (Off)                                      [ Default ] */
+  FSK_OOK_REGPACKETCONFIG1_DC_FREE_MANCHESTER             =   ( 0b01 << 5U ), /*!<  Manchester                                                  */
+  FSK_OOK_REGPACKETCONFIG1_DC_FREE_WHITENING              =   ( 0b10 << 5U )  /*!<  Whitening                                                   */
+} fsk_ook_regpacketconfig1_dc_free_t;
+
+
+/**
+  * CrcOn <4>
+  *
+  *   NOTE: Enables CRC calculation/check (Tx/Rx).
+  */
+typedef enum
+{
+  FSK_OOK_REGPACKETCONFIG1_CRC_ON_MASK                    =   ( 1U << 4U ),   /*!<  CrcOn mask                                                  */
+  FSK_OOK_REGPACKETCONFIG1_CRC_ON_OFF                     =   ( 0U << 4U ),   /*!<  CrcOn off                                                   */
+  FSK_OOK_REGPACKETCONFIG1_CRC_ON_ON                      =   ( 1U << 4U )    /*!<  CrcOn on                                        [ Default ] */
+} fsk_ook_regpacketconfig1_crc_on_t;
+
+
+/**
+  * CrcAutoClearOff <3>
+  *
+  *   NOTE: Defines the behavior of the packet handler when CRC check fails.
+  */
+typedef enum
+{
+  FSK_OOK_REGPACKETCONFIG1_CRC_AUTO_CLEAR_OFF_MASK            =   ( 1U << 3U ), /*!<  CrcAutoClearOff mask                                                                        */
+  FSK_OOK_REGPACKETCONFIG1_CRC_AUTO_CLEAR_OFF_CLEAR_FIFO      =   ( 0U << 3U ), /*!<  Clear FIFO and restart new packet reception. No PayloadReady interrupt issued   [ Default ] */
+  FSK_OOK_REGPACKETCONFIG1_CRC_AUTO_CLEAR_OFF_NOT_CLEAR_FIFO  =   ( 1U << 3U )  /*!<  Do not clear FIFO. PayloadReady interrupt issued                                            */
+} fsk_ook_regpacketconfig1_crc_auto_clear_off_t;
+
+
+/**
+  * AddressFiltering <2:1>
+  *
+  *   NOTE: Defines address based filtering in Rx.
+  */
+typedef enum
+{
+  FSK_OOK_REGPACKETCONFIG1_ADDRESS_FILTERING_MASK         =   ( 0b11 << 1U ), /*!<  AddressFiltering mask                                       */
+  FSK_OOK_REGPACKETCONFIG1_ADDRESS_FILTERING_0            =   ( 0b00 << 1U ), /*!<  None (Off)                                      [ Default ] */
+  FSK_OOK_REGPACKETCONFIG1_ADDRESS_FILTERING_1            =   ( 0b01 << 1U ), /*!<  Address field must match NodeAddress                        */
+  FSK_OOK_REGPACKETCONFIG1_ADDRESS_FILTERING_2            =   ( 0b10 << 1U )  /*!<  Address field must match NodeAddress or BroadcastAddress    */
+} fsk_ook_regpacketconfig1_address_filtering_t;
+
+
+/**
+  * CrcWhiteningType <0>
+  *
+  *   NOTE: Selects the CRC and whitening algorithms.
+  */
+typedef enum
+{
+  FSK_OOK_REGPACKETCONFIG1_CRC_WHITENING_TYPE_MASK        =   ( 1U << 0U ),   /*!<  CrcWhiteningType mask                                         */
+  FSK_OOK_REGPACKETCONFIG1_CRC_WHITENING_TYPE_0           =   ( 0U << 0U ),   /*!<  CCITT CRC implementation with standard whitening  [ Default ] */
+  FSK_OOK_REGPACKETCONFIG1_CRC_WHITENING_TYPE_1           =   ( 1U << 0U )    /*!<  IBM CRC implementation with alternate whitening               */
+} fsk_ook_regpacketconfig1_crc_whitening_type_t;
+
+
+/**
+  * @brief   REG_PACKET_CONFIG_2
+  */
+/**
+  * DataMode <6>
+  *
+  *   NOTE: Data processing mode.
+  */
+typedef enum
+{
+  FSK_OOK_REGPACKETCONFIG2_DATA_MODE_MASK                 =   ( 1U << 6U ),   /*!<  DataMode mask                                               */
+  FSK_OOK_REGPACKETCONFIG2_DATA_MODE_CONTINUOUS_MODE      =   ( 0U << 6U ),   /*!<  Continuous mode                                             */
+  FSK_OOK_REGPACKETCONFIG2_DATA_MODE_PACKET_MODE          =   ( 1U << 6U )    /*!<  Packet mode                                     [ Default ] */
+} fsk_ook_regpacketconfig2_data_mode_t;
+
+
+/**
+  * IoHomeOn <5>
+  *
+  *   NOTE: Enables the io-homecontrol compatibility mode.
+  */
+typedef enum
+{
+  FSK_OOK_REGPACKETCONFIG2_IO_HOME_ON_MASK                =   ( 1U << 5U ),   /*!<  IoHomeOn mask                                               */
+  FSK_OOK_REGPACKETCONFIG2_IO_HOME_ON_DISABLED            =   ( 0U << 5U ),   /*!<  Disabled                                        [ Default ] */
+  FSK_OOK_REGPACKETCONFIG2_IO_HOME_ON_ENABLED             =   ( 1U << 5U )    /*!<  Enabled                                                     */
+} fsk_ook_regpacketconfig2_io_home_on_t;
+
+
+/**
+  * IoHomePowerFrame <4> (Default: 0x00)
+  *
+  *   NOTE: reserved - Linked to io-homecontrol compatibility mode.
+  */
+typedef enum
+{
+  FSK_OOK_REGPACKETCONFIG2_IO_HOME_POWER_FRAME_MASK       =   ( 1U << 4U )    /*!<  IoHomePowerFrame mask                                       */
+} fsk_ook_regpacketconfig2_io_home_power_frame_t;
+
+
+/**
+  * BeaconOn <3> (Default: 0x00)
+  *
+  *   NOTE: Enables the Beacon mode in Fixed packet format.
+  */
+typedef enum
+{
+  FSK_OOK_REGPACKETCONFIG2_BEACON_ON_MASK                 =   ( 1U << 3U )    /*!<  BeaconOn mask                                               */
+} fsk_ook_regpacketconfig2_beacon_on_t;
+
+
+/**
+  * PayloadLength <2:0> (Default: 0x00)
+  *
+  *   NOTE: Packet Length Most significant bits.
+  */
+typedef enum
+{
+  FSK_OOK_REGPACKETCONFIG2_PAYLOAD_LENGTH_MASK            =   ( 0b111 << 0U ) /*!<  PayloadLength mask                                          */
+} fsk_ook_regpacketconfig2_payload_length_t;
+
+
+/**
+  * @brief   REG_PAYLOAD_LENGTH (Default: 0x40)
+  *
+  *   NOTE: If PacketFormat = 0 (fixed), payload length.
+  *         If PacketFormat = 1 (variable), max length in Rx, not used in Tx.
+  */
+typedef enum
+{
+  FSK_OOK_REGPAYLOADLENGTH_PAYLOAD_LENGTH_MASK            =   0xFF            /*!<  PayloadLength mask                                          */
+} fsk_ook_regpayloadlength_payload_length_t;
+
+
+/**
+  * @brief   REG_NODE_ADRS (Default: 0x00)
+  *
+  *   NOTE: Node address used in address filtering.
+  */
+typedef enum
+{
+  FSK_OOK_REGNODEADRS_NODE_ADDRESS_MASK                   =   0xFF            /*!<  NodeAddress mask                                            */
+} fsk_ook_regnodeadrs_node_address_t;
+
+
+/**
+  * @brief   REG_BROADCAST_ADRS (Default: 0x00)
+  *
+  *   NOTE: Broadcast address used in address filtering.
+  */
+typedef enum
+{
+  FSK_OOK_REGBROADCASTADRS_BROADCAST_ADDRESS_MASK         =   0xFF            /*!<  BroadcastAddress mask                                       */
+} fsk_ook_regbroadcastadrs_broadcast_address_t;
 
 
 
