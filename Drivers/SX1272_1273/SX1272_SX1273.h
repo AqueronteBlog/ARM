@@ -1315,6 +1315,563 @@ typedef enum
 } fsk_ook_regbroadcastadrs_broadcast_address_t;
 
 
+/**
+  * @brief   REG_FIFO_THRESH
+  */
+/**
+  * TxStartCondition <7>
+  *
+  *   NOTE: Defines the condition to start packet transmission.
+  */
+typedef enum
+{
+  FSK_OOK_REGFIFOTHRESH_TX_START_CONDITION_MASK           =   ( 1U << 7U ),   /*!<  TxStartCondition mask                                                   */
+  FSK_OOK_REGFIFOTHRESH_TX_START_CONDITION_FIFO_LEVEL     =   ( 0U << 7U ),   /*!<  FifoLevel (i.e. the number of bytes in the FIFO exceeds FifoThreshold)  */
+  FSK_OOK_REGFIFOTHRESH_TX_START_CONDITION_FIFO_EMPTY     =   ( 1U << 7U )    /*!<  FifoEmpty goes low (i.e. at least one byte in the FIFO)     [ Default ] */
+} fsk_ook_regfifothresh_tx_start_condition_t;
+
+
+/**
+  * FifoThreshold <5:0> (Default: 0x0F)
+  *
+  *   NOTE: Used to trigger FifoLevel interrupt, when: number of bytes in FIFO >= FifoThreshold + 1.
+  */
+typedef enum
+{
+  FSK_OOK_REGFIFOTHRESH_FIFO_THRESHOLD_MASK               =   ( 0b111111 << 0U )  /*!<  FifoThreshold mask                                          */
+} fsk_ook_regfifothresh_fifo_threshold_t;
+
+
+/* FSK/OOK: Sequencer registers   */
+/**
+  * @brief   REG_SEQ_CONFIG_1
+  */
+/**
+  * SequencerStart <7>
+  *
+  *   NOTE: Controls the top level Sequencer When set to '1', executes the 'Start' transition. The sequencer can only be enabled when the chip is in Sleep or Standby mode.
+  */
+typedef enum
+{
+  FSK_OOK_REGSEQCONFIG1_SEQUENCER_START_MASK              =   ( 1U << 7U ),     /*!<  SequencerStart mask                                           */
+  FSK_OOK_REGSEQCONFIG1_SEQUENCER_START_START_TRANSITION  =   ( 1U << 7U )      /*!<  executes the 'Start' transition                               */
+} fsk_ook_regseqconfig1_sequencer_start_t;
+
+
+/**
+  * SequencerStop <6>
+  *
+  *   NOTE: Forces the Sequencer Off. Always reads '0'.
+  */
+typedef enum
+{
+  FSK_OOK_REGSEQCONFIG1_SEQUENCER_STOP_MASK                =   ( 1U << 6U ),     /*!<  SequencerStop mask                                            */
+  FSK_OOK_REGSEQCONFIG1_SEQUENCER_STOP_FORCE_SEQUENCER_OFF =   ( 1U << 6U )      /*!<  Forces the Sequencer Off                                      */
+} fsk_ook_regseqconfig1_sequencer_stop_t;
+
+
+/**
+  * IdleMode <5>
+  *
+  *   NOTE: Selects chip mode during the state.
+  */
+typedef enum
+{
+  FSK_OOK_REGSEQCONFIG1_IDLE_MODE_MASK                    =   ( 1U << 5U ),     /*!<  IdleMode mask                                                 */
+  FSK_OOK_REGSEQCONFIG1_IDLE_MODE_STANDBY_MODE            =   ( 0U << 5U ),     /*!<  Standby mode                                      [ Default ] */
+  FSK_OOK_REGSEQCONFIG1_IDLE_MODE_SLEEP_MODE              =   ( 1U << 5U )      /*!<  Sleep mode                                                    */
+} fsk_ook_regseqconfig1_idle_mode_t;
+
+
+/**
+  * FromStart <4:3>
+  *
+  *   NOTE: Controls the Sequencer transition when SequencerStart is set to 1 in Sleep or Standby mode.
+  */
+typedef enum
+{
+  FSK_OOK_REGSEQCONFIG1_FROM_START_MASK                       =   ( 0b11 << 3U ), /*!<  FromStart mask                                                */
+  FSK_OOK_REGSEQCONFIG1_FROM_START_TO_LOW_POWER_SELECTION     =   ( 0b00 << 3U ), /*!<  to LowPowerSelection                              [ Default ] */
+  FSK_OOK_REGSEQCONFIG1_FROM_START_TO_RECEIVE_STATE           =   ( 0b01 << 3U ), /*!<  to Receive state                                              */
+  FSK_OOK_REGSEQCONFIG1_FROM_START_TO_TRANSMIT_STATE          =   ( 0b10 << 3U ), /*!<  to Transmit state                                             */
+  FSK_OOK_REGSEQCONFIG1_FROM_START_TO_TX_STATE_ON_FIFO_LEVEL  =   ( 0b11 << 3U )  /*!<  to Transmit state on a FifoLevel interrupt                    */
+} fsk_ook_regseqconfig1_from_start_t;
+
+
+/**
+  * LowPowerSelection <2>
+  *
+  *   NOTE: Selects the Sequencer LowPower state after a to LowPowerSelection transition.
+  */
+typedef enum
+{
+  FSK_OOK_REGSEQCONFIG1_LOW_POWER_SELECTION_MASK          =   ( 1U << 2U ),     /*!<  LowPowerSelection mask                                              */
+  FSK_OOK_REGSEQCONFIG1_LOW_POWER_SELECTION_0             =   ( 0U << 2U ),     /*!<  SequencerOff state with chip on Initial mode            [ Default ] */
+  FSK_OOK_REGSEQCONFIG1_LOW_POWER_SELECTION_1             =   ( 1U << 2U )      /*!<  Idle state with chip on Standby or Sleep mode depending on IdleMode */
+} fsk_ook_regseqconfig1_low_power_selection_t;
+
+
+/**
+  * FromIdle <1>
+  *
+  *   NOTE: Controls the Sequencer transition from the Idle state on a T1 interrupt.
+  */
+typedef enum
+{
+  FSK_OOK_REGSEQCONFIG1_FROM_IDLE_MASK                    =   ( 1U << 1U ),     /*!<  FromIdle mask                                                 */
+  FSK_OOK_REGSEQCONFIG1_FROM_IDLE_TO_TRANSMIT_STATE       =   ( 0U << 1U ),     /*!<  to Transmit state                                 [ Default ] */
+  FSK_OOK_REGSEQCONFIG1_FROM_IDLE_TO_RECEIVE_STATE        =   ( 1U << 1U )      /*!<  to Receive state                                              */
+} fsk_ook_regseqconfig1_from_idle_t;
+
+
+/**
+  * FromTransmit <0>
+  *
+  *   NOTE: Controls the Sequencer transition from the Transmit state.
+  */
+typedef enum
+{
+  FSK_OOK_REGSEQCONFIG1_FROM_TRANSMIT_MASK                    =   ( 1U << 0U ),   /*!<  FromTransmit mask                                             */
+  FSK_OOK_REGSEQCONFIG1_FROM_TRANSMIT_TO_LOW_POWER_SELECTION  =   ( 0U << 0U ),   /*!<  to LowPowerSelection on a PacketSent interrupt    [ Default ] */
+  FSK_OOK_REGSEQCONFIG1_FROM_TRANSMIT_TO_RECEIVE_STATE        =   ( 1U << 0U )    /*!<  to Receive state on a PacketSent interrupt                    */
+} fsk_ook_regseqconfig1_from_transmit_t;
+
+
+/**
+  * @brief   REG_SEQ_CONFIG_2
+  */
+/**
+  * FromReceive <7:5>
+  *
+  *   NOTE: Controls the Sequencer transition from the Receive state.
+  */
+typedef enum
+{
+  FSK_OOK_REGSEQCONFIG2_FROM_RECEIVE_MASK                 =   ( 0b111 << 5U ),  /*!<  FromReceive mask                                              */
+  FSK_OOK_REGSEQCONFIG2_FROM_RECEIVE_0                    =   ( 0b001 << 5U ),  /*!<  to PacketReceived state on a PayloadReady interrupt           */
+  FSK_OOK_REGSEQCONFIG2_FROM_RECEIVE_1                    =   ( 0b010 << 5U ),  /*!<  to LowPowerSelection on a PayloadReady interrupt              */
+  FSK_OOK_REGSEQCONFIG2_FROM_RECEIVE_2                    =   ( 0b011 << 5U ),  /*!<  to PacketReceived state on a CrcOk interrupt                  */
+  FSK_OOK_REGSEQCONFIG2_FROM_RECEIVE_3                    =   ( 0b100 << 5U ),  /*!<  to SequencerOff state on a Rssi interrupt                     */
+  FSK_OOK_REGSEQCONFIG2_FROM_RECEIVE_4                    =   ( 0b101 << 5U ),  /*!<  to SequencerOff state on a SyncAddress interrupt              */
+  FSK_OOK_REGSEQCONFIG2_FROM_RECEIVE_5                    =   ( 0b110 << 5U )   /*!<  to SequencerOff state on a PreambleDetect interrupt           */
+} fsk_ook_regseqconfig2_from_receive_t;
+
+
+/**
+  * FromRxTimeout <4:3>
+  *
+  *   NOTE: Controls the state-machine transition from the Receive state on a RxTimeout interrupt (and on PayloadReady if FromReceive = 011).
+  */
+typedef enum
+{
+  FSK_OOK_REGSEQCONFIG2_FROM_RX_TIMEOUT_MASK                    =   ( 0b11 << 3U ), /*!<  FromRxTimeout mask                                            */
+  FSK_OOK_REGSEQCONFIG2_FROM_RX_TIMEOUT_TO_RECEIVE_STATE        =   ( 0b00 << 3U ), /*!<  to Receive State, via ReceiveRestart              [ Default ] */
+  FSK_OOK_REGSEQCONFIG2_FROM_RX_TIMEOUT_TO_TRANSMIT_STATE       =   ( 0b01 << 3U ), /*!<  to Transmit state                                             */
+  FSK_OOK_REGSEQCONFIG2_FROM_RX_TIMEOUT_TO_LOW_POWER_SELECTION  =   ( 0b10 << 3U ), /*!<  to LowPowerSelection                                          */
+  FSK_OOK_REGSEQCONFIG2_FROM_RX_TIMEOUT_SEQUENCER_OFF_STATE     =   ( 0b11 << 3U )  /*!<  to SequencerOff state                                         */
+} fsk_ook_regseqconfig2_from_rx_timeout_t;
+
+
+/**
+  * FromPacketReceived <2:0>
+  *
+  *   NOTE: Controls the state-machine transition from the PacketReceived state.
+  */
+typedef enum
+{
+  FSK_OOK_REGSEQCONFIG2_FROM_PACKET_RECEIVED_MASK                   =   ( 0b111 << 0U ), /*!<  FromPacketReceived mask                                  */
+  FSK_OOK_REGSEQCONFIG2_FROM_PACKET_RECEIVED_TO_SEQUENCER_OFF_STATE =   ( 0b000 << 0U ), /*!<  to SequencerOff state                        [ Default ] */
+  FSK_OOK_REGSEQCONFIG2_FROM_PACKET_RECEIVED_TO_TRANSMIT_STATE      =   ( 0b001 << 0U ), /*!<  to Transmit state on a FifoEmpty interrupt               */
+  FSK_OOK_REGSEQCONFIG2_FROM_PACKET_RECEIVED_TO_LOW_POWER_SELECTION =   ( 0b010 << 0U ), /*!<  to LowPowerSelection                                     */
+  FSK_OOK_REGSEQCONFIG2_FROM_PACKET_RECEIVED_TO_RECEIVE_VIA_FS_MODE =   ( 0b011 << 0U ), /*!<  to Receive via FS mode, if frequency was changed         */
+  FSK_OOK_REGSEQCONFIG2_FROM_PACKET_RECEIVED_TO_RECEIVE_STATE       =   ( 0b100 << 0U )  /*!<  to Receive state (no frequency change)                   */
+} fsk_ook_regseqconfig2_from_packet_received_t;
+
+
+/**
+  * @brief   REG_TIMER_RESOL
+  */
+/**
+  * Timer1Resolution <3:2>
+  *
+  *   NOTE: Resolution of Timer 1.
+  */
+typedef enum
+{
+  FSK_OOK_REGTIMERRESOL_TIMER1_RESOLUTION_MASK            =   ( 0b11 << 2U ),   /*!<  Timer1Resolution mask                                         */
+  FSK_OOK_REGTIMERRESOL_TIMER1_RESOLUTION_TIMER1_DISABLED =   ( 0b00 << 2U ),   /*!<  Timer1 disabled                                   [ Default ] */
+  FSK_OOK_REGTIMERRESOL_TIMER1_RESOLUTION_64_US           =   ( 0b01 << 2U ),   /*!<  64 us                                                         */
+  FSK_OOK_REGTIMERRESOL_TIMER1_RESOLUTION_4_1_MS          =   ( 0b10 << 2U ),   /*!<  4.1 ms                                                        */
+  FSK_OOK_REGTIMERRESOL_TIMER1_RESOLUTION_262_MS          =   ( 0b11 << 2U )    /*!<  262 ms                                                        */
+} fsk_ook_regtimerresol_timer1_resolution_t;
+
+
+/**
+  * Timer2Resolution <1:0>
+  *
+  *   NOTE: Resolution of Timer 2.
+  */
+typedef enum
+{
+  FSK_OOK_REGTIMERRESOL_TIMER2_RESOLUTION_MASK            =   ( 0b11 << 0U ),   /*!<  Timer2Resolution mask                                         */
+  FSK_OOK_REGTIMERRESOL_TIMER2_RESOLUTION_TIMER2_DISABLED =   ( 0b00 << 0U ),   /*!<  Timer2 disabled                                   [ Default ] */
+  FSK_OOK_REGTIMERRESOL_TIMER2_RESOLUTION_64_US           =   ( 0b01 << 0U ),   /*!<  64 us                                                         */
+  FSK_OOK_REGTIMERRESOL_TIMER2_RESOLUTION_4_1_MS          =   ( 0b10 << 0U ),   /*!<  4.1 ms                                                        */
+  FSK_OOK_REGTIMERRESOL_TIMER2_RESOLUTION_262_MS          =   ( 0b11 << 0U )    /*!<  262 ms                                                        */
+} fsk_ook_regtimerresol_timer2_resolution_t;
+
+
+/**
+  * @brief   REG_TIMER1_COEF (Default: 0xF5)
+  *
+  *   NOTE: Multiplying coefficient for Timer 1.
+  */
+typedef enum
+{
+  FSK_OOK_REGTIMER1COEF_TIMER1_COEFFICIENT_MASK           =   0xFF              /*!<  Timer1Coefficient mask                                        */
+} fsk_ook_regtimer1coef_timer1_coefficient_t;
+
+
+/**
+  * @brief   REG_TIMER2_COEF (Default: 0x20)
+  *
+  *   NOTE: Multiplying coefficient for Timer 2.
+  */
+typedef enum
+{
+  FSK_OOK_REGTIMER2COEF_TIMER2_COEFFICIENT_MASK           =   0xFF              /*!<  Timer2Coefficient mask                                        */
+} fsk_ook_regtimer2coef_timer2_coefficient_t;
+
+
+/* FSK/OOK: Service registers   */
+/**
+  * @brief   REG_IMAGE_CAL
+  */
+/**
+  * AutoImageCalOn <7>
+  *
+  *   NOTE: Resolution of Timer 1.
+  */
+typedef enum
+{
+  FSK_OOK_REGIMAGECAL_AUTO_IMAGE_CAL_ON_MASK              =   ( 1U << 7U ),     /*!<  AutoImageCalOn mask                                                               */
+  FSK_OOK_REGIMAGECAL_AUTO_IMAGE_CAL_ON_0                 =   ( 0U << 7U ),     /*!<  Calibration of the receiver depending on the temperature is disabled  [ Default ] */
+  FSK_OOK_REGIMAGECAL_AUTO_IMAGE_CAL_ON_1                 =   ( 1U << 7U )      /*!<  Calibration of the receiver depending on the temperature enabled                  */
+} fsk_ook_regimagecal_auto_image_cal_on_t;
+
+
+/**
+  * ImageCalRunning <5>
+  *
+  *   NOTE: Set to 1 while the Image and RSSI calibration are running. Toggles back to 0 when the process is completed.
+  */
+typedef enum
+{
+  FSK_OOK_REGIMAGECAL_IMAGE_CAL_RUNNING_MASK              =   ( 1U << 5U )      /*!<  ImageCalRunning mask                                          */
+} fsk_ook_regimagecal_image_cal_running_t;
+
+
+/**
+  * TempChange <3>
+  *
+  *   NOTE: IRQ flag witnessing a temperature change exceeding TempThreshold since the last Image and RSSI calibration.
+  */
+typedef enum
+{
+  FSK_OOK_REGIMAGECAL_TEMP_CHANGE_MASK                    =   ( 1U << 3U )      /*!<  TempChange mask                                               */
+} fsk_ook_regimagecal_temp_change_t;
+
+
+/**
+  * TempThreshold <2:1>
+  *
+  *   NOTE: Temperature change threshold to trigger a new I/Q calibration.
+  */
+typedef enum
+{
+  FSK_OOK_REGIMAGECAL_TEMP_THRESHOLD_MASK                 =   ( 0b11 << 1U ),     /*!<  TempThreshold mask                                            */
+  FSK_OOK_REGIMAGECAL_TEMP_THRESHOLD_5_C                  =   ( 0b00 << 1U ),     /*!<  TempThreshold 5C                                              */
+  FSK_OOK_REGIMAGECAL_TEMP_THRESHOLD_10_C                 =   ( 0b01 << 1U ),     /*!<  TempThreshold 10C                                 [ Default ] */
+  FSK_OOK_REGIMAGECAL_TEMP_THRESHOLD_15_C                 =   ( 0b10 << 1U ),     /*!<  TempThreshold 15C                                             */
+  FSK_OOK_REGIMAGECAL_TEMP_THRESHOLD_20_C                 =   ( 0b11 << 1U )      /*!<  TempThreshold 20C                                             */
+} fsk_ook_regimagecal_temp_threshold_t;
+
+
+/**
+  * TempMonitorOff <0>
+  *
+  *   NOTE: Controls the temperature monitor operation.
+  */
+typedef enum
+{
+  FSK_OOK_REGIMAGECAL_TEMP_MONITOR_OFF_MASK                     =   ( 1U << 0U ),   /*!<  TempMonitorOff mask                                                           */
+  FSK_OOK_REGIMAGECAL_TEMP_MONITOR_OFF_TEMP_MONITORING_DONE     =   ( 0U << 0U ),   /*!<  Temperature monitoring done in all modes except Sleep and Standby [ Default ] */
+  FSK_OOK_REGIMAGECAL_TEMP_MONITOR_OFF_TEMP_MONITORING_STOPPED  =   ( 1U << 0U )    /*!<  Temperature monitoring stopped                                                */
+} fsk_ook_regimagecal_temp_monitor_off_t;
+
+
+/**
+  * @brief   REG_TEMP 
+  *
+  *   NOTE: Measured temperature -1°C per Lsb Needs calibration for absolute accuracy.
+  */
+typedef enum
+{
+  FSK_OOK_REGTEMP_TEMP_VALUE_MASK                           =   0xFF              /*!<  TempValue mask                                                */
+} fsk_ook_regtemp_temp_value_t;
+
+
+/**
+  * @brief   REG_LOW_BAT
+  */
+/**
+  * LowBatOn <3>
+  *
+  *   NOTE: Low Battery detector enable signal.
+  */
+typedef enum
+{
+  FSK_OOK_REGLOWBAT_LOW_BAT_ON_MASK                       =   ( 1U << 3U ),     /*!<  LowBatOn mask                                                   */
+  FSK_OOK_REGLOWBAT_LOW_BAT_ON_DISABLED                   =   ( 0U << 3U ),     /*!<  LowBat detector disabled                            [ Default ] */
+  FSK_OOK_REGLOWBAT_LOW_BAT_ON_ENABLED                    =   ( 1U << 3U )      /*!<  LowBat detector enabled                                         */
+} fsk_ook_reglowbat_low_bat_on_t;
+
+
+/**
+  * LowBatTrim <2:0>
+  *
+  *   NOTE: Trimming of the LowBat threshold.
+  */
+typedef enum
+{
+  FSK_OOK_REGLOWBAT_LOW_BAT_TRIM_MASK                     =   ( 0b111 << 0U ),  /*!<  LowBatTrim mask                                                 */
+  FSK_OOK_REGLOWBAT_LOW_BAT_TRIM_1_695_V                  =   ( 0b000 << 0U ),  /*!<  LowBatTrim 1.695 V                                              */
+  FSK_OOK_REGLOWBAT_LOW_BAT_TRIM_1_764_V                  =   ( 0b001 << 0U ),  /*!<  LowBatTrim 1.764 V                                              */
+  FSK_OOK_REGLOWBAT_LOW_BAT_TRIM_1_835_V                  =   ( 0b010 << 0U ),  /*!<  LowBatTrim 1.835 V                                  [ Default ] */
+  FSK_OOK_REGLOWBAT_LOW_BAT_TRIM_1_905_V                  =   ( 0b011 << 0U ),  /*!<  LowBatTrim 1.905 V                                              */
+  FSK_OOK_REGLOWBAT_LOW_BAT_TRIM_1_976_V                  =   ( 0b100 << 0U ),  /*!<  LowBatTrim 1.976 V                                              */
+  FSK_OOK_REGLOWBAT_LOW_BAT_TRIM_2_045_V                  =   ( 0b101 << 0U ),  /*!<  LowBatTrim 2.045 V                                              */
+  FSK_OOK_REGLOWBAT_LOW_BAT_TRIM_2_116_V                  =   ( 0b110 << 0U ),  /*!<  LowBatTrim 2.116 V                                              */
+  FSK_OOK_REGLOWBAT_LOW_BAT_TRIM_2_185_V                  =   ( 0b111 << 0U )   /*!<  LowBatTrim 2.185 V                                              */
+} fsk_ook_reglowbat_low_bat_trim_t;
+
+
+/* FSK/OOK: Status registers   */
+/**
+  * @brief   REG_IRQ_FLAGS_1
+  */
+/**
+  * ModeReady <7>
+  *
+  *   NOTE: Set when the operation mode requested in Mode, is ready.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS1_MODE_RADY_MASK                     =   ( 1U << 7U ),     /*!<  ModeReady mask                                                  */
+  FSK_OOK_REGIRQFLAGS1_MODE_RADY_HIGH                     =   ( 1U << 7U ),     /*!<  ModeReady High                                                  */
+  FSK_OOK_REGIRQFLAGS1_MODE_RADY_LOW                      =   ( 0U << 7U )      /*!<  ModeReady Low                                                   */
+} fsk_ook_regirqflags1_mode_ready_t;
+
+
+/**
+  * RxReady <6>
+  *
+  *   NOTE: Set in Rx mode, after RSSI, AGC and AFC. Cleared when leaving Rx.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS1_RX_READY_MASK                      =   ( 1U << 6U ),     /*!<  RxReady mask                                                    */
+  FSK_OOK_REGIRQFLAGS1_RX_READY_HIGH                      =   ( 1U << 6U ),     /*!<  RxReady High                                                    */
+  FSK_OOK_REGIRQFLAGS1_RX_READY_LOW                       =   ( 0U << 6U )      /*!<  RxReady Low                                                     */
+} fsk_ook_regirqflags1_rx_ready_t;
+
+
+/**
+  * TxReady <5>
+  *
+  *   NOTE: Set in Tx mode, after PA ramp-up. Cleared when leaving Tx.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS1_TX_READY_MASK                      =   ( 1U << 5U ),     /*!<  TxReady mask                                                    */
+  FSK_OOK_REGIRQFLAGS1_TX_READY_HIGH                      =   ( 1U << 5U ),     /*!<  TxReady High                                                    */
+  FSK_OOK_REGIRQFLAGS1_TX_READY_LOW                       =   ( 0U << 5U )      /*!<  TxReady Low                                                     */
+} fsk_ook_regirqflags1_tx_ready_t;
+
+
+/**
+  * PllLock <4>
+  *
+  *   NOTE: Set (in FS, Rx or Tx) when the PLL is locked. Cleared when it is not.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS1_PLL_LOCK_MASK                      =   ( 1U << 4U ),     /*!<  PllLock mask                                                    */
+  FSK_OOK_REGIRQFLAGS1_PLL_LOCK_HIGH                      =   ( 1U << 4U ),     /*!<  PllLock High                                                    */
+  FSK_OOK_REGIRQFLAGS1_PLL_LOCK_LOW                       =   ( 0U << 4U )      /*!<  PllLock Low                                                     */
+} fsk_ook_regirqflags1_pll_lock_t;
+
+
+/**
+  * Rssi <3>
+  *
+  *   NOTE: Set in Rx when the RssiValue exceeds RssiThreshold. Cleared when leaving Rx or setting this bit to 1.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS1_RSSI_MASK                          =   ( 1U << 3U ),     /*!<  Rssi mask                                                       */
+  FSK_OOK_REGIRQFLAGS1_RSSI_HIGH                          =   ( 1U << 3U ),     /*!<  Rssi High                                                       */
+  FSK_OOK_REGIRQFLAGS1_RSSI_LOW                           =   ( 0U << 3U )      /*!<  Rssi Low                                                        */
+} fsk_ook_regirqflags1_rssi_t;
+
+
+/**
+  * Timeout <2>
+  *
+  *   NOTE: Set when a timeout occurs Cleared when leaving Rx or FIFO is emptied.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS1_TIMEOUT_MASK                       =   ( 1U << 2U ),     /*!<  Timeout mask                                                    */
+  FSK_OOK_REGIRQFLAGS1_TIMEOUT_HIGH                       =   ( 1U << 2U ),     /*!<  Timeout High                                                    */
+  FSK_OOK_REGIRQFLAGS1_TIMEOUT_LOW                        =   ( 0U << 2U )      /*!<  Timeout Low                                                     */
+} fsk_ook_regirqflags1_timeout_t;
+
+
+/**
+  * PreambleDetect <1>
+  *
+  *   NOTE: Set when the Preamble Detector has found valid Preamble. bit clear when set to 1.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS1_PREAMBLE_DETECT_MASK               =   ( 1U << 1U ),     /*!<  PreambleDetect mask                                             */
+  FSK_OOK_REGIRQFLAGS1_PREAMBLE_DETECT_HIGH               =   ( 1U << 1U ),     /*!<  PreambleDetect High                                             */
+  FSK_OOK_REGIRQFLAGS1_PREAMBLE_DETECT_LOW                =   ( 0U << 1U )      /*!<  PreambleDetect Low                                              */
+} fsk_ook_regirqflags1_preamble_detect_t;
+
+
+/**
+  * SyncAddressMatch <0>
+  *
+  *   NOTE: Set when Sync and Address (if enabled) are detected. Cleared when leaving Rx or FIFO is emptied. This bit is read only in Packet mode, rwc in Continuous mode.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS1_SYNC_ADDRESS_MATCH_MASK            =   ( 1U << 0U ),     /*!<  SyncAddressMatch mask                                           */
+  FSK_OOK_REGIRQFLAGS1_SYNC_ADDRESS_MATCH_HIGH            =   ( 1U << 0U ),     /*!<  SyncAddressMatch High                                           */
+  FSK_OOK_REGIRQFLAGS1_SYNC_ADDRESS_MATCH_LOW             =   ( 0U << 0U )      /*!<  SyncAddressMatch Low                                            */
+} fsk_ook_regirqflags1_sync_address_match_t;
+
+
+/**
+  * @brief   REG_IRQ_FLAGS_2
+  */
+/**
+  * FifoFull <7>
+  *
+  *   NOTE: Set when FIFO is full (i.e. contains 66 bytes), else cleared.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS2_FIFO_FULL_MASK                     =   ( 1U << 7U ),     /*!<  FifoFull mask                                                   */
+  FSK_OOK_REGIRQFLAGS2_FIFO_FULL_HIGH                     =   ( 1U << 7U ),     /*!<  FifoFull High                                                   */
+  FSK_OOK_REGIRQFLAGS2_FIFO_FULL_LOW                      =   ( 0U << 7U )      /*!<  FifoFull Low                                                    */
+} fsk_ook_regirqflags2_fifo_full_t;
+
+
+/**
+  * FifoEmpty <6>
+  *
+  *   NOTE: Set when FIFO is empty, and cleared when there is at least 1 byte in the FIFO.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS2_FIFO_EMPTY_MASK                    =   ( 1U << 6U ),     /*!<  FifoEmpty mask                                                  */
+  FSK_OOK_REGIRQFLAGS2_FIFO_EMPTY_HIGH                    =   ( 1U << 6U ),     /*!<  FifoEmpty High                                                  */
+  FSK_OOK_REGIRQFLAGS2_FIFO_EMPTY_LOW                     =   ( 0U << 6U )      /*!<  FifoEmpty Low                                                   */
+} fsk_ook_regirqflags2_fifo_empty_t;
+
+
+/**
+  * FifoLevel <5>
+  *
+  *   NOTE: Set when the number of bytes in the FIFO strictly exceeds FifoThreshold , else cleared.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS2_FIFO_LEVEL_MASK                    =   ( 1U << 5U ),     /*!<  FifoLevel mask                                                  */
+  FSK_OOK_REGIRQFLAGS2_FIFO_LEVEL_HIGH                    =   ( 1U << 5U ),     /*!<  FifoLevel High                                                  */
+  FSK_OOK_REGIRQFLAGS2_FIFO_LEVEL_LOW                     =   ( 0U << 5U )      /*!<  FifoLevel Low                                                   */
+} fsk_ook_regirqflags2_fifo_level_t;
+
+
+/**
+  * FifoOverrun <4>
+  *
+  *   NOTE: Set when FIFO overrun occurs. (except in Sleep mode) Flag(s) and FIFO are cleared when this bit is set. The FIFO then becomes immediately available for the next transmission / reception.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS2_FIFO_OVERRUN_MASK                  =   ( 1U << 4U ),     /*!<  FifoOverrun mask                                                */
+  FSK_OOK_REGIRQFLAGS2_FIFO_OVERRUN_HIGH                  =   ( 1U << 4U ),     /*!<  FifoOverrun High                                                */
+  FSK_OOK_REGIRQFLAGS2_FIFO_OVERRUN_LOW                   =   ( 0U << 4U )      /*!<  FifoOverrun Low                                                 */
+} fsk_ook_regirqflags2_fifo_overrun_t;
+
+
+/**
+  * PacketSent <3>
+  *
+  *   NOTE: Set in Tx when the complete packet has been sent. Cleared when exiting Tx.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS2_PACKET_SENT_MASK                   =   ( 1U << 3U ),     /*!<  PacketSent mask                                                 */
+  FSK_OOK_REGIRQFLAGS2_PACKET_SENT_HIGH                   =   ( 1U << 3U ),     /*!<  PacketSent High                                                 */
+  FSK_OOK_REGIRQFLAGS2_PACKET_SENT_LOW                    =   ( 0U << 3U )      /*!<  PacketSent Low                                                  */
+} fsk_ook_regirqflags2_packet_sent_t;
+
+
+/**
+  * PayloadReady <2>
+  *
+  *   NOTE: Set in Rx when the payload is ready (i.e. last byte received and CRC, if enabled and CrcAutoClearOff is cleared , is Ok). Cleared when FIFO is empty.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS2_PAYLOAD_READY_MASK                 =   ( 1U << 2U ),     /*!<  PayloadReady mask                                               */
+  FSK_OOK_REGIRQFLAGS2_PAYLOAD_READY_HIGH                 =   ( 1U << 2U ),     /*!<  PayloadReady High                                               */
+  FSK_OOK_REGIRQFLAGS2_PAYLOAD_READY_LOW                  =   ( 0U << 2U )      /*!<  PayloadReady Low                                                */
+} fsk_ook_regirqflags2_payload_ready_t;
+
+
+/**
+  * CrcOk <1>
+  *
+  *   NOTE: Set in Rx when the CRC of the payload is Ok. Cleared when FIFO is empty.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS2_CRC_OK_MASK                        =   ( 1U << 1U ),     /*!<  CrcOk mask                                                      */
+  FSK_OOK_REGIRQFLAGS2_CRC_OK_HIGH                        =   ( 1U << 1U ),     /*!<  CrcOk High                                                      */
+  FSK_OOK_REGIRQFLAGS2_CRC_OK_LOW                         =   ( 0U << 1U )      /*!<  CrcOk Low                                                       */
+} fsk_ook_regirqflags2_crc_ok_t;
+
+
+/**
+  * LowBat <0>
+  *
+  *   NOTE: Set when the battery voltage drops below the Low Battery threshold. Cleared only when set to 1 by the user.
+  */
+typedef enum
+{
+  FSK_OOK_REGIRQFLAGS2_LOW_BAT_MASK                       =   ( 1U << 0U ),     /*!<  LowBat mask                                                     */
+  FSK_OOK_REGIRQFLAGS2_LOW_BAT_HIGH                       =   ( 1U << 0U ),     /*!<  LowBat High                                                     */
+  FSK_OOK_REGIRQFLAGS2_LOW_BAT_LOW                        =   ( 0U << 0U )      /*!<  LowBat Low                                                      */
+} fsk_ook_regirqflags2_low_bat_t;
+
+
+
 
 
 
