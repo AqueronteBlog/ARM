@@ -1872,6 +1872,244 @@ typedef enum
 
 
 
+ //REG_DIO_MAPPING1 AND 2 MUST BE COMPLETED ------------->>>>HOLAHOLAHOLAHOLAHLAHOLAHOLAHOLAJP;<<<--------------------------
+
+
+
+
+
+
+/* FSK/OOK: Version register   */
+/**
+  * @brief   REG_VERSION
+  *
+  *          NOTE: Version code of the chip. Bits 7-4 give the full revision number; bits 3-0 give the metal mask revision number
+  */
+typedef enum
+{
+  FSK_OOK_REGVERSION_VERSION_MASK                         =   0xFF,             /*!<  Version mask                                                    */
+  FSK_OOK_REGVERSION_VERSION                              =   0x22              /*!<  Version value                                                   */
+} fsk_ook_regversion_version_t;
+
+
+/* FSK/OOK: Additional registers   */
+/**
+  * @brief   REG_AGC_REF
+  */
+/**
+  * AgcReferenceLevel <5:0> (Default: 0x13)
+  *
+  *   NOTE: Sets the floor reference for all AGC thresholds: 
+  *           AGC Reference [dBm] = -174 dBm + 10*log(2* RxBw ) + SNR + AgcReferenceLevel SNR = 8 dB, fixed value.
+  */
+typedef enum
+{
+  FSK_OOK_REGAGCREF_AGC_REFERENCE_LEVEL_MASK              =   ( 0b111111 << 0U ) /*!<  AgcReferenceLevel mask                                          */
+} fsk_ook_regagcref_agc_reference_level_t;
+
+
+/**
+  * @brief   REG_AGC_THRESH1
+  */
+/**
+  * AgcStep1 <4:0> (Default: 0x0E)
+  *
+  *   NOTE: Defines the 1st AGC Threshold.
+  */
+typedef enum
+{
+  FSK_OOK_REGAGCTHRESH1_AGC_STEP_1_MASK                   =   ( 0b11111 << 0U )   /*!<  AgcStep1 mask                                                 */
+} fsk_ook_regagcthresh1_agc_step_1_t;
+
+
+/**
+  * @brief   REG_AGC_THRESH2
+  */
+/**
+  * AgcStep2 <7:4> (Default: 0x05)
+  *
+  *   NOTE: Defines the 2nd AGC Threshold.
+  */
+typedef enum
+{
+  FSK_OOK_REGAGCTHRESH2_AGC_STEP_2_MASK                   =   ( 0b1111 << 4U )   /*!<  AgcStep2 mask                                                 */
+} fsk_ook_regagcthresh2_agc_step_2_t;
+
+
+/**
+  * AgcStep3 <3:0> (Default: 0x0B)
+  *
+  *   NOTE: Defines the 3rd AGC Threshold.
+  */
+typedef enum
+{
+  FSK_OOK_REGAGCTHRESH2_AGC_STEP_3_MASK                   =   ( 0b1111 << 0U )   /*!<  AgcStep3 mask                                                 */
+} fsk_ook_regagcthresh2_agc_step_3_t;
+
+
+/**
+  * @brief   REG_AGC_THRESH3
+  */
+/**
+  * AgcStep4 <7:4> (Default: 0x0D)
+  *
+  *   NOTE: Defines the 4th AGC Threshold.
+  */
+typedef enum
+{
+  FSK_OOK_REGAGCTHRESH3_AGC_STEP_4_MASK                   =   ( 0b1111 << 4U )   /*!<  AgcStep4 mask                                                 */
+} fsk_ook_regagcthresh3_agc_step_4_t;
+
+
+/**
+  * AgcStep5 <3:0> (Default: 0x0B)
+  *
+  *   NOTE: Defines the 5th AGC Threshold.
+  */
+typedef enum
+{
+  FSK_OOK_REGAGCTHRESH3_AGC_STEP_5_MASK                   =   ( 0b1111 << 0U )   /*!<  AgcStep5 mask                                                 */
+} fsk_ook_regagcthresh3_agc_step_5_t;
+
+
+/**
+  * @brief   REG_PLL_HOP
+  */
+/**
+  * FastHopOn <7> 
+  *
+  *   NOTE: Bypasses the main state machine for a quick frequency hop. Writing RegFrfLsb will trigger the frequency change.
+  */
+typedef enum
+{
+  FSK_OOK_REGPLLHOP_FAST_HOP_ON_MASK                      =   ( 1U << 7U ),     /*!<  FastHopOn mask                                                */
+  FSK_OOK_REGPLLHOP_FAST_HOP_ON_0                         =   ( 0U << 7U ),     /*!<  Frf is validated when FSTx or FSRx is requested   [ Default ] */
+  FSK_OOK_REGPLLHOP_FAST_HOP_ON_1                         =   ( 1U << 7U )      /*!<  Frf is validated triggered when RegFrfLsb is written          */
+} fsk_ook_regpllhop_fast_hop_on_t;
+
+
+/**
+  * PaManualDutyCycle <3:0> (Default: 0x0E)
+  *
+  *   NOTE: See app note 1200.32.
+  */
+typedef enum
+{
+  FSK_OOK_REGPLLHOP_PA_MANUAL_DUTY_CYCLE_MASK               =   ( 0b1111 << 0U ) /*!<  PaManualDutyCycle mask                                        */
+} fsk_ook_regpllhop_pa_manual_duty_cycle_t;
+
+
+/**
+  * @brief   REG_TCXO
+  */
+/**
+  * TcxoInputOn <4> 
+  *
+  *   NOTE: Controls the crystal oscillator.
+  */
+typedef enum
+{
+  FSK_OOK_REGTCXO_TCXO_INPUT_ON_MASK                      =   ( 1U << 4U ),     /*!<  TcxoInputOn mask                                              */
+  FSK_OOK_REGTCXO_TCXO_INPUT_ON_0                         =   ( 0U << 4U ),     /*!<  Crystal Oscillator with external Crystal          [ Default ] */
+  FSK_OOK_REGTCXO_TCXO_INPUT_ON_1                         =   ( 1U << 4U )      /*!<  External clipped sine TCXO AC-connected to XTA pin            */
+} fsk_ook_regtcxo_tcxo_input_on_t;
+
+
+/**
+  * @brief   REG_PA_DAC
+  */
+/**
+  * PaDac <2:0> 
+  *
+  *   NOTE: Enables the +20 dBm option on PA_BOOST pin.
+  */
+typedef enum
+{
+  FSK_OOK_REGPADAC_PA_DAC_MASK                            =   ( 0b111 << 0U ),  /*!<  PaDac mask                                                    */
+  FSK_OOK_REGPADAC_PA_DAC_DEFAULT_VALUE                   =   ( 0x04 << 0U ),   /*!<  Default value                                     [ Default ] */
+  FSK_OOK_REGPADAC_PA_DAC_PLUS_20_DBM                     =   ( 0x07 << 0U )    /*!<  +20 dBm on PA_BOOST when OutputPower = 1111                   */
+} fsk_ook_regpadac_pa_dac_t;
+
+
+/**
+  * @brief   REG_PLL
+  */
+/**
+  * PllBandwidth <7:6> 
+  *
+  *   NOTE: Controls the PLL bandwidth.
+  */
+typedef enum
+{
+  FSK_OOK_REGPLL_PLL_BANDWIDTH_MASK                     =   ( 0b11 << 6U ),   /*!<  PllBandwidth mask                                             */
+  FSK_OOK_REGPLL_PLL_BANDWIDTH_75_KHZ                   =   ( 0b00 << 6U ),   /*!<  PllBandwidth 75 kHz                                           */
+  FSK_OOK_REGPLL_PLL_BANDWIDTH_150_KHZ                  =   ( 0b01 << 6U ),   /*!<  PllBandwidth 150 kHz                                          */
+  FSK_OOK_REGPLL_PLL_BANDWIDTH_225_KHZ                  =   ( 0b10 << 6U ),   /*!<  PllBandwidth 225 kHz                                          */
+  FSK_OOK_REGPLL_PLL_BANDWIDTH_300_KHZ                  =   ( 0b11 << 6U )    /*!<  PllBandwidth 300 kHz                              [ Default ] */
+} fsk_ook_regpll_pll_bandwidth_t;
+
+
+/**
+  * @brief   REG_PLL_LOW_PN
+  */
+/**
+  * PllBandwidth <7:6> 
+  *
+  *   NOTE: Controls the Low Phase Noise PLL bandwidth.
+  */
+typedef enum
+{
+  FSK_OOK_REGPLLLOWPN_PLL_BANDWIDTH_MASK                =   ( 0b11 << 6U ),   /*!<  PllBandwidth mask                                             */
+  FSK_OOK_REGPLLLOWPN_PLL_BANDWIDTH_75_KHZ              =   ( 0b00 << 6U ),   /*!<  PllBandwidth 75 kHz                                           */
+  FSK_OOK_REGPLLLOWPN_PLL_BANDWIDTH_150_KHZ             =   ( 0b01 << 6U ),   /*!<  PllBandwidth 150 kHz                                          */
+  FSK_OOK_REGPLLLOWPN_PLL_BANDWIDTH_225_KHZ             =   ( 0b10 << 6U ),   /*!<  PllBandwidth 225 kHz                                          */
+  FSK_OOK_REGPLLLOWPN_PLL_BANDWIDTH_300_KHZ             =   ( 0b11 << 6U )    /*!<  PllBandwidth 300 kHz                              [ Default ] */
+} fsk_ook_regplllowpn_pll_bandwidth_t;
+
+
+/**
+  * @brief   REG_PA_MANUAL
+  */
+/**
+  * ManualPaControl <4> 
+  *
+  *   NOTE: See AN1200.32.
+  */
+typedef enum
+{
+  FSK_OOK_REGPAMANUAL_MANUAL_PA_CONTROL_MASK            =   ( 1U << 4U ),     /*!<  PllBandwidth mask                                             */
+  FSK_OOK_REGPAMANUAL_MANUAL_PA_CONTROL_DISABLED        =   ( 0U << 4U ),     /*!<  disables manual PA control                        [ Default ] */
+  FSK_OOK_REGPAMANUAL_MANUAL_PA_CONTROL_ENABLED         =   ( 1U << 4U )      /*!<  enables manual PA control                                     */
+} fsk_ook_regpamanual_manual_pa_control_t;
+
+
+/**
+  * @brief   REG_FORMER_TEMP
+  *
+  *           NOTE: Temperature saved during the latest IQ (RSSI and Image) calibrated. Same format as TempValue in RegTemp
+  */
+typedef enum
+{
+  FSK_OOK_REGFORMERTEMP_FORMER_TEMP_MASK                =   0xFF              /*!<  FormerTemp mask                                               */
+} fsk_ook_regformertemp_former_temp_t;
+
+
+/**
+  * @brief   REG_BIT_RATE_FRAC
+  *
+  *           NOTE: Fractional part of the bit rate divider (Only valid for FSK)
+  */
+typedef enum
+{
+  FSK_OOK_REGBITRATEFRAC_BIT_RATE_FRAC_MASK             =   0xFF              /*!<  BitRateFrac mask                                              */
+} fsk_ook_recbitratefrac_bit_rate_frac_t;
+
+
+
+
+
+
+
 
 
 
