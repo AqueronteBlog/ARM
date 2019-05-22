@@ -1,14 +1,14 @@
 /**
  * @brief       HTS221.h
- * @details     �0.5캜 Maximum Accuracy Digital Temperature Sensor.
+ * @details     Capacitive digital sensor for relative humidity and temperature.
  *              Header file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        15/April/2019
- * @version     15/April/2019    The ORIGIN
+ * @date        22/May/2019
+ * @version     22/May/2019    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ). All rights reserved.
@@ -21,19 +21,12 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESSES
+  * @brief   DEFAULT ADDRESS
   */
 typedef enum
 {
-  HTS221_ADDRESS_0     =   0b0011000,        /*!<   I2C slave address byte: A2A1A0: 000          */
-  HTS221_ADDRESS_1     =   0b0011001,        /*!<   I2C slave address byte: A2A1A0: 001          */
-  HTS221_ADDRESS_2     =   0b0011010,        /*!<   I2C slave address byte: A2A1A0: 010          */
-  HTS221_ADDRESS_3     =   0b0011011,        /*!<   I2C slave address byte: A2A1A0: 011          */
-  HTS221_ADDRESS_4     =   0b0011100,        /*!<   I2C slave address byte: A2A1A0: 100          */
-  HTS221_ADDRESS_5     =   0b0011101,        /*!<   I2C slave address byte: A2A1A0: 101          */
-  HTS221_ADDRESS_6     =   0b0011110,        /*!<   I2C slave address byte: A2A1A0: 110          */
-  HTS221_ADDRESS_7     =   0b0011111         /*!<   I2C slave address byte: A2A1A0: 111          */
-} HTS221_addresses_t;
+  HTS221_ADDRESS     =   0b1011111          /*!<   I2C slave address byte                       */
+} HTS221_address_t;
 
 
 
@@ -42,276 +35,276 @@ typedef enum
   */
 typedef enum
 {
-  HTS221_CONFIG          =   0x01,           /*!<  CONFIG register                               */
-  HTS221_TUPPER          =   0x02,           /*!<  T_UPPER register                              */
-  HTS221_TLOWER          =   0x03,           /*!<  T_LOWER register                              */
-  HTS221_TCRIT           =   0x04,           /*!<  T_CRIT register                               */
-  HTS221_TA              =   0x05,           /*!<  T_A register                                  */
-  HTS221_MANUFACTURER_ID =   0x06,           /*!<  Manufacturer ID register                      */
-  HTS221_DEVICE_ID       =   0x07,           /*!<  Device ID/Revision register                   */
-  HTS221_RESOLUTION      =   0x08            /*!<  Resolution register                           */
+  HTS221_WHO_AM_I        =   0x0F,           /*!<  Device identification                         */
+  HTS221_AV_CONF         =   0x10,           /*!<  Humidity and temperature resolution mode      */
+  HTS221_CTRL_REG1       =   0x20,           /*!<  Control register 1                            */
+  HTS221_CTRL_REG2       =   0x21,           /*!<  Control register 2                            */
+  HTS221_CTRL_REG3       =   0x22,           /*!<  Control register 3                            */
+  HTS221_STATUS_REG      =   0x27,           /*!<  Status register                               */
+  HTS221_HUMIDITY_OUT_L  =   0x28,           /*!<  Relative humidity data (LSB)                  */
+  HTS221_HUMIDITY_OUT_H  =   0x29,           /*!<  Relative humidity data (MSB)                  */
+  HTS221_TEMP_OUT_L      =   0x2A,           /*!<  Temperature data (LSB)                        */
+  HTS221_TEMP_OUT_H      =   0x2B,           /*!<  Temperature data (MSB)                        */
+  HTS221_CALIB_0         =   0x30,           /*!<  Calibration register                          */
+  HTS221_CALIB_1         =   0x31,           /*!<  Calibration register                          */
+  HTS221_CALIB_2         =   0x32,           /*!<  Calibration register                          */
+  HTS221_CALIB_3         =   0x33,           /*!<  Calibration register                          */
+  HTS221_CALIB_4         =   0x34,           /*!<  Calibration register                          */
+  HTS221_CALIB_5         =   0x35,           /*!<  Calibration register                          */
+  HTS221_CALIB_6         =   0x36,           /*!<  Calibration register                          */
+  HTS221_CALIB_7         =   0x37,           /*!<  Calibration register                          */
+  HTS221_CALIB_8         =   0x38,           /*!<  Calibration register                          */
+  HTS221_CALIB_9         =   0x39,           /*!<  Calibration register                          */
+  HTS221_CALIB_A         =   0x3A,           /*!<  Calibration register                          */
+  HTS221_CALIB_B         =   0x3B,           /*!<  Calibration register                          */
+  HTS221_CALIB_C         =   0x3C,           /*!<  Calibration register                          */
+  HTS221_CALIB_D         =   0x3D,           /*!<  Calibration register                          */
+  HTS221_CALIB_E         =   0x3E,           /*!<  Calibration register                          */
+  HTS221_CALIB_F         =   0x3F            /*!<  Calibration register                          */
 } HTS221_registers_t;
 
 
 
 /**
-  * @brief   CONFIG Register
+  * @brief   WHO_AM_I REGISTER
   */
-/* T_HYST <9:10>: TUPPER AND TLOWER LIMIT HYSTERESIS BITS
- *    NOTE:
- *      � This bit can not be altered when either of the Lock bits are set ( bit 6 and bit 7 )
- *      � This bit can be programmed in Shutdown mode
- */
 typedef enum
 {
-    CONFIG_T_HYST_MASK                =   ( 0b11 << 9U ),   /*!<  T_HYST mask                                     */
-    CONFIG_T_HYST_0_C                 =   ( 0b00 << 9U ),   /*!<  T_HYST: 0C                          [ Default ] */
-    CONFIG_T_HYST_1_5_C               =   ( 0b01 << 9U ),   /*!<  T_HYST: +1.5C                                   */
-    CONFIG_T_HYST_3_0_C               =   ( 0b10 << 9U ),   /*!<  T_HYST: +3.0C                                   */
-    CONFIG_T_HYST_6_0_C               =   ( 0b11 << 9U ),   /*!<  T_HYST: +6.0C                                   */
-} HTS221_config_thyst_t;
-
-
-
-/* SHDN <8>: SHUTDOWN MODE BIT
- *    NOTE: 
- *      � This bit can not be set to '1' when either of the Lock bits are set ( bit 6 and bit 7 ), however,
- *        it can be cleared to '0' for continuous conversion while locked.
- */
-typedef enum
-{
-    CONFIG_SHDN_MASK                  =   ( 1U << 8U ),     /*!<  SHDN mask                                       */
-    CONFIG_SHDN_CONTINUOUS_CONVERSION =   ( 0U << 8U ),     /*!<  SHDN: Continuous conversion         [ Default ] */
-    CONFIG_SHDN_SHUTDOWN              =   ( 1U << 8U )      /*!<  SHDN: Shutdown ( Low-power mode )               */
-} HTS221_config_shdn_t;
-
-
-
-/* CRIT_LOCK <7>: T_CRIT LOCKED BIT
- *    NOTE: N/A.
- */
-typedef enum
-{
-    CONFIG_CRIT_LOCK_MASK             =   ( 1U << 7U ),     /*!<  CRIT_LOCK mask                                  */
-    CONFIG_CRIT_LOCK_UNLOCKED         =   ( 0U << 7U ),     /*!<  T_CRIT register can be written      [ Default ] */
-    CONFIG_CRIT_LOCK_LOCKED           =   ( 1U << 7U )      /*!<  T_CRIT register can not be written              */
-} HTS221_config_crit_lock_t;
-
-
-
-/* WIN_LOCK <6>: CORRECTION INTERRUPT ENABLE 
- *    NOTE: N/A.
- */
-typedef enum
-{
-    CONFIG_WIN_LOCK_MASK              =   ( 1U << 6U ),     /*!<  WIN_LOCK mask                                   */
-    CONFIG_WIN_LOCK_UNLOCKED          =   ( 0U << 6U ),     /*!<  TUPPER and TLOWER can be written    [ Default ] */
-    CONFIG_WIN_LOCK_LOCKED            =   ( 1U << 6U )      /*!<  TUPPER and TLOWER can not be written            */
-} HTS221_config_win_lock_t;
-
-
-
-/* INT_CLEAR <5>: INTERRUPT CLEAR BIT 
- *    NOTE: 
- *      � This bit can not be set to '1' in Shutdown mode, but it can be cleared after the device enters Shutdown mode
- */
-typedef enum
-{
-    CONFIG_INT_CLEAR_MASK              =   ( 1U << 5U ),     /*!<  INT_CLEAR mask                                 */
-    CONFIG_INT_CLEAR_NO_EFFECT         =   ( 0U << 5U ),     /*!<  No effect                          [ Default ] */
-    CONFIG_INT_CLEAR_CLEAR_INT_OUTPUT  =   ( 1U << 5U )      /*!<  Clear interrupt output, when read, returns '0' */
-} HTS221_conf_int_clear_t;
-
-
-
-/* ALERT_STAT <4>: ALERT OUTPUT STATUS BIT 
- *    NOTE: N/A.
- */
-typedef enum
-{
-    CONFIG_ALERT_STAT_MASK              =   ( 1U << 4U ),     /*!<  ALERT_STAT mask                               */
-    CONFIG_ALERT_STAT_NOT_ASSERTED      =   ( 0U << 4U ),     /*!<  ALERT_STAT is not asserted        [ Default ] */
-    CONFIG_ALERT_STAT_ASSERTED          =   ( 1U << 4U )      /*!<  ALERT_STAT is asserted                        */
-} HTS221_config_alert_stat_t;
-
-
-
-/* ALERT_CNT <3>: ALERT OUTPUT CONTROL BIT 
- *    NOTE: N/A.
- */
-typedef enum
-{
-    CONFIG_ALERT_CNT_MASK               =   ( 1U << 3U ),     /*!<  ALERT_CNT mask                               */
-    CONFIG_ALERT_CNT_DISABLED           =   ( 0U << 3U ),     /*!<  ALERT_CNT disabled               [ Default ] */
-    CONFIG_ALERT_CNT_ENABLED            =   ( 1U << 3U )      /*!<  ALERT_CNT enabled                            */
-} HTS221_config_alert_cnt_t;
-
-
-
-/* ALERT_SEL <2>: ALERT OUTPUT SELECT BIT 
- *    NOTE: N/A.
- */
-typedef enum
-{
-    CONFIG_ALERT_SEL_MASK                 =   ( 1U << 2U ),   /*!<  ALERT_SEL mask                                            */
-    CONFIG_ALERT_SEL_TUPPER_TLOWER_TCRIT  =   ( 0U << 2U ),   /*!<  Alert output for T_UPPER, T_LOWER and T_CRIT  [ Default ] */
-    CONFIG_ALERT_SEL_TA_GREATER_TCRIT     =   ( 1U << 2U )    /*!<  Alert output for T_A greater T_CRIT                       */
-} HTS221_config_alert_sel_t;
-
-
-
-/* ALERT_POL <1>: ALERT OUTPUT POLARITY BIT 
- *    NOTE: N/A.
- */
-typedef enum
-{
-    CONFIG_ALERT_POL_MASK               =   ( 1U << 1U ),     /*!<  ALERT_POL mask                               */
-    CONFIG_ALERT_POL_ACTIVE_LOW         =   ( 0U << 1U ),     /*!<  ALERT_POL active-low             [ Default ] */
-    CONFIG_ALERT_POL_ACTIVE_HIGH        =   ( 1U << 1U )      /*!<  ALERT_POL active-high                        */
-} HTS221_config_alert_pol_t;
-
-
-
-/* ALERT_MOD <0>: ALERT OUTPUT MODE BIT 
- *    NOTE: N/A.
- */
-typedef enum
-{
-    CONFIG_ALERT_MOD_MASK               =   ( 1U << 0U ),     /*!<  ALERT_MOD mask                               */
-    CONFIG_ALERT_MOD_COMPARATOR_OUTPUT  =   ( 0U << 0U ),     /*!<  ALERT_MOD comparator output      [ Default ] */
-    CONFIG_ALERT_MOD_INTERRUPT_OUTPUT   =   ( 1U << 0U )      /*!<  ALERT_MOD interrupt output                   */
-} HTS221_config_alert_mod_t;
-
+    WHO_AM_I_MASK           =   0xFF,             /*!<  WHO_AM_I mask                               */
+    WHO_AM_I_VALUE          =   0xBC              /*!<  WHO_AM_I value                              */
+} HTS221_who_am_i_t;
 
 
 
 /**
-  * @brief   T_UPPER/T_LOWER/T_CRIT TEMPERATURE LIMIT REGISTERS
+  * @brief   AV_CONF REGISTER
   */
-/* SIGN <12>: SIGN BIT
- *    NOTE: N/A.
+/* AVGT <5:3>
+ *    NOTE: Numbers of averaged temperature samples ( 2-256 ).
  */
 typedef enum
 {
-    TEMPERATURE_LIMIT_SIGN_MASK         =   ( 1U << 12U ),    /*!<  SIGN mask                                   */
-    TEMPERATURE_LIMIT_SIGN_TA_POSITIVE  =   ( 0U << 12U ),    /*!<  T_A greater or iqual 0C         [ Default ] */
-    TEMPERATURE_LIMIT_SIGN_TA_NEGATIVE  =   ( 1U << 12U )     /*!<  T_A lower 0C                                */
-} HTS221_temperature_limit_sign_t;
+    AV_CONF_AVGT_MASK       =   ( 0b111 << 3U ),    /*!<  AVGT mask                                   */
+    AV_CONF_AVGT_2          =   ( 0b000 << 3U ),    /*!<  AVGT Nr. internal average 2                 */
+    AV_CONF_AVGT_4          =   ( 0b001 << 3U ),    /*!<  AVGT Nr. internal average 4                 */
+    AV_CONF_AVGT_8          =   ( 0b010 << 3U ),    /*!<  AVGT Nr. internal average 8                 */
+    AV_CONF_AVGT_16         =   ( 0b011 << 3U ),    /*!<  AVGT Nr. internal average 16    [ Default ] */
+    AV_CONF_AVGT_32         =   ( 0b100 << 3U ),    /*!<  AVGT Nr. internal average 32                */
+    AV_CONF_AVGT_64         =   ( 0b101 << 3U ),    /*!<  AVGT Nr. internal average 64                */
+    AV_CONF_AVGT_128        =   ( 0b110 << 3U ),    /*!<  AVGT Nr. internal average 128               */
+    AV_CONF_AVGT_256        =   ( 0b111 << 3U )     /*!<  AVGT Nr. internal average 256               */
+} HTS221_av_config_avgt_t;
 
 
-
-/* INTEGRAL <8:4>: TEMPERATURE INTEGRAL BOUNDARY PART
- *    NOTE: N/A.
+/* AVGH <2:0>
+ *    NOTE: Numbers of averaged humidity samples ( 4-512 ).
  */
 typedef enum
 {
-    TEMPERATURE_LIMIT_INTEGRAL_PART_MASK  =   ( 0b11111111 << 4U ) /*!<  Temperature limit, integral part mask    */
-} HTS221_temperature_limit_integral_boundary_t;
-
-
-
-/* DECIMAL <3:2>: TEMPERATURE DECIMAL BOUNDARY PART
- *    NOTE: N/A.
- */
-typedef enum
-{
-    TEMPERATURE_LIMIT_DECIMAL_PART_MASK   =   ( 0b11 << 2U ),   /*!<  Temperature limit, decimal part mask       */
-    TEMPERATURE_LIMIT_DECIMAL_PART_0_00C  =   ( 0b00 << 2U ),   /*!<  Temperature limit, decimal part: 0.00C     */
-    TEMPERATURE_LIMIT_DECIMAL_PART_0_25C  =   ( 0b01 << 2U ),   /*!<  Temperature limit, decimal part: 0.25C     */
-    TEMPERATURE_LIMIT_DECIMAL_PART_0_50C  =   ( 0b10 << 2U ),   /*!<  Temperature limit, decimal part: 0.50C     */
-    TEMPERATURE_LIMIT_DECIMAL_PART_0_75C  =   ( 0b11 << 2U )    /*!<  Temperature limit, decimal part: 0.75C     */
-} HTS221_temperature_limit_decimal_boundary_t;
-
+    AV_CONF_AVGH_MASK       =   ( 0b111 << 0U ),    /*!<  AVGH mask                                   */
+    AV_CONF_AVGH_4          =   ( 0b000 << 0U ),    /*!<  AVGH Nr. internal average 4                 */
+    AV_CONF_AVGH_8          =   ( 0b001 << 0U ),    /*!<  AVGH Nr. internal average 8                 */
+    AV_CONF_AVGH_16         =   ( 0b010 << 0U ),    /*!<  AVGH Nr. internal average 16                */
+    AV_CONF_AVGH_32         =   ( 0b011 << 0U ),    /*!<  AVGH Nr. internal average 32    [ Default ] */
+    AV_CONF_AVGH_64         =   ( 0b100 << 0U ),    /*!<  AVGH Nr. internal average 64                */
+    AV_CONF_AVGH_128        =   ( 0b101 << 0U ),    /*!<  AVGH Nr. internal average 128               */
+    AV_CONF_AVGH_256        =   ( 0b110 << 0U ),    /*!<  AVGH Nr. internal average 256               */
+    AV_CONF_AVGH_512        =   ( 0b111 << 0U )     /*!<  AVGH Nr. internal average 512               */
+} HTS221_av_config_avgh_t;
 
 
 
 /**
-  * @brief   T_A AMBIENT TEMPERATURE REGISTERS
+  * @brief   CTRL_REG1 REGISTER
   */
-/* TA_VS_TCRIT <15>
- *    NOTE: N/A.
+/* PD <7>
+ *    NOTE: Power-down control.
  */
 typedef enum
 {
-    T_A_TA_VS_TCRIT_MASK                    =   ( 1U << 15U ),  /*!<  T_A mask                                    */
-    T_A_TA_VS_TCRIT_TA_LOWER_TCRIT          =   ( 0U << 15U ),  /*!<  T_A lower T_CRIT                            */
-    T_A_TA_VS_TCRIT_TA_GREATER_EQUAL_TCRIT  =   ( 1U << 15U )   /*!<  T_A greater or equal T_CRIT                 */
-} HTS221_t_a_ta_vs_tcrit_t;
+    CTRL_REG1_PD_MASK           =   ( 1U << 7U ),   /*!<  PD mask                                     */
+    CTRL_REG1_PD_POWER_DOWN_MOD =   ( 0U << 7U ),   /*!<  PD power-down mode              [ Default ] */
+    CTRL_REG1_PD_ACTIVE_MODE    =   ( 1U << 7U )    /*!<  PD active mode                              */
+} HTS221_ctrl_reg1_pd_t;
 
 
-
-/* TA_VS_TUPPER <14>
- *    NOTE: N/A.
+/* BDU <2>
+ *    NOTE: Block data update.
  */
 typedef enum
 {
-    T_A_TA_VS_TUPPER_MASK                     =   ( 1U << 14U ),  /*!<  T_A mask                                    */
-    T_A_TA_VS_TUPPER_TA_LOWER__IQUAL_TUPPER   =   ( 0U << 14U ),  /*!<  T_A lower or equal T_UPPER                  */
-    T_A_TA_VS_TUPPER_TA_GREATER_TUPPER        =   ( 1U << 14U )   /*!<  T_A greater T_UPPER                         */
-} HTS221_t_a_ta_vs_tupper_t;
+    CTRL_REG1_BDU_MASK               =   ( 1U << 2U ),  /*!<  BDU mask                                                            */
+    CTRL_REG1_BDU_CONTINUOUS_UPDATE  =   ( 0U << 2U ),  /*!<  Continuous update                                                   */
+    CTRL_REG1_BDU_DEFAULT_MODE       =   ( 1U << 2U )   /*!<  Output registers not updated until MSB and LSB reading  [ Default ] */
+} HTS221_ctrl_reg1_bdu_t;
 
 
-
-/* TA_VS_LOWER <13>
- *    NOTE: N/A.
+/* ODR <1:0>
+ *    NOTE: Output data rate selection.
  */
 typedef enum
 {
-    T_A_TA_VS_TLOWER_MASK                     =   ( 1U << 13U ),  /*!<  T_A mask                                    */
-    T_A_TA_VS_TLOWER_TA_LOWER_TLOWER          =   ( 1U << 13U ),  /*!<  T_A lower or equal T_LOWER                  */
-    T_A_TA_VS_TLOWER_TA_GREATER_EQUAL_TLOWER  =   ( 0U << 13U )   /*!<  T_A greater T_LOWER                         */
-} HTS221_t_a_ta_vs_tlower_t;
-
-
-
-/* TA_SIGN <12>
- *    NOTE: N/A.
- */
-typedef enum
-{
-    T_A_TA_SIGN_MASK                          =   ( 1U << 12U ),  /*!<  T_A SIGN mask                               */
-    T_A_TA_SIGN_POSITIVE                      =   ( 0U << 12U ),  /*!<  T_A positive                                */
-    T_A_TA_SIGN_NEGATIVE                      =   ( 1U << 12U )   /*!<  T_A negative                                */
-} HTS221_t_a_sign_t;
-
-
-
-/* TA_INTEGRAL <11:4>
- *    NOTE: N/A.
- */
-typedef enum
-{
-    T_A_TA_INTEGRAL_PART_MASK         =   ( 0b11111111 << 4U )    /*!<  T_A integral part                         */
-} HTS221_t_a_integral_t;
-
-
-
-/* TA_DECIMAL <3:0>
- *    NOTE: N/A.
- */
-typedef enum
-{
-    T_A_TA_DECIMAL_PART_MASK         =   ( 0b1111 << 0U )         /*!<  T_A decimal part                         */
-} HTS221_t_a_decimal_t;
-
+    CTRL_REG1_ODR_MASK               =   ( 0b11 << 0U ),  /*!<  ODR mask                                                            */
+    CTRL_REG1_ODR_ONE_SHOT           =   ( 0b00 << 0U ),  /*!<  One-shot                                                            */
+    CTRL_REG1_ODR_1_HZ               =   ( 0b01 << 0U ),  /*!<  1 Hz                                                                */
+    CTRL_REG1_ODR_7_HZ               =   ( 0b10 << 0U ),  /*!<  7 Hz                                                                */
+    CTRL_REG1_ODR_12_5_HZ            =   ( 0b11 << 0U )   /*!<  12.5 Hz                                                             */
+} HTS221_ctrl_reg1_odr_t;
 
 
 
 /**
-  * @brief   RESOLUTION REGISTER
+  * @brief   CTRL_REG2 REGISTER
   */
-/* RESOLUTION <1:0>
- *    NOTE: N/A.
+/* BOOT <7>
+ *    NOTE: Reboot memory content.
  */
 typedef enum
 {
-    RESOLUTION_MASK                   =   ( 0b11 << 0U ),         /*!<  Resolution mask                       */
-    RESOLUTION_0_5_C                  =   ( 0b00 << 0U ),         /*!<  Resolution: +0.5C                     */
-    RESOLUTION_0_25_C                 =   ( 0b01 << 0U ),         /*!<  Resolution: +0.25C                    */
-    RESOLUTION_0_125_C                =   ( 0b10 << 0U ),         /*!<  Resolution: +0.125C                   */
-    RESOLUTION_0_0625_C               =   ( 0b11 << 0U )          /*!<  Resolution: +0.0625C      [ Default ] */
-} HTS221_resolution_t;
+    CTRL_REG2_BOOT_MASK                   =   ( 1U << 7U ), /*!<  BOOT mask                                   */
+    CTRL_REG2_BOOT_NORMAL_MODE            =   ( 0U << 7U ), /*!<  normal mode                     [ Default ] */
+    CTRL_REG2_BOOT_REBOOT_MEMORY_CONTENT  =   ( 1U << 7U )  /*!<  reboot memory content                       */
+} HTS221_ctrl_reg2_boot_t;
 
+
+/* Heater <1>
+ *    NOTE: Controling an internal heating element.
+ */
+typedef enum
+{
+    CTRL_REG2_HEATER_MASK                 =   ( 1U << 1U ), /*!<  Heater mask                                 */
+    CTRL_REG2_HEATER_HEATER_DISABLED      =   ( 0U << 1U ), /*!<  Heater disabled                 [ Default ] */
+    CTRL_REG2_HEATER_HEATER_ENABLED       =   ( 1U << 1U )  /*!<  Heater enabled                              */
+} HTS221_ctrl_reg2_heater_t;
+
+
+/* ONE_SHOT <0>
+ *    NOTE: One-shot enable.
+ */
+typedef enum
+{
+    CTRL_REG2_ONE_SHOT_MASK               =   ( 1U << 0U ), /*!<  ONE_SHOT mask                               */
+    CTRL_REG2_ONE_SHOT_WAITING            =   ( 0U << 0U ), /*!<  waiting for start of conversion [ Default ] */
+    CTRL_REG2_ONE_SHOT_START              =   ( 1U << 0U )  /*!<  start for a new dataset                     */
+} HTS221_ctrl_reg2_one_shot_t;
+
+
+
+/**
+  * @brief   CTRL_REG3 REGISTER
+  */
+/* DRDY_H_L <7>
+ *    NOTE: Data Ready output signal active high, low.
+ */
+typedef enum
+{
+    CTRL_REG3_DRDY_H_L_MASK               =   ( 1U << 7U ), /*!<  DRDY_H_L mask                               */
+    CTRL_REG3_DRDY_H_L_ACTIVE_HIGH        =   ( 0U << 7U ), /*!<  active high                     [ Default ] */
+    CTRL_REG3_DRDY_H_L_ACTIVE_LOW         =   ( 1U << 7U )  /*!<  active low                                  */
+} HTS221_ctrl_reg3_drdy_h_l_t;
+
+
+/* PP_OD <6>
+ *    NOTE: Push-pull / Open Drain selection on pin 3 (DRDY).
+ */
+typedef enum
+{
+    CTRL_REG3_PP_OD_MASK                  =   ( 1U << 6U ), /*!<  PP_OD mask                                  */
+    CTRL_REG3_PP_OD_PUSH_PULL             =   ( 0U << 6U ), /*!<  push-pull                       [ Default ] */
+    CTRL_REG3_PP_OD_OPEN_DRAIN            =   ( 1U << 6U )  /*!<  open drain                                  */
+} HTS221_ctrl_reg3_pp_od_t;
+
+
+/* DRDY_EN <2>
+ *    NOTE: Data Ready enable.
+ */
+typedef enum
+{
+    CTRL_REG3_DRDY_EN_MASK                =   ( 1U << 2U ), /*!<  DRDY_EN mask                                */
+    CTRL_REG3_DRDY_DATA_READY_DISABLED    =   ( 0U << 2U ), /*!<  Data Ready disabled             [ Default ] */
+    CTRL_REG3_DRDY_DATA_READY_ENABLED     =   ( 1U << 2U )  /*!<  Data Ready signal available on pin 3        */
+} HTS221_ctrl_reg3_drdy_en_t;
+
+
+
+/**
+  * @brief   STATUS_REG REGISTER
+  *
+  *   NOTE: H_DA is set to 1 whenever a new humidity sample is available. H_DA is cleared anytime
+  *         HUMIDITY_OUT_H (29h) register is read. T_DA is set to 1 whenever a new temperature sample is available. T_DA is cleared anytime TEMP_OUT_H (2Bh) register is read.
+  */
+/* H_DA <1>
+ *    NOTE: Humidity data available.
+ */
+typedef enum
+{
+    STATUS_REGISTER_H_DA_MASK               =   ( 1U << 1U ), /*!<  H_DA mask                                   */
+    STATUS_REGISTER_H_DA_DATA_NOT_AVAILABLE =   ( 0U << 1U ), /*!<  new data for humidity is not yet available  */
+    STATUS_REGISTER_H_DA_DATA_AVAILABLE     =   ( 1U << 1U )  /*!<  new data for humidity is available          */
+} HTS221_status_reg_h_da_t;
+
+
+/* T_DA <0>
+ *    NOTE: Temperature data available.
+ */
+typedef enum
+{
+    STATUS_REGISTER_T_DA_MASK               =   ( 1U << 0U ), /*!<  T_DA mask                                     */
+    STATUS_REGISTER_T_DA_DATA_NOT_AVAILABLE =   ( 0U << 0U ), /*!<  new data for temperature is not yet available */
+    STATUS_REGISTER_T_DA_DATA_AVAILABLE     =   ( 1U << 0U )  /*!<  new data for temperature is available         */
+} HTS221_status_reg_t_da_t;
+
+
+
+/**
+  * @brief   HUMIDITY_OUT_L REGISTER
+  *
+  *   NOTE: Relative humidity data (LSB)
+. *
+  */
+typedef enum
+{
+    HUMIDITY_OUT_L_MASK               =   0xFF                  /*!<  Humidity data LSB mask                     */
+} HTS221_humidity_out_l_t;
+
+
+
+/**
+  * @brief   HUMIDITY_OUT_H REGISTER
+  *
+  *   NOTE: Relative humidity data (LSB)
+. *
+  */
+typedef enum
+{
+    HUMIDITY_OUT_H_MASK               =   0xFF                  /*!<  Humidity data MSB mask                     */
+} HTS221_humidity_out_h_t;
+
+
+
+/**
+  * @brief   TEMP_OUT_L REGISTER
+  *
+  *   NOTE: Temperature data (LSB)
+. *
+  */
+typedef enum
+{
+    TEMP_OUT_L_MASK                   =   0xFF                  /*!<  Temperature data LSB mask                 */
+} HTS221_temp_out_l_t;
+
+
+
+/**
+  * @brief   TEMP_OUT_H REGISTER
+  *
+  *   NOTE: Temperature data (MSB)
+. *
+  */
+typedef enum
+{
+    TEMP_OUT_H_MASK                   =   0xFF                  /*!<  Temperature data MSB mask                 */
+} HTS221_temp_out_h_t;
 
 
 
@@ -321,38 +314,26 @@ typedef enum
 #define HTS221_VECTOR_STRUCT_H
 typedef struct
 {
-    HTS221_config_thyst_t      t_hyst;           /*!<  Temperature Limit Hysteresis  */
-    HTS221_config_shdn_t       shdn;             /*!<  Shutdown mode                 */
-    HTS221_config_crit_lock_t  t_crit;           /*!<  T_CRIT lock bit               */
-    HTS221_config_win_lock_t   t_win_lock;       /*!<  Win. Lock bit                 */
-    HTS221_conf_int_clear_t    int_clear;        /*!<  Interrupt clear bit           */
-    HTS221_config_alert_stat_t alert_stat;       /*!<  Alert output status bit       */
-    HTS221_config_alert_cnt_t  alert_cnt;        /*!<  Alert Output control bit      */
-    HTS221_config_alert_sel_t  alert_sel;        /*!<  Alert Output select bit       */
-    HTS221_config_alert_pol_t  alert_pol;        /*!<  Alert Output polarity bit     */
-    HTS221_config_alert_mod_t  alert_mod;        /*!<  Alert Output mode bit         */
-} HTS221_config_reg_t;
+    /* Output registers  */
+    int16_t   h_out;           /*!<  Raw humidity                  */
+    int16_t   t_out;           /*!<  Raw temperature               */
 
+    float     humidity;        /*!<  Humidity value                */
+    float     temperature;     /*!<  Temperature value             */
 
-typedef struct
-{
-    float                       t_a;              /*!<  Ambient temperature value     */
-    uint16_t                    t_a_raw;          /*!<  Raw ambient temperature value */
+    /* Calibration registers  */
+    uint8_t   h0_rH_x2;        /*!<  Calibration register          */
+    uint8_t   h1_rH_x2;        /*!<  Calibration register          */
+    uint8_t   t0_degC_x8;      /*!<  Calibration register          */
+    uint8_t   t1_degC_x8;      /*!<  Calibration register          */
+    uint8_t   t1_T0_msb;       /*!<  Calibration register          */
+    int16_t   h0_T0_OUT;       /*!<  Calibration register          */
+    int16_t   h1_T0_OUT;       /*!<  Calibration register          */
+    int16_t   t0_OUT;          /*!<  Calibration register          */
+    int16_t   t1_OUT;          /*!<  Calibration register          */
 
-    HTS221_t_a_sign_t          t_a_sign;         /*!<  Ambient temperature sign      */
-    HTS221_t_a_ta_vs_tcrit_t   ta_vs_tcrit;      /*!<  T_A vs T_CRIT  result         */
-    HTS221_t_a_ta_vs_tupper_t  ta_vs_tupper;     /*!<  T_A vs T_UPPER result         */
-    HTS221_t_a_ta_vs_tlower_t  ta_vs_tlower;     /*!<  T_A vs T_LOWER result         */
-
-    HTS221_resolution_t        resolution;       /*!<  Device resolution             */
-
-    float                       t_upper;          /*!<  T_UPPER limit                 */
-    float                       t_lower;          /*!<  T_LOWER limit                 */
-    float                       t_crit;           /*!<  T_CRIT limit                  */
-
-    uint16_t                    manufacturerID;   /*!<  Manufacturer ID               */
-    uint8_t                     deviceID;         /*!<  Device ID                     */
-    uint8_t                     deviceRevision;   /*!<  Device Revision               */
+    /* Device identification   */
+    uint8_t   deviceID;        /*!<  Device ID                     */
 } HTS221_data_t;
 #endif
 
@@ -378,42 +359,3 @@ typedef enum
   */
 HTS221_status_t HTS221_Init               ( I2C_parameters_t myI2Cparameters                                                              );
 
-/** It gets CONFIG register value.
-  */
-HTS221_status_t HTS221_GetCONFIG          ( I2C_parameters_t myI2Cparameters, HTS221_config_reg_t* myCONFIG                              );
-
-/** It sets CONFIG register value.
-  */
-HTS221_status_t HTS221_SetCONFIG          ( I2C_parameters_t myI2Cparameters, HTS221_config_reg_t myCONFIG                               );
-
-/** It sets temperature limit for: T_UPPER, T_LOWER or T_CRIT.
-  */
-HTS221_status_t HTS221_SetT_Limit         ( I2C_parameters_t myI2Cparameters, HTS221_registers_t myTLimit, HTS221_data_t myTValue_Limit );
-
-/** It gets temperature limit for: T_UPPER, T_LOWER or T_CRIT.
-  */
-HTS221_status_t HTS221_GetT_Limit         ( I2C_parameters_t myI2Cparameters, HTS221_registers_t myTLimit, HTS221_data_t* myTValue_Limit);
-
-/** It gets ambient temperature register ( raw value ).
-  */
-HTS221_status_t HTS221_GetRawTA           ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myRawTA                                     );
-
-/** It gets ambient temperature register ( Celsius degrees ).
-  */
-HTS221_status_t HTS221_GetTA              ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTA                                        );
-
-/** It gets manufacturer ID.
-  */
-HTS221_status_t HTS221_GetManufacturerID  ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myManufacturerID                            );
-
-/** It gets both device ID and device revision.
-  */
-HTS221_status_t HTS221_GetDeviceID        ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myDeviceID                                  );
-
-/** It sets the sensor resolution.
-  */
-HTS221_status_t HTS221_SetResolution      ( I2C_parameters_t myI2Cparameters, HTS221_data_t myResolution                                 );    
-
-/** It gets the sensor resolution.
-  */
-HTS221_status_t HTS221_GetResolution      ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myResolution                                );
