@@ -1,14 +1,14 @@
 /**
  * @brief       HTS221.c
- * @details     ±0.5°C Maximum Accuracy Digital Temperature Sensor.
+ * @details     Capacitive digital sensor for relative humidity and temperature.
  *              Functions file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        15/April/2019
- * @version     15/April/2019    The ORIGIN
+ * @date        22/May/2019
+ * @version     22/May/2019    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ). All rights reserved.
