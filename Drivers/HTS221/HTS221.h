@@ -334,6 +334,16 @@ typedef struct
 
     /* Device identification   */
     uint8_t   deviceID;        /*!<  Device ID                     */
+
+    /* Device configuration   */
+    HTS221_av_config_avgt_t     temperatureResolution;  /*!<  Temperature resolution        */
+    HTS221_av_config_avgh_t     humidityResolution;     /*!<  Humidity resolution           */
+
+    HTS221_ctrl_reg1_bdu_t      bdu;                    /*!<  Block data update             */
+    HTS221_ctrl_reg1_odr_t      odr;                    /*!<  Output data rate              */
+    HTS221_ctrl_reg2_boot_t     boot;                   /*!<  Reboot mode content           */
+    HTS221_ctrl_reg2_heater_t   heater;                 /*!<  Heater                        */
+    HTS221_ctrl_reg2_one_shot_t one_shot;               /*!<  One-Shot                      */
 } HTS221_data_t;
 #endif
 
@@ -357,5 +367,60 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-HTS221_status_t HTS221_Init               ( I2C_parameters_t myI2Cparameters                                                              );
+HTS221_status_t HTS221_Init               ( I2C_parameters_t myI2Cparameters                                      );
 
+/** It gets the device identification.
+  */
+HTS221_status_t HTS221_GetDeviceID        ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myDeviceID           );
+
+/** It sets humidity and temperature resolution mode.
+  */
+HTS221_status_t HTS221_SetResolution      ( I2C_parameters_t myI2Cparameters, HTS221_data_t myTempHumResolution   );
+
+/** It gets humidity and temperature resolution mode.
+  */
+HTS221_status_t HTS221_GetResolution      ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTempHumResolution  );
+
+/** It sets power-down control mode.
+  */
+HTS221_status_t HTS221_SetPowerDown       ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg1_pd_t myPowerMode   );
+
+/** It sets the block data update.
+  */
+HTS221_status_t HTS221_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HTS221_data_t myBDU                 );
+
+/** It gets the block data update.
+  */
+HTS221_status_t HTS221_GetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myBDU                );
+
+/** It sets the output data rate ( ODR ).
+  */
+HTS221_status_t HTS221_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HTS221_data_t  myODR                );
+
+/** It gets the output data rate ( ODR ).
+  */
+HTS221_status_t HTS221_GetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myODR                );
+
+/** It sets reboot memory content.
+  */
+HTS221_status_t HTS221_SetBoot            ( I2C_parameters_t myI2Cparameters                                      );
+
+/** It gets reboot memory content.
+  */
+HTS221_status_t HTS221_GetBoot            ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myBOOT               );
+
+/** It sets heater mode: Enabled/Disabled.
+  */
+HTS221_status_t HTS221_SetHeater          ( I2C_parameters_t myI2Cparameters, HTS221_data_t  myHeater             );
+
+/** It gets heater mode.
+  */
+HTS221_status_t HTS221_GetHeater          ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHeater             );
+
+/** It sets one-shot, new data set.
+  */
+HTS221_status_t HTS221_SetOneShot         ( I2C_parameters_t myI2Cparameters                                      );
+
+/** It gets one-shot flag.
+  */
+HTS221_status_t HTS221_GetOneShot         ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myOneShot            );
