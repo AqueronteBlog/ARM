@@ -315,8 +315,8 @@ typedef enum
 typedef struct
 {
     /* Output registers  */
-    int16_t   h_out;           /*!<  Raw humidity                  */
-    int16_t   t_out;           /*!<  Raw temperature               */
+    int16_t   rawHumidity;     /*!<  Raw humidity                  */
+    int16_t   rawTemperature;  /*!<  Raw temperature               */
 
     float     humidity;        /*!<  Humidity value                */
     float     temperature;     /*!<  Temperature value             */
@@ -344,6 +344,10 @@ typedef struct
     HTS221_ctrl_reg2_boot_t     boot;                   /*!<  Reboot mode content           */
     HTS221_ctrl_reg2_heater_t   heater;                 /*!<  Heater                        */
     HTS221_ctrl_reg2_one_shot_t one_shot;               /*!<  One-Shot                      */
+
+    /* Device status   */
+    HTS221_status_reg_h_da_t    h_da;                   /*!<  Humidity data available       */
+    HTS221_status_reg_t_da_t    t_da;                   /*!<  Temperature data available    */
 } HTS221_data_t;
 #endif
 
@@ -367,60 +371,92 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-HTS221_status_t HTS221_Init               ( I2C_parameters_t myI2Cparameters                                      );
+HTS221_status_t HTS221_Init               ( I2C_parameters_t myI2Cparameters                                          );
 
 /** It gets the device identification.
   */
-HTS221_status_t HTS221_GetDeviceID        ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myDeviceID           );
+HTS221_status_t HTS221_GetDeviceID        ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myDeviceID               );
 
 /** It sets humidity and temperature resolution mode.
   */
-HTS221_status_t HTS221_SetResolution      ( I2C_parameters_t myI2Cparameters, HTS221_data_t myTempHumResolution   );
+HTS221_status_t HTS221_SetResolution      ( I2C_parameters_t myI2Cparameters, HTS221_data_t myTempHumResolution       );
 
 /** It gets humidity and temperature resolution mode.
   */
-HTS221_status_t HTS221_GetResolution      ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTempHumResolution  );
+HTS221_status_t HTS221_GetResolution      ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTempHumResolution      );
 
 /** It sets power-down control mode.
   */
-HTS221_status_t HTS221_SetPowerDown       ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg1_pd_t myPowerMode   );
+HTS221_status_t HTS221_SetPowerDown       ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg1_pd_t myPowerMode       );
 
 /** It sets the block data update.
   */
-HTS221_status_t HTS221_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HTS221_data_t myBDU                 );
+HTS221_status_t HTS221_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HTS221_data_t myBDU                     );
 
 /** It gets the block data update.
   */
-HTS221_status_t HTS221_GetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myBDU                );
+HTS221_status_t HTS221_GetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myBDU                    );
 
 /** It sets the output data rate ( ODR ).
   */
-HTS221_status_t HTS221_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HTS221_data_t  myODR                );
+HTS221_status_t HTS221_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HTS221_data_t  myODR                    );
 
 /** It gets the output data rate ( ODR ).
   */
-HTS221_status_t HTS221_GetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myODR                );
+HTS221_status_t HTS221_GetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myODR                    );
 
 /** It sets reboot memory content.
   */
-HTS221_status_t HTS221_SetBoot            ( I2C_parameters_t myI2Cparameters                                      );
+HTS221_status_t HTS221_SetBoot            ( I2C_parameters_t myI2Cparameters                                          );
 
 /** It gets reboot memory content.
   */
-HTS221_status_t HTS221_GetBoot            ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myBOOT               );
+HTS221_status_t HTS221_GetBoot            ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myBOOT                   );
 
 /** It sets heater mode: Enabled/Disabled.
   */
-HTS221_status_t HTS221_SetHeater          ( I2C_parameters_t myI2Cparameters, HTS221_data_t  myHeater             );
+HTS221_status_t HTS221_SetHeater          ( I2C_parameters_t myI2Cparameters, HTS221_data_t  myHeater                 );
 
 /** It gets heater mode.
   */
-HTS221_status_t HTS221_GetHeater          ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHeater             );
+HTS221_status_t HTS221_GetHeater          ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHeater                 );
 
 /** It sets one-shot, new data set.
   */
-HTS221_status_t HTS221_SetOneShot         ( I2C_parameters_t myI2Cparameters                                      );
+HTS221_status_t HTS221_SetOneShot         ( I2C_parameters_t myI2Cparameters                                          );
 
 /** It gets one-shot flag.
   */
-HTS221_status_t HTS221_GetOneShot         ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myOneShot            );
+HTS221_status_t HTS221_GetOneShot         ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myOneShot                );
+
+/** It sets data ready output signal active high/low.
+  */
+HTS221_status_t HTS221_SetDataReadyOuput  ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_drdy_h_l_t myDRDY_H_L  );
+
+/** It sets Push-pull/Open Drain selection on pin 3 ( DRDY ).
+  */
+HTS221_status_t HTS221_SetSelectionOnPin3 ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_pp_od_t myDRDY         );
+
+/** It sets data ready enable.
+  */
+HTS221_status_t HTS221_SetDataReadyEnable ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_drdy_en_t myDRDY_EN    );
+
+/** It gets humidity data available flag.
+  */
+HTS221_status_t HTS221_GetHumidityDataAvailable ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHumidityFlag     );
+
+/** It gets temperature data available flag.
+  */
+HTS221_status_t HTS221_GetTemperatureDataAvailable  ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTemperatureFlag  );
+
+/** It gets raw humidity.
+  */
+HTS221_status_t HTS221_GetRawHumidity             ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myRawHumidity            );
+
+/** It gets raw temperature.
+  */
+HTS221_status_t HTS221_GetRawTemperature          ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myRawTemperature         );
+
+/** It gets calibration coefficients.
+  */
+HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myCoeff           );
