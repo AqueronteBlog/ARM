@@ -724,3 +724,400 @@ HTS221_status_t HTS221_GetOneShot ( I2C_parameters_t myI2Cparameters, HTS221_dat
     return   HTS221_FAILURE;
   }
 }
+
+
+
+/**
+ * @brief       HTS221_SetDataReadyOuput ( I2C_parameters_t , HTS221_ctrl_reg3_drdy_h_l_t )
+ *
+ * @details     It sets data ready output signal active high/low.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myDRDY_H_L:      Data ready output signal high/low.
+ *
+ * @param[out]   N/A
+ *
+ *
+ * @return       Status of HTS221_SetDataReadyOuput.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/May/2019
+ * @version     24/May/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HTS221_status_t HTS221_SetDataReadyOuput ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_drdy_h_l_t myDRDY_H_L )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]   =   HTS221_CTRL_REG3;
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+  /* Update the register   */
+  cmd[1]   =   ( ( cmd[1] & CTRL_REG3_DRDY_H_L_MASK ) | myDRDY_H_L );
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+  
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   HTS221_SUCCESS;
+  }
+  else
+  {
+    return   HTS221_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       HTS221_SetSelectionOnPin3 ( I2C_parameters_t , HTS221_ctrl_reg3_pp_od_t )
+ *
+ * @details     It sets Push-pull/Open Drain selection on pin 3 ( DRDY ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myDRDY:          Push-pull/Open Drain selection on pin 3 (DRDY).
+ *
+ * @param[out]   N/A
+ *
+ *
+ * @return       Status of HTS221_SetDataReadyOuput.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/May/2019
+ * @version     24/May/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HTS221_status_t HTS221_SetSelectionOnPin3 ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_pp_od_t myDRDY )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]   =   HTS221_CTRL_REG3;
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+  /* Update the register   */
+  cmd[1]   =   ( ( cmd[1] & CTRL_REG3_PP_OD_MASK ) | myDRDY );
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+  
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   HTS221_SUCCESS;
+  }
+  else
+  {
+    return   HTS221_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       HTS221_SetDataReadyEnable ( I2C_parameters_t , HTS221_ctrl_reg3_drdy_en_t )
+ *
+ * @details     It sets data ready enable.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myDRDY_EN:       Data Ready enable.
+ *
+ * @param[out]   N/A
+ *
+ *
+ * @return       Status of HTS221_SetDataReadyEnable.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/May/2019
+ * @version     24/May/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HTS221_status_t HTS221_SetDataReadyEnable ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_drdy_en_t myDRDY_EN )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]   =   HTS221_CTRL_REG3;
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+  /* Update the register   */
+  cmd[1]   =   ( ( cmd[1] & CTRL_REG3_DRDY_EN_MASK ) | myDRDY_EN );
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+  
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   HTS221_SUCCESS;
+  }
+  else
+  {
+    return   HTS221_FAILURE;
+  }
+}
+
+
+/**
+ * @brief       HTS221_GetHumidityDataAvailable ( I2C_parameters_t , HTS221_data_t* )
+ *
+ * @details     It gets humidity data available flag.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myHumidityFlag:  Humidity data available flag
+ *
+ *
+ * @return       Status of HTS221_GetHumidityDataAvailable.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/May/2019
+ * @version     24/May/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+HTS221_status_t HTS221_GetHumidityDataAvailable ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHumidityFlag )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd   =   HTS221_STATUS_REG;
+  aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data   */
+  myHumidityFlag->h_da   =   (HTS221_status_reg_h_da_t)( cmd & STATUS_REGISTER_H_DA_MASK );
+  
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   HTS221_SUCCESS;
+  }
+  else
+  {
+    return   HTS221_FAILURE;
+  }
+}
+
+
+/**
+ * @brief       HTS221_GetTemperatureDataAvailable ( I2C_parameters_t , HTS221_data_t* )
+ *
+ * @details     It gets temperature data available flag.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myTemperatureFlag: Temperature data available flag
+ *
+ *
+ * @return       Status of HTS221_GetTemperatureDataAvailable.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/May/2019
+ * @version     24/May/2019     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+HTS221_status_t HTS221_GetTemperatureDataAvailable ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTemperatureFlag )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd   =   HTS221_STATUS_REG;
+  aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data   */
+  myTemperatureFlag->t_da   =   (HTS221_status_reg_t_da_t)( cmd & STATUS_REGISTER_T_DA_MASK );
+  
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   HTS221_SUCCESS;
+  }
+  else
+  {
+    return   HTS221_FAILURE;
+  }
+}
+
+
+/**
+ * @brief       HTS221_GetRawHumidity ( I2C_parameters_t , HTS221_data_t* )
+ *
+ * @details     It gets raw humidity.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myRawHumidity:     Raw humidity
+ *
+ *
+ * @return       Status of HTS221_GetRawHumidity.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/May/2019
+ * @version     24/May/2019     The ORIGIN
+ * @pre         This function uses autoincrementing for reading the registers.
+ * @warning     N/A.
+ */
+HTS221_status_t HTS221_GetRawHumidity ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myRawHumidity )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]   =   ( HTS221_HUMIDITY_OUT_L | 0x80 );                                        // Autoincrementing
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+  /* Parse the data   */
+  myRawHumidity->rawHumidity   =   cmd[1];
+  myRawHumidity->rawHumidity <<=   8U;
+  myRawHumidity->rawHumidity  |=   cmd[0];
+  
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   HTS221_SUCCESS;
+  }
+  else
+  {
+    return   HTS221_FAILURE;
+  }
+}
+
+
+/**
+ * @brief       HTS221_GetRawTemperature ( I2C_parameters_t , HTS221_data_t* )
+ *
+ * @details     It gets raw temperature.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myRawTemperature:  Raw temperature
+ *
+ *
+ * @return       Status of HTS221_GetRawTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/May/2019
+ * @version     24/May/2019     The ORIGIN
+ * @pre         This function uses autoincrementing for reading the registers.
+ * @warning     N/A.
+ */
+HTS221_status_t HTS221_GetRawTemperature ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myRawTemperature )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]   =   ( HTS221_TEMP_OUT_L | 0x80 );                                             // Autoincrementing
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+  /* Parse the data   */
+  myRawTemperature->rawTemperature   =   cmd[1];
+  myRawTemperature->rawTemperature <<=   8U;
+  myRawTemperature->rawTemperature  |=   cmd[0];
+  
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   HTS221_SUCCESS;
+  }
+  else
+  {
+    return   HTS221_FAILURE;
+  }
+}
+
+
+/**
+ * @brief       HTS221_GetCalibrationCoefficients ( I2C_parameters_t , HTS221_data_t* )
+ *
+ * @details     It gets calibration coefficients.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myCoeff:           Calibration coefficients
+ *
+ *
+ * @return       Status of HTS221_GetCalibrationCoefficients.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/May/2019
+ * @version     24/May/2019     The ORIGIN
+ * @pre         This function uses autoincrementing for reading the registers.
+ * @warning     N/A.
+ */
+HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myCoeff )
+{
+  uint8_t      cmd[16]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]   =   ( HTS221_CALIB_0 | 0x80 );                                             // Autoincrementing 
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+  /* Parse the data   */
+  myCoeff->h0_rH_x2    =   cmd[0];
+  myCoeff->h1_rH_x2    =   cmd[1];
+  myCoeff->t0_degC_x8  =   cmd[2];
+  myCoeff->t1_degC_x8  =   cmd[3];
+  myCoeff->t1_T0_msb   =   ( cmd[5] & 0x0F );
+  myCoeff->h0_T0_OUT   =   cmd[7];
+  myCoeff->h0_T0_OUT <<=   8U;
+  myCoeff->h0_T0_OUT  |=   cmd[6];
+  myCoeff->h1_T0_OUT   =   cmd[10];
+  myCoeff->h1_T0_OUT <<=   8U;
+  myCoeff->h1_T0_OUT  |=   cmd[11];
+  myCoeff->t0_OUT      =   cmd[13];
+  myCoeff->t0_OUT    <<=   8U;
+  myCoeff->t0_OUT     |=   cmd[12];
+  myCoeff->t1_OUT      =   cmd[15];
+  myCoeff->t1_OUT    <<=   8U;
+  myCoeff->t1_OUT     |=   cmd[14];
+  
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   HTS221_SUCCESS;
+  }
+  else
+  {
+    return   HTS221_FAILURE;
+  }
+}
