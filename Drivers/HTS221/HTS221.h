@@ -460,3 +460,11 @@ HTS221_status_t HTS221_GetRawTemperature          ( I2C_parameters_t myI2Cparame
 /** It gets calibration coefficients.
   */
 HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myCoeff           );
+
+/** It gets the current temperature value in Celsius degrees.
+  */
+HTS221_status_t HTS221_GetTemperature             ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTemperature     );
+
+/** It gets the current humidity value.
+  */
+HTS221_status_t HTS221_GetHumidity                ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHumidity        );
