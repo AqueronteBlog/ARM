@@ -231,7 +231,7 @@ HTS221_status_t HTS221_SetPowerDown ( I2C_parameters_t myI2Cparameters, HTS221_c
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
   /* Update the register   */
-  cmd[1]   =   ( ( cmd[1] & CTRL_REG1_PD_MASK ) | myPowerMode );
+  cmd[1]   =   ( ( cmd[1] & ~CTRL_REG1_PD_MASK ) | myPowerMode );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   
 
@@ -280,7 +280,7 @@ HTS221_status_t HTS221_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HT
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
   /* Update the register   */
-  cmd[1]   =   ( ( cmd[1] & CTRL_REG1_BDU_MASK ) | myBDU.bdu );
+  cmd[1]   =   ( ( cmd[1] & ~CTRL_REG1_BDU_MASK ) | myBDU.bdu );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   
 
@@ -376,7 +376,7 @@ HTS221_status_t HTS221_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HT
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
   /* Update the register   */
-  cmd[1]   =   ( ( cmd[1] & CTRL_REG1_ODR_MASK ) | myODR.odr );
+  cmd[1]   =   ( ( cmd[1] & ~CTRL_REG1_ODR_MASK ) | myODR.odr );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   
 
@@ -471,7 +471,7 @@ HTS221_status_t HTS221_SetBoot  ( I2C_parameters_t myI2Cparameters )
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
   /* Update the register   */
-  cmd[1]   =   ( ( cmd[1] & CTRL_REG2_BOOT_MASK ) | CTRL_REG2_BOOT_REBOOT_MEMORY_CONTENT );
+  cmd[1]   =   ( ( cmd[1] & ~CTRL_REG2_BOOT_MASK ) | CTRL_REG2_BOOT_REBOOT_MEMORY_CONTENT );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   
 
@@ -567,7 +567,7 @@ HTS221_status_t HTS221_SetHeater ( I2C_parameters_t myI2Cparameters, HTS221_data
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
   /* Update the register   */
-  cmd[1]   =   ( ( cmd[1] & CTRL_REG2_HEATER_MASK ) | myHeater.heater );
+  cmd[1]   =   ( ( cmd[1] & ~CTRL_REG2_HEATER_MASK ) | myHeater.heater );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   
 
@@ -662,7 +662,7 @@ HTS221_status_t HTS221_SetOneShot ( I2C_parameters_t myI2Cparameters )
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
   /* Update the register   */
-  cmd[1]   =   ( ( cmd[1] & CTRL_REG2_ONE_SHOT_MASK ) | CTRL_REG2_ONE_SHOT_START );
+  cmd[1]   =   ( ( cmd[1] & ~CTRL_REG2_ONE_SHOT_MASK ) | CTRL_REG2_ONE_SHOT_START );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   
 
@@ -758,7 +758,7 @@ HTS221_status_t HTS221_SetDataReadyOuput ( I2C_parameters_t myI2Cparameters, HTS
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
   /* Update the register   */
-  cmd[1]   =   ( ( cmd[1] & CTRL_REG3_DRDY_H_L_MASK ) | myDRDY_H_L );
+  cmd[1]   =   ( ( cmd[1] & ~CTRL_REG3_DRDY_H_L_MASK ) | myDRDY_H_L );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   
 
@@ -807,7 +807,7 @@ HTS221_status_t HTS221_SetSelectionOnPin3 ( I2C_parameters_t myI2Cparameters, HT
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
   /* Update the register   */
-  cmd[1]   =   ( ( cmd[1] & CTRL_REG3_PP_OD_MASK ) | myDRDY );
+  cmd[1]   =   ( ( cmd[1] & ~CTRL_REG3_PP_OD_MASK ) | myDRDY );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   
 
@@ -856,7 +856,7 @@ HTS221_status_t HTS221_SetDataReadyEnable ( I2C_parameters_t myI2Cparameters, HT
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
   /* Update the register   */
-  cmd[1]   =   ( ( cmd[1] & CTRL_REG3_DRDY_EN_MASK ) | myDRDY_EN );
+  cmd[1]   =   ( ( cmd[1] & ~CTRL_REG3_DRDY_EN_MASK ) | myDRDY_EN );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   
 
@@ -1113,6 +1113,108 @@ HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparame
 
 
   if ( aux == I2C_SUCCESS )
+  {
+    return   HTS221_SUCCESS;
+  }
+  else
+  {
+    return   HTS221_FAILURE;
+  }
+}
+
+
+/**
+ * @brief       HTS221_GetTemperature ( I2C_parameters_t , HTS221_data_t* )
+ *
+ * @details     It gets the current temperature in Celsius degrees.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myTemperature:     Current temperature in Celsius degress
+ *
+ *
+ * @return       Status of HTS221_GetTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        26/May/2019
+ * @version     26/May/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HTS221_status_t HTS221_GetTemperature ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTemperature )
+{
+  HTS221_status_t aux;
+  int16_t         mT0_degC_x8 = 0U, mT1_degC_x8 = 0U;
+
+  /* Get temperature  */
+  aux  =   HTS221_GetRawTemperature ( myI2Cparameters, &(*myTemperature) );
+
+  /* Parse the data   */
+  mT0_degC_x8   =  ( myTemperature->t1_T0_msb & 0x03 );
+  mT0_degC_x8 <<=  8U;
+  mT0_degC_x8  |=  myTemperature->t0_degC_x8;
+  mT0_degC_x8 >>=  3U;
+
+  mT1_degC_x8   =   ( myTemperature->t1_T0_msb & 0x0C );
+  mT1_degC_x8 <<=   8U;
+  mT1_degC_x8  |=   myTemperature->t1_degC_x8;
+  mT1_degC_x8 >>=  3U;
+
+  myTemperature->temperature   =   (float)( ( myTemperature->rawTemperature - myTemperature->t0_OUT )*(float)( mT1_degC_x8 - mT0_degC_x8 )/( myTemperature->t1_OUT - myTemperature->t0_OUT ) );
+
+
+
+  if ( aux == HTS221_SUCCESS )
+  {
+    return   HTS221_SUCCESS;
+  }
+  else
+  {
+    return   HTS221_FAILURE;
+  }
+}
+
+
+/**
+ * @brief       HTS221_GetHumidity ( I2C_parameters_t , HTS221_data_t* )
+ *
+ * @details     It gets the current humidity value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myHumidity:        Current humidity value
+ *
+ *
+ * @return       Status of HTS221_GetHumidity.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        26/May/2019
+ * @version     26/May/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HTS221_status_t HTS221_GetHumidity ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHumidity )
+{
+  HTS221_status_t aux;
+  int16_t         myH0_RH = 0U, myH1_RH = 0U;
+
+  /* Get humidity  */
+  aux  =   HTS221_GetRawHumidity ( myI2Cparameters, &(*myHumidity) );
+
+  /* Parse the data   */ 
+  myH0_RH  =   myHumidity->h0_rH_x2;
+  myH0_RH >>=  1U;
+
+  myH1_RH  =   myHumidity->h1_rH_x2;
+  myH1_RH >>=  1U;
+
+  myHumidity->humidity   =   (float)( (uint16_t)(( myHumidity->rawHumidity - myHumidity->h0_T0_OUT ))*(float)( myH1_RH - myH0_RH )/(uint16_t)( myHumidity->h1_T0_OUT - myHumidity->h0_T0_OUT ));
+
+
+
+  if ( aux == HTS221_SUCCESS )
   {
     return   HTS221_SUCCESS;
   }
