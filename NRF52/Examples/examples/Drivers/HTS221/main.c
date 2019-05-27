@@ -143,6 +143,7 @@ int main(void)
 
       
       /* Reset the variables   */
+
       myState          =   0UL;
       NRF_P0->OUTSET  |=   ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );          // Turn all the LEDs off
     }
