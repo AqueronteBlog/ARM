@@ -1099,9 +1099,9 @@ HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparame
   myCoeff->h0_T0_OUT   =   cmd[7];
   myCoeff->h0_T0_OUT <<=   8U;
   myCoeff->h0_T0_OUT  |=   cmd[6];
-  myCoeff->h1_T0_OUT   =   cmd[10];
+  myCoeff->h1_T0_OUT   =   cmd[11];
   myCoeff->h1_T0_OUT <<=   8U;
-  myCoeff->h1_T0_OUT  |=   cmd[11];
+  myCoeff->h1_T0_OUT  |=   cmd[10];
   myCoeff->t0_OUT      =   cmd[13];
   myCoeff->t0_OUT    <<=   8U;
   myCoeff->t0_OUT     |=   cmd[12];
@@ -1148,18 +1148,18 @@ HTS221_status_t HTS221_GetTemperature ( I2C_parameters_t myI2Cparameters, HTS221
   int16_t         mT0_degC_x8 = 0U, mT1_degC_x8 = 0U;
 
   /* Get temperature  */
-  aux  =   HTS221_GetRawTemperature ( myI2Cparameters, &(*myTemperature) );
+  aux  =   HTS221_GetRawTemperature ( myI2Cparameters, myTemperature );
 
   /* Parse the data   */
   mT0_degC_x8   =  ( myTemperature->t1_T0_msb & 0x03 );
   mT0_degC_x8 <<=  8U;
   mT0_degC_x8  |=  myTemperature->t0_degC_x8;
-  mT0_degC_x8 >>=  3U;
+  mT0_degC_x8 /=  8.0;
 
   mT1_degC_x8   =   ( myTemperature->t1_T0_msb & 0x0C );
-  mT1_degC_x8 <<=   8U;
+  mT1_degC_x8 <<=   6U;
   mT1_degC_x8  |=   myTemperature->t1_degC_x8;
-  mT1_degC_x8 >>=  3U;
+  mT1_degC_x8 /=  8.0;
 
   myTemperature->temperature   =   (float)( ( myTemperature->rawTemperature - myTemperature->t0_OUT )*(float)( mT1_degC_x8 - mT0_degC_x8 )/( myTemperature->t1_OUT - myTemperature->t0_OUT ) );
 
@@ -1205,12 +1205,12 @@ HTS221_status_t HTS221_GetHumidity ( I2C_parameters_t myI2Cparameters, HTS221_da
 
   /* Parse the data   */ 
   myH0_RH  =   myHumidity->h0_rH_x2;
-  myH0_RH >>=  1U;
+  myH0_RH /=  2.0;
 
   myH1_RH  =   myHumidity->h1_rH_x2;
-  myH1_RH >>=  1U;
+  myH1_RH /=  2.0;
 
-  myHumidity->humidity   =   (float)( (uint16_t)(( myHumidity->rawHumidity - myHumidity->h0_T0_OUT ))*(float)( myH1_RH - myH0_RH )/(uint16_t)( myHumidity->h1_T0_OUT - myHumidity->h0_T0_OUT ));
+  myHumidity->humidity   =   (float)(( myHumidity->rawHumidity - myHumidity->h0_T0_OUT )*(float)( myH1_RH - myH0_RH )/( myHumidity->h1_T0_OUT - myHumidity->h0_T0_OUT ));
 
 
 
