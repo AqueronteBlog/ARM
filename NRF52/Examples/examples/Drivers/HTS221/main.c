@@ -76,12 +76,19 @@ int main(void)
   /* Get device ID  */
   aux  =   HTS221_GetDeviceID ( myHTS221_I2C_parameters, &myHTS221_Data );
 
+  /* Boot the device   */
+  aux  =   HTS221_SetBoot ( myHTS221_I2C_parameters );
+
   /* Set device in ACTIVE mode  */
   aux  =   HTS221_SetPowerDown ( myHTS221_I2C_parameters, CTRL_REG1_PD_ACTIVE_MODE );
 
   /* Get calibration coefficients  */
   aux  =   HTS221_GetCalibrationCoefficients ( myHTS221_I2C_parameters, &myHTS221_Data );
   
+  /* Output registers not updated until MSB and LSB reading  */
+  myHTS221_Data.bdu  =   CTRL_REG1_BDU_DEFAULT_MODE;
+  aux  =   HTS221_SetBlockDataUpdate ( myHTS221_I2C_parameters, myHTS221_Data );
+
   /* Set resolution: 16 AVGT, 32 AVGH  */
   myHTS221_Data.temperatureResolution  =   AV_CONF_AVGT_16;
   myHTS221_Data.humidityResolution     =   AV_CONF_AVGH_32;
@@ -126,6 +133,10 @@ int main(void)
       aux  =   HTS221_GetCalibrationCoefficients ( myHTS221_I2C_parameters, &myHTS221_Data );
 
       /* Get temperature  */
+      do{
+        aux  =   HTS221_GetTemperatureDataAvailable ( myHTS221_I2C_parameters, &myHTS221_Data );
+      }while( myHTS221_Data.t_da == STATUS_REGISTER_T_DA_DATA_NOT_AVAILABLE );
+
       aux  =   HTS221_GetTemperature ( myHTS221_I2C_parameters, &myHTS221_Data );
 
       /* Get humidity  */
@@ -141,7 +152,6 @@ int main(void)
 //      NRF_UART0->TASKS_STARTTX =   1UL;
 //      NRF_UART0->TXD           =   *myPtr;
 
-      
       /* Reset the variables   */
 
       myState          =   0UL;
