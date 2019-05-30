@@ -1042,6 +1042,7 @@ HTS221_status_t HTS221_GetRawTemperature ( I2C_parameters_t myI2Cparameters, HTS
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
+
   /* Parse the data   */
   myRawTemperature->rawTemperature   =   cmd[1];
   myRawTemperature->rawTemperature <<=   8U;
@@ -1076,7 +1077,8 @@ HTS221_status_t HTS221_GetRawTemperature ( I2C_parameters_t myI2Cparameters, HTS
  *
  * @author      Manuel Caballero
  * @date        24/May/2019
- * @version     24/May/2019     The ORIGIN
+ * @version     30/May/2019     Coefficients calibration is calculated here.
+ *              24/May/2019     The ORIGIN
  * @pre         This function uses autoincrementing for reading the registers.
  * @warning     N/A.
  */
@@ -1109,6 +1111,23 @@ HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparame
   myCoeff->t1_OUT    <<=   8U;
   myCoeff->t1_OUT     |=   cmd[14];
   
+  /* Coefficient result for temperature & humidity  */
+  myCoeff->t0_degC   =  ( myCoeff->t1_T0_msb & 0x03 );
+  myCoeff->t0_degC <<=  8U;
+  myCoeff->t0_degC  |=  myCoeff->t0_degC_x8;
+  myCoeff->t0_degC >>=  3U;
+
+  myCoeff->t1_degC   =   ( myCoeff->t1_T0_msb & 0x0C );
+  myCoeff->t1_degC <<=   6U;
+  myCoeff->t1_degC  |=   myCoeff->t1_degC_x8;
+  myCoeff->t1_degC >>=  3U;
+
+  myCoeff->h0_RH     =   myCoeff->h0_rH_x2;
+  myCoeff->h0_RH   >>=  1U;
+
+  myCoeff->h1_RH     =   myCoeff->h1_rH_x2;
+  myCoeff->h1_RH   >>=  1U;
+  
 
 
 
@@ -1138,32 +1157,24 @@ HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparame
  *
  * @author      Manuel Caballero
  * @date        26/May/2019
- * @version     26/May/2019     The ORIGIN
+ * @version     30/May/2019     Temperature calculation was improved
+ *              26/May/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
 HTS221_status_t HTS221_GetTemperature ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTemperature )
 {
   HTS221_status_t aux;
-  int16_t         mT0_degC_x8 = 0U, mT1_degC_x8 = 0U;
 
   /* Get temperature  */
-  aux  =   HTS221_GetRawTemperature ( myI2Cparameters, myTemperature );
+  aux  =   HTS221_GetRawTemperature ( myI2Cparameters, &(*myTemperature) );
 
   /* Parse the data   */
-  mT0_degC_x8   =  ( myTemperature->t1_T0_msb & 0x03 );
-  mT0_degC_x8 <<=  8U;
-  mT0_degC_x8  |=  myTemperature->t0_degC_x8;
-  mT0_degC_x8 /=  8.0;
-
-  mT1_degC_x8   =   ( myTemperature->t1_T0_msb & 0x0C );
-  mT1_degC_x8 <<=   6U;
-  mT1_degC_x8  |=   myTemperature->t1_degC_x8;
-  mT1_degC_x8 /=  8.0;
-
-  myTemperature->temperature   =   (float)( ( myTemperature->rawTemperature - myTemperature->t0_OUT )*(float)( mT1_degC_x8 - mT0_degC_x8 )/( myTemperature->t1_OUT - myTemperature->t0_OUT ) );
-
-
+  myTemperature->temperature   =   (int32_t)( 10.0*( myTemperature->rawTemperature - myTemperature->t0_OUT )*( myTemperature->t1_degC - myTemperature->t0_degC )/( myTemperature->t1_OUT - myTemperature->t0_OUT ) );
+  myTemperature->temperature  +=   10.0*myTemperature->t0_degC;
+  myTemperature->temperature  /=   10.0;
+  
+  
 
   if ( aux == HTS221_SUCCESS )
   {
@@ -1191,28 +1202,30 @@ HTS221_status_t HTS221_GetTemperature ( I2C_parameters_t myI2Cparameters, HTS221
  *
  * @author      Manuel Caballero
  * @date        26/May/2019
- * @version     26/May/2019     The ORIGIN
+ * @version     30/May/2019     Humidity calculation was improved
+ *              26/May/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
 HTS221_status_t HTS221_GetHumidity ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHumidity )
 {
   HTS221_status_t aux;
-  int16_t         myH0_RH = 0U, myH1_RH = 0U;
 
   /* Get humidity  */
   aux  =   HTS221_GetRawHumidity ( myI2Cparameters, &(*myHumidity) );
 
   /* Parse the data   */ 
-  myH0_RH  =   myHumidity->h0_rH_x2;
-  myH0_RH /=  2.0;
+  myHumidity->humidity   =   (int32_t)( 10.0*( myHumidity->rawHumidity - myHumidity->h0_T0_OUT )*( myHumidity->h1_RH - myHumidity->h0_RH )/( myHumidity->h1_T0_OUT - myHumidity->h0_T0_OUT ) );
+  myHumidity->humidity  +=   10.0*myHumidity->h0_RH;
+  myHumidity->humidity  /=   10.0;
 
-  myH1_RH  =   myHumidity->h1_rH_x2;
-  myH1_RH /=  2.0;
-
-  myHumidity->humidity   =   (float)(( myHumidity->rawHumidity - myHumidity->h0_T0_OUT )*(float)( myH1_RH - myH0_RH )/( myHumidity->h1_T0_OUT - myHumidity->h0_T0_OUT ));
-
-
+  /* Check if it is saturated  */
+  if ( myHumidity->humidity > 100 )
+  {
+    myHumidity->humidity   =   100;
+  }
+  
+  
 
   if ( aux == HTS221_SUCCESS )
   {
