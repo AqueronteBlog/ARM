@@ -122,9 +122,9 @@ typedef enum
  */
 typedef enum
 {
-    CTRL_REG1_PD_MASK           =   ( 1U << 7U ),   /*!<  PD mask                                     */
-    CTRL_REG1_PD_POWER_DOWN_MOD =   ( 0U << 7U ),   /*!<  PD power-down mode              [ Default ] */
-    CTRL_REG1_PD_ACTIVE_MODE    =   ( 1U << 7U )    /*!<  PD active mode                              */
+    CTRL_REG1_PD_MASK            =   ( 1U << 7U ),   /*!<  PD mask                                     */
+    CTRL_REG1_PD_POWER_DOWN_MODE =   ( 0U << 7U ),   /*!<  PD power-down mode              [ Default ] */
+    CTRL_REG1_PD_ACTIVE_MODE     =   ( 1U << 7U )    /*!<  PD active mode                              */
 } HTS221_ctrl_reg1_pd_t;
 
 
@@ -331,6 +331,11 @@ typedef struct
     int16_t   h1_T0_OUT;       /*!<  Calibration register          */
     int16_t   t0_OUT;          /*!<  Calibration register          */
     int16_t   t1_OUT;          /*!<  Calibration register          */
+
+    int16_t   t0_degC;         /*!<  Calibration result            */
+    int16_t   t1_degC;         /*!<  Calibration result            */
+    int16_t   h0_RH;           /*!<  Calibration result            */
+    int16_t   h1_RH;           /*!<  Calibration result            */
 
     /* Device identification   */
     uint8_t   deviceID;        /*!<  Device ID                     */
