@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: HTS221. Every 1 seconds, a new
- *              temperature value is read and the data is transmitted through the UART ( Baud Rate: 230400 ).
+ * @details     This example shows how to work with the external device: HTS221. Every 1 seconds, a new
+ *              temperature/humidity value is read and the data is transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
  *
@@ -60,7 +60,6 @@ int main(void)
   conf_TIMER0 ();
 
   
-
   /* I2C definition   */
   myHTS221_I2C_parameters.TWIinstance =    NRF_TWI0;
   myHTS221_I2C_parameters.SDA         =    TWI0_SDA;
@@ -72,6 +71,9 @@ int main(void)
 
   /* Configure I2C peripheral  */
   aux  =   HTS221_Init  ( myHTS221_I2C_parameters );
+  
+  /* Set device in lOW-POWER mode  */
+  aux  =   HTS221_SetPowerDown ( myHTS221_I2C_parameters, CTRL_REG1_PD_POWER_DOWN_MODE );
 
   /* Get device ID  */
   aux  =   HTS221_GetDeviceID ( myHTS221_I2C_parameters, &myHTS221_Data );
@@ -79,12 +81,9 @@ int main(void)
   /* Boot the device   */
   aux  =   HTS221_SetBoot ( myHTS221_I2C_parameters );
 
-  /* Set device in ACTIVE mode  */
-  aux  =   HTS221_SetPowerDown ( myHTS221_I2C_parameters, CTRL_REG1_PD_ACTIVE_MODE );
-
   /* Get calibration coefficients  */
   aux  =   HTS221_GetCalibrationCoefficients ( myHTS221_I2C_parameters, &myHTS221_Data );
-  
+
   /* Output registers not updated until MSB and LSB reading  */
   myHTS221_Data.bdu  =   CTRL_REG1_BDU_DEFAULT_MODE;
   aux  =   HTS221_SetBlockDataUpdate ( myHTS221_I2C_parameters, myHTS221_Data );
@@ -98,10 +97,21 @@ int main(void)
   myHTS221_Data.odr  =   CTRL_REG1_ODR_ONE_SHOT;
   aux  =   HTS221_SetOutputDataRate ( myHTS221_I2C_parameters, myHTS221_Data );
 
+  /* Set device in ACTIVE mode  */
+  aux  =   HTS221_SetPowerDown ( myHTS221_I2C_parameters, CTRL_REG1_PD_ACTIVE_MODE );
+
+  /* Turn the heater on  */
+  myHTS221_Data.heater   =   CTRL_REG2_HEATER_HEATER_ENABLED;
+  aux  =   HTS221_SetHeater ( myHTS221_I2C_parameters, myHTS221_Data );
+
+  nrf_delay_ms( 1000 );
+
+  /* Turn the heater off  */
+  myHTS221_Data.heater   =   CTRL_REG2_HEATER_HEATER_DISABLED;
+  aux  =   HTS221_SetHeater ( myHTS221_I2C_parameters, myHTS221_Data );
+
   
   
-  
-    
   myState  =   0;                             // Reset the variable
   NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
 
@@ -116,10 +126,10 @@ int main(void)
     __WFE();
 
 
-
+    /* Proccess new action   */
     if ( myState == 1UL )
     {
-      NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );          // Turn all the LEDs on
+      NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );   // Turn all the LEDs on
 
       /* Trigger to get a new data value  */
       aux  =   HTS221_SetOneShot ( myHTS221_I2C_parameters );
@@ -127,35 +137,39 @@ int main(void)
       /* Wait until there is a new data  */
       do{
         aux  =   HTS221_GetOneShot ( myHTS221_I2C_parameters, &myHTS221_Data );
-      }while( myHTS221_Data.one_shot == CTRL_REG2_ONE_SHOT_WAITING );
-
-      
-      aux  =   HTS221_GetCalibrationCoefficients ( myHTS221_I2C_parameters, &myHTS221_Data );
+      }while( myHTS221_Data.one_shot == CTRL_REG2_ONE_SHOT_WAITING );                             // Dangerous!!! The uC may get stuck here...
+                                                                                                  // [WORKAROUND] Insert a counter
 
       /* Get temperature  */
       do{
         aux  =   HTS221_GetTemperatureDataAvailable ( myHTS221_I2C_parameters, &myHTS221_Data );
-      }while( myHTS221_Data.t_da == STATUS_REGISTER_T_DA_DATA_NOT_AVAILABLE );
+      }while( myHTS221_Data.t_da == STATUS_REGISTER_T_DA_DATA_NOT_AVAILABLE );                    // Dangerous!!! The uC may get stuck here...
+                                                                                                  // [WORKAROUND] Insert a counter
 
       aux  =   HTS221_GetTemperature ( myHTS221_I2C_parameters, &myHTS221_Data );
 
       /* Get humidity  */
+      do{
+        aux  =   HTS221_GetHumidityDataAvailable ( myHTS221_I2C_parameters, &myHTS221_Data );
+      }while( myHTS221_Data.h_da == STATUS_REGISTER_H_DA_DATA_NOT_AVAILABLE );                    // Dangerous!!! The uC may get stuck here...
+                                                                                                  // [WORKAROUND] Insert a counter
+
       aux  =   HTS221_GetHumidity ( myHTS221_I2C_parameters, &myHTS221_Data );
 
-//      /* Transmit result through the UART  */
-//      sprintf ( (char*)myMessage, "T: %d.%d C\r\n", (int32_t)myHTS221_Data.t_a, (int32_t)( ( myHTS221_Data.t_a - (uint32_t)myHTS221_Data.t_a ) * 10000.0f ) );
-//
-//      NRF_UART0->TASKS_STOPRX  =   1UL;
-//      NRF_UART0->TASKS_STOPTX  =   1UL;
-//      myPtr                    =   &myMessage[0];
-//
-//      NRF_UART0->TASKS_STARTTX =   1UL;
-//      NRF_UART0->TXD           =   *myPtr;
+      /* Transmit result through the UART  */
+      sprintf ( (char*)myMessage, "T: %d.%d C, RH: %d.%d%%\r\n", (int32_t)myHTS221_Data.temperature, (int32_t)( ( myHTS221_Data.temperature - (uint32_t)myHTS221_Data.temperature ) * 10.0f ), 
+                                                                 (int32_t)myHTS221_Data.humidity, (int32_t)( ( myHTS221_Data.humidity - (uint32_t)myHTS221_Data.humidity ) * 10.0f ) );
+
+      NRF_UART0->TASKS_STOPRX  =   1UL;
+      NRF_UART0->TASKS_STOPTX  =   1UL;
+      myPtr                    =   &myMessage[0];
+
+      NRF_UART0->TASKS_STARTTX =   1UL;
+      NRF_UART0->TXD           =   *myPtr;
 
       /* Reset the variables   */
-
       myState          =   0UL;
-      NRF_P0->OUTSET  |=   ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );          // Turn all the LEDs off
+      NRF_P0->OUTSET  |=   ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );  // Turn all the LEDs off
     }
     //__NOP();
   }
