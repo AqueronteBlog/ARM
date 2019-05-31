@@ -66,7 +66,7 @@ void conf_CLK  ( void )
 void conf_GPIO  ( void )
 {
   uint32_t i = 0UL;
-
+  
   for ( i = LED1; i < ( LED4 + 1 ); i++ )
   {
     NRF_P0->OUTSET        =   ( 1UL << i );
