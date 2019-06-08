@@ -1,6 +1,6 @@
 /**
  * @brief       LPS25HB.h
- * @details     Capacitive digital sensor for relative humidity and temperature.
+ * @details     MEMS pressure sensor: 260-1260 hPa absolute digital output baromete.
  *              Header file.
  *
  *
@@ -21,12 +21,13 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESS
+  * @brief   DEFAULT ADDRESSES
   */
 typedef enum
 {
-  LPS25HB_ADDRESS     =   0b1011111          /*!<   I2C slave address byte                       */
-} LPS25HB_address_t;
+  LPS25HB_ADDRESS_0     =   0b1011100,       /*!<   I2C slave address byte, SDO/SA0 = GND        */
+  LPS25HB_ADDRESS_1     =   0b1011101        /*!<   I2C slave address byte, SDO/SA0 = VDD        */
+} LPS25HB_addresses_t;
 
 
 
@@ -35,97 +36,136 @@ typedef enum
   */
 typedef enum
 {
-  LPS25HB_WHO_AM_I        =   0x0F,           /*!<  Device identification                         */
-  LPS25HB_AV_CONF         =   0x10,           /*!<  Humidity and temperature resolution mode      */
-  LPS25HB_CTRL_REG1       =   0x20,           /*!<  Control register 1                            */
-  LPS25HB_CTRL_REG2       =   0x21,           /*!<  Control register 2                            */
-  LPS25HB_CTRL_REG3       =   0x22,           /*!<  Control register 3                            */
+  LPS25HB_REF_P_XL        =   0x08,           /*!<  Reference pressure registers                  */
+  LPS25HB_REF_P_L         =   0x09,           /*!<  Reference pressure registers                  */
+  LPS25HB_REF_P_H         =   0x0A,           /*!<  Reference pressure registers                  */
+  LPS25HB_WHO_AM_I        =   0x0F,           /*!<  Who am I register                             */
+  LPS25HB_RES_CONF        =   0x10,           /*!<  Resolution register                           */
+  LPS25HB_CTRL_REG1       =   0x20,           /*!<  Control registers                             */
+  LPS25HB_CTRL_REG2       =   0x21,           /*!<  Control registers                             */
+  LPS25HB_CTRL_REG3       =   0x22,           /*!<  Control registers                             */
+  LPS25HB_CTRL_REG4       =   0x23,           /*!<  Control registers                             */
+  LPS25HB_INTERRUPT_CFG   =   0x24,           /*!<  Interrupt registers                           */
+  LPS25HB_INT_SOURCE      =   0x25,           /*!<  Interrupt registers                           */
   LPS25HB_STATUS_REG      =   0x27,           /*!<  Status register                               */
-  LPS25HB_HUMIDITY_OUT_L  =   0x28,           /*!<  Relative humidity data (LSB)                  */
-  LPS25HB_HUMIDITY_OUT_H  =   0x29,           /*!<  Relative humidity data (MSB)                  */
-  LPS25HB_TEMP_OUT_L      =   0x2A,           /*!<  Temperature data (LSB)                        */
-  LPS25HB_TEMP_OUT_H      =   0x2B,           /*!<  Temperature data (MSB)                        */
-  LPS25HB_CALIB_0         =   0x30,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_1         =   0x31,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_2         =   0x32,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_3         =   0x33,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_4         =   0x34,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_5         =   0x35,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_6         =   0x36,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_7         =   0x37,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_8         =   0x38,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_9         =   0x39,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_A         =   0x3A,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_B         =   0x3B,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_C         =   0x3C,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_D         =   0x3D,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_E         =   0x3E,           /*!<  Calibration register                          */
-  LPS25HB_CALIB_F         =   0x3F            /*!<  Calibration register                          */
+  LPS25HB_PRESS_OUT_XL    =   0x28,           /*!<  Pressure output register                      */
+  LPS25HB_PRESS_OUT_L     =   0x29,           /*!<  Pressure output register                      */
+  LPS25HB_PRESS_OUT_H     =   0x2A,           /*!<  Pressure output register                      */
+  LPS25HB_TEMP_OUT_L      =   0x2B,           /*!<  Temperature output registers                  */
+  LPS25HB_TEMP_OUT_H      =   0x2C,           /*!<  Temperature output registers                  */
+  LPS25HB_FIFO_CTRL       =   0x2E,           /*!<  FIFO configure registers                      */
+  LPS25HB_FIFO_STATUS     =   0x2F,           /*!<  FIFO configure registers                      */
+  LPS25HB_THS_P_L         =   0x30,           /*!<  Pressure threshold registers                  */
+  LPS25HB_THS_P_H         =   0x31,           /*!<  Pressure threshold registers                  */
+  LPS25HB_RPDS_L          =   0x39,           /*!<  Pressure offset registers                     */
+  LPS25HB_RPDS_H          =   0x3A            /*!<  Pressure offset registers                     */
 } LPS25HB_registers_t;
 
 
 
 /**
-  * @brief   WHO_AM_I REGISTER
+  * @brief   REF_P_XL REGISTER. Reference pressure (LSB data) ( Default: 0x00 )
   */
 typedef enum
 {
-    WHO_AM_I_MASK           =   0xFF,             /*!<  WHO_AM_I mask                               */
-    WHO_AM_I_VALUE          =   0xBC              /*!<  WHO_AM_I value                              */
+    REF_P_XL_MASK         =   0xFF            /*!<  REF_P_XL mask                                 */
+} LPS25HB_rep_p_xl_t;
+
+
+/**
+  * @brief   REF_P_L REGISTER. Reference pressure (middle part) ( Default: 0x00 )
+  */
+typedef enum
+{
+    REF_P_L_MASK          =   0xFF            /*!<  REF_P_L mask                                  */
+} LPS25HB_rep_p_l_t;
+
+
+/**
+  * @brief   REF_P_H REGISTER. Reference pressure (MSB data) ( Default: 0x00 )
+  */
+typedef enum
+{
+    REF_P_H_MASK          =   0xFF            /*!<  REF_P_H mask                                  */
+} LPS25HB_rep_p_h_t;
+
+
+/**
+  * @brief   WHO_AM_I REGISTER.
+  */
+typedef enum
+{
+    WHO_AM_I_MASK         =   0xFF,           /*!<  WHO_AM_I mask                                */
+    WHO_AM_I_VALUE        =   0xBD            /*!<  WHO_AM_I: 0xBD                               */
 } LPS25HB_who_am_i_t;
 
 
-
 /**
-  * @brief   AV_CONF REGISTER
+  * @brief   RES_CONF REGISTER.
   */
-/* AVGT <5:3>
- *    NOTE: Numbers of averaged temperature samples ( 2-256 ).
+/* AVGT <3:2>
+ *    NOTE: Temperature internal average configuration.
  */
 typedef enum
 {
-    AV_CONF_AVGT_MASK       =   ( 0b111 << 3U ),    /*!<  AVGT mask                                   */
-    AV_CONF_AVGT_2          =   ( 0b000 << 3U ),    /*!<  AVGT Nr. internal average 2                 */
-    AV_CONF_AVGT_4          =   ( 0b001 << 3U ),    /*!<  AVGT Nr. internal average 4                 */
-    AV_CONF_AVGT_8          =   ( 0b010 << 3U ),    /*!<  AVGT Nr. internal average 8                 */
-    AV_CONF_AVGT_16         =   ( 0b011 << 3U ),    /*!<  AVGT Nr. internal average 16    [ Default ] */
-    AV_CONF_AVGT_32         =   ( 0b100 << 3U ),    /*!<  AVGT Nr. internal average 32                */
-    AV_CONF_AVGT_64         =   ( 0b101 << 3U ),    /*!<  AVGT Nr. internal average 64                */
-    AV_CONF_AVGT_128        =   ( 0b110 << 3U ),    /*!<  AVGT Nr. internal average 128               */
-    AV_CONF_AVGT_256        =   ( 0b111 << 3U )     /*!<  AVGT Nr. internal average 256               */
-} LPS25HB_av_config_avgt_t;
+    RES_CONF_AVGT_MASK    =   ( 0b11 << 2U ),   /*!<  AVGT mask                                    */
+    RES_CONF_AVGT_8       =   ( 0b00 << 2U ),   /*!<  AVGT Nr. internal average  8                 */
+    RES_CONF_AVGT_16      =   ( 0b01 << 2U ),   /*!<  AVGT Nr. internal average 16                 */
+    RES_CONF_AVGT_32      =   ( 0b10 << 2U ),   /*!<  AVGT Nr. internal average 32                 */
+    RES_CONF_AVGT_64      =   ( 0b11 << 2U )    /*!<  AVGT Nr. internal average 64     [ Default ] */
+} LPS25HB_res_conf_avgt_t;
 
 
-/* AVGH <2:0>
- *    NOTE: Numbers of averaged humidity samples ( 4-512 ).
+/* AVGP <1:0>
+ *    NOTE: Pressure internal average configuration.
  */
 typedef enum
 {
-    AV_CONF_AVGH_MASK       =   ( 0b111 << 0U ),    /*!<  AVGH mask                                   */
-    AV_CONF_AVGH_4          =   ( 0b000 << 0U ),    /*!<  AVGH Nr. internal average 4                 */
-    AV_CONF_AVGH_8          =   ( 0b001 << 0U ),    /*!<  AVGH Nr. internal average 8                 */
-    AV_CONF_AVGH_16         =   ( 0b010 << 0U ),    /*!<  AVGH Nr. internal average 16                */
-    AV_CONF_AVGH_32         =   ( 0b011 << 0U ),    /*!<  AVGH Nr. internal average 32    [ Default ] */
-    AV_CONF_AVGH_64         =   ( 0b100 << 0U ),    /*!<  AVGH Nr. internal average 64                */
-    AV_CONF_AVGH_128        =   ( 0b101 << 0U ),    /*!<  AVGH Nr. internal average 128               */
-    AV_CONF_AVGH_256        =   ( 0b110 << 0U ),    /*!<  AVGH Nr. internal average 256               */
-    AV_CONF_AVGH_512        =   ( 0b111 << 0U )     /*!<  AVGH Nr. internal average 512               */
-} LPS25HB_av_config_avgh_t;
-
+    RES_CONF_AVGP_MASK    =   ( 0b11 << 0U ),   /*!<  AVGP mask                                    */
+    RES_CONF_AVGP_8       =   ( 0b00 << 0U ),   /*!<  AVGP Nr. internal average   8                */
+    RES_CONF_AVGP_32      =   ( 0b01 << 0U ),   /*!<  AVGP Nr. internal average  32                */
+    RES_CONF_AVGP_128     =   ( 0b10 << 0U ),   /*!<  AVGP Nr. internal average 128                */
+    RES_CONF_AVGP_512     =   ( 0b11 << 0U )    /*!<  AVGP Nr. internal average 512    [ Default ] */
+} LPS25HB_res_conf_avgp_t;
 
 
 /**
-  * @brief   CTRL_REG1 REGISTER
+  * @brief   CTRL_REG1 REGISTER.
   */
 /* PD <7>
  *    NOTE: Power-down control.
  */
 typedef enum
 {
-    CTRL_REG1_PD_MASK            =   ( 1U << 7U ),   /*!<  PD mask                                     */
-    CTRL_REG1_PD_POWER_DOWN_MODE =   ( 0U << 7U ),   /*!<  PD power-down mode              [ Default ] */
-    CTRL_REG1_PD_ACTIVE_MODE     =   ( 1U << 7U )    /*!<  PD active mode                              */
+    CTRL_REG1_PD_MASK             =   ( 1U << 7U ),     /*!<  PD mask                                       */
+    CTRL_REG1_PD_POWER_DOWN_MODE  =   ( 0U << 7U ),     /*!<  Power-down mode                   [ Default ] */
+    CTRL_REG1_PD_ACTIVE_MODE      =   ( 1U << 7U )      /*!<  Active mode                                   */
 } LPS25HB_ctrl_reg1_pd_t;
+
+
+/* ODR <6:4>
+ *    NOTE: Output data rate selection.
+ */
+typedef enum
+{
+    CTRL_REG1_ODR_MASK            =   ( 0b111 << 4U ),  /*!<  ODR mask                                      */
+    CTRL_REG1_ODR_ONE_SHOT_MODE   =   ( 0b000 << 4U ),  /*!<  One- shot mode enabled            [ Default ] */
+    CTRL_REG1_ODR_1_HZ            =   ( 0b001 << 4U ),  /*!<  ODR:  1 HZ                                    */
+    CTRL_REG1_ODR_7_HZ            =   ( 0b010 << 4U ),  /*!<  ODR:  7 HZ                                    */
+    CTRL_REG1_ODR_12_5_HZ         =   ( 0b011 << 4U ),  /*!<  ODR: 12.5 HZ                                  */
+    CTRL_REG1_ODR_25_HZ           =   ( 0b100 << 4U )   /*!<  ODR: 25 HZ                                    */
+} LPS25HB_ctrl_reg1_odr_t;
+
+
+/* DIFF_EN <3>
+ *    NOTE: Interrupt generation enable.
+ */
+typedef enum
+{
+    CTRL_REG1_DIFF_EN_MASK        =   ( 1U << 3U ),     /*!<  DIFF_EN mask                                  */
+    CTRL_REG1_DIFF_EN_DISABLED    =   ( 0U << 3U ),     /*!<  Interrupt generation disabled     [ Default ] */
+    CTRL_REG1_DIFF_EN_ENABLED     =   ( 1U << 3U )      /*!<  Interrupt generation enabled                  */
+} LPS25HB_ctrl_reg1_diff_en_t;
 
 
 /* BDU <2>
@@ -133,79 +173,141 @@ typedef enum
  */
 typedef enum
 {
-    CTRL_REG1_BDU_MASK               =   ( 1U << 2U ),  /*!<  BDU mask                                                            */
-    CTRL_REG1_BDU_CONTINUOUS_UPDATE  =   ( 0U << 2U ),  /*!<  Continuous update                                                   */
-    CTRL_REG1_BDU_DEFAULT_MODE       =   ( 1U << 2U )   /*!<  Output registers not updated until MSB and LSB reading  [ Default ] */
+    CTRL_REG1_BDU_MASK            =   ( 1U << 2U ),     /*!<  BDU mask                                      */
+    CTRL_REG1_BDU_0               =   ( 0U << 2U ),     /*!<  Continuous update                 [ Default ] */
+    CTRL_REG1_BDU_1               =   ( 1U << 2U )      /*!<  Not updated until MSB and LSB have been read  */
 } LPS25HB_ctrl_reg1_bdu_t;
 
 
-/* ODR <1:0>
- *    NOTE: Output data rate selection.
+/* RESET_AZ <1>
+ *    NOTE: Reset Autozero function.
  */
 typedef enum
 {
-    CTRL_REG1_ODR_MASK               =   ( 0b11 << 0U ),  /*!<  ODR mask                                                            */
-    CTRL_REG1_ODR_ONE_SHOT           =   ( 0b00 << 0U ),  /*!<  One-shot                                                            */
-    CTRL_REG1_ODR_1_HZ               =   ( 0b01 << 0U ),  /*!<  1 Hz                                                                */
-    CTRL_REG1_ODR_7_HZ               =   ( 0b10 << 0U ),  /*!<  7 Hz                                                                */
-    CTRL_REG1_ODR_12_5_HZ            =   ( 0b11 << 0U )   /*!<  12.5 Hz                                                             */
-} LPS25HB_ctrl_reg1_odr_t;
+    CTRL_REG1_RESET_AZ_MASK                     =   ( 1U << 1U ), /*!<  RESET_AZ mask                                 */
+    CTRL_REG1_RESET_AZ_NORMAL_MODE              =   ( 0U << 1U ), /*!<  Normal mode                       [ Default ] */
+    CTRL_REG1_RESET_AZ_RESET_AUTOZERO_FUNCTION  =   ( 1U << 1U )  /*!<  Reset Autozero function                       */
+} LPS25HB_ctrl_reg1_reset_az_t;
 
+
+/* SIM <0>
+ *    NOTE: SPI Serial Interface Mode selection.
+ */
+typedef enum
+{
+    CTRL_REG1_SIM_MASK              =   ( 1U << 0U ),   /*!<  SIM mask                                      */
+    CTRL_REG1_SIM_4_WIRE_INTERFACE  =   ( 0U << 0U ),   /*!<  4-wire interface                  [ Default ] */
+    CTRL_REG1_SIM_3_WIRE_INTERFACE  =   ( 1U << 0U )    /*!<  3-wire interface                              */
+} LPS25HB_ctrl_reg1_sim_t;
 
 
 /**
-  * @brief   CTRL_REG2 REGISTER
+  * @brief   CTRL_REG2 REGISTER.
   */
 /* BOOT <7>
- *    NOTE: Reboot memory content.
+ *    NOTE: Reboot memory content. The bit is self-cleared when the BOOT is completed
  */
 typedef enum
 {
-    CTRL_REG2_BOOT_MASK                   =   ( 1U << 7U ), /*!<  BOOT mask                                   */
-    CTRL_REG2_BOOT_NORMAL_MODE            =   ( 0U << 7U ), /*!<  normal mode                     [ Default ] */
-    CTRL_REG2_BOOT_REBOOT_MEMORY_CONTENT  =   ( 1U << 7U )  /*!<  reboot memory content                       */
+    CTRL_REG2_BOOT_MASK           =   ( 1U << 7U ),     /*!<  BOOT mask                                     */
+    CTRL_REG2_BOOT_NORMAL_MODE    =   ( 0U << 7U ),     /*!<  Normal mode                       [ Default ] */
+    CTRL_REG2_BOOT_REBOOT_MODE    =   ( 1U << 7U )      /*!<  Reboot memory content                         */
 } LPS25HB_ctrl_reg2_boot_t;
 
 
-/* Heater <1>
- *    NOTE: Controling an internal heating element.
+/* FIFO_EN <6>
+ *    NOTE: FIFO enable
  */
 typedef enum
 {
-    CTRL_REG2_HEATER_MASK                 =   ( 1U << 1U ), /*!<  Heater mask                                 */
-    CTRL_REG2_HEATER_HEATER_DISABLED      =   ( 0U << 1U ), /*!<  Heater disabled                 [ Default ] */
-    CTRL_REG2_HEATER_HEATER_ENABLED       =   ( 1U << 1U )  /*!<  Heater enabled                              */
-} LPS25HB_ctrl_reg2_heater_t;
+    CTRL_REG2_FIFO_EN_MASK        =   ( 1U << 6U ),     /*!<  FIFO_EN mask                                  */
+    CTRL_REG2_FIFO_EN_DISABLED    =   ( 0U << 6U ),     /*!<  Disable                           [ Default ] */
+    CTRL_REG2_FIFO_EN_ENABLED     =   ( 1U << 6U )      /*!<  Enabled                                       */
+} LPS25HB_ctrl_reg2_fifo_en_t;
+
+
+/* STOP_ON_FTH <5>
+ *    NOTE: Enable the FTH_FIFO bit in FIFO_STATUS (2Fh) for monitoring of FIFO level.
+ */
+typedef enum
+{
+    CTRL_REG2_STOP_ON_FTH_MASK      =   ( 1U << 5U ),   /*!<  STOP_ON_FTH mask                              */
+    CTRL_REG2_STOP_ON_FTH_DISABLED  =   ( 0U << 5U ),   /*!<  Disable                           [ Default ] */
+    CTRL_REG2_STOP_ON_FTH_ENABLED   =   ( 1U << 5U )    /*!<  Enabled                                       */
+} LPS25HB_ctrl_reg2_stop_on_fth_t;
+
+
+/* FIFO_MEAN_DEC <4>
+ *    NOTE: Enable to decimate the output pressure to 1Hz with FIFO Mean mode.
+ */
+typedef enum
+{
+    CTRL_REG2_FIFO_MEAN_DEC_MAS       =   ( 1U << 4U ),   /*!<  FIFO_MEAN_DEC mask                            */
+    CTRL_REG2_FIFO_MEAN_DEC_DISABLED  =   ( 0U << 4U ),   /*!<  Disable                           [ Default ] */
+    CTRL_REG2_FIFO_MEAN_DEC_ENABLED   =   ( 1U << 4U )    /*!<  Enabled                                       */
+} LPS25HB_ctrl_reg2_fifo_mean_dec_t;
+
+
+/* I2C_DIS <3>
+ *    NOTE: I2C interface enabled
+ */
+typedef enum
+{
+    CTRL_REG2_I2C_DIS_MASK        =   ( 1U << 3U ),     /*!<  I2C_DIS mask                                  */
+    CTRL_REG2_I2C_DIS_ENABLED     =   ( 0U << 3U ),     /*!<  Enabled                           [ Default ] */
+    CTRL_REG2_I2C_DIS_DISABLED    =   ( 1U << 3U )      /*!<  Disabled                                      */
+} LPS25HB_ctrl_reg2_i2c_dis_t;
+
+
+/* SWRESET <2>
+ *    NOTE: Software reset. The bit is self-cleared when the reset is completed.
+ */
+typedef enum
+{
+    CTRL_REG2_SWRESET_MASK        =   ( 1U << 2U ),     /*!<  SWRESET mask                                  */
+    CTRL_REG2_SWRESET_NORMAL_MODE =   ( 0U << 2U ),     /*!<  Normal mode                       [ Default ] */
+    CTRL_REG2_SWRESET_SW_RESET    =   ( 1U << 2U )      /*!<  Software reset                                */
+} LPS25HB_ctrl_reg2_swreset_t;
+
+
+/* AUTOZERO <1>
+ *    NOTE: Autozero enable.
+ */
+typedef enum
+{
+    CTRL_REG2_AUTOZERO_MASK             =   ( 1U << 1U ),     /*!<  AUTOZERO mask                                 */
+    CTRL_REG2_AUTOZERO_NORMAL_MODE      =   ( 0U << 1U ),     /*!<  Normal mode                       [ Default ] */
+    CTRL_REG2_AUTOZERO_AUTOZERO_ENABLED =   ( 1U << 1U )      /*!<  Autozero enabled                              */
+} LPS25HB_ctrl_reg2_autozero_t;
 
 
 /* ONE_SHOT <0>
- *    NOTE: One-shot enable.
+ *    NOTE: One shot mode enable.
  */
 typedef enum
 {
-    CTRL_REG2_ONE_SHOT_MASK               =   ( 1U << 0U ), /*!<  ONE_SHOT mask                               */
-    CTRL_REG2_ONE_SHOT_WAITING            =   ( 0U << 0U ), /*!<  waiting for start of conversion [ Default ] */
-    CTRL_REG2_ONE_SHOT_START              =   ( 1U << 0U )  /*!<  start for a new dataset                     */
+    CTRL_REG2_ONE_SHOT_MASK         =   ( 1U << 0U ),   /*!<  ONE_SHOT mask                                 */
+    CTRL_REG2_ONE_SHOTL_IDLE_MODE   =   ( 0U << 0U ),   /*!<  Idle mode                         [ Default ] */
+    CTRL_REG2_ONE_SHOT_NEW_DATASET  =   ( 1U << 0U )    /*!<  A new dataset is acquired                     */
 } LPS25HB_ctrl_reg2_one_shot_t;
-
 
 
 /**
   * @brief   CTRL_REG3 REGISTER
   */
-/* DRDY_H_L <7>
- *    NOTE: Data Ready output signal active high, low.
+/* INT_H_L <7>
+ *    NOTE: Interrupt active high
  */
 typedef enum
 {
-    CTRL_REG3_DRDY_H_L_MASK               =   ( 1U << 7U ), /*!<  DRDY_H_L mask                               */
-    CTRL_REG3_DRDY_H_L_ACTIVE_HIGH        =   ( 0U << 7U ), /*!<  active high                     [ Default ] */
-    CTRL_REG3_DRDY_H_L_ACTIVE_LOW         =   ( 1U << 7U )  /*!<  active low                                  */
-} LPS25HB_ctrl_reg3_drdy_h_l_t;
+    CTRL_REG3_INT_H_L_MASK          =   ( 1U << 7U ),   /*!<  INT_H_L mask                                 */
+    CTRL_REG3_INT_H_L_ACTIVE_HIGH   =   ( 0U << 7U ),   /*!<  active high                      [ Default ] */
+    CTRL_REG3_INT_H_L_ACTIVE_LOW    =   ( 1U << 7U )    /*!<  active low                                   */
+} LPS25HB_ctrl_reg3_int_h_l_t;
 
 
 /* PP_OD <6>
- *    NOTE: Push-pull / Open Drain selection on pin 3 (DRDY).
+ *    NOTE: Push-pull/open drain selection on interrupt pads.
  */
 typedef enum
 {
@@ -215,97 +317,261 @@ typedef enum
 } LPS25HB_ctrl_reg3_pp_od_t;
 
 
-/* DRDY_EN <2>
- *    NOTE: Data Ready enable.
+/* INT_S2 <1:0>
+ *    NOTE: Data signal on INT_DRDY pin control bits.
  */
 typedef enum
 {
-    CTRL_REG3_DRDY_EN_MASK                =   ( 1U << 2U ), /*!<  DRDY_EN mask                                */
-    CTRL_REG3_DRDY_DATA_READY_DISABLED    =   ( 0U << 2U ), /*!<  Data Ready disabled             [ Default ] */
-    CTRL_REG3_DRDY_DATA_READY_ENABLED     =   ( 1U << 2U )  /*!<  Data Ready signal available on pin 3        */
-} LPS25HB_ctrl_reg3_drdy_en_t;
+    CTRL_REG3_INT_S2_MASK                 =   ( 0b11 << 0U ), /*!<  INT_S2 mask                                 */
+    CTRL_REG3_INT_S2_DATA_SIGNAL          =   ( 0b00 << 0U ), /*!<  Data signal                     [ Default ] */
+    CTRL_REG3_INT_S2_PRESSURE_HIGH        =   ( 0b01 << 0U ), /*!<  Pressure high (P_high)                      */
+    CTRL_REG3_INT_S2_PRESSURE_LOW         =   ( 0b10 << 0U ), /*!<  Pressure low (P_low)                        */
+    CTRL_REG3_INT_S2_PRESSURE_LOW_OR_HIGH =   ( 0b11 << 0U )  /*!<  Pressure low OR high                        */
+} LPS25HB_ctrl_reg3_int_s2_t;
 
+
+/**
+  * @brief   CTRL_REG4 REGISTER
+  */
+/* F_EMPTY <3>
+ *    NOTE: FIFO empty flag on INT_DRDY pin
+ */
+typedef enum
+{
+    CTRL_REG4_F_EMPTY_MASK          =   ( 1U << 3U ),   /*!<  F_EMPTY mask                                  */
+    CTRL_REG4_F_EMPTY_DISABLED      =   ( 0U << 3U ),   /*!<  Disabled                          [ Default ] */
+    CTRL_REG4_F_EMPTY_ENABLED       =   ( 1U << 3U )    /*!<  Enabled                                       */
+} LPS25HB_ctrl_reg4_f_empty_t;
+
+
+/* F_FTH <2>
+ *    NOTE: FIFO threshold (watermark) status on INT_DRDY pin to indicate that FIFO is filled up to the threshold level
+ */
+typedef enum
+{
+    CTRL_REG4_F_FTH_MASK            =   ( 1U << 2U ),   /*!<  F_FTH mask                                    */
+    CTRL_REG4_F_FTH_DISABLED        =   ( 0U << 2U ),   /*!<  Disabled                          [ Default ] */
+    CTRL_REG4_F_FTH_ENABLED         =   ( 1U << 2U )    /*!<  Enabled                                       */
+} LPS25HB_ctrl_reg4_f_fth_t;
+
+
+/* F_OVR <1>
+ *    NOTE: FIFO overrun interrupt on INT_DRDY pin to indicate that FIFO is full in FIFO mode or that an overrun occurred in Stream mode
+ */
+typedef enum
+{
+    CTRL_REG4_F_OVR_MASK            =   ( 1U << 1U ),   /*!<  F_OVR mask                                    */
+    CTRL_REG4_F_OVR_DISABLED        =   ( 0U << 1U ),   /*!<  Disabled                          [ Default ] */
+    CTRL_REG4_F_OVR_ENABLED         =   ( 1U << 1U )    /*!<  Enabled                                       */
+} LPS25HB_ctrl_reg4_f_ovr_t;
+
+
+/* DRDY <0>
+ *    NOTE: Data-ready signal on INT_DRDY pin
+ */
+typedef enum
+{
+    CTRL_REG4_DRDY_MASK             =   ( 1U << 0U ),   /*!<  DRDY mask                                     */
+    CTRL_REG4_DRDY_DISABLED         =   ( 0U << 0U ),   /*!<  Disabled                          [ Default ] */
+    CTRL_REG4_DRDY_ENABLED          =   ( 1U << 0U )    /*!<  Enabled                                       */
+} LPS25HB_ctrl_reg4_drdy_t;
+
+
+/**
+  * @brief   INTERRUPT_CFG REGISTER
+  */
+/* LIR <2>
+ *    NOTE: Latch interrupt request to the INT_SOURCE (25h) register
+ */
+typedef enum
+{
+    INTERRUPT_CFG_LIR_MASK          =   ( 1U << 2U ),   /*!<  LIR mask                                      */
+    INTERRUPT_CFG_LIR_NOT_LATCHED   =   ( 0U << 2U ),   /*!<  Interrupt request not latched     [ Default ] */
+    INTERRUPT_CFG_LIR_LATCHED       =   ( 1U << 2U )    /*!<  Interrupt request latched                     */
+} LPS25HB_interrupt_cfg_lir_t;
+
+
+/* PL_E <1>
+ *    NOTE: Enable interrupt generation on differential pressure low event
+ */
+typedef enum
+{
+    INTERRUPT_CFG_PL_E_MASK         =   ( 1U << 1U ),   /*!<  PL_E mask                                     */
+    INTERRUPT_CFG_PL_E_DISABLED     =   ( 0U << 1U ),   /*!<  Disable interrupt request         [ Default ] */
+    INTERRUPT_CFG_PL_E_ENABLED      =   ( 1U << 1U )    /*!<  Enable interrupt request on measured differential pressure value lower than preset threshold      */
+} LPS25HB_interrupt_cfg_pl_e_t;
+
+
+/* PH_E <0>
+ *    NOTE: Enable interrupt generation on differential pressure high event
+ */
+typedef enum
+{
+    INTERRUPT_CFG_PH_E_MASK         =   ( 1U << 0U ),   /*!<  PH_E mask                                     */
+    INTERRUPT_CFG_PH_E_DISABLED     =   ( 0U << 0U ),   /*!<  Disable interrupt request         [ Default ] */
+    INTERRUPT_CFG_PH_E_ENABLED      =   ( 1U << 0U )    /*!<  enable interrupt request on measured differential pressure value higher than preset threshold      */
+} LPS25HB_interrupt_cfg_ph_e_t;
+
+
+/**
+  * @brief   INT_SOURCE REGISTER ( INT_SOURCE register is cleared by reading it )
+  */
+/* IA <2>
+ *    NOTE: Interrupt active
+ */
+typedef enum
+{
+    INT_SOURCE_IA_MASK                    =   ( 1U << 2U ),   /*!<  IA mask                                       */
+    INT_SOURCE_IA_NO_INTERRUPT_GENERATED  =   ( 0U << 2U ),   /*!<  No interrupt has been generated               */
+    INT_SOURCE_IA_INTERRUPT_GENERATED     =   ( 1U << 2U )    /*!<  One/more interrupt events have been generated */
+} LPS25HB_int_source_ia_t;
+
+
+/* PL <1>
+ *    NOTE: Differential pressure Low
+ */
+typedef enum
+{ 
+    INT_SOURCE_PL_MASK                    =   ( 1U << 1U ),   /*!<  PL mask                                       */
+    INT_SOURCE_PL_NO_INTERRUPT_GENERATED  =   ( 0U << 1U ),   /*!<  No interrupt has been generated               */
+    INT_SOURCE_PL_EVENT_OCCURRED          =   ( 1U << 1U )    /*!<  Low differential pressure event has occurred  */
+} LPS25HB_int_source_pl_t;
+
+
+/* PH <0>
+ *    NOTE: Differential pressure High
+ */
+typedef enum
+{ 
+    INT_SOURCE_PH_MASK                    =   ( 1U << 0U ),   /*!<  PH mask                                       */
+    INT_SOURCE_PH_NO_INTERRUPT_GENERATED  =   ( 0U << 0U ),   /*!<  No interrupt has been generated               */
+    INT_SOURCE_PH_EVENT_OCCURRED          =   ( 1U << 0U )    /*!<  High differential pressure event has occurred */
+} LPS25HB_int_source_ph_t;
 
 
 /**
   * @brief   STATUS_REG REGISTER
-  *
-  *   NOTE: H_DA is set to 1 whenever a new humidity sample is available. H_DA is cleared anytime
-  *         HUMIDITY_OUT_H (29h) register is read. T_DA is set to 1 whenever a new temperature sample is available. T_DA is cleared anytime TEMP_OUT_H (2Bh) register is read.
   */
-/* H_DA <1>
- *    NOTE: Humidity data available.
+/* P_OR <5>
+ *    NOTE: Pressure data overrun
  */
 typedef enum
 {
-    STATUS_REGISTER_H_DA_MASK               =   ( 1U << 1U ), /*!<  H_DA mask                                   */
-    STATUS_REGISTER_H_DA_DATA_NOT_AVAILABLE =   ( 0U << 1U ), /*!<  new data for humidity is not yet available  */
-    STATUS_REGISTER_H_DA_DATA_AVAILABLE     =   ( 1U << 1U )  /*!<  new data for humidity is available          */
-} LPS25HB_status_reg_h_da_t;
+    STATUS_REG_P_OR_MASK            =   ( 1U << 5U ),   /*!<  P_OR mask                                               */
+    STATUS_REG_P_OR_NO_DATA         =   ( 0U << 5U ),   /*!<  no overrun has occurred                                 */
+    STATUS_REG_P_OR_NEW_DATA        =   ( 1U << 5U )    /*!<  new data for pressure has overwritten the previous one  */
+} LPS25HB_status_reg_p_or_t;
+
+
+/* T_OR <4>
+ *    NOTE: Temperature data overrun
+ */
+typedef enum
+{
+    STATUS_REG_T_OR_MASK            =   ( 1U << 4U ),   /*!<  T_OR mask                                                 */
+    STATUS_REG_T_OR_NO_DATA         =   ( 0U << 4U ),   /*!<  no overrun has occurred                                   */
+    STATUS_REG_T_OR_NEW_DATA        =   ( 1U << 4U )    /*!<  new data for temperature has overwritten the previous one */
+} LPS25HB_status_reg_t_or_t;
+
+
+/* P_DA <1>
+ *    NOTE: Pressure data available
+ */
+typedef enum
+{
+    STATUS_REG_P_DA_MASK            =   ( 1U << 1U ),   /*!<  P_DA mask                                               */
+    STATUS_REG_P_DA_NO_AVAILABLE    =   ( 0U << 1U ),   /*!<  new data for pressure is not yet available              */
+    STATUS_REG_P_DA_NEW_DATA        =   ( 1U << 1U )    /*!<  new data for pressure is available                      */
+} LPS25HB_status_reg_p_da_t;
 
 
 /* T_DA <0>
- *    NOTE: Temperature data available.
+ *    NOTE: Temperature data available
  */
 typedef enum
 {
-    STATUS_REGISTER_T_DA_MASK               =   ( 1U << 0U ), /*!<  T_DA mask                                     */
-    STATUS_REGISTER_T_DA_DATA_NOT_AVAILABLE =   ( 0U << 0U ), /*!<  new data for temperature is not yet available */
-    STATUS_REGISTER_T_DA_DATA_AVAILABLE     =   ( 1U << 0U )  /*!<  new data for temperature is available         */
+    STATUS_REG_T_DA_MASK            =   ( 1U << 0U ),   /*!<  T_DA mask                                               */
+    STATUS_REG_T_DA_NO_AVAILABLE    =   ( 0U << 0U ),   /*!<  new data for temperature is not yet available           */
+    STATUS_REG_T_DA_NEW_DATA        =   ( 1U << 0U )    /*!<  new data for temperature is available                   */
 } LPS25HB_status_reg_t_da_t;
 
 
-
 /**
-  * @brief   HUMIDITY_OUT_L REGISTER
-  *
-  *   NOTE: Relative humidity data (LSB)
-. *
+  * @brief   FIFO_CTRL REGISTER
   */
+/* F_MODE <7:5>
+ *    NOTE: FIFO mode selection
+ */
 typedef enum
 {
-    HUMIDITY_OUT_L_MASK               =   0xFF                  /*!<  Humidity data LSB mask                     */
-} LPS25HB_humidity_out_l_t;
+    FIFO_CTRL_F_MODE_MASK                   =   ( 0b111 << 5U ),  /*!<  F_MODE mask                                           */
+    FIFO_CTRL_F_MODE_BYPASS_MODE            =   ( 0b000 << 5U ),  /*!<  Bypass mode                               [ Default ] */
+    FIFO_CTRL_F_MODE_FIFO_MODE              =   ( 0b001 << 5U ),  /*!<  FIDO mode                                             */
+    FIFO_CTRL_F_MODE_STREAM_MOD             =   ( 0b010 << 5U ),  /*!<  Stream mode                                           */
+    FIFO_CTRL_F_MODE_STREAM_TO_FIFO_MODE    =   ( 0b011 << 5U ),  /*!<  Stream-to-FIDO mode                                   */
+    FIFO_CTRL_F_MODE_BYPASS_TO_STREAM_MODE  =   ( 0b100 << 5U ),  /*!<  Bypass-to-Stream mode                                 */
+    FIFO_CTRL_F_MODE_FIFO_MEAN_MODE         =   ( 0b110 << 5U ),  /*!<  FIDO mean mode                                        */
+    FIFO_CTRL_F_MODE_BYPASS_TO_FIFO_MODE    =   ( 0b111 << 5U )   /*!<  Bypass-to-FIDO mode                                   */
+} LPS25HB_fifo_ctrl_f_mode_t;
 
 
-
-/**
-  * @brief   HUMIDITY_OUT_H REGISTER
-  *
-  *   NOTE: Relative humidity data (LSB)
-. *
-  */
+/* WTM_POINT <4:0>
+ *    NOTE: FIFO threshold (watermark) level selection
+ */
 typedef enum
 {
-    HUMIDITY_OUT_H_MASK               =   0xFF                  /*!<  Humidity data MSB mask                     */
-} LPS25HB_humidity_out_h_t;
-
-
-
-/**
-  * @brief   TEMP_OUT_L REGISTER
-  *
-  *   NOTE: Temperature data (LSB)
-. *
-  */
-typedef enum
-{
-    TEMP_OUT_L_MASK                   =   0xFF                  /*!<  Temperature data LSB mask                 */
-} LPS25HB_temp_out_l_t;
-
+    FIFO_CTRL_WTM_POINT_MASK                =   ( 0b11111 << 0U ),  /*!<  WTM_POINT mask                                        */
+    FIFO_CTRL_WTM_POINT_2_SAMPLE_MOV_AVG    =   ( 0b00001 << 0U ),  /*!<  2-sample moving average                   [ Default ] */
+    FIFO_CTRL_WTM_POINT_4_SAMPLE_MOV_AVG    =   ( 0b00011 << 0U ),  /*!<  4-sample moving average                               */
+    FIFO_CTRL_WTM_POINT_8_SAMPLE_MOV_AVG    =   ( 0b00111 << 0U ),  /*!<  8-sample moving average                               */
+    FIFO_CTRL_WTM_POINT_16_SAMPLE_MOV_AVG   =   ( 0b01111 << 0U ),  /*!<  16-sample moving average                              */
+    FIFO_CTRL_WTM_POINT_32_SAMPLE_MOV_AVG   =   ( 0b11111 << 0U )   /*!<  32-sample moving average                              */
+} LPS25HB_fifo_ctrl_wtm_point_t;
 
 
 /**
-  * @brief   TEMP_OUT_H REGISTER
-  *
-  *   NOTE: Temperature data (MSB)
-. *
+  * @brief   FIFO_STATUS REGISTER
   */
+/* FTH_FIFO <7>
+ *    NOTE: FIFO threshold status
+ */
 typedef enum
 {
-    TEMP_OUT_H_MASK                   =   0xFF                  /*!<  Temperature data MSB mask                 */
-} LPS25HB_temp_out_h_t;
+    FIFO_STATUS_FTH_FIFO_MASK       =   ( 1U << 7U ),   /*!<  FTH_FIFO mask                                           */
+    FIFO_STATUS_FTH_FIFO_0          =   ( 0U << 7U ),   /*!<  FIFO filling is lower than FTH level                    */
+    FIFO_STATUS_FTH_FIFO_1          =   ( 1U << 7U )    /*!<  FIFO filling is equal or higher than FTH level          */
+} LPS25HB_fifo_status_fth_fifo_t;
 
+
+/* OVR <6>
+ *    NOTE: Overrun bit status
+ */
+typedef enum
+{
+    FIFO_STATUS_OVR_MASK            =   ( 1U << 6U ),   /*!<  OVR mask                                                */
+    FIFO_STATUS_OVR_FIFO_NOT_FULL   =   ( 0U << 6U ),   /*!<  FIFO not full                                           */
+    FIFO_STATUS_OVR_FIFO_FULL       =   ( 1U << 6U )    /*!<  FIFO is full and at least one sample in the FIFO has been overwritten */
+} LPS25HB_fifo_status_ovr_t;
+
+
+/* EMPTY_FIFO <5>
+ *    NOTE: Empty FIFO bit status
+ */
+typedef enum
+{
+    FIFO_STATUS_EMPTY_FIFO_MASK       =   ( 1U << 5U ),   /*!<  EMPTY_FIFO mask                                       */
+    FIFO_STATUS_EMPTY_FIFO_NOT_EMPTY  =   ( 0U << 5U ),   /*!<  FIFO not empty                                        */
+    FIFO_STATUS_EMPTY_FIFO_EMPTY      =   ( 1U << 5U )    /*!<  FIFO empty                                            */
+} LPS25HB_fifo_status_empty_fifo_t;
+
+
+/* FSS <4:0>
+ *    NOTE: FIFO stored data level
+ */
+typedef enum
+{
+    FIFO_STATUS_FSS_MASK              =   ( 0b11111 << 0U ) /*!<  FSS mask                                              */
+} LPS25HB_fifo_status_fss_t;
 
 
 
@@ -315,44 +581,21 @@ typedef enum
 typedef struct
 {
     /* Output registers  */
-    int16_t   rawHumidity;     /*!<  Raw humidity                  */
+    int32_t   rawReferencePressure;     /*!<  Raw reference pressure    */
     int16_t   rawTemperature;  /*!<  Raw temperature               */
 
     float     humidity;        /*!<  Humidity value                */
     float     temperature;     /*!<  Temperature value             */
-
-    /* Calibration registers  */
-    uint8_t   h0_rH_x2;        /*!<  Calibration register          */
-    uint8_t   h1_rH_x2;        /*!<  Calibration register          */
-    uint8_t   t0_degC_x8;      /*!<  Calibration register          */
-    uint8_t   t1_degC_x8;      /*!<  Calibration register          */
-    uint8_t   t1_T0_msb;       /*!<  Calibration register          */
-    int16_t   h0_T0_OUT;       /*!<  Calibration register          */
-    int16_t   h1_T0_OUT;       /*!<  Calibration register          */
-    int16_t   t0_OUT;          /*!<  Calibration register          */
-    int16_t   t1_OUT;          /*!<  Calibration register          */
-
-    int16_t   t0_degC;         /*!<  Calibration result            */
-    int16_t   t1_degC;         /*!<  Calibration result            */
-    int16_t   h0_RH;           /*!<  Calibration result            */
-    int16_t   h1_RH;           /*!<  Calibration result            */
+    
+    /* Resolution  */
+    LPS25HB_res_conf_avgt_t avgt;   /*!<  Temperature resolution        */
+    LPS25HB_res_conf_avgp_t avgp;   /*!<  Pressure resolution           */
+    
+    /* Configuration  */
+    LPS25HB_ctrl_reg1_odr_t odr;   /*!<  Output data rate selection     */
 
     /* Device identification   */
-    uint8_t   deviceID;        /*!<  Device ID                     */
-
-    /* Device configuration   */
-    LPS25HB_av_config_avgt_t     temperatureResolution;  /*!<  Temperature resolution        */
-    LPS25HB_av_config_avgh_t     humidityResolution;     /*!<  Humidity resolution           */
-
-    LPS25HB_ctrl_reg1_bdu_t      bdu;                    /*!<  Block data update             */
-    LPS25HB_ctrl_reg1_odr_t      odr;                    /*!<  Output data rate              */
-    LPS25HB_ctrl_reg2_boot_t     boot;                   /*!<  Reboot mode content           */
-    LPS25HB_ctrl_reg2_heater_t   heater;                 /*!<  Heater                        */
-    LPS25HB_ctrl_reg2_one_shot_t one_shot;               /*!<  One-Shot                      */
-
-    /* Device status   */
-    LPS25HB_status_reg_h_da_t    h_da;                   /*!<  Humidity data available       */
-    LPS25HB_status_reg_t_da_t    t_da;                   /*!<  Temperature data available    */
+    uint8_t   deviceID;             /*!<  Device ID                     */
 } LPS25HB_data_t;
 #endif
 
@@ -376,100 +619,45 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-LPS25HB_status_t LPS25HB_Init               ( I2C_parameters_t myI2Cparameters                                          );
+LPS25HB_status_t LPS25HB_Init                     ( I2C_parameters_t myI2Cparameters                              );
 
-/** It gets the device identification.
+/** It gets raw reference pressure.
   */
-LPS25HB_status_t LPS25HB_GetDeviceID        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myDeviceID               );
+LPS25HB_status_t LPS25HB_GetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myREFL      );
 
-/** It sets humidity and temperature resolution mode.
+/** It sets raw reference pressure.
   */
-LPS25HB_status_t LPS25HB_SetResolution      ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myTempHumResolution       );
+LPS25HB_status_t LPS25HB_SetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myREFL       );
 
-/** It gets humidity and temperature resolution mode.
+/** It gets the device ID.
   */
-LPS25HB_status_t LPS25HB_GetResolution      ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myTempHumResolution      );
+LPS25HB_status_t LPS25HB_GetDeviceID              ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myID        );
 
-/** It sets power-down control mode.
+/** It sets temperature resolution.
   */
-LPS25HB_status_t LPS25HB_SetPowerDown       ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg1_pd_t myPowerMode       );
+LPS25HB_status_t LPS25HB_SetTemperatureResolution ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myAVGT       );
 
-/** It sets the block data update.
+/** It gets temperature resolution.
   */
-LPS25HB_status_t LPS25HB_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myBDU                     );
+LPS25HB_status_t LPS25HB_GetTemperatureResolution ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myAVGT      );
 
-/** It gets the block data update.
+/** It sets pressure resolution.
   */
-LPS25HB_status_t LPS25HB_GetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myBDU                    );
+LPS25HB_status_t LPS25HB_SetPressureResolution    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myAVGP       );
 
-/** It sets the output data rate ( ODR ).
+/** It gets pressure resolution.
   */
-LPS25HB_status_t LPS25HB_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t  myODR                    );
+LPS25HB_status_t LPS25HB_GetPressureResolution    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myAVGP      );
 
-/** It gets the output data rate ( ODR ).
+/** It sets the power mode.
   */
-LPS25HB_status_t LPS25HB_GetOutputDataRate  ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myODR                    );
+LPS25HB_status_t LPS25HB_SetPowerMode             ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg1_pd_t myPD );
 
-/** It sets reboot memory content.
+/** It sets the output data rate.
   */
-LPS25HB_status_t LPS25HB_SetBoot            ( I2C_parameters_t myI2Cparameters                                          );
+LPS25HB_status_t LPS25HB_SetOutputDataRate        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myODR        );
 
-/** It gets reboot memory content.
+/** It gets the output data rate.
   */
-LPS25HB_status_t LPS25HB_GetBoot            ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myBOOT                   );
+LPS25HB_status_t LPS25HB_GetOutputDataRate        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myODR       );
 
-/** It sets heater mode: Enabled/Disabled.
-  */
-LPS25HB_status_t LPS25HB_SetHeater          ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t  myHeater                 );
-
-/** It gets heater mode.
-  */
-LPS25HB_status_t LPS25HB_GetHeater          ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myHeater                 );
-
-/** It sets one-shot, new data set.
-  */
-LPS25HB_status_t LPS25HB_SetOneShot         ( I2C_parameters_t myI2Cparameters                                          );
-
-/** It gets one-shot flag.
-  */
-LPS25HB_status_t LPS25HB_GetOneShot         ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myOneShot                );
-
-/** It sets data ready output signal active high/low.
-  */
-LPS25HB_status_t LPS25HB_SetDataReadyOuput  ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_drdy_h_l_t myDRDY_H_L  );
-
-/** It sets Push-pull/Open Drain selection on pin 3 ( DRDY ).
-  */
-LPS25HB_status_t LPS25HB_SetSelectionOnPin3 ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_pp_od_t myDRDY         );
-
-/** It sets data ready enable.
-  */
-LPS25HB_status_t LPS25HB_SetDataReadyEnable ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_drdy_en_t myDRDY_EN    );
-
-/** It gets humidity data available flag.
-  */
-LPS25HB_status_t LPS25HB_GetHumidityDataAvailable ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myHumidityFlag     );
-
-/** It gets temperature data available flag.
-  */
-LPS25HB_status_t LPS25HB_GetTemperatureDataAvailable  ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myTemperatureFlag  );
-
-/** It gets raw humidity.
-  */
-LPS25HB_status_t LPS25HB_GetRawHumidity             ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myRawHumidity            );
-
-/** It gets raw temperature.
-  */
-LPS25HB_status_t LPS25HB_GetRawTemperature          ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myRawTemperature         );
-
-/** It gets calibration coefficients.
-  */
-LPS25HB_status_t LPS25HB_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myCoeff           );
-
-/** It gets the current temperature value in Celsius degrees.
-  */
-LPS25HB_status_t LPS25HB_GetTemperature             ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myTemperature     );
-
-/** It gets the current humidity value.
-  */
-LPS25HB_status_t LPS25HB_GetHumidity                ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myHumidity        );
