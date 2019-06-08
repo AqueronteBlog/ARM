@@ -1,5 +1,5 @@
 /**
- * @brief       HTS221.h
+ * @brief       LPS25HB.h
  * @details     Capacitive digital sensor for relative humidity and temperature.
  *              Header file.
  *
@@ -7,8 +7,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        22/May/2019
- * @version     22/May/2019    The ORIGIN
+ * @date        08/June/2019
+ * @version     08/June/2019    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ). All rights reserved.
@@ -25,8 +25,8 @@
   */
 typedef enum
 {
-  HTS221_ADDRESS     =   0b1011111          /*!<   I2C slave address byte                       */
-} HTS221_address_t;
+  LPS25HB_ADDRESS     =   0b1011111          /*!<   I2C slave address byte                       */
+} LPS25HB_address_t;
 
 
 
@@ -35,33 +35,33 @@ typedef enum
   */
 typedef enum
 {
-  HTS221_WHO_AM_I        =   0x0F,           /*!<  Device identification                         */
-  HTS221_AV_CONF         =   0x10,           /*!<  Humidity and temperature resolution mode      */
-  HTS221_CTRL_REG1       =   0x20,           /*!<  Control register 1                            */
-  HTS221_CTRL_REG2       =   0x21,           /*!<  Control register 2                            */
-  HTS221_CTRL_REG3       =   0x22,           /*!<  Control register 3                            */
-  HTS221_STATUS_REG      =   0x27,           /*!<  Status register                               */
-  HTS221_HUMIDITY_OUT_L  =   0x28,           /*!<  Relative humidity data (LSB)                  */
-  HTS221_HUMIDITY_OUT_H  =   0x29,           /*!<  Relative humidity data (MSB)                  */
-  HTS221_TEMP_OUT_L      =   0x2A,           /*!<  Temperature data (LSB)                        */
-  HTS221_TEMP_OUT_H      =   0x2B,           /*!<  Temperature data (MSB)                        */
-  HTS221_CALIB_0         =   0x30,           /*!<  Calibration register                          */
-  HTS221_CALIB_1         =   0x31,           /*!<  Calibration register                          */
-  HTS221_CALIB_2         =   0x32,           /*!<  Calibration register                          */
-  HTS221_CALIB_3         =   0x33,           /*!<  Calibration register                          */
-  HTS221_CALIB_4         =   0x34,           /*!<  Calibration register                          */
-  HTS221_CALIB_5         =   0x35,           /*!<  Calibration register                          */
-  HTS221_CALIB_6         =   0x36,           /*!<  Calibration register                          */
-  HTS221_CALIB_7         =   0x37,           /*!<  Calibration register                          */
-  HTS221_CALIB_8         =   0x38,           /*!<  Calibration register                          */
-  HTS221_CALIB_9         =   0x39,           /*!<  Calibration register                          */
-  HTS221_CALIB_A         =   0x3A,           /*!<  Calibration register                          */
-  HTS221_CALIB_B         =   0x3B,           /*!<  Calibration register                          */
-  HTS221_CALIB_C         =   0x3C,           /*!<  Calibration register                          */
-  HTS221_CALIB_D         =   0x3D,           /*!<  Calibration register                          */
-  HTS221_CALIB_E         =   0x3E,           /*!<  Calibration register                          */
-  HTS221_CALIB_F         =   0x3F            /*!<  Calibration register                          */
-} HTS221_registers_t;
+  LPS25HB_WHO_AM_I        =   0x0F,           /*!<  Device identification                         */
+  LPS25HB_AV_CONF         =   0x10,           /*!<  Humidity and temperature resolution mode      */
+  LPS25HB_CTRL_REG1       =   0x20,           /*!<  Control register 1                            */
+  LPS25HB_CTRL_REG2       =   0x21,           /*!<  Control register 2                            */
+  LPS25HB_CTRL_REG3       =   0x22,           /*!<  Control register 3                            */
+  LPS25HB_STATUS_REG      =   0x27,           /*!<  Status register                               */
+  LPS25HB_HUMIDITY_OUT_L  =   0x28,           /*!<  Relative humidity data (LSB)                  */
+  LPS25HB_HUMIDITY_OUT_H  =   0x29,           /*!<  Relative humidity data (MSB)                  */
+  LPS25HB_TEMP_OUT_L      =   0x2A,           /*!<  Temperature data (LSB)                        */
+  LPS25HB_TEMP_OUT_H      =   0x2B,           /*!<  Temperature data (MSB)                        */
+  LPS25HB_CALIB_0         =   0x30,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_1         =   0x31,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_2         =   0x32,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_3         =   0x33,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_4         =   0x34,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_5         =   0x35,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_6         =   0x36,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_7         =   0x37,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_8         =   0x38,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_9         =   0x39,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_A         =   0x3A,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_B         =   0x3B,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_C         =   0x3C,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_D         =   0x3D,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_E         =   0x3E,           /*!<  Calibration register                          */
+  LPS25HB_CALIB_F         =   0x3F            /*!<  Calibration register                          */
+} LPS25HB_registers_t;
 
 
 
@@ -72,7 +72,7 @@ typedef enum
 {
     WHO_AM_I_MASK           =   0xFF,             /*!<  WHO_AM_I mask                               */
     WHO_AM_I_VALUE          =   0xBC              /*!<  WHO_AM_I value                              */
-} HTS221_who_am_i_t;
+} LPS25HB_who_am_i_t;
 
 
 
@@ -93,7 +93,7 @@ typedef enum
     AV_CONF_AVGT_64         =   ( 0b101 << 3U ),    /*!<  AVGT Nr. internal average 64                */
     AV_CONF_AVGT_128        =   ( 0b110 << 3U ),    /*!<  AVGT Nr. internal average 128               */
     AV_CONF_AVGT_256        =   ( 0b111 << 3U )     /*!<  AVGT Nr. internal average 256               */
-} HTS221_av_config_avgt_t;
+} LPS25HB_av_config_avgt_t;
 
 
 /* AVGH <2:0>
@@ -110,7 +110,7 @@ typedef enum
     AV_CONF_AVGH_128        =   ( 0b101 << 0U ),    /*!<  AVGH Nr. internal average 128               */
     AV_CONF_AVGH_256        =   ( 0b110 << 0U ),    /*!<  AVGH Nr. internal average 256               */
     AV_CONF_AVGH_512        =   ( 0b111 << 0U )     /*!<  AVGH Nr. internal average 512               */
-} HTS221_av_config_avgh_t;
+} LPS25HB_av_config_avgh_t;
 
 
 
@@ -125,7 +125,7 @@ typedef enum
     CTRL_REG1_PD_MASK            =   ( 1U << 7U ),   /*!<  PD mask                                     */
     CTRL_REG1_PD_POWER_DOWN_MODE =   ( 0U << 7U ),   /*!<  PD power-down mode              [ Default ] */
     CTRL_REG1_PD_ACTIVE_MODE     =   ( 1U << 7U )    /*!<  PD active mode                              */
-} HTS221_ctrl_reg1_pd_t;
+} LPS25HB_ctrl_reg1_pd_t;
 
 
 /* BDU <2>
@@ -136,7 +136,7 @@ typedef enum
     CTRL_REG1_BDU_MASK               =   ( 1U << 2U ),  /*!<  BDU mask                                                            */
     CTRL_REG1_BDU_CONTINUOUS_UPDATE  =   ( 0U << 2U ),  /*!<  Continuous update                                                   */
     CTRL_REG1_BDU_DEFAULT_MODE       =   ( 1U << 2U )   /*!<  Output registers not updated until MSB and LSB reading  [ Default ] */
-} HTS221_ctrl_reg1_bdu_t;
+} LPS25HB_ctrl_reg1_bdu_t;
 
 
 /* ODR <1:0>
@@ -149,7 +149,7 @@ typedef enum
     CTRL_REG1_ODR_1_HZ               =   ( 0b01 << 0U ),  /*!<  1 Hz                                                                */
     CTRL_REG1_ODR_7_HZ               =   ( 0b10 << 0U ),  /*!<  7 Hz                                                                */
     CTRL_REG1_ODR_12_5_HZ            =   ( 0b11 << 0U )   /*!<  12.5 Hz                                                             */
-} HTS221_ctrl_reg1_odr_t;
+} LPS25HB_ctrl_reg1_odr_t;
 
 
 
@@ -164,7 +164,7 @@ typedef enum
     CTRL_REG2_BOOT_MASK                   =   ( 1U << 7U ), /*!<  BOOT mask                                   */
     CTRL_REG2_BOOT_NORMAL_MODE            =   ( 0U << 7U ), /*!<  normal mode                     [ Default ] */
     CTRL_REG2_BOOT_REBOOT_MEMORY_CONTENT  =   ( 1U << 7U )  /*!<  reboot memory content                       */
-} HTS221_ctrl_reg2_boot_t;
+} LPS25HB_ctrl_reg2_boot_t;
 
 
 /* Heater <1>
@@ -175,7 +175,7 @@ typedef enum
     CTRL_REG2_HEATER_MASK                 =   ( 1U << 1U ), /*!<  Heater mask                                 */
     CTRL_REG2_HEATER_HEATER_DISABLED      =   ( 0U << 1U ), /*!<  Heater disabled                 [ Default ] */
     CTRL_REG2_HEATER_HEATER_ENABLED       =   ( 1U << 1U )  /*!<  Heater enabled                              */
-} HTS221_ctrl_reg2_heater_t;
+} LPS25HB_ctrl_reg2_heater_t;
 
 
 /* ONE_SHOT <0>
@@ -186,7 +186,7 @@ typedef enum
     CTRL_REG2_ONE_SHOT_MASK               =   ( 1U << 0U ), /*!<  ONE_SHOT mask                               */
     CTRL_REG2_ONE_SHOT_WAITING            =   ( 0U << 0U ), /*!<  waiting for start of conversion [ Default ] */
     CTRL_REG2_ONE_SHOT_START              =   ( 1U << 0U )  /*!<  start for a new dataset                     */
-} HTS221_ctrl_reg2_one_shot_t;
+} LPS25HB_ctrl_reg2_one_shot_t;
 
 
 
@@ -201,7 +201,7 @@ typedef enum
     CTRL_REG3_DRDY_H_L_MASK               =   ( 1U << 7U ), /*!<  DRDY_H_L mask                               */
     CTRL_REG3_DRDY_H_L_ACTIVE_HIGH        =   ( 0U << 7U ), /*!<  active high                     [ Default ] */
     CTRL_REG3_DRDY_H_L_ACTIVE_LOW         =   ( 1U << 7U )  /*!<  active low                                  */
-} HTS221_ctrl_reg3_drdy_h_l_t;
+} LPS25HB_ctrl_reg3_drdy_h_l_t;
 
 
 /* PP_OD <6>
@@ -212,7 +212,7 @@ typedef enum
     CTRL_REG3_PP_OD_MASK                  =   ( 1U << 6U ), /*!<  PP_OD mask                                  */
     CTRL_REG3_PP_OD_PUSH_PULL             =   ( 0U << 6U ), /*!<  push-pull                       [ Default ] */
     CTRL_REG3_PP_OD_OPEN_DRAIN            =   ( 1U << 6U )  /*!<  open drain                                  */
-} HTS221_ctrl_reg3_pp_od_t;
+} LPS25HB_ctrl_reg3_pp_od_t;
 
 
 /* DRDY_EN <2>
@@ -223,7 +223,7 @@ typedef enum
     CTRL_REG3_DRDY_EN_MASK                =   ( 1U << 2U ), /*!<  DRDY_EN mask                                */
     CTRL_REG3_DRDY_DATA_READY_DISABLED    =   ( 0U << 2U ), /*!<  Data Ready disabled             [ Default ] */
     CTRL_REG3_DRDY_DATA_READY_ENABLED     =   ( 1U << 2U )  /*!<  Data Ready signal available on pin 3        */
-} HTS221_ctrl_reg3_drdy_en_t;
+} LPS25HB_ctrl_reg3_drdy_en_t;
 
 
 
@@ -241,7 +241,7 @@ typedef enum
     STATUS_REGISTER_H_DA_MASK               =   ( 1U << 1U ), /*!<  H_DA mask                                   */
     STATUS_REGISTER_H_DA_DATA_NOT_AVAILABLE =   ( 0U << 1U ), /*!<  new data for humidity is not yet available  */
     STATUS_REGISTER_H_DA_DATA_AVAILABLE     =   ( 1U << 1U )  /*!<  new data for humidity is available          */
-} HTS221_status_reg_h_da_t;
+} LPS25HB_status_reg_h_da_t;
 
 
 /* T_DA <0>
@@ -252,7 +252,7 @@ typedef enum
     STATUS_REGISTER_T_DA_MASK               =   ( 1U << 0U ), /*!<  T_DA mask                                     */
     STATUS_REGISTER_T_DA_DATA_NOT_AVAILABLE =   ( 0U << 0U ), /*!<  new data for temperature is not yet available */
     STATUS_REGISTER_T_DA_DATA_AVAILABLE     =   ( 1U << 0U )  /*!<  new data for temperature is available         */
-} HTS221_status_reg_t_da_t;
+} LPS25HB_status_reg_t_da_t;
 
 
 
@@ -265,7 +265,7 @@ typedef enum
 typedef enum
 {
     HUMIDITY_OUT_L_MASK               =   0xFF                  /*!<  Humidity data LSB mask                     */
-} HTS221_humidity_out_l_t;
+} LPS25HB_humidity_out_l_t;
 
 
 
@@ -278,7 +278,7 @@ typedef enum
 typedef enum
 {
     HUMIDITY_OUT_H_MASK               =   0xFF                  /*!<  Humidity data MSB mask                     */
-} HTS221_humidity_out_h_t;
+} LPS25HB_humidity_out_h_t;
 
 
 
@@ -291,7 +291,7 @@ typedef enum
 typedef enum
 {
     TEMP_OUT_L_MASK                   =   0xFF                  /*!<  Temperature data LSB mask                 */
-} HTS221_temp_out_l_t;
+} LPS25HB_temp_out_l_t;
 
 
 
@@ -304,14 +304,14 @@ typedef enum
 typedef enum
 {
     TEMP_OUT_H_MASK                   =   0xFF                  /*!<  Temperature data MSB mask                 */
-} HTS221_temp_out_h_t;
+} LPS25HB_temp_out_h_t;
 
 
 
 
 
-#ifndef HTS221_VECTOR_STRUCT_H
-#define HTS221_VECTOR_STRUCT_H
+#ifndef LPS25HB_VECTOR_STRUCT_H
+#define LPS25HB_VECTOR_STRUCT_H
 typedef struct
 {
     /* Output registers  */
@@ -341,19 +341,19 @@ typedef struct
     uint8_t   deviceID;        /*!<  Device ID                     */
 
     /* Device configuration   */
-    HTS221_av_config_avgt_t     temperatureResolution;  /*!<  Temperature resolution        */
-    HTS221_av_config_avgh_t     humidityResolution;     /*!<  Humidity resolution           */
+    LPS25HB_av_config_avgt_t     temperatureResolution;  /*!<  Temperature resolution        */
+    LPS25HB_av_config_avgh_t     humidityResolution;     /*!<  Humidity resolution           */
 
-    HTS221_ctrl_reg1_bdu_t      bdu;                    /*!<  Block data update             */
-    HTS221_ctrl_reg1_odr_t      odr;                    /*!<  Output data rate              */
-    HTS221_ctrl_reg2_boot_t     boot;                   /*!<  Reboot mode content           */
-    HTS221_ctrl_reg2_heater_t   heater;                 /*!<  Heater                        */
-    HTS221_ctrl_reg2_one_shot_t one_shot;               /*!<  One-Shot                      */
+    LPS25HB_ctrl_reg1_bdu_t      bdu;                    /*!<  Block data update             */
+    LPS25HB_ctrl_reg1_odr_t      odr;                    /*!<  Output data rate              */
+    LPS25HB_ctrl_reg2_boot_t     boot;                   /*!<  Reboot mode content           */
+    LPS25HB_ctrl_reg2_heater_t   heater;                 /*!<  Heater                        */
+    LPS25HB_ctrl_reg2_one_shot_t one_shot;               /*!<  One-Shot                      */
 
     /* Device status   */
-    HTS221_status_reg_h_da_t    h_da;                   /*!<  Humidity data available       */
-    HTS221_status_reg_t_da_t    t_da;                   /*!<  Temperature data available    */
-} HTS221_data_t;
+    LPS25HB_status_reg_h_da_t    h_da;                   /*!<  Humidity data available       */
+    LPS25HB_status_reg_t_da_t    t_da;                   /*!<  Temperature data available    */
+} LPS25HB_data_t;
 #endif
 
 
@@ -364,9 +364,9 @@ typedef struct
   */
 typedef enum
 {
-    HTS221_SUCCESS     =       0,
-    HTS221_FAILURE     =       1
-} HTS221_status_t;
+    LPS25HB_SUCCESS     =       0,
+    LPS25HB_FAILURE     =       1
+} LPS25HB_status_t;
 
 
 
@@ -376,100 +376,100 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-HTS221_status_t HTS221_Init               ( I2C_parameters_t myI2Cparameters                                          );
+LPS25HB_status_t LPS25HB_Init               ( I2C_parameters_t myI2Cparameters                                          );
 
 /** It gets the device identification.
   */
-HTS221_status_t HTS221_GetDeviceID        ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myDeviceID               );
+LPS25HB_status_t LPS25HB_GetDeviceID        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myDeviceID               );
 
 /** It sets humidity and temperature resolution mode.
   */
-HTS221_status_t HTS221_SetResolution      ( I2C_parameters_t myI2Cparameters, HTS221_data_t myTempHumResolution       );
+LPS25HB_status_t LPS25HB_SetResolution      ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myTempHumResolution       );
 
 /** It gets humidity and temperature resolution mode.
   */
-HTS221_status_t HTS221_GetResolution      ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTempHumResolution      );
+LPS25HB_status_t LPS25HB_GetResolution      ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myTempHumResolution      );
 
 /** It sets power-down control mode.
   */
-HTS221_status_t HTS221_SetPowerDown       ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg1_pd_t myPowerMode       );
+LPS25HB_status_t LPS25HB_SetPowerDown       ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg1_pd_t myPowerMode       );
 
 /** It sets the block data update.
   */
-HTS221_status_t HTS221_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HTS221_data_t myBDU                     );
+LPS25HB_status_t LPS25HB_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myBDU                     );
 
 /** It gets the block data update.
   */
-HTS221_status_t HTS221_GetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myBDU                    );
+LPS25HB_status_t LPS25HB_GetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myBDU                    );
 
 /** It sets the output data rate ( ODR ).
   */
-HTS221_status_t HTS221_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HTS221_data_t  myODR                    );
+LPS25HB_status_t LPS25HB_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t  myODR                    );
 
 /** It gets the output data rate ( ODR ).
   */
-HTS221_status_t HTS221_GetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myODR                    );
+LPS25HB_status_t LPS25HB_GetOutputDataRate  ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myODR                    );
 
 /** It sets reboot memory content.
   */
-HTS221_status_t HTS221_SetBoot            ( I2C_parameters_t myI2Cparameters                                          );
+LPS25HB_status_t LPS25HB_SetBoot            ( I2C_parameters_t myI2Cparameters                                          );
 
 /** It gets reboot memory content.
   */
-HTS221_status_t HTS221_GetBoot            ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myBOOT                   );
+LPS25HB_status_t LPS25HB_GetBoot            ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myBOOT                   );
 
 /** It sets heater mode: Enabled/Disabled.
   */
-HTS221_status_t HTS221_SetHeater          ( I2C_parameters_t myI2Cparameters, HTS221_data_t  myHeater                 );
+LPS25HB_status_t LPS25HB_SetHeater          ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t  myHeater                 );
 
 /** It gets heater mode.
   */
-HTS221_status_t HTS221_GetHeater          ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHeater                 );
+LPS25HB_status_t LPS25HB_GetHeater          ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myHeater                 );
 
 /** It sets one-shot, new data set.
   */
-HTS221_status_t HTS221_SetOneShot         ( I2C_parameters_t myI2Cparameters                                          );
+LPS25HB_status_t LPS25HB_SetOneShot         ( I2C_parameters_t myI2Cparameters                                          );
 
 /** It gets one-shot flag.
   */
-HTS221_status_t HTS221_GetOneShot         ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myOneShot                );
+LPS25HB_status_t LPS25HB_GetOneShot         ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myOneShot                );
 
 /** It sets data ready output signal active high/low.
   */
-HTS221_status_t HTS221_SetDataReadyOuput  ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_drdy_h_l_t myDRDY_H_L  );
+LPS25HB_status_t LPS25HB_SetDataReadyOuput  ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_drdy_h_l_t myDRDY_H_L  );
 
 /** It sets Push-pull/Open Drain selection on pin 3 ( DRDY ).
   */
-HTS221_status_t HTS221_SetSelectionOnPin3 ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_pp_od_t myDRDY         );
+LPS25HB_status_t LPS25HB_SetSelectionOnPin3 ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_pp_od_t myDRDY         );
 
 /** It sets data ready enable.
   */
-HTS221_status_t HTS221_SetDataReadyEnable ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_drdy_en_t myDRDY_EN    );
+LPS25HB_status_t LPS25HB_SetDataReadyEnable ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_drdy_en_t myDRDY_EN    );
 
 /** It gets humidity data available flag.
   */
-HTS221_status_t HTS221_GetHumidityDataAvailable ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHumidityFlag     );
+LPS25HB_status_t LPS25HB_GetHumidityDataAvailable ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myHumidityFlag     );
 
 /** It gets temperature data available flag.
   */
-HTS221_status_t HTS221_GetTemperatureDataAvailable  ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTemperatureFlag  );
+LPS25HB_status_t LPS25HB_GetTemperatureDataAvailable  ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myTemperatureFlag  );
 
 /** It gets raw humidity.
   */
-HTS221_status_t HTS221_GetRawHumidity             ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myRawHumidity            );
+LPS25HB_status_t LPS25HB_GetRawHumidity             ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myRawHumidity            );
 
 /** It gets raw temperature.
   */
-HTS221_status_t HTS221_GetRawTemperature          ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myRawTemperature         );
+LPS25HB_status_t LPS25HB_GetRawTemperature          ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myRawTemperature         );
 
 /** It gets calibration coefficients.
   */
-HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myCoeff           );
+LPS25HB_status_t LPS25HB_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myCoeff           );
 
 /** It gets the current temperature value in Celsius degrees.
   */
-HTS221_status_t HTS221_GetTemperature             ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTemperature     );
+LPS25HB_status_t LPS25HB_GetTemperature             ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myTemperature     );
 
 /** It gets the current humidity value.
   */
-HTS221_status_t HTS221_GetHumidity                ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHumidity        );
+LPS25HB_status_t LPS25HB_GetHumidity                ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myHumidity        );

@@ -1,5 +1,5 @@
 /**
- * @brief       HTS221.c
+ * @brief       LPS25HB.c
  * @details     Capacitive digital sensor for relative humidity and temperature.
  *              Functions file.
  *
@@ -14,11 +14,11 @@
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ). All rights reserved.
  */
 
-#include "HTS221.h"
+#include "LPS25HB.h"
 
 
 /**
- * @brief       HTS221_Init ( I2C_parameters_t )
+ * @brief       LPS25HB_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,7 +27,7 @@
  * @param[out]   N/A.
  *
  *
- * @return       Status of HTS221_Init.
+ * @return       Status of LPS25HB_Init.
  *
  *
  * @author      Manuel Caballero
@@ -36,7 +36,7 @@
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_Init ( I2C_parameters_t myI2Cparameters )
+LPS25HB_status_t LPS25HB_Init ( I2C_parameters_t myI2Cparameters )
 {
   i2c_status_t aux;
 
@@ -46,18 +46,18 @@ HTS221_status_t HTS221_Init ( I2C_parameters_t myI2Cparameters )
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_GetDeviceID ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetDeviceID ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets the device identification.
  *
@@ -66,7 +66,7 @@ HTS221_status_t HTS221_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   myDeviceID:      Device ID.
  *
  *
- * @return       Status of HTS221_GetDeviceID.
+ * @return       Status of LPS25HB_GetDeviceID.
  *
  *
  * @author      Manuel Caballero
@@ -75,13 +75,13 @@ HTS221_status_t HTS221_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetDeviceID ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myDeviceID )
+LPS25HB_status_t LPS25HB_GetDeviceID ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myDeviceID )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd   =   HTS221_WHO_AM_I;
+  cmd   =   LPS25HB_WHO_AM_I;
   aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
@@ -92,18 +92,18 @@ HTS221_status_t HTS221_GetDeviceID ( I2C_parameters_t myI2Cparameters, HTS221_da
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_SetResolution ( I2C_parameters_t , HTS221_data_t )
+ * @brief       LPS25HB_SetResolution ( I2C_parameters_t , LPS25HB_data_t )
  *
  * @details     It set humidity and temperature resolution mode.
  *
@@ -113,7 +113,7 @@ HTS221_status_t HTS221_GetDeviceID ( I2C_parameters_t myI2Cparameters, HTS221_da
  * @param[out]   N/A.
  *
  *
- * @return       Status of HTS221_SetResolution.
+ * @return       Status of LPS25HB_SetResolution.
  *
  *
  * @author      Manuel Caballero
@@ -122,13 +122,13 @@ HTS221_status_t HTS221_GetDeviceID ( I2C_parameters_t myI2Cparameters, HTS221_da
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_SetResolution ( I2C_parameters_t myI2Cparameters, HTS221_data_t myTempHumResolution )
+LPS25HB_status_t LPS25HB_SetResolution ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myTempHumResolution )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   HTS221_AV_CONF;
+  cmd[0]   =   LPS25HB_AV_CONF;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
@@ -142,18 +142,18 @@ HTS221_status_t HTS221_SetResolution ( I2C_parameters_t myI2Cparameters, HTS221_
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_GetResolution ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetResolution ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It get humidity and temperature resolution mode.
  *
@@ -162,7 +162,7 @@ HTS221_status_t HTS221_SetResolution ( I2C_parameters_t myI2Cparameters, HTS221_
  * @param[out]   myTempHumResolution: Humidity and Temperature resolution mode
  *
  *
- * @return       Status of HTS221_GetResolution.
+ * @return       Status of LPS25HB_GetResolution.
  *
  *
  * @author      Manuel Caballero
@@ -171,37 +171,37 @@ HTS221_status_t HTS221_SetResolution ( I2C_parameters_t myI2Cparameters, HTS221_
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetResolution ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTempHumResolution )
+LPS25HB_status_t LPS25HB_GetResolution ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myTempHumResolution )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd   =   HTS221_AV_CONF;
+  cmd   =   LPS25HB_AV_CONF;
   aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
   /* Parse the data  */
-  myTempHumResolution->temperatureResolution   =   (HTS221_av_config_avgt_t)( cmd & AV_CONF_AVGT_MASK );
-  myTempHumResolution->humidityResolution      =   (HTS221_av_config_avgh_t)( cmd & AV_CONF_AVGH_MASK );
+  myTempHumResolution->temperatureResolution   =   (LPS25HB_av_config_avgt_t)( cmd & AV_CONF_AVGT_MASK );
+  myTempHumResolution->humidityResolution      =   (LPS25HB_av_config_avgh_t)( cmd & AV_CONF_AVGH_MASK );
 
 
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_SetPowerDown ( I2C_parameters_t , HTS221_ctrl_reg1_pd_t )
+ * @brief       LPS25HB_SetPowerDown ( I2C_parameters_t , LPS25HB_ctrl_reg1_pd_t )
  *
  * @details     It sets the device into power-down ( low-power mode ) or active mode.
  *
@@ -211,7 +211,7 @@ HTS221_status_t HTS221_GetResolution ( I2C_parameters_t myI2Cparameters, HTS221_
  * @param[out]   N/A
  *
  *
- * @return       Status of HTS221_SetPowerDown.
+ * @return       Status of LPS25HB_SetPowerDown.
  *
  *
  * @author      Manuel Caballero
@@ -220,13 +220,13 @@ HTS221_status_t HTS221_GetResolution ( I2C_parameters_t myI2Cparameters, HTS221_
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_SetPowerDown ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg1_pd_t myPowerMode )
+LPS25HB_status_t LPS25HB_SetPowerDown ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg1_pd_t myPowerMode )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   HTS221_CTRL_REG1;
+  cmd[0]   =   LPS25HB_CTRL_REG1;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
@@ -239,18 +239,18 @@ HTS221_status_t HTS221_SetPowerDown ( I2C_parameters_t myI2Cparameters, HTS221_c
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_SetBlockDataUpdate ( I2C_parameters_t , HTS221_data_t )
+ * @brief       LPS25HB_SetBlockDataUpdate ( I2C_parameters_t , LPS25HB_data_t )
  *
  * @details     It sets the block data update.
  *
@@ -260,7 +260,7 @@ HTS221_status_t HTS221_SetPowerDown ( I2C_parameters_t myI2Cparameters, HTS221_c
  * @param[out]   N/A
  *
  *
- * @return       Status of HTS221_SetBlockDataUpdate.
+ * @return       Status of LPS25HB_SetBlockDataUpdate.
  *
  *
  * @author      Manuel Caballero
@@ -269,13 +269,13 @@ HTS221_status_t HTS221_SetPowerDown ( I2C_parameters_t myI2Cparameters, HTS221_c
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HTS221_data_t myBDU )
+LPS25HB_status_t LPS25HB_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myBDU )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   HTS221_CTRL_REG1;
+  cmd[0]   =   LPS25HB_CTRL_REG1;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
@@ -288,18 +288,18 @@ HTS221_status_t HTS221_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HT
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_GetBlockDataUpdate ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetBlockDataUpdate ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets the block data update.
  *
@@ -308,7 +308,7 @@ HTS221_status_t HTS221_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HT
  * @param[out]   myBDU:           Block data update mode
  *
  *
- * @return       Status of HTS221_GetBlockDataUpdate.
+ * @return       Status of LPS25HB_GetBlockDataUpdate.
  *
  *
  * @author      Manuel Caballero
@@ -317,36 +317,36 @@ HTS221_status_t HTS221_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HT
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myBDU )
+LPS25HB_status_t LPS25HB_GetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myBDU )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd   =   HTS221_CTRL_REG1;
+  cmd   =   LPS25HB_CTRL_REG1;
   aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
   /* Parse the data  */
-  myBDU->bdu   =   (HTS221_ctrl_reg1_bdu_t)( cmd & CTRL_REG1_BDU_MASK );
+  myBDU->bdu   =   (LPS25HB_ctrl_reg1_bdu_t)( cmd & CTRL_REG1_BDU_MASK );
   
 
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_SetOutputDataRate ( I2C_parameters_t , HTS221_data_t )
+ * @brief       LPS25HB_SetOutputDataRate ( I2C_parameters_t , LPS25HB_data_t )
  *
  * @details     It sets the output data rate ( ODR ).
  *
@@ -356,7 +356,7 @@ HTS221_status_t HTS221_GetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HT
  * @param[out]   N/A
  *
  *
- * @return       Status of HTS221_SetOutputDataRate.
+ * @return       Status of LPS25HB_SetOutputDataRate.
  *
  *
  * @author      Manuel Caballero
@@ -365,13 +365,13 @@ HTS221_status_t HTS221_GetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, HT
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HTS221_data_t myODR )
+LPS25HB_status_t LPS25HB_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myODR )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   HTS221_CTRL_REG1;
+  cmd[0]   =   LPS25HB_CTRL_REG1;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
@@ -384,18 +384,18 @@ HTS221_status_t HTS221_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HT
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_GetOutputDataRate ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetOutputDataRate ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets the output data rate ( ODR ).
  *
@@ -404,7 +404,7 @@ HTS221_status_t HTS221_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HT
  * @param[out]   myODR:           Output data rate
  *
  *
- * @return       Status of HTS221_GetOutputDataRate.
+ * @return       Status of LPS25HB_GetOutputDataRate.
  *
  *
  * @author      Manuel Caballero
@@ -413,36 +413,36 @@ HTS221_status_t HTS221_SetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HT
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myODR )
+LPS25HB_status_t LPS25HB_GetOutputDataRate  ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myODR )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd   =   HTS221_CTRL_REG1;
+  cmd   =   LPS25HB_CTRL_REG1;
   aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
   /* Parse the data   */
-  myODR->odr   =   (HTS221_ctrl_reg1_odr_t)( cmd & CTRL_REG1_ODR_MASK );
+  myODR->odr   =   (LPS25HB_ctrl_reg1_odr_t)( cmd & CTRL_REG1_ODR_MASK );
   
 
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_SetBoot ( I2C_parameters_t )
+ * @brief       LPS25HB_SetBoot ( I2C_parameters_t )
  *
  * @details     It sets reboot memory content.
  *
@@ -451,7 +451,7 @@ HTS221_status_t HTS221_GetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HT
  * @param[out]   N/A
  *
  *
- * @return       Status of HTS221_SetBoot.
+ * @return       Status of LPS25HB_SetBoot.
  *
  *
  * @author      Manuel Caballero
@@ -460,13 +460,13 @@ HTS221_status_t HTS221_GetOutputDataRate  ( I2C_parameters_t myI2Cparameters, HT
  * @pre         At the end of the boot process, the BOOT bit is set again to '0'.
  * @warning     N/A.
  */
-HTS221_status_t HTS221_SetBoot  ( I2C_parameters_t myI2Cparameters )
+LPS25HB_status_t LPS25HB_SetBoot  ( I2C_parameters_t myI2Cparameters )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   HTS221_CTRL_REG2;
+  cmd[0]   =   LPS25HB_CTRL_REG2;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
@@ -479,18 +479,18 @@ HTS221_status_t HTS221_SetBoot  ( I2C_parameters_t myI2Cparameters )
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_GetBoot ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetBoot ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets reboot memory content.
  *
@@ -499,7 +499,7 @@ HTS221_status_t HTS221_SetBoot  ( I2C_parameters_t myI2Cparameters )
  * @param[out]   myBOOT:          Reboot memory content flag
  *
  *
- * @return       Status of HTS221_GetBoot.
+ * @return       Status of LPS25HB_GetBoot.
  *
  *
  * @author      Manuel Caballero
@@ -508,36 +508,36 @@ HTS221_status_t HTS221_SetBoot  ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetBoot ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myBOOT )
+LPS25HB_status_t LPS25HB_GetBoot ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myBOOT )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd   =   HTS221_CTRL_REG2;
+  cmd   =   LPS25HB_CTRL_REG2;
   aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
   /* Parse the data   */
-  myBOOT->boot   =   (HTS221_ctrl_reg2_boot_t)( cmd & CTRL_REG2_BOOT_MASK );
+  myBOOT->boot   =   (LPS25HB_ctrl_reg2_boot_t)( cmd & CTRL_REG2_BOOT_MASK );
   
 
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_SetHeater ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_SetHeater ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It sets heater mode: Enabled/Disabled.
  *
@@ -547,7 +547,7 @@ HTS221_status_t HTS221_GetBoot ( I2C_parameters_t myI2Cparameters, HTS221_data_t
  * @param[out]   N/A
  *
  *
- * @return       Status of HTS221_SetHeater.
+ * @return       Status of LPS25HB_SetHeater.
  *
  *
  * @author      Manuel Caballero
@@ -556,13 +556,13 @@ HTS221_status_t HTS221_GetBoot ( I2C_parameters_t myI2Cparameters, HTS221_data_t
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_SetHeater ( I2C_parameters_t myI2Cparameters, HTS221_data_t myHeater )
+LPS25HB_status_t LPS25HB_SetHeater ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myHeater )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   HTS221_CTRL_REG2;
+  cmd[0]   =   LPS25HB_CTRL_REG2;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
@@ -575,18 +575,18 @@ HTS221_status_t HTS221_SetHeater ( I2C_parameters_t myI2Cparameters, HTS221_data
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_GetHeater ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetHeater ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets heater mode.
  *
@@ -595,7 +595,7 @@ HTS221_status_t HTS221_SetHeater ( I2C_parameters_t myI2Cparameters, HTS221_data
  * @param[out]   myHeater         Heater mode
  *
  *
- * @return       Status of HTS221_GetHeater.
+ * @return       Status of LPS25HB_GetHeater.
  *
  *
  * @author      Manuel Caballero
@@ -604,36 +604,36 @@ HTS221_status_t HTS221_SetHeater ( I2C_parameters_t myI2Cparameters, HTS221_data
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetHeater ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHeater )
+LPS25HB_status_t LPS25HB_GetHeater ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myHeater )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd   =   HTS221_CTRL_REG2;
+  cmd   =   LPS25HB_CTRL_REG2;
   aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
   /* Parse the data   */
-  myHeater->heater   =   (HTS221_ctrl_reg2_heater_t)( cmd & CTRL_REG2_HEATER_MASK );
+  myHeater->heater   =   (LPS25HB_ctrl_reg2_heater_t)( cmd & CTRL_REG2_HEATER_MASK );
   
 
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_SetOneShot ( I2C_parameters_t )
+ * @brief       LPS25HB_SetOneShot ( I2C_parameters_t )
  *
  * @details     It sets one-shot, new data set.
  *
@@ -642,7 +642,7 @@ HTS221_status_t HTS221_GetHeater ( I2C_parameters_t myI2Cparameters, HTS221_data
  * @param[out]   N/A
  *
  *
- * @return       Status of HTS221_SetOneShot.
+ * @return       Status of LPS25HB_SetOneShot.
  *
  *
  * @author      Manuel Caballero
@@ -651,13 +651,13 @@ HTS221_status_t HTS221_GetHeater ( I2C_parameters_t myI2Cparameters, HTS221_data
  * @pre         ONE_SHOT bit comes back to '0' by hardware
  * @warning     N/A.
  */
-HTS221_status_t HTS221_SetOneShot ( I2C_parameters_t myI2Cparameters )
+LPS25HB_status_t LPS25HB_SetOneShot ( I2C_parameters_t myI2Cparameters )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   HTS221_CTRL_REG2;
+  cmd[0]   =   LPS25HB_CTRL_REG2;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
@@ -670,18 +670,18 @@ HTS221_status_t HTS221_SetOneShot ( I2C_parameters_t myI2Cparameters )
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_GetOneShot ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetOneShot ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets one-shot flag.
  *
@@ -690,7 +690,7 @@ HTS221_status_t HTS221_SetOneShot ( I2C_parameters_t myI2Cparameters )
  * @param[out]   myOneShot:       One-shot flag
  *
  *
- * @return       Status of HTS221_GetOneShot.
+ * @return       Status of LPS25HB_GetOneShot.
  *
  *
  * @author      Manuel Caballero
@@ -699,36 +699,36 @@ HTS221_status_t HTS221_SetOneShot ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetOneShot ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myOneShot )
+LPS25HB_status_t LPS25HB_GetOneShot ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myOneShot )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd   =   HTS221_CTRL_REG2;
+  cmd   =   LPS25HB_CTRL_REG2;
   aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
   /* Parse the data   */
-  myOneShot->one_shot   =   (HTS221_ctrl_reg2_one_shot_t)( cmd & CTRL_REG2_ONE_SHOT_MASK );
+  myOneShot->one_shot   =   (LPS25HB_ctrl_reg2_one_shot_t)( cmd & CTRL_REG2_ONE_SHOT_MASK );
   
 
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_SetDataReadyOuput ( I2C_parameters_t , HTS221_ctrl_reg3_drdy_h_l_t )
+ * @brief       LPS25HB_SetDataReadyOuput ( I2C_parameters_t , LPS25HB_ctrl_reg3_drdy_h_l_t )
  *
  * @details     It sets data ready output signal active high/low.
  *
@@ -738,7 +738,7 @@ HTS221_status_t HTS221_GetOneShot ( I2C_parameters_t myI2Cparameters, HTS221_dat
  * @param[out]   N/A
  *
  *
- * @return       Status of HTS221_SetDataReadyOuput.
+ * @return       Status of LPS25HB_SetDataReadyOuput.
  *
  *
  * @author      Manuel Caballero
@@ -747,13 +747,13 @@ HTS221_status_t HTS221_GetOneShot ( I2C_parameters_t myI2Cparameters, HTS221_dat
  * @pre         N/A.
  * @warning     N/A.
  */
-HTS221_status_t HTS221_SetDataReadyOuput ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_drdy_h_l_t myDRDY_H_L )
+LPS25HB_status_t LPS25HB_SetDataReadyOuput ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_drdy_h_l_t myDRDY_H_L )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   HTS221_CTRL_REG3;
+  cmd[0]   =   LPS25HB_CTRL_REG3;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
@@ -766,18 +766,18 @@ HTS221_status_t HTS221_SetDataReadyOuput ( I2C_parameters_t myI2Cparameters, HTS
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_SetSelectionOnPin3 ( I2C_parameters_t , HTS221_ctrl_reg3_pp_od_t )
+ * @brief       LPS25HB_SetSelectionOnPin3 ( I2C_parameters_t , LPS25HB_ctrl_reg3_pp_od_t )
  *
  * @details     It sets Push-pull/Open Drain selection on pin 3 ( DRDY ).
  *
@@ -787,7 +787,7 @@ HTS221_status_t HTS221_SetDataReadyOuput ( I2C_parameters_t myI2Cparameters, HTS
  * @param[out]   N/A
  *
  *
- * @return       Status of HTS221_SetDataReadyOuput.
+ * @return       Status of LPS25HB_SetDataReadyOuput.
  *
  *
  * @author      Manuel Caballero
@@ -796,13 +796,13 @@ HTS221_status_t HTS221_SetDataReadyOuput ( I2C_parameters_t myI2Cparameters, HTS
  * @pre         N/A.
  * @warning     N/A.
  */
-HTS221_status_t HTS221_SetSelectionOnPin3 ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_pp_od_t myDRDY )
+LPS25HB_status_t LPS25HB_SetSelectionOnPin3 ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_pp_od_t myDRDY )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   HTS221_CTRL_REG3;
+  cmd[0]   =   LPS25HB_CTRL_REG3;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
@@ -815,18 +815,18 @@ HTS221_status_t HTS221_SetSelectionOnPin3 ( I2C_parameters_t myI2Cparameters, HT
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       HTS221_SetDataReadyEnable ( I2C_parameters_t , HTS221_ctrl_reg3_drdy_en_t )
+ * @brief       LPS25HB_SetDataReadyEnable ( I2C_parameters_t , LPS25HB_ctrl_reg3_drdy_en_t )
  *
  * @details     It sets data ready enable.
  *
@@ -836,7 +836,7 @@ HTS221_status_t HTS221_SetSelectionOnPin3 ( I2C_parameters_t myI2Cparameters, HT
  * @param[out]   N/A
  *
  *
- * @return       Status of HTS221_SetDataReadyEnable.
+ * @return       Status of LPS25HB_SetDataReadyEnable.
  *
  *
  * @author      Manuel Caballero
@@ -845,13 +845,13 @@ HTS221_status_t HTS221_SetSelectionOnPin3 ( I2C_parameters_t myI2Cparameters, HT
  * @pre         N/A.
  * @warning     N/A.
  */
-HTS221_status_t HTS221_SetDataReadyEnable ( I2C_parameters_t myI2Cparameters, HTS221_ctrl_reg3_drdy_en_t myDRDY_EN )
+LPS25HB_status_t LPS25HB_SetDataReadyEnable ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_drdy_en_t myDRDY_EN )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   HTS221_CTRL_REG3;
+  cmd[0]   =   LPS25HB_CTRL_REG3;
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
 
@@ -864,17 +864,17 @@ HTS221_status_t HTS221_SetDataReadyEnable ( I2C_parameters_t myI2Cparameters, HT
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 /**
- * @brief       HTS221_GetHumidityDataAvailable ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetHumidityDataAvailable ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets humidity data available flag.
  *
@@ -883,7 +883,7 @@ HTS221_status_t HTS221_SetDataReadyEnable ( I2C_parameters_t myI2Cparameters, HT
  * @param[out]   myHumidityFlag:  Humidity data available flag
  *
  *
- * @return       Status of HTS221_GetHumidityDataAvailable.
+ * @return       Status of LPS25HB_GetHumidityDataAvailable.
  *
  *
  * @author      Manuel Caballero
@@ -892,35 +892,35 @@ HTS221_status_t HTS221_SetDataReadyEnable ( I2C_parameters_t myI2Cparameters, HT
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetHumidityDataAvailable ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHumidityFlag )
+LPS25HB_status_t LPS25HB_GetHumidityDataAvailable ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myHumidityFlag )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd   =   HTS221_STATUS_REG;
+  cmd   =   LPS25HB_STATUS_REG;
   aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
   /* Parse the data   */
-  myHumidityFlag->h_da   =   (HTS221_status_reg_h_da_t)( cmd & STATUS_REGISTER_H_DA_MASK );
+  myHumidityFlag->h_da   =   (LPS25HB_status_reg_h_da_t)( cmd & STATUS_REGISTER_H_DA_MASK );
   
 
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 /**
- * @brief       HTS221_GetTemperatureDataAvailable ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetTemperatureDataAvailable ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets temperature data available flag.
  *
@@ -929,7 +929,7 @@ HTS221_status_t HTS221_GetHumidityDataAvailable ( I2C_parameters_t myI2Cparamete
  * @param[out]   myTemperatureFlag: Temperature data available flag
  *
  *
- * @return       Status of HTS221_GetTemperatureDataAvailable.
+ * @return       Status of LPS25HB_GetTemperatureDataAvailable.
  *
  *
  * @author      Manuel Caballero
@@ -938,35 +938,35 @@ HTS221_status_t HTS221_GetHumidityDataAvailable ( I2C_parameters_t myI2Cparamete
  * @pre         N/A
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetTemperatureDataAvailable ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTemperatureFlag )
+LPS25HB_status_t LPS25HB_GetTemperatureDataAvailable ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myTemperatureFlag )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd   =   HTS221_STATUS_REG;
+  cmd   =   LPS25HB_STATUS_REG;
   aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
   /* Parse the data   */
-  myTemperatureFlag->t_da   =   (HTS221_status_reg_t_da_t)( cmd & STATUS_REGISTER_T_DA_MASK );
+  myTemperatureFlag->t_da   =   (LPS25HB_status_reg_t_da_t)( cmd & STATUS_REGISTER_T_DA_MASK );
   
 
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 /**
- * @brief       HTS221_GetRawHumidity ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetRawHumidity ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets raw humidity.
  *
@@ -975,7 +975,7 @@ HTS221_status_t HTS221_GetTemperatureDataAvailable ( I2C_parameters_t myI2Cparam
  * @param[out]   myRawHumidity:     Raw humidity
  *
  *
- * @return       Status of HTS221_GetRawHumidity.
+ * @return       Status of LPS25HB_GetRawHumidity.
  *
  *
  * @author      Manuel Caballero
@@ -984,13 +984,13 @@ HTS221_status_t HTS221_GetTemperatureDataAvailable ( I2C_parameters_t myI2Cparam
  * @pre         This function uses autoincrementing for reading the registers.
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetRawHumidity ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myRawHumidity )
+LPS25HB_status_t LPS25HB_GetRawHumidity ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myRawHumidity )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   ( HTS221_HUMIDITY_OUT_L | 0x80 );                                        // Autoincrementing
+  cmd[0]   =   ( LPS25HB_HUMIDITY_OUT_L | 0x80 );                                        // Autoincrementing
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -1004,17 +1004,17 @@ HTS221_status_t HTS221_GetRawHumidity ( I2C_parameters_t myI2Cparameters, HTS221
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 /**
- * @brief       HTS221_GetRawTemperature ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetRawTemperature ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets raw temperature.
  *
@@ -1023,7 +1023,7 @@ HTS221_status_t HTS221_GetRawHumidity ( I2C_parameters_t myI2Cparameters, HTS221
  * @param[out]   myRawTemperature:  Raw temperature
  *
  *
- * @return       Status of HTS221_GetRawTemperature.
+ * @return       Status of LPS25HB_GetRawTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -1032,13 +1032,13 @@ HTS221_status_t HTS221_GetRawHumidity ( I2C_parameters_t myI2Cparameters, HTS221
  * @pre         This function uses autoincrementing for reading the registers.
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetRawTemperature ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myRawTemperature )
+LPS25HB_status_t LPS25HB_GetRawTemperature ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myRawTemperature )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   ( HTS221_TEMP_OUT_L | 0x80 );                                             // Autoincrementing
+  cmd[0]   =   ( LPS25HB_TEMP_OUT_L | 0x80 );                                             // Autoincrementing
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -1053,17 +1053,17 @@ HTS221_status_t HTS221_GetRawTemperature ( I2C_parameters_t myI2Cparameters, HTS
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 /**
- * @brief       HTS221_GetCalibrationCoefficients ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetCalibrationCoefficients ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets calibration coefficients.
  *
@@ -1072,7 +1072,7 @@ HTS221_status_t HTS221_GetRawTemperature ( I2C_parameters_t myI2Cparameters, HTS
  * @param[out]   myCoeff:           Calibration coefficients
  *
  *
- * @return       Status of HTS221_GetCalibrationCoefficients.
+ * @return       Status of LPS25HB_GetCalibrationCoefficients.
  *
  *
  * @author      Manuel Caballero
@@ -1082,13 +1082,13 @@ HTS221_status_t HTS221_GetRawTemperature ( I2C_parameters_t myI2Cparameters, HTS
  * @pre         This function uses autoincrementing for reading the registers.
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myCoeff )
+LPS25HB_status_t LPS25HB_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myCoeff )
 {
   uint8_t      cmd[16]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]   =   ( HTS221_CALIB_0 | 0x80 );                                             // Autoincrementing 
+  cmd[0]   =   ( LPS25HB_CALIB_0 | 0x80 );                                             // Autoincrementing 
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux      =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -1133,17 +1133,17 @@ HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparame
 
   if ( aux == I2C_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 /**
- * @brief       HTS221_GetTemperature ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetTemperature ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets the current temperature in Celsius degrees.
  *
@@ -1152,7 +1152,7 @@ HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparame
  * @param[out]   myTemperature:     Current temperature in Celsius degress
  *
  *
- * @return       Status of HTS221_GetTemperature.
+ * @return       Status of LPS25HB_GetTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -1162,12 +1162,12 @@ HTS221_status_t HTS221_GetCalibrationCoefficients ( I2C_parameters_t myI2Cparame
  * @pre         N/A.
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetTemperature ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myTemperature )
+LPS25HB_status_t LPS25HB_GetTemperature ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myTemperature )
 {
-  HTS221_status_t aux;
+  LPS25HB_status_t aux;
 
   /* Get temperature  */
-  aux  =   HTS221_GetRawTemperature ( myI2Cparameters, &(*myTemperature) );
+  aux  =   LPS25HB_GetRawTemperature ( myI2Cparameters, &(*myTemperature) );
 
   /* Parse the data   */
   myTemperature->temperature   =   (int32_t)( 10.0*( myTemperature->rawTemperature - myTemperature->t0_OUT )*( myTemperature->t1_degC - myTemperature->t0_degC )/( myTemperature->t1_OUT - myTemperature->t0_OUT ) );
@@ -1176,19 +1176,19 @@ HTS221_status_t HTS221_GetTemperature ( I2C_parameters_t myI2Cparameters, HTS221
   
   
 
-  if ( aux == HTS221_SUCCESS )
+  if ( aux == LPS25HB_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
 
 
 /**
- * @brief       HTS221_GetHumidity ( I2C_parameters_t , HTS221_data_t* )
+ * @brief       LPS25HB_GetHumidity ( I2C_parameters_t , LPS25HB_data_t* )
  *
  * @details     It gets the current humidity value.
  *
@@ -1197,7 +1197,7 @@ HTS221_status_t HTS221_GetTemperature ( I2C_parameters_t myI2Cparameters, HTS221
  * @param[out]   myHumidity:        Current humidity value
  *
  *
- * @return       Status of HTS221_GetHumidity.
+ * @return       Status of LPS25HB_GetHumidity.
  *
  *
  * @author      Manuel Caballero
@@ -1207,12 +1207,12 @@ HTS221_status_t HTS221_GetTemperature ( I2C_parameters_t myI2Cparameters, HTS221
  * @pre         N/A.
  * @warning     N/A.
  */
-HTS221_status_t HTS221_GetHumidity ( I2C_parameters_t myI2Cparameters, HTS221_data_t* myHumidity )
+LPS25HB_status_t LPS25HB_GetHumidity ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myHumidity )
 {
-  HTS221_status_t aux;
+  LPS25HB_status_t aux;
 
   /* Get humidity  */
-  aux  =   HTS221_GetRawHumidity ( myI2Cparameters, &(*myHumidity) );
+  aux  =   LPS25HB_GetRawHumidity ( myI2Cparameters, &(*myHumidity) );
 
   /* Parse the data   */ 
   myHumidity->humidity   =   (int32_t)( 10.0*( myHumidity->rawHumidity - myHumidity->h0_T0_OUT )*( myHumidity->h1_RH - myHumidity->h0_RH )/( myHumidity->h1_T0_OUT - myHumidity->h0_T0_OUT ) );
@@ -1227,12 +1227,12 @@ HTS221_status_t HTS221_GetHumidity ( I2C_parameters_t myI2Cparameters, HTS221_da
   
   
 
-  if ( aux == HTS221_SUCCESS )
+  if ( aux == LPS25HB_SUCCESS )
   {
-    return   HTS221_SUCCESS;
+    return   LPS25HB_SUCCESS;
   }
   else
   {
-    return   HTS221_FAILURE;
+    return   LPS25HB_FAILURE;
   }
 }
