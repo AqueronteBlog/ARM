@@ -69,3 +69,4 @@ ADuCM3029/Examples/GPIO_LEDs/.settings/
 ADuCM3029/Resources/
 ADuCM3029/Examples/GPIO_LEDs/.gitignore
 ADuCM3029/Examples/.gitignore
+NRF52/Examples/examples/Drivers/LPS25HB/pca10040/s132/ses/Output/
