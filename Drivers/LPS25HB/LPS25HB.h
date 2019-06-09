@@ -242,7 +242,7 @@ typedef enum
  */
 typedef enum
 {
-    CTRL_REG2_FIFO_MEAN_DEC_MAS       =   ( 1U << 4U ),   /*!<  FIFO_MEAN_DEC mask                            */
+    CTRL_REG2_FIFO_MEAN_DEC_MASK      =   ( 1U << 4U ),   /*!<  FIFO_MEAN_DEC mask                            */
     CTRL_REG2_FIFO_MEAN_DEC_DISABLED  =   ( 0U << 4U ),   /*!<  Disable                           [ Default ] */
     CTRL_REG2_FIFO_MEAN_DEC_ENABLED   =   ( 1U << 4U )    /*!<  Enabled                                       */
 } LPS25HB_ctrl_reg2_fifo_mean_dec_t;
@@ -581,21 +581,42 @@ typedef enum
 typedef struct
 {
     /* Output registers  */
-    int32_t   rawReferencePressure;     /*!<  Raw reference pressure    */
-    int16_t   rawTemperature;  /*!<  Raw temperature               */
-
-    float     humidity;        /*!<  Humidity value                */
-    float     temperature;     /*!<  Temperature value             */
+    int32_t   rawReferencePressure;         /*!<  Raw reference pressure        */
+    uint32_t  rawPressure;                  /*!<  Raw pressure                  */
+    uint16_t  rawTemperature;               /*!<  Raw temperature               */
     
     /* Resolution  */
-    LPS25HB_res_conf_avgt_t avgt;   /*!<  Temperature resolution        */
-    LPS25HB_res_conf_avgp_t avgp;   /*!<  Pressure resolution           */
+    LPS25HB_res_conf_avgt_t avgt;           /*!<  Temperature resolution        */
+    LPS25HB_res_conf_avgp_t avgp;           /*!<  Pressure resolution           */
     
     /* Configuration  */
-    LPS25HB_ctrl_reg1_odr_t odr;   /*!<  Output data rate selection     */
+    LPS25HB_ctrl_reg1_odr_t      odr;       /*!<  Output data rate selection    */
+    LPS25HB_ctrl_reg1_reset_az_t reset_az;  /*!<  Reset autozero function       */
+    LPS25HB_ctrl_reg2_boot_t     boot;      /*!<  Reboot memory content         */
+    LPS25HB_ctrl_reg2_fifo_en_t  fifo_en;   /*!<  FIFO enable                   */
+    LPS25HB_ctrl_reg2_swreset_t  swreset;   /*!<  Software reset                */
+    LPS25HB_ctrl_reg2_autozero_t autozero;  /*!<  Autozero enable               */
+    LPS25HB_ctrl_reg2_one_shot_t one_shot;  /*!<  One-shot                      */
+    
+    /* INT_DRDY behaviour   */
+    LPS25HB_ctrl_reg4_f_empty_t  f_empty;   /*!<  FIFO empty flag on INT_DRDY pin                   */
+    LPS25HB_ctrl_reg4_f_fth_t    f_fth;     /*!<  FIFO threshold (watermark) status on INT_DRDY pin */
+    LPS25HB_ctrl_reg4_f_ovr_t    f_ovr;     /*!<  FIFO overrun interrupt on INT_DRDY pin            */
+    LPS25HB_ctrl_reg4_drdy_t     drdy;      /*!<  Data-ready signal on INT_DRDY pin                 */
+
+    /* Interrupt configuration   */
+    LPS25HB_interrupt_cfg_lir_t  lir;       /*!<  Latch interrupt request                                         */
+    LPS25HB_interrupt_cfg_pl_e_t pl_e;      /*!<  Enable interrupt generation on differential pressure low event  */
+    LPS25HB_interrupt_cfg_ph_e_t ph_e;      /*!<  Enable interrupt generation on differential pressure high event */
+    
+    /* Interrupt source  */
+    uint8_t                      int_source;  /*!<  Interrupt source            */
+    
+    /* Status register  */
+    uint8_t                      status_reg;  /*!<  Status register             */
 
     /* Device identification   */
-    uint8_t   deviceID;             /*!<  Device ID                     */
+    uint8_t   deviceID;                     /*!<  Device ID                     */
 } LPS25HB_data_t;
 #endif
 
@@ -619,45 +640,148 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-LPS25HB_status_t LPS25HB_Init                     ( I2C_parameters_t myI2Cparameters                              );
+LPS25HB_status_t LPS25HB_Init                     ( I2C_parameters_t myI2Cparameters                                        );
 
 /** It gets raw reference pressure.
   */
-LPS25HB_status_t LPS25HB_GetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myREFL      );
+LPS25HB_status_t LPS25HB_GetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myREFL                );
 
 /** It sets raw reference pressure.
   */
-LPS25HB_status_t LPS25HB_SetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myREFL       );
+LPS25HB_status_t LPS25HB_SetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myREFL                 );
 
 /** It gets the device ID.
   */
-LPS25HB_status_t LPS25HB_GetDeviceID              ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myID        );
+LPS25HB_status_t LPS25HB_GetDeviceID              ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myID                  );
 
 /** It sets temperature resolution.
   */
-LPS25HB_status_t LPS25HB_SetTemperatureResolution ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myAVGT       );
+LPS25HB_status_t LPS25HB_SetTemperatureResolution ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myAVGT                 );
 
 /** It gets temperature resolution.
   */
-LPS25HB_status_t LPS25HB_GetTemperatureResolution ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myAVGT      );
+LPS25HB_status_t LPS25HB_GetTemperatureResolution ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myAVGT                );
 
 /** It sets pressure resolution.
   */
-LPS25HB_status_t LPS25HB_SetPressureResolution    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myAVGP       );
+LPS25HB_status_t LPS25HB_SetPressureResolution    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myAVGP                 );
 
 /** It gets pressure resolution.
   */
-LPS25HB_status_t LPS25HB_GetPressureResolution    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myAVGP      );
+LPS25HB_status_t LPS25HB_GetPressureResolution    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myAVGP                );
 
 /** It sets the power mode.
   */
-LPS25HB_status_t LPS25HB_SetPowerMode             ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg1_pd_t myPD );
+LPS25HB_status_t LPS25HB_SetPowerMode             ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg1_pd_t myPD           );
 
 /** It sets the output data rate.
   */
-LPS25HB_status_t LPS25HB_SetOutputDataRate        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myODR        );
+LPS25HB_status_t LPS25HB_SetOutputDataRate        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myODR                  );
 
 /** It gets the output data rate.
   */
-LPS25HB_status_t LPS25HB_GetOutputDataRate        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myODR       );
+LPS25HB_status_t LPS25HB_GetOutputDataRate        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myODR                 );
 
+/** It sets the interrupt generation enable.
+  */
+LPS25HB_status_t LPS25HB_SetInterruptGeneration   ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg1_diff_en_t myDIFF_EN );
+
+/** It sets the block data update.
+  */
+LPS25HB_status_t LPS25HB_SetBlockDataUpdate       ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg1_bdu_t myBDU         );
+
+/** It sets the reset autozero function.
+  */
+LPS25HB_status_t LPS25HB_SetResetAutozero         ( I2C_parameters_t myI2Cparameters                                        );
+
+/** It gets the reset autozero function.
+  */
+LPS25HB_status_t LPS25HB_GetResetAutozero         ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myRESET_AZ            );
+
+/** It sets the reboot memory content.
+  */
+LPS25HB_status_t LPS25HB_SetRebootMemoryContent   ( I2C_parameters_t myI2Cparameters                                        );
+
+/** It gets the reboot memory content.
+  */
+LPS25HB_status_t LPS25HB_GetRebootMemoryContent   ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myBOOT                );
+
+/** It sets the FIFO enable/disable.
+  */
+LPS25HB_status_t LPS25HB_SetFIFOEnable            ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myFIFO_EN              );
+
+/** It gets the FIFO enable/disable.
+  */
+LPS25HB_status_t LPS25HB_GetFIFOEnable            ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myFIFO_EN             );
+
+/** It enables/disables the decimate the output pressure to 1Hz with FIFO Mean mode.
+  */
+LPS25HB_status_t LPS25HB_SetFIFOMeanDec           ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg2_fifo_mean_dec_t myFIFO_MEAN_DEC );
+
+/** It sets the software reset.
+  */
+LPS25HB_status_t LPS25HB_SetSoftwareReset         ( I2C_parameters_t myI2Cparameters                                        );
+
+/** It gets the software reset flag value.
+  */
+LPS25HB_status_t LPS25HB_GetSoftwareReset         ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* mySWRESET             );
+
+/** It sets the autozero enable.
+  */
+LPS25HB_status_t LPS25HB_SetAutozero              ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myAUTOZERO             );
+
+/** It gets the autozero enable value.
+  */
+LPS25HB_status_t LPS25HB_GetAutozero              ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myAUTOZERO            );
+
+/** It sets the one-shot mode.
+  */
+LPS25HB_status_t LPS25HB_SetOneShot               ( I2C_parameters_t myI2Cparameters                                        );
+
+/** It gets the one-shot mode flag.
+  */
+LPS25HB_status_t LPS25HB_GetOneShot               ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myONE_SHOT            );
+
+/** It sets the interrupt active mode.
+  */
+LPS25HB_status_t LPS25HB_SetInterruptActiveMode   ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_int_h_l_t myINT_H_L );
+
+/** It sets the Push-pull/open drain selection on interrupt pads.
+  */
+LPS25HB_status_t LPS25HB_SetDrainSelectionMode    ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_pp_od_t myPP_OD     );
+
+/** It sets the Data signal on INT_DRDY pin control bits.
+  */
+LPS25HB_status_t LPS25HB_SetDataSignalOnPin       ( I2C_parameters_t myI2Cparameters, LPS25HB_ctrl_reg3_int_s2_t myINT_S    );
+
+/** It sets the INT_DRDY behaviour.
+  */
+LPS25HB_status_t LPS25HB_SetINT_DRDY_Behaviour    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myIntConfig           );
+
+/** It gets the INT_DRDY behaviour.
+  */
+LPS25HB_status_t LPS25HB_GetINT_DRDY_Behaviour    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myIntConfig          );
+
+/** It sets the interrupt configuration register.
+  */
+LPS25HB_status_t LPS25HB_SetInterruptConfiguration ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myIntConfig           );
+
+/** It gets the interrupt configuration register.
+  */
+LPS25HB_status_t LPS25HB_GetInterruptConfiguration ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myIntConfig          );
+
+/** It reads the interrupt source register.
+  */
+LPS25HB_status_t LPS25HB_GetInterruptSource       ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myIntSource           );
+
+/** It reads the status register.
+  */
+LPS25HB_status_t LPS25HB_GetStatusRegister        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myStatusRegister      );
+
+/** It gets the raw pressure value.
+  */
+LPS25HB_status_t LPS25HB_GetRawPressure           ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myRawPressure         );
+
+/** It gets the raw temperature value.
+  */
+LPS25HB_status_t LPS25HB_GetRawTemperature        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myRawTemperature      );
