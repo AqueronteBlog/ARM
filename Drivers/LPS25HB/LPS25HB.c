@@ -1757,3 +1757,511 @@ LPS25HB_status_t LPS25HB_GetRawTemperature ( I2C_parameters_t myI2Cparameters, L
     return   LPS25HB_FAILURE;
   }
 }
+
+
+
+/**
+ * @brief       LPS25HB_SetFIFO_Mode ( I2C_parameters_t , LPS25HB_data_t )
+ *
+ * @details     It sets the FIFO mode selection.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myFIFOmode:      FIFO mode selection.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LPS25HB_SetFIFO_Mode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/June/2019
+ * @version     10/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS25HB_status_t LPS25HB_SetFIFO_Mode ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myFIFOmode )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Update the register   */
+  cmd[0]  =   LPS25HB_FIFO_CTRL;                                                     
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  cmd[1] &=  ~( FIFO_CTRL_F_MODE_MASK );
+  cmd[1] |=   myFIFOmode.f_mode;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS25HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS25HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS25HB_GetFIFO_Mode ( I2C_parameters_t , LPS25HB_data_t* )
+ *
+ * @details     It gets the FIFO mode selection.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myFIFOmode:      FIFO mode selection.
+ *
+ *
+ * @return       Status of LPS25HB_GetFIFO_Mode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/June/2019
+ * @version     10/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS25HB_status_t LPS25HB_GetFIFO_Mode ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myFIFOmode )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   LPS25HB_FIFO_CTRL;                                                     
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+  
+  /* Parse the data  */
+  myFIFOmode->f_mode   =  (LPS25HB_fifo_ctrl_f_mode_t)( FIFO_CTRL_F_MODE_MASK & cmd );
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS25HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS25HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS25HB_SetFIFO_Threshold ( I2C_parameters_t , LPS25HB_data_t )
+ *
+ * @details     It sets the FIFO threshold (watermark) level selection.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myFIFOthreshold: FIFO threshold (watermark) level selection.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LPS25HB_SetFIFO_Threshold.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/June/2019
+ * @version     10/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS25HB_status_t LPS25HB_SetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myFIFOthreshold )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Update the register   */
+  cmd[0]  =   LPS25HB_FIFO_CTRL;                                                     
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  cmd[1] &=  ~( FIFO_CTRL_WTM_POINT_MASK );
+  cmd[1] |=   myFIFOthreshold.wtm_point;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS25HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS25HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS25HB_GetFIFO_Threshold ( I2C_parameters_t , LPS25HB_data_t* )
+ *
+ * @details     It gets the FIFO threshold (watermark) level selection.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myFIFOthreshold: FIFO threshold (watermark) level selection.
+ *
+ *
+ * @return       Status of LPS25HB_GetFIFO_Threshold.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/June/2019
+ * @version     10/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS25HB_status_t LPS25HB_GetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myFIFOthreshold )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   LPS25HB_FIFO_CTRL;                                                     
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+  
+  /* Parse the data  */
+  myFIFOthreshold->wtm_point   =  (LPS25HB_fifo_ctrl_wtm_point_t)( FIFO_CTRL_WTM_POINT_MASK & cmd );
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS25HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS25HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS25HB_GetFIFO_Status ( I2C_parameters_t , LPS25HB_data_t* )
+ *
+ * @details     It reads the FIFO status register.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myFIFOstatus:    FIFO threshold (watermark) level selection.
+ *
+ *
+ * @return       Status of LPS25HB_GetFIFO_Status.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/June/2019
+ * @version     10/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS25HB_status_t LPS25HB_GetFIFO_Status ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myFIFOstatus )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   LPS25HB_FIFO_STATUS;                                                     
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+  
+  /* Parse the data  */
+  myFIFOstatus->FIFOstatus   =  cmd;
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS25HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS25HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS25HB_GetFIFO_ThresholdValue ( I2C_parameters_t , LPS25HB_data_t* )
+ *
+ * @details     It gets the FIFO threshold value.
+ *
+ * @param[in]    myI2Cparameters:       I2C parameters.
+ *
+ * @param[out]   myFIFOthresholdValue:  Threshold value for pressure interrupt generation.
+ *
+ *
+ * @return       Status of LPS25HB_GetFIFO_ThresholdValue.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/June/2019
+ * @version     10/June/2019     The ORIGIN
+ * @pre         This function implemets auto-increment.
+ * @warning     N/A.
+ */
+LPS25HB_status_t LPS25HB_GetFIFO_ThresholdValue ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myFIFOthresholdValue )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]  =   ( LPS25HB_THS_P_L | 0x80 );                                   // Force auto-increment
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+  
+  /* Parse the data  */
+  myFIFOthresholdValue->ths_p   =   cmd[1];
+  myFIFOthresholdValue->ths_p <<=   8U;
+  myFIFOthresholdValue->ths_p  |=   cmd[0];
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS25HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS25HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS25HB_SetFIFO_ThresholdValue ( I2C_parameters_t , LPS25HB_data_t* )
+ *
+ * @details     It sets the FIFO threshold value.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myFIFOthresholdValue:  Threshold value for pressure interrupt generation.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LPS25HB_SetFIFO_ThresholdValue.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/June/2019
+ * @version     10/June/2019     The ORIGIN
+ * @pre         This function implements auto-increment.
+ * @warning     N/A.
+ */
+LPS25HB_status_t LPS25HB_SetFIFO_ThresholdValue ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myFIFOthresholdValue )
+{
+  uint8_t      cmd[3]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]  =   ( LPS25HB_THS_P_L | 0x80 );                                   // Force auto-increment  
+  cmd[1]  =   (uint8_t)( myFIFOthresholdValue.ths_p & 0xFF );
+  cmd[2]  =   (uint8_t)( ( myFIFOthresholdValue.ths_p >> 8U ) & 0xFF );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+  
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS25HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS25HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS25HB_GetPressureOffset ( I2C_parameters_t , LPS25HB_data_t* )
+ *
+ * @details     It gets the Pressure offset value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myPressureOffset:  Pressure offset.
+ *
+ *
+ * @return       Status of LPS25HB_GetPressureOffset.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/June/2019
+ * @version     10/June/2019     The ORIGIN
+ * @pre         This function implemets auto-increment.
+ * @warning     N/A.
+ */
+LPS25HB_status_t LPS25HB_GetPressureOffset ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myPressureOffset )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]  =   ( LPS25HB_RPDS_L | 0x80 );                                   // Force auto-increment
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+  
+  /* Parse the data  */
+  myPressureOffset->rpds   =   cmd[1];
+  myPressureOffset->rpds <<=   8U;
+  myPressureOffset->rpds  |=   cmd[0];
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS25HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS25HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS25HB_SetPressureOffset ( I2C_parameters_t , LPS25HB_data_t* )
+ *
+ * @details     It sets the Pressure offset value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myPressureOffset:  Pressure offset.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LPS25HB_SetPressureOffset.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/June/2019
+ * @version     10/June/2019     The ORIGIN
+ * @pre         This function implements auto-increment.
+ * @warning     N/A.
+ */
+LPS25HB_status_t LPS25HB_SetPressureOffset ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myPressureOffset )
+{
+  uint8_t      cmd[3]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]  =   ( LPS25HB_RPDS_L | 0x80 );                                   // Force auto-increment  
+  cmd[1]  =   (uint8_t)( myPressureOffset.rpds & 0xFF );
+  cmd[2]  =   (uint8_t)( ( myPressureOffset.rpds >> 8U ) & 0xFF );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+  
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS25HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS25HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS25HB_GetPressure ( I2C_parameters_t , LPS25HB_data_t* )
+ *
+ * @details     It gets the current pressure in mbar.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myPressure:        Current pressure in mbar.
+ *
+ *
+ * @return       Status of LPS25HB_GetPressure.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/June/2019
+ * @version     10/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS25HB_status_t LPS25HB_GetPressure ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myPressure )
+{
+  LPS25HB_status_t aux;
+
+  /* Read raw pressure   */
+  aux  =   LPS25HB_GetRawPressure ( myI2Cparameters, &(*myPressure) );
+
+  /* Check if the pressure value is negative   */
+  if ( ( myPressure->rawPressure & 0x800000 ) == 0x800000 )
+  {
+    /* Negative pressure   */
+    myPressure->rawPressure |=   0xFF000000;
+  }
+  else
+  {
+    /* Positive pressure   */
+  }
+  
+  
+  /* Calculate pressure  */
+  myPressure->pressure   =   (float)( myPressure->rawPressure / 4096.0 );
+  
+
+
+  return aux;
+}
+
+
+
+/**
+ * @brief       LPS25HB_GetTemperature ( I2C_parameters_t , LPS25HB_data_t* )
+ *
+ * @details     It gets the current temperature in Celsius degrees.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myTemperature:     Current temperature in Celsius degrees.
+ *
+ *
+ * @return       Status of LPS25HB_GetTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/June/2019
+ * @version     10/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS25HB_status_t LPS25HB_GetTemperature ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myTemperature )
+{
+  LPS25HB_status_t aux;
+
+  /* Read raw temperature   */
+  aux  =   LPS25HB_GetRawTemperature ( myI2Cparameters, &(*myTemperature) );
+
+  /* Calculate temperature  */
+  myTemperature->temperature   =   (float)( 42.5 + ( myTemperature->rawTemperature / 480.0 ) );
+  
+
+
+  return aux;
+}
