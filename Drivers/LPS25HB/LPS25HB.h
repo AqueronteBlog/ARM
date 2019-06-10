@@ -582,8 +582,11 @@ typedef struct
 {
     /* Output registers  */
     int32_t   rawReferencePressure;         /*!<  Raw reference pressure        */
-    uint32_t  rawPressure;                  /*!<  Raw pressure                  */
-    uint16_t  rawTemperature;               /*!<  Raw temperature               */
+    int32_t   rawPressure;                  /*!<  Raw pressure                  */
+    int16_t   rawTemperature;               /*!<  Raw temperature               */
+
+    float     pressure;                     /*!<  Pressure in mbar              */
+    float     temperature;                  /*!<  Temperature in Celsius degree */
     
     /* Resolution  */
     LPS25HB_res_conf_avgt_t avgt;           /*!<  Temperature resolution        */
@@ -615,8 +618,21 @@ typedef struct
     /* Status register  */
     uint8_t                      status_reg;  /*!<  Status register             */
 
+    /* FIFO control  */
+    LPS25HB_fifo_ctrl_f_mode_t    f_mode;     /*!<  FIFO mode selection                         */
+    LPS25HB_fifo_ctrl_wtm_point_t wtm_point;  /*!<  FIFO threshold (watermark) level selection  */
+
+    /* FIFO status   */
+    uint8_t                       FIFOstatus; /*!<  FIFO status register        */
+    
+    /* Pressure threshold  */
+    uint16_t                      ths_p;      /*!<  Threshold value for pressure interrupt generation */
+
+    /* Pressure offset  */
+    uint16_t                      rpds;       /*!<  Pressure offset             */
+
     /* Device identification   */
-    uint8_t   deviceID;                     /*!<  Device ID                     */
+    uint8_t                       deviceID;   /*!<  Device ID                   */
 } LPS25HB_data_t;
 #endif
 
@@ -756,11 +772,11 @@ LPS25HB_status_t LPS25HB_SetDataSignalOnPin       ( I2C_parameters_t myI2Cparame
 
 /** It sets the INT_DRDY behaviour.
   */
-LPS25HB_status_t LPS25HB_SetINT_DRDY_Behaviour    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myIntConfig           );
+LPS25HB_status_t LPS25HB_SetINT_DRDY_Behaviour    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myIntConfig            );
 
 /** It gets the INT_DRDY behaviour.
   */
-LPS25HB_status_t LPS25HB_GetINT_DRDY_Behaviour    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myIntConfig          );
+LPS25HB_status_t LPS25HB_GetINT_DRDY_Behaviour    ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myIntConfig           );
 
 /** It sets the interrupt configuration register.
   */
@@ -769,7 +785,7 @@ LPS25HB_status_t LPS25HB_SetInterruptConfiguration ( I2C_parameters_t myI2Cparam
 /** It gets the interrupt configuration register.
   */
 LPS25HB_status_t LPS25HB_GetInterruptConfiguration ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myIntConfig          );
-
+ 
 /** It reads the interrupt source register.
   */
 LPS25HB_status_t LPS25HB_GetInterruptSource       ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myIntSource           );
@@ -785,3 +801,47 @@ LPS25HB_status_t LPS25HB_GetRawPressure           ( I2C_parameters_t myI2Cparame
 /** It gets the raw temperature value.
   */
 LPS25HB_status_t LPS25HB_GetRawTemperature        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myRawTemperature      );
+
+/** It gets the FIFO mode selection.
+  */
+LPS25HB_status_t LPS25HB_GetFIFO_Mode             ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myFIFOmode            );
+
+/** It sets the FIFO mode selection.
+  */
+LPS25HB_status_t LPS25HB_SetFIFO_Mode             ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myFIFOmode             );
+
+/** It gets the FIFO threshold (watermark) level selection.
+  */
+LPS25HB_status_t LPS25HB_GetFIFO_Threshold        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myFIFOthreshold       );
+
+/** It sets the FIFO threshold (watermark) level selection.
+  */
+LPS25HB_status_t LPS25HB_SetFIFO_Threshold        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myFIFOthreshold        );
+
+/** It reads the FIFO status register.
+  */
+LPS25HB_status_t LPS25HB_GetFIFO_Status           ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myFIFOstatus          );
+
+/** It sets the FIFO threshold value.
+  */
+LPS25HB_status_t LPS25HB_SetFIFO_ThresholdValue   ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myFIFOthresholdValue   );
+
+/** It gets the FIFO threshold value.
+  */
+LPS25HB_status_t LPS25HB_GetFIFO_ThresholdValue   ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myFIFOthresholdValue  );
+
+/** It sets the Pressure offset value.
+  */
+LPS25HB_status_t LPS25HB_SetPressureOffset        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t myPressureOffset       );
+
+/** It gets the Pressure offset value.
+  */
+LPS25HB_status_t LPS25HB_GetPressureOffset        ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myPressureOffset      );
+
+/** It gets the current pressure in mbar.
+  */
+LPS25HB_status_t LPS25HB_GetPressure              ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myPressure            );
+
+/** It gets the current temperature in Celsius degrees.
+  */
+LPS25HB_status_t LPS25HB_GetTemperature           ( I2C_parameters_t myI2Cparameters, LPS25HB_data_t* myTemperature         );
