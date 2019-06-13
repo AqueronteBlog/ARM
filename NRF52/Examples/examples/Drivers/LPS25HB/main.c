@@ -64,7 +64,7 @@ int main(void)
   myLPS25HB_I2C_parameters.TWIinstance =    NRF_TWI0;
   myLPS25HB_I2C_parameters.SDA         =    TWI0_SDA;
   myLPS25HB_I2C_parameters.SCL         =    TWI0_SCL;
-  myLPS25HB_I2C_parameters.ADDR        =    LPS25HB_ADDRESS_0;
+  myLPS25HB_I2C_parameters.ADDR        =    LPS25HB_ADDRESS_1;
   myLPS25HB_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
   myLPS25HB_I2C_parameters.SDAport     =    NRF_P0;
   myLPS25HB_I2C_parameters.SCLport     =    NRF_P0;
@@ -89,7 +89,7 @@ int main(void)
   }while ( myLPS25HB_Data.boot == CTRL_REG2_BOOT_REBOOT_MODE );
   
   /* Set device in lOW-POWER mode  */
-  aux  =   LPS25HB_SetPowerMode ( myLPS25HB_I2C_parameters, CTRL_REG1_PD_POWER_DOWN_MODE );
+  aux  =   LPS25HB_SetPowerMode ( myLPS25HB_I2C_parameters, CTRL_REG1_PD_ACTIVE_MODE ); //CTRL_REG1_PD_POWER_DOWN_MODE );
 
   /* Get device ID  */
   aux  =   LPS25HB_GetDeviceID ( myLPS25HB_I2C_parameters, &myLPS25HB_Data );
@@ -107,7 +107,7 @@ int main(void)
   aux  =   LPS25HB_SetOutputDataRate ( myLPS25HB_I2C_parameters, myLPS25HB_Data );
 
   /* Interrupt generation disabled  */
-  aux  =   LPS25HB_SetInterruptGeneration ( myLPS25HB_I2C_parameters, CTRL_REG1_DIFF_EN_ENABLED );
+  aux  =   LPS25HB_SetInterruptGeneration ( myLPS25HB_I2C_parameters, CTRL_REG1_DIFF_EN_DISABLED );
 
   /* Block data update: output registers not updated until MSB and LSB have been read  */
   aux  =   LPS25HB_SetBlockDataUpdate ( myLPS25HB_I2C_parameters, CTRL_REG1_BDU_1 );
@@ -121,7 +121,7 @@ int main(void)
   aux  =   LPS25HB_SetAutozero ( myLPS25HB_I2C_parameters, myLPS25HB_Data );
 
   /* Set device in ACTIVE mode  */
-  aux  =   LPS25HB_SetPowerMode ( myLPS25HB_I2C_parameters, CTRL_REG1_PD_ACTIVE_MODE );
+  //aux  =   LPS25HB_SetPowerMode ( myLPS25HB_I2C_parameters, CTRL_REG1_PD_ACTIVE_MODE );
 
   
   
@@ -156,7 +156,7 @@ int main(void)
       /* Wait until there is a new data ( both pressure and temperature )  */
       do{
         aux  =   LPS25HB_GetStatusRegister ( myLPS25HB_I2C_parameters, &myLPS25HB_Data );
-      }while( ( myLPS25HB_Data.status_reg & ( STATUS_REG_P_DA_MASK | STATUS_REG_T_DA_MASK ) ) != ( STATUS_REG_P_DA_NEW_DATA | STATUS_REG_T_DA_NEW_DATA ) ); // Dangerous!!! The uC may get stuck here...
+      }while( ( myLPS25HB_Data.status_reg & ( STATUS_REG_P_DA_MASK | STATUS_REG_T_DA_MASK ) ) != STATUS_REG_P_DA_NEW_DATA ); // Dangerous!!! The uC may get stuck here...
                                                                                                                                                             // [WORKAROUND] Insert a counter
       
       /* Get pressure  */
