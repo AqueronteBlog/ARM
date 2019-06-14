@@ -64,7 +64,7 @@ int main(void)
   myLPS25HB_I2C_parameters.TWIinstance =    NRF_TWI0;
   myLPS25HB_I2C_parameters.SDA         =    TWI0_SDA;
   myLPS25HB_I2C_parameters.SCL         =    TWI0_SCL;
-  myLPS25HB_I2C_parameters.ADDR        =    LPS25HB_ADDRESS_0;
+  myLPS25HB_I2C_parameters.ADDR        =    LPS25HB_ADDRESS_1;
   myLPS25HB_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
   myLPS25HB_I2C_parameters.SDAport     =    NRF_P0;
   myLPS25HB_I2C_parameters.SCLport     =    NRF_P0;
