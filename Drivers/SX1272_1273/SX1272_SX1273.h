@@ -1871,11 +1871,264 @@ typedef enum
 } fsk_ook_regirqflags2_low_bat_t;
 
 
+/**
+  * @brief   REG_DIO_MAPPING1
+  */
+/**
+  * Dio0Mapping <7:6>
+  *
+  *   NOTE: DIO0 Mapping.
+  */
+typedef enum
+{
+  FSK_OOK_REGDIOMAPPING1_DIO0_MAPPING_MASK                  =   ( 0b11 << 6U )  /*!<  Dio0Mapping mask                                                */
+} fsk_ook_regdiomapping1_dio0_mapping_t;
 
- //REG_DIO_MAPPING1 AND 2 MUST BE COMPLETED ------------->>>>HOLAHOLAHOLAHOLAHLAHOLAHOLAHOLAJP;<<<--------------------------
+
+/**
+  * Dio1Mapping <5:4>
+  *
+  *   NOTE: DIO1 Mapping.
+  */
+typedef enum
+{
+  FSK_OOK_REGDIOMAPPING1_DIO1_MAPPING_MASK                  =   ( 0b11 << 4U )  /*!<  Dio1Mapping mask                                                */
+} fsk_ook_regdiomapping1_dio1_mapping_t;
+
+
+/**
+  * Dio2Mapping <3:2>
+  *
+  *   NOTE: DIO2 Mapping.
+  */
+typedef enum
+{
+  FSK_OOK_REGDIOMAPPING1_DIO2_MAPPING_MASK                  =   ( 0b11 << 2U )  /*!<  Dio2Mapping mask                                                */
+} fsk_ook_regdiomapping1_dio2_mapping_t;
+
+
+/**
+  * Dio3Mapping <1:0>
+  *
+  *   NOTE: DIO3 Mapping.
+  */
+typedef enum
+{
+  FSK_OOK_REGDIOMAPPING1_DIO3_MAPPING_MASK                  =   ( 0b11 << 0U )  /*!<  Dio3Mapping mask                                                */
+} fsk_ook_regdiomapping1_dio3_mapping_t;
 
 
 
+/**
+  * @brief   REG_DIO_MAPPING2
+  */
+/**
+  * Dio4Mapping <7:6>
+  *
+  *   NOTE: DIO4 Mapping.
+  */
+typedef enum
+{
+  FSK_OOK_REGDIOMAPPING2_DIO4_MAPPING_MASK                  =   ( 0b11 << 6U )  /*!<  Dio4Mapping mask                                                */
+} fsk_ook_regdiomapping2_dio4_mapping_t;
+
+
+/**
+  * Dio5Mapping <5:4>
+  *
+  *   NOTE: DIO5 Mapping.
+  */
+typedef enum
+{
+  FSK_OOK_REGDIOMAPPING2_DIO5_MAPPING_MASK                  =   ( 0b11 << 4U )  /*!<  Dio5Mapping mask                                                */
+} fsk_ook_regdiomapping2_dio5_mapping_t;
+
+
+/**
+  * MapPreambleDetect <0>
+  *
+  *   NOTE: Allows the mapping of either Rssi Or PreambleDetect to the DIO pins.
+  */
+typedef enum
+{
+  FSK_OOK_REGDIOMAPPING2_MAP_PREAMBLE_DETECT_MASK             =   ( 1U << 0U ), /*!<  MapPreambleDetect mask                                          */
+  FSK_OOK_REGDIOMAPPING2_MAP_PREAMBLE_DETECT_RSSI             =   ( 0U << 0U ), /*!<  Rssi interrupt                                      [ Default ] */
+  FSK_OOK_REGDIOMAPPING2_MAP_PREAMBLE_DETECT_PREAMBLE_DETECT  =   ( 1U << 0U )  /*!<  PreambleDetect interrupt                                        */
+} fsk_ook_regdiomapping2_map_preamble_detect_t;
+
+
+/**
+  * @brief   DIO MAPPING: CONTINUOUS MODE
+  */
+/**
+  * DIO0 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO0_CONTINUOUS_MODE_0             =   0U,             /*!<  Rx: SyncAddress | Tx: TxReady                       [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO0_CONTINUOUS_MODE_1             =   1U,             /*!<  Rx: Rssi/PreambleDetect                                         */
+  FSK_OOK_DIOMAPPING_DIO0_CONTINUOUS_MODE_2             =   2U,             /*!<  Rx: RxReady | Tx: TxReady                                       */
+  FSK_OOK_DIOMAPPING_DIO0_CONTINUOUS_MODE_3             =   3U              /*!<  None                                                            */
+} fsk_ook_diomapping_dio0_continuous_mode_t;
+
+
+/**
+  * DIO1 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO1_CONTINUOUS_MODE_0             =   0U,             /*!<  Rx: Dclk | Tx: Dclk                                 [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO1_CONTINUOUS_MODE_1             =   1U,             /*!<  Rx: Rssi/PreambleDetect                                         */
+  FSK_OOK_DIOMAPPING_DIO1_CONTINUOUS_MODE_2             =   2U,             /*!<  None                                                            */
+  FSK_OOK_DIOMAPPING_DIO1_CONTINUOUS_MODE_3             =   3U              /*!<  None                                                            */
+} fsk_ook_diomapping_dio1_continuous_mode_t;
+
+
+/**
+  * DIO2 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO2_CONTINUOUS_MODE_0             =   0U,             /*!<  Rx: Data | Tx: Data                                 [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO2_CONTINUOUS_MODE_1             =   1U,             /*!<  Rx: Data | Tx: Data                                             */
+  FSK_OOK_DIOMAPPING_DIO2_CONTINUOUS_MODE_2             =   2U,             /*!<  Rx: Data | Tx: Data                                             */
+  FSK_OOK_DIOMAPPING_DIO2_CONTINUOUS_MODE_3             =   3U              /*!<  Rx: Data | Tx: Data                                             */
+} fsk_ook_diomapping_dio2_continuous_mode_t;
+
+
+/**
+  * DIO3 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO3_CONTINUOUS_MODE_0             =   0U,             /*!<  Rx: Timeout                                                                                 [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO3_CONTINUOUS_MODE_1             =   1U,             /*!<  Rx: Rssi/PreambleDetect                                                                                 */
+  FSK_OOK_DIOMAPPING_DIO3_CONTINUOUS_MODE_2             =   2U,             /*!<  None                                                                                                    */
+  FSK_OOK_DIOMAPPING_DIO3_CONTINUOUS_MODE_3             =   3U              /*!<  Standby: TempChange/LowBat | FSRx/Tx: TempChange/LowBat | Rx: TempChange/LowBat | Tx: TempChange/LowBat */
+} fsk_ook_diomapping_dio3_continuous_mode_t;
+
+
+/**
+  * DIO4 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO4_CONTINUOUS_MODE_0             =   0U,             /*!<  FSRx/Tx: TempChange/LowBat | Rx: TempChange/LowBat | Tx: TempChange/LowBat  [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO4_CONTINUOUS_MODE_1             =   1U,             /*!<  FSRx/Tx: PllLock | Rx: PllLock | Tx: PllLock                                            */
+  FSK_OOK_DIOMAPPING_DIO4_CONTINUOUS_MODE_2             =   2U,             /*!<  Rx: TimeOut                                                                             */
+  FSK_OOK_DIOMAPPING_DIO4_CONTINUOUS_MODE_3             =   3U              /*!<  Standby: ModeReady | FSRx/Tx: ModeReady | Rx: ModeReady | Tx: ModeReady                 */
+} fsk_ook_diomapping_dio4_continuous_mode_t;
+
+
+/**
+  * DIO5 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO5_CONTINUOUS_MODE_0             =   0U,             /*!<  Sleep: ClkOut if RC | Standby: ClkOut | FSRx/Tx: ClkOut | Rx: ClkOut | Tx: ClkOut [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO5_CONTINUOUS_MODE_1             =   1U,             /*!<  FSRx/Tx: PllLock | Rx: PllLock | Tx: PllLock                                                  */
+  FSK_OOK_DIOMAPPING_DIO5_CONTINUOUS_MODE_2             =   2U,             /*!<  Rx: Rssi/PreambleDetect                                                                       */
+  FSK_OOK_DIOMAPPING_DIO5_CONTINUOUS_MODE_3             =   3U              /*!<  Standby: ModeReady | FSRx/Tx: ModeReady | Rx: ModeReady | Tx: ModeReady                       */
+} fsk_ook_diomapping_dio5_continuous_mode_t;
+
+
+/**
+  * @brief   DIO MAPPING: PACKET MODE
+  */
+/**
+  * DIO0 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO0_PACKET_MODE_0                 =   0U,             /*!<  Rx: PayloadReady | Tx: PacketSent                                                           [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO0_PACKET_MODE_1                 =   1U,             /*!<  Rx: CrcOk                                                                                               */
+  FSK_OOK_DIOMAPPING_DIO0_PACKET_MODE_2                 =   2U,             /*!<  None                                                                                                    */
+  FSK_OOK_DIOMAPPING_DIO0_PACKET_MODE_3                 =   3U              /*!<  Standby: TempChange/LowBat | FSRx/Tx: TempChange/LowBat | Rx: TempChange/LowBat | Tx: TempChange/LowBat */
+} fsk_ook_diomapping_dio0_packet_mode_t;
+
+
+/**
+  * DIO1 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO1_PACKET_MODE_0                   =   0U,             /*!<  Sleep: FifoLevel | Standby: FifoLevel | FSRx/Tx: FifoLevel | Rx: FifoLevel | Tx: FifoLevel  [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO1_PACKET_MODE_1                   =   1U,             /*!<  Sleep: FifoEmpty | Standby: FifoEmpty | FSRx/Tx: FifoEmpty | Rx: FifoEmpty | Tx: FifoEmpty              */
+  FSK_OOK_DIOMAPPING_DIO1_PACKET_MODE_2                   =   2U,             /*!<  Sleep: FifoFull  | Standby: FifoFull  | FSRx/Tx: FifoFull  | Rx: FifoFull  | Tx: FifoFull               */
+  FSK_OOK_DIOMAPPING_DIO1_PACKET_MODE_3                   =   3U              /*!<  None                                                                                                    */
+} fsk_ook_diomapping_dio1_packet_mode_t;
+
+
+/**
+  * DIO2 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO2_PACKET_MODE_0                   =   0U,             /*!<  Sleep: FifoFull  | Standby: FifoFull  | FSRx/Tx: FifoFull  | Rx: FifoFull  | Tx: FifoFull     [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO2_PACKET_MODE_1                   =   1U,             /*!<  Rx: RxReady                                                                                               */
+  FSK_OOK_DIOMAPPING_DIO2_PACKET_MODE_2                   =   2U,             /*!<  Sleep: FifoFull  | Standby: FifoFull  | FSRx/Tx: FifoFull  | Rx: TimeOut   | Tx: FifoFull                 */
+  FSK_OOK_DIOMAPPING_DIO2_PACKET_MODE_3                   =   3U              /*!<  Sleep: FifoFull  | Standby: FifoFull  | FSRx/Tx: FifoFull  | Rx: SyncAddress | Tx: FifoFull               */
+} fsk_ook_diomapping_dio2_packet_mode_t;
+
+
+/**
+  * DIO3 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO3_PACKET_MODE_0                   =   0U,             /*!<  Sleep: FifoEmpty  | Standby: FifoEmpty  | FSRx/Tx: FifoEmpty  | Rx: FifoEmpty   | Tx: FifoEmpty   [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO3_PACKET_MODE_1                   =   1U,             /*!<  Tx: TxReady                                                                                                   */
+  FSK_OOK_DIOMAPPING_DIO3_PACKET_MODE_2                   =   2U,             /*!<  Sleep: FifoEmpty  | Standby: FifoEmpty  | FSRx/Tx: FifoEmpty  | Rx: FifoEmpty   | Tx: FifoEmpty               */
+  FSK_OOK_DIOMAPPING_DIO3_PACKET_MODE_3                   =   3U              /*!<  Sleep: FifoEmpty  | Standby: FifoEmpty  | FSRx/Tx: FifoEmpty  | Rx: FifoEmpty   | Tx: FifoEmpty               */
+} fsk_ook_diomapping_dio3_packet_mode_t;
+
+
+/**
+  * DIO4 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO4_PACKET_MODE_0                   =   0U,             /*!<  Standby: TempChange/LowBat | FSRx/Tx: TempChange/LowBat | Rx: TempChange/LowBat | Tx: TempChange/LowBat [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO4_PACKET_MODE_1                   =   1U,             /*!<  FSRx/Tx: PllLock | Rx: PllLock | Tx: PllLock                                                                        */
+  FSK_OOK_DIOMAPPING_DIO4_PACKET_MODE_2                   =   2U,             /*!<  Rx: TimeOut                                                                                                         */
+  FSK_OOK_DIOMAPPING_DIO4_PACKET_MODE_3                   =   3U              /*!<  Rx: Rssi/PreambleDetect                                                                                             */
+} fsk_ook_diomapping_dio4_packet_mode_t;
+
+
+/**
+  * DIO5 MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  FSK_OOK_DIOMAPPING_DIO5_PACKET_MODE_0                   =   0U,             /*!<  Sleep: ClkOut if RC | Standby: ClkOut | FSRx/Tx: ClkOut | Rx: ClkOut | Tx: ClkOut [ Default ] */
+  FSK_OOK_DIOMAPPING_DIO5_PACKET_MODE_1                   =   1U,             /*!<  FSRx/Tx: PllLock | Rx: PllLock | Tx: PllLock                                                  */
+  FSK_OOK_DIOMAPPING_DIO5_PACKET_MODE_2                   =   2U,             /*!<  Rx: Data | Tx: Data                                                                           */
+  FSK_OOK_DIOMAPPING_DIO5_PACKET_MODE_3                   =   3U              /*!<  Standby: ModeReady | FSRx/Tx: ModeReady | Rx: ModeReady | Tx: ModeReady                       */
+} fsk_ook_diomapping_dio5_packet_mode_t;
 
 
 
@@ -2103,20 +2356,6 @@ typedef enum
 {
   FSK_OOK_REGBITRATEFRAC_BIT_RATE_FRAC_MASK             =   0xFF              /*!<  BitRateFrac mask                                              */
 } fsk_ook_recbitratefrac_bit_rate_frac_t;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2914,6 +3153,23 @@ typedef enum
 } lora_regchirpfilter_t;
 
 
+/**
+  * @brief   DIO MAPPING: LORA MODE
+  */
+/**
+  * ALL DIOs MAPPING
+  *
+  *   NOTE: N/A.
+  */
+typedef enum
+{
+  LORA_DIOMAPPING_ALL_LORA_MODE_0                     =   0U,             /*!<  DIO5: ModeReady | DIO4: CadDetected | DIO3: CadDone         | DIO2: FhssChangeChannel | DIO1: RxTimeout         | DIO0: RxDone  [ Default ] */
+  LORA_DIOMAPPING_ALL_LORA_MODE_1                     =   1U,             /*!<  DIO5: ClkOut    | DIO4: PllLock     | DIO3: ValidHeader     | DIO2: FhssChangeChannel | DIO1: FhssChangeChannel | DIO0: TxDone              */
+  LORA_DIOMAPPING_ALL_LORA_MODE_2                     =   2U,             /*!<  DIO5: ClkOut    | DIO4: PllLock     | DIO3: PayloadCrcError | DIO2: FhssChangeChannel | DIO1: CadDetected       | DIO0: CadDone             */
+  LORA_DIOMAPPING_ALL_LORA_MODE_3                     =   3U              /*!<  None                                                                                                                                        */
+} lora_diomapping_all_lora_mode_t;
+
+
 
 
 
@@ -2931,10 +3187,9 @@ typedef struct
     float                       t_lower;          /*!<  T_LOWER limit                 */
     float                       t_crit;           /*!<  T_CRIT limit                  */
 
-    uint16_t                    manufacturerID;   /*!<  Manufacturer ID               */
     uint8_t                     deviceID;         /*!<  Device ID                     */
     uint8_t                     deviceRevision;   /*!<  Device Revision               */
-} SX1272_SX1273_data_t;
+} SX1272_SX1273_lora_data_t;
 #endif
 
 
@@ -2956,8 +3211,8 @@ typedef enum
   */
 /** It configures the SPI peripheral.
   */
-SX1272_SX1273_status_t SX1272_SX1273_Init               ( SPI_parameters_t mySPIparameters                                                              );
+SX1272_SX1273_status_t SX1272_SX1273_Init           ( SPI_parameters_t mySPIparameters                                                              );
 
-/** It gets CONFIG register value.
+/** It sets the long range mode: FSK/OOK mode or LoRa mode.
   */
-//SX1272_SX1273_status_t SX1272_SX1273_GetCONFIG          ( SPI_parameters_t mySPIparameters, SX1272_SX1273_config_reg_t* myCONFIG                              );
+SX1272_SX1273_status_t SX1272_SX1273_SetMode        ( SPI_parameters_t mySPIparameters, lora_regopmode_long_range_mode_t myMode                     );
