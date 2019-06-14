@@ -2209,6 +2209,7 @@ LPS25HB_status_t LPS25HB_GetPressure ( I2C_parameters_t myI2Cparameters, LPS25HB
 
   /* Read raw pressure   */
   aux  =   LPS25HB_GetRawPressure ( myI2Cparameters, &(*myPressure) );
+  
 
   /* Check if the pressure value is negative   */
   if ( ( myPressure->rawPressure & 0x800000 ) == 0x800000 )
@@ -2257,6 +2258,7 @@ LPS25HB_status_t LPS25HB_GetTemperature ( I2C_parameters_t myI2Cparameters, LPS2
 
   /* Read raw temperature   */
   aux  =   LPS25HB_GetRawTemperature ( myI2Cparameters, &(*myTemperature) );
+  
 
   /* Calculate temperature  */
   myTemperature->temperature   =   (float)( 42.5 + ( myTemperature->rawTemperature / 480.0 ) );
