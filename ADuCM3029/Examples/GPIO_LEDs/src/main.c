@@ -1,9 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the external device: HTS221. Every 1 seconds, a new
- *              temperature/humidity value is read and the data is transmitted through the UART ( Baud Rate: 230400 ).
- *
- *              The microcontroller is in low power the rest of the time.
+ * @details     This example shows how to work with the internal peripheral: GPIO. Both LEDs blink every certain period of time.
  *
  *
  * @return      N/A
@@ -42,6 +39,7 @@
  */
 int main(int argc, char *argv[])
 {
+	uint32_t i = 0UL;
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
 	 * the project.
@@ -50,10 +48,21 @@ int main(int argc, char *argv[])
 	adi_initComponents();
 	
 	/* Begin adding your custom code here */
-	pADI_GPIO0->CFG	|=	 ( 1UL << BITP_GPIO_CFG_PIN15 );
+	conf_CLK  ();
+	conf_GPIO ();
 
 
+	while ( 1 )
+	{
+		/* Blink LEDs	 */
+		pADI_GPIO2->TGL	|=	 DS3;
+		pADI_GPIO1->TGL	|=	 DS4;
 
+		/* Delay	 */
+		for ( i = 0UL; i < 0x23232; i++ );
+	}
+
+	/* It should never reach here	 */
 	return 0;
 }
 
