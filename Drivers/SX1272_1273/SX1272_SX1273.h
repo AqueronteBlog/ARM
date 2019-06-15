@@ -3180,15 +3180,27 @@ typedef enum
 #define SX1272_SX1273_VECTOR_STRUCT_H
 typedef struct
 {
-    float                       t_a;              /*!<  Ambient temperature value     */
-    uint16_t                    t_a_raw;          /*!<  Raw ambient temperature value */
+  float                       t_a;              /*!<  Ambient temperature value     */
+  uint16_t                    t_a_raw;          /*!<  Raw ambient temperature value */
 
-    float                       t_upper;          /*!<  T_UPPER limit                 */
-    float                       t_lower;          /*!<  T_LOWER limit                 */
-    float                       t_crit;           /*!<  T_CRIT limit                  */
+  float                       t_upper;          /*!<  T_UPPER limit                 */
+  float                       t_lower;          /*!<  T_LOWER limit                 */
+  float                       t_crit;           /*!<  T_CRIT limit                  */
+    
+  /* Long range mode   */
+  lora_regopmode_long_range_mode_t  mode;       /*!<  FSK/OOK or LoRa               */
+  
+  /* LoRa parameters   */
+  lora_regmodemconfig2_spreading_factor_t         sf;                       /*!<  LoRa: Spreading factor            */
+  lora_regmodemconfig1_coding_rate_t              cr;                       /*!<  LoRa: Coding rate                 */
+  lora_regmodemconfig1_bw_t                       bw;                       /*!<  LoRa: Bandwidth                   */
+  uint16_t                                        preamble;                 /*!<  LoRa: Preamble:  6 - 65535        */
+  lora_regmodemconfig1_implicit_header_mode_on_t  headerMode;               /*!<  LoRa: Header mode                 */
+  lora_regmodemconfig1_low_data_rate_optimize_t   lowDataRateOptimization;  /*!<  LoRa: Low Data Rate Optimization  */
+  uint8_t                                         hopPeriod;                /*!<  LoRa: Frequency Hopping period    */
 
-    uint8_t                     deviceID;         /*!<  Device ID                     */
-    uint8_t                     deviceRevision;   /*!<  Device Revision               */
+  uint8_t                     deviceID;         /*!<  Device ID                     */
+  uint8_t                     deviceRevision;   /*!<  Device Revision               */
 } SX1272_SX1273_lora_data_t;
 #endif
 
@@ -3211,8 +3223,68 @@ typedef enum
   */
 /** It configures the SPI peripheral.
   */
-SX1272_SX1273_status_t SX1272_SX1273_Init           ( SPI_parameters_t mySPIparameters                                                              );
+SX1272_SX1273_status_t SX1272_SX1273_Init               ( SPI_parameters_t mySPIparameters                                                        );
 
 /** It sets the long range mode: FSK/OOK mode or LoRa mode.
   */
-SX1272_SX1273_status_t SX1272_SX1273_SetMode        ( SPI_parameters_t mySPIparameters, lora_regopmode_long_range_mode_t myMode                     );
+SX1272_SX1273_status_t SX1272_SX1273_SetMode            ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t myMode                      );
+
+/** It gets the long range mode: FSK/OOK mode or LoRa mode.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_GetMode            ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myMode                     );
+
+/** It sets the spreading factor value.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetSF         ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t mySF                        );
+
+/** It gets the spreading factor value.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetSF         ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* mySF                       );
+
+/** It sets the coding rate value.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetCR         ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t myCR                        );
+
+/** It gets the coding rate value.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetCR         ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myCR                       );
+
+/** It sets the bandwidth value.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetBW         ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t myBW                        );
+
+/** It gets the bandwidth value.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetBW         ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myBW                       );
+
+/** It sets the preamble value.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetPreamble   ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t myPreamble                  );
+
+/** It gets the preamble value.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetPreamble   ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myPreamble                 );
+
+/** It sets the header mode.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetHeaderMode ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t myHeaderMode                );
+
+/** It gets the header mode.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetHeaderMode ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myHeaderMode               );
+
+/** It sets the Low Data Rate Optimization mode.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetLowDataRateOptimization ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t myLowDataRateOptimization  );
+
+/** It gets Low Data Rate Optimization mode.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetLowDataRateOptimization ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myLowDataRateOptimization );
+
+/** It sets the Frequency Hopping Period mode.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetHopPeriod  ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t myHopPeriod                 );
+
+/** It gets Frequency Hopping Period mode.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetHopPeriod  ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myHopPeriod                 );
