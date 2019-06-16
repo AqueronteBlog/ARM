@@ -36,29 +36,29 @@ typedef enum
   */
 typedef enum
 {
-  LPS22HB_REF_P_XL        =   0x08,           /*!<  Reference pressure registers                  */
-  LPS22HB_REF_P_L         =   0x09,           /*!<  Reference pressure registers                  */
-  LPS22HB_REF_P_H         =   0x0A,           /*!<  Reference pressure registers                  */
+  LPS22HB_INTERRUPT_CFG   =   0x0B,           /*!<  Interrupt registers                           */
+  LPS22HB_THS_P_L         =   0x0C,           /*!<  Pressure threshold registers                  */
+  LPS22HB_THS_P_H         =   0x0D,           /*!<  Pressure threshold registers                  */
   LPS22HB_WHO_AM_I        =   0x0F,           /*!<  Who am I register                             */
-  LPS22HB_RES_CONF        =   0x10,           /*!<  Resolution register                           */
-  LPS22HB_CTRL_REG1       =   0x20,           /*!<  Control registers                             */
-  LPS22HB_CTRL_REG2       =   0x21,           /*!<  Control registers                             */
-  LPS22HB_CTRL_REG3       =   0x22,           /*!<  Control registers                             */
-  LPS22HB_CTRL_REG4       =   0x23,           /*!<  Control registers                             */
-  LPS22HB_INTERRUPT_CFG   =   0x24,           /*!<  Interrupt registers                           */
+  LPS22HB_CTRL_REG1       =   0x10,           /*!<  Control registers                             */
+  LPS22HB_CTRL_REG2       =   0x11,           /*!<  Control registers                             */
+  LPS22HB_CTRL_REG3       =   0x12,           /*!<  Control registers                             */
+  LPS22HB_FIFO_CTRL       =   0x14,           /*!<  FIFO configure registers                      */
+  LPS22HB_REF_P_XL        =   0x15,           /*!<  Reference pressure registers                  */
+  LPS22HB_REF_P_L         =   0x16,           /*!<  Reference pressure registers                  */
+  LPS22HB_REF_P_H         =   0x17,           /*!<  Reference pressure registers                  */
+  LPS22HB_RPDS_L          =   0x18,           /*!<  Pressure offset registers                     */
+  LPS22HB_RPDS_H          =   0x18,           /*!<  Pressure offset registers                     */
+  LPS22HB_RES_CONF        =   0x1A,           /*!<  Resolution register                           */
   LPS22HB_INT_SOURCE      =   0x25,           /*!<  Interrupt registers                           */
-  LPS22HB_STATUS_REG      =   0x27,           /*!<  Status register                               */
+  LPS22HB_FIFO_STATUS     =   0x26,           /*!<  FIFO configure registers                      */
+  LPS22HB_STATUS          =   0x27,           /*!<  Status register                               */
   LPS22HB_PRESS_OUT_XL    =   0x28,           /*!<  Pressure output register                      */
   LPS22HB_PRESS_OUT_L     =   0x29,           /*!<  Pressure output register                      */
   LPS22HB_PRESS_OUT_H     =   0x2A,           /*!<  Pressure output register                      */
   LPS22HB_TEMP_OUT_L      =   0x2B,           /*!<  Temperature output registers                  */
   LPS22HB_TEMP_OUT_H      =   0x2C,           /*!<  Temperature output registers                  */
-  LPS22HB_FIFO_CTRL       =   0x2E,           /*!<  FIFO configure registers                      */
-  LPS22HB_FIFO_STATUS     =   0x2F,           /*!<  FIFO configure registers                      */
-  LPS22HB_THS_P_L         =   0x30,           /*!<  Pressure threshold registers                  */
-  LPS22HB_THS_P_H         =   0x31,           /*!<  Pressure threshold registers                  */
-  LPS22HB_RPDS_L          =   0x39,           /*!<  Pressure offset registers                     */
-  LPS22HB_RPDS_H          =   0x3A            /*!<  Pressure offset registers                     */
+  LPS22HB_LPFP_RES        =   0x33            /*!<  Filter reset register                         */
 } LPS22HB_registers_t;
 
 
@@ -96,53 +96,27 @@ typedef enum
 typedef enum
 {
     WHO_AM_I_MASK         =   0xFF,           /*!<  WHO_AM_I mask                                */
-    WHO_AM_I_VALUE        =   0xBD            /*!<  WHO_AM_I: 0xBD                               */
+    WHO_AM_I_VALUE        =   0xB1            /*!<  WHO_AM_I: 0xB1                               */
 } LPS22HB_who_am_i_t;
 
 
 /**
   * @brief   RES_CONF REGISTER.
   */
-/* AVGT <3:2>
- *    NOTE: Temperature internal average configuration.
+/* LC_EN <0>
+ *    NOTE: Low current mode enable.
  */
 typedef enum
 {
-    RES_CONF_AVGT_MASK    =   ( 0b11 << 2U ),   /*!<  AVGT mask                                    */
-    RES_CONF_AVGT_8       =   ( 0b00 << 2U ),   /*!<  AVGT Nr. internal average  8                 */
-    RES_CONF_AVGT_16      =   ( 0b01 << 2U ),   /*!<  AVGT Nr. internal average 16                 */
-    RES_CONF_AVGT_32      =   ( 0b10 << 2U ),   /*!<  AVGT Nr. internal average 32                 */
-    RES_CONF_AVGT_64      =   ( 0b11 << 2U )    /*!<  AVGT Nr. internal average 64     [ Default ] */
-} LPS22HB_res_conf_avgt_t;
-
-
-/* AVGP <1:0>
- *    NOTE: Pressure internal average configuration.
- */
-typedef enum
-{
-    RES_CONF_AVGP_MASK    =   ( 0b11 << 0U ),   /*!<  AVGP mask                                    */
-    RES_CONF_AVGP_8       =   ( 0b00 << 0U ),   /*!<  AVGP Nr. internal average   8                */
-    RES_CONF_AVGP_32      =   ( 0b01 << 0U ),   /*!<  AVGP Nr. internal average  32                */
-    RES_CONF_AVGP_128     =   ( 0b10 << 0U ),   /*!<  AVGP Nr. internal average 128                */
-    RES_CONF_AVGP_512     =   ( 0b11 << 0U )    /*!<  AVGP Nr. internal average 512    [ Default ] */
-} LPS22HB_res_conf_avgp_t;
+    RES_CONF_LC_EN_MASK             =   ( 1U << 0U ),   /*!<  LC_EN mask                                   */
+    RES_CONF_LC_EN_NORMAL_MODE      =   ( 0U << 0U ),   /*!<  Normal mode (low-noise mode)     [ Default ] */
+    RES_CONF_LC_EN_LOW_CURRENT_MODE =   ( 1U << 0U )    /*!<  Low-current mode                             */
+} LPS22HB_res_conf_lc_en_t;
 
 
 /**
   * @brief   CTRL_REG1 REGISTER.
   */
-/* PD <7>
- *    NOTE: Power-down control.
- */
-typedef enum
-{
-    CTRL_REG1_PD_MASK             =   ( 1U << 7U ),     /*!<  PD mask                                       */
-    CTRL_REG1_PD_POWER_DOWN_MODE  =   ( 0U << 7U ),     /*!<  Power-down mode                   [ Default ] */
-    CTRL_REG1_PD_ACTIVE_MODE      =   ( 1U << 7U )      /*!<  Active mode                                   */
-} LPS22HB_ctrl_reg1_pd_t;
-
-
 /* ODR <6:4>
  *    NOTE: Output data rate selection.
  */
@@ -151,43 +125,44 @@ typedef enum
     CTRL_REG1_ODR_MASK            =   ( 0b111 << 4U ),  /*!<  ODR mask                                      */
     CTRL_REG1_ODR_ONE_SHOT_MODE   =   ( 0b000 << 4U ),  /*!<  One- shot mode enabled            [ Default ] */
     CTRL_REG1_ODR_1_HZ            =   ( 0b001 << 4U ),  /*!<  ODR:  1 HZ                                    */
-    CTRL_REG1_ODR_7_HZ            =   ( 0b010 << 4U ),  /*!<  ODR:  7 HZ                                    */
-    CTRL_REG1_ODR_12_5_HZ         =   ( 0b011 << 4U ),  /*!<  ODR: 12.5 HZ                                  */
-    CTRL_REG1_ODR_25_HZ           =   ( 0b100 << 4U )   /*!<  ODR: 25 HZ                                    */
+    CTRL_REG1_ODR_10_HZ           =   ( 0b010 << 4U ),  /*!<  ODR: 10 HZ                                    */
+    CTRL_REG1_ODR_25_HZ           =   ( 0b011 << 4U ),  /*!<  ODR: 25 HZ                                    */
+    CTRL_REG1_ODR_50_HZ           =   ( 0b100 << 4U ),  /*!<  ODR: 50 HZ                                    */
+    CTRL_REG1_ODR_75_HZ           =   ( 0b101 << 4U )   /*!<  ODR: 75 HZ                                    */
 } LPS22HB_ctrl_reg1_odr_t;
 
 
-/* DIFF_EN <3>
- *    NOTE: Interrupt generation enable.
+/* EN_LPFP <3>
+ *    NOTE: Enable low-pass filter on pressure data when Continuous mode is used.
  */
 typedef enum
 {
-    CTRL_REG1_DIFF_EN_MASK        =   ( 1U << 3U ),     /*!<  DIFF_EN mask                                  */
-    CTRL_REG1_DIFF_EN_DISABLED    =   ( 0U << 3U ),     /*!<  Interrupt generation disabled     [ Default ] */
-    CTRL_REG1_DIFF_EN_ENABLED     =   ( 1U << 3U )      /*!<  Interrupt generation enabled                  */
-} LPS22HB_ctrl_reg1_diff_en_t;
+    CTRL_REG1_EN_LPFP_MASK        =   ( 1U << 3U ),     /*!<  EN_LPFP mask                                  */
+    CTRL_REG1_EN_LPFP_DISABLED    =   ( 0U << 3U ),     /*!<  Low-pass filter disabled          [ Default ] */
+    CTRL_REG1_EN_LPFP_ENABLED     =   ( 1U << 3U )      /*!<  Low-pass filter enabled                       */
+} LPS22HB_ctrl_reg1_en_lpfp_t;
 
 
-/* BDU <2>
+/* LPFP_CFG <2>
+ *    NOTE: Low-pass configuration register.
+ */
+typedef enum
+{
+    CTRL_REG1_LPFP_CFG_MASK       =   ( 1U << 2U ),     /*!<  LPFP_CFG mask                                 */
+    CTRL_REG1_LPFP_CFG_ODR_DIV_9  =   ( 0U << 2U ),     /*!<  ODR/9                             [ Default ] */
+    CTRL_REG1_LPFP_CFG_ODR_DIV_20 =   ( 1U << 2U )      /*!<  ODR/20                                        */
+} LPS22HB_ctrl_reg1_lpfp_cfg_t;
+
+
+/* BDU <1>
  *    NOTE: Block data update.
  */
 typedef enum
 {
-    CTRL_REG1_BDU_MASK            =   ( 1U << 2U ),     /*!<  BDU mask                                      */
-    CTRL_REG1_BDU_0               =   ( 0U << 2U ),     /*!<  Continuous update                 [ Default ] */
-    CTRL_REG1_BDU_1               =   ( 1U << 2U )      /*!<  Not updated until MSB and LSB have been read  */
+    CTRL_REG1_BDU_MASK            =   ( 1U << 1U ),     /*!<  BDU mask                                      */
+    CTRL_REG1_BDU_0               =   ( 0U << 1U ),     /*!<  Continuous update                 [ Default ] */
+    CTRL_REG1_BDU_1               =   ( 1U << 1U )      /*!<  Not updated until MSB and LSB have been read  */
 } LPS22HB_ctrl_reg1_bdu_t;
-
-
-/* RESET_AZ <1>
- *    NOTE: Reset Autozero function.
- */
-typedef enum
-{
-    CTRL_REG1_RESET_AZ_MASK                     =   ( 1U << 1U ), /*!<  RESET_AZ mask                                 */
-    CTRL_REG1_RESET_AZ_NORMAL_MODE              =   ( 0U << 1U ), /*!<  Normal mode                       [ Default ] */
-    CTRL_REG1_RESET_AZ_RESET_AUTOZERO_FUNCTION  =   ( 1U << 1U )  /*!<  Reset Autozero function                       */
-} LPS22HB_ctrl_reg1_reset_az_t;
 
 
 /* SIM <0>
@@ -237,15 +212,15 @@ typedef enum
 } LPS22HB_ctrl_reg2_stop_on_fth_t;
 
 
-/* FIFO_MEAN_DEC <4>
- *    NOTE: Enable to decimate the output pressure to 1Hz with FIFO Mean mode.
+/* IF_ADD_INC <4>
+ *    NOTE: Register address automatically incremented during a multiple byte access with a serial interface (I2C or SPI).
  */
 typedef enum
 {
-    CTRL_REG2_FIFO_MEAN_DEC_MASK      =   ( 1U << 4U ),   /*!<  FIFO_MEAN_DEC mask                            */
-    CTRL_REG2_FIFO_MEAN_DEC_DISABLED  =   ( 0U << 4U ),   /*!<  Disable                           [ Default ] */
-    CTRL_REG2_FIFO_MEAN_DEC_ENABLED   =   ( 1U << 4U )    /*!<  Enabled                                       */
-} LPS22HB_ctrl_reg2_fifo_mean_dec_t;
+    CTRL_REG2_IF_ADD_INC_MASK         =   ( 1U << 4U ),   /*!<  IF_ADD_INC mask                               */
+    CTRL_REG2_IF_ADD_INC_DISABLED     =   ( 0U << 4U ),   /*!<  Disable                                       */
+    CTRL_REG2_IF_ADD_INC_ENABLED      =   ( 1U << 4U )    /*!<  Enabled                           [ Default ] */
+} LPS22HB_ctrl_reg2_if_add_inc_t;
 
 
 /* I2C_DIS <3>
@@ -268,17 +243,6 @@ typedef enum
     CTRL_REG2_SWRESET_NORMAL_MODE =   ( 0U << 2U ),     /*!<  Normal mode                       [ Default ] */
     CTRL_REG2_SWRESET_SW_RESET    =   ( 1U << 2U )      /*!<  Software reset                                */
 } LPS22HB_ctrl_reg2_swreset_t;
-
-
-/* AUTOZERO <1>
- *    NOTE: Autozero enable.
- */
-typedef enum
-{
-    CTRL_REG2_AUTOZERO_MASK             =   ( 1U << 1U ),     /*!<  AUTOZERO mask                                 */
-    CTRL_REG2_AUTOZERO_NORMAL_MODE      =   ( 0U << 1U ),     /*!<  Normal mode                       [ Default ] */
-    CTRL_REG2_AUTOZERO_AUTOZERO_ENABLED =   ( 1U << 1U )      /*!<  Autozero enabled                              */
-} LPS22HB_ctrl_reg2_autozero_t;
 
 
 /* ONE_SHOT <0>
@@ -317,6 +281,50 @@ typedef enum
 } LPS22HB_ctrl_reg3_pp_od_t;
 
 
+/* F_FSS5 <5>
+ *    NOTE: FIFO full flag on INT_DRDY pin.
+ */
+typedef enum
+{
+    CTRL_REG3_F_FSS5_MASK                 =   ( 1U << 5U ), /*!<  F_FSS5 mask                                 */
+    CTRL_REG3_F_FSS5_DISABLE              =   ( 0U << 5U ), /*!<  Disable                         [ Default ] */
+    CTRL_REG3_F_FSS5_ENABLE               =   ( 1U << 5U )  /*!<  Enable                                      */
+} LPS22HB_ctrl_reg3_f_fss5_t;
+
+
+/* F_FTH <4>
+ *    NOTE: FIFO watermark status on INT_DRDY pin.
+ */
+typedef enum
+{
+    CTRL_REG3_F_FTH_MASK                  =   ( 1U << 4U ), /*!<  F_FTH mask                                  */
+    CTRL_REG3_F_FTH_DISABLE               =   ( 0U << 4U ), /*!<  Disable                         [ Default ] */
+    CTRL_REG3_F_FTH_ENABLE                =   ( 1U << 4U )  /*!<  Enable                                      */
+} LPS22HB_ctrl_reg3_f_fth_t;
+
+
+/* F_OVR <3>
+ *    NOTE: FIFO overrun interrupt on INT_DRDY pin.
+ */
+typedef enum
+{
+    CTRL_REG3_F_OVR_MASK                  =   ( 1U << 3U ), /*!<  F_OVR mask                                  */
+    CTRL_REG3_F_OVR_DISABLE               =   ( 0U << 3U ), /*!<  Disable                         [ Default ] */
+    CTRL_REG3_F_OVR_ENABLE                =   ( 1U << 3U )  /*!<  Enable                                      */
+} LPS22HB_ctrl_reg3_f_ovr_t;
+
+
+/* DRDY <2>
+ *    NOTE: Data-ready signal on INT_DRDY pin.
+ */
+typedef enum
+{
+    CTRL_REG3_DRDY_MASK                   =   ( 1U << 2U ), /*!<  DRDY mask                                   */
+    CTRL_REG3_DRDY_DISABLE                =   ( 0U << 2U ), /*!<  Disable                         [ Default ] */
+    CTRL_REG3_DRDY_ENABLE                 =   ( 1U << 2U )  /*!<  Enable                                      */
+} LPS22HB_ctrl_reg3_drdy_t;
+
+
 /* INT_S2 <1:0>
  *    NOTE: Data signal on INT_DRDY pin control bits.
  */
@@ -331,57 +339,65 @@ typedef enum
 
 
 /**
-  * @brief   CTRL_REG4 REGISTER
-  */
-/* F_EMPTY <3>
- *    NOTE: FIFO empty flag on INT_DRDY pin
- */
-typedef enum
-{
-    CTRL_REG4_F_EMPTY_MASK          =   ( 1U << 3U ),   /*!<  F_EMPTY mask                                  */
-    CTRL_REG4_F_EMPTY_DISABLED      =   ( 0U << 3U ),   /*!<  Disabled                          [ Default ] */
-    CTRL_REG4_F_EMPTY_ENABLED       =   ( 1U << 3U )    /*!<  Enabled                                       */
-} LPS22HB_ctrl_reg4_f_empty_t;
-
-
-/* F_FTH <2>
- *    NOTE: FIFO threshold (watermark) status on INT_DRDY pin to indicate that FIFO is filled up to the threshold level
- */
-typedef enum
-{
-    CTRL_REG4_F_FTH_MASK            =   ( 1U << 2U ),   /*!<  F_FTH mask                                    */
-    CTRL_REG4_F_FTH_DISABLED        =   ( 0U << 2U ),   /*!<  Disabled                          [ Default ] */
-    CTRL_REG4_F_FTH_ENABLED         =   ( 1U << 2U )    /*!<  Enabled                                       */
-} LPS22HB_ctrl_reg4_f_fth_t;
-
-
-/* F_OVR <1>
- *    NOTE: FIFO overrun interrupt on INT_DRDY pin to indicate that FIFO is full in FIFO mode or that an overrun occurred in Stream mode
- */
-typedef enum
-{
-    CTRL_REG4_F_OVR_MASK            =   ( 1U << 1U ),   /*!<  F_OVR mask                                    */
-    CTRL_REG4_F_OVR_DISABLED        =   ( 0U << 1U ),   /*!<  Disabled                          [ Default ] */
-    CTRL_REG4_F_OVR_ENABLED         =   ( 1U << 1U )    /*!<  Enabled                                       */
-} LPS22HB_ctrl_reg4_f_ovr_t;
-
-
-/* DRDY <0>
- *    NOTE: Data-ready signal on INT_DRDY pin
- */
-typedef enum
-{
-    CTRL_REG4_DRDY_MASK             =   ( 1U << 0U ),   /*!<  DRDY mask                                     */
-    CTRL_REG4_DRDY_DISABLED         =   ( 0U << 0U ),   /*!<  Disabled                          [ Default ] */
-    CTRL_REG4_DRDY_ENABLED          =   ( 1U << 0U )    /*!<  Enabled                                       */
-} LPS22HB_ctrl_reg4_drdy_t;
-
-
-/**
   * @brief   INTERRUPT_CFG REGISTER
   */
+/* AUTORIFP <7>
+ *    NOTE: Enable AUTORIFP: function
+ */
+typedef enum
+{
+    INTERRUPT_CFG_AUTORIFP_MASK     =   ( 1U << 7U ),   /*!<  AUTORIFP mask                                 */
+    INTERRUPT_CFG_AUTORIFP_NORMAL   =   ( 0U << 7U ),   /*!<  normal mode                       [ Default ] */
+    INTERRUPT_CFG_AUTORIFP_ENABLED  =   ( 1U << 7U )    /*!<  AutoRifP enabled                              */
+} LPS22HB_interrupt_cfg_autorift_t;
+
+
+/* RESET_ARP <6>
+ *    NOTE: Enable Autozero function
+ */
+typedef enum
+{
+    INTERRUPT_CFG_RESET_ARP_MASK    =   ( 1U << 6U ),   /*!<  RESET_ARP mask                                */
+    INTERRUPT_CFG_RESET_ARP_NORMAL  =   ( 0U << 6U ),   /*!<  normal mode                       [ Default ] */
+    INTERRUPT_CFG_RESET_ARP_ENABLED =   ( 1U << 6U )    /*!<  reset AutoRifP function                       */
+} LPS22HB_interrupt_cfg_reset_arp_t;
+
+
+/* AUTOZERO <5>
+ *    NOTE: Enable Autozero function
+ */
+typedef enum
+{
+    INTERRUPT_CFG_AUTOZERO_MASK     =   ( 1U << 5U ),   /*!<  AUTOZERO mask                                 */
+    INTERRUPT_CFG_AUTOZERO_NORMAL   =   ( 0U << 5U ),   /*!<  normal mode                       [ Default ] */
+    INTERRUPT_CFG_AUTOZERO_ENABLED  =   ( 1U << 5U )    /*!<  Autozero enabled                              */
+} LPS22HB_interrupt_cfg_autozero_t;
+
+
+/* RESET_AZ <4>
+ *    NOTE: Reset Autozero function
+ */
+typedef enum
+{
+    INTERRUPT_CFG_RESET_AZ_MASK     =   ( 1U << 4U ),   /*!<  RESET_AZ mask                                 */
+    INTERRUPT_CFG_RESET_AZ_NORMAL   =   ( 0U << 4U ),   /*!<  normal mode                       [ Default ] */
+    INTERRUPT_CFG_RESET_AZ_ENABLED  =   ( 1U << 4U )    /*!<  reset Autozero function                       */
+} LPS22HB_interrupt_cfg_reset_az_t;
+
+
+/* DIFF_EN <3>
+ *    NOTE: Enable interrupt generation
+ */
+typedef enum
+{
+    INTERRUPT_CFG_DIFF_EN_MASK      =   ( 1U << 3U ),   /*!<  DIFF_EN mask                                 */
+    INTERRUPT_CFG_DIFF_EN_DISABLED  =   ( 0U << 3U ),   /*!<  interrupt generation disabled    [ Default ] */
+    INTERRUPT_CFG_DIFF_EN_ENABLED   =   ( 1U << 3U )    /*!<  interrupt generation enabled                 */
+} LPS22HB_interrupt_cfg_diff_en_t;
+
+
 /* LIR <2>
- *    NOTE: Latch interrupt request to the INT_SOURCE (25h) register
+ *    NOTE: Latch interrupt request to the INT_SOURCE (25h) register.
  */
 typedef enum
 {
@@ -391,39 +407,50 @@ typedef enum
 } LPS22HB_interrupt_cfg_lir_t;
 
 
-/* PL_E <1>
+/* PLE <1>
  *    NOTE: Enable interrupt generation on differential pressure low event
  */
 typedef enum
 {
-    INTERRUPT_CFG_PL_E_MASK         =   ( 1U << 1U ),   /*!<  PL_E mask                                     */
-    INTERRUPT_CFG_PL_E_DISABLED     =   ( 0U << 1U ),   /*!<  Disable interrupt request         [ Default ] */
-    INTERRUPT_CFG_PL_E_ENABLED      =   ( 1U << 1U )    /*!<  Enable interrupt request on measured differential pressure value lower than preset threshold      */
-} LPS22HB_interrupt_cfg_pl_e_t;
+    INTERRUPT_CFG_PLE_MASK          =   ( 1U << 1U ),   /*!<  PLE mask                                      */
+    INTERRUPT_CFG_PLE_DISABLED      =   ( 0U << 1U ),   /*!<  Disable interrupt request         [ Default ] */
+    INTERRUPT_CFG_PLE_ENABLED       =   ( 1U << 1U )    /*!<  Enable interrupt request on measured differential pressure value lower than preset threshold      */
+} LPS22HB_interrupt_cfg_ple_t;
 
 
-/* PH_E <0>
+/* PHE <0>
  *    NOTE: Enable interrupt generation on differential pressure high event
  */
 typedef enum
 {
-    INTERRUPT_CFG_PH_E_MASK         =   ( 1U << 0U ),   /*!<  PH_E mask                                     */
-    INTERRUPT_CFG_PH_E_DISABLED     =   ( 0U << 0U ),   /*!<  Disable interrupt request         [ Default ] */
-    INTERRUPT_CFG_PH_E_ENABLED      =   ( 1U << 0U )    /*!<  enable interrupt request on measured differential pressure value higher than preset threshold      */
-} LPS22HB_interrupt_cfg_ph_e_t;
+    INTERRUPT_CFG_PHE_MASK          =   ( 1U << 0U ),   /*!<  PHE mask                                      */
+    INTERRUPT_CFG_PHE_DISABLED      =   ( 0U << 0U ),   /*!<  Disable interrupt request         [ Default ] */
+    INTERRUPT_CFG_PHE_ENABLED       =   ( 1U << 0U )    /*!<  enable interrupt request on measured differential pressure value higher than preset threshold      */
+} LPS22HB_interrupt_cfg_phe_t;
 
 
 /**
-  * @brief   INT_SOURCE REGISTER ( INT_SOURCE register is cleared by reading it )
+  * @brief   INT_SOURCE REGISTER
   */
-/* IA <2>
+/* BOOT_STATUS <7>
  *    NOTE: Interrupt active
  */
 typedef enum
 {
+    INT_SOURCE_BOOT_STATUS_MASK           =   ( 1U << 7U ),   /*!<  BOOT_STATUS mask                              */
+    INT_SOURCE_BOOT_STATUS_RUNNING        =   ( 1U << 7U ),   /*!<  It indicates that the Boot phase is running   */
+    INT_SOURCE_BOOT_STATUS_NOT_RUNNING    =   ( 0U << 7U )    /*!<  Boot is not running               [ Default ] */
+} LPS22HB_int_source_boot_status_t;
+
+
+/* IA <2>
+ *    NOTE: Interrupt active
+ */
+typedef enum
+{ 
     INT_SOURCE_IA_MASK                    =   ( 1U << 2U ),   /*!<  IA mask                                       */
     INT_SOURCE_IA_NO_INTERRUPT_GENERATED  =   ( 0U << 2U ),   /*!<  No interrupt has been generated               */
-    INT_SOURCE_IA_INTERRUPT_GENERATED     =   ( 1U << 2U )    /*!<  One/more interrupt events have been generated */
+    INT_SOURCE_IA_INTERRUPT_GENERATED     =   ( 1U << 2U )    /*!<  one or more interrupt have been generated     */
 } LPS22HB_int_source_ia_t;
 
 
@@ -450,50 +477,50 @@ typedef enum
 
 
 /**
-  * @brief   STATUS_REG REGISTER
+  * @brief   STATUS REGISTER
   */
-/* P_OR <5>
- *    NOTE: Pressure data overrun
- */
-typedef enum
-{
-    STATUS_REG_P_OR_MASK            =   ( 1U << 5U ),   /*!<  P_OR mask                                               */
-    STATUS_REG_P_OR_NO_DATA         =   ( 0U << 5U ),   /*!<  no overrun has occurred                                 */
-    STATUS_REG_P_OR_NEW_DATA        =   ( 1U << 5U )    /*!<  new data for pressure has overwritten the previous one  */
-} LPS22HB_status_reg_p_or_t;
-
-
-/* T_OR <4>
+/* T_OR <5>
  *    NOTE: Temperature data overrun
  */
 typedef enum
 {
-    STATUS_REG_T_OR_MASK            =   ( 1U << 4U ),   /*!<  T_OR mask                                                 */
-    STATUS_REG_T_OR_NO_DATA         =   ( 0U << 4U ),   /*!<  no overrun has occurred                                   */
-    STATUS_REG_T_OR_NEW_DATA        =   ( 1U << 4U )    /*!<  new data for temperature has overwritten the previous one */
-} LPS22HB_status_reg_t_or_t;
+    STATUS_REG_T_OR_MASK            =   ( 1U << 5U ),   /*!<  T_OR mask                                                 */
+    STATUS_REG_T_OR_NO_DATA         =   ( 0U << 5U ),   /*!<  no overrun has occurred                                   */
+    STATUS_REG_T_OR_NEW_DATA        =   ( 1U << 5U )    /*!<  new data for temperature has overwritten the previous one */
+} LPS22HB_status_t_or_t;
 
 
-/* P_DA <1>
- *    NOTE: Pressure data available
+/* P_OR <4>
+ *    NOTE: Pressure data overrun
  */
 typedef enum
 {
-    STATUS_REG_P_DA_MASK            =   ( 1U << 1U ),   /*!<  P_DA mask                                               */
-    STATUS_REG_P_DA_NO_AVAILABLE    =   ( 0U << 1U ),   /*!<  new data for pressure is not yet available              */
-    STATUS_REG_P_DA_NEW_DATA        =   ( 1U << 1U )    /*!<  new data for pressure is available                      */
-} LPS22HB_status_reg_p_da_t;
+    STATUS_REG_P_OR_MASK            =   ( 1U << 4U ),   /*!<  P_OR mask                                               */
+    STATUS_REG_P_OR_NO_DATA         =   ( 0U << 4U ),   /*!<  no overrun has occurred                                 */
+    STATUS_REG_P_OR_NEW_DATA        =   ( 1U << 4U )    /*!<  new data for pressure has overwritten the previous one  */
+} LPS22HB_status_p_or_t;
 
 
-/* T_DA <0>
+/* T_DA <1>
  *    NOTE: Temperature data available
  */
 typedef enum
 {
-    STATUS_REG_T_DA_MASK            =   ( 1U << 0U ),   /*!<  T_DA mask                                               */
-    STATUS_REG_T_DA_NO_AVAILABLE    =   ( 0U << 0U ),   /*!<  new data for temperature is not yet available           */
-    STATUS_REG_T_DA_NEW_DATA        =   ( 1U << 0U )    /*!<  new data for temperature is available                   */
-} LPS22HB_status_reg_t_da_t;
+    STATUS_REG_T_DA_MASK            =   ( 1U << 1U ),   /*!<  T_DA mask                                               */
+    STATUS_REG_T_DA_NO_AVAILABLE    =   ( 0U << 1U ),   /*!<  new data for temperature is not yet available           */
+    STATUS_REG_T_DA_NEW_DATA        =   ( 1U << 1U )    /*!<  new data for temperature is available                   */
+} LPS22HB_status_t_da_t;
+
+
+/* P_DA <0>
+ *    NOTE: Pressure data available
+ */
+typedef enum
+{
+    STATUS_REG_P_DA_MASK            =   ( 1U << 0U ),   /*!<  P_DA mask                                               */
+    STATUS_REG_P_DA_NO_AVAILABLE    =   ( 0U << 0U ),   /*!<  new data for pressure is not yet available              */
+    STATUS_REG_P_DA_NEW_DATA        =   ( 1U << 0U )    /*!<  new data for pressure is available                      */
+} LPS22HB_status_p_da_t;
 
 
 /**
@@ -510,13 +537,13 @@ typedef enum
     FIFO_CTRL_F_MODE_STREAM_MOD             =   ( 0b010 << 5U ),  /*!<  Stream mode                                           */
     FIFO_CTRL_F_MODE_STREAM_TO_FIFO_MODE    =   ( 0b011 << 5U ),  /*!<  Stream-to-FIDO mode                                   */
     FIFO_CTRL_F_MODE_BYPASS_TO_STREAM_MODE  =   ( 0b100 << 5U ),  /*!<  Bypass-to-Stream mode                                 */
-    FIFO_CTRL_F_MODE_FIFO_MEAN_MODE         =   ( 0b110 << 5U ),  /*!<  FIDO mean mode                                        */
+    FIFO_CTRL_F_MODE_DYNAMIC_STREAM_MODE    =   ( 0b110 << 5U ),  /*!<  Dynamic-Stream mode                                   */
     FIFO_CTRL_F_MODE_BYPASS_TO_FIFO_MODE    =   ( 0b111 << 5U )   /*!<  Bypass-to-FIDO mode                                   */
 } LPS22HB_fifo_ctrl_f_mode_t;
 
 
 /* WTM_POINT <4:0>
- *    NOTE: FIFO threshold (watermark) level selection
+ *    NOTE: FIFO watermark level selection
  */
 typedef enum
 {
@@ -533,7 +560,7 @@ typedef enum
   * @brief   FIFO_STATUS REGISTER
   */
 /* FTH_FIFO <7>
- *    NOTE: FIFO threshold status
+ *    NOTE: FIFO watermark status
  */
 typedef enum
 {
@@ -544,7 +571,7 @@ typedef enum
 
 
 /* OVR <6>
- *    NOTE: Overrun bit status
+ *    NOTE: FIFO overrun status
  */
 typedef enum
 {
@@ -554,23 +581,12 @@ typedef enum
 } LPS22HB_fifo_status_ovr_t;
 
 
-/* EMPTY_FIFO <5>
- *    NOTE: Empty FIFO bit status
- */
-typedef enum
-{
-    FIFO_STATUS_EMPTY_FIFO_MASK       =   ( 1U << 5U ),   /*!<  EMPTY_FIFO mask                                       */
-    FIFO_STATUS_EMPTY_FIFO_NOT_EMPTY  =   ( 0U << 5U ),   /*!<  FIFO not empty                                        */
-    FIFO_STATUS_EMPTY_FIFO_EMPTY      =   ( 1U << 5U )    /*!<  FIFO empty                                            */
-} LPS22HB_fifo_status_empty_fifo_t;
-
-
-/* FSS <4:0>
+/* FSS <5:0>
  *    NOTE: FIFO stored data level
  */
 typedef enum
 {
-    FIFO_STATUS_FSS_MASK              =   ( 0b11111 << 0U ) /*!<  FSS mask                                              */
+    FIFO_STATUS_FSS_MASK              =   ( 0b111111 << 0U ) /*!<  FSS mask                                              */
 } LPS22HB_fifo_status_fss_t;
 
 
@@ -581,42 +597,38 @@ typedef enum
 typedef struct
 {
     /* Output registers  */
-    int32_t   rawReferencePressure;         /*!<  Raw reference pressure        */
     int32_t   rawPressure;                  /*!<  Raw pressure                  */
     int16_t   rawTemperature;               /*!<  Raw temperature               */
 
     float     pressure;                     /*!<  Pressure in mbar              */
     float     temperature;                  /*!<  Temperature in Celsius degree */
     
-    /* Resolution  */
-    LPS22HB_res_conf_avgt_t avgt;           /*!<  Temperature resolution        */
-    LPS22HB_res_conf_avgp_t avgp;           /*!<  Pressure resolution           */
-    
     /* Configuration  */
     LPS22HB_ctrl_reg1_odr_t      odr;       /*!<  Output data rate selection    */
-    LPS22HB_ctrl_reg1_reset_az_t reset_az;  /*!<  Reset autozero function       */
     LPS22HB_ctrl_reg2_boot_t     boot;      /*!<  Reboot memory content         */
     LPS22HB_ctrl_reg2_fifo_en_t  fifo_en;   /*!<  FIFO enable                   */
     LPS22HB_ctrl_reg2_swreset_t  swreset;   /*!<  Software reset                */
-    LPS22HB_ctrl_reg2_autozero_t autozero;  /*!<  Autozero enable               */
     LPS22HB_ctrl_reg2_one_shot_t one_shot;  /*!<  One-shot                      */
     
     /* INT_DRDY behaviour   */
-    LPS22HB_ctrl_reg4_f_empty_t  f_empty;   /*!<  FIFO empty flag on INT_DRDY pin                   */
-    LPS22HB_ctrl_reg4_f_fth_t    f_fth;     /*!<  FIFO threshold (watermark) status on INT_DRDY pin */
-    LPS22HB_ctrl_reg4_f_ovr_t    f_ovr;     /*!<  FIFO overrun interrupt on INT_DRDY pin            */
-    LPS22HB_ctrl_reg4_drdy_t     drdy;      /*!<  Data-ready signal on INT_DRDY pin                 */
-
+    LPS22HB_ctrl_reg3_int_h_l_t  int_h_l;   /*!<  Interrupt active-high/low                         */
+    LPS22HB_ctrl_reg3_pp_od_t    pp_od;     /*!<  Push-pull/open drain selection on interrupt pad   */
+    LPS22HB_ctrl_reg3_f_fss5_t   f_fss5;    /*!<  FIFO full flag on INT_DRDY pin                    */
+    LPS22HB_ctrl_reg3_f_fth_t    f_fth;     /*!<  FIFO threshold (watermark) status on INT_DRDY pin */
+    LPS22HB_ctrl_reg3_f_ovr_t    f_ovr;     /*!<  FIFO overrun interrupt on INT_DRDY pin            */
+    LPS22HB_ctrl_reg3_drdy_t     drdy;      /*!<  Data-ready signal on INT_DRDY pin                 */
+    LPS22HB_ctrl_reg3_int_s2_t   int_s;     /*!<  Data signal on INT_DRDY pin control bits          */
+    
     /* Interrupt configuration   */
     LPS22HB_interrupt_cfg_lir_t  lir;       /*!<  Latch interrupt request                                         */
-    LPS22HB_interrupt_cfg_pl_e_t pl_e;      /*!<  Enable interrupt generation on differential pressure low event  */
-    LPS22HB_interrupt_cfg_ph_e_t ph_e;      /*!<  Enable interrupt generation on differential pressure high event */
+    LPS22HB_interrupt_cfg_ple_t  ple;       /*!<  Enable interrupt generation on differential pressure low event  */
+    LPS22HB_interrupt_cfg_phe_t  phe;       /*!<  Enable interrupt generation on differential pressure high event */
     
     /* Interrupt source  */
     uint8_t                      int_source;  /*!<  Interrupt source            */
     
     /* Status register  */
-    uint8_t                      status_reg;  /*!<  Status register             */
+    uint8_t                      status;      /*!<  Status register             */
 
     /* FIFO control  */
     LPS22HB_fifo_ctrl_f_mode_t    f_mode;     /*!<  FIFO mode selection                         */
