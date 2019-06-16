@@ -15,6 +15,7 @@
 #include <sys/platform.h>
 #include "adi_initialize.h"
 #include <sys/ADuCM302x_device.h>
+#include "core_cm3.h"
 
 #ifndef FUNCTION_H_
 #define FUNCTION_H_
@@ -29,6 +30,7 @@ extern "C" {
  */
 void conf_CLK    ( void );
 void conf_GPIO   ( void );
+void conf_WDT    ( void );
 
 
 

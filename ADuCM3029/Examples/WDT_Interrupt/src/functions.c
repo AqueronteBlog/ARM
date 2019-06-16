@@ -18,7 +18,11 @@
 
 /**
  * @brief       void conf_CLK  ( void )
- * @details     It activates the external HFCLK crystal oscillator ( 64MHz ).
+ * @details     It activates the external HFOSC crystal oscillator ( 26MHz ).
+ *
+ * 					- ACLK: HFOSC/4 = 6.4MHz
+ * 					- HCLK: HFOSC/4 = 6.4MHz
+ * 					- PCLK: HFOSC/4 = 6.4MHz
  *
  * @param[in]    N/A.
  *
@@ -29,7 +33,8 @@
  *
  * @author      Manuel Caballero
  * @date        13/June/2019
- * @version     13/June/2019      The ORIGIN
+ * @version     14/June/2019      The clock was updated.
+ * 				13/June/2019      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -46,18 +51,17 @@ void conf_CLK  ( void )
 	pADI_CLKG0_OSC->CTL	|=	 ( 1U << BITP_CLKG_OSC_CTL_HFOSCEN  );
 
 	/* Configure dividers
-	 *  - ACLK/1 = 26MHz
-	 *  - HCLK/1 = 26MHz
-	 *  - PCLK/1 = 26MHz
+	 *  - ACLK/4 = 26MHz/4 = 6.5MHz
+	 *  - HCLK/4 = 26MHz/4 = 6.5MHz
+	 *  - PCLK/4 = 26MHz/4 = 6.5MHz
 	 */
 	pADI_CLKG0_CLK->CTL1	&=	~( ( 0b11111111 << BITP_CLKG_CLK_CTL1_ACLKDIVCNT ) | ( 0b111111 << BITP_CLKG_CLK_CTL1_PCLKDIVCNT ) | ( 0b111111 << BITP_CLKG_CLK_CTL1_HCLKDIVCNT ) );
-	pADI_CLKG0_CLK->CTL1	|=	 ( ( 0b00000001 << BITP_CLKG_CLK_CTL1_ACLKDIVCNT ) | ( 0b000001 << BITP_CLKG_CLK_CTL1_PCLKDIVCNT ) | ( 0b000001 << BITP_CLKG_CLK_CTL1_HCLKDIVCNT ) );
+	pADI_CLKG0_CLK->CTL1	|=	 ( ( 0b00000100 << BITP_CLKG_CLK_CTL1_ACLKDIVCNT ) | ( 0b000100 << BITP_CLKG_CLK_CTL1_PCLKDIVCNT ) | ( 0b000100 << BITP_CLKG_CLK_CTL1_HCLKDIVCNT ) );
 
 	/* Wait for HFOSC and LFXTAL to stabilize */
 	while ( ( pADI_CLKG0_OSC->CTL & ( ( 1U << BITP_CLKG_OSC_CTL_HFOSCOK ) | ( 1U << BITP_CLKG_OSC_CTL_LFOSCOK ) ) ) != ( ( 1U << BITP_CLKG_OSC_CTL_HFOSCOK ) | ( 1U << BITP_CLKG_OSC_CTL_LFOSCOK ) ) )
 	{
 	}
-
 
 	/* Block registers	 */
 	pADI_CLKG0_OSC->KEY	 =	 0x0000U;
@@ -121,3 +125,54 @@ void conf_GPIO  ( void )
 	pADI_GPIO2->OEN	|=	 DS3;
 	pADI_GPIO1->OEN	|=	 DS4;
 }
+
+
+
+/**
+ * @brief       void conf_WDT  ( void )
+ * @details     [TODO]It activates the external HFOSC crystal oscillator ( 26MHz ).
+ *
+ * 					- ACLK: HFOSC/4 = 6.4MHz
+ * 					- HCLK: HFOSC/4 = 6.4MHz
+ * 					- PCLK: HFOSC/4 = 6.4MHz
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        14/June/2019
+ * @version     14/June/2019      The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void conf_WDT  ( void )
+{
+	/* Disable WDT	 */
+	pADI_WDT0->CTL	&=	~( 1U << BITP_WDT_CTL_EN );
+
+	/*
+	 * WDT Configuration:
+	 * 	- Prescaler: Source clock/1 ( 32768/1 = 32768Hz )
+	 * 	- Timer Mode: Periodic mode
+	 * 	- IRQ: WDT generates interrupt when timed out
+	 */
+	pADI_WDT0->CTL	&=	~( 0b11 << BITP_WDT_CTL_PRE );
+	pADI_WDT0->CTL	|=	 ( ( 0b00 << BITP_WDT_CTL_PRE ) | ( 1U << BITP_WDT_CTL_MODE ) | ( 1U << BITP_WDT_CTL_IRQ ) );
+
+	/* Load WDT: Overflow every 1s ( 32768 * ( 1 / 32768Hz ) )	 */
+	pADI_WDT0->LOAD	 =	 32768U;
+
+	/* Clear IRQ	 */
+	pADI_WDT0->RESTART	 =	 0xCCCC;
+
+	/* Enable interrupt	 */
+	__NVIC_SetPriority ( WDT_EXP_IRQn, 0U );
+
+	/* Enable WDT	 */
+	pADI_WDT0->CTL	|=	 ( 1U << BITP_WDT_CTL_EN );
+}
+
