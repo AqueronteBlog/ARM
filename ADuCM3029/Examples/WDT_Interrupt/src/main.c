@@ -15,11 +15,13 @@
 
 #include <sys/platform.h>
 #include "adi_initialize.h"
-//#include <sys/ADuCM302x.h>
+#include <sys/ADuCM302x.h>
 #include <sys/ADuCM302x_device.h>
 #include "board.h"
 #include "functions.h"
 #include "interrupts.h"
+
+
 
 
 
@@ -30,7 +32,7 @@
 
 /**@brief Variables.
  */
-
+volatile uint32_t myState	 =	 0UL;		/*!<   State that indicates when to perform the next action     */
 
 
 
@@ -39,7 +41,6 @@
  */
 int main(int argc, char *argv[])
 {
-	uint32_t i = 0UL;
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
 	 * the project.
@@ -50,16 +51,30 @@ int main(int argc, char *argv[])
 	/* Begin adding your custom code here */
 	conf_CLK  ();
 	conf_GPIO ();
+	conf_WDT  ();
+
+	/* Enable interrupts	 */
+	__enable_irq ();
 
 
 	while ( 1 )
 	{
-		/* Blink LEDs	 */
-		pADI_GPIO2->TGL	|=	 DS3;
-		pADI_GPIO1->TGL	|=	 DS4;
+		if ( myState == 1UL )
+		{
+			/* Disable interrupts	 */
+			__disable_irq ();
 
-		/* Delay	 */
-		for ( i = 0UL; i < 0x23232; i++ );
+			/* Blink LEDs	 */
+			pADI_GPIO2->TGL	|=	 DS3;
+			pADI_GPIO1->TGL	|=	 DS4;
+
+
+			/* Reset variables	 */
+			myState	 =	 0UL;
+
+			/* Enable interrupts	 */
+			__enable_irq ();
+		}
 	}
 
 	/* It should never reach here	 */
