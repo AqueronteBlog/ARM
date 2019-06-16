@@ -30,7 +30,7 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-
+extern void WDog_Tmr_Int_Handler ( void );
 
 
 /**@brief Constants.
@@ -40,7 +40,7 @@ extern "C" {
 
 /**@brief Variables.
  */
-
+extern volatile uint32_t myState;
 
 
 #ifdef __cplusplus
