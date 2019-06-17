@@ -13,9 +13,6 @@
  */
 
 #include "board.h"
-#include <sys/platform.h>
-#include "adi_initialize.h"
-#include <sys/ADuCM302x_device.h>
 
 
 #ifndef INTERRUPTS_H_
