@@ -13,11 +13,12 @@
  */
 
 #include <stdio.h>
-#include "cmsis_gcc.h"
+#include <system_ADuCM3029.h>
 
 
 #ifndef BOARD_H_
 #define BOARD_H_
+
 
 #ifdef __cplusplus
 extern "C" {
