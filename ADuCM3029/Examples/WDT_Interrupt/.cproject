@@ -70,6 +70,7 @@
 								<option id="arm.linker.option.sirevision.142062843" name="-msi-revision" superClass="arm.linker.option.sirevision" useByScannerDiscovery="false" value=" none" valueType="string"/>
 								<option id="arm.toolchain.gcc.c.linker.option.fpu.abi.1395336565" name="Float ABI" superClass="arm.toolchain.gcc.c.linker.option.fpu.abi" useByScannerDiscovery="false" value="" valueType="enumerated"/>
 								<option id="arm.linker.option.ldprocessing.ldfile.733529801" name="Custom linker script (-T)" superClass="arm.linker.option.ldprocessing.ldfile" useByScannerDiscovery="false" value="${workspace_loc:/${ProjName}}/RTE/Device/ADuCM3029/ADuCM3029.ld" valueType="string"/>
+								<option id="arm.toolchain.gcc.c.linker.option.specs.1712964006" superClass="arm.toolchain.gcc.c.linker.option.specs" useByScannerDiscovery="false" value="arm.toolchain.gcc.c.linker.option.specs.custom" valueType="enumerated"/>
 								<inputType id="arm.linker.input.269976604" superClass="arm.linker.input">
 									<additionalInput kind="additionaldependency" paths="$(USER_OBJS)"/>
 								</inputType>
@@ -111,6 +112,7 @@
 					</folderInfo>
 					<folderInfo id="arm.toolchain.gcc.target.exe.debug.553218947.system" name="system" resourcePath="system">
 						<toolChain id="arm.gcc.toolchain.1377979801" name="CrossCore GCC ARM Embedded Toolchain" superClass="arm.gcc.toolchain" unusedChildren="">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="arm.toolchain.platform.base" name="Development Platform" osList="all" superClass="arm.toolchain.platform.base"/>
 							<tool id="arm.toolchain.gcc.assembler.262482630" name="CrossCore GCC ARM Embedded Assembler" superClass="arm.toolchain.gcc.assembler.1991704838">
 								<inputType id="arm.toolchain.assembler.base.input.1212732085" superClass="arm.toolchain.assembler.base.input"/>
 							</tool>
@@ -243,6 +245,7 @@
 					</folderInfo>
 					<folderInfo id="arm.toolchain.gcc.target.exe.release.1131284633.system" name="system" resourcePath="system">
 						<toolChain id="arm.gcc.toolchain.586406681" name="CrossCore GCC ARM Embedded Toolchain" superClass="arm.gcc.toolchain" unusedChildren="">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="arm.toolchain.platform.base" name="Development Platform" osList="all" superClass="arm.toolchain.platform.base"/>
 							<tool id="arm.toolchain.gcc.assembler.122663819" name="CrossCore GCC ARM Embedded Assembler" superClass="arm.toolchain.gcc.assembler.1655526308">
 								<inputType id="arm.toolchain.assembler.base.input.722629560" superClass="arm.toolchain.assembler.base.input"/>
 							</tool>

@@ -1,6 +1,9 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the internal peripheral: GPIO. Both LEDs blink every certain period of time.
+ * @details     This example shows how to work with the internal peripheral: WDT on interrupt configuration.
+ * 				Both LEDs blink every 1 second.
+ *
+ * 				The rest of the time, the microcontroller is in low-power mode.
  *
  *
  * @return      N/A
@@ -15,14 +18,9 @@
 
 #include <sys/platform.h>
 #include "adi_initialize.h"
-#include <sys/ADuCM302x.h>
-#include <sys/ADuCM302x_device.h>
 #include "board.h"
 #include "functions.h"
 #include "interrupts.h"
-
-
-
 
 
 /**@brief Constants.
@@ -49,6 +47,8 @@ int main(int argc, char *argv[])
 	adi_initComponents();
 	
 	/* Begin adding your custom code here */
+	SystemInit ();
+
 	conf_CLK  ();
 	conf_GPIO ();
 	conf_WDT  ();
@@ -59,6 +59,14 @@ int main(int argc, char *argv[])
 
 	while ( 1 )
 	{
+		/* Low power mode: Flexi Mode	 */
+		pADI_PMG0->PWRKEY	 =	 0x4859;
+		pADI_PMG0->PWRMOD	&=	~( 0b11 << BITP_PMG_PWRMOD_MODE );
+		pADI_PMG0->PWRKEY	 =	 0x0000;
+		__WFI();
+
+
+		/* Check new action	 */
 		if ( myState == 1UL )
 		{
 			/* Disable interrupts	 */
