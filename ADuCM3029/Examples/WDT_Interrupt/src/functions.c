@@ -170,7 +170,8 @@ void conf_WDT  ( void )
 	pADI_WDT0->RESTART	 =	 0xCCCC;
 
 	/* Enable interrupt	 */
-	__NVIC_SetPriority ( WDT_EXP_IRQn, 0U );
+	NVIC_SetPriority ( WDT_EXP_IRQn, 0UL );
+	NVIC_EnableIRQ   ( WDT_EXP_IRQn );
 
 	/* Enable WDT	 */
 	pADI_WDT0->CTL	|=	 ( 1U << BITP_WDT_CTL_EN );

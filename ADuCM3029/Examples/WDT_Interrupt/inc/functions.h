@@ -12,10 +12,7 @@
  */
 
 #include "board.h"
-#include <sys/platform.h>
-#include "adi_initialize.h"
-#include <sys/ADuCM302x_device.h>
-#include "core_cm3.h"
+
 
 #ifndef FUNCTION_H_
 #define FUNCTION_H_
