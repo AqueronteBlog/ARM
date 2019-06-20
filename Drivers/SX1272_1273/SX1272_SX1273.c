@@ -818,3 +818,151 @@ SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetHopPeriod  ( SPI_parameters_t mySPI
     return   SX1272_SX1273_FAILURE;
   }
 }
+
+
+/**
+ * @brief       SX1272_SX1273_LoRa_SetOperatingMode ( SPI_parameters_t , SX1272_SX1273_lora_data_t )
+ *
+ * @details     It sets the LoRa operating mode functionality.
+ *
+ * @param[in]    mySPIparameters:     SPI parameters.   
+ * @param[in]    myLoRaOperatingMode: LoRa operating mode functionality.
+ *
+ * @param[out]   N/A
+ *
+ *
+ * @return       Status of SX1272_SX1273_LoRa_SetOperatingMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/June/2019
+ * @version     20/June/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetOperatingMode ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t myLoRaOperatingMode )
+{
+  uint8_t      cmd[2]   =  { 0U };
+  spi_status_t aux;
+  
+  /* Update the new value   */
+  cmd[0]   =   ( SX1272_SX1273_REG_OP_MODE & 0x7F );            // Read access
+  aux      =   spi_transfer ( mySPIparameters, &cmd[0], 1U, &cmd[1], 1U );
+  
+  /* The device must be in LoRa mode   */
+  if ( ( cmd[1] & LORA_REGOPMODE_LONG_RANGE_MODE_MASK ) == LORA_REGOPMODE_LONG_RANGE_MODE_FSK_OOK_MODE  )
+  {
+    return   SX1272_SX1273_FAILURE;
+  }
+  else
+  {
+    /* Update the register   */
+    cmd[0]  |=   0x80;            // Write access;
+    cmd[1]  &=  ~LORA_REGOPMODE_MODE_MASK;
+    cmd[1]  |=   myLoRaOperatingMode.loraOperatingMode;
+    aux      =   spi_transfer ( mySPIparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+  }
+
+
+
+  if ( aux == SPI_SUCCESS )
+  {
+    return   SX1272_SX1273_SUCCESS;
+  }
+  else
+  {
+    return   SX1272_SX1273_FAILURE;
+  }
+}
+
+
+/**
+ * @brief       SX1272_SX1273_LoRa_GetOperatingMode ( SPI_parameters_t , SX1272_SX1273_lora_data_t* )
+ *
+ * @details     It gets LoRa operating mode functionality.
+ *
+ * @param[in]    mySPIparameters:     SPI parameters.   
+ *
+ * @param[out]   myLoRaOperatingMode: LoRa operating mode functionality.
+ *
+ *
+ * @return       Status of SX1272_SX1273_LoRa_GetOperatingMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/June/2019
+ * @version     20/June/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetOperatingMode ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myLoRaOperatingMode )
+{
+  uint8_t      cmd   =  0U;
+  spi_status_t aux;
+
+  /* Read the register   */
+  cmd  =   ( SX1272_SX1273_REG_OP_MODE & 0x7F );            // Read access
+  aux  =   spi_transfer ( mySPIparameters, &cmd, 1U, &cmd, 1U );
+  
+  /* Parse the data   */
+  myLoRaOperatingMode->loraOperatingMode   =   (lora_regopmode_mode_t)( cmd & LORA_REGOPMODE_MODE_MASK );
+
+
+
+  if ( aux == SPI_SUCCESS )
+  {
+    return   SX1272_SX1273_SUCCESS;
+  }
+  else
+  {
+    return   SX1272_SX1273_FAILURE;
+  }
+}
+
+
+/**
+ * @brief       SX1272_SX1273_LoRa_SetAccessSharedReg ( SPI_parameters_t , lora_regopmode_access_shared_reg_t )
+ *
+ * @details     It allows access to FSK registers page located in address space ( 0x0D:0x3F ) while in LoRa mode.
+ *
+ * @param[in]    mySPIparameters:   SPI parameters.   
+ * @param[in]    myAccessSharedReg: Enable/Disable access.
+ *
+ * @param[out]   N/A
+ *
+ *
+ * @return       Status of SX1272_SX1273_LoRa_SetAccessSharedReg.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/June/2019
+ * @version     20/June/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetAccessSharedReg ( SPI_parameters_t mySPIparameters, lora_regopmode_access_shared_reg_t myAccessSharedReg )
+{
+  uint8_t      cmd[2]   =  { 0U };
+  spi_status_t aux;
+  
+  /* Read the register   */
+  cmd[0]  =   ( SX1272_SX1273_REG_OP_MODE & 0x7F );                       // Read access
+  aux     =   spi_transfer ( mySPIparameters, &cmd[0], 1U, &cmd[1], 1U );
+  
+  /* Update the new value   */
+  cmd[0]  |=   0x80;                                                      // Write access
+  cmd[1]  &=  ~LORA_REGOPMODE_ACCESS_SHARED_REG_MASK;
+  cmd[1]  |=   myAccessSharedReg;
+  aux      =   spi_transfer ( mySPIparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+  if ( aux == SPI_SUCCESS )
+  {
+    return   SX1272_SX1273_SUCCESS;
+  }
+  else
+  {
+    return   SX1272_SX1273_FAILURE;
+  }
+}
