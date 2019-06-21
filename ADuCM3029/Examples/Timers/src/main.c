@@ -47,11 +47,12 @@ int main(int argc, char *argv[])
 	adi_initComponents();
 	
 	/* Begin adding your custom code here */
-	SystemInit ();
+	SystemInit 	();
 
-	conf_CLK  ();
-	conf_GPIO ();
-	conf_WDT  ();
+	conf_CLK  	();
+	conf_GPIO 	();
+	conf_Timer0	();
+	conf_Timer1	();
 
 	/* Enable interrupts	 */
 	__enable_irq ();
@@ -64,25 +65,6 @@ int main(int argc, char *argv[])
 		pADI_PMG0->PWRMOD	&=	~( 0b11 << BITP_PMG_PWRMOD_MODE );
 		pADI_PMG0->PWRKEY	 =	 0x0000;
 		__WFI();
-
-
-		/* Check new action	 */
-		if ( myState == 1UL )
-		{
-			/* Disable interrupts	 */
-			__disable_irq ();
-
-			/* Blink LEDs	 */
-			pADI_GPIO2->TGL	|=	 DS3;
-			pADI_GPIO1->TGL	|=	 DS4;
-
-
-			/* Reset variables	 */
-			myState	 =	 0UL;
-
-			/* Enable interrupts	 */
-			__enable_irq ();
-		}
 	}
 
 	/* It should never reach here	 */
