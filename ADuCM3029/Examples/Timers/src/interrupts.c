@@ -15,8 +15,8 @@
 
 
 /**
- * @brief       void WDog_Tmr_Int_Handler  ( void )
- * @details     WDT subroutine.
+ * @brief       void GP_Tmr0_Int_Handler  ( void )
+ * @details     TMR0 subroutine.
  *
  *
  * @param[in]    N/A.
@@ -27,20 +27,53 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        19/June/2019
- * @version     19/June/2019    The ORIGIN
+ * @date        21/June/2019
+ * @version     21/June/2019    The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
-void WDog_Tmr_Int_Handler ( void )
+void GP_Tmr0_Int_Handler ( void )
 {
-	/* Check if WDT interrupt pending	 */
-	if ( ( pADI_WDT0->STAT & ( 1U << BITP_WDT_STAT_IRQ ) ) == ( 1U << BITP_WDT_STAT_IRQ ) )
+	/* Check if TMR0 interrupt pending	 */
+	if ( ( pADI_TMR0->STAT & ( 1U << BITP_TMR_STAT_TIMEOUT ) ) == ( 1U << BITP_TMR_STAT_TIMEOUT ) )
 	{
-		/* New action	 */
-		myState	 =	 1UL;
+		/* Blink LED	 */
+		pADI_GPIO2->TGL	|=	 DS3;
 
 		/* Clear IRQ	 */
-		pADI_WDT0->RESTART	 =	 0xCCCC;
+		pADI_TMR0->CLRINT	|=	 ( 1U << BITP_TMR_CLRINT_TIMEOUT );
+	}
+}
+
+
+
+/**
+ * @brief       void GP_Tmr1_Int_Handler  ( void )
+ * @details     TMR1 subroutine.
+ *
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        21/June/2019
+ * @version     21/June/2019    The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void GP_Tmr1_Int_Handler ( void )
+{
+	/* Check if TMR1 interrupt pending	 */
+	if ( ( pADI_TMR1->STAT & ( 1U << BITP_TMR_STAT_TIMEOUT ) ) == ( 1U << BITP_TMR_STAT_TIMEOUT ) )
+	{
+		/* Blink LED	 */
+		pADI_GPIO1->TGL	|=	 DS4;
+
+		/* Clear IRQ	 */
+		pADI_TMR1->CLRINT	|=	 ( 1U << BITP_TMR_CLRINT_TIMEOUT );
 	}
 }
