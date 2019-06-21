@@ -128,12 +128,15 @@ void conf_GPIO  ( void )
 
 
 /**
- * @brief       void conf_WDT  ( void )
- * @details     [TODO]It activates the external HFOSC crystal oscillator ( 26MHz ).
+ * @brief       void conf_Timer0  ( void )
+ * @details     It configures the Timer0.
  *
- * 					- ACLK: HFOSC/4 = 6.4MHz
- * 					- HCLK: HFOSC/4 = 6.4MHz
- * 					- PCLK: HFOSC/4 = 6.4MHz
+ *					TMR0:
+ * 						- TMR0_CLK: LFOSC/4 = 32768Hz/4 = 8192Hz
+ * 						- Count down
+ * 						- Periodic mode
+ * 						- Interrupt enabled
+ * 						- Overflow: 1s ( 8192 / 8192Hz = 1s )
  *
  * @param[in]    N/A.
  *
@@ -144,35 +147,100 @@ void conf_GPIO  ( void )
  *
  * @author      Manuel Caballero
  * @date        19/June/2019
- * @version     19/June/2019      The ORIGIN
+ * @version     21/June/2019      Overflow was added.
+ * 				19/June/2019      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
-void conf_WDT  ( void )
+void conf_Timer0  ( void )
 {
-	/* Disable WDT	 */
-	pADI_WDT0->CTL	&=	~( 1U << BITP_WDT_CTL_EN );
+	/* Timer0 must be released before is configured	 */
+	while ( ( pADI_TMR0->STAT & ( 1U << BITP_TMR_STAT_BUSY ) ) == ( 1U << BITP_TMR_STAT_BUSY ) );
 
-	/*
-	 * WDT Configuration:
-	 * 	- Prescaler: Source clock/1 ( 32768/1 = 32768Hz )
-	 * 	- Timer Mode: Periodic mode
-	 * 	- IRQ: WDT generates interrupt when timed out
+	/* Timer0
+	 *  - Synchronization bypass is disabled
+	 *  - Event will not be captured
+	 *  - TMR0 disabled
+	 *  - TMR0 CLK: LFOSC ( 32768 Hz )
+	 *  - TMR0 Prescaler: TMR0_CLK/4 ( 32768Hz / 4 = 8192Hz )
+	 *  - Timer is set to count down
+	 *	- Timer runs in periodic mode
 	 */
-	pADI_WDT0->CTL	&=	~( 0b11 << BITP_WDT_CTL_PRE );
-	pADI_WDT0->CTL	|=	 ( ( 0b00 << BITP_WDT_CTL_PRE ) | ( 1U << BITP_WDT_CTL_MODE ) | ( 1U << BITP_WDT_CTL_IRQ ) );
+	pADI_TMR0->CTL	&=	~( ( 1U << BITP_TMR_CTL_SYNCBYP ) | ( 1U << BITP_TMR_CTL_EVTEN ) | ( 0b11 << BITP_TMR_CTL_CLK ) | ( 1U << BITP_TMR_CTL_EN ) | ( 0b11 << BITP_TMR_CTL_PRE ) );
+	pADI_TMR0->CTL	|=	 ( ( 0b10 << BITP_TMR_CTL_CLK ) | ( 1U << BITP_TMR_CTL_MODE ) );
 
-	/* Load WDT: Overflow every 1s ( 32768 * ( 1 / 32768Hz ) )	 */
-	pADI_WDT0->LOAD	 =	 32768U;
+	/* Timer0
+	 *  - Overflow every ~ 1 second ( 8192 * ( 1/ 8192 ) = 1s )
+	 */
+	pADI_TMR0->LOAD	 =	 8192U;
 
-	/* Clear IRQ	 */
-	pADI_WDT0->RESTART	 =	 0xCCCC;
+	/* Clear interrupt: Timeout	 */
+	pADI_TMR0->CLRINT	|=	 ( 1U << BITP_TMR_CLRINT_TIMEOUT );
 
 	/* Enable interrupt	 */
-	NVIC_SetPriority ( WDT_EXP_IRQn, 0UL );
-	NVIC_EnableIRQ   ( WDT_EXP_IRQn );
+	NVIC_SetPriority ( TMR0_EVT_IRQn, 0UL );
+	NVIC_EnableIRQ   ( TMR0_EVT_IRQn );
 
-	/* Enable WDT	 */
-	pADI_WDT0->CTL	|=	 ( 1U << BITP_WDT_CTL_EN );
+	/* Enable Timer0	 */
+	pADI_TMR0->CTL	|=	 ( 1U << BITP_TMR_CTL_EN );
+}
+
+
+
+/**
+ * @brief       void conf_Timer1  ( void )
+ * @details     It configures the Timer1.
+ *
+ *					TMR1:
+ * 						- TMR1_CLK: PCLK/64 = 6.5MHz/64 = 101562.5Hz
+ * 						- Count down
+ * 						- Periodic mode
+ * 						- Interrupt enabled
+ * 						- Overflow: ~0.5s ( 50781 * ( 1/101562.5Hz ) ~ 0.5s )
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        21/June/2019
+ * @version     21/June/2019      The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void conf_Timer1  ( void )
+{
+	/* Timer1 must be released before is configured	 */
+	while ( ( pADI_TMR1->STAT & ( 1U << BITP_TMR_STAT_BUSY ) ) == ( 1U << BITP_TMR_STAT_BUSY ) );
+
+	/* Timer1
+	 *  - Synchronization bypass is disabled
+	 *  - Event will not be captured
+	 *  - TMR1 disabled
+	 *  - TMR1 CLK: PCLK ( 6.5MHz )
+	 *  - TMR1 Prescaler: TMR1_CLK/64 ( 6.5MHz / 64 = 101562.5Hz )
+	 *  - Timer is set to count down
+	 *	- Timer runs in periodic mode
+	 */
+	pADI_TMR1->CTL	&=	~( ( 1U << BITP_TMR_CTL_SYNCBYP ) | ( 1U << BITP_TMR_CTL_EVTEN ) | ( 0b11 << BITP_TMR_CTL_CLK ) | ( 1U << BITP_TMR_CTL_EN ) | ( 0b11 << BITP_TMR_CTL_PRE ) );
+	pADI_TMR1->CTL	|=	 ( ( 1U << BITP_TMR_CTL_MODE ) | ( 0b10 << BITP_TMR_CTL_PRE ) );
+
+	/* Timer1
+	 *  - Overflow every ~ 0.5 second ( 50781 * ( 1/101562.5Hz ) ~ 0.5s )
+	 */
+	pADI_TMR1->LOAD	 =	 50781U;
+
+	/* Clear interrupt: Timeout	 */
+	pADI_TMR1->CLRINT	|=	 ( 1U << BITP_TMR_CLRINT_TIMEOUT );
+
+	/* Enable interrupt	 */
+	NVIC_SetPriority ( TMR1_EVT_IRQn, 0UL );
+	NVIC_EnableIRQ   ( TMR1_EVT_IRQn );
+
+	/* Enable Timer1	 */
+	pADI_TMR1->CTL	|=	 ( 1U << BITP_TMR_CTL_EN );
 }
 

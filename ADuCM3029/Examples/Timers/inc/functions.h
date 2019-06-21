@@ -27,7 +27,8 @@ extern "C" {
  */
 void conf_CLK    ( void );
 void conf_GPIO   ( void );
-void conf_WDT    ( void );
+void conf_Timer0 ( void );
+void conf_Timer1 ( void );
 
 
 
