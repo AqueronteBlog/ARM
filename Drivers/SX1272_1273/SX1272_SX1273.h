@@ -3173,9 +3173,16 @@ typedef enum
 
 
 
+/**
+  * @brief   CONSTANTS
+  */
+#define F_XOSC    32000000                        /*!<  F_XOSC in MHz               */
+#define F_2POW19  524288                          /*!<  2^19                        */
 
 
-
+/**
+  * @brief   USER VARIABLES
+  */
 #ifndef SX1272_SX1273_VECTOR_STRUCT_H
 #define SX1272_SX1273_VECTOR_STRUCT_H
 typedef struct
@@ -3199,6 +3206,7 @@ typedef struct
   lora_regmodemconfig1_low_data_rate_optimize_t   lowDataRateOptimization;  /*!<  LoRa: Low Data Rate Optimization    */
   uint8_t                                         hopPeriod;                /*!<  LoRa: Frequency Hopping period      */
   lora_regopmode_mode_t                           loraOperatingMode;        /*!<  LoRa: Operating mode functionality  */
+  float                                           frequency;                /*!<  LoRa: Frequency in Hz               */
 
   uint8_t                     deviceID;         /*!<  Device ID                     */
   uint8_t                     deviceRevision;   /*!<  Device Revision               */
@@ -3288,7 +3296,7 @@ SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetHopPeriod  ( SPI_parameters_t mySPI
 
 /** It gets Frequency Hopping Period mode.
   */
-SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetHopPeriod  ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myHopPeriod                 );
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetHopPeriod  ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myHopPeriod                );
 
 /** It sets the LoRa operating mode functionality.
   */
@@ -3301,3 +3309,11 @@ SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetOperatingMode    ( SPI_parameters_t
 /** It allows access to FSK registers page located in address space ( 0x0D:0x3F ) while in LoRa mode.
   */
 SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetAccessSharedReg  ( SPI_parameters_t mySPIparameters, lora_regopmode_access_shared_reg_t myAccessSharedReg  );
+
+/** It sets the frequency.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetFrequency   ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t myFrequency                );
+
+/** It gets the frequency.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetFrequency   ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myFrequency               );

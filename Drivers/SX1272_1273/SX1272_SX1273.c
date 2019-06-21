@@ -966,3 +966,103 @@ SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetAccessSharedReg ( SPI_parameters_t 
     return   SX1272_SX1273_FAILURE;
   }
 }
+
+
+/**
+ * @brief       SX1272_SX1273_LoRa_SetFrequency ( SPI_parameters_t , SX1272_SX1273_lora_data_t )
+ *
+ * @details     It sets the LoRa frequency.
+ *
+ * @param[in]    mySPIparameters: SPI parameters.   
+ * @param[in]    myFrequency:     Frequency.
+ *
+ * @param[out]   N/A
+ *
+ *
+ * @return       Status of SX1272_SX1273_LoRa_SetFrequency.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        21/June/2019
+ * @version     21/June/2019   The ORIGIN
+ * @pre         The address is automatically incremented internally.
+ * @warning     The device MUST be in SLEEP or STANDBY mode.
+ */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetFrequency ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t myFrequency )
+{
+  uint8_t      cmd[4]   =  { 0U };
+  uint32_t     frf      =  0UL;
+  spi_status_t aux;
+  
+  /* Calculate the RF carrier frequency  */
+  frf  =   (uint32_t)( (float)( ( myFrequency.frequency * F_2POW19 ) / F_XOSC ) + 0.5 );
+
+  /* Update the register   */
+  cmd[0]   =   ( SX1272_SX1273_REG_FRF_MSB | 0x80 );            // Write access
+  cmd[1]   =   (uint8_t)( frf >> 16U );                         // MSB Frf 
+  cmd[2]   =   (uint8_t)( frf >> 8U );                          // Mib Frf 
+  cmd[3]   =   (uint8_t)( frf & 0xFF );                         // LSB Frf 
+  aux      =   spi_transfer ( mySPIparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+  if ( aux == SPI_SUCCESS )
+  {
+    return   SX1272_SX1273_SUCCESS;
+  }
+  else
+  {
+    return   SX1272_SX1273_FAILURE;
+  }
+}
+
+
+/**
+ * @brief       SX1272_SX1273_LoRa_GetFrequency ( SPI_parameters_t , SX1272_SX1273_lora_data_t* )
+ *
+ * @details     It gets the LoRa frequency.
+ *
+ * @param[in]    mySPIparameters: SPI parameters.   
+ *
+ * @param[out]   myFrequency:     Frequency.
+ *
+ *
+ * @return       Status of SX1272_SX1273_LoRa_GetFrequency.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        21/June/2019
+ * @version     21/June/2019   The ORIGIN
+ * @pre         The address is automatically incremented internally.
+ * @pre         This function returns the calculate frequency regarding the value in Frf register.
+ * @warning     N/A.
+ */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetFrequency ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myFrequency )
+{
+  uint8_t      cmd[3]   =  { 0U };
+  uint32_t     frf      =  0UL;
+  spi_status_t aux;
+
+  /* Read the register   */
+  cmd[0]  =   ( SX1272_SX1273_REG_FRF_MSB & 0x7F );            // Read access
+  aux     =   spi_transfer ( mySPIparameters, &cmd[0], 1U, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+  
+  /* Parse the data   */
+  frf                      =   cmd[0];
+  frf                    <<=   8U;
+  frf                     |=   cmd[1];
+  frf                    <<=   8U;
+  frf                     |=   cmd[2];
+  myFrequency->frequency   =   (float)( ( F_XOSC * frf ) / F_2POW19 );
+
+
+
+  if ( aux == SPI_SUCCESS )
+  {
+    return   SX1272_SX1273_SUCCESS;
+  }
+  else
+  {
+    return   SX1272_SX1273_FAILURE;
+  }
+}
