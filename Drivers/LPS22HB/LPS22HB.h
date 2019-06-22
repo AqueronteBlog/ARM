@@ -349,7 +349,7 @@ typedef enum
     INTERRUPT_CFG_AUTORIFP_MASK     =   ( 1U << 7U ),   /*!<  AUTORIFP mask                                 */
     INTERRUPT_CFG_AUTORIFP_NORMAL   =   ( 0U << 7U ),   /*!<  normal mode                       [ Default ] */
     INTERRUPT_CFG_AUTORIFP_ENABLED  =   ( 1U << 7U )    /*!<  AutoRifP enabled                              */
-} LPS22HB_interrupt_cfg_autorift_t;
+} LPS22HB_interrupt_cfg_autorifp_t;
 
 
 /* RESET_ARP <6>
@@ -605,7 +605,9 @@ typedef struct
     
     /* Configuration  */
     LPS22HB_ctrl_reg1_odr_t      odr;       /*!<  Output data rate selection    */
-    LPS22HB_ctrl_reg2_boot_t     boot;      /*!<  Reboot memory content         */
+    LPS22HB_ctrl_reg1_bdu_t      bdu;       /*!<  Block data update             */
+
+
     LPS22HB_ctrl_reg2_fifo_en_t  fifo_en;   /*!<  FIFO enable                   */
     LPS22HB_ctrl_reg2_swreset_t  swreset;   /*!<  Software reset                */
     LPS22HB_ctrl_reg2_one_shot_t one_shot;  /*!<  One-shot                      */
@@ -619,32 +621,14 @@ typedef struct
     LPS22HB_ctrl_reg3_drdy_t     drdy;      /*!<  Data-ready signal on INT_DRDY pin                 */
     LPS22HB_ctrl_reg3_int_s2_t   int_s;     /*!<  Data signal on INT_DRDY pin control bits          */
     
-    /* Interrupt configuration   */
-    LPS22HB_interrupt_cfg_lir_t  lir;       /*!<  Latch interrupt request                                         */
-    LPS22HB_interrupt_cfg_ple_t  ple;       /*!<  Enable interrupt generation on differential pressure low event  */
-    LPS22HB_interrupt_cfg_phe_t  phe;       /*!<  Enable interrupt generation on differential pressure high event */
-    
-    /* Interrupt source  */
-    uint8_t                      int_source;  /*!<  Interrupt source            */
-    
-    /* Status register  */
-    uint8_t                      status;      /*!<  Status register             */
-
-    /* FIFO control  */
-    LPS22HB_fifo_ctrl_f_mode_t    f_mode;     /*!<  FIFO mode selection                         */
-    LPS22HB_fifo_ctrl_wtm_point_t wtm_point;  /*!<  FIFO threshold (watermark) level selection  */
-
-    /* FIFO status   */
-    uint8_t                       FIFOstatus; /*!<  FIFO status register        */
+    /* Interrupt mode for pressure acquisition configuration   */
+    uint8_t                       interruptCFG; /*!<  Interrupt_CFG register raw value                  */
     
     /* Pressure threshold  */
-    uint16_t                      ths_p;      /*!<  Threshold value for pressure interrupt generation */
-
-    /* Pressure offset  */
-    uint16_t                      rpds;       /*!<  Pressure offset             */
+    uint16_t                      ths_p;        /*!<  Threshold value for pressure interrupt generation */
 
     /* Device identification   */
-    uint8_t                       deviceID;   /*!<  Device ID                   */
+    uint8_t                       deviceID;     /*!<  Device ID                                         */
 } LPS22HB_data_t;
 #endif
 
@@ -670,6 +654,50 @@ typedef enum
   */
 LPS22HB_status_t LPS22HB_Init                     ( I2C_parameters_t myI2Cparameters                                        );
 
+/** It sets the Interrupt mode for pressure acquisition configuration.
+  */
+LPS22HB_status_t LPS22HB_SetInterruptMode         ( I2C_parameters_t myI2Cparameters, LPS22HB_interrupt_cfg_autorifp_t myAUTORIFP, LPS22HB_interrupt_cfg_reset_arp_t myResetARP, LPS22HB_interrupt_cfg_autozero_t myAutoZero,
+                                                    LPS22HB_interrupt_cfg_reset_az_t myResetAZ, LPS22HB_interrupt_cfg_diff_en_t myDiffEN, LPS22HB_interrupt_cfg_lir_t myLIR, LPS22HB_interrupt_cfg_ple_t myPLE, LPS22HB_interrupt_cfg_phe_t myPHE  );
+
+/** It gets the InterruptCFG register: raw value.
+  */
+LPS22HB_status_t LPS22HB_GetInterruptMode         ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myInterruptCFG        );
+
+/** It sets the threshold value for pressure interrupt event.
+  */
+LPS22HB_status_t LPS22HB_SetPressureThreshold     ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myThs_P                );
+
+/** It gets the threshold value for pressure interrupt event.
+  */
+LPS22HB_status_t LPS22HB_GetPressureThreshold     ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myThs_P               );
+
+/** It gets the device ID.
+  */
+LPS22HB_status_t LPS22HB_GetDeviceID              ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myID                  );
+
+/** It sets the output data rate.
+  */
+LPS22HB_status_t LPS22HB_SetOutputDataRate        ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myODR                  );
+
+/** It gets the output data rate.
+  */
+LPS22HB_status_t LPS22HB_GetOutputDataRate        ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myODR                 );
+
+/** It configures the low-pass filter.
+  */
+LPS22HB_status_t LPS22HB_ConfLowPassFilter        ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_en_lpfp_t myEN_LPFP, LPS22HB_ctrl_reg1_lpfp_cfg_t myLPFP_CFG  );
+
+/** It sets the block data update.
+  */
+LPS22HB_status_t LPS22HB_SetBlockDataUpdate       ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_bdu_t myBDU         );
+
+
+
+
+
+
+
+
 /** It gets raw reference pressure.
   */
 LPS22HB_status_t LPS22HB_GetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myREFL                );
@@ -677,10 +705,6 @@ LPS22HB_status_t LPS22HB_GetReferencePressure     ( I2C_parameters_t myI2Cparame
 /** It sets raw reference pressure.
   */
 LPS22HB_status_t LPS22HB_SetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myREFL                 );
-
-/** It gets the device ID.
-  */
-LPS22HB_status_t LPS22HB_GetDeviceID              ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myID                  );
 
 /** It sets temperature resolution.
   */
@@ -702,21 +726,9 @@ LPS22HB_status_t LPS22HB_GetPressureResolution    ( I2C_parameters_t myI2Cparame
   */
 LPS22HB_status_t LPS22HB_SetPowerMode             ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_pd_t myPD           );
 
-/** It sets the output data rate.
-  */
-LPS22HB_status_t LPS22HB_SetOutputDataRate        ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myODR                  );
-
-/** It gets the output data rate.
-  */
-LPS22HB_status_t LPS22HB_GetOutputDataRate        ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myODR                 );
-
 /** It sets the interrupt generation enable.
   */
 LPS22HB_status_t LPS22HB_SetInterruptGeneration   ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_diff_en_t myDIFF_EN );
-
-/** It sets the block data update.
-  */
-LPS22HB_status_t LPS22HB_SetBlockDataUpdate       ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_bdu_t myBDU         );
 
 /** It sets the reset autozero function.
   */

@@ -57,6 +57,468 @@ LPS22HB_status_t LPS22HB_Init ( I2C_parameters_t myI2Cparameters )
 
 
 /**
+ * @brief       LPS22HB_SetInterruptMode ( I2C_parameters_t , LPS22HB_interrupt_cfg_autorifp_t , LPS22HB_interrupt_cfg_reset_arp_t , LPS22HB_interrupt_cfg_autozero_t ,
+ *                                         LPS22HB_interrupt_cfg_reset_az_t , LPS22HB_interrupt_cfg_diff_en_t , LPS22HB_interrupt_cfg_lir_t , LPS22HB_interrupt_cfg_ple_t , LPS22HB_interrupt_cfg_phe_t )
+ *
+ * @details     It sets the Interrupt mode for pressure acquisition configuration.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myAUTORIFP:      Enable/Disable AUTORIFP function.
+ * @param[in]    myResetARP:      Enable/Disable RESET_ARP function.
+ * @param[in]    myAutoZero:      Enable/Disable myAutoZero function.
+ * @param[in]    myResetAZ:       Enable/Disable myResetAZ function.
+ * @param[in]    myDiffEN:        Enable/Disable DIFF_EN function.
+ * @param[in]    myLIR:           Enable/Disable LIR function.
+ * @param[in]    myPLE:           Enable/Disable PLE function.
+ * @param[in]    myPHE:           Enable/Disable PHE function.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LPS22HB_SetInterruptMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        22/June/2019
+ * @version     22/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS22HB_status_t LPS22HB_SetInterruptMode ( I2C_parameters_t myI2Cparameters, LPS22HB_interrupt_cfg_autorifp_t myAUTORIFP, LPS22HB_interrupt_cfg_reset_arp_t myResetARP, LPS22HB_interrupt_cfg_autozero_t myAutoZero,
+                                            LPS22HB_interrupt_cfg_reset_az_t myResetAZ, LPS22HB_interrupt_cfg_diff_en_t myDiffEN, LPS22HB_interrupt_cfg_lir_t myLIR, LPS22HB_interrupt_cfg_ple_t myPLE, LPS22HB_interrupt_cfg_phe_t myPHE )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Update the register   */
+  cmd[0]  =    LPS22HB_INTERRUPT_CFG;
+  cmd[1]   =   ( myAUTORIFP | myResetARP | myAutoZero | myResetAZ | myDiffEN | myLIR | myPLE | myPHE );
+  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS22HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS22HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS22HB_GetInterruptMode ( I2C_parameters_t , LPS22HB_data_t* )
+ *
+ * @details     It gets the Interrupt CFG register, raw value.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myInterruptCFG:  InterruptCFG register, raw value.
+ *
+ *
+ * @return       Status of LPS22HB_GetInterruptMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        22/June/2019
+ * @version     22/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS22HB_status_t LPS22HB_GetInterruptMode ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myInterruptCFG )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   LPS22HB_INTERRUPT_CFG;
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+  
+  /* Parse the data   */
+  myInterruptCFG->interruptCFG   =   cmd;
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS22HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS22HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS22HB_SetPressureThreshold ( I2C_parameters_t , LPS22HB_data_t )
+ *
+ * @details     It sets the threshold value for pressure interrupt event.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myThs_P:         Pressure threshold value.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LPS22HB_SetPressureThreshold.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        22/June/2019
+ * @version     22/June/2019     The ORIGIN
+ * @pre         This functions uses auto-increment.
+ * @warning     N/A.
+ */
+LPS22HB_status_t LPS22HB_SetPressureThreshold ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myThs_P )
+{
+  uint8_t      cmd[3]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]  =   ( LPS22HB_THS_P_L | 0x80 );    // Auto-increment
+  cmd[1]  =   (uint8_t)( myThs_P.ths_p & 0xFF );
+  cmd[2]  =   (uint8_t)( myThs_P.ths_p >> 8U );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS22HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS22HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS22HB_GetPressureThreshold ( I2C_parameters_t , LPS22HB_data_t* )
+ *
+ * @details     It gets the threshold value for pressure interrupt event.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myThs_P:         Pressure threshold value.
+ *
+ *
+ * @return       Status of LPS22HB_GetPressureThreshold.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        22/June/2019
+ * @version     22/June/2019     The ORIGIN
+ * @pre         This function uses auto-increment.
+ * @warning     N/A.
+ */
+LPS22HB_status_t LPS22HB_GetPressureThreshold ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myThs_P )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]  =   ( LPS22HB_THS_P_L | 0x80 );    // Auto-increment
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+  
+  /* Parse the data  */
+  myThs_P->ths_p   =   cmd[0];
+  myThs_P->ths_p <<=   8U;
+  myThs_P->ths_p  |=   cmd[1];
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS22HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS22HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS22HB_GetDeviceID ( I2C_parameters_t , LPS22HB_data_t* )
+ *
+ * @details     It gets the device ID.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myID:            Device ID.
+ *
+ *
+ * @return       Status of LPS22HB_GetDeviceID.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        22/June/2019
+ * @version     22/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS22HB_status_t LPS22HB_GetDeviceID ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myID )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Write the register   */
+  cmd   =  LPS22HB_WHO_AM_I;                                              
+  aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse data  */
+  myID->deviceID   =   cmd;
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS22HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS22HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS22HB_SetOutputDataRate ( I2C_parameters_t , LPS22HB_data_t )
+ *
+ * @details     It sets the output data rate.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myODR:           Output data rate.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LPS22HB_SetOutputDataRate.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        22/June/2019
+ * @version     22/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS22HB_status_t LPS22HB_SetOutputDataRate ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myODR )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Update the register   */
+  cmd[0]  =   LPS22HB_CTRL_REG1;                                                     
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  cmd[1] &=  ~( CTRL_REG1_ODR_MASK );
+  cmd[1] |=   myODR.odr;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS22HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS22HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS22HB_GetOutputDataRate ( I2C_parameters_t , LPS22HB_data_t* )
+ *
+ * @details     It gets the output data rate.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myODR:           Output data rate.
+ *
+ *
+ * @return       Status of LPS22HB_GetOutputDataRate.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        22/June/2019
+ * @version     22/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS22HB_status_t LPS22HB_GetOutputDataRate ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myODR )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   LPS22HB_CTRL_REG1;                                                     
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+  
+  /* Parse the data  */
+  myODR->odr   =   (LPS22HB_ctrl_reg1_odr_t)( cmd & CTRL_REG1_ODR_MASK );
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS22HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS22HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS22HB_ConfLowPassFilter ( I2C_parameters_t , LPS22HB_ctrl_reg1_en_lpfp_t , LPS22HB_ctrl_reg1_lpfp_cfg_t )
+ *
+ * @details     It configures the low-pass filter.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myEN_LPFP:       Enable/Disable Low-pass filter.
+ * @param[in]    myLPFP_CFG:      Low-pass configuration.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LPS22HB_ConfLowPassFilter.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        22/June/2019
+ * @version     22/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS22HB_status_t LPS22HB_ConfLowPassFilter ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_en_lpfp_t myEN_LPFP, LPS22HB_ctrl_reg1_lpfp_cfg_t myLPFP_CFG )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   LPS22HB_CTRL_REG1;                                                     
+  aux  =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  /* Update the register   */  
+  cmd[1] &=  ~( CTRL_REG1_EN_LPFP_MASK | CTRL_REG1_LPFP_CFG_MASK );
+  cmd[1] |=   ( myEN_LPFP | myLPFP_CFG );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS22HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS22HB_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       LPS22HB_SetBlockDataUpdate ( I2C_parameters_t , LPS22HB_ctrl_reg1_bdu_t )
+ *
+ * @details     It sets the block data update.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myBDU:           Block data update.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LPS22HB_SetBlockDataUpdate.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        22/June/2019
+ * @version     22/June/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LPS22HB_status_t LPS22HB_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_bdu_t myBDU )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Update the register   */
+  cmd[0]  =   LPS22HB_CTRL_REG1;                                                     
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  cmd[1] &=  ~( CTRL_REG1_BDU_MASK );
+  cmd[1] |=   myBDU;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+ 
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   LPS22HB_SUCCESS;
+  }
+  else
+  {
+    return   LPS22HB_FAILURE;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
  * @brief       LPS22HB_GetReferencePressure ( I2C_parameters_t , LPS22HB_data_t* )
  *
  * @details     It gets raw reference pressure.
@@ -138,52 +600,6 @@ LPS22HB_status_t LPS22HB_SetReferencePressure ( I2C_parameters_t myI2Cparameters
   cmd[3]  =   (uint8_t)( myREFL.rawReferencePressure >> 16UL );                 // REF_P_H
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
-
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   LPS22HB_SUCCESS;
-  }
-  else
-  {
-    return   LPS22HB_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       LPS22HB_GetDeviceID ( I2C_parameters_t , LPS22HB_data_t* )
- *
- * @details     It gets the device ID.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   myID:            Device ID.
- *
- *
- * @return       Status of LPS22HB_GetDeviceID.
- *
- *
- * @author      Manuel Caballero
- * @date        08/June/2019
- * @version     08/June/2019     The ORIGIN
- * @pre         N/A.
- * @warning     N/A.
- */
-LPS22HB_status_t LPS22HB_GetDeviceID ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myID )
-{
-  uint8_t      cmd  = 0U;
-  i2c_status_t aux;
-
-  /* Write the register   */
-  cmd   =  LPS22HB_WHO_AM_I;                                              
-  aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
-
-  /* Parse data  */
-  myID->deviceID   =   cmd;
 
 
 
@@ -436,100 +852,6 @@ LPS22HB_status_t LPS22HB_SetPowerMode ( I2C_parameters_t myI2Cparameters, LPS22H
 
 
 /**
- * @brief       LPS22HB_SetOutputDataRate ( I2C_parameters_t , LPS22HB_data_t )
- *
- * @details     It sets the output data rate.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myODR:           Output data rate.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of LPS22HB_SetOutputDataRate.
- *
- *
- * @author      Manuel Caballero
- * @date        08/June/2019
- * @version     08/June/2019     The ORIGIN
- * @pre         N/A.
- * @warning     N/A.
- */
-LPS22HB_status_t LPS22HB_SetOutputDataRate ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myODR )
-{
-  uint8_t      cmd[2]  = { 0U };
-  i2c_status_t aux;
-
-  /* Update the register   */
-  cmd[0]  =   LPS22HB_CTRL_REG1;                                                     
-  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
-  
-  cmd[1] &=  ~( CTRL_REG1_ODR_MASK );
-  cmd[1] |=   myODR.odr;
-  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
- 
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   LPS22HB_SUCCESS;
-  }
-  else
-  {
-    return   LPS22HB_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       LPS22HB_GetOutputDataRate ( I2C_parameters_t , LPS22HB_data_t* )
- *
- * @details     It gets the output data rate.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- *
- * @param[out]   myODR:           Output data rate.
- *
- *
- * @return       Status of LPS22HB_GetOutputDataRate.
- *
- *
- * @author      Manuel Caballero
- * @date        08/June/2019
- * @version     08/June/2019     The ORIGIN
- * @pre         N/A.
- * @warning     N/A.
- */
-LPS22HB_status_t LPS22HB_GetOutputDataRate ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myODR )
-{
-  uint8_t      cmd  = 0U;
-  i2c_status_t aux;
-
-  /* Read the register   */
-  cmd  =   LPS22HB_CTRL_REG1;                                                     
-  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
-  
-  /* Parse the data  */
-  myODR->odr   =   (LPS22HB_ctrl_reg1_odr_t)( cmd & CTRL_REG1_ODR_MASK );
- 
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   LPS22HB_SUCCESS;
-  }
-  else
-  {
-    return   LPS22HB_FAILURE;
-  }
-}
-
-
-
-/**
  * @brief       LPS22HB_SetInterruptGeneration ( I2C_parameters_t , LPS22HB_ctrl_reg1_diff_en_t )
  *
  * @details     It sets the interrupt generation enable.
@@ -561,54 +883,6 @@ LPS22HB_status_t LPS22HB_SetInterruptGeneration ( I2C_parameters_t myI2Cparamete
   
   cmd[1] &=  ~( CTRL_REG1_DIFF_EN_MASK );
   cmd[1] |=   myDIFF_EN;
-  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
- 
-
-
-  if ( aux == I2C_SUCCESS )
-  {
-    return   LPS22HB_SUCCESS;
-  }
-  else
-  {
-    return   LPS22HB_FAILURE;
-  }
-}
-
-
-
-/**
- * @brief       LPS22HB_SetBlockDataUpdate ( I2C_parameters_t , LPS22HB_ctrl_reg1_bdu_t )
- *
- * @details     It sets the block data update.
- *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myBDU:           Block data update.
- *
- * @param[out]   N/A.
- *
- *
- * @return       Status of LPS22HB_SetBlockDataUpdate.
- *
- *
- * @author      Manuel Caballero
- * @date        09/June/2019
- * @version     09/June/2019     The ORIGIN
- * @pre         N/A.
- * @warning     N/A.
- */
-LPS22HB_status_t LPS22HB_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_bdu_t myBDU )
-{
-  uint8_t      cmd[2]  = { 0U };
-  i2c_status_t aux;
-
-  /* Update the register   */
-  cmd[0]  =   LPS22HB_CTRL_REG1;                                                     
-  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
-  
-  cmd[1] &=  ~( CTRL_REG1_BDU_MASK );
-  cmd[1] |=   myBDU;
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
  
 
