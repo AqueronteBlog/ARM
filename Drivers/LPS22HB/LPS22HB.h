@@ -542,20 +542,6 @@ typedef enum
 } LPS22HB_fifo_ctrl_f_mode_t;
 
 
-/* WTM_POINT <4:0>
- *    NOTE: FIFO watermark level selection
- */
-typedef enum
-{
-    FIFO_CTRL_WTM_POINT_MASK                =   ( 0b11111 << 0U ),  /*!<  WTM_POINT mask                                        */
-    FIFO_CTRL_WTM_POINT_2_SAMPLE_MOV_AVG    =   ( 0b00001 << 0U ),  /*!<  2-sample moving average                   [ Default ] */
-    FIFO_CTRL_WTM_POINT_4_SAMPLE_MOV_AVG    =   ( 0b00011 << 0U ),  /*!<  4-sample moving average                               */
-    FIFO_CTRL_WTM_POINT_8_SAMPLE_MOV_AVG    =   ( 0b00111 << 0U ),  /*!<  8-sample moving average                               */
-    FIFO_CTRL_WTM_POINT_16_SAMPLE_MOV_AVG   =   ( 0b01111 << 0U ),  /*!<  16-sample moving average                              */
-    FIFO_CTRL_WTM_POINT_32_SAMPLE_MOV_AVG   =   ( 0b11111 << 0U )   /*!<  32-sample moving average                              */
-} LPS22HB_fifo_ctrl_wtm_point_t;
-
-
 /**
   * @brief   FIFO_STATUS REGISTER
   */
@@ -596,39 +582,46 @@ typedef enum
 #define LPS22HB_VECTOR_STRUCT_H
 typedef struct
 {
-    /* Output registers  */
-    int32_t   rawPressure;                  /*!<  Raw pressure                  */
-    int16_t   rawTemperature;               /*!<  Raw temperature               */
+  /* Output registers  */
+  int32_t   rawPressure;                      /*!<  Raw pressure                      */
+  int16_t   rawTemperature;                   /*!<  Raw temperature                   */
 
-    float     pressure;                     /*!<  Pressure in mbar              */
-    float     temperature;                  /*!<  Temperature in Celsius degree */
-    
-    /* Configuration  */
-    LPS22HB_ctrl_reg1_odr_t      odr;       /*!<  Output data rate selection    */
-    LPS22HB_ctrl_reg1_bdu_t      bdu;       /*!<  Block data update             */
+  float     pressure;                         /*!<  Pressure in mbar                  */
+  float     temperature;                      /*!<  Temperature in Celsius degree     */
 
+  uint32_t  ref_p;                            /*!<  Reference pressure ( raw value )  */
+  uint16_t  rpds;                             /*!<  Pressure offset                   */
 
-    LPS22HB_ctrl_reg2_fifo_en_t  fifo_en;   /*!<  FIFO enable                   */
-    LPS22HB_ctrl_reg2_swreset_t  swreset;   /*!<  Software reset                */
-    LPS22HB_ctrl_reg2_one_shot_t one_shot;  /*!<  One-shot                      */
-    
-    /* INT_DRDY behaviour   */
-    LPS22HB_ctrl_reg3_int_h_l_t  int_h_l;   /*!<  Interrupt active-high/low                         */
-    LPS22HB_ctrl_reg3_pp_od_t    pp_od;     /*!<  Push-pull/open drain selection on interrupt pad   */
-    LPS22HB_ctrl_reg3_f_fss5_t   f_fss5;    /*!<  FIFO full flag on INT_DRDY pin                    */
-    LPS22HB_ctrl_reg3_f_fth_t    f_fth;     /*!<  FIFO threshold (watermark) status on INT_DRDY pin */
-    LPS22HB_ctrl_reg3_f_ovr_t    f_ovr;     /*!<  FIFO overrun interrupt on INT_DRDY pin            */
-    LPS22HB_ctrl_reg3_drdy_t     drdy;      /*!<  Data-ready signal on INT_DRDY pin                 */
-    LPS22HB_ctrl_reg3_int_s2_t   int_s;     /*!<  Data signal on INT_DRDY pin control bits          */
-    
-    /* Interrupt mode for pressure acquisition configuration   */
-    uint8_t                       interruptCFG; /*!<  Interrupt_CFG register raw value                  */
-    
-    /* Pressure threshold  */
-    uint16_t                      ths_p;        /*!<  Threshold value for pressure interrupt generation */
+  /* Configuration  */
+  LPS22HB_ctrl_reg1_odr_t         odr;        /*!<  Output data rate selection        */
+  LPS22HB_ctrl_reg1_bdu_t         bdu;        /*!<  Block data update                 */
+  LPS22HB_ctrl_reg2_boot_t        boot;       /*!<  Reboot memory content flag        */
+  LPS22HB_ctrl_reg2_fifo_en_t     fifo_en;    /*!<  FIFO enable                       */
+  LPS22HB_ctrl_reg2_stop_on_fth_t stopOnFTH;  /*!<  FIFO watermark level use flag     */
+  LPS22HB_ctrl_reg2_swreset_t     swreset;    /*!<  Software reset                    */
+  LPS22HB_ctrl_reg2_one_shot_t    one_shot;   /*!<  One-shot                          */
+  
+  /* FIFO control  */
+  LPS22HB_fifo_ctrl_f_mode_t      f_mode;     /*!<  FIFO mode selection               */  
+  uint8_t                         wtm;        /*!<  FIFO watermark level              */  
 
-    /* Device identification   */
-    uint8_t                       deviceID;     /*!<  Device ID                                         */
+  /* Interrupt mode for pressure acquisition configuration   */
+  uint8_t                       interruptCFG; /*!<  Interrupt_CFG register raw value  */
+
+  /* Interrupt source  */
+  uint8_t                       int_source;   /*!<  Interrupt source                  */ 
+
+  /* FIFO status  */
+  uint8_t                       fifo_status;  /*!<  FIFO status                       */ 
+  
+  /* Status register value  */
+  uint8_t                       status;       /*!<  Status register value             */ 
+
+  /* Pressure threshold  */
+  uint16_t                      ths_p;        /*!<  Threshold value for pressure interrupt generation */
+
+  /* Device identification   */
+  uint8_t                       deviceID;     /*!<  Device ID                                         */
 } LPS22HB_data_t;
 #endif
 
@@ -691,53 +684,6 @@ LPS22HB_status_t LPS22HB_ConfLowPassFilter        ( I2C_parameters_t myI2Cparame
   */
 LPS22HB_status_t LPS22HB_SetBlockDataUpdate       ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_bdu_t myBDU         );
 
-
-
-
-
-
-
-
-/** It gets raw reference pressure.
-  */
-LPS22HB_status_t LPS22HB_GetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myREFL                );
-
-/** It sets raw reference pressure.
-  */
-LPS22HB_status_t LPS22HB_SetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myREFL                 );
-
-/** It sets temperature resolution.
-  */
-LPS22HB_status_t LPS22HB_SetTemperatureResolution ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myAVGT                 );
-
-/** It gets temperature resolution.
-  */
-LPS22HB_status_t LPS22HB_GetTemperatureResolution ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myAVGT                );
-
-/** It sets pressure resolution.
-  */
-LPS22HB_status_t LPS22HB_SetPressureResolution    ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myAVGP                 );
-
-/** It gets pressure resolution.
-  */
-LPS22HB_status_t LPS22HB_GetPressureResolution    ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myAVGP                );
-
-/** It sets the power mode.
-  */
-LPS22HB_status_t LPS22HB_SetPowerMode             ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_pd_t myPD           );
-
-/** It sets the interrupt generation enable.
-  */
-LPS22HB_status_t LPS22HB_SetInterruptGeneration   ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_diff_en_t myDIFF_EN );
-
-/** It sets the reset autozero function.
-  */
-LPS22HB_status_t LPS22HB_SetResetAutozero         ( I2C_parameters_t myI2Cparameters                                        );
-
-/** It gets the reset autozero function.
-  */
-LPS22HB_status_t LPS22HB_GetResetAutozero         ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myRESET_AZ            );
-
 /** It sets the reboot memory content.
   */
 LPS22HB_status_t LPS22HB_SetRebootMemoryContent   ( I2C_parameters_t myI2Cparameters                                        );
@@ -754,9 +700,13 @@ LPS22HB_status_t LPS22HB_SetFIFOEnable            ( I2C_parameters_t myI2Cparame
   */
 LPS22HB_status_t LPS22HB_GetFIFOEnable            ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myFIFO_EN             );
 
-/** It enables/disables the decimate the output pressure to 1Hz with FIFO Mean mode.
+/** It sets the FIFO watermark level use.
   */
-LPS22HB_status_t LPS22HB_SetFIFOMeanDec           ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg2_fifo_mean_dec_t myFIFO_MEAN_DEC );
+LPS22HB_status_t LPS22HB_SetFIFOWatermarkLevel    ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t mySTOP_ON_FTH          );
+
+/** It gets the FIFO watermark level use.
+  */
+LPS22HB_status_t LPS22HB_GetFIFOWatermarkLevel    ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* mySTOP_ON_FTH         );
 
 /** It sets the software reset.
   */
@@ -766,65 +716,18 @@ LPS22HB_status_t LPS22HB_SetSoftwareReset         ( I2C_parameters_t myI2Cparame
   */
 LPS22HB_status_t LPS22HB_GetSoftwareReset         ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* mySWRESET             );
 
-/** It sets the autozero enable.
+/** It triggers the one-shot mode.
   */
-LPS22HB_status_t LPS22HB_SetAutozero              ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myAUTOZERO             );
-
-/** It gets the autozero enable value.
-  */
-LPS22HB_status_t LPS22HB_GetAutozero              ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myAUTOZERO            );
-
-/** It sets the one-shot mode.
-  */
-LPS22HB_status_t LPS22HB_SetOneShot               ( I2C_parameters_t myI2Cparameters                                        );
+LPS22HB_status_t LPS22HB_TriggerOneShot           ( I2C_parameters_t myI2Cparameters                                        );
 
 /** It gets the one-shot mode flag.
   */
 LPS22HB_status_t LPS22HB_GetOneShot               ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myONE_SHOT            );
 
-/** It sets the interrupt active mode.
+/** It sets the interrupt generation enable: INT_DRDY pin control.
   */
-LPS22HB_status_t LPS22HB_SetInterruptActiveMode   ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg3_int_h_l_t myINT_H_L );
-
-/** It sets the Push-pull/open drain selection on interrupt pads.
-  */
-LPS22HB_status_t LPS22HB_SetDrainSelectionMode    ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg3_pp_od_t myPP_OD     );
-
-/** It sets the Data signal on INT_DRDY pin control bits.
-  */
-LPS22HB_status_t LPS22HB_SetDataSignalOnPin       ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg3_int_s2_t myINT_S    );
-
-/** It sets the INT_DRDY behaviour.
-  */
-LPS22HB_status_t LPS22HB_SetINT_DRDY_Behaviour    ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myIntConfig            );
-
-/** It gets the INT_DRDY behaviour.
-  */
-LPS22HB_status_t LPS22HB_GetINT_DRDY_Behaviour    ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myIntConfig           );
-
-/** It sets the interrupt configuration register.
-  */
-LPS22HB_status_t LPS22HB_SetInterruptConfiguration ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myIntConfig           );
-
-/** It gets the interrupt configuration register.
-  */
-LPS22HB_status_t LPS22HB_GetInterruptConfiguration ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myIntConfig          );
- 
-/** It reads the interrupt source register.
-  */
-LPS22HB_status_t LPS22HB_GetInterruptSource       ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myIntSource           );
-
-/** It reads the status register.
-  */
-LPS22HB_status_t LPS22HB_GetStatusRegister        ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myStatusRegister      );
-
-/** It gets the raw pressure value.
-  */
-LPS22HB_status_t LPS22HB_GetRawPressure           ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myRawPressure         );
-
-/** It gets the raw temperature value.
-  */
-LPS22HB_status_t LPS22HB_GetRawTemperature        ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myRawTemperature      );
+LPS22HB_status_t LPS22HB_SetInterruptGeneration   ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg3_int_h_l_t myINT_H_L, LPS22HB_ctrl_reg3_pp_od_t myPP_OD, LPS22HB_ctrl_reg3_f_fss5_t myF_FSS5,
+                                                    LPS22HB_ctrl_reg3_f_fth_t myF_FTH, LPS22HB_ctrl_reg3_f_ovr_t myF_OVR, LPS22HB_ctrl_reg3_drdy_t myDRDY, LPS22HB_ctrl_reg3_int_s2_t myINT_S         );
 
 /** It gets the FIFO mode selection.
   */
@@ -842,17 +745,13 @@ LPS22HB_status_t LPS22HB_GetFIFO_Threshold        ( I2C_parameters_t myI2Cparame
   */
 LPS22HB_status_t LPS22HB_SetFIFO_Threshold        ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myFIFOthreshold        );
 
-/** It reads the FIFO status register.
+/** It gets raw reference pressure.
   */
-LPS22HB_status_t LPS22HB_GetFIFO_Status           ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myFIFOstatus          );
+LPS22HB_status_t LPS22HB_GetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myREF_P               );
 
-/** It sets the FIFO threshold value.
+/** It sets raw reference pressure.
   */
-LPS22HB_status_t LPS22HB_SetFIFO_ThresholdValue   ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myFIFOthresholdValue   );
-
-/** It gets the FIFO threshold value.
-  */
-LPS22HB_status_t LPS22HB_GetFIFO_ThresholdValue   ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myFIFOthresholdValue  );
+LPS22HB_status_t LPS22HB_SetReferencePressure     ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myREF_P                );
 
 /** It sets the Pressure offset value.
   */
@@ -861,6 +760,30 @@ LPS22HB_status_t LPS22HB_SetPressureOffset        ( I2C_parameters_t myI2Cparame
 /** It gets the Pressure offset value.
   */
 LPS22HB_status_t LPS22HB_GetPressureOffset        ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myPressureOffset      );
+
+/** It sets the power mode.
+  */
+LPS22HB_status_t LPS22HB_SetPowerMode             ( I2C_parameters_t myI2Cparameters, LPS22HB_res_conf_lc_en_t myLC_EN      );
+
+/** It reads the interrupt source register.
+  */
+LPS22HB_status_t LPS22HB_GetInterruptSource       ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myIntSource           );
+
+/** It reads the FIFO status register.
+  */
+LPS22HB_status_t LPS22HB_GetFIFO_Status           ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myFIFOstatus          );
+
+/** It reads the status register.
+  */
+LPS22HB_status_t LPS22HB_GetStatusRegister        ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myStatusRegister      );
+
+/** It gets the raw pressure value.
+  */
+LPS22HB_status_t LPS22HB_GetRawPressure           ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myRawPressure         );
+
+/** It gets the raw temperature value.
+  */
+LPS22HB_status_t LPS22HB_GetRawTemperature        ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myRawTemperature      );
 
 /** It gets the current pressure in mbar.
   */
