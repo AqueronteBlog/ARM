@@ -1066,3 +1066,111 @@ SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetFrequency ( SPI_parameters_t mySPIp
     return   SX1272_SX1273_FAILURE;
   }
 }
+
+
+/**
+ * @brief       SX1272_SX1273_LoRa_SetPowerAmplifier ( SPI_parameters_t , SX1272_SX1273_lora_data_t )
+ *
+ * @details     It sets the RF power amplifier block.
+ *
+ * @param[in]    mySPIparameters: SPI parameters.   
+ * @param[in]    myPaConfig:      PaSelect and OuputPower.
+ *
+ * @param[out]   myPaConfig:      PaDac value.
+ *
+ *
+ * @return       Status of SX1272_SX1273_LoRa_SetPowerAmplifier.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        24/June/2019
+ * @version     24/June/2019   The ORIGIN
+ * @pre         This function updates PaDac automatically.
+ * @warning     N/A.
+ */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetPowerAmplifier ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myPaConfig )
+{
+  uint8_t      cmd[2]     =  { 0U };
+  int8_t       myAuxPower =  0U;
+  spi_status_t aux;
+  
+
+  /* Identify PA output pin  */
+  switch ( myPaConfig->paSelect )
+  {
+    default:
+    case LORA_PA_PA0_OUTPUT_ON_RFIO:      
+      /* Check power range: [ -1, +14 ] dBm   */
+      if ( ( myPaConfig->p_out >= -1 ) && ( myPaConfig->p_out <= 14 ) )
+      {
+        myAuxPower   =   ( myPaConfig->p_out + 1 );
+      }
+      else
+      {
+        return   SX1272_SX1273_FAILURE;
+      }
+      
+      cmd[1]  =  LORA_REGPACONFIG_PA_SELECT_RFIO_PIN;
+      break;
+
+    case LORA_PA_PA1_PA2_COMBINED_ON_PA_BOOST:
+      /* Check power range: [ +2, +17 ] dBm   */
+      if ( ( myPaConfig->p_out >= 2 ) && ( myPaConfig->p_out <= 17 ) )
+      {
+        myAuxPower   =   ( myPaConfig->p_out - 2 );
+      }
+      else
+      {
+        return   SX1272_SX1273_FAILURE;
+      }
+
+      cmd[1]  =  LORA_REGPACONFIG_PA_SELECT_PA_BOOST_PIN;
+      break;
+
+    case LORA_PA_PA1_PA2_ON_PA_BOOST_HIGH_OUTPUT_20_DBM:
+      /* Check power range: [ +5, +20 ] dBm   */
+      if ( ( myPaConfig->p_out >= 5 ) && ( myPaConfig->p_out <= 20 ) )
+      {
+        myAuxPower   =   ( myPaConfig->p_out - 5 );
+      }
+      else
+      {
+        return   SX1272_SX1273_FAILURE;
+      }
+
+      cmd[1]  =  LORA_REGPACONFIG_PA_SELECT_PA_BOOST_PIN;
+      break;
+  }
+  
+  
+  /* Update the register   */
+  cmd[0]  =  ( SX1272_SX1273_REG_PA_CONFIG | 0x80 );       // Write access
+  cmd[1] |=  ( LORA_REGPACONFIG_OUTPUT_POWER_MASK & myAuxPower );
+  aux     =  spi_transfer ( mySPIparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+  
+  /* Update the High Power Settings accordingly ( PaDac )  */
+  if ( myPaConfig->paSelect == LORA_PA_PA1_PA2_ON_PA_BOOST_HIGH_OUTPUT_20_DBM )
+  {
+    myPaConfig->paDac  =   LORA_REGPADAC_PA_DAC_PLUS_20_DBM;
+  }
+  else
+  {
+    myPaConfig->paDac  =   LORA_REGPADAC_PA_DAC_DEFAULT_VALUE;
+  }
+  
+  cmd[0]  =  ( SX1272_SX1273_REG_PA_DAC | 0x80 );          // Write access
+  cmd[1]  =  myPaConfig->paDac;
+  aux     =  spi_transfer ( mySPIparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+
+  if ( aux == SPI_SUCCESS )
+  {
+    return   SX1272_SX1273_SUCCESS;
+  }
+  else
+  {
+    return   SX1272_SX1273_FAILURE;
+  }
+}

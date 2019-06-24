@@ -2474,7 +2474,7 @@ typedef enum
   */
 typedef enum
 {
-  LORA_REGPACONFIG_OUTPUT_POWER_MASK              =   ( 0b1111 << 7U )    /*!<  OutputPower Mask                                                */
+  LORA_REGPACONFIG_OUTPUT_POWER_MASK              =   ( 0b1111 << 0U )    /*!<  OutputPower Mask                                                */
 } lora_regpaconfig_output_power_t;
 
 
@@ -3170,6 +3170,29 @@ typedef enum
 } lora_diomapping_all_lora_mode_t;
 
 
+/**
+  * @brief   POWER AMPLIFIER MODE SELECTION
+  */
+typedef enum
+{
+  LORA_PA_PA0_OUTPUT_ON_RFIO                          =   0U,             /*!<  PA0 output on pin RFO ( -1 to +14 dBm )                                       */
+  LORA_PA_PA1_PA2_COMBINED_ON_PA_BOOST                =   1U,             /*!<  PA1 and PA2 combined on pin PA_BOOST ( +2 to +17 dBm )                        */
+  LORA_PA_PA1_PA2_ON_PA_BOOST_HIGH_OUTPUT_20_DBM      =   2U              /*!<  PA1+PA2 on PA_BOOST with high output power +20 dBm settings ( +5 to +20 dBm ) */
+} lora_pa_mode_t;
+
+
+/**
+  * @brief   REG_PA_DAC
+  */
+typedef enum
+{
+  LORA_REGPADAC_PA_DAC_MASK                            =   0xFF,            /*!<  PaDac mask                                                    */
+  LORA_REGPADAC_PA_DAC_DEFAULT_VALUE                   =   0x84,            /*!<  Default value PA0 or +17dBm                       [ Default ] */
+  LORA_REGPADAC_PA_DAC_PLUS_20_DBM                     =   0x87             /*!<  Value for High Power +20dBm                                   */
+} lora_regpadac_pa_dac_t;
+
+
+
 
 
 
@@ -3198,15 +3221,21 @@ typedef struct
   lora_regopmode_long_range_mode_t  mode;       /*!<  FSK/OOK or LoRa               */
   
   /* LoRa parameters   */
-  lora_regmodemconfig2_spreading_factor_t         sf;                       /*!<  LoRa: Spreading factor              */
-  lora_regmodemconfig1_coding_rate_t              cr;                       /*!<  LoRa: Coding rate                   */
-  lora_regmodemconfig1_bw_t                       bw;                       /*!<  LoRa: Bandwidth                     */
-  uint16_t                                        preamble;                 /*!<  LoRa: Preamble:  6 - 65535          */
-  lora_regmodemconfig1_implicit_header_mode_on_t  headerMode;               /*!<  LoRa: Header mode                   */
-  lora_regmodemconfig1_low_data_rate_optimize_t   lowDataRateOptimization;  /*!<  LoRa: Low Data Rate Optimization    */
-  uint8_t                                         hopPeriod;                /*!<  LoRa: Frequency Hopping period      */
-  lora_regopmode_mode_t                           loraOperatingMode;        /*!<  LoRa: Operating mode functionality  */
-  float                                           frequency;                /*!<  LoRa: Frequency in Hz               */
+  lora_regmodemconfig2_spreading_factor_t         sf;                       /*!<  LoRa: Spreading factor                    */
+  lora_regmodemconfig1_coding_rate_t              cr;                       /*!<  LoRa: Coding rate                         */
+  lora_regmodemconfig1_bw_t                       bw;                       /*!<  LoRa: Bandwidth                           */
+  uint16_t                                        preamble;                 /*!<  LoRa: Preamble:  6 - 65535                */
+  lora_regmodemconfig1_implicit_header_mode_on_t  headerMode;               /*!<  LoRa: Header mode                         */
+  lora_regmodemconfig1_low_data_rate_optimize_t   lowDataRateOptimization;  /*!<  LoRa: Low Data Rate Optimization          */
+  uint8_t                                         hopPeriod;                /*!<  LoRa: Frequency Hopping period            */
+  lora_regopmode_mode_t                           loraOperatingMode;        /*!<  LoRa: Operating mode functionality        */
+  float                                           frequency;                /*!<  LoRa: Frequency in Hz                     */
+  
+  /* RF settings   */
+  lora_pa_mode_t                                  paSelect;                 /*!<  LoRa: Power Amplifier output pin          */
+  int8_t                                          p_out;                    /*!<  LoRa: PA max output power in dBm          */
+  lora_regpadac_pa_dac_t                          paDac;                    /*!<  LoRa: Higher power settings of the PA     */
+
 
   uint8_t                     deviceID;         /*!<  Device ID                     */
   uint8_t                     deviceRevision;   /*!<  Device Revision               */
@@ -3317,3 +3346,11 @@ SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetFrequency   ( SPI_parameters_t mySP
 /** It gets the frequency.
   */
 SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetFrequency   ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myFrequency               );
+
+/** It sets the RF power amplifier block.
+  */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetPowerAmplifier ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myPaConfig             );
+
+/** It gets the RF power amplifier block.
+  */
+//SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetFrequency   ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myFrequency               );
