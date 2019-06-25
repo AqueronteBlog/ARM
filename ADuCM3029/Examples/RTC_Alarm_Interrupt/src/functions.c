@@ -18,7 +18,8 @@
 
 /**
  * @brief       void conf_CLK  ( void )
- * @details     It activates the external HFOSC crystal oscillator ( 26MHz ).
+ * @details     It activates the internal HFOSC crystal oscillator ( 26MHz ) and the internal
+ * 				LFOSC ( 32768Hz ) oscillator.
  *
  * 					- ACLK: HFOSC/4 = 6.4MHz
  * 					- HCLK: HFOSC/4 = 6.4MHz
@@ -128,11 +129,11 @@ void conf_GPIO  ( void )
 
 
 /**
- * @brief       void conf_Timer0  ( void )
- * @details     It configures the Timer0.
+ * @brief       void conf_RTC  ( void )
+ * @details     [TODO]It configures the RTC.
  *
- *					TMR0:
- * 						- TMR0_CLK: LFOSC/4 = 32768Hz/4 = 8192Hz
+ *					RTC1:
+ * 						- RTC1_CLK: LFOSC/2 = 32768Hz/2 = 16384Hz
  * 						- Count down
  * 						- Periodic mode
  * 						- Interrupt enabled
@@ -151,95 +152,52 @@ void conf_GPIO  ( void )
  * @pre         N/A
  * @warning     N/A
  */
-void conf_Timer0  ( void )
+void conf_RTC ( void )
 {
-	/* Timer0 must be released before is configured	 */
-	while ( ( pADI_TMR0->STAT & ( 1U << BITP_TMR_STAT_BUSY ) ) == ( 1U << BITP_TMR_STAT_BUSY ) );
-
-	/* Timer0
-	 *  - Synchronization bypass is disabled
-	 *  - Event will not be captured
-	 *  - TMR0 disabled
-	 *  - TMR0 CLK: LFOSC ( 32768 Hz )
-	 *  - TMR0 Prescaler: TMR0_CLK/4 ( 32768Hz / 4 = 8192Hz )
-	 *  - Timer is set to count down
-	 *	- Timer runs in periodic mode
+	/* Make sure that RTC1 registers can be modfied
+	 *  - NOTE:
+	 *  	This is dangerous!, the uC may get stuck here, add a counter to avoid that circumstance.
 	 */
-	pADI_TMR0->CTL	&=	~( ( 1U << BITP_TMR_CTL_SYNCBYP ) | ( 1U << BITP_TMR_CTL_EVTEN ) | ( 0b11 << BITP_TMR_CTL_CLK ) | ( 1U << BITP_TMR_CTL_EN ) | ( 0b11 << BITP_TMR_CTL_PRE ) );
-	pADI_TMR0->CTL	|=	 ( ( 0b10 << BITP_TMR_CTL_CLK ) | ( 1U << BITP_TMR_CTL_MODE ) );
+	while ( ( pADI_RTC1->SR1 & ( ( 1U << BITP_RTC_SR1_WPNDTRM ) | ( 1U << BITP_RTC_SR1_WPNDALM1 ) | ( 1U << BITP_RTC_SR1_WPNDALM0 ) | ( 1U << BITP_RTC_SR1_WPNDCNT1 ) | ( 1U << BITP_RTC_SR1_WPNDCNT0 ) | ( 1U << BITP_RTC_SR1_WPNDSR0 ) | ( 1U << BITP_RTC_SR1_WPNDCR0 ) ) ) == 0x00 );
 
-	/* Timer0
-	 *  - Overflow every ~ 1 second ( 8192 * ( 1/ 8192 ) = 1s )
+	/* Disable RTC1	 */
+	pADI_RTC1->CR0	&=	~( 1U << BITP_RTC_CR0_CNTEN );
+
+	/* RTC1
+	 *  - Enable the RTC Alarm (Absolute) Operation
+	 *  - Enable ALMINT Sourced Alarm Interrupts to the CPU
 	 */
-	pADI_TMR0->LOAD	 =	 8192U;
+	pADI_RTC1->CR0	|=	 ( ( 1U << BITP_RTC_CR0_ALMINTEN ) | ( 1U << BITP_RTC_CR0_ALMEN ) );
 
-	/* Clear interrupt: Timeout	 */
-	pADI_TMR0->CLRINT	|=	 ( 1U << BITP_TMR_CLRINT_TIMEOUT );
+	/* RTC1
+	 *  - Prescale the RTC base clock by 2^1 = 2 ( 32768Hz/2 = 16384Hz )
+	 *  - Disable for the RTC Modulo-60 Count Roll-Over Interrupt Source
+	 *  - Disable for the RTC Count Roll-Over Interrupt Source
+	 *  - Disable for the RTC Trim Interrupt Source
+	 *  - Disable for the Prescaled, Modulo-1 Interrupt Source
+	 *  - Disable for the RTC Count Interrupt Source
+	 */
+	pADI_RTC1->CR1	&=	~( ( 0b1111 << BITP_RTC_CR1_PRESCALE2EXP ) | ( 1U << BITP_RTC_CR1_CNTMOD60ROLLINTEN ) | ( 1U << BITP_RTC_CR1_CNTROLLINTEN ) | ( 1U << BITP_RTC_CR1_TRMINTEN ) | ( 1U << BITP_RTC_CR1_PSINTEN ) | ( 1U << BITP_RTC_CR1_CNTINTEN ) );
+	pADI_RTC1->CR1	|=	~( 0b0001 << BITP_RTC_CR1_PRESCALE2EXP );
+
+	/* RTC1
+	 *  - Overflow every ~ 1 second ( 16384 * ( 1/ 16384 ) = 1s )
+	 */
+	pADI_RTC1->ALM0	 =	 16384U;		// Lower 16 bits of the non-fractional (prescaled) RTC alarm target time value
+	pADI_RTC1->ALM1	 =	 0U;			// Upper 16 bits of the non-fractional (prescaled) RTC alarm target time value
+	pADI_RTC1->ALM2	 =	 0U;			// Fractional (non-prescaled) bits of the RTC alarm target time value
+
+	/* Reset RTC1 counter register	 */
+	pADI_RTC1->CNT0	 =	 0U;			// Lower 16 bits of the RTC counter
+	pADI_RTC1->CNT1	 =	 0U;			// Upper 16 bits of the RTC counter
+
+	/* Clear Alarm Interrupt Source	 */
+	pADI_RTC1->SR0	|=	 ( 1U << BITP_RTC_SR0_ALMINT );
 
 	/* Enable interrupt	 */
-	NVIC_SetPriority ( TMR0_EVT_IRQn, 0UL );
-	NVIC_EnableIRQ   ( TMR0_EVT_IRQn );
+	NVIC_SetPriority ( RTC1_EVT_IRQn, 0UL );
+	NVIC_EnableIRQ   ( RTC1_EVT_IRQn );
 
-	/* Enable Timer0	 */
-	pADI_TMR0->CTL	|=	 ( 1U << BITP_TMR_CTL_EN );
+	/* Enable RTC1	 */
+	pADI_RTC1->CR0	|=	 ( 1U << BITP_RTC_CR0_CNTEN );
 }
-
-
-
-/**
- * @brief       void conf_Timer1  ( void )
- * @details     It configures the Timer1.
- *
- *					TMR1:
- * 						- TMR1_CLK: PCLK/64 = 6.5MHz/64 = 101562.5Hz
- * 						- Count down
- * 						- Periodic mode
- * 						- Interrupt enabled
- * 						- Overflow: ~0.5s ( 50781 * ( 1/101562.5Hz ) ~ 0.5s )
- *
- * @param[in]    N/A.
- *
- * @param[out]   N/A.
- *
- *
- * @return      N/A
- *
- * @author      Manuel Caballero
- * @date        25/June/2019
- * @version     25/June/2019      The ORIGIN
- * @pre         N/A
- * @warning     N/A
- */
-void conf_Timer1  ( void )
-{
-	/* Timer1 must be released before is configured	 */
-	while ( ( pADI_TMR1->STAT & ( 1U << BITP_TMR_STAT_BUSY ) ) == ( 1U << BITP_TMR_STAT_BUSY ) );
-
-	/* Timer1
-	 *  - Synchronization bypass is disabled
-	 *  - Event will not be captured
-	 *  - TMR1 disabled
-	 *  - TMR1 CLK: PCLK ( 6.5MHz )
-	 *  - TMR1 Prescaler: TMR1_CLK/64 ( 6.5MHz / 64 = 101562.5Hz )
-	 *  - Timer is set to count down
-	 *	- Timer runs in periodic mode
-	 */
-	pADI_TMR1->CTL	&=	~( ( 1U << BITP_TMR_CTL_SYNCBYP ) | ( 1U << BITP_TMR_CTL_EVTEN ) | ( 0b11 << BITP_TMR_CTL_CLK ) | ( 1U << BITP_TMR_CTL_EN ) | ( 0b11 << BITP_TMR_CTL_PRE ) );
-	pADI_TMR1->CTL	|=	 ( ( 1U << BITP_TMR_CTL_MODE ) | ( 0b10 << BITP_TMR_CTL_PRE ) );
-
-	/* Timer1
-	 *  - Overflow every ~ 0.5 second ( 50781 * ( 1/101562.5Hz ) ~ 0.5s )
-	 */
-	pADI_TMR1->LOAD	 =	 50781U;
-
-	/* Clear interrupt: Timeout	 */
-	pADI_TMR1->CLRINT	|=	 ( 1U << BITP_TMR_CLRINT_TIMEOUT );
-
-	/* Enable interrupt	 */
-	NVIC_SetPriority ( TMR1_EVT_IRQn, 0UL );
-	NVIC_EnableIRQ   ( TMR1_EVT_IRQn );
-
-	/* Enable Timer1	 */
-	pADI_TMR1->CTL	|=	 ( 1U << BITP_TMR_CTL_EN );
-}
-
