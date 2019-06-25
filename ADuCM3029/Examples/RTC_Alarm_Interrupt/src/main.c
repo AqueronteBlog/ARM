@@ -51,8 +51,7 @@ int main(int argc, char *argv[])
 
 	conf_CLK  	();
 	conf_GPIO 	();
-	conf_Timer0	();
-	conf_Timer1	();
+	conf_RTC	();
 
 	/* Enable interrupts	 */
 	__enable_irq ();
