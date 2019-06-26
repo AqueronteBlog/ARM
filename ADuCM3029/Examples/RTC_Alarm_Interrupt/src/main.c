@@ -1,9 +1,9 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: WDT on interrupt configuration.
+ * @details     This example shows how to work with the internal peripheral: RTC ( Alarm event ) on interrupt configuration.
  * 				Both LEDs blink every 1 second.
  *
- * 				The rest of the time, the microcontroller is in low-power mode.
+ * 				The rest of the time, the microcontroller is in low-power mode: Hibernate mode.
  *
  *
  * @return      N/A
@@ -59,11 +59,22 @@ int main(int argc, char *argv[])
 
 	while ( 1 )
 	{
-		/* Low power mode: Flexi Mode	 */
+		/* Low power mode: Hibernate Mode	 */
 		pADI_PMG0->PWRKEY	 =	 0x4859;
 		pADI_PMG0->PWRMOD	&=	~( 0b11 << BITP_PMG_PWRMOD_MODE );
+		pADI_PMG0->PWRMOD	|=	 ( 0b10 << BITP_PMG_PWRMOD_MODE );
 		pADI_PMG0->PWRKEY	 =	 0x0000;
 		__WFI();
+
+		if ( myState == 1UL )
+		{
+			/* Blink LED	 */
+			pADI_GPIO2->TGL	|=	 DS3;
+			pADI_GPIO1->TGL	|=	 DS4;
+
+			/* Reset variables	 */
+			myState = 0UL;
+		}
 	}
 
 	/* It should never reach here	 */
