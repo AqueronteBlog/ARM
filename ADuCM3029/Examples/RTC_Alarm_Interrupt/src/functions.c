@@ -130,7 +130,7 @@ void conf_GPIO  ( void )
 
 /**
  * @brief       void conf_RTC  ( void )
- * @details     [TODO]It configures the RTC.
+ * @details     It configures the RTC.
  *
  *					RTC1:
  * 						- RTC1_CLK: LFOSC/2 = 32768Hz/2 = 16384Hz
@@ -148,26 +148,40 @@ void conf_GPIO  ( void )
  *
  * @author      Manuel Caballero
  * @date        25/June/2019
- * @version     25/June/2019      The ORIGIN
+ * @version     26/June/2019    Pending status of posted writes was added
+ * 				25/June/2019    The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
 void conf_RTC ( void )
 {
-	/* Make sure that RTC1 registers can be modfied
+	/* Make sure that RTC1 registers can be modified
 	 *  - NOTE:
 	 *  	This is dangerous!, the uC may get stuck here, add a counter to avoid that circumstance.
 	 */
-	while ( ( pADI_RTC1->SR1 & ( ( 1U << BITP_RTC_SR1_WPNDTRM ) | ( 1U << BITP_RTC_SR1_WPNDALM1 ) | ( 1U << BITP_RTC_SR1_WPNDALM0 ) | ( 1U << BITP_RTC_SR1_WPNDCNT1 ) | ( 1U << BITP_RTC_SR1_WPNDCNT0 ) | ( 1U << BITP_RTC_SR1_WPNDSR0 ) | ( 1U << BITP_RTC_SR1_WPNDCR0 ) ) ) == 0x00 );
+	while ( ( pADI_RTC1->SR1 & ( ( 1U << BITP_RTC_SR1_WPNDTRM ) | ( 1U << BITP_RTC_SR1_WPNDALM1 ) | ( 1U << BITP_RTC_SR1_WPNDALM0 ) | ( 1U << BITP_RTC_SR1_WPNDCNT1 ) | ( 1U << BITP_RTC_SR1_WPNDCNT0 ) | ( 1U << BITP_RTC_SR1_WPNDSR0 ) | ( 1U << BITP_RTC_SR1_WPNDCR0 ) ) ) != 0x00 );
 
 	/* Disable RTC1	 */
 	pADI_RTC1->CR0	&=	~( 1U << BITP_RTC_CR0_CNTEN );
+
+	/* Pending Status of Posted Writes to CR0
+	 *  - NOTE:
+	 *  	This is dangerous!, the uC may get stuck here, add a counter to avoid that circumstance.
+	 */
+	while ( ( pADI_RTC1->SR1 & ( 1U << BITP_RTC_SR1_WPNDCR0 ) ) == ( 1U << BITP_RTC_SR1_WPNDCR0 ) );
+
 
 	/* RTC1
 	 *  - Enable the RTC Alarm (Absolute) Operation
 	 *  - Enable ALMINT Sourced Alarm Interrupts to the CPU
 	 */
 	pADI_RTC1->CR0	|=	 ( ( 1U << BITP_RTC_CR0_ALMINTEN ) | ( 1U << BITP_RTC_CR0_ALMEN ) );
+
+	/* Pending Status of Posted Writes to CR0
+	 *  - NOTE:
+	 *  	This is dangerous!, the uC may get stuck here, add a counter to avoid that circumstance.
+	 */
+	while ( ( pADI_RTC1->SR1 & ( 1U << BITP_RTC_SR1_WPNDCR0 ) ) == ( 1U << BITP_RTC_SR1_WPNDCR0 ) );
 
 	/* RTC1
 	 *  - Prescale the RTC base clock by 2^1 = 2 ( 32768Hz/2 = 16384Hz )
@@ -180,6 +194,7 @@ void conf_RTC ( void )
 	pADI_RTC1->CR1	&=	~( ( 0b1111 << BITP_RTC_CR1_PRESCALE2EXP ) | ( 1U << BITP_RTC_CR1_CNTMOD60ROLLINTEN ) | ( 1U << BITP_RTC_CR1_CNTROLLINTEN ) | ( 1U << BITP_RTC_CR1_TRMINTEN ) | ( 1U << BITP_RTC_CR1_PSINTEN ) | ( 1U << BITP_RTC_CR1_CNTINTEN ) );
 	pADI_RTC1->CR1	|=	~( 0b0001 << BITP_RTC_CR1_PRESCALE2EXP );
 
+
 	/* RTC1
 	 *  - Overflow every ~ 1 second ( 16384 * ( 1/ 16384 ) = 1s )
 	 */
@@ -187,9 +202,22 @@ void conf_RTC ( void )
 	pADI_RTC1->ALM1	 =	 0U;			// Upper 16 bits of the non-fractional (prescaled) RTC alarm target time value
 	pADI_RTC1->ALM2	 =	 0U;			// Fractional (non-prescaled) bits of the RTC alarm target time value
 
+	/* Pending Status of Posted Writes to ALM0
+	 *  - NOTE:
+	 *  	This is dangerous!, the uC may get stuck here, add a counter to avoid that circumstance.
+	 */
+	while ( ( pADI_RTC1->SR1 & ( 1U << BITP_RTC_SR1_WPNDALM1 ) ) == ( 1U << BITP_RTC_SR1_WPNDALM1 ) );
+
+
 	/* Reset RTC1 counter register	 */
 	pADI_RTC1->CNT0	 =	 0U;			// Lower 16 bits of the RTC counter
 	pADI_RTC1->CNT1	 =	 0U;			// Upper 16 bits of the RTC counter
+
+	/* Pending Status of Posted Writes to CNT0
+	 *  - NOTE:
+	 *  	This is dangerous!, the uC may get stuck here, add a counter to avoid that circumstance.
+	 */
+	while ( ( pADI_RTC1->SR1 & ( 1U << BITP_RTC_SR1_WPNDCNT0 ) ) == ( 1U << BITP_RTC_SR1_WPNDCNT0 ) );
 
 	/* Clear Alarm Interrupt Source	 */
 	pADI_RTC1->SR0	|=	 ( 1U << BITP_RTC_SR0_ALMINT );
@@ -200,4 +228,10 @@ void conf_RTC ( void )
 
 	/* Enable RTC1	 */
 	pADI_RTC1->CR0	|=	 ( 1U << BITP_RTC_CR0_CNTEN );
+
+	/* Pending Status of Posted Writes to CR0
+	 *  - NOTE:
+	 *  	This is dangerous!, the uC may get stuck here, add a counter to avoid that circumstance.
+	 */
+	while ( ( pADI_RTC1->SR1 & ( 1U << BITP_RTC_SR1_WPNDCR0 ) ) == ( 1U << BITP_RTC_SR1_WPNDCR0 ) );
 }
