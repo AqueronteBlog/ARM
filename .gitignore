@@ -73,3 +73,4 @@ NRF52/Examples/examples/Drivers/LPS25HB/pca10040/s132/ses/Output/
 NRF52/Examples/examples/Drivers/LPS22HB/pca10040/s132/ses/Output/
 ADuCM3029/Examples/WDT_Interrupt/Release/
 ADuCM3029/Examples/Timers/Debug/
+ADuCM3029/Examples/RTC_Alarm_Interrupt/Debug/
