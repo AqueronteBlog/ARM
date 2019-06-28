@@ -1069,7 +1069,7 @@ SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetFrequency ( SPI_parameters_t mySPIp
 
 
 /**
- * @brief       SX1272_SX1273_LoRa_SetPowerAmplifier ( SPI_parameters_t , SX1272_SX1273_lora_data_t )
+ * @brief       SX1272_SX1273_LoRa_SetPowerAmplifier ( SPI_parameters_t , SX1272_SX1273_lora_data_t* )
  *
  * @details     It sets the RF power amplifier block.
  *
@@ -1086,7 +1086,7 @@ SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetFrequency ( SPI_parameters_t mySPIp
  * @date        24/June/2019
  * @version     24/June/2019   The ORIGIN
  * @pre         This function updates PaDac automatically.
- * @warning     N/A.
+ * @warning     The Over Current Protection limit should be adapted to the actual power level, in RegOcp.
  */
 SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetPowerAmplifier ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myPaConfig )
 {
@@ -1162,6 +1162,77 @@ SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetPowerAmplifier ( SPI_parameters_t m
   cmd[1]  =  myPaConfig->paDac;
   aux     =  spi_transfer ( mySPIparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
+
+
+
+  if ( aux == SPI_SUCCESS )
+  {
+    return   SX1272_SX1273_SUCCESS;
+  }
+  else
+  {
+    return   SX1272_SX1273_FAILURE;
+  }
+}
+
+
+/**
+ * @brief       SX1272_SX1273_LoRa_GetPowerAmplifier ( SPI_parameters_t , SX1272_SX1273_lora_data_t* )
+ *
+ * @details     It gets the RF power amplifier block.
+ *
+ * @param[in]    mySPIparameters: SPI parameters.   
+ *
+ * @param[out]   myPaConfig:      PaSelect and OuputPower.
+ * @param[out]   myPaConfig:      PaDac value.
+ *
+ *
+ * @return       Status of SX1272_SX1273_LoRa_GetPowerAmplifier.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        28/June/2019
+ * @version     28/June/2019   The ORIGIN
+ * @pre         This function calculates the power amplifier max. output power.
+ * @warning     N/A.
+ */
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetPowerAmplifier ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myPaConfig )
+{
+  uint8_t      cmd     =  0U;
+  spi_status_t aux;
+  
+
+  /* Read the register   */
+  cmd  =  ( SX1272_SX1273_REG_PA_CONFIG | 0x7F );            // Read access
+  aux  =  spi_transfer ( mySPIparameters, &cmd, 1U, &cmd, 1U );
+  
+  /* Parse the data  */
+  myPaConfig->paSelect   =   ( cmd & LORA_REGPACONFIG_PA_SELECT_MASK );
+
+  /* Identify PA output pin  */
+  switch ( myPaConfig->paSelect )
+  {
+    default:
+    case LORA_PA_PA0_OUTPUT_ON_RFIO:      
+      myPaConfig->p_out   =   (int8_t)( ( cmd & LORA_REGPACONFIG_OUTPUT_POWER_MASK ) - 1 );
+      break;
+
+    case LORA_PA_PA1_PA2_COMBINED_ON_PA_BOOST:
+      myPaConfig->p_out   =   (uint8_t)( ( cmd & LORA_REGPACONFIG_OUTPUT_POWER_MASK ) + 2 );
+      break;
+
+    case LORA_PA_PA1_PA2_ON_PA_BOOST_HIGH_OUTPUT_20_DBM:
+      myPaConfig->p_out   =   (uint8_t)( ( cmd & LORA_REGPACONFIG_OUTPUT_POWER_MASK ) + 5 );
+      break;
+  }
+  
+  
+  /* Read the register: High Power Settings accordingly ( PaDac )  */  
+  cmd  =  ( SX1272_SX1273_REG_PA_DAC | 0x7F );            // Read access
+  aux  =  spi_transfer ( mySPIparameters, &cmd, 1U, &cmd, 1U );
+
+  /* Parse the data  */
+  myPaConfig->paDac  =   ( cmd & LORA_REGPADAC_PA_DAC_MASK );
 
 
 

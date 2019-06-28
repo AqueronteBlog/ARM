@@ -3233,7 +3233,7 @@ typedef struct
   
   /* RF settings   */
   lora_pa_mode_t                                  paSelect;                 /*!<  LoRa: Power Amplifier output pin          */
-  int8_t                                          p_out;                    /*!<  LoRa: PA max output power in dBm          */
+  int8_t                                          p_out;                    /*!<  LoRa: PA max output power in dBmn          */
   lora_regpadac_pa_dac_t                          paDac;                    /*!<  LoRa: Higher power settings of the PA     */
 
 
@@ -3353,4 +3353,4 @@ SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetPowerAmplifier ( SPI_parameters_t m
 
 /** It gets the RF power amplifier block.
   */
-//SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetFrequency   ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myFrequency               );
+SX1272_SX1273_status_t SX1272_SX1273_LoRa_GetPowerAmplifier ( SPI_parameters_t mySPIparameters, SX1272_SX1273_lora_data_t* myPaConfig             );
