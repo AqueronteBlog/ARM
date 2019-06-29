@@ -1,6 +1,6 @@
 /**
  * @brief       BMA456.h
- * @details     MEMS nano pressure sensor: 260-1260 hPa absolute digital output barometer.
+ * @details     Digital, triaxial acceleration sensor.
  *              Header file.
  *
  *
@@ -25,8 +25,8 @@
   */
 typedef enum
 {
-  BMA456_ADDRESS_0     =   0b1011100,       /*!<   I2C slave address byte, SDO/SA0 = GND        */
-  BMA456_ADDRESS_1     =   0b1011101        /*!<   I2C slave address byte, SDO/SA0 = VDD        */
+  BMA456_ADDRESS_SDO_GND     =   0x18,       /*!<   I2C slave address byte, SDO = GND        */
+  BMA456_ADDRESS_SDO_VDDIO   =   0x19        /*!<   I2C slave address byte, SDO = VDDIO      */
 } BMA456_addresses_t;
 
 
@@ -36,29 +36,71 @@ typedef enum
   */
 typedef enum
 {
-  BMA456_INTERRUPT_CFG   =   0x0B,           /*!<  Interrupt registers                           */
-  BMA456_THS_P_L         =   0x0C,           /*!<  Pressure threshold registers                  */
-  BMA456_THS_P_H         =   0x0D,           /*!<  Pressure threshold registers                  */
-  BMA456_WHO_AM_I        =   0x0F,           /*!<  Who am I register                             */
-  BMA456_CTRL_REG1       =   0x10,           /*!<  Control registers                             */
-  BMA456_CTRL_REG2       =   0x11,           /*!<  Control registers                             */
-  BMA456_CTRL_REG3       =   0x12,           /*!<  Control registers                             */
-  BMA456_FIFO_CTRL       =   0x14,           /*!<  FIFO configure registers                      */
-  BMA456_REF_P_XL        =   0x15,           /*!<  Reference pressure registers                  */
-  BMA456_REF_P_L         =   0x16,           /*!<  Reference pressure registers                  */
-  BMA456_REF_P_H         =   0x17,           /*!<  Reference pressure registers                  */
-  BMA456_RPDS_L          =   0x18,           /*!<  Pressure offset registers                     */
-  BMA456_RPDS_H          =   0x18,           /*!<  Pressure offset registers                     */
-  BMA456_RES_CONF        =   0x1A,           /*!<  Resolution register                           */
-  BMA456_INT_SOURCE      =   0x25,           /*!<  Interrupt registers                           */
-  BMA456_FIFO_STATUS     =   0x26,           /*!<  FIFO configure registers                      */
-  BMA456_STATUS          =   0x27,           /*!<  Status register                               */
-  BMA456_PRESS_OUT_XL    =   0x28,           /*!<  Pressure output register                      */
-  BMA456_PRESS_OUT_L     =   0x29,           /*!<  Pressure output register                      */
-  BMA456_PRESS_OUT_H     =   0x2A,           /*!<  Pressure output register                      */
-  BMA456_TEMP_OUT_L      =   0x2B,           /*!<  Temperature output registers                  */
-  BMA456_TEMP_OUT_H      =   0x2C,           /*!<  Temperature output registers                  */
-  BMA456_LPFP_RES        =   0x33            /*!<  Filter reset register                         */
+  BMA456_CHIP_ID          =   0x00,           /*!<  Chip ID                           */
+  BMA456_ERR_REG          =   0x02,           /*!<  ERR_REG                           */
+  BMA456_STATUS           =   0x03,           /*!<  Status                            */
+  BMA456_DATA_0           =   0x0A,           /*!<  DATA0                             */
+  BMA456_DATA_1           =   0x0B,           /*!<  DATA1                             */
+  BMA456_DATA_2           =   0x0C,           /*!<  DATA2                             */
+  BMA456_DATA_3           =   0x0D,           /*!<  DATA3                             */
+  BMA456_DATA_4           =   0x0E,           /*!<  DATA4                             */
+  BMA456_DATA_5           =   0x0F,           /*!<  DATA5                             */
+  BMA456_DATA_6           =   0x10,           /*!<  DATA6                             */
+  BMA456_DATA_7           =   0x11,           /*!<  DATA7                             */
+  BMA456_DATA_8           =   0x12,           /*!<  DATA8                             */
+  BMA456_DATA_9           =   0x13,           /*!<  DATA9                             */
+  BMA456_DATA_10          =   0x14,           /*!<  DATA10                            */
+  BMA456_DATA_11          =   0x15,           /*!<  DATA11                            */
+  BMA456_DATA_12          =   0x16,           /*!<  DATA12                            */
+  BMA456_DATA_13          =   0x17,           /*!<  DATA13                            */
+  BMA456_SENSOR_TIME_0    =   0x18,           /*!<  SENSOR TIME 0                     */
+  BMA456_SENSOR_TIME_1    =   0x19,           /*!<  SENSOR TIME 1                     */
+  BMA456_SENSOR_TIME_2    =   0x1A,           /*!<  SENSOR TIME 2                     */
+  BMA456_EVENT            =   0x1B,           /*!<  EVENT                             */
+  BMA456_INT_STATUS_0     =   0x1C,           /*!<  INT STATUS 0                      */
+  BMA456_INT_STATUS_1     =   0x1D,           /*!<  INT STATUS 1                      */
+  BMA456_STEP_COUNTER_0   =   0x1E,           /*!<  STEP COUNTER 0                    */
+  BMA456_STEP_COUNTER_1   =   0x1F,           /*!<  STEP COUNTER 1                    */
+  BMA456_STEP_COUNTER_2   =   0x20,           /*!<  STEP COUNTER 2                    */
+  BMA456_STEP_COUNTER_3   =   0x21,           /*!<  STEP COUNTER 3                    */
+  BMA456_TEMPERATURE      =   0x22,           /*!<  TEMPERATURE                       */
+  BMA456_FIFO_LENGTH_0    =   0x24,           /*!<  FIFO LENGHT 0                     */
+  BMA456_FIFO_LENGTH_1    =   0x25,           /*!<  FIFO LENGHT 1                     */
+  BMA456_FIFO_DATA        =   0x26,           /*!<  FIFO DATA                         */
+  BMA456_ACTIVITY_TYPE    =   0x27,           /*!<  ACTIVITY TYPE                     */
+  BMA456_INTERNAL_STATUS  =   0x2A,           /*!<  INTERNAL STATUS                   */
+  BMA456_ACC_CONF         =   0x40,           /*!<  ACC CONF                          */
+  BMA456_ACC_RANGE        =   0x41,           /*!<  ACC RANGE                         */
+  BMA456_AUX_CONF         =   0x44,           /*!<  AUX CONF                          */
+  BMA456_FIFO_DOWNS       =   0x45,           /*!<  FIFO DOWNS                        */
+  BMA456_FIFO_WTM_0       =   0x46,           /*!<  FIFO WTM 0                        */
+  BMA456_FIFO_WTM_1       =   0x47,           /*!<  FIFO WTM 1                        */
+  BMA456_FIFO_CONFIG_0    =   0x48,           /*!<  FIFO CONFIG 0                     */
+  BMA456_FIFO_CONFIG_1    =   0x49,           /*!<  FIFO CONFIG 1                     */
+  BMA456_AUX_DEV_ID       =   0x4B,           /*!<  AUX DEV ID                        */
+  BMA456_AUX_IF_CONF      =   0x4C,           /*!<  AUX IF CONF                       */
+  BMA456_AUX_RD_ADDR      =   0x4D,           /*!<  AUX RD ADDR                       */
+  BMA456_AUX_WR_ADDR      =   0x4E,           /*!<  AUX WR ADDR                       */
+  BMA456_AUX_WR_DATA      =   0x4F,           /*!<  AUX WR DATA                       */
+  BMA456_INT1_IO_CTRL     =   0x53,           /*!<  INT1 IO CTRL                      */
+  BMA456_INT2_IO_CTRL     =   0x54,           /*!<  INT2 IO CTRL                      */
+  BMA456_INT_LATCH        =   0x55,           /*!<  INT LATCH                         */
+  BMA456_INT1_MAP         =   0x56,           /*!<  INT1 MAP                          */
+  BMA456_INT2_MAP         =   0x57,           /*!<  INT2 MAP                          */
+  BMA456_INT_MAP_DATA     =   0x58,           /*!<  INT MAP DATA                      */
+  BMA456_INIT_CTRL        =   0x59,           /*!<  INIT CTRL                         */
+  BMA456_FEATURES_IN      =   0x5E,           /*!<  FEATURES IN                       */
+  BMA456_INTERNAL_ERROR   =   0x5F,           /*!<  INTERNAL ERROR                    */
+  BMA456_NVM_CONF         =   0x6A,           /*!<  NVM CONF                          */
+  BMA456_IF_CONF          =   0x6B,           /*!<  IF CONF                           */
+  BMA456_ACC_SELF_TEST    =   0x6D,           /*!<  ACC SELF TEST                     */
+  BMA456_NV_CONF          =   0x70,           /*!<  NV CONF                           */
+  BMA456_OFFSET_0         =   0x71,           /*!<  OFFSET 0                          */
+  BMA456_OFFSET_1         =   0x72,           /*!<  OFFSET 1                          */
+  BMA456_OFFSET_2         =   0x73,           /*!<  OFFSET 2                          */
+  BMA456_PWR_CONF         =   0x7C,           /*!<  PWR CONF                          */
+  BMA456_PWR_CTRL         =   0x7D,           /*!<  PWR CTRL                          */
+  BMA456_CMD              =   0x7E            /*!<  CMD                               */
 } BMA456_registers_t;
 
 
