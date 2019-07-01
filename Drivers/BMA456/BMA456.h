@@ -219,6 +219,34 @@ typedef enum
 } BMA456_status_aux_man_op_t;
 
 
+/**
+  * @brief   EVENT. Sensor status flags.
+  */
+/* POR_DETECTED <0>
+ *    NOTE: Clear-on-read.
+ */
+typedef enum
+{
+    EVENT_POR_DETECTED_MASK       =   ( 1U << 0U ),   /*!<  POR_DETECTED mask                             */
+    EVENT_POR_DETECTED_HIGH       =   ( 1U << 0U ),   /*!<  After device power up or softreset[ Default ] */
+    EVENT_POR_DETECTED_LOW        =   ( 0U << 0U )    /*!<  Low value                                     */
+} BMA456_event_por_detected_t;
+
+
+/**
+  * @brief   INT_STATUS_0. Interrupt/Feature status.
+  */
+/* ERROR_INT_OUT <7>
+ *    NOTE: Clear-on-read.
+ */
+typedef enum
+{
+    INT_STATUS_0_ERROR_INT_OUT_MASK =   ( 1U << 7U ),   /*!<  ERROR_INT_OUT mask                            */
+    INT_STATUS_0_ERROR_INT_OUT_HIGH =   ( 1U << 7U ),   /*!<  Error interrupt out detected                  */
+    INT_STATUS_0_ERROR_INT_OUT_LOW  =   ( 0U << 7U )    /*!<  Error interrupt out not detected  [ Default ] */
+} BMA456_int_status_0_error_int_out_t;
+
+
 
 
 
@@ -239,42 +267,10 @@ typedef struct
   uint16_t  acc_x;                            /*!<  Accelerometer: Acc_X              */
   uint16_t  acc_y;                            /*!<  Accelerometer: Acc_Y              */
   uint16_t  acc_z;                            /*!<  Accelerometer: Acc_Z              */
-
-
-
-  float     pressure;                         /*!<  Pressure in mbar                  */
-  float     temperature;                      /*!<  Temperature in Celsius degree     */
-
-  uint32_t  ref_p;                            /*!<  Reference pressure ( raw value )  */
-  uint16_t  rpds;                             /*!<  Pressure offset                   */
-
-  /* Configuration  */
-  BMA456_ctrl_reg1_odr_t         odr;        /*!<  Output data rate selection        */
-  BMA456_ctrl_reg1_bdu_t         bdu;        /*!<  Block data update                 */
-  BMA456_ctrl_reg2_boot_t        boot;       /*!<  Reboot memory content flag        */
-  BMA456_ctrl_reg2_fifo_en_t     fifo_en;    /*!<  FIFO enable                       */
-  BMA456_ctrl_reg2_stop_on_fth_t stopOnFTH;  /*!<  FIFO watermark level use flag     */
-  BMA456_ctrl_reg2_swreset_t     swreset;    /*!<  Software reset                    */
-  BMA456_ctrl_reg2_one_shot_t    one_shot;   /*!<  One-shot                          */
   
-  /* FIFO control  */
-  BMA456_fifo_ctrl_f_mode_t      f_mode;     /*!<  FIFO mode selection               */  
-  uint8_t                         wtm;        /*!<  FIFO watermark level              */  
+  uint16_t  sensor_time;                      /*!<  Sensor time                       */
 
-  /* Interrupt mode for pressure acquisition configuration   */
-  uint8_t                       interruptCFG; /*!<  Interrupt_CFG register raw value  */
 
-  /* Interrupt source  */
-  uint8_t                       int_source;   /*!<  Interrupt source                  */ 
-
-  /* FIFO status  */
-  uint8_t                       fifo_status;  /*!<  FIFO status                       */ 
-  
-  /* Status register value  */
-  uint8_t                       status;       /*!<  Status register value             */ 
-
-  /* Pressure threshold  */
-  uint16_t                      ths_p;        /*!<  Threshold value for pressure interrupt generation */
 
   /* Device identification   */
   uint8_t                       deviceID;     /*!<  Device ID                                         */
