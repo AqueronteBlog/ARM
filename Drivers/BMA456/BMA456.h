@@ -247,6 +247,693 @@ typedef enum
 } BMA456_int_status_0_error_int_out_t;
 
 
+/* ANY_NO_MOTION_OUT <6>
+ *    NOTE: Clear-on-read.
+ */
+typedef enum
+{
+    INT_STATUS_0_ANY_NO_MOTION_OUT_MASK =   ( 1U << 6U ), /*!<  ANY_NO_MOTION_OUT mask                          */
+    INT_STATUS_0_ANY_NO_MOTION_OUT_HIGH =   ( 1U << 6U ), /*!<  Any-motion detection output detected            */
+    INT_STATUS_0_ANY_NO_MOTION_OUT_LOW  =   ( 0U << 6U )  /*!<  No-motion detection output detected [ Default ] */
+} BMA456_int_status_0_any_no_motion_out_t;
+
+
+/* WAKEUP_OUT <5>
+ *    NOTE: Clear-on-read.
+ */
+typedef enum
+{
+    INT_STATUS_0_WAKEUP_OUT_MASK    =   ( 1U << 5U ),     /*!<  WAKEUP_OUT mask                                 */
+    INT_STATUS_0_WAKEUP_OUT_HIGH    =   ( 1U << 5U ),     /*!<  Wakeup output detected                          */
+    INT_STATUS_0_WAKEUP_OUT_LOW     =   ( 0U << 5U )      /*!<  Wakeup output no detected           [ Default ] */
+} BMA456_int_status_0_wakeup_out_t;
+
+
+/* WRIST_TILT_OUT <3>
+ *    NOTE: Clear-on-read.
+ */
+typedef enum
+{
+    INT_STATUS_0_WRIST_TILT_OUT_MASK    =   ( 1U << 3U ),   /*!<  WRIST_TILT_OUT mask                             */
+    INT_STATUS_0_WRIST_TILT_OUT_HIGH    =   ( 1U << 3U ),   /*!<  Wrist tilt output detected                      */
+    INT_STATUS_0_WRIST_TILT_OUT_LOW     =   ( 0U << 3U )    /*!<  Wrist tilt output no detected       [ Default ] */
+} BMA456_int_status_0_wrist_tilt_out_t;
+
+
+/* ACTIVITY_TYPE_OUT <2>
+ *    NOTE: Clear-on-read.
+ */
+typedef enum
+{
+    INT_STATUS_0_ACTIVITY_TYPE_OUT_MASK    =   ( 1U << 2U ),  /*!<  ACTIVITY_TYPE_OUT mask                                */
+    INT_STATUS_0_ACTIVITY_TYPE_OUT_HIGH    =   ( 1U << 2U ),  /*!<  Step counter activity output detected                 */
+    INT_STATUS_0_ACTIVITY_TYPE_OUT_LOW     =   ( 0U << 2U )   /*!<  Step counter activity output no detected  [ Default ] */
+} BMA456_int_status_0_activity_type_out_t;
+
+
+/* STEP_COUNTER_OUT <1>
+ *    NOTE: Clear-on-read.
+ */
+typedef enum
+{
+    INT_STATUS_0_STEP_COUNTER_OUT_MASK    =   ( 1U << 1U ),   /*!<  STEP_COUNTER_OUT mask                                                   */
+    INT_STATUS_0_STEP_COUNTER_OUT_HIGH    =   ( 1U << 1U ),   /*!<  Step-counter watermark or step-detector output detected                 */
+    INT_STATUS_0_STEP_COUNTER_OUT_LOW     =   ( 0U << 1U )    /*!<  Step-counter watermark or step-detector output no detected  [ Default ] */
+} BMA456_int_status_0_step_counter_out_t;
+
+
+/**
+  * @brief   INT_STATUS_1. Interrupt status.
+  */
+/* ACC_DRDY_INT <7>
+ *    NOTE: Clear-on-read.
+ */
+typedef enum
+{
+    INT_STATUS_1_ACC_DRDY_INT_MASK =   ( 1U << 7U ),   /*!<  ACC_DRDY_INT mask                                  */
+    INT_STATUS_1_ACC_DRDY_INT_HIGH =   ( 1U << 7U ),   /*!<  Accelerometer data ready interrupt                 */
+    INT_STATUS_1_ACC_DRDY_INT_LOW  =   ( 0U << 7U )    /*!<  Accelerometer data not ready interrupt [ Default ] */
+} BMA456_int_status_1_acc_drdy_int_t;
+
+
+/* AUX_DRDY_INT <5>
+ *    NOTE: Clear-on-read.
+ */
+typedef enum
+{
+    INT_STATUS_1_AUX_DRDY_INT_MASK =   ( 1U << 5U ),   /*!<  AUX_DRDY_INT mask                                      */
+    INT_STATUS_1_AUX_DRDY_INT_HIGH =   ( 1U << 5U ),   /*!<  Auxiliary sensor data ready interrupt                  */
+    INT_STATUS_1_AUX_DRDY_INT_LOW  =   ( 0U << 5U )    /*!<  Auxiliary sensor data not ready interrupt  [ Default ] */
+} BMA456_int_status_1_aux_drdy_int_t;
+
+
+/* FWM_INT <1>
+ *    NOTE: Clear-on-read.
+ */
+typedef enum
+{
+    INT_STATUS_1_FWM_INT_MASK =   ( 1U << 1U ),   /*!<  FWM_INT mask                                       */
+    INT_STATUS_1_FWM_INT_HIGH =   ( 1U << 1U ),   /*!<  FIFO watermark interrupt detected                  */
+    INT_STATUS_1_FWM_INT_LOW  =   ( 0U << 1U )    /*!<  FIFO watermark interrupt not detected  [ Default ] */
+} BMA456_int_status_1_fwm_int_t;
+
+
+/* FFULL_INT <0>
+ *    NOTE: Clear-on-read.
+ */
+typedef enum
+{
+    INT_STATUS_1_FFULL_INT_MASK =   ( 1U << 0U ),   /*!<  FFULL_INT mask                                    */
+    INT_STATUS_1_FFULL_INT_HIGH =   ( 1U << 0U ),   /*!<  FIFO full interrupt detected                      */
+    INT_STATUS_1_FFULL_INT_LOW  =   ( 0U << 0U )    /*!<  FIFO full interrupt not detected      [ Default ] */
+} BMA456_int_status_1_ffull_int_t;
+
+
+/**
+  * @brief   ACTIVITY_TYPE. Step couter activity output ( Running, walking, still ).
+  */
+/* ACTIVITY_TYPE_OUT <1:0>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    ACTIVITY_TYPE_ACTIVITY_TYPE_OUT_MASK    =   ( 0b11 << 0U ), /*!<  ACTIVITY_TYPE_OUT mask                              */
+    ACTIVITY_TYPE_ACTIVITY_TYPE_OUT_STILL   =   ( 0b00 << 0U ), /*!<  User not moving                         [ Default ] */
+    ACTIVITY_TYPE_ACTIVITY_TYPE_OUT_WALKING =   ( 0b01 << 0U ), /*!<  User walking                                        */
+    ACTIVITY_TYPE_ACTIVITY_TYPE_OUT_RUNNING =   ( 0b10 << 0U ), /*!<  User running                                        */
+    ACTIVITY_TYPE_ACTIVITY_TYPE_OUT_UNKNOWN =   ( 0b11 << 0U )  /*!<  Unknown state                                       */
+} BMA456_activity_type_activity_type_out_t;
+
+
+/**
+  * @brief   INTERNAL_STATUS. Error bits and message indicating internal status.
+  */
+/* ODR_HIGH_ERROR <7>
+ *    NOTE: The minimum bandwidth conditions are not respected for the wakeup detection.
+ */
+typedef enum
+{
+    INTERNAL_STATUS_ODR_HIGH_ERROR_MASK   =   ( 1U << 7U ),     /*!<  ODR_HIGH_ERROR mask                              */
+    INTERNAL_STATUS_ODR_HIGH_ERROR_LOW    =   ( 0U << 7U ),     /*!<  The conditions are respected         [ Default ] */
+    INTERNAL_STATUS_ODR_HIGH_ERROR_HIGH   =   ( 1U << 7U )      /*!<  The conditions are not respected                 */
+} BMA456_internal_status_odr_high_error_t;
+
+
+/* ODR_50HZ_ERROR <6>
+ *    NOTE: The minimum bandwidth conditions are not respected for the features which require 50 Hz data.
+ */
+typedef enum
+{
+    INTERNAL_STATUS_ODR_50HZ_ERROR_MASK   =   ( 1U << 6U ),     /*!<  ODR_50HZ_ERROR mask                              */
+    INTERNAL_STATUS_ODR_50HZ_ERROR_LOW    =   ( 0U << 6U ),     /*!<  The conditions are respected         [ Default ] */
+    INTERNAL_STATUS_ODR_50HZ_ERROR_HIGH   =   ( 1U << 6U )      /*!<  The conditions are not respected                 */
+} BMA456_internal_status_odr_50hz_error_t;
+
+
+/* AXES_REMAP_ERROR <5>
+ *    NOTE: Axes remapped wrongly because a source axis is not assigned to more than one target axis.
+ */
+typedef enum
+{
+    INTERNAL_STATUS_AXES_REMAP_ERROR_MASK =   ( 1U << 5U ),     /*!<  AXES_REMAP_ERROR mask                            */
+    INTERNAL_STATUS_AXES_REMAP_ERROR_LOW  =   ( 0U << 5U ),     /*!<  Axes mapped correctly                [ Default ] */
+    INTERNAL_STATUS_AXES_REMAP_ERROR_HIGH =   ( 1U << 5U )      /*!<  Axes mapped wrongly                              */
+} BMA456_internal_status_axes_remap_error_t;
+
+
+/* MESSAGE <4:0>
+ *    NOTE: Axes remapped wrongly because a source axis is not assigned to more than one target axis.
+ */
+typedef enum
+{
+    INTERNAL_STATUS_MESSAGE_MASK      =   ( 0b11111 << 0U ),     /*!<  MESSAGE mask                                     */
+    INTERNAL_STATUS_MESSAGE_NOT_INIT  =   ( 0b00000 << 0U ),     /*!<  ASIC is not initializef              [ Default ] */
+    INTERNAL_STATUS_MESSAGE_INIT_OK   =   ( 0b00001 << 0U ),     /*!<  ASIC initialized                                 */
+    INTERNAL_STATUS_MESSAGE_INIT_ERR  =   ( 0b00010 << 0U ),     /*!<  Initialization error                             */
+    INTERNAL_STATUS_MESSAGE_DRV_ERR   =   ( 0b00011 << 0U ),     /*!<  Invalid driver                                   */
+    INTERNAL_STATUS_MESSAGE_SNS_STOP  =   ( 0b00100 << 0U )      /*!<  Sensor stopped                                   */
+} BMA456_internal_status_message_t;
+
+
+/**
+  * @brief   ACC_CONF. Sets the output data rate, the bandwidth, and the read mode of the acceleration sensor.
+  */
+/* ACC_PERF_MODE <7>
+ *    NOTE: Select accelerometer filter performance mode.
+ */
+typedef enum
+{
+    ACC_CONF_ACC_PERF_MODE_MASK     =   ( 1U << 7U ),     /*!<  ACC_PERF_MODE mask                              */
+    ACC_CONF_ACC_PERF_MODE_CIC_AVG  =   ( 0U << 7U ),     /*!<  Averaging mode                                  */
+    ACC_CONF_ACC_PERF_MODE_CONT     =   ( 1U << 7U )      /*!<  Continuous filter function          [ Default ] */
+} BMA456_acc_conf_acc_perf_mode_t;
+
+
+/* ACC_BWP <6:4>
+ *    NOTE: Bandwidth parameters, determines filter configuration (acc_perf_mode = 1) and averaging for undersampling mode (acc_perf_mode = 0).
+ */
+typedef enum
+{
+    ACC_CONF_ACC_BWP_MASK       =   ( 0b111 << 4U ),     /*!<  ACC_BWP mask                                                                   */
+    ACC_CONF_ACC_BWP_OSR4_AVG1  =   ( 0b000 << 4U ),     /*!<  acc_perf_mode=1 : OSR4 mode; acc_perf_mode=0 : no averaging                    */
+    ACC_CONF_ACC_BWP_OSR2_AVG2  =   ( 0b001 << 4U ),     /*!<  acc_perf_mode=1 : OSR2 mode; acc_perf_mode=0 : average 2 samples               */
+    ACC_CONF_ACC_BWP_NORM_AVG4  =   ( 0b010 << 4U ),     /*!<  acc_perf_mode=1 : normal mode; acc_perf_mode=0 : average 4 samples [ Default ] */
+    ACC_CONF_ACC_BWP_CIC_AVG8   =   ( 0b011 << 4U ),     /*!<  acc_perf_mode=1 : reserved; acc_perf_mode=0 : average 8 samples                */
+    ACC_CONF_ACC_BWP_RES_AVG16  =   ( 0b100 << 4U ),     /*!<  acc_perf_mode=1 : reserved; acc_perf_mode=0 : average 16 samples               */
+    ACC_CONF_ACC_BWP_RES_AVG32  =   ( 0b101 << 4U ),     /*!<  acc_perf_mode=1 : reserved; acc_perf_mode=0 : average 32 samples               */
+    ACC_CONF_ACC_BWP_RES_AVG64  =   ( 0b110 << 4U ),     /*!<  acc_perf_mode=1 : reserved; acc_perf_mode=0 : average 64 samples               */
+    ACC_CONF_ACC_BWP_RES_AVG128 =   ( 0b111 << 4U )      /*!<  acc_perf_mode=1 : reserved; acc_perf_mode=0 : average 128 samples              */
+} BMA456_acc_conf_acc_bwp_t;
+
+
+/* ACC_ODR <3:0>
+ *    NOTE: ODR in Hz. The output data rate is independent of the power ode setting for the sensor, but not all settings are supported in all power modes.
+ */
+typedef enum
+{
+    ACC_CONF_ACC_ODR_MASK       =   ( 0b1111 << 0U ),     /*!<  ACC_ODR mask                                                                  */
+    ACC_CONF_ACC_ODR_ODR_0P78   =   ( 0b0001 << 0U ),     /*!<  ACC ODR: 25/32                                                                */
+    ACC_CONF_ACC_ODR_ODR_1P5    =   ( 0b0010 << 0U ),     /*!<  ACC ODR: 25/16                                                                */
+    ACC_CONF_ACC_ODR_ODR_3P1    =   ( 0b0011 << 0U ),     /*!<  ACC ODR: 25/8                                                                 */
+    ACC_CONF_ACC_ODR_ODR_6P25   =   ( 0b0100 << 0U ),     /*!<  ACC ODR: 25/4                                                                 */
+    ACC_CONF_ACC_ODR_ODR_12P5   =   ( 0b0101 << 0U ),     /*!<  ACC ODR: 25/2                                                                 */
+    ACC_CONF_ACC_ODR_ODR_25     =   ( 0b0110 << 0U ),     /*!<  ACC ODR: 25                                                                   */
+    ACC_CONF_ACC_ODR_ODR_50     =   ( 0b0111 << 0U ),     /*!<  ACC ODR: 50                                                                   */
+    ACC_CONF_ACC_ODR_ODR_100    =   ( 0b1000 << 0U ),     /*!<  ACC ODR: 100                                                      [ Default ] */
+    ACC_CONF_ACC_ODR_ODR_200    =   ( 0b1001 << 0U ),     /*!<  ACC ODR: 200                                                                  */
+    ACC_CONF_ACC_ODR_ODR_400    =   ( 0b1010 << 0U ),     /*!<  ACC ODR: 400                                                                  */
+    ACC_CONF_ACC_ODR_ODR_800    =   ( 0b1011 << 0U ),     /*!<  ACC ODR: 800                                                                  */
+    ACC_CONF_ACC_ODR_ODR_1K6    =   ( 0b1100 << 0U )      /*!<  ACC ODR: 1600                                                                 */
+} BMA456_acc_conf_acc_odr_t;
+
+
+/**
+  * @brief   ACC_RANGE. Selection of the accelerometer g-range.
+  */
+/* ACC_RANGE <1:0>
+ *    NOTE: Accelerometer g-range.
+ */
+typedef enum
+{
+    ACC_RANGE_ACC_RANGE_MASK      =   ( 0b11 << 0U ),   /*!<  ACC_RANGE mask                                    */
+    ACC_RANGE_ACC_RANGE_RANGE_2G  =   ( 0b00 << 0U ),   /*!<  +/- 2g                                            */
+    ACC_RANGE_ACC_RANGE_RANGE_4G  =   ( 0b01 << 0U ),   /*!<  +/- 4g                                [ Default ] */
+    ACC_RANGE_ACC_RANGE_RANGE_8G  =   ( 0b10 << 0U ),   /*!<  +/- 8g                                            */
+    ACC_RANGE_ACC_RANGE_RANGE_16G =   ( 0b11 << 0U )    /*!<  +/- 16g                                           */
+} BMA456_acc_range_acc_acc_range_t;
+
+
+/**
+  * @brief   AUX_CONF. Sets the output data rate of the auxiliary interface.
+  */
+/* AUX_OFFSET <7:4>
+ *    NOTE: Trigger-readout offset in units of 2.5ms. If set to zero, the offset is maximum (i.e. after readout a trigger is issued inmediately)
+ */
+typedef enum
+{
+    AUX_CONF_AUX_OFFSET_MASK      =   ( 0b1111 << 4U )  /*!<  AUX_OFFSET mask                                  */
+} BMA456_aux_conf_aux_offset_t;
+
+
+/* AUX_ODR <3:0>
+ *    NOTE: Select the poll rate for the sensor attached to the auxiliary interface.
+ */
+typedef enum
+{
+    AUX_CONF_AUX_ODR_MASK       =   ( 0b1111 << 0U ),   /*!<  AUX_ODR mask                                                                  */
+    AUX_CONF_AUX_ODR_ODR_0P78   =   ( 0b0001 << 0U ),   /*!<  AUX ODR: 25/32                                                                */
+    AUX_CONF_AUX_ODR_ODR_1P5    =   ( 0b0010 << 0U ),   /*!<  AUX ODR: 25/16                                                                */
+    AUX_CONF_AUX_ODR_ODR_3P1    =   ( 0b0011 << 0U ),   /*!<  AUX ODR: 25/8                                                                 */
+    AUX_CONF_AUX_ODR_ODR_6P25   =   ( 0b0100 << 0U ),   /*!<  AUX ODR: 25/4                                                                 */
+    AUX_CONF_AUX_ODR_ODR_12P5   =   ( 0b0101 << 0U ),   /*!<  AUX ODR: 25/2                                                                 */
+    AUX_CONF_AUX_ODR_ODR_25     =   ( 0b0110 << 0U ),   /*!<  AUX ODR: 25                                                       [ Default ] */
+    AUX_CONF_AUX_ODR_ODR_50     =   ( 0b0111 << 0U ),   /*!<  AUX ODR: 50                                                                   */
+    AUX_CONF_AUX_ODR_ODR_100    =   ( 0b1000 << 0U ),   /*!<  AUX ODR: 100                                                                  */
+    AUX_CONF_AUX_ODR_ODR_200    =   ( 0b1001 << 0U ),   /*!<  AUX ODR: 200                                                                  */
+    AUX_CONF_AUX_ODR_ODR_400    =   ( 0b1010 << 0U ),   /*!<  AUX ODR: 400                                                                  */
+    AUX_CONF_AUX_ODR_ODR_800    =   ( 0b1011 << 0U )    /*!<  AUX ODR: 800                                                                  */
+} BMA456_aux_conf_aux_odr_t;
+
+
+/**
+  * @brief   FIFO_DOWNS. Configure accelerometer downsampling rates for FIFO.
+  */
+/* ACC_FIFO_FILT_DATA <7>
+ *    NOTE: Selects filtered or unfiltered accelerometer data for FIFO.
+ */
+typedef enum
+{
+    FIFO_DOWNS_ACC_FIFO_FILT_DATA_MASK        =   ( 1U << 7U ),  /*!<  ACC_FIFO_FILT_DATA mask                  */
+    FIFO_DOWNS_ACC_FIFO_FILT_DATA_UNFILTERED  =   ( 0U << 7U ),  /*!<  Unfiltered data                          */
+    FIFO_DOWNS_ACC_FIFO_FILT_DATA_FILTERED    =   ( 1U << 7U )   /*!<  Filtered data                [ Default ] */
+} BMA456_fifo_downs_acc_fifo_filt_data_t;
+
+
+/* ACC_FIFO_DOWNS <6:4>
+ *    NOTE: Downsampling for accelerometer data (2^acc_fifo_downs).
+ */
+typedef enum
+{
+    FIFO_DOWNS_ACC_FIFO_DOWNS_MASK        =   ( 0b111 << 4U )     /*!<  ACC_FIFO_FILT_DATA mask                  */
+} BMA456_fifo_downs_acc_fifo_downs_t;
+
+
+/**
+  * @brief   FIFO_CONFIG_0. FIFO frame content configuration.
+  */
+/* FIFO_TIME_EN <1>
+ *    NOTE: Return sensortime frame after the last valid data frame.
+ */
+typedef enum
+{
+    FIFO_CONFIG_0_FIFO_TIME_EN_MASK       =   ( 1U << 1U ),       /*!<  FIFO_TIME_EN mask                                */
+    FIFO_CONFIG_0_FIFO_TIME_EN_DISABLE    =   ( 0U << 1U ),       /*!<  Do not return sensortime frame                   */
+    FIFO_CONFIG_0_FIFO_TIME_EN_ENABLE     =   ( 1U << 1U )        /*!<  Return sensortime frane              [ Default ] */
+} BMA456_fifo_config_0_fifo_time_en_t;
+
+
+/* FIFO_STOP_ON_FULL <0>
+ *    NOTE: Stop writing samples into FIFO when FIFO is full.
+ */
+typedef enum
+{
+    FIFO_CONFIG_0_FIFO_STOP_ON_FULL_MASK       =   ( 1U << 0U ),  /*!<  FIFO_STOP_ON_FULL mask                            */
+    FIFO_CONFIG_0_FIFO_STOP_ON_FULL_DISABLE    =   ( 0U << 0U ),  /*!<  Do not stop writing to FIFO when full [ Default ] */
+    FIFO_CONFIG_0_FIFO_STOP_ON_FULL_ENABLE     =   ( 1U << 0U )   /*!<  Stop writing into FIFO when full                  */
+} BMA456_fifo_config_0_fifo_stop_on_full_t;
+
+
+/**
+  * @brief   FIFO_CONFIG_1. FIFO frame content configuration.
+  */
+/* FIFO_ACC_EN <6>
+ *    NOTE: Store accelerometer data in FIFO (all 3 axes).
+ */
+typedef enum
+{
+    FIFO_CONFIG_1_FIFO_ACC_EN_MASK        =   ( 1U << 6U ),       /*!<  FIFO_ACC_EN mask                                  */
+    FIFO_CONFIG_1_FIFO_ACC_EN_DISABLE     =   ( 0U << 6U ),       /*!<  No accelerometer data is stored       [ Default ] */
+    FIFO_CONFIG_1_FIFO_ACC_EN_ENABLE      =   ( 1U << 6U )        /*!<  Accelerometer data is stored                      */
+} BMA456_fifo_config_1_fifo_acc_en_t;
+
+
+/* FIFO_AUX_EN <5>
+ *    NOTE: Store auxiliary data in FIFO (all 3 axes).
+ */
+typedef enum
+{
+    FIFO_CONFIG_1_FIFO_AUX_EN_MASK        =   ( 1U << 5U ),       /*!<  FIFO_AUX_EN mask                                  */
+    FIFO_CONFIG_1_FIFO_AUX_EN_DISABLE     =   ( 0U << 5U ),       /*!<  No auxiliary data is stored           [ Default ] */
+    FIFO_CONFIG_1_FIFO_AUX_EN_ENABLE      =   ( 1U << 5U )        /*!<  Auxiliary data is stored                          */
+} BMA456_fifo_config_1_fifo_aux_en_t;
+
+
+/* FIFO_HEADER_EN <4>
+ *    NOTE: FIFO frame header enable.
+ */
+typedef enum
+{
+    FIFO_CONFIG_1_FIFO_HEADER_EN_MASK     =   ( 1U << 4U ),       /*!<  FIFO_HEADER_EN mask                               */
+    FIFO_CONFIG_1_FIFO_HEADER_EN_DISABLE  =   ( 0U << 4U ),       /*!<  No header is stored                               */
+    FIFO_CONFIG_1_FIFO_HEADER_EN_ENABLE   =   ( 1U << 4U )        /*!<  Header is stored                      [ Default ] */
+} BMA456_fifo_config_1_fifo_header_en_t;
+
+
+/* FIFO_TAG_INT1_EN <3>
+ *    NOTE: FIFO interrupt 1 tag enable.
+ */
+typedef enum
+{
+    FIFO_CONFIG_1_FIFO_TAG_INT1_EN_MASK     =   ( 1U << 3U ),     /*!<  FIFO_TAG_INT1_EN mask                             */
+    FIFO_CONFIG_1_FIFO_TAG_INT1_EN_DISABLE  =   ( 0U << 3U ),     /*!<  Disable tag                           [ Default ] */
+    FIFO_CONFIG_1_FIFO_TAG_INT1_EN_ENABLE   =   ( 1U << 3U )      /*!<  Enable tag                                        */
+} BMA456_fifo_config_1_fifo_tag_int1_en_t;
+
+
+/* FIFO_TAG_INT2_EN <2>
+ *    NOTE: FIFO interrupt 2 tag enable.
+ */
+typedef enum
+{
+    FIFO_CONFIG_1_FIFO_TAG_INT2_EN_MASK     =   ( 1U << 2U ),     /*!<  FIFO_TAG_INT2_EN mask                             */
+    FIFO_CONFIG_1_FIFO_TAG_INT2_EN_DISABLE  =   ( 0U << 2U ),     /*!<  Disable tag                           [ Default ] */
+    FIFO_CONFIG_1_FIFO_TAG_INT2_EN_ENABLE   =   ( 1U << 2U )      /*!<  Enable tag                                        */
+} BMA456_fifo_config_1_fifo_tag_int2_en_t;
+
+
+/**
+  * @brief   AUX_DEV_ID. Auxiliary interface slave device ID.
+  */
+/* I2C_DEVICE_ADDR <7:1>
+ *    NOTE: I2C device address of auxiliary slave.
+ */
+typedef enum
+{
+    AUX_DEV_ID_I2C_DEVICE_ADDR_MASK        =   ( 0b1111111 << 1U )  /*!<  I2C_DEVICE_ADDR mask                              */
+} BMA456_aux_dev_id_i2c_device_addr_t;
+
+
+/**
+  * @brief   AUX_IF_CONF. Auxiliary interface configuration.
+  */
+/* AUX_MANUAL_EN <7>
+ *    NOTE: Enable auxiliary interface manual mode.
+ */
+typedef enum
+{
+    AUX_IF_CONF_AUX_MANUAL_EN_MASK      =   ( 1U << 7U ),       /*!<  AUX_MANUAL_EN mask                                */
+    AUX_IF_CONF_AUX_MANUAL_EN_DISABLE   =   ( 0U << 7U ),       /*!<  Data mode                                         */
+    AUX_IF_CONF_AUX_MANUAL_EN_ENABLE    =   ( 1U << 7U )        /*!<  Setup mode                            [ Default ] */
+} BMA456_aux_if_conf_aux_manual_en_t;
+
+
+/* AUX_RD_BURST <1:0>
+ *    NOTE: Burst data length (1, 2, 6, 8 byte).
+ */
+typedef enum
+{
+    AUX_IF_CONF_AUX_RD_BURST_MASK       =   ( 0b11 << 0U ),     /*!<  AUX_RD_BURST mask                                 */
+    AUX_IF_CONF_AUX_RD_BURST_BL1        =   ( 0b00 << 0U ),     /*!<  Burst length 1                                    */
+    AUX_IF_CONF_AUX_RD_BURST_BL2        =   ( 0b01 << 0U ),     /*!<  Burst length 2                                    */
+    AUX_IF_CONF_AUX_RD_BURST_BL6        =   ( 0b10 << 0U ),     /*!<  Burst length 6                                    */
+    AUX_IF_CONF_AUX_RD_BURST_BL8        =   ( 0b11 << 0U )      /*!<  Burst length 8                        [ Default ] */
+} BMA456_aux_if_conf_aux_rd_burst_t;
+
+
+/**
+  * @brief   INT1_IO_CTRL. Configure the electrical behaviour of the interrupt pins.
+  */
+/* INPUT_EN <4>
+ *    NOTE: Input enable for INT1 pin.
+ */
+typedef enum
+{
+    INT1_IO_CTRL_INPUT_EN_MASK      =   ( 1U << 4U ),       /*!<  INPUT_EN mask                                     */
+    INT1_IO_CTRL_INPUT_EN_OFF       =   ( 0U << 4U ),       /*!<  Input disabled                        [ Default ] */
+    INT1_IO_CTRL_INPUT_EN_ON        =   ( 1U << 4U )        /*!<  Input enabled                                     */
+} BMA456_int1_io_ctrl_input_en_t;
+
+
+/* OUTPUT_EN <3>
+ *    NOTE: Output enable for INT1 pin.
+ */
+typedef enum
+{
+    INT1_IO_CTRL_OUTPUT_EN_MASK     =   ( 1U << 3U ),       /*!<  OUTPUT_EN mask                                    */
+    INT1_IO_CTRL_OUTPUT_EN_OFF      =   ( 0U << 3U ),       /*!<  Output disabled                       [ Default ] */
+    INT1_IO_CTRL_OUTPUT_EN_ON       =   ( 1U << 3U )        /*!<  Output enabled                                    */
+} BMA456_int1_io_ctrl_output_en_t;
+
+
+/* OD <2>
+ *    NOTE: Configure behaviour of INT1 pin to open drain.
+ */
+typedef enum
+{   
+    INT1_IO_CTRL_OD_MASK            =   ( 1U << 2U ),       /*!<  OD mask                                           */
+    INT1_IO_CTRL_OD_PUSH_PULL       =   ( 0U << 2U ),       /*!<  Push-pull                             [ Default ] */
+    INT1_IO_CTRL_OD_OPEN_DRAIN      =   ( 1U << 2U )        /*!<  Open drain                                        */
+} BMA456_int1_io_ctrl_od_t;
+
+
+/* LVL <1>
+ *    NOTE: Configure level of INT1 pin.
+ */
+typedef enum
+{   
+    INT1_IO_CTRL_LVL_MASK           =   ( 1U << 1U ),       /*!<  LVL mask                                          */
+    INT1_IO_CTRL_LVL_ACTIVE_LOW     =   ( 0U << 1U ),       /*!<  Active low                            [ Default ] */
+    INT1_IO_CTRL_LVL_ACTIVE_HIGH    =   ( 1U << 1U )        /*!<  Active high                                       */
+} BMA456_int1_io_ctrl_lvl_t;
+
+
+/* EDGE_CTRL <0>
+ *    NOTE: Configure trigger condition of INT1 pin (input).
+ */
+typedef enum
+{   
+    INT1_IO_CTRL_EDGE_CTRL_MASK     =   ( 1U << 0U ),       /*!<  EDGE_CTRL mask                                    */
+    INT1_IO_CTRL_EDGE_CTRL_LEVEL_TR =   ( 0U << 0U ),       /*!<  Level                                 [ Default ] */
+    INT1_IO_CTRL_EDGE_CTRL_EDGE_TR  =   ( 1U << 0U )        /*!<  Edge                                              */
+} BMA456_int1_io_ctrl_edge_ctrl_t;
+
+
+/**
+  * @brief   INT2_IO_CTRL. Configure the electrical behaviour of the interrupt pins.
+  */
+/* INPUT_EN <4>
+ *    NOTE: Input enable for INT2 pin.
+ */
+typedef enum
+{
+    INT2_IO_CTRL_INPUT_EN_MASK      =   ( 1U << 4U ),       /*!<  INPUT_EN mask                                     */
+    INT2_IO_CTRL_INPUT_EN_OFF       =   ( 0U << 4U ),       /*!<  Input disabled                        [ Default ] */
+    INT2_IO_CTRL_INPUT_EN_ON        =   ( 1U << 4U )        /*!<  Input enabled                                     */
+} BMA456_int2_io_ctrl_input_en_t;
+
+
+/* OUTPUT_EN <3>
+ *    NOTE: Output enable for INT2 pin.
+ */
+typedef enum
+{
+    INT2_IO_CTRL_OUTPUT_EN_MASK     =   ( 1U << 3U ),       /*!<  OUTPUT_EN mask                                    */
+    INT2_IO_CTRL_OUTPUT_EN_OFF      =   ( 0U << 3U ),       /*!<  Output disabled                       [ Default ] */
+    INT2_IO_CTRL_OUTPUT_EN_ON       =   ( 1U << 3U )        /*!<  Output enabled                                    */
+} BMA456_int2_io_ctrl_output_en_t;
+
+
+/* OD <2>
+ *    NOTE: Configure behaviour of INT2 pin to open drain.
+ */
+typedef enum
+{   
+    INT2_IO_CTRL_OD_MASK            =   ( 1U << 2U ),       /*!<  OD mask                                           */
+    INT2_IO_CTRL_OD_PUSH_PULL       =   ( 0U << 2U ),       /*!<  Push-pull                             [ Default ] */
+    INT2_IO_CTRL_OD_OPEN_DRAIN      =   ( 1U << 2U )        /*!<  Open drain                                        */
+} BMA456_int2_io_ctrl_od_t;
+
+
+/* LVL <1>
+ *    NOTE: Configure level of INT2 pin.
+ */
+typedef enum
+{   
+    INT2_IO_CTRL_LVL_MASK           =   ( 1U << 1U ),       /*!<  LVL mask                                          */
+    INT2_IO_CTRL_LVL_ACTIVE_LOW     =   ( 0U << 1U ),       /*!<  Active low                            [ Default ] */
+    INT2_IO_CTRL_LVL_ACTIVE_HIGH    =   ( 1U << 1U )        /*!<  Active high                                       */
+} BMA456_int2_io_ctrl_lvl_t;
+
+
+/* EDGE_CTRL <0>
+ *    NOTE: Configure trigger condition of INT2 pin (input).
+ */
+typedef enum
+{   
+    INT2_IO_CTRL_EDGE_CTRL_MASK     =   ( 1U << 0U ),       /*!<  EDGE_CTRL mask                                    */
+    INT2_IO_CTRL_EDGE_CTRL_LEVEL_TR =   ( 0U << 0U ),       /*!<  Level                                 [ Default ] */
+    INT2_IO_CTRL_EDGE_CTRL_EDGE_TR  =   ( 1U << 0U )        /*!<  Edge                                              */
+} BMA456_int2_io_ctrl_edge_ctrl_t;
+
+
+/**
+  * @brief   INT_LATCH. Configure interrupt modes.
+  */
+/* INT_LATCH <0>
+ *    NOTE: Latched/non-latched/temporary interrupt modes.
+ */
+typedef enum
+{
+    INT_LATCH_INT_LATCH_MASK      =   ( 1U << 0U ),         /*!<  INT_LATCH mask                                    */
+    INT_LATCH_INT_LATCH_NONE      =   ( 0U << 0U ),         /*!<  Non latched                           [ Default ] */
+    INT_LATCH_INT_LATCH_PERMANENT =   ( 1U << 0U )          /*!<  Latched                                           */
+} BMA456_int_latch_int_latch_t;
+
+
+/**
+  * @brief   INT1_MAP. Interrupt/Feature mapping on INT1.
+  */
+/* ERROR_INT_OUT <7>
+ *    NOTE: Error interrupt output.
+ */
+typedef enum
+{
+    INT1_MAP_ERROR_INT_OUT_MASK     =   ( 1U << 7U ),       /*!<  ERROR_INT_OUT mask                                */
+    INT1_MAP_ERROR_INT_OUT_DISABLED =   ( 0U << 7U ),       /*!<  Non enabled                           [ Default ] */
+    INT1_MAP_ERROR_INT_OUT_ENABLED  =   ( 1U << 7U )        /*!<  Enabled                                           */
+} BMA456_int1_map_error_int_out_t;
+
+
+/* ANY_NO_MOTION_OUT <6>
+ *    NOTE: Error interrupt output.
+ */
+typedef enum
+{
+    INT1_MAP_ERROR_ANY_NO_MOTION_OUT_MASK     =   ( 1U << 6U ),       /*!<  ERROR_INT_OUT mask                                */
+    INT1_MAP_ERROR_ANY_NO_MOTION_OUT_DISABLED =   ( 0U << 6U ),       /*!<  Non enabled                           [ Default ] */
+    INT1_MAP_ERROR_ANY_NO_MOTION_OUT_ENABLED  =   ( 1U << 6U )        /*!<  Enabled                                           */
+} BMA456_int1_map_error_any_no_motion_out_t;
+
+
+/* WAKEUP_OUT <5>
+ *    NOTE: Wakeup output.
+ */
+typedef enum
+{
+    INT1_MAP_ERROR_WAKEUP_OUT_MASK     =   ( 1U << 5U ),    /*!<  WAKEUP_OUT mask                                   */
+    INT1_MAP_ERROR_WAKEUP_OUT_DISABLED =   ( 0U << 5U ),    /*!<  Non enabled                           [ Default ] */
+    INT1_MAP_ERROR_WAKEUP_OUT_ENABLED  =   ( 1U << 5U )     /*!<  Enabled                                           */
+} BMA456_int1_map_error_wakeup_out_t;
+
+
+/* WRIST_TILT_OUT <3>
+ *    NOTE: Wrist tilt output.
+ */
+typedef enum
+{
+    INT1_MAP_ERROR_WRIST_TILT_OUT_MASK     =   ( 1U << 3U ),  /*!<  WRIST_TILT_OUT mask                               */
+    INT1_MAP_ERROR_WRIST_TILT_OUT_DISABLED =   ( 0U << 3U ),  /*!<  Non enabled                           [ Default ] */
+    INT1_MAP_ERROR_WRIST_TILT_OUT_ENABLED  =   ( 1U << 3U )   /*!<  Enabled                                           */
+} BMA456_int1_map_error_wrist_tilt_out_t;
+
+
+/* ACTIVITY_TYPE_OUT <2>
+ *    NOTE: Step counter activity output (running, walking, still).
+ */
+typedef enum
+{
+    INT1_MAP_ERROR_ACTIVITY_TYPE_OUT_MASK     =   ( 1U << 2U ),  /*!<  ACTIVITY_TYPE_OUT mask                            */
+    INT1_MAP_ERROR_ACTIVITY_TYPE_OUT_DISABLED =   ( 0U << 2U ),  /*!<  Non enabled                           [ Default ] */
+    INT1_MAP_ERROR_ACTIVITY_TYPE_OUT_ENABLED  =   ( 1U << 2U )   /*!<  Enabled                                           */
+} BMA456_int1_map_error_activity_type_out_t;
+
+
+/* STEP_COUNTER_OUT <1>
+ *    NOTE: Step-counter watermark or step-detector output.
+ */
+typedef enum
+{
+    INT1_MAP_ERROR_STEP_COUNTER_OUT_MASK     =   ( 1U << 1U ),  /*!<  STEP_COUNTER_OUT mask                             */
+    INT1_MAP_ERROR_STEP_COUNTER_OUT_DISABLED =   ( 0U << 1U ),  /*!<  Non enabled                           [ Default ] */
+    INT1_MAP_ERROR_STEP_COUNTER_OUT_ENABLED  =   ( 1U << 1U )   /*!<  Enabled                                           */
+} BMA456_int1_map_error_step_counter_out_t;
+
+
+/**
+  * @brief   INT2_MAP. Interrupt/Feature mapping on INT2.
+  */
+/* ERROR_INT_OUT <7>
+ *    NOTE: Error interrupt output.
+ */
+typedef enum
+{
+    INT2_MAP_ERROR_INT_OUT_MASK     =   ( 1U << 7U ),       /*!<  ERROR_INT_OUT mask                                */
+    INT2_MAP_ERROR_INT_OUT_DISABLED =   ( 0U << 7U ),       /*!<  Non enabled                           [ Default ] */
+    INT2_MAP_ERROR_INT_OUT_ENABLED  =   ( 1U << 7U )        /*!<  Enabled                                           */
+} BMA456_int2_map_error_int_out_t;
+
+
+/* ANY_NO_MOTION_OUT <6>
+ *    NOTE: Error interrupt output.
+ */
+typedef enum
+{
+    INT2_MAP_ERROR_ANY_NO_MOTION_OUT_MASK     =   ( 1U << 6U ),       /*!<  ERROR_INT_OUT mask                                */
+    INT2_MAP_ERROR_ANY_NO_MOTION_OUT_DISABLED =   ( 0U << 6U ),       /*!<  Non enabled                           [ Default ] */
+    INT2_MAP_ERROR_ANY_NO_MOTION_OUT_ENABLED  =   ( 1U << 6U )        /*!<  Enabled                                           */
+} BMA456_int2_map_error_any_no_motion_out_t;
+
+
+/* WAKEUP_OUT <5>
+ *    NOTE: Wakeup output.
+ */
+typedef enum
+{
+    INT2_MAP_ERROR_WAKEUP_OUT_MASK     =   ( 1U << 5U ),    /*!<  WAKEUP_OUT mask                                   */
+    INT2_MAP_ERROR_WAKEUP_OUT_DISABLED =   ( 0U << 5U ),    /*!<  Non enabled                           [ Default ] */
+    INT2_MAP_ERROR_WAKEUP_OUT_ENABLED  =   ( 1U << 5U )     /*!<  Enabled                                           */
+} BMA456_int2_map_error_wakeup_out_t;
+
+
+/* WRIST_TILT_OUT <3>
+ *    NOTE: Wrist tilt output.
+ */
+typedef enum
+{
+    INT2_MAP_ERROR_WRIST_TILT_OUT_MASK     =   ( 1U << 3U ),  /*!<  WRIST_TILT_OUT mask                               */
+    INT2_MAP_ERROR_WRIST_TILT_OUT_DISABLED =   ( 0U << 3U ),  /*!<  Non enabled                           [ Default ] */
+    INT2_MAP_ERROR_WRIST_TILT_OUT_ENABLED  =   ( 1U << 3U )   /*!<  Enabled                                           */
+} BMA456_int2_map_error_wrist_tilt_out_t;
+
+
+/* ACTIVITY_TYPE_OUT <2>
+ *    NOTE: Step counter activity output (running, walking, still).
+ */
+typedef enum
+{
+    INT2_MAP_ERROR_ACTIVITY_TYPE_OUT_MASK     =   ( 1U << 2U ),  /*!<  ACTIVITY_TYPE_OUT mask                            */
+    INT2_MAP_ERROR_ACTIVITY_TYPE_OUT_DISABLED =   ( 0U << 2U ),  /*!<  Non enabled                           [ Default ] */
+    INT2_MAP_ERROR_ACTIVITY_TYPE_OUT_ENABLED  =   ( 1U << 2U )   /*!<  Enabled                                           */
+} BMA456_int2_map_error_activity_type_out_t;
+
+
+/* STEP_COUNTER_OUT <1>
+ *    NOTE: Step-counter watermark or step-detector output.
+ */
+typedef enum
+{
+    INT2_MAP_ERROR_STEP_COUNTER_OUT_MASK     =   ( 1U << 1U ),  /*!<  STEP_COUNTER_OUT mask                             */
+    INT2_MAP_ERROR_STEP_COUNTER_OUT_DISABLED =   ( 0U << 1U ),  /*!<  Non enabled                           [ Default ] */
+    INT2_MAP_ERROR_STEP_COUNTER_OUT_ENABLED  =   ( 1U << 1U )   /*!<  Enabled                                           */
+} BMA456_int2_map_error_step_counter_out_t;
+
+
+
+
+
+
+
+
 
 
 
@@ -269,6 +956,12 @@ typedef struct
   uint16_t  acc_z;                            /*!<  Accelerometer: Acc_Z              */
   
   uint16_t  sensor_time;                      /*!<  Sensor time                       */
+  uint32_t  step_counter;                     /*!<  Step counting value               */
+  
+  int8_t    temperature;                      /*!<  Temperature value of the sensor   */
+  
+  uint16_t  fifo_byte_counter;                /*!<  FIFO counter                      */
+  uint8_t   fifo_data;                        /*!<  FIFO read data                    */
 
 
 
