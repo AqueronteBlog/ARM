@@ -70,7 +70,7 @@ SI7006_status_t  SI7006_Init ( I2C_parameters_t myI2Cparameters )
  * @author      Manuel Caballero
  * @date        19/October/2017
  * @version     19/October/2017   The ORIGIN
- * @pre         Except where noted, reserved register bits will always read back as “1,” and are not affected by write operations. For
+ * @pre         Except where noted, reserved register bits will always read back as ï¿½1,ï¿½ and are not affected by write operations. For
  *              future compatibility, it is recommended that prior to a write operation, registers should be read. Then the values read
  *              from the RSVD bits should be written back unchanged during the write operation
  * @warning     NaN.
@@ -565,12 +565,12 @@ SI7006_status_t  SI7006_TriggerHumidity ( I2C_parameters_t myI2Cparameters, SI70
     // Check the mode if it is HOLD MASTER MODE, then not generate a stop bit
     if ( myMode == SI7006_HOLD_MASTER_MODE )
     {
-        cmd         =    SI7006_MEASURE_TEMPERATURE_HOLD_MASTER_MODE;
+        cmd         =    SI7006_MEASURE_RELATIVE_HUMIDITY_HOLD_MASTER_MODE;
         myI2C_stop  =    I2C_NO_STOP_BIT;
     }
     else
     {
-        cmd         =    SI7006_MEASURE_TEMPERATURE_NO_HOLD_MASTER_MODE;
+        cmd         =    SI7006_MEASURE_RELATIVE_HUMIDITY_NO_HOLD_MASTER_MODE;
         myI2C_stop  =    I2C_STOP_BIT;
     }
 
