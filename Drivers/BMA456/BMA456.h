@@ -928,9 +928,308 @@ typedef enum
 } BMA456_int2_map_error_step_counter_out_t;
 
 
+/**
+  * @brief   INT_MAP_DATA. Interrupt mappeing hardware interrupts.
+  */
+/* INT2_DRDY <6>
+ *    NOTE: Data ready interrupt mapped to INT2.
+ */
+typedef enum
+{
+    INT_MAP_DATA_INT2_DRDY_MASK       =   ( 1U << 6U ),           /*!<  INT2_DRDY mask                                    */
+    INT_MAP_DATA_INT2_DRDY_NOT_MAPPED =   ( 0U << 6U ),           /*!<  Interrupt not mapped                  [ Default ] */
+    INT_MAP_DATA_INT2_DRDY_MAPPED     =   ( 1U << 6U )            /*!<  Interrupt mapped                                  */
+} BMA456_int_map_data_int2_drdy_t;
+
+
+/* INT2_FWM <5>
+ *    NOTE: FIFO watermark interrupt mapped to INT2.
+ */
+typedef enum
+{
+    INT_MAP_DATA_INT2_FWM_MASK        =   ( 1U << 5U ),           /*!<  INT2_FWM mask                                     */
+    INT_MAP_DATA_INT2_FWM_NOT_MAPPED  =   ( 0U << 5U ),           /*!<  Interrupt not mapped                  [ Default ] */
+    INT_MAP_DATA_INT2_FWM_MAPPED      =   ( 1U << 5U )            /*!<  Interrupt mapped                                  */
+} BMA456_int_map_data_int2_fwm_t;
+
+
+/* INT2_FFULL <4>
+ *    NOTE: FIFO full interrupt mapped to INT2.
+ */
+typedef enum
+{
+    INT_MAP_DATA_INT2_FFULL_MASK        =   ( 1U << 4U ),         /*!<  INT2_FFULL mask                                   */
+    INT_MAP_DATA_INT2_FFULL_NOT_MAPPED  =   ( 0U << 4U ),         /*!<  Interrupt not mapped                  [ Default ] */
+    INT_MAP_DATA_INT2_FFULL_MAPPED      =   ( 1U << 4U )          /*!<  Interrupt mapped                                  */
+} BMA456_int_map_data_int2_ffull_t;
+
+
+/* INT1_DRDY <2>
+ *    NOTE: Data ready interrupt mapped to INT1.
+ */
+typedef enum
+{
+    INT_MAP_DATA_INT1_DRDY_MASK        =   ( 1U << 2U ),         /*!<  INT1_DRDY mask                                    */
+    INT_MAP_DATA_INT1_DRDY_NOT_MAPPED  =   ( 0U << 2U ),         /*!<  Interrupt not mapped                  [ Default ] */
+    INT_MAP_DATA_INT1_DRDY_MAPPED      =   ( 1U << 2U )          /*!<  Interrupt mapped                                  */
+} BMA456_int_map_data_int1_drdy_t;
+
+
+/* INT1_FWM <1>
+ *    NOTE: FIFO watermark interrupt mapped to INT1.
+ */
+typedef enum
+{
+    INT_MAP_DATA_INT1_FWM_MASK        =   ( 1U << 1U ),           /*!<  INT1_FWM mask                                     */
+    INT_MAP_DATA_INT1_FWM_NOT_MAPPED  =   ( 0U << 1U ),           /*!<  Interrupt not mapped                  [ Default ] */
+    INT_MAP_DATA_INT1_FWM_MAPPED      =   ( 1U << 1U )            /*!<  Interrupt mapped                                  */
+} BMA456_int_map_data_int1_fwm_t;
+
+
+/* INT1_FFULL <0>
+ *    NOTE: FIFO full interrupt mapped to INT1.
+ */
+typedef enum
+{
+    INT_MAP_DATA_INT1_FFULL_MASK        =   ( 1U << 0U ),         /*!<  INT1_FFULL mask                                   */
+    INT_MAP_DATA_INT1_FFULL_NOT_MAPPED  =   ( 0U << 0U ),         /*!<  Interrupt not mapped                  [ Default ] */
+    INT_MAP_DATA_INT1_FFULL_MAPPED      =   ( 1U << 0U )          /*!<  Interrupt mapped                                  */
+} BMA456_int_map_data_int1_ffull_t;
+
+
+/**
+  * @brief   INIT_CTRL. Start initialization.
+  */
+/* INIT_CTRL <7:0>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    INIT_CTRL_INIT_CTRL_MASK      =   0xFF,                       /*!<  INIT_CTRL mask                                    */
+    INIT_CTRL_INIT_CTRL           =   0x90                        /*!<  Reset value                           [ Default ] */
+} BMA456_int_ctrl_init_ctrl_t;
 
 
 
+/* features_in  HOLAHOLAHOLAHOLAHOLAHOLAHOLAHOLAOLAHOLAHOLAHOLAHOLAHOLAHOLAHOLA 
+                HOLAHOLAHOLAHOLAHOLAHOLAHOLAHOLAOLAHOLAHOLAHOLAHOLAHOLAHOLAHOLA 
+                HOLAHOLAHOLAHOLAHOLAHOLAHOLAHOLAOLAHOLAHOLAHOLAHOLAHOLAHOLAHOLA 
+*/
+
+
+
+
+
+/**
+  * @brief   INTERNAL_ERROR. Internal error flags.
+  */
+/* INT_ERR_2 <2>
+ *    NOTE: Internal error flag: fatal error, processing halted.
+ */
+typedef enum
+{
+    INTERNAL_ERROR_INT_ERR_2_MASK       =   ( 1U << 2U ),         /*!<  INT_ERR_2 mask                                    */
+    INTERNAL_ERROR_INT_ERR_2_NO_ERROR   =   ( 0U << 2U ),         /*!<  No errors                             [ Default ] */
+    INTERNAL_ERROR_INT_ERR_2_ERROR      =   ( 1U << 2U )          /*!<  Errors                                            */
+} BMA456_internal_error_int_err_2_t;
+
+
+/* INT_ERR_1 <1>
+ *    NOTE: Internal error flag: long processing time, processing halted.
+ */
+typedef enum
+{
+    INTERNAL_ERROR_INT_ERR_1_MASK       =   ( 1U << 1U ),         /*!<  INT_ERR_1 mask                                    */
+    INTERNAL_ERROR_INT_ERR_1_NO_ERROR   =   ( 0U << 1U ),         /*!<  No errors                             [ Default ] */
+    INTERNAL_ERROR_INT_ERR_1_ERROR      =   ( 1U << 1U )          /*!<  Errors                                            */
+} BMA456_internal_error_int_err_1_t;
+
+
+/**
+  * @brief   NVM_CONF. NVM controller mode (prog/erase or read only).
+  */
+/* NVM_PROG_EN <1>
+ *    NOTE: Enable NVM programming.
+ */
+typedef enum
+{
+    NVM_CONF_NVM_PROG_EN_MASK       =   ( 1U << 1U ),             /*!<  NVM_PROG_EN mask                                  */
+    NVM_CONF_NVM_PROG_EN_DISABLE    =   ( 0U << 1U ),             /*!<  Disable                               [ Default ] */
+    NVM_CONF_NVM_PROG_EN_ENABLE     =   ( 1U << 1U )              /*!<  Enable                                            */
+} BMA456_nvm_conf_nvm_prog_en_t;
+
+
+/**
+  * @brief   IF_CONF. Serial interface settings.
+  */
+/* IF_MODE <4>
+ *    NOTE: Auxiliary interface configuration.
+ */
+typedef enum
+{
+    IF_CONF_IF_MODE_MASK          =   ( 1U << 4U ),               /*!<  IF_MODE mask                                      */
+    IF_CONF_IF_MODE_P_AUTO_S_OFF  =   ( 0U << 4U ),               /*!<  Auxiliary interface: off              [ Default ] */
+    IF_CONF_IF_MODE_P_AUTO_S_MAG  =   ( 1U << 4U )                /*!<  Auxiliary interface: Magnetometer                 */
+} BMA456_if_conf_if_mode_t;
+
+
+/* SPI3 <0>
+ *    NOTE: Configure SPI interface mode for primary interface.
+ */
+typedef enum
+{
+    IF_CONF_SPI3_MASK           =   ( 1U << 0U ),                 /*!<  SPI3 mask                                         */
+    IF_CONF_SPI3_SPI4           =   ( 0U << 0U ),                 /*!<  SPI 4-wire mode                       [ Default ] */
+    IF_CONF_SPI3_SPI3           =   ( 1U << 0U )                  /*!<  SPI 3-wire mode                                   */
+} BMA456_if_conf_spi3_t;
+
+
+/**
+  * @brief   ACC_SELF_TEST. Settings for the sensor self-test configuration and trigger.
+  */
+/* ACC_SELF_TEST_AMP <3>
+ *    NOTE: Select amplitud of the selftest deflection.
+ */
+typedef enum
+{
+    ACC_SELF_TEST_ACC_SELF_TEST_AMP_MASK  =   ( 1U << 3U ),       /*!<  ACC_SELF_TEST_AMP mask                            */
+    ACC_SELF_TEST_ACC_SELF_TEST_AMP_LOW   =   ( 0U << 3U ),       /*!<  low                                   [ Default ] */
+    ACC_SELF_TEST_ACC_SELF_TEST_AMP_HIGH  =   ( 1U << 3U )        /*!<  high                                              */
+} BMA456_acc_self_test_acc_self_test_amp_t;
+
+
+/* ACC_SELF_TEST_SIGN <2>
+ *    NOTE: Select sign of self-test exication.
+ */
+typedef enum
+{
+    ACC_SELF_TEST_ACC_SELF_TEST_SIGN_MASK     =   ( 1U << 2U ),     /*!<  ACC_SELF_TEST_SIGN mask                            */
+    ACC_SELF_TEST_ACC_SELF_TEST_SIGN_NEGATIVE =   ( 0U << 2U ),     /*!<  negative                               [ Default ] */
+    ACC_SELF_TEST_ACC_SELF_TEST_SIGN_POSITIVE =   ( 1U << 2U )      /*!<  positive                                           */
+} BMA456_acc_self_test_acc_self_test_sign_t;
+
+
+/* ACC_SELF_TEST_EN <0>
+ *    NOTE: Enable accelerometer self-test.
+ */
+typedef enum
+{
+    ACC_SELF_TEST_ACC_SELF_TEST_EN_MASK    =   ( 1U << 0U ),        /*!<  ACC_SELF_TEST_EN mask                              */
+    ACC_SELF_TEST_ACC_SELF_TEST_EN_DISABLE =   ( 0U << 0U ),        /*!<  disable                                [ Default ] */
+    ACC_SELF_TEST_ACC_SELF_TEST_EN_ENABLE  =   ( 1U << 0U )         /*!<  enable                                             */
+} BMA456_acc_self_test_acc_self_test_en_t;
+
+
+/**
+  * @brief   NV_CONF. NVM backed configuration bits.
+  */
+/* ACC_OFF_EN <3>
+ *    NOTE: Add the offset defined in the off_acc_[xyz] OFFSET register to filtered and unfiltered accelerometer data.
+ */
+typedef enum
+{
+    NV_CONF_ACC_OFF_EN_MASK     =   ( 1U << 3U ),                   /*!<  ACC_OFF_EN mask                                   */
+    NV_CONF_ACC_OFF_EN_DISABLE  =   ( 0U << 3U ),                   /*!<  disable                               [ Default ] */
+    NV_CONF_ACC_OFF_EN_ENABLE   =   ( 1U << 3U )                    /*!<  enable                                            */
+} BMA456_nv_conf_acc_off_en_t;
+
+
+/* I2C_WDT_EN <2>
+ *    NOTE: I2C watchdog at the SDI pin in I2C interface mode.
+ */
+typedef enum
+{
+    NV_CONF_I2C_WDT_EN_MASK     =   ( 1U << 2U ),                   /*!<  I2C_WDT_EN mask                                   */
+    NV_CONF_I2C_WDT_EN_DISABLE  =   ( 0U << 2U ),                   /*!<  disable I2C watchdog                  [ Default ] */
+    NV_CONF_I2C_WDT_EN_ENABLE   =   ( 1U << 2U )                    /*!<  enable I2C watchdog                               */
+} BMA456_nv_conf_i2c_wdt_en_t;
+
+
+/* I2C_WDT_SEL <1>
+ *    NOTE: Select timer period for I2C watchdog.
+ */
+typedef enum
+{
+    NV_CONF_I2C_WDT_SEL_MASK      =   ( 1U << 1U ),                 /*!<  I2C_WDT_SEL mask                                  */
+    NV_CONF_I2C_WDT_SEL_WDT_SHORT =   ( 0U << 1U ),                 /*!<  I2C watchdog timeout after 1.25ms     [ Default ] */
+    NV_CONF_I2C_WDT_SEL_WDT_LONG  =   ( 1U << 1U )                  /*!<  I2C watchdog timeout after 40ms                   */
+} BMA456_nv_conf_i2c_wdt_sel_t;
+
+
+/* SPI_EN <0>
+ *    NOTE: Disable the I2C and enable SPI for the primary interface, when it is in autoconfig mode.
+ */
+typedef enum
+{
+    NV_CONF_SPI_EN_MASK      =   ( 1U << 0U ),                      /*!<  SPI_EN mask                                       */
+    NV_CONF_SPI_EN_DISABLE   =   ( 0U << 0U ),                      /*!<  I2C enabled                           [ Default ] */
+    NV_CONF_SPI_EN_ENABLE    =   ( 1U << 0U )                       /*!<  I2C disabled                                      */
+} BMA456_nv_conf_spi_en_t;
+
+
+/**
+  * @brief   PWR_CONF. Power mode configuration register.
+  */
+/* FIFO_SELF_WAKEUP <1>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PWR_CONF_FIFO_SELF_WAKEUP_MASK     =   ( 1U << 1U ),            /*!<  FIFO_SELF_WAKEUP mask                                                       */
+    PWR_CONF_FIFO_SELF_WAKEUP_FSW_OFF  =   ( 0U << 1U ),            /*!<  FIFO read disabled in advanced power saving mode                            */
+    PWR_CONF_FIFO_SELF_WAKEUP_FSW_ON   =   ( 1U << 1U )             /*!<  FIFO read enabled after interrupt in advanced power saving mode [ Default ] */
+} BMA456_pwr_conf_fifo_self_wakeup_t;
+
+
+/* ADV_POWER_SAVE <0>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PWR_CONF_ADV_POWER_SAVE_MASK        =   ( 1U << 0U ),            /*!<  ADV_POWER_SAVE mask                                                                          */
+    PWR_CONF_ADV_POWER_SAVE_APS_OFF     =   ( 0U << 0U ),            /*!<  Advanced power save disabled (fast clk always enabled)                                       */
+    PWR_CONF_ADV_POWER_SAVE_APS_ON      =   ( 1U << 0U )             /*!<  Advanced power mode enabled (slow clk is active when no measurement is ongoing)  [ Default ] */
+} BMA456_pwr_conf_adv_power_save_t;
+
+
+/**
+  * @brief   PWR_CTRL. Sensor enable register.
+  */
+/* ACC_EN <2>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PWR_CTRL_ACC_EN_MASK     =   ( 1U << 2U ),                   /*!<  ACC_EN mask                                       */
+    PWR_CTRL_ACC_EN_ACC_OFF  =   ( 0U << 2U ),                   /*!<  Disables the accelerometer            [ Default ] */
+    PWR_CTRL_ACC_EN_ACC_ON   =   ( 1U << 2U )                    /*!<  Enables the accelerometer                         */
+} BMA456_pwr_ctrl_acc_en_t;
+
+
+/* AUX_EN <0>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    PWR_CTRL_AUX_EN_MASK     =   ( 1U << 0U ),                   /*!<  AUX_EN mask                                       */
+    PWR_CTRL_AUX_EN_MAG_OFF  =   ( 0U << 0U ),                   /*!<  Disables the auxiliary sensor         [ Default ] */
+    PWR_CTRL_AUX_EN_MAG_ON   =   ( 1U << 0U )                    /*!<  Enables the auxiliary sensor                      */
+} BMA456_pwr_ctrl_aux_en_t;
+
+
+/**
+  * @brief   CMD. Command register.
+  */
+/* CMD <7:0>
+ *    NOTE: Register will always read as 0x00.
+ */
+typedef enum
+{
+    CMD_CMD_MASK        =   0xFF,               /*!<  CMD mask                                                                                    */
+    CMD_CMD_NV_PROG     =   0xA0,               /*!<  Writes the NVM backed registers into NVM                                                    */
+    CMD_CMD_FIFO_FLUSH  =   0xB0,               /*!<  Clears all data in the FIFO, does not change FIFO_CONFIG and FIFO_DOWNS registers           */
+    CMD_CMD_SOFTRESET   =   0xB6                /*!<  Triggers a reset, all user configuration settings are overwritten with their default state  */
+} BMA456_cmd_cmd_t;
 
 
 
