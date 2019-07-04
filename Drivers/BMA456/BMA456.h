@@ -1261,11 +1261,22 @@ typedef struct
   
   uint16_t  fifo_byte_counter;                /*!<  FIFO counter                      */
   uint8_t   fifo_data;                        /*!<  FIFO read data                    */
+  
+  /* Sensor status flags   */
+  BMA456_status_drdy_acc_t    drdy_acc;       /*!<  Data ready for accelerometer      */
+  BMA456_status_drdy_aux_t    drdy_aux;       /*!<  Data ready for auxiliary sensor   */
+  BMA456_status_cmd_rdy_t     cmd_rdy;        /*!<  CMD decoder status                */
+  BMA456_status_aux_man_op_t  aux_man_op;     /*!<  Auxiliary interface operation     */
 
-
+  /* Sensor error conditions  */
+  BMA456_err_reg_aux_err_t    aux_err;        /*!<  Error in I2C-Master detected      */
+  BMA456_err_reg_fifo_err_t   fifo_err;       /*!<  Error in FIFO detected            */
+  BMA456_err_reg_error_code_t error_code;     /*!<  Error codes for persistent errors */
+  BMA456_err_reg_cmd_err_t    cmd_err;        /*!<  Command execution failed          */
+  BMA456_err_reg_fatal_err_t  fatal_err;      /*!<  Fatal error                       */
 
   /* Device identification   */
-  uint8_t                       deviceID;     /*!<  Device ID                                         */
+  uint8_t   chip_id;                          /*!<  Device ID                         */
 } BMA456_data_t;
 #endif
 
@@ -1291,3 +1302,14 @@ typedef enum
   */
 BMA456_status_t BMA456_Init                     ( I2C_parameters_t myI2Cparameters                                        );
 
+/** It gets the device ID.
+  */
+BMA456_status_t BMA456_GetID                    ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myID                   );
+
+/** It reports sensor error conditions.
+  */
+BMA456_status_t BMA456_GetSensorErrorConditions ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myErrors               );
+
+/** It reports sensor status flags.
+  */
+BMA456_status_t BMA456_GetSensorStatusFlags     ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myStatusFlags          );
