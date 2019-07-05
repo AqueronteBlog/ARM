@@ -98,10 +98,6 @@ void conf_GPIO  ( void )
 	pADI_GPIO2->CFG	&=	~( 0b11 << BITP_GPIO_CFG_PIN00 );
 	pADI_GPIO1->CFG	&=	~( 0b11 << BITP_GPIO_CFG_PIN15 );
 
-	/* Set the Output Low for DS3 and High for DS4	 */
-	pADI_GPIO2->CLR	 =	 DS3;
-	pADI_GPIO1->SET	 =	 DS4;
-
 	/* Drive Strength Select: Normal	 */
 	pADI_GPIO2->DS	&=	~( DS3 );
 	pADI_GPIO1->DS	&=	~( DS4 );
@@ -129,11 +125,13 @@ void conf_GPIO  ( void )
 
 /**
  * @brief       void conf_WDT  ( void )
- * @details     [TODO]It activates the external HFOSC crystal oscillator ( 26MHz ).
+ * @details     It configures the WDT as watchdog mode.
  *
- * 					- ACLK: HFOSC/4 = 6.4MHz
- * 					- HCLK: HFOSC/4 = 6.4MHz
- * 					- PCLK: HFOSC/4 = 6.4MHz
+ * 					WDT:
+ * 					 - Overflow every 1s
+ * 					 - Watchdog mode: It generates a reset.
+ * 					 - Source clock: Source clock/1 ( 32768/1 = 32768Hz
+ *
  *
  * @param[in]    N/A.
  *
@@ -157,20 +155,13 @@ void conf_WDT  ( void )
 	 * WDT Configuration:
 	 * 	- Prescaler: Source clock/1 ( 32768/1 = 32768Hz )
 	 * 	- Timer Mode: Periodic mode
-	 * 	- IRQ: WDT generates interrupt when timed out
+	 * 	- IRQ: WDT generates reset when timed out
 	 */
-	pADI_WDT0->CTL	&=	~( 0b11 << BITP_WDT_CTL_PRE );
-	pADI_WDT0->CTL	|=	 ( ( 0b00 << BITP_WDT_CTL_PRE ) | ( 1U << BITP_WDT_CTL_MODE ) | ( 1U << BITP_WDT_CTL_IRQ ) );
+	pADI_WDT0->CTL	&=	~( ( 0b11 << BITP_WDT_CTL_PRE ) | ( 1U << BITP_WDT_CTL_IRQ ) );
+	pADI_WDT0->CTL	|=	 ( ( 0b00 << BITP_WDT_CTL_PRE ) | ( 1U << BITP_WDT_CTL_MODE ) );
 
 	/* Load WDT: Overflow every 1s ( 32768 * ( 1 / 32768Hz ) )	 */
 	pADI_WDT0->LOAD	 =	 32768U;
-
-	/* Clear IRQ	 */
-	pADI_WDT0->RESTART	 =	 0xCCCC;
-
-	/* Enable interrupt	 */
-	NVIC_SetPriority ( WDT_EXP_IRQn, 0UL );
-	NVIC_EnableIRQ   ( WDT_EXP_IRQn );
 
 	/* Enable WDT	 */
 	pADI_WDT0->CTL	|=	 ( 1U << BITP_WDT_CTL_EN );
