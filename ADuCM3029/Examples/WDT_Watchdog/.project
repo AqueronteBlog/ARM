@@ -31,4 +31,10 @@
 		<nature>com.analog.crosscore.managedbuilder.core.CCESProjectNature</nature>
 		<nature>com.arm.cmsis.pack.project.RteNature</nature>
 	</natures>
+	<variableList>
+		<variable>
+			<name>CCES</name>
+			<value>file:/C:/Analog%20Devices/CrossCore%20Embedded%20Studio%202.8.3</value>
+		</variable>
+	</variableList>
 </projectDescription>

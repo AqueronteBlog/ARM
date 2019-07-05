@@ -1,9 +1,9 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: WDT on interrupt configuration.
+ * @details     This example shows how to work with the internal peripheral: WDT on watchdog configuration.
  * 				Both LEDs blink every 1 second.
  *
- * 				The rest of the time, the microcontroller is in low-power mode.
+ * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
  *
  *
  * @return      N/A
@@ -30,7 +30,6 @@
 
 /**@brief Variables.
  */
-volatile uint32_t myState	 =	 0UL;		/*!<   State that indicates when to perform the next action     */
 
 
 
@@ -53,8 +52,16 @@ int main(int argc, char *argv[])
 	conf_GPIO ();
 	conf_WDT  ();
 
-	/* Enable interrupts	 */
-	__enable_irq ();
+	/* Check if the reset was caused by the WDT	 */
+	if ( ( pADI_PMG0->RST_STAT & ( 1U << BITP_PMG_RST_STAT_WDRST ) ) == ( 1U << BITP_PMG_RST_STAT_WDRST ) )
+	{
+		/* Both LEDs OFF	 */
+		pADI_GPIO2->CLR	 =	 DS3;
+		pADI_GPIO1->CLR	 =	 DS4;
+
+		/* Clear flag	 */
+		pADI_PMG0->RST_STAT	|=	 ( 1U << BITP_PMG_RST_STAT_WDRST );
+	}
 
 
 	while ( 1 )
@@ -63,26 +70,18 @@ int main(int argc, char *argv[])
 		pADI_PMG0->PWRKEY	 =	 0x4859;
 		pADI_PMG0->PWRMOD	&=	~( 0b11 << BITP_PMG_PWRMOD_MODE );
 		pADI_PMG0->PWRKEY	 =	 0x0000;
+
+		/* Disable key protection for clock oscillator	 */
+		pADI_CLKG0_OSC->KEY	 =	 0xCB14U;
+
+		/* Clocks to all peripherals are gated off	 */
+		pADI_CLKG0_CLK->CTL5	|=	 ( 1U << BITP_CLKG_CLK_CTL5_PERCLKOFF );
+
+		/* Block registers	 */
+		pADI_CLKG0_OSC->KEY	 =	 0x0000U;
+
+		/* Enter in low power Flexi mode	 */
 		__WFI();
-
-
-		/* Check new action	 */
-		if ( myState == 1UL )
-		{
-			/* Disable interrupts	 */
-			__disable_irq ();
-
-			/* Blink LEDs	 */
-			pADI_GPIO2->TGL	|=	 DS3;
-			pADI_GPIO1->TGL	|=	 DS4;
-
-
-			/* Reset variables	 */
-			myState	 =	 0UL;
-
-			/* Enable interrupts	 */
-			__enable_irq ();
-		}
 	}
 
 	/* It should never reach here	 */
