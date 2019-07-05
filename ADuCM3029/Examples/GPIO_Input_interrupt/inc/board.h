@@ -7,7 +7,8 @@
  *
  * @author      Manuel Caballero
  * @date        07/June/2019
- * @version     07/June/2019   The ORIGIN
+ * @version     04/July/2019   Switches were added
+ * 				07/June/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -31,6 +32,13 @@ typedef enum{
   DS4  = (uint16_t)( 1U << 15U )	 	/*!<   LED2: P1_15   */
 } ADICUP3029_board_leds_t;
 
+
+/**@brief SWITCHES.
+ */
+typedef enum{
+  S4  = (uint16_t)( 1U << 2U ),			/*!<   WIFI_RST<-->GPIO34_WIFI: P2_02   */
+  S3  = (uint16_t)( 1U << 15U )	 		/*!<   S3: P1_01   						*/
+} ADICUP3029_board_switches_t;
 
 
 #ifdef __cplusplus
