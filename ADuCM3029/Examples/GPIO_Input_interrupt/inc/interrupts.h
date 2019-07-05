@@ -27,7 +27,7 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-extern void RTC1_Int_Handler ( void );
+extern void GPIO_A_Int_Handler ( void );
 
 
 /**@brief Constants.
