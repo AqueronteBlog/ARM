@@ -27,7 +27,7 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-extern void WDog_Tmr_Int_Handler ( void );
+
 
 
 /**@brief Constants.
