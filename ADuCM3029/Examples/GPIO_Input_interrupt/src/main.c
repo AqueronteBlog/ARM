@@ -1,9 +1,9 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: RTC ( Alarm event ) on interrupt configuration.
- * 				Both LEDs blink every 1 second.
+ * @details     This example shows how to work with the internal peripheral: GPIO input ( GPIO A interrupt ).
+ * 				Both LEDs blink every time that there is a transition high-to-low on P2_02 ( GPIO34 ).
  *
- * 				The rest of the time, the microcontroller is in low-power mode: Hibernate mode.
+ * 				The rest of the time, the microcontroller is in low-power mode: Flexi mode.
  *
  *
  * @return      N/A
@@ -51,7 +51,6 @@ int main(int argc, char *argv[])
 
 	conf_CLK  	();
 	conf_GPIO 	();
-	conf_RTC	();
 
 	/* Enable interrupts	 */
 	__enable_irq ();
@@ -59,13 +58,13 @@ int main(int argc, char *argv[])
 
 	while ( 1 )
 	{
-		/* Low power mode: Hibernate Mode	 */
+		/* Low power mode: Flexi Mode	 */
 		pADI_PMG0->PWRKEY	 =	 0x4859;
 		pADI_PMG0->PWRMOD	&=	~( 0b11 << BITP_PMG_PWRMOD_MODE );
-		pADI_PMG0->PWRMOD	|=	 ( 0b10 << BITP_PMG_PWRMOD_MODE );
 		pADI_PMG0->PWRKEY	 =	 0x0000;
 		__WFI();
 
+		/* Check for new action	 */
 		if ( myState == 1UL )
 		{
 			/* Blink LED	 */
