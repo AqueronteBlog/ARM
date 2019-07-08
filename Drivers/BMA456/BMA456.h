@@ -1244,29 +1244,35 @@ typedef enum
 #define BMA456_VECTOR_STRUCT_H
 typedef struct
 {
-  /* Output registers  */
-  uint16_t  aux_x;                            /*!<  Accelerometer: Aux_X              */
-  uint16_t  aux_y;                            /*!<  Accelerometer: Aux_Y              */
-  uint16_t  aux_z;                            /*!<  Accelerometer: Aux_Z              */
-  uint16_t  aux_r;                            /*!<  Accelerometer: Aux_R              */
+  /* Output: Raw data  */
+  uint16_t  aux_raw_x;                        /*!<  Auxiliary: Raw Aux_X              */
+  uint16_t  aux_raw_y;                        /*!<  Auxiliary: Raw Aux_Y              */
+  uint16_t  aux_raw_z;                        /*!<  Auxiliary: Raw Aux_Z              */
+  uint16_t  aux_raw_r;                        /*!<  Auxiliary: Raw Aux_R              */
 
-  uint16_t  acc_x;                            /*!<  Accelerometer: Acc_X              */
-  uint16_t  acc_y;                            /*!<  Accelerometer: Acc_Y              */
-  uint16_t  acc_z;                            /*!<  Accelerometer: Acc_Z              */
+  uint16_t  acc_raw_x;                        /*!<  Accelerometer: Raw Acc_X          */
+  uint16_t  acc_raw_y;                        /*!<  Accelerometer: Raw Acc_Y          */
+  uint16_t  acc_raw_z;                        /*!<  Accelerometer: Raw Acc_Z          */
   
-  uint16_t  sensor_time;                      /*!<  Sensor time                       */
+  uint32_t  sensor_time;                      /*!<  Sensor time                       */
   uint32_t  step_counter;                     /*!<  Step counting value               */
   
-  int8_t    temperature;                      /*!<  Temperature value of the sensor   */
+  uint8_t   rawTemperature;                   /*!<  Temperature raw value             */
   
-  uint16_t  fifo_byte_counter;                /*!<  FIFO counter                      */
-  uint8_t   fifo_data;                        /*!<  FIFO read data                    */
   
   /* Sensor status flags   */
   BMA456_status_drdy_acc_t    drdy_acc;       /*!<  Data ready for accelerometer      */
   BMA456_status_drdy_aux_t    drdy_aux;       /*!<  Data ready for auxiliary sensor   */
   BMA456_status_cmd_rdy_t     cmd_rdy;        /*!<  CMD decoder status                */
   BMA456_status_aux_man_op_t  aux_man_op;     /*!<  Auxiliary interface operation     */
+
+  BMA456_event_por_detected_t por_detected;   /*!<  Power-up or softreset             */
+  
+  /* Internal status   */
+  BMA456_internal_status_odr_high_error_t   odr_high_error;     /*!<  Minimum Bandwidth conditions for Wakeup detection                 */
+  BMA456_internal_status_odr_50hz_error_t   odr_50hz_error;     /*!<  Minimum Bandwidth conditions for features that require 50Hz data  */
+  BMA456_internal_status_axes_remap_error_t axes_remap_error;   /*!<  Axes remapped error                                               */
+  BMA456_internal_status_message_t          message;            /*!<  Internal status message                                           */
 
   /* Sensor error conditions  */
   BMA456_err_reg_aux_err_t    aux_err;        /*!<  Error in I2C-Master detected      */
@@ -1275,9 +1281,102 @@ typedef struct
   BMA456_err_reg_cmd_err_t    cmd_err;        /*!<  Command execution failed          */
   BMA456_err_reg_fatal_err_t  fatal_err;      /*!<  Fatal error                       */
 
+  /* FIFO  */
+  uint16_t                                  fifo_byte_counter;  /*!<  FIFO byte count register            */
+  uint8_t                                   fifo_data;          /*!<  FIFO read data                      */
+
+  uint8_t                                   acc_fifo_downs;     /*!<  FIFO downsampling for Acc.          */
+  BMA456_fifo_downs_acc_fifo_filt_data_t    acc_fifo_filt_data; /*!<  Filtered/Unfiltered for Acc.        */
+  
+  uint16_t                                  fifo_water_mark;    /*!<  FIFO watermark level                */
+  
+  BMA456_fifo_config_0_fifo_time_en_t       fifo_time_en;       /*!<  Sensortime frame                    */
+  BMA456_fifo_config_0_fifo_stop_on_full_t  fifo_stop_on_full;  /*!<  Writing samples into FIFO when full */
+  BMA456_fifo_config_1_fifo_acc_en_t        fifo_acc_en;        /*!<  Store Acc. data in FIFO             */
+  BMA456_fifo_config_1_fifo_aux_en_t        fifo_aux_en;        /*!<  Store Aux. data in FIFO             */
+  BMA456_fifo_config_1_fifo_header_en_t     fifo_header_en;     /*!<  FIFO frame header enable            */
+  BMA456_fifo_config_1_fifo_tag_int1_en_t   fifo_tag_int1_en;   /*!<  FIFO interrupt 1 tag enable         */
+  BMA456_fifo_config_1_fifo_tag_int2_en_t   fifo_tag_int2_en;   /*!<  FIFO interrupt 2 tag enable         */
+
+
+
+
+  /* Activity  */
+  BMA456_activity_type_activity_type_out_t activity_type_out; /*!<  Step counter activity output  */
+
+  /* Accelerometer configuration   */
+  BMA456_acc_conf_acc_perf_mode_t  acc_perf_mode;   /*!<  Acc. Filter performance           */
+  BMA456_acc_conf_acc_bwp_t        acc_bwp;         /*!<  Acc. Bandwidth parameter          */
+  BMA456_acc_conf_acc_odr_t        acc_odr;         /*!<  Acc. ODR in Hz                    */
+
+  BMA456_acc_range_acc_acc_range_t acc_range;       /*!<  Acc. Range                        */
+
+  /* Auxiliary interface configuration   */
+  uint8_t                             aux_offset;       /*!<  Trigger-readout offset in units of 2.5ms  */
+  BMA456_aux_conf_aux_odr_t           aux_odr;          /*!<  Auxiliary ODR in Hz                       */
+  
+  uint8_t                             i2c_device_addr;  /*!<  Auxiliary interface slave device ID       */
+  
+  BMA456_aux_if_conf_aux_manual_en_t  aux_manual_en;    /*!<  Auxiliary interface manual mode           */
+  BMA456_aux_if_conf_aux_rd_burst_t   aux_rd_burst;     /*!<  Auxiliary interface burst data length     */
+
+  uint8_t                             read_addr;        /*!<  Auxiliary interface, address to read      */
+  uint8_t                             write_addr;       /*!<  Auxiliary interface, address to write     */
+
+  uint8_t                             write_data;       /*!<  Auxiliary interface, write data           */
+
+  
+  /* Interrupt pins  */
+  BMA456_int1_io_ctrl_input_en_t            int1_input_en;          /*!<  Input enable for INT1 pin                       */
+  BMA456_int1_io_ctrl_output_en_t           int1_output_en;         /*!<  Output enable for INT1 pin                      */
+  BMA456_int1_io_ctrl_od_t                  int1_od;                /*!<  Open-drain for INT1 pin                         */
+  BMA456_int1_io_ctrl_lvl_t                 int1_lvl;               /*!<  Configure level for INT1 pin                    */
+  BMA456_int1_io_ctrl_edge_ctrl_t           int1_edge_ctrl;         /*!<  Trigger condition of INT1 pin                   */
+
+  BMA456_int2_io_ctrl_input_en_t            int2_input_en;          /*!<  Input enable for INT2 pin                       */
+  BMA456_int2_io_ctrl_output_en_t           int2_output_en;         /*!<  Output enable for INT2 pin                      */
+  BMA456_int2_io_ctrl_od_t                  int2_od;                /*!<  Open-drain for INT2 pin                         */
+  BMA456_int2_io_ctrl_lvl_t                 int2_lvl;               /*!<  Configure level for INT2 pin                    */
+  BMA456_int2_io_ctrl_edge_ctrl_t           int2_edge_ctrl;         /*!<  Trigger condition of INT2 pin                   */
+
+  BMA456_int_latch_int_latch_t              int_latch;              /*!<  Latched/non-latched/temporary interrupt modes   */
+
+  BMA456_int1_map_error_int_out_t           int1_error_int_out;     /*!<  Error interrupt output                          */
+  BMA456_int1_map_error_any_no_motion_out_t int1_any_no_motion_out; /*!<  Any-motion/No-motion detection output           */
+  BMA456_int1_map_error_wakeup_out_t        int1_wakeup_out;        /*!<  Wakeup output                                   */
+  BMA456_int1_map_error_wrist_tilt_out_t    int1_wrist_tilt_out;    /*!<  Wrist tilt output                               */
+  BMA456_int1_map_error_activity_type_out_t int1_activity_type_out; /*!<  Step counter activity output                    */
+  BMA456_int1_map_error_activity_type_out_t int1_step_counter_out;  /*!<  Step-counter watermark or Step-detector output  */
+
+  BMA456_int2_map_error_int_out_t           int2_error_int_out;     /*!<  Error interrupt output                          */
+  BMA456_int2_map_error_any_no_motion_out_t int2_any_no_motion_out; /*!<  Any-motion/No-motion detection output           */
+  BMA456_int2_map_error_wakeup_out_t        int2_wakeup_out;        /*!<  Wakeup output                                   */
+  BMA456_int2_map_error_wrist_tilt_out_t    int2_wrist_tilt_out;    /*!<  Wrist tilt output                               */
+  BMA456_int2_map_error_activity_type_out_t int2_activity_type_out; /*!<  Step counter activity output                    */
+  BMA456_int2_map_error_activity_type_out_t int2_step_counter_out;  /*!<  Step-counter watermark or Step-detector output  */
+
+
+
+
   /* Device identification   */
   uint8_t   chip_id;                          /*!<  Device ID                         */
 } BMA456_data_t;
+
+
+typedef struct
+{
+  /* Interrupt/Feature status  */
+  BMA456_int_status_0_error_int_out_t     error_int_out;      /*!<  Error interrupt output                      */
+  BMA456_int_status_0_any_no_motion_out_t any_no_motion_out;  /*!<  Any-motion/No-motion detection output       */
+  BMA456_int_status_0_wakeup_out_t        wakeup_out;         /*!<  Wakeup output                               */
+  BMA456_int_status_0_wrist_tilt_out_t    wrist_tilt_out;     /*!<  Wrist tilt output                           */
+  BMA456_int_status_0_activity_type_out_t activity_type_out;  /*!<  Step counter activity output                */
+  BMA456_int_status_0_step_counter_out_t  step_counter_out;   /*!<  Step-counter watermark/Step-detector output */
+  BMA456_int_status_1_acc_drdy_int_t      acc_drdy_int;       /*!<  Accelerometer data ready interrupt          */
+  BMA456_int_status_1_aux_drdy_int_t      aux_drdy_int;       /*!<  Auxiliary sensor data ready interrupt       */
+  BMA456_int_status_1_fwm_int_t           fwm_int;            /*!<  FIFO watermark interrupt                    */
+  BMA456_int_status_1_ffull_int_t         ffull_int;          /*!<  FIFO full interrupt                         */
+} BMA456_int_status_t;
 #endif
 
 
@@ -1313,3 +1412,176 @@ BMA456_status_t BMA456_GetSensorErrorConditions ( I2C_parameters_t myI2Cparamete
 /** It reports sensor status flags.
   */
 BMA456_status_t BMA456_GetSensorStatusFlags     ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myStatusFlags          );
+
+/** It gets aux raw data ( X, Y, Z and R ).
+  */
+BMA456_status_t BMA456_GetAuxRawData            ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAuxRawData           );
+
+/** It gets acceleration raw data ( X, Y and Z ).
+  */
+BMA456_status_t BMA456_GetAccRawData            ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAccRawData           );
+
+/** It gets sensor time ( raw value ).
+  */
+BMA456_status_t BMA456_GetSensorTime            ( I2C_parameters_t myI2Cparameters, BMA456_data_t* mySensorTime           );
+
+/** It gets sensor status flag ( POR event ).
+  */
+BMA456_status_t BMA456_GetEvent                 ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myEvent                );
+
+/** It gets interrupt/feature status.
+  */
+BMA456_status_t BMA456_GetIntStatus             ( I2C_parameters_t myI2Cparameters, BMA456_int_status_t* myIntStatus      );
+
+/** It gets step counter value.
+  */
+BMA456_status_t BMA456_GetStepCounter           ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myStepCounter          );
+
+/** It gets the temperature raw value of the sensor.
+  */
+BMA456_status_t BMA456_GetRawTemperature        ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myRawTemperature       );
+
+/** It gets the FIFO length.
+  */
+BMA456_status_t BMA456_GetFIFO_Length           ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myFIFOlen              );
+
+/** It gets the FIFO data output.
+  */
+BMA456_status_t BMA456_GetFIFO_Data             ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myFIFOdata             );
+
+/** It gets the activity type ( Running, walking or still ).
+  */
+BMA456_status_t BMA456_GetActivityType          ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myActivityType         );
+
+/** It gets the internal status.
+  */
+BMA456_status_t BMA456_GetInternalStatus        ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myInternalStatus       );
+
+/** It gets the accelerometer configuration of the acceleration sensor.
+  */
+BMA456_status_t BMA456_GetAccConf               ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAccConf              );
+
+/** It sets the accelerometer configuration of the acceleration sensor.
+  */
+BMA456_status_t BMA456_SetAccConf               ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAccConf               );
+
+/** It gets the accelerometer range: ±2g/±4g/±8g/±16g.
+  */
+BMA456_status_t BMA456_GetAccRange              ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAccRange             );
+
+/** It sets the accelerometer range: ±2g/±4g/±8g/±16g.
+  */
+BMA456_status_t BMA456_SetAccRange              ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAccRange              );
+
+/** It gets the auxiliary configuration of the auxiliary interface.
+  */
+BMA456_status_t BMA456_GetAuxConf               ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAuxConf              );
+
+/** It sets the auxiliary configuration of the auxiliary interface.
+  */
+BMA456_status_t BMA456_SetAuxConf               ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAuxConf               );
+
+/** It gets the sensor configuration downsampling rates for FIFO.
+  */
+BMA456_status_t BMA456_GetFIFO_Downs            ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myFIFOdowns            );
+
+/** It sets the sensor configuration downsampling rates for FIFO.
+  */
+BMA456_status_t BMA456_SetFIFO_Downs            ( I2C_parameters_t myI2Cparameters, BMA456_data_t myFIFOdowns             );
+
+/** It gets the FIFO watermark level.
+  */
+BMA456_status_t BMA456_GetFIFO_Watermark        ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myFIFOwtm              );
+
+/** It sets the FIFO watermark level.
+  */
+BMA456_status_t BMA456_SetFIFO_Watermark        ( I2C_parameters_t myI2Cparameters, BMA456_data_t myFIFOwtm               );
+
+/** It gets the FIFO frame content configuration.
+  */
+BMA456_status_t BMA456_GetFIFO_Config           ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myFIFOconfig           );
+
+/** It sets the FIFO frame content configuration.
+  */
+BMA456_status_t BMA456_SetFIFO_Config           ( I2C_parameters_t myI2Cparameters, BMA456_data_t myFIFOconfig            );
+
+/** It gets the auxiliary interface slave ID.
+  */
+BMA456_status_t BMA456_GetAuxDevID              ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAuxDevID             );
+
+/** It sets the auxiliary interface slave ID.
+  */
+BMA456_status_t BMA456_SetAuxDevID              ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAuxDevID              );
+
+/** It gets the auxiliary interface configuration.
+  */
+BMA456_status_t BMA456_GetAuxIfConf             ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAuxIfConf            );
+
+/** It sets the auxiliary interface configuration.
+  */
+BMA456_status_t BMA456_SetAuxIfConf             ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAuxIfConf             );
+
+/** It gets the auxiliary interface read register address.
+  */
+BMA456_status_t BMA456_GetAuxRdAddr             ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAuxRdAddr            );
+
+/** It sets the auxiliary interface read register address.
+  */
+BMA456_status_t BMA456_SetAuxRdAddr             ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAuxRdAddr             );
+
+/** It gets the auxiliary interface write register address.
+  */
+BMA456_status_t BMA456_GetAuxWdAddr             ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAuxWdAddr            );
+
+/** It sets the auxiliary interface write register address.
+  */
+BMA456_status_t BMA456_SetAuxWdAddr             ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAuxWdAddr             );
+
+/** It gets the auxiliary interface write data.
+  */
+BMA456_status_t BMA456_GetAuxWrData             ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAuxWrData            );
+
+/** It sets the auxiliary interface write data.
+  */
+BMA456_status_t BMA456_SetAuxWrData             ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAuxWrData             );
+
+/** It gets the configuration for the electrical behaviour of the interrupt pins ( INT1 ).
+  */
+BMA456_status_t BMA456_GetInt1_IO_Ctrl          ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myInt1_IO_Ctrl         );
+
+/** It sets the configuration for the electrical behaviour of the interrupt pins ( INT1 ).
+  */
+BMA456_status_t BMA456_SetInt1_IO_Ctrl          ( I2C_parameters_t myI2Cparameters, BMA456_data_t myInt1_IO_Ctrl          );
+
+/** It gets the configuration for the electrical behaviour of the interrupt pins ( INT2 ).
+  */
+BMA456_status_t BMA456_GetInt2_IO_Ctrl          ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myInt2_IO_Ctrl         );
+
+/** It sets the configuration for the electrical behaviour of the interrupt pins ( INT2 ).
+  */
+BMA456_status_t BMA456_SetInt2_IO_Ctrl          ( I2C_parameters_t myI2Cparameters, BMA456_data_t myInt2_IO_Ctrl          );
+
+/** It gets the configuration for interrupt modes.
+  */
+BMA456_status_t BMA456_GetIntLatch              ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myIntLatch             );
+
+/** It sets the configuration for interrupt modes.
+  */
+BMA456_status_t BMA456_SetIntLatch              ( I2C_parameters_t myI2Cparameters, BMA456_data_t myIntLatch              );
+
+/** It gets the interrupt/feature mapping on INT1.
+  */
+BMA456_status_t BMA456_GetInt1Map               ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myInt1Map              );
+
+/** It sets the interrupt/feature mapping on INT1.
+  */
+BMA456_status_t BMA456_SetInt1Map               ( I2C_parameters_t myI2Cparameters, BMA456_data_t myInt1Map               );
+
+/** It gets the interrupt/feature mapping on INT2.
+  */
+BMA456_status_t BMA456_GetInt2Map               ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myInt2Map              );
+
+/** It sets the interrupt/feature mapping on INT2.
+  */
+BMA456_status_t BMA456_SetInt2Map               ( I2C_parameters_t myI2Cparameters, BMA456_data_t myInt2Map               );
+
