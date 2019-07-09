@@ -124,13 +124,11 @@ void conf_GPIO  ( void )
 
 
 /**
- * @brief       void conf_WDT  ( void )
- * @details     It configures the WDT as watchdog mode.
+ * @brief       void conf_UART  ( void )
+ * @details     [TODO]It configures the UART peripheral.
  *
- * 					WDT:
- * 					 - Overflow every 1s
- * 					 - Watchdog mode: It generates a reset.
- * 					 - Source clock: Source clock/1 ( 32768/1 = 32768Hz
+ * 					UART:
+ * 					 - [TODO]
  *
  *
  * @param[in]    N/A.
@@ -146,24 +144,14 @@ void conf_GPIO  ( void )
  * @pre         N/A
  * @warning     N/A
  */
-void conf_WDT  ( void )
+void conf_UART  ( void )
 {
-	/* Disable WDT	 */
-	pADI_WDT0->CTL	&=	~( 1U << BITP_WDT_CTL_EN );
-
-	/*
-	 * WDT Configuration:
-	 * 	- Prescaler: Source clock/1 ( 32768/1 = 32768Hz )
-	 * 	- Timer Mode: Periodic mode
-	 * 	- IRQ: WDT generates reset when timed out
-	 */
-	pADI_WDT0->CTL	&=	~( ( 0b11 << BITP_WDT_CTL_PRE ) | ( 1U << BITP_WDT_CTL_IRQ ) );
-	pADI_WDT0->CTL	|=	 ( ( 0b00 << BITP_WDT_CTL_PRE ) | ( 1U << BITP_WDT_CTL_MODE ) );
-
-	/* Load WDT: Overflow every 1s ( 32768 * ( 1 / 32768Hz ) )	 */
-	pADI_WDT0->LOAD	 =	 32768U;
-
-	/* Enable WDT	 */
-	pADI_WDT0->CTL	|=	 ( 1U << BITP_WDT_CTL_EN );
+	/* UART
+	 *  - No parity
+	 *  - 1 Stop bit
+	 *  - 8-bit length
+	*/
+	pADI_UART0->LCR	&=	~( ( 1U << BITP_UART_LCR_BRK ) | ( 1U << BITP_UART_LCR_SP ) | ( 1U << BITP_UART_LCR_PEN ) | ( 1U << BITP_UART_LCR_STOP ) | ( 0b11 << BITP_UART_LCR_WLS ) );
+	pADI_UART0->LCR	|=	 ( 0b11 << BITP_UART_LCR_WLS );
 }
 
