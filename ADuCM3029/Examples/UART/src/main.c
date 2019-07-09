@@ -50,18 +50,7 @@ int main(int argc, char *argv[])
 
 	conf_CLK  ();
 	conf_GPIO ();
-	conf_WDT  ();
-
-	/* Check if the reset was caused by the WDT	 */
-	if ( ( pADI_PMG0->RST_STAT & ( 1U << BITP_PMG_RST_STAT_WDRST ) ) == ( 1U << BITP_PMG_RST_STAT_WDRST ) )
-	{
-		/* Both LEDs OFF	 */
-		pADI_GPIO2->CLR	 =	 DS3;
-		pADI_GPIO1->CLR	 =	 DS4;
-
-		/* Clear flag	 */
-		pADI_PMG0->RST_STAT	|=	 ( 1U << BITP_PMG_RST_STAT_WDRST );
-	}
+	conf_UART  ();
 
 
 	while ( 1 )
