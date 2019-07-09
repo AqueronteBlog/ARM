@@ -37,7 +37,7 @@ extern "C" {
 
 /**@brief Variables.
  */
-extern volatile uint32_t myState;
+
 
 
 #ifdef __cplusplus
