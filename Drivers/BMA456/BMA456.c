@@ -2263,6 +2263,854 @@ BMA456_status_t BMA456_SetInt2Map ( I2C_parameters_t myI2Cparameters, BMA456_dat
 
 
 
+/**
+ * @brief       BMA456_GetIntMapData ( I2C_parameters_t , BMA456_data_t* )
+ *
+ * @details     It gets the interrupt mapping hardware interrupts.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myIntMapData:    Interrupt mapping hardware interrupts.
+ *
+ *
+ * @return       Status of BMA456_GetIntMapData.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_GetIntMapData ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myIntMapData )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   BMA456_INT_MAP_DATA;
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data   */
+  myIntMapData->int2_drdy   =   (BMA456_int_map_data_int2_drdy_t)( cmd & INT_MAP_DATA_INT2_DRDY_MASK );
+  myIntMapData->int2_fwm    =   (BMA456_int_map_data_int2_fwm_t)( cmd & INT_MAP_DATA_INT2_FWM_MASK );
+  myIntMapData->int2_ffull  =   (BMA456_int_map_data_int2_ffull_t)( cmd & INT_MAP_DATA_INT2_FFULL_MASK );
+  myIntMapData->int1_drdy   =   (BMA456_int_map_data_int1_drdy_t)( cmd & INT_MAP_DATA_INT1_DRDY_MASK );
+  myIntMapData->int1_fwm    =   (BMA456_int_map_data_int1_fwm_t)( cmd & INT_MAP_DATA_INT1_FWM_MASK );
+  myIntMapData->int1_ffull  =   (BMA456_int_map_data_int1_ffull_t)( cmd & INT_MAP_DATA_INT1_FFULL_MASK );
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_SetIntMapData ( I2C_parameters_t , BMA456_data_t )
+ *
+ * @details     It sets the interrupt mapping hardware interrupts.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myIntMapData:    Interrupt mapping hardware interrupts.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BMA456_GetIntMapData.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_SetIntMapData ( I2C_parameters_t myI2Cparameters, BMA456_data_t myIntMapData )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+  
+  /* Write the register   */
+  cmd[0]  =   BMA456_INT_MAP_DATA;
+  cmd[1]  =   ( myIntMapData.int2_drdy | myIntMapData.int2_fwm | myIntMapData.int2_ffull | myIntMapData.int1_drdy | myIntMapData.int1_fwm | myIntMapData.int1_ffull );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_GetInternalError ( I2C_parameters_t , BMA456_data_t* )
+ *
+ * @details     It gets the internal error flags.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myInternalError: Internal error flags.
+ *
+ *
+ * @return       Status of BMA456_GetInternalError.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_GetInternalError ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myInternalError )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   BMA456_INTERNAL_ERROR;
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data   */
+  myInternalError->int_err_2  =   (BMA456_internal_error_int_err_2_t)( cmd & INTERNAL_ERROR_INT_ERR_2_MASK );
+  myInternalError->int_err_1  =   (BMA456_internal_error_int_err_1_t)( cmd & INTERNAL_ERROR_INT_ERR_1_MASK );
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_GetNVM_Conf ( I2C_parameters_t , BMA456_data_t* )
+ *
+ * @details     It gets the NVM controller mode (Prog/rase or Read only).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myNVM_Conf:      Enabled/Disabled NVM programming.
+ *
+ *
+ * @return       Status of BMA456_GetNVM_Conf.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_GetNVM_Conf ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myNVM_Conf )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   BMA456_NVM_CONF;
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data   */
+  myNVM_Conf->nvm_prog_en  =   (BMA456_nvm_conf_nvm_prog_en_t)( cmd & NVM_CONF_NVM_PROG_EN_MASK );
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_SetNVM_Conf ( I2C_parameters_t , BMA456_data_t )
+ *
+ * @details     It sets the NVM controller mode (Prog/rase or Read only).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myNVM_Conf:      Enabled/Disabled NVM programming.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BMA456_SetNVM_Conf.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_SetNVM_Conf ( I2C_parameters_t myI2Cparameters, BMA456_data_t myNVM_Conf )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+  
+  /* Read data to mask it  */
+  cmd[0]  =   BMA456_NVM_CONF;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+  /* Write the register   */
+  cmd[1] &=  ~( NVM_CONF_NVM_PROG_EN_MASK );
+  cmd[1] |=   myNVM_Conf.nvm_prog_en;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_GetAuxiliaryInterfaceConf ( I2C_parameters_t , BMA456_data_t* )
+ *
+ * @details     It gets the auxiliary interface configuration.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myAuxIntConf:    Auxiliary interface configuration.
+ *
+ *
+ * @return       Status of BMA456_GetAuxiliaryInterfaceConf.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_GetAuxiliaryInterfaceConf ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAuxIntConf )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   BMA456_IF_CONF;
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data   */
+  myAuxIntConf->if_mode  =   (BMA456_if_conf_if_mode_t)( cmd & IF_CONF_IF_MODE_MASK );
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_SetAuxiliaryInterfaceConf ( I2C_parameters_t , BMA456_data_t )
+ *
+ * @details     It sets the auxiliary interface configuration.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myAuxIntConf:    Auxiliary interface configuration.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BMA456_SetAuxiliaryInterfaceConf.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_SetAuxiliaryInterfaceConf ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAuxIntConf )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+  
+  /* Read data to mask it  */
+  cmd[0]  =   BMA456_IF_CONF;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+  /* Write the register   */
+  cmd[1] &=  ~( IF_CONF_IF_MODE_MASK );
+  cmd[1] |=   myAuxIntConf.if_mode;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_GetAccSelfTest ( I2C_parameters_t , BMA456_data_t* )
+ *
+ * @details     It gets the settings for the sensor self-test configuration and trigger.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myAccSelfTest:   Settings for the sensor self-test configuration and trigger.
+ *
+ *
+ * @return       Status of BMA456_GetAccSelfTest.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_GetAccSelfTest ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAccSelfTest )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   BMA456_ACC_SELF_TEST;
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data   */
+  myAccSelfTest->acc_self_test_amp   =  (BMA456_acc_self_test_acc_self_test_amp_t)( cmd & ACC_SELF_TEST_ACC_SELF_TEST_AMP_MASK );
+  myAccSelfTest->acc_self_test_sign  =  (BMA456_acc_self_test_acc_self_test_sign_t)( cmd & ACC_SELF_TEST_ACC_SELF_TEST_SIGN_MASK );
+  myAccSelfTest->acc_self_test_en    =  (BMA456_acc_self_test_acc_self_test_en_t)( cmd & ACC_SELF_TEST_ACC_SELF_TEST_EN_MASK );
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_SetAccSelfTest ( I2C_parameters_t , BMA456_data_t )
+ *
+ * @details     It sets the settings for the sensor self-test configuration and trigger.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myAccSelfTest:   Settings for the sensor self-test configuration and trigger.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BMA456_SetAccSelfTest.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_SetAccSelfTest ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAccSelfTest )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+  
+  /* Read data to mask it  */
+  cmd[0]  =   BMA456_ACC_SELF_TEST;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+  /* Write the register   */
+  cmd[1] &=  ~( ACC_SELF_TEST_ACC_SELF_TEST_AMP_MASK | ACC_SELF_TEST_ACC_SELF_TEST_SIGN_MASK | ACC_SELF_TEST_ACC_SELF_TEST_EN_MASK );
+  cmd[1] |=   ( myAccSelfTest.acc_self_test_amp | myAccSelfTest.acc_self_test_sign | myAccSelfTest.acc_self_test_en );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_GetNV_Conf ( I2C_parameters_t , BMA456_data_t* )
+ *
+ * @details     It gets the NVM backed configuration bits.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myNV_Conf:       NVM backed configuration bits.
+ *
+ *
+ * @return       Status of BMA456_GetNV_Conf.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_GetNV_Conf ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myNV_Conf )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   BMA456_NV_CONF;
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data   */
+  myNV_Conf->acc_off_en   =  (BMA456_nv_conf_acc_off_en_t)( cmd & NV_CONF_ACC_OFF_EN_MASK );
+  myNV_Conf->i2c_wdt_en   =  (BMA456_nv_conf_i2c_wdt_en_t)( cmd & NV_CONF_I2C_WDT_EN_MASK );
+  myNV_Conf->i2c_wdt_sel  =  (BMA456_nv_conf_i2c_wdt_sel_t)( cmd & NV_CONF_I2C_WDT_SEL_MASK );
+  myNV_Conf->spi_en       =  (BMA456_nv_conf_spi_en_t)( cmd & NV_CONF_SPI_EN_MASK );
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_SetNV_Conf ( I2C_parameters_t , BMA456_data_t )
+ *
+ * @details     It sets the NVM backed configuration bits.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myNV_Conf:       NVM backed configuration bits.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BMA456_SetNV_Conf.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_SetNV_Conf ( I2C_parameters_t myI2Cparameters, BMA456_data_t myNV_Conf )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+  
+  /* Read data to mask it  */
+  cmd[0]  =   BMA456_NV_CONF;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+  /* Write the register   */
+  cmd[1] &=  ~( NV_CONF_ACC_OFF_EN_MASK | NV_CONF_I2C_WDT_EN_MASK | NV_CONF_I2C_WDT_SEL_MASK | NV_CONF_SPI_EN_MASK );
+  cmd[1] |=   ( myNV_Conf.acc_off_en | myNV_Conf.i2c_wdt_en | myNV_Conf.i2c_wdt_sel | myNV_Conf.spi_en );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_GetOffset ( I2C_parameters_t , BMA456_data_t* )
+ *
+ * @details     It gets the offset compensation for accelerometer X/Y/Z-axis.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myOffset:        Offset compensation for accelerometer X/Y/Z-axis.
+ *
+ *
+ * @return       Status of BMA456_GetOffset.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         This function uses auto-increment access.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_GetOffset ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myOffset )
+{
+  uint8_t      cmd[3]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]  =   BMA456_OFFSET_0;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+  /* Parse the data   */
+  myOffset->off_acc_x   =  cmd[0];
+  myOffset->off_acc_y   =  cmd[1];
+  myOffset->off_acc_z   =  cmd[2];
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_SetOffset ( I2C_parameters_t , BMA456_data_t )
+ *
+ * @details     It sets the offset compensation for accelerometer X/Y/Z-axis.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myOffset:        Offset compensation for accelerometer X/Y/Z-axis.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BMA456_SetOffset.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         This function uses auto-increment access.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_SetOffset ( I2C_parameters_t myI2Cparameters, BMA456_data_t myOffset )
+{
+  uint8_t      cmd[4]  = { 0U };
+  i2c_status_t aux;
+  
+  /* Write the register   */
+  cmd[0]  =   BMA456_OFFSET_0;
+  cmd[1]  =   myOffset.off_acc_x;
+  cmd[2]  =   myOffset.off_acc_y;
+  cmd[3]  =   myOffset.off_acc_z;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_GetPWR_Conf ( I2C_parameters_t , BMA456_data_t* )
+ *
+ * @details     It gets the power mode configuration register.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myPWR_Conf:      Offset compensation for accelerometer X/Y/Z-axis.
+ *
+ *
+ * @return       Status of BMA456_GetPWR_Conf.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_GetPWR_Conf ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myPWR_Conf )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   BMA456_PWR_CONF;
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data   */
+  myPWR_Conf->fifo_self_wakeup  =  (BMA456_pwr_conf_fifo_self_wakeup_t)( cmd & PWR_CONF_FIFO_SELF_WAKEUP_MASK );
+  myPWR_Conf->adv_power_save    =  (BMA456_pwr_conf_adv_power_save_t)( cmd & PWR_CONF_ADV_POWER_SAVE_MASK );
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_SetPWR_Conf ( I2C_parameters_t , BMA456_data_t )
+ *
+ * @details     It sets the power mode configuration register.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myPWR_Conf:      Offset compensation for accelerometer X/Y/Z-axis.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BMA456_SetPWR_Conf.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_SetPWR_Conf ( I2C_parameters_t myI2Cparameters, BMA456_data_t myPWR_Conf )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+  
+  /* Read data to mask it  */
+  cmd[0]  =   BMA456_PWR_CONF;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+  /* Write the register   */
+  cmd[1] &=  ~( PWR_CONF_FIFO_SELF_WAKEUP_MASK | PWR_CONF_ADV_POWER_SAVE_MASK );
+  cmd[1] |=   ( myPWR_Conf.fifo_self_wakeup | myPWR_Conf.adv_power_save );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_GetPWR_Ctrl ( I2C_parameters_t , BMA456_data_t* )
+ *
+ * @details     It gets the sensor enable register.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myPWR_Conf:      Sensor enable register.
+ *
+ *
+ * @return       Status of BMA456_GetPWR_Ctrl.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_GetPWR_Ctrl ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myPWR_Ctrl )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd  =   BMA456_PWR_CTRL;
+  aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data   */
+  myPWR_Ctrl->acc_en  =  (BMA456_pwr_ctrl_acc_en_t)( cmd & PWR_CTRL_ACC_EN_MASK );
+  myPWR_Ctrl->aux_en  =  (BMA456_pwr_ctrl_aux_en_t)( cmd & PWR_CTRL_AUX_EN_MASK );
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_SetPWR_Ctrl ( I2C_parameters_t , BMA456_data_t )
+ *
+ * @details     It sets the sensor enable register.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myPWR_Conf:      Sensor enable register.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BMA456_SetPWR_Ctrl.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_SetPWR_Ctrl ( I2C_parameters_t myI2Cparameters, BMA456_data_t myPWR_Ctrl )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+  
+  /* Read data to mask it  */
+  cmd[0]  =   BMA456_PWR_CTRL;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+  /* Write the register   */
+  cmd[1] &=  ~( PWR_CTRL_ACC_EN_MASK | PWR_CTRL_AUX_EN_MASK );
+  cmd[1] |=   ( myPWR_Ctrl.acc_en | myPWR_Ctrl.aux_en );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_SetCMD ( I2C_parameters_t , BMA456_data_t )
+ *
+ * @details     It sets the command register.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myCMD:           Command.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BMA456_SetCMD.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/July/2019
+ * @version     10/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_SetCMD ( I2C_parameters_t myI2Cparameters, BMA456_data_t myCMD )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+  
+  /* Write the register   */
+  cmd[0]  =   BMA456_CMD;
+  cmd[1]  =   myCMD.cmd;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
 
 
 

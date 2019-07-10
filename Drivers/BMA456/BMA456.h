@@ -1006,6 +1006,8 @@ typedef enum
 typedef enum
 {
     INIT_CTRL_INIT_CTRL_MASK      =   0xFF,                       /*!<  INIT_CTRL mask                                    */
+    INIT_CTRL_INIT_CTRL_DISABLE   =   0x00,                       /*!<  Disable                                           */
+    INIT_CTRL_INIT_CTRL_ENABLE    =   0x01,                       /*!<  Enable                                            */
     INIT_CTRL_INIT_CTRL           =   0x90                        /*!<  Reset value                           [ Default ] */
 } BMA456_int_ctrl_init_ctrl_t;
 
@@ -1259,6 +1261,10 @@ typedef struct
   
   uint8_t   rawTemperature;                   /*!<  Temperature raw value             */
   
+  /* Offset  */
+  int8_t    off_acc_x;                        /*!<  Offset for Accelerometer X-axis   */
+  int8_t    off_acc_y;                        /*!<  Offset for Accelerometer Y-axis   */
+  int8_t    off_acc_z;                        /*!<  Offset for Accelerometer Z-axis   */
   
   /* Sensor status flags   */
   BMA456_status_drdy_acc_t    drdy_acc;       /*!<  Data ready for accelerometer      */
@@ -1298,7 +1304,12 @@ typedef struct
   BMA456_fifo_config_1_fifo_tag_int1_en_t   fifo_tag_int1_en;   /*!<  FIFO interrupt 1 tag enable         */
   BMA456_fifo_config_1_fifo_tag_int2_en_t   fifo_tag_int2_en;   /*!<  FIFO interrupt 2 tag enable         */
 
-
+  /* Power mode configuration  */
+  BMA456_pwr_conf_fifo_self_wakeup_t  fifo_self_wakeup; /*!<  FIFO self wakeup                    */
+  BMA456_pwr_conf_adv_power_save_t    adv_power_save;   /*!<  Advanced power save                 */
+  
+  BMA456_pwr_ctrl_acc_en_t            acc_en;           /*!<  Enable/Disable Accelerometer        */
+  BMA456_pwr_ctrl_aux_en_t            aux_en;           /*!<  Enable/Disable Auxiliary sensor     */
 
 
   /* Activity  */
@@ -1355,11 +1366,40 @@ typedef struct
   BMA456_int2_map_error_activity_type_out_t int2_activity_type_out; /*!<  Step counter activity output                    */
   BMA456_int2_map_error_activity_type_out_t int2_step_counter_out;  /*!<  Step-counter watermark or Step-detector output  */
 
+  BMA456_int_map_data_int2_drdy_t           int2_drdy;              /*!<  Data ready interrupt mapped to INT2             */
+  BMA456_int_map_data_int2_fwm_t            int2_fwm;               /*!<  FIFO watermark interrupt mapped to INT2         */
+  BMA456_int_map_data_int2_ffull_t          int2_ffull;             /*!<  FIFO full interrupt mapped to INT2              */
+  BMA456_int_map_data_int1_drdy_t           int1_drdy;              /*!<  Data ready interrupt mapped to INT1             */
+  BMA456_int_map_data_int1_fwm_t            int1_fwm;               /*!<  FIFO watermark interrupt mapped to INT1         */
+  BMA456_int_map_data_int1_ffull_t          int1_ffull;             /*!<  FIFO full interrupt mapped to INT1              */
 
+  /* Internal error flags  */
+  BMA456_internal_error_int_err_2_t int_err_2;  /*!<  Internal error flag - fatal error, processing halted          */
+  BMA456_internal_error_int_err_1_t int_err_1;  /*!<  Internal error flag - long processing time, processing halted */
+  
+  /* NVM controller mode   */
+  BMA456_nvm_conf_nvm_prog_en_t nvm_prog_en;    /*!<  Enable/Disable NVM programming    */
+
+  BMA456_nv_conf_acc_off_en_t   acc_off_en;     /*!<  Enable/Disable offset             */
+  BMA456_nv_conf_i2c_wdt_en_t   i2c_wdt_en;     /*!<  I2C watchdog at the SDI pin       */
+  BMA456_nv_conf_i2c_wdt_sel_t  i2c_wdt_sel;    /*!<  I2C watchdog period               */
+  BMA456_nv_conf_spi_en_t       spi_en;         /*!<  Enable/Disable SPI                */
+
+
+  /* Auxiliary interface configuration   */
+  BMA456_if_conf_if_mode_t      if_mode;        /*!<  Auxiliary interface configuration */
+
+  /* Self-test configuration and trigger   */
+  BMA456_acc_self_test_acc_self_test_amp_t  acc_self_test_amp;        /*!<  Amplitude of the sleftest deflection    */
+  BMA456_acc_self_test_acc_self_test_sign_t acc_self_test_sign;       /*!<  Sign of the selftest excitation         */
+  BMA456_acc_self_test_acc_self_test_en_t   acc_self_test_en;         /*!<  Enable accelerometer self-test          */
+  
+  /* Command   */
+  BMA456_cmd_cmd_t              cmd;            /*!<  Available commands                */
 
 
   /* Device identification   */
-  uint8_t   chip_id;                          /*!<  Device ID                         */
+  uint8_t   chip_id;                            /*!<  Device ID                         */
 } BMA456_data_t;
 
 
@@ -1585,3 +1625,77 @@ BMA456_status_t BMA456_GetInt2Map               ( I2C_parameters_t myI2Cparamete
   */
 BMA456_status_t BMA456_SetInt2Map               ( I2C_parameters_t myI2Cparameters, BMA456_data_t myInt2Map               );
 
+/** It gets the interrupt mapping hardware interrupts.
+  */
+BMA456_status_t BMA456_GetIntMapData            ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myIntMapData           );
+
+/** It sets the interrupt mapping hardware interrupts.
+  */
+BMA456_status_t BMA456_SetIntMapData            ( I2C_parameters_t myI2Cparameters, BMA456_data_t myIntMapData            );
+
+/* INIT_CTRL nad FEATURES **********************************************************************/
+
+
+/** It gets the internal error flags.
+  */
+BMA456_status_t BMA456_GetInternalError         ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myInternalError        );
+
+/** It gets the NVM controller mode (Prog/rase or Read only).
+  */
+BMA456_status_t BMA456_GetNVM_Conf              ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myNVM_Conf             );
+
+/** It sets the NVM controller mode (Prog/rase or Read only).
+  */
+BMA456_status_t BMA456_SetNVM_Conf              ( I2C_parameters_t myI2Cparameters, BMA456_data_t myNVM_Conf              );
+
+/** It gets the auxiliary interface configuration.
+  */
+BMA456_status_t BMA456_GetAuxiliaryInterfaceConf  ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAuxIntConf           );
+
+/** It sets the auxiliary interface configuration.
+  */
+BMA456_status_t BMA456_SetAuxiliaryInterfaceConf  ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAuxIntConf            );
+
+/** It gets the settings for the sensor self-test configuration and trigger.
+  */
+BMA456_status_t BMA456_GetAccSelfTest           ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAccSelfTest          );
+
+/** It sets the settings for the sensor self-test configuration and trigger.
+  */
+BMA456_status_t BMA456_SetAccSelfTest           ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAccSelfTest           );
+
+/** It gets the NVM backed configuration bits.
+  */
+BMA456_status_t BMA456_GetNV_Conf               ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myNV_Conf              );
+
+/** It sets the NVM backed configuration bits.
+  */
+BMA456_status_t BMA456_SetNV_Conf               ( I2C_parameters_t myI2Cparameters, BMA456_data_t myNV_Conf               );
+
+/** It gets the offset compensation for accelerometer X/Y/Z-axis.
+  */
+BMA456_status_t BMA456_GetOffset                ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myOffset               );
+
+/** It sets the offset compensation for accelerometer X/Y/Z-axis.
+  */
+BMA456_status_t BMA456_SetOffset                ( I2C_parameters_t myI2Cparameters, BMA456_data_t myOffset                );
+
+/** It gets the power mode configuration register.
+  */
+BMA456_status_t BMA456_GetPWR_Conf              ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myPWR_Conf             );
+
+/** It sets the power mode configuration register.
+  */
+BMA456_status_t BMA456_SetPWR_Conf              ( I2C_parameters_t myI2Cparameters, BMA456_data_t myPWR_Conf              );
+
+/** It gets the sensor enable register.
+  */
+BMA456_status_t BMA456_GetPWR_Ctrl              ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myPWR_Ctrl             );
+
+/** It sets the sensor enable register.
+  */
+BMA456_status_t BMA456_SetPWR_Ctrl              ( I2C_parameters_t myI2Cparameters, BMA456_data_t myPWR_Ctrl              );
+
+/** It sets the command register.
+  */
+BMA456_status_t BMA456_SetCMD                   ( I2C_parameters_t myI2Cparameters, BMA456_data_t myCMD                   );
