@@ -1260,7 +1260,9 @@ typedef struct
   uint32_t  step_counter;                     /*!<  Step counting value               */
   
   uint8_t   rawTemperature;                   /*!<  Temperature raw value             */
-  
+  int8_t    temperature;                      /*!<  Temperature in Celsius degrees    */
+
+
   /* Offset  */
   int8_t    off_acc_x;                        /*!<  Offset for Accelerometer X-axis   */
   int8_t    off_acc_y;                        /*!<  Offset for Accelerometer Y-axis   */
@@ -1480,6 +1482,10 @@ BMA456_status_t BMA456_GetStepCounter           ( I2C_parameters_t myI2Cparamete
 /** It gets the temperature raw value of the sensor.
   */
 BMA456_status_t BMA456_GetRawTemperature        ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myRawTemperature       );
+
+/** It gets the temperature raw value of the sensor.
+  */
+BMA456_status_t BMA456_GetTemperature           ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myTemperature          );
 
 /** It gets the FIFO length.
   */
