@@ -831,8 +831,8 @@ BMA456_status_t BMA456_SetAccConf ( I2C_parameters_t myI2Cparameters, BMA456_dat
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
-
-  /* Write the register   */
+  
+  /* Read the register to mask it later  */
   cmd[0]  =   BMA456_ACC_CONF;
   cmd[1]  =   ( myAccConf.acc_perf_mode | myAccConf.acc_bwp | myAccConf.acc_odr );
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -913,7 +913,8 @@ BMA456_status_t BMA456_GetAccRange ( I2C_parameters_t myI2Cparameters, BMA456_da
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+ *              08/July/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -922,10 +923,15 @@ BMA456_status_t BMA456_SetAccRange ( I2C_parameters_t myI2Cparameters, BMA456_da
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
-  /* Write the register   */
+  /* Read the register to mask it later   */
   cmd[0]  =   BMA456_ACC_RANGE;
-  cmd[1]  =   myAccRange.acc_range;
-  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_STOP_BIT );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  /* Write the register   */
+  cmd[1] &=  ~ACC_RANGE_ACC_RANGE_MASK;
+  cmd[1] |=   myAccRange.acc_range;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -1103,7 +1109,8 @@ BMA456_status_t BMA456_GetFIFO_Downs ( I2C_parameters_t myI2Cparameters, BMA456_
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+ *              08/July/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -1119,9 +1126,14 @@ BMA456_status_t BMA456_SetFIFO_Downs ( I2C_parameters_t myI2Cparameters, BMA456_
   }
   else
   {
-    /* Write the register   */
+    /* Read the register to mask it later   */
     cmd[0]  =   BMA456_FIFO_DOWNS;
-    cmd[1]  =   ( ( myFIFOdowns.acc_fifo_downs << 4U ) | myFIFOdowns.acc_fifo_filt_data );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+    /* Write the register   */
+    cmd[1] &=  ~( FIFO_DOWNS_ACC_FIFO_FILT_DATA_MASK | FIFO_DOWNS_ACC_FIFO_DOWNS_MASK );
+    cmd[1] |=   ( ( myFIFOdowns.acc_fifo_downs << 4U ) | myFIFOdowns.acc_fifo_filt_data );
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   }
 
@@ -1203,7 +1215,8 @@ BMA456_status_t BMA456_GetFIFO_Watermark ( I2C_parameters_t myI2Cparameters, BMA
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+ *              08/July/2019     The ORIGIN
  * @pre         This function uses auto-increment access.
  * @warning     N/A.
  */
@@ -1219,10 +1232,16 @@ BMA456_status_t BMA456_SetFIFO_Watermark ( I2C_parameters_t myI2Cparameters, BMA
   }
   else
   {
+    /* Read the register to mask it later   */
+    cmd[0]  =   BMA456_FIFO_WTM_1;
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[2], 1U );
+  
     /* Write the register   */
     cmd[0]  =   BMA456_FIFO_WTM_0;
     cmd[1]  =   (uint8_t)( myFIFOwtm.fifo_water_mark );
-    cmd[2]  =   (uint8_t)( myFIFOwtm.fifo_water_mark >> 8U );
+    cmd[2] &=   0xE0;
+    cmd[2] |=   (uint8_t)( myFIFOwtm.fifo_water_mark >> 8U );
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   }
 
@@ -1308,7 +1327,8 @@ BMA456_status_t BMA456_GetFIFO_Config ( I2C_parameters_t myI2Cparameters, BMA456
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+                08/July/2019     The ORIGIN
  * @pre         This function uses auto-increment access.
  * @warning     N/A.
  */
@@ -1317,9 +1337,15 @@ BMA456_status_t BMA456_SetFIFO_Config ( I2C_parameters_t myI2Cparameters, BMA456
   uint8_t      cmd[3]  = { 0U };
   i2c_status_t aux;
   
-  /* Write the register   */
+  /* Read the register to mask it later  */
   cmd[0]  =   BMA456_FIFO_CONFIG_0;
-  cmd[1]  =   (uint8_t)( myFIFOconfig.fifo_time_en | myFIFOconfig.fifo_stop_on_full );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 2U );
+  
+  /* Write the register   */
+  cmd[1] &=  ~( FIFO_CONFIG_0_FIFO_TIME_EN_MASK | FIFO_CONFIG_0_FIFO_STOP_ON_FULL_MASK );
+  cmd[1] |=   (uint8_t)( myFIFOconfig.fifo_time_en | myFIFOconfig.fifo_stop_on_full );
+  cmd[2] &=  ~( FIFO_CONFIG_1_FIFO_ACC_EN_MASK | FIFO_CONFIG_1_FIFO_AUX_EN_MASK | FIFO_CONFIG_1_FIFO_HEADER_EN_MASK | FIFO_CONFIG_1_FIFO_TAG_INT1_EN_MASK | FIFO_CONFIG_1_FIFO_TAG_INT2_EN_MASK );
   cmd[2]  =   (uint8_t)( myFIFOconfig.fifo_acc_en | myFIFOconfig.fifo_aux_en | myFIFOconfig.fifo_header_en | myFIFOconfig.fifo_tag_int1_en | myFIFOconfig.fifo_tag_int2_en );
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -1400,7 +1426,8 @@ BMA456_status_t BMA456_GetAuxDevID ( I2C_parameters_t myI2Cparameters, BMA456_da
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+                08/July/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -1416,9 +1443,14 @@ BMA456_status_t BMA456_SetAuxDevID ( I2C_parameters_t myI2Cparameters, BMA456_da
   }
   else
   {
-    /* Write the register   */
+    /* Read the register to mask it later  */
     cmd[0]  =   BMA456_AUX_DEV_ID;
-    cmd[1]  =   (uint8_t)( ( myAuxDevID.i2c_device_addr << 1U ) & AUX_DEV_ID_I2C_DEVICE_ADDR_MASK );
+    aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+    /* Write the register   */
+    cmd[1] &=  ~( AUX_DEV_ID_I2C_DEVICE_ADDR_MASK );
+    cmd[1] |=   (uint8_t)( ( myAuxDevID.i2c_device_addr << 1U ) & AUX_DEV_ID_I2C_DEVICE_ADDR_MASK );
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   }
 
@@ -1499,7 +1531,8 @@ BMA456_status_t BMA456_GetAuxIfConf ( I2C_parameters_t myI2Cparameters, BMA456_d
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+ *              08/July/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -1508,9 +1541,14 @@ BMA456_status_t BMA456_SetAuxIfConf ( I2C_parameters_t myI2Cparameters, BMA456_d
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
   
-  /* Write the register   */
+  /* Read the register to mask it later  */
   cmd[0]  =   BMA456_AUX_IF_CONF;
-  cmd[1]  =   (uint8_t)( myAuxIfConf.aux_manual_en | myAuxIfConf.aux_rd_burst );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  /* Write the register   */
+  cmd[1] &=  ~( AUX_IF_CONF_AUX_MANUAL_EN_MASK | AUX_IF_CONF_AUX_RD_BURST_MASK );
+  cmd[1] |=   (uint8_t)( myAuxIfConf.aux_manual_en | myAuxIfConf.aux_rd_burst );
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -1863,7 +1901,8 @@ BMA456_status_t BMA456_GetInt1_IO_Ctrl ( I2C_parameters_t myI2Cparameters, BMA45
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+ *              08/July/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -1872,9 +1911,14 @@ BMA456_status_t BMA456_SetInt1_IO_Ctrl ( I2C_parameters_t myI2Cparameters, BMA45
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
   
-  /* Write the register   */
+  /* Read the register to mask it later  */
   cmd[0]  =   BMA456_INT1_IO_CTRL;
-  cmd[1]  =   ( myInt1_IO_Ctrl.int1_input_en | myInt1_IO_Ctrl.int1_output_en | myInt1_IO_Ctrl.int1_od | myInt1_IO_Ctrl.int1_lvl | myInt1_IO_Ctrl.int1_edge_ctrl );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  /* Write the register   */
+  cmd[1] &=  ~(INT1_IO_CTRL_INPUT_EN_MASK | INT1_IO_CTRL_OUTPUT_EN_MASK | INT1_IO_CTRL_OD_MASK | INT1_IO_CTRL_LVL_MASK | INT1_IO_CTRL_EDGE_CTRL_MASK );
+  cmd[1] |=   ( myInt1_IO_Ctrl.int1_input_en | myInt1_IO_Ctrl.int1_output_en | myInt1_IO_Ctrl.int1_od | myInt1_IO_Ctrl.int1_lvl | myInt1_IO_Ctrl.int1_edge_ctrl );
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -1957,7 +2001,8 @@ BMA456_status_t BMA456_GetInt2_IO_Ctrl ( I2C_parameters_t myI2Cparameters, BMA45
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+ *              08/July/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -1966,9 +2011,14 @@ BMA456_status_t BMA456_SetInt2_IO_Ctrl ( I2C_parameters_t myI2Cparameters, BMA45
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
   
-  /* Write the register   */
+  /* Read the register to mask it later  */
   cmd[0]  =   BMA456_INT2_IO_CTRL;
-  cmd[1]  =   ( myInt2_IO_Ctrl.int2_input_en | myInt2_IO_Ctrl.int2_output_en | myInt2_IO_Ctrl.int2_od | myInt2_IO_Ctrl.int2_lvl | myInt2_IO_Ctrl.int2_edge_ctrl );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  /* Write the register   */
+  cmd[1] &=  ~( INT2_IO_CTRL_INPUT_EN_MASK | INT2_IO_CTRL_OUTPUT_EN_MASK | INT2_IO_CTRL_OD_MASK | INT2_IO_CTRL_LVL_MASK | INT2_IO_CTRL_EDGE_CTRL_MASK );
+  cmd[1] |=   ( myInt2_IO_Ctrl.int2_input_en | myInt2_IO_Ctrl.int2_output_en | myInt2_IO_Ctrl.int2_od | myInt2_IO_Ctrl.int2_lvl | myInt2_IO_Ctrl.int2_edge_ctrl );
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -2047,7 +2097,8 @@ BMA456_status_t BMA456_GetIntLatch ( I2C_parameters_t myI2Cparameters, BMA456_da
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+ *              08/July/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -2056,9 +2107,14 @@ BMA456_status_t BMA456_SetIntLatch ( I2C_parameters_t myI2Cparameters, BMA456_da
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
   
-  /* Write the register   */
+  /* Read the register to mask it later  */
   cmd[0]  =   BMA456_INT_LATCH;
-  cmd[1]  =   myIntLatch.int_latch;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  /* Write the register   */
+  cmd[1] &=  ~( INT_LATCH_INT_LATCH_MASK );
+  cmd[1] |=   myIntLatch.int_latch;
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -2141,7 +2197,8 @@ BMA456_status_t BMA456_GetInt1Map ( I2C_parameters_t myI2Cparameters, BMA456_dat
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+ *              08/July/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -2150,9 +2207,14 @@ BMA456_status_t BMA456_SetInt1Map ( I2C_parameters_t myI2Cparameters, BMA456_dat
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
   
-  /* Write the register   */
+  /* Read the register to mask it later  */
   cmd[0]  =   BMA456_INT1_MAP;
-  cmd[1]  =   ( myInt1Map.int1_error_int_out | myInt1Map.int1_any_no_motion_out | myInt1Map.int1_wakeup_out | myInt1Map.int1_wrist_tilt_out | myInt1Map.int1_activity_type_out | myInt1Map.int1_step_counter_out );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  /* Write the register   */
+  cmd[1] &=  ~( INT1_MAP_ERROR_INT_OUT_MASK | INT1_MAP_ERROR_ANY_NO_MOTION_OUT_MASK | INT1_MAP_ERROR_WAKEUP_OUT_MASK | INT1_MAP_ERROR_WRIST_TILT_OUT_MASK | INT1_MAP_ERROR_ACTIVITY_TYPE_OUT_MASK | INT1_MAP_ERROR_STEP_COUNTER_OUT_MASK );
+  cmd[1] |=   ( myInt1Map.int1_error_int_out | myInt1Map.int1_any_no_motion_out | myInt1Map.int1_wakeup_out | myInt1Map.int1_wrist_tilt_out | myInt1Map.int1_activity_type_out | myInt1Map.int1_step_counter_out );
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -2235,7 +2297,8 @@ BMA456_status_t BMA456_GetInt2Map ( I2C_parameters_t myI2Cparameters, BMA456_dat
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+ *              08/July/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -2244,9 +2307,14 @@ BMA456_status_t BMA456_SetInt2Map ( I2C_parameters_t myI2Cparameters, BMA456_dat
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
   
-  /* Write the register   */
+  /* Read the register to mask it later  */
   cmd[0]  =   BMA456_INT2_MAP;
-  cmd[1]  =   ( myInt2Map.int2_error_int_out | myInt2Map.int2_any_no_motion_out | myInt2Map.int2_wakeup_out | myInt2Map.int2_wrist_tilt_out | myInt2Map.int2_activity_type_out | myInt2Map.int2_step_counter_out );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  /* Write the register   */
+  cmd[1] &=  ~( INT2_MAP_ERROR_INT_OUT_MASK | INT2_MAP_ERROR_ANY_NO_MOTION_OUT_MASK | INT2_MAP_ERROR_WAKEUP_OUT_MASK | INT2_MAP_ERROR_WRIST_TILT_OUT_MASK | INT2_MAP_ERROR_ACTIVITY_TYPE_OUT_MASK | INT2_MAP_ERROR_STEP_COUNTER_OUT_MASK );
+  cmd[1] |=   ( myInt2Map.int2_error_int_out | myInt2Map.int2_any_no_motion_out | myInt2Map.int2_wakeup_out | myInt2Map.int2_wrist_tilt_out | myInt2Map.int2_activity_type_out | myInt2Map.int2_step_counter_out );
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -2329,7 +2397,8 @@ BMA456_status_t BMA456_GetIntMapData ( I2C_parameters_t myI2Cparameters, BMA456_
  *
  * @author      Manuel Caballero
  * @date        10/July/2019
- * @version     10/July/2019     The ORIGIN
+ * @version     12/July/2019     Reserved bits are safe now.
+ *              10/July/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -2338,9 +2407,14 @@ BMA456_status_t BMA456_SetIntMapData ( I2C_parameters_t myI2Cparameters, BMA456_
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
   
-  /* Write the register   */
+  /* Read the register to mask it  */
   cmd[0]  =   BMA456_INT_MAP_DATA;
-  cmd[1]  =   ( myIntMapData.int2_drdy | myIntMapData.int2_fwm | myIntMapData.int2_ffull | myIntMapData.int1_drdy | myIntMapData.int1_fwm | myIntMapData.int1_ffull );
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  
+  /* Write the register   */
+  cmd[1] &=  ~( INT_MAP_DATA_INT2_DRDY_MASK | INT_MAP_DATA_INT2_FWM_MASK | INT_MAP_DATA_INT2_FFULL_MASK | INT_MAP_DATA_INT1_DRDY_MASK | INT_MAP_DATA_INT1_FWM_MASK | INT_MAP_DATA_INT1_FFULL_MASK );
+  cmd[1] |=   ( myIntMapData.int2_drdy | myIntMapData.int2_fwm | myIntMapData.int2_ffull | myIntMapData.int1_drdy | myIntMapData.int1_fwm | myIntMapData.int1_ffull );
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
