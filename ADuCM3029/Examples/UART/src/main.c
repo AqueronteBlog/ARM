@@ -1,7 +1,8 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: WDT on watchdog configuration.
- * 				Both LEDs blink every 1 second.
+ * @details     This example shows how to work with the internal peripheral: UART.
+ * 				If '1' is received, LED1 is turned on, if '2' is received, the LED2 is turned on.
+ * 				A message will be transmitted back, any other value will turn both LEDs off.
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
  *
@@ -25,12 +26,13 @@
 
 /**@brief Constants.
  */
-
+#define TX_BUFF_SIZE  64                    /*!<   UART buffer size                                       */
 
 
 /**@brief Variables.
  */
-
+volatile uint8_t  myState	 =	 0U;		/*!<   State that indicates when to perform the next action   */
+volatile uint8_t  *myPtr;                   /*!<   Pointer to point out myMessage                         */
 
 
 
@@ -38,6 +40,8 @@
  */
 int main(int argc, char *argv[])
 {
+	uint8_t  myMessage[ TX_BUFF_SIZE ];
+
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
 	 * the project.
@@ -48,9 +52,18 @@ int main(int argc, char *argv[])
 	/* Begin adding your custom code here */
 	SystemInit ();
 
+	/* Initialized the message	 */
+	myMessage[ 0 ]   =  'L';
+	myMessage[ 1 ]   =  'E';
+	myMessage[ 2 ]   =  'D';
+	myMessage[ 3 ]   =  ' ';
+	myMessage[ 4 ]   =  ' ';
+	myMessage[ 11 ]  =  '\n';
+
+
 	conf_CLK  ();
 	conf_GPIO ();
-	conf_UART  ();
+	conf_UART ();
 
 
 	while ( 1 )
@@ -71,6 +84,60 @@ int main(int argc, char *argv[])
 
 		/* Enter in low power Flexi mode	 */
 		__WFI();
+
+		if ( myState != 0U )
+		{
+			/* Initialized the message	 */
+			myMessage[ 5 ]   =  'T';
+			myMessage[ 6 ]   =  'O';
+			myMessage[ 7 ]   =  'G';
+			myMessage[ 8 ]   =  'G';
+			myMessage[ 9 ]   =  'L';
+			myMessage[ 10 ]  =  'E';
+
+			switch ( myState )
+			{
+				case '1':
+					/* Toggle LED1	 */
+					pADI_GPIO1->TGL	|=	 DS4;
+					myMessage [ 3 ]	 =	 '1';
+					break;
+
+				case '2':
+					/* Toggle LED2	 */
+					pADI_GPIO2->TGL	|=	 DS3;
+					myMessage [ 3 ]	 =   '2';
+					break;
+
+				default:
+					/* Both LEDs off	 */
+					pADI_GPIO1->CLR	|=	 DS4;
+					pADI_GPIO2->CLR	|=	 DS3;
+
+					/* Initialized the message	 */
+					myMessage[ 3 ]   =  ' ';
+					myMessage[ 5 ]   =  'E';
+					myMessage[ 6 ]   =  'R';
+					myMessage[ 7 ]   =  'R';
+					myMessage[ 8 ]   =  'O';
+					myMessage[ 9 ]   =  'R';
+					myMessage[ 10 ]  =  '!';
+					break;
+			}
+
+			/* Check that is safe to send data	 */
+			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
+
+			/* Transmit data back	 */
+			myPtr            =   &myMessage[0];
+			pADI_UART0->TX	 =	 *myPtr;
+
+			/* Transmit Buffer Empty Interrupt: Enabled	 */
+			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
+
+			/* Reset variables	 */
+			myState	 =	 0U;
+		}
 	}
 
 	/* It should never reach here	 */
