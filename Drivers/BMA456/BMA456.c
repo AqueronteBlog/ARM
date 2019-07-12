@@ -541,7 +541,7 @@ BMA456_status_t BMA456_GetStepCounter ( I2C_parameters_t myI2Cparameters, BMA456
  * @date        08/July/2019
  * @version     08/July/2019     The ORIGIN
  * @pre         Temperature value in two's complement representation in units of 1 Kelvin: 0x00 corresponds to 23 degree Celsius.
- * @warning     N/A.
+ * @warning     A new temperature value every 1.28s, the user MUST take this time into consideration.
  */
 BMA456_status_t BMA456_GetRawTemperature ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myRawTemperature )
 {
@@ -566,6 +566,50 @@ BMA456_status_t BMA456_GetRawTemperature ( I2C_parameters_t myI2Cparameters, BMA
   {
     return   BMA456_FAILURE;
   }
+}
+
+
+
+/**
+ * @brief       BMA456_GetTemperature ( I2C_parameters_t , BMA456_data_t* )
+ *
+ * @details     It gets the temperature value of the sensor in Celsius degrees.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myTemperature:   Temperature value of the sensor.
+ *
+ *
+ * @return       Status of BMA456_GetTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/July/2019
+ * @version     12/July/2019     The ORIGIN
+ * @pre         Temperature value in two's complement representation in units of 1 Kelvin: 0x00 corresponds to 23 degree Celsius.
+ * @pre         This function updates rawTemperature value as well.
+ * @warning     A new temperature value every 1.28s, the user MUST take this time into consideration.
+ */
+BMA456_status_t BMA456_GetTemperature ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myTemperature )
+{
+  BMA456_status_t aux;
+
+  /* Get the temperature   */
+  aux  =   BMA456_GetRawTemperature ( myI2Cparameters, &(*myTemperature) );
+  
+  /* Check if there is a valid temperature information available   */
+  if ( myTemperature->rawTemperature == 0x80 )
+  {
+    return   BMA456_FAILURE;
+  }
+  else
+  {
+    /* Calculate the temperature   */
+    myTemperature->temperature   =   (int8_t)( myTemperature->rawTemperature + 23 );
+  }
+
+
+  return   aux;
 }
 
 
