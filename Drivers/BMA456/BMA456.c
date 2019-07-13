@@ -321,6 +321,70 @@ BMA456_status_t BMA456_GetAccRawData ( I2C_parameters_t myI2Cparameters, BMA456_
 
 
 /**
+ * @brief       BMA456_GetAccData ( I2C_parameters_t , BMA456_data_t* )
+ *
+ * @details     It gets acceleration data ( X, Y and Z ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myAccData:       Acceleration data.
+ *
+ *
+ * @return       Status of BMA456_GetAccData.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        13/July/2019
+ * @version     13/July/2019     The ORIGIN
+ * @pre         Make sure that BMA456_SetAccRange was configure previously.
+ * @pre         This function also updates acceleration raw data.
+ * @pre         This function does NOT applies any temperature compensation ( T_A = 25C is taken for granted ).
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_GetAccData ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAccData )
+{
+  float           myRange  =   0.0;
+  BMA456_status_t aux;
+
+  /* Get acceleration raw data   */
+  aux     =   BMA456_GetAccRawData ( myI2Cparameters, &(*myAccData) );
+  
+  /* Set the range   */
+  switch ( myAccData->acc_range )
+  {
+    case ACC_RANGE_ACC_RANGE_RANGE_2G:
+      myRange  =   16348.0;
+      break;
+    
+    case ACC_RANGE_ACC_RANGE_RANGE_4G:
+      myRange  =   8192.0;
+      break;
+
+    case ACC_RANGE_ACC_RANGE_RANGE_8G:
+      myRange  =   4096.0;
+      break;
+
+    case ACC_RANGE_ACC_RANGE_RANGE_16G:
+      myRange  =   2048.0;
+      break;
+    
+    default:
+      return   BMA456_FAILURE;
+      break;
+  }
+  
+  /* Parse the data   */
+  myAccData->acc_x   =   (float)( myAccData->acc_raw_x / myRange );
+  myAccData->acc_y   =   (float)( myAccData->acc_raw_y / myRange );
+  myAccData->acc_z   =   (float)( myAccData->acc_raw_z / myRange );
+
+
+  return   aux;
+}
+
+
+
+/**
  * @brief       BMA456_GetSensorTime ( I2C_parameters_t , BMA456_data_t* )
  *
  * @details     It gets sensor time ( raw value ).
@@ -400,7 +464,7 @@ BMA456_status_t BMA456_GetEvent ( I2C_parameters_t myI2Cparameters, BMA456_data_
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
   /* Parse the data   */
-  myEvent->por_detected   =   (BMA456_event_por_detected_t)cmd;
+  myEvent->por_detected   =   (BMA456_event_por_detected_t)( cmd & EVENT_POR_DETECTED_MASK );
 
 
 
