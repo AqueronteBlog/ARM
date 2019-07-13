@@ -1247,14 +1247,18 @@ typedef enum
 typedef struct
 {
   /* Output: Raw data  */
-  uint16_t  aux_raw_x;                        /*!<  Auxiliary: Raw Aux_X              */
-  uint16_t  aux_raw_y;                        /*!<  Auxiliary: Raw Aux_Y              */
-  uint16_t  aux_raw_z;                        /*!<  Auxiliary: Raw Aux_Z              */
-  uint16_t  aux_raw_r;                        /*!<  Auxiliary: Raw Aux_R              */
+  int16_t  aux_raw_x;                        /*!<  Auxiliary: Raw Aux_X              */
+  int16_t  aux_raw_y;                        /*!<  Auxiliary: Raw Aux_Y              */
+  int16_t  aux_raw_z;                        /*!<  Auxiliary: Raw Aux_Z              */
+  int16_t  aux_raw_r;                        /*!<  Auxiliary: Raw Aux_R              */
 
-  uint16_t  acc_raw_x;                        /*!<  Accelerometer: Raw Acc_X          */
-  uint16_t  acc_raw_y;                        /*!<  Accelerometer: Raw Acc_Y          */
-  uint16_t  acc_raw_z;                        /*!<  Accelerometer: Raw Acc_Z          */
+  int16_t  acc_raw_x;                        /*!<  Accelerometer: Raw Acc_X          */
+  int16_t  acc_raw_y;                        /*!<  Accelerometer: Raw Acc_Y          */
+  int16_t  acc_raw_z;                        /*!<  Accelerometer: Raw Acc_Z          */
+
+  float    acc_x;                             /*!<  Accelerometer: Acc_X             */
+  float    acc_y;                             /*!<  Accelerometer: Acc_Y             */
+  float    acc_z;                             /*!<  Accelerometer: Acc_Z             */
   
   uint32_t  sensor_time;                      /*!<  Sensor time                       */
   uint32_t  step_counter;                     /*!<  Step counting value               */
@@ -1462,6 +1466,10 @@ BMA456_status_t BMA456_GetAuxRawData            ( I2C_parameters_t myI2Cparamete
 /** It gets acceleration raw data ( X, Y and Z ).
   */
 BMA456_status_t BMA456_GetAccRawData            ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAccRawData           );
+
+/** It gets acceleration data ( X, Y and Z ).
+  */
+BMA456_status_t BMA456_GetAccData               ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myAccData              );
 
 /** It gets sensor time ( raw value ).
   */
