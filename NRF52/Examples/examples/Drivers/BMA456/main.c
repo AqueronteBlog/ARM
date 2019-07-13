@@ -92,27 +92,26 @@ int main(void)
     aux  =   BMA456_GetEvent ( myBMA456_I2C_parameters, &myBMA456_Data );   
   }while( myBMA456_Data.por_detected == EVENT_POR_DETECTED_HIGH );                            // Dangerous!!! The uC may get stuck here...
                                                                                               // [WORKAROUND] Insert a counter  
-
-  /* Get the ID  */
-  aux  =   BMA456_GetID ( myBMA456_I2C_parameters, &myBMA456_Data );
-
-  /* Accelerometer enabled, Auxiliary sensor disabled  */
-  myBMA456_Data.acc_en   =   PWR_CTRL_ACC_EN_ACC_ON;
+  /* Accelerometer disabled, Auxiliary sensor disabled  */
+  myBMA456_Data.acc_en   =   PWR_CTRL_ACC_EN_ACC_OFF;
   myBMA456_Data.aux_en   =   PWR_CTRL_AUX_EN_MAG_OFF;
   aux  =   BMA456_SetPWR_Ctrl ( myBMA456_I2C_parameters, myBMA456_Data );
+  
+  /* Get the ID  */
+  aux  =   BMA456_GetID ( myBMA456_I2C_parameters, &myBMA456_Data );
+  
+  /* Accelerometer. Range: +/- 16g  */
+  myBMA456_Data.acc_range   =   ACC_RANGE_ACC_RANGE_RANGE_16G;
+  aux  =   BMA456_SetAccRange ( myBMA456_I2C_parameters, myBMA456_Data );
 
   /* Accelerometer. Bandwidth: Average 2 samples | ODR: 50Hz | Filter performance: Average mode  */
   myBMA456_Data.acc_bwp        =   ACC_CONF_ACC_BWP_OSR2_AVG2;
   myBMA456_Data.acc_odr        =   ACC_CONF_ACC_ODR_ODR_50;
   myBMA456_Data.acc_perf_mode  =   ACC_CONF_ACC_PERF_MODE_CIC_AVG;
   aux  =   BMA456_SetPWR_Ctrl ( myBMA456_I2C_parameters, myBMA456_Data );
-
-  /* Accelerometer. Range: +/- 16g  */
-  myBMA456_Data.acc_range   =   ACC_RANGE_ACC_RANGE_RANGE_16G;
-  aux  =   BMA456_SetAccRange ( myBMA456_I2C_parameters, myBMA456_Data );
   
   /* Accelerometer. Advanced power mode enabled  */
-  myBMA456_Data.adv_power_save   =   PWR_CONF_ADV_POWER_SAVE_APS_ON;
+  myBMA456_Data.adv_power_save   =   PWR_CONF_ADV_POWER_SAVE_APS_OFF;
   aux  =   BMA456_SetPWR_Conf ( myBMA456_I2C_parameters, myBMA456_Data );
 
   /* Check that there is not any error after configuring ACC_CONF   */
@@ -120,8 +119,12 @@ int main(void)
     aux  =   BMA456_GetSensorErrorConditions ( myBMA456_I2C_parameters, &myBMA456_Data );   
   }while( myBMA456_Data.error_code == ERR_REG_ERROR_CODE_ACC_ERR );                           // Dangerous!!! The uC may get stuck here...
                                                                                               // [WORKAROUND] Insert a counter 
-  
+  /* Accelerometer enabled, Auxiliary sensor disabled  */
+  myBMA456_Data.acc_en   =   PWR_CTRL_ACC_EN_ACC_ON;
+  myBMA456_Data.aux_en   =   PWR_CTRL_AUX_EN_MAG_OFF;
+  aux  =   BMA456_SetPWR_Ctrl ( myBMA456_I2C_parameters, myBMA456_Data );
 
+  
 
   myState  =   0;                             // Reset the variable
   NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
@@ -151,10 +154,12 @@ int main(void)
                                                                                             // [WORKAROUND] Insert a counter
       
       /* Get the acceleration data from the device   */
-      aux  =   BMA456_GetAccRawData ( myBMA456_I2C_parameters, &myBMA456_Data );
+      aux  =   BMA456_GetAccData ( myBMA456_I2C_parameters, &myBMA456_Data );
+
+      aux = BMA456_GetAccRange(myBMA456_I2C_parameters, &myBMA456_Data);
 
       /* Transmit result through the UART  */
-      sprintf ( (char*)myMessage, "X: %d | Y: %d | Z: %d | T: %d C\r\n", myBMA456_Data.acc_raw_x, myBMA456_Data.acc_raw_y, myBMA456_Data.acc_raw_z, myBMA456_Data.temperature );
+      sprintf ( (char*)myMessage, "X: %d mg | Y: %d mg | Z: %d mg | T: %d C\r\n", (int16_t)( myBMA456_Data.acc_x * 1000.0 ), (int16_t)( myBMA456_Data.acc_y * 1000.0 ), (int16_t)( myBMA456_Data.acc_z * 1000.0 ), myBMA456_Data.temperature );
 
       NRF_UART0->TASKS_STOPRX  =   1UL;
       NRF_UART0->TASKS_STOPTX  =   1UL;
