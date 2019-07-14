@@ -932,7 +932,7 @@ BMA456_status_t BMA456_GetAccConf ( I2C_parameters_t myI2Cparameters, BMA456_dat
  * @author      Manuel Caballero
  * @date        08/July/2019
  * @version     08/July/2019     The ORIGIN
- * @pre         N/A.
+ * @pre         In Low Power mode the registers need an inter-write-delay of at least 1ms.
  * @warning     N/A.
  */
 BMA456_status_t BMA456_SetAccConf ( I2C_parameters_t myI2Cparameters, BMA456_data_t myAccConf )
@@ -3122,7 +3122,7 @@ BMA456_status_t BMA456_GetPWR_Conf ( I2C_parameters_t myI2Cparameters, BMA456_da
  * @author      Manuel Caballero
  * @date        10/July/2019
  * @version     10/July/2019     The ORIGIN
- * @pre         N/A.
+ * @pre         In Low Power mode the registers need an inter-write-delay of at least 1ms.
  * @warning     N/A.
  */
 BMA456_status_t BMA456_SetPWR_Conf ( I2C_parameters_t myI2Cparameters, BMA456_data_t myPWR_Conf )
