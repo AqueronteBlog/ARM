@@ -96,23 +96,27 @@ int main(void)
   myBMA456_Data.acc_en   =   PWR_CTRL_ACC_EN_ACC_OFF;
   myBMA456_Data.aux_en   =   PWR_CTRL_AUX_EN_MAG_OFF;
   aux  =   BMA456_SetPWR_Ctrl ( myBMA456_I2C_parameters, myBMA456_Data );
-  
+  nrf_delay_ms ( 1UL );
+
   /* Get the ID  */
   aux  =   BMA456_GetID ( myBMA456_I2C_parameters, &myBMA456_Data );
   
   /* Accelerometer. Range: +/- 16g  */
   myBMA456_Data.acc_range   =   ACC_RANGE_ACC_RANGE_RANGE_16G;
   aux  =   BMA456_SetAccRange ( myBMA456_I2C_parameters, myBMA456_Data );
+  nrf_delay_ms ( 1UL );
 
   /* Accelerometer. Bandwidth: Average 2 samples | ODR: 50Hz | Filter performance: Average mode  */
   myBMA456_Data.acc_bwp        =   ACC_CONF_ACC_BWP_OSR2_AVG2;
   myBMA456_Data.acc_odr        =   ACC_CONF_ACC_ODR_ODR_50;
   myBMA456_Data.acc_perf_mode  =   ACC_CONF_ACC_PERF_MODE_CIC_AVG;
-  aux  =   BMA456_SetPWR_Ctrl ( myBMA456_I2C_parameters, myBMA456_Data );
-  
+  aux  =   BMA456_SetAccConf ( myBMA456_I2C_parameters, myBMA456_Data );
+  nrf_delay_ms ( 1UL );
+
   /* Accelerometer. Advanced power mode enabled  */
-  myBMA456_Data.adv_power_save   =   PWR_CONF_ADV_POWER_SAVE_APS_OFF;
+  myBMA456_Data.adv_power_save   =   PWR_CONF_ADV_POWER_SAVE_APS_ON;
   aux  =   BMA456_SetPWR_Conf ( myBMA456_I2C_parameters, myBMA456_Data );
+  nrf_delay_ms ( 1UL );
 
   /* Check that there is not any error after configuring ACC_CONF   */
   do{
@@ -123,14 +127,15 @@ int main(void)
   myBMA456_Data.acc_en   =   PWR_CTRL_ACC_EN_ACC_ON;
   myBMA456_Data.aux_en   =   PWR_CTRL_AUX_EN_MAG_OFF;
   aux  =   BMA456_SetPWR_Ctrl ( myBMA456_I2C_parameters, myBMA456_Data );
+  nrf_delay_ms ( 1UL );
 
   
 
-  myState  =   0;                             // Reset the variable
-  NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
+  myState  =   0UL;                           // Reset the variable
+  NRF_TIMER0->TASKS_START  =   1UL;           // Start Timer0
 
   //NRF_POWER->SYSTEMOFF = 1;
-  NRF_POWER->TASKS_LOWPWR  =   1;             // Sub power mode: Low power.
+  NRF_POWER->TASKS_LOWPWR  =   1UL;           // Sub power mode: Low power.
   while( 1 )
   {
     /* Enter System ON sleep mode   */
@@ -151,12 +156,10 @@ int main(void)
       do{
         aux  =   BMA456_GetSensorStatusFlags ( myBMA456_I2C_parameters, &myBMA456_Data );
       }while( myBMA456_Data.drdy_acc == STATUS_DRDY_ACC_DATA_NO_READY );                    // Dangerous!!! The uC may get stuck here...
-                                                                                            // [WORKAROUND] Insert a counter
-      
+                                                                                            // [WORKAROUND] Insert a counter 
       /* Get the acceleration data from the device   */
       aux  =   BMA456_GetAccData ( myBMA456_I2C_parameters, &myBMA456_Data );
 
-      aux = BMA456_GetAccRange(myBMA456_I2C_parameters, &myBMA456_Data);
 
       /* Transmit result through the UART  */
       sprintf ( (char*)myMessage, "X: %d mg | Y: %d mg | Z: %d mg | T: %d C\r\n", (int16_t)( myBMA456_Data.acc_x * 1000.0 ), (int16_t)( myBMA456_Data.acc_y * 1000.0 ), (int16_t)( myBMA456_Data.acc_z * 1000.0 ), myBMA456_Data.temperature );
