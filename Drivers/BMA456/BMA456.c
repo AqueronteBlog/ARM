@@ -741,9 +741,11 @@ BMA456_status_t BMA456_GetFIFO_Length ( I2C_parameters_t myI2Cparameters, BMA456
  *
  * @author      Manuel Caballero
  * @date        08/July/2019
- * @version     08/July/2019     The ORIGIN
+ * @version     15/July/2019     Some comments were improved.
+ *              08/July/2019     The ORIGIN
  * @pre         N/A.
- * @warning     N/A.
+ * @warning     PWR_CONF ( adv_power_save ) must set to 0b0 to this register gac be read. The
+ *              user MUST take care of this.
  */
 BMA456_status_t BMA456_GetFIFO_Data ( I2C_parameters_t myI2Cparameters, BMA456_data_t* myFIFOdata )
 {
@@ -3277,6 +3279,94 @@ BMA456_status_t BMA456_SetCMD ( I2C_parameters_t myI2Cparameters, BMA456_data_t 
   /* Write the register   */
   cmd[0]  =   BMA456_CMD;
   cmd[1]  =   myCMD.cmd;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_SetInitCtrl ( I2C_parameters_t , BMA456_tap_doubletap_t )
+ *
+ * @details     It sets the feature enginee.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myInitCtrl:      Feature initialization.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BMA456_SetInitCtrl.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        15/July/2019
+ * @version     15/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_SetInitCtrl ( I2C_parameters_t myI2Cparameters, BMA456_data_t myInitCtrl )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+  
+  /* Write to the register   */
+  cmd[0]  =   BMA456_INIT_CTRL;
+  cmd[1]  =   myInitCtrl.init_ctrl;
+  aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BMA456_SUCCESS;
+  }
+  else
+  {
+    return   BMA456_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BMA456_SetTap_DoubleTapDetection ( I2C_parameters_t , BMA456_tap_doubletap_t )
+ *
+ * @details     It sets the tap/double tap detection feature.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myTapDetection:  Tap/Double tap detection parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BMA456_SetTap_DoubleTapDetection.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        15/July/2019
+ * @version     15/July/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BMA456_status_t BMA456_SetTap_DoubleTapDetection ( I2C_parameters_t myI2Cparameters, BMA456_tap_doubletap_t myTapDetection )
+{
+  uint8_t      cmd[63]  = { 0U };
+  i2c_status_t aux;
+  
+  /* Burst read to reg FEATURES_IN   */
+  cmd[0]  =   BMA456_CMD;
+  //cmd[1]  =   myCMD.cmd;
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
