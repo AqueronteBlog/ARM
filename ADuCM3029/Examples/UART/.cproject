@@ -70,7 +70,7 @@
 								<option id="arm.linker.option.sirevision.1706664186" name="-msi-revision" superClass="arm.linker.option.sirevision" useByScannerDiscovery="false" value=" none" valueType="string"/>
 								<option id="arm.toolchain.gcc.c.linker.option.fpu.abi.1150742864" name="Float ABI" superClass="arm.toolchain.gcc.c.linker.option.fpu.abi" useByScannerDiscovery="false" value="" valueType="enumerated"/>
 								<option id="arm.linker.option.ldprocessing.ldfile.2100420628" name="Custom linker script (-T)" superClass="arm.linker.option.ldprocessing.ldfile" useByScannerDiscovery="false" value="${workspace_loc:/${ProjName}}/RTE/Device/ADuCM3029/ADuCM3029.ld" valueType="string"/>
-								<option id="arm.toolchain.gcc.c.linker.option.specs.1722060893" superClass="arm.toolchain.gcc.c.linker.option.specs" useByScannerDiscovery="false" value="arm.toolchain.gcc.c.linker.option.specs.nosys" valueType="enumerated"/>
+								<option id="arm.toolchain.gcc.c.linker.option.specs.1722060893" name="Semihosting support" superClass="arm.toolchain.gcc.c.linker.option.specs" useByScannerDiscovery="false" value="arm.toolchain.gcc.c.linker.option.specs.nosys" valueType="enumerated"/>
 								<inputType id="arm.linker.input.1458952497" superClass="arm.linker.input">
 									<additionalInput kind="additionaldependency" paths="$(USER_OBJS)"/>
 								</inputType>
@@ -112,6 +112,7 @@
 					</folderInfo>
 					<folderInfo id="arm.toolchain.gcc.target.exe.debug.766928143.system" name="system" resourcePath="system">
 						<toolChain id="arm.gcc.toolchain.1591771166" name="CrossCore GCC ARM Embedded Toolchain" superClass="arm.gcc.toolchain" unusedChildren="">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="arm.toolchain.platform.base" name="Development Platform" osList="all" superClass="arm.toolchain.platform.base"/>
 							<tool id="arm.toolchain.gcc.assembler.533138960" name="CrossCore GCC ARM Embedded Assembler" superClass="arm.toolchain.gcc.assembler.406721345">
 								<inputType id="arm.toolchain.assembler.base.input.38090365" superClass="arm.toolchain.assembler.base.input"/>
 							</tool>
@@ -244,6 +245,7 @@
 					</folderInfo>
 					<folderInfo id="arm.toolchain.gcc.target.exe.release.654054934.system" name="system" resourcePath="system">
 						<toolChain id="arm.gcc.toolchain.1199838964" name="CrossCore GCC ARM Embedded Toolchain" superClass="arm.gcc.toolchain" unusedChildren="">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="arm.toolchain.platform.base" name="Development Platform" osList="all" superClass="arm.toolchain.platform.base"/>
 							<tool id="arm.toolchain.gcc.assembler.950507851" name="CrossCore GCC ARM Embedded Assembler" superClass="arm.toolchain.gcc.assembler.1200349250">
 								<inputType id="arm.toolchain.assembler.base.input.1127614182" superClass="arm.toolchain.assembler.base.input"/>
 							</tool>
