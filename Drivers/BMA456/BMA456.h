@@ -1019,7 +1019,49 @@ typedef enum
 */
 
 
+/**
+  * @brief   FEATURES_IN. Feature configuration read/write port.
+  */
+/**
+  * @brief   TAP_DOUBLETAP. Tap general configuration flags
+  */
+/* ENABLE <0>
+ *    NOTE: Enables the feature.
+ */
+typedef enum
+{
+    FEATURES_IN_TAP_DOUBLETAP_ENABLE_MASK     =   ( 1U << 0U ),         /*!<  ENABLE mask                                       */
+    FEATURES_IN_TAP_DOUBLETAP_ENABLE_ENABLED  =   ( 1U << 0U ),         /*!<  Feature enabled                                   */
+    FEATURES_IN_TAP_DOUBLETAP_ENABLE_DISABLED =   ( 0U << 0U )          /*!<  Feature disabled                      [ Default ] */
+} BMA456_features_in_tap_doubletap_enable_t;
 
+
+/* SENSITIVITY <3:1>
+ *    NOTE: Configures Tap sensitivity, the range goes from 0 ( high sensitive ) to 7 ( low sensitive ).
+ */
+typedef enum
+{
+    FEATURES_IN_TAP_DOUBLETAP_SENSITIVITY_MASK  =   ( 0b111 << 1U ),    /*!<  SENSITIVITY mask                                  */
+    FEATURES_IN_TAP_DOUBLETAP_SENSITIVITY_0     =   ( 0b000 << 1U ),    /*!<  Sensitivity: 0 ( highest )                        */
+    FEATURES_IN_TAP_DOUBLETAP_SENSITIVITY_1     =   ( 0b001 << 1U ),    /*!<  Sensitivity: 1                                    */
+    FEATURES_IN_TAP_DOUBLETAP_SENSITIVITY_2     =   ( 0b010 << 1U ),    /*!<  Sensitivity: 2                                    */
+    FEATURES_IN_TAP_DOUBLETAP_SENSITIVITY_3     =   ( 0b011 << 1U ),    /*!<  Sensitivity: 3                        [ Default ] */
+    FEATURES_IN_TAP_DOUBLETAP_SENSITIVITY_4     =   ( 0b100 << 1U ),    /*!<  Sensitivity: 4                                    */
+    FEATURES_IN_TAP_DOUBLETAP_SENSITIVITY_5     =   ( 0b101 << 1U ),    /*!<  Sensitivity: 5                                    */
+    FEATURES_IN_TAP_DOUBLETAP_SENSITIVITY_6     =   ( 0b110 << 1U ),    /*!<  Sensitivity: 6                                    */
+    FEATURES_IN_TAP_DOUBLETAP_SENSITIVITY_7     =   ( 0b111 << 1U )     /*!<  Sensitivity: 7 ( lowest )                         */
+} BMA456_features_in_tap_doubletap_sensitivity_t;
+
+
+/* SINGLE_TAP_EN <4>
+ *    NOTE: Flag for enabling single tap detection ( and disabling double tap ). By default double tap detection is being enabled.
+ */
+typedef enum
+{
+    FEATURES_IN_TAP_DOUBLETAP_SINGLE_TAP_EN_MASK      =   ( 1U << 4U ), /*!<  SINGLE_TAP_EN mask                                */
+    FEATURES_IN_TAP_DOUBLETAP_SINGLE_TAP_EN_ENABLED   =   ( 1U << 4U ), /*!<  Single tap enabled                                */
+    FEATURES_IN_TAP_DOUBLETAP_SINGLE_TAP_EN_DISABLED  =   ( 0U << 4U )  /*!<  Single tap disabled                   [ Default ] */
+} BMA456_features_in_tap_doubletap_single_tap_en_t;
 
 
 /**
@@ -1402,7 +1444,8 @@ typedef struct
   
   /* Command   */
   BMA456_cmd_cmd_t              cmd;            /*!<  Available commands                */
-
+  
+  BMA456_int_ctrl_init_ctrl_t   init_ctrl;      /*!<  Start initialization              */
 
   /* Device identification   */
   uint8_t   chip_id;                            /*!<  Device ID                         */
@@ -1423,6 +1466,14 @@ typedef struct
   BMA456_int_status_1_fwm_int_t           fwm_int;            /*!<  FIFO watermark interrupt                    */
   BMA456_int_status_1_ffull_int_t         ffull_int;          /*!<  FIFO full interrupt                         */
 } BMA456_int_status_t;
+
+
+typedef struct
+{
+  BMA456_features_in_tap_doubletap_enable_t         enable;         /*!<  Enebale/Disable the feature                 */
+  BMA456_features_in_tap_doubletap_sensitivity_t    sensitivity;    /*!<  Tap sensititvity                            */
+  BMA456_features_in_tap_doubletap_single_tap_en_t  single_tap_en;  /*!<  Enable/Disable single tap                   */
+} BMA456_tap_doubletap_t;
 #endif
 
 
@@ -1647,7 +1698,15 @@ BMA456_status_t BMA456_GetIntMapData            ( I2C_parameters_t myI2Cparamete
   */
 BMA456_status_t BMA456_SetIntMapData            ( I2C_parameters_t myI2Cparameters, BMA456_data_t myIntMapData            );
 
+/** It sets the feature enginee.
+  */
+BMA456_status_t BMA456_SetInitCtrl              ( I2C_parameters_t myI2Cparameters, BMA456_data_t myInitCtrl              );
+
 /* INIT_CTRL nad FEATURES **********************************************************************/
+/** It sets the tap/double tap detection feature.
+  */
+BMA456_status_t BMA456_SetTap_DoubleTapDetection  ( I2C_parameters_t myI2Cparameters, BMA456_tap_doubletap_t myTapDetection );
+
 
 
 /** It gets the internal error flags.
