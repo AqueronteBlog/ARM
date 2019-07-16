@@ -1,24 +1,24 @@
 /**
- * @brief       LPS22HB.c
- * @details     MEMS nano pressure sensor: 260-1260 hPa absolute digital output barometer.
+ * @brief       WS2812.c
+ * @details     [todo]MEMS nano pressure sensor: 260-1260 hPa absolute digital output barometer.
  *              Functions file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        15/June/2019
- * @version     15/June/2019    The ORIGIN
+ * @date        16/July/2019
+ * @version     16/July/2019    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "LPS22HB.h"
+#include "WS2812.h"
 
 
 /**
- * @brief       LPS22HB_Init ( I2C_parameters_t )
+ * @brief       WS2812_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,7 +27,7 @@
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_Init.
+ * @return       Status of WS2812_Init.
  *
  *
  * @author      Manuel Caballero
@@ -36,7 +36,7 @@
  * @pre         N/A
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_Init ( I2C_parameters_t myI2Cparameters )
+WS2812_status_t WS2812_Init ( I2C_parameters_t myI2Cparameters )
 {
   i2c_status_t aux;
 
@@ -46,19 +46,19 @@ LPS22HB_status_t LPS22HB_Init ( I2C_parameters_t myI2Cparameters )
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetInterruptMode ( I2C_parameters_t , LPS22HB_interrupt_cfg_autorifp_t , LPS22HB_interrupt_cfg_reset_arp_t , LPS22HB_interrupt_cfg_autozero_t ,
- *                                         LPS22HB_interrupt_cfg_reset_az_t , LPS22HB_interrupt_cfg_diff_en_t , LPS22HB_interrupt_cfg_lir_t , LPS22HB_interrupt_cfg_ple_t , LPS22HB_interrupt_cfg_phe_t )
+ * @brief       WS2812_SetInterruptMode ( I2C_parameters_t , WS2812_interrupt_cfg_autorifp_t , WS2812_interrupt_cfg_reset_arp_t , WS2812_interrupt_cfg_autozero_t ,
+ *                                         WS2812_interrupt_cfg_reset_az_t , WS2812_interrupt_cfg_diff_en_t , WS2812_interrupt_cfg_lir_t , WS2812_interrupt_cfg_ple_t , WS2812_interrupt_cfg_phe_t )
  *
  * @details     It sets the Interrupt mode for pressure acquisition configuration.
  *
@@ -75,7 +75,7 @@ LPS22HB_status_t LPS22HB_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetInterruptMode.
+ * @return       Status of WS2812_SetInterruptMode.
  *
  *
  * @author      Manuel Caballero
@@ -84,14 +84,14 @@ LPS22HB_status_t LPS22HB_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetInterruptMode ( I2C_parameters_t myI2Cparameters, LPS22HB_interrupt_cfg_autorifp_t myAUTORIFP, LPS22HB_interrupt_cfg_reset_arp_t myResetARP, LPS22HB_interrupt_cfg_autozero_t myAutoZero,
-                                            LPS22HB_interrupt_cfg_reset_az_t myResetAZ, LPS22HB_interrupt_cfg_diff_en_t myDiffEN, LPS22HB_interrupt_cfg_lir_t myLIR, LPS22HB_interrupt_cfg_ple_t myPLE, LPS22HB_interrupt_cfg_phe_t myPHE )
+WS2812_status_t WS2812_SetInterruptMode ( I2C_parameters_t myI2Cparameters, WS2812_interrupt_cfg_autorifp_t myAUTORIFP, WS2812_interrupt_cfg_reset_arp_t myResetARP, WS2812_interrupt_cfg_autozero_t myAutoZero,
+                                            WS2812_interrupt_cfg_reset_az_t myResetAZ, WS2812_interrupt_cfg_diff_en_t myDiffEN, WS2812_interrupt_cfg_lir_t myLIR, WS2812_interrupt_cfg_ple_t myPLE, WS2812_interrupt_cfg_phe_t myPHE )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
-  cmd[0]  =    LPS22HB_INTERRUPT_CFG;
+  cmd[0]  =    WS2812_INTERRUPT_CFG;
   cmd[1]   =   ( myAUTORIFP | myResetARP | myAutoZero | myResetAZ | myDiffEN | myLIR | myPLE | myPHE );
   aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -99,18 +99,18 @@ LPS22HB_status_t LPS22HB_SetInterruptMode ( I2C_parameters_t myI2Cparameters, LP
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetInterruptMode ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetInterruptMode ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the Interrupt CFG register, raw value.
  *
@@ -119,7 +119,7 @@ LPS22HB_status_t LPS22HB_SetInterruptMode ( I2C_parameters_t myI2Cparameters, LP
  * @param[out]   myInterruptCFG:  InterruptCFG register, raw value.
  *
  *
- * @return       Status of LPS22HB_GetInterruptMode.
+ * @return       Status of WS2812_GetInterruptMode.
  *
  *
  * @author      Manuel Caballero
@@ -128,13 +128,13 @@ LPS22HB_status_t LPS22HB_SetInterruptMode ( I2C_parameters_t myI2Cparameters, LP
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetInterruptMode ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myInterruptCFG )
+WS2812_status_t WS2812_GetInterruptMode ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myInterruptCFG )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_INTERRUPT_CFG;
+  cmd  =   WS2812_INTERRUPT_CFG;
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
@@ -145,18 +145,18 @@ LPS22HB_status_t LPS22HB_GetInterruptMode ( I2C_parameters_t myI2Cparameters, LP
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetPressureThreshold ( I2C_parameters_t , LPS22HB_data_t )
+ * @brief       WS2812_SetPressureThreshold ( I2C_parameters_t , WS2812_data_t )
  *
  * @details     It sets the threshold value for pressure interrupt event.
  *
@@ -166,7 +166,7 @@ LPS22HB_status_t LPS22HB_GetInterruptMode ( I2C_parameters_t myI2Cparameters, LP
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetPressureThreshold.
+ * @return       Status of WS2812_SetPressureThreshold.
  *
  *
  * @author      Manuel Caballero
@@ -175,13 +175,13 @@ LPS22HB_status_t LPS22HB_GetInterruptMode ( I2C_parameters_t myI2Cparameters, LP
  * @pre         This functions uses auto-increment.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetPressureThreshold ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myThs_P )
+WS2812_status_t WS2812_SetPressureThreshold ( I2C_parameters_t myI2Cparameters, WS2812_data_t myThs_P )
 {
   uint8_t      cmd[3]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]  =   ( LPS22HB_THS_P_L | 0x80 );    // Auto-increment
+  cmd[0]  =   ( WS2812_THS_P_L | 0x80 );    // Auto-increment
   cmd[1]  =   (uint8_t)( myThs_P.ths_p & 0xFF );
   cmd[2]  =   (uint8_t)( myThs_P.ths_p >> 8U );
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -191,18 +191,18 @@ LPS22HB_status_t LPS22HB_SetPressureThreshold ( I2C_parameters_t myI2Cparameters
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetPressureThreshold ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetPressureThreshold ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the threshold value for pressure interrupt event.
  *
@@ -211,7 +211,7 @@ LPS22HB_status_t LPS22HB_SetPressureThreshold ( I2C_parameters_t myI2Cparameters
  * @param[out]   myThs_P:         Pressure threshold value.
  *
  *
- * @return       Status of LPS22HB_GetPressureThreshold.
+ * @return       Status of WS2812_GetPressureThreshold.
  *
  *
  * @author      Manuel Caballero
@@ -220,13 +220,13 @@ LPS22HB_status_t LPS22HB_SetPressureThreshold ( I2C_parameters_t myI2Cparameters
  * @pre         This function uses auto-increment.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetPressureThreshold ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myThs_P )
+WS2812_status_t WS2812_GetPressureThreshold ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myThs_P )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]  =   ( LPS22HB_THS_P_L | 0x80 );    // Auto-increment
+  cmd[0]  =   ( WS2812_THS_P_L | 0x80 );    // Auto-increment
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
@@ -239,18 +239,18 @@ LPS22HB_status_t LPS22HB_GetPressureThreshold ( I2C_parameters_t myI2Cparameters
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetDeviceID ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetDeviceID ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the device ID.
  *
@@ -259,7 +259,7 @@ LPS22HB_status_t LPS22HB_GetPressureThreshold ( I2C_parameters_t myI2Cparameters
  * @param[out]   myID:            Device ID.
  *
  *
- * @return       Status of LPS22HB_GetDeviceID.
+ * @return       Status of WS2812_GetDeviceID.
  *
  *
  * @author      Manuel Caballero
@@ -268,13 +268,13 @@ LPS22HB_status_t LPS22HB_GetPressureThreshold ( I2C_parameters_t myI2Cparameters
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetDeviceID ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myID )
+WS2812_status_t WS2812_GetDeviceID ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myID )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Write the register   */
-  cmd   =  LPS22HB_WHO_AM_I;                                              
+  cmd   =  WS2812_WHO_AM_I;                                              
   aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
@@ -285,18 +285,18 @@ LPS22HB_status_t LPS22HB_GetDeviceID ( I2C_parameters_t myI2Cparameters, LPS22HB
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetOutputDataRate ( I2C_parameters_t , LPS22HB_data_t )
+ * @brief       WS2812_SetOutputDataRate ( I2C_parameters_t , WS2812_data_t )
  *
  * @details     It sets the output data rate.
  *
@@ -306,7 +306,7 @@ LPS22HB_status_t LPS22HB_GetDeviceID ( I2C_parameters_t myI2Cparameters, LPS22HB
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetOutputDataRate.
+ * @return       Status of WS2812_SetOutputDataRate.
  *
  *
  * @author      Manuel Caballero
@@ -315,13 +315,13 @@ LPS22HB_status_t LPS22HB_GetDeviceID ( I2C_parameters_t myI2Cparameters, LPS22HB
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetOutputDataRate ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myODR )
+WS2812_status_t WS2812_SetOutputDataRate ( I2C_parameters_t myI2Cparameters, WS2812_data_t myODR )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
-  cmd[0]  =   LPS22HB_CTRL_REG1;                                                     
+  cmd[0]  =   WS2812_CTRL_REG1;                                                     
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
   
@@ -333,18 +333,18 @@ LPS22HB_status_t LPS22HB_SetOutputDataRate ( I2C_parameters_t myI2Cparameters, L
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetOutputDataRate ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetOutputDataRate ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the output data rate.
  *
@@ -353,7 +353,7 @@ LPS22HB_status_t LPS22HB_SetOutputDataRate ( I2C_parameters_t myI2Cparameters, L
  * @param[out]   myODR:           Output data rate.
  *
  *
- * @return       Status of LPS22HB_GetOutputDataRate.
+ * @return       Status of WS2812_GetOutputDataRate.
  *
  *
  * @author      Manuel Caballero
@@ -362,35 +362,35 @@ LPS22HB_status_t LPS22HB_SetOutputDataRate ( I2C_parameters_t myI2Cparameters, L
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetOutputDataRate ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myODR )
+WS2812_status_t WS2812_GetOutputDataRate ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myODR )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_CTRL_REG1;                                                     
+  cmd  =   WS2812_CTRL_REG1;                                                     
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
   /* Parse the data  */
-  myODR->odr   =   (LPS22HB_ctrl_reg1_odr_t)( cmd & CTRL_REG1_ODR_MASK );
+  myODR->odr   =   (WS2812_ctrl_reg1_odr_t)( cmd & CTRL_REG1_ODR_MASK );
  
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_ConfLowPassFilter ( I2C_parameters_t , LPS22HB_ctrl_reg1_en_lpfp_t , LPS22HB_ctrl_reg1_lpfp_cfg_t )
+ * @brief       WS2812_ConfLowPassFilter ( I2C_parameters_t , WS2812_ctrl_reg1_en_lpfp_t , WS2812_ctrl_reg1_lpfp_cfg_t )
  *
  * @details     It configures the low-pass filter.
  *
@@ -401,7 +401,7 @@ LPS22HB_status_t LPS22HB_GetOutputDataRate ( I2C_parameters_t myI2Cparameters, L
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_ConfLowPassFilter.
+ * @return       Status of WS2812_ConfLowPassFilter.
  *
  *
  * @author      Manuel Caballero
@@ -410,13 +410,13 @@ LPS22HB_status_t LPS22HB_GetOutputDataRate ( I2C_parameters_t myI2Cparameters, L
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_ConfLowPassFilter ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_en_lpfp_t myEN_LPFP, LPS22HB_ctrl_reg1_lpfp_cfg_t myLPFP_CFG )
+WS2812_status_t WS2812_ConfLowPassFilter ( I2C_parameters_t myI2Cparameters, WS2812_ctrl_reg1_en_lpfp_t myEN_LPFP, WS2812_ctrl_reg1_lpfp_cfg_t myLPFP_CFG )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]  =   LPS22HB_CTRL_REG1;                                                     
+  cmd[0]  =   WS2812_CTRL_REG1;                                                     
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
   
@@ -429,18 +429,18 @@ LPS22HB_status_t LPS22HB_ConfLowPassFilter ( I2C_parameters_t myI2Cparameters, L
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetBlockDataUpdate ( I2C_parameters_t , LPS22HB_ctrl_reg1_bdu_t )
+ * @brief       WS2812_SetBlockDataUpdate ( I2C_parameters_t , WS2812_ctrl_reg1_bdu_t )
  *
  * @details     It sets the block data update.
  *
@@ -450,7 +450,7 @@ LPS22HB_status_t LPS22HB_ConfLowPassFilter ( I2C_parameters_t myI2Cparameters, L
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetBlockDataUpdate.
+ * @return       Status of WS2812_SetBlockDataUpdate.
  *
  *
  * @author      Manuel Caballero
@@ -459,13 +459,13 @@ LPS22HB_status_t LPS22HB_ConfLowPassFilter ( I2C_parameters_t myI2Cparameters, L
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg1_bdu_t myBDU )
+WS2812_status_t WS2812_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, WS2812_ctrl_reg1_bdu_t myBDU )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
-  cmd[0]  =   LPS22HB_CTRL_REG1;                                                     
+  cmd[0]  =   WS2812_CTRL_REG1;                                                     
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
   
@@ -477,18 +477,18 @@ LPS22HB_status_t LPS22HB_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetRebootMemoryContent ( I2C_parameters_t )
+ * @brief       WS2812_SetRebootMemoryContent ( I2C_parameters_t )
  *
  * @details     It sets the reboot memory content.
  *
@@ -497,7 +497,7 @@ LPS22HB_status_t LPS22HB_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetRebootMemoryContent.
+ * @return       Status of WS2812_SetRebootMemoryContent.
  *
  *
  * @author      Manuel Caballero
@@ -506,13 +506,13 @@ LPS22HB_status_t LPS22HB_SetBlockDataUpdate ( I2C_parameters_t myI2Cparameters, 
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetRebootMemoryContent ( I2C_parameters_t myI2Cparameters )
+WS2812_status_t WS2812_SetRebootMemoryContent ( I2C_parameters_t myI2Cparameters )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
-  cmd[0]  =   LPS22HB_CTRL_REG2;                                                     
+  cmd[0]  =   WS2812_CTRL_REG2;                                                     
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
   
@@ -524,18 +524,18 @@ LPS22HB_status_t LPS22HB_SetRebootMemoryContent ( I2C_parameters_t myI2Cparamete
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetRebootMemoryContent ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetRebootMemoryContent ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the reboot memory content.
  *
@@ -544,7 +544,7 @@ LPS22HB_status_t LPS22HB_SetRebootMemoryContent ( I2C_parameters_t myI2Cparamete
  * @param[out]   myBOOT:          Reboot memory content value.
  *
  *
- * @return       Status of LPS22HB_GetRebootMemoryContent.
+ * @return       Status of WS2812_GetRebootMemoryContent.
  *
  *
  * @author      Manuel Caballero
@@ -553,35 +553,35 @@ LPS22HB_status_t LPS22HB_SetRebootMemoryContent ( I2C_parameters_t myI2Cparamete
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetRebootMemoryContent ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myBOOT )
+WS2812_status_t WS2812_GetRebootMemoryContent ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myBOOT )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_CTRL_REG2;                                                     
+  cmd  =   WS2812_CTRL_REG2;                                                     
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
   /* Parse the data  */
-  myBOOT->boot   =  (LPS22HB_ctrl_reg2_boot_t)( CTRL_REG2_BOOT_MASK & cmd );
+  myBOOT->boot   =  (WS2812_ctrl_reg2_boot_t)( CTRL_REG2_BOOT_MASK & cmd );
  
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetFIFOEnable ( I2C_parameters_t , LPS22HB_data_t )
+ * @brief       WS2812_SetFIFOEnable ( I2C_parameters_t , WS2812_data_t )
  *
  * @details     It sets the FIFO enable/disable.
  *
@@ -591,7 +591,7 @@ LPS22HB_status_t LPS22HB_GetRebootMemoryContent ( I2C_parameters_t myI2Cparamete
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetFIFOEnable.
+ * @return       Status of WS2812_SetFIFOEnable.
  *
  *
  * @author      Manuel Caballero
@@ -600,13 +600,13 @@ LPS22HB_status_t LPS22HB_GetRebootMemoryContent ( I2C_parameters_t myI2Cparamete
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetFIFOEnable ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myFIFO_EN )
+WS2812_status_t WS2812_SetFIFOEnable ( I2C_parameters_t myI2Cparameters, WS2812_data_t myFIFO_EN )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
-  cmd[0]  =   LPS22HB_CTRL_REG2;                                                     
+  cmd[0]  =   WS2812_CTRL_REG2;                                                     
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
   
@@ -618,18 +618,18 @@ LPS22HB_status_t LPS22HB_SetFIFOEnable ( I2C_parameters_t myI2Cparameters, LPS22
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetFIFOEnable ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetFIFOEnable ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the FIFO enable/disable.
  *
@@ -638,7 +638,7 @@ LPS22HB_status_t LPS22HB_SetFIFOEnable ( I2C_parameters_t myI2Cparameters, LPS22
  * @param[out]   myFIFO_EN:       FIFO enable/disable.
  *
  *
- * @return       Status of LPS22HB_GetFIFOEnable.
+ * @return       Status of WS2812_GetFIFOEnable.
  *
  *
  * @author      Manuel Caballero
@@ -647,35 +647,35 @@ LPS22HB_status_t LPS22HB_SetFIFOEnable ( I2C_parameters_t myI2Cparameters, LPS22
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetFIFOEnable ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myFIFO_EN )
+WS2812_status_t WS2812_GetFIFOEnable ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myFIFO_EN )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_CTRL_REG2;                                                     
+  cmd  =   WS2812_CTRL_REG2;                                                     
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
   /* Parse the data  */
-  myFIFO_EN->fifo_en   =  (LPS22HB_ctrl_reg2_fifo_en_t)( CTRL_REG2_FIFO_EN_MASK & cmd );
+  myFIFO_EN->fifo_en   =  (WS2812_ctrl_reg2_fifo_en_t)( CTRL_REG2_FIFO_EN_MASK & cmd );
  
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetFIFOWatermarkLevel ( I2C_parameters_t , LPS22HB_data_t )
+ * @brief       WS2812_SetFIFOWatermarkLevel ( I2C_parameters_t , WS2812_data_t )
  *
  * @details     It sets the FIFO watermark level use.
  *
@@ -685,7 +685,7 @@ LPS22HB_status_t LPS22HB_GetFIFOEnable ( I2C_parameters_t myI2Cparameters, LPS22
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetFIFOWatermarkLevel.
+ * @return       Status of WS2812_SetFIFOWatermarkLevel.
  *
  *
  * @author      Manuel Caballero
@@ -694,13 +694,13 @@ LPS22HB_status_t LPS22HB_GetFIFOEnable ( I2C_parameters_t myI2Cparameters, LPS22
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetFIFOWatermarkLevel ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t mySTOP_ON_FTH )
+WS2812_status_t WS2812_SetFIFOWatermarkLevel ( I2C_parameters_t myI2Cparameters, WS2812_data_t mySTOP_ON_FTH )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
-  cmd[0]  =   LPS22HB_CTRL_REG2;                                                     
+  cmd[0]  =   WS2812_CTRL_REG2;                                                     
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
   
@@ -712,18 +712,18 @@ LPS22HB_status_t LPS22HB_SetFIFOWatermarkLevel ( I2C_parameters_t myI2Cparameter
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetFIFOWatermarkLevel ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetFIFOWatermarkLevel ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the FIFO enable/disable.
  *
@@ -732,7 +732,7 @@ LPS22HB_status_t LPS22HB_SetFIFOWatermarkLevel ( I2C_parameters_t myI2Cparameter
  * @param[out]   mySTOP_ON_FTH:   FIFO watermark level use flag.
  *
  *
- * @return       Status of LPS22HB_GetFIFOWatermarkLevel.
+ * @return       Status of WS2812_GetFIFOWatermarkLevel.
  *
  *
  * @author      Manuel Caballero
@@ -741,35 +741,35 @@ LPS22HB_status_t LPS22HB_SetFIFOWatermarkLevel ( I2C_parameters_t myI2Cparameter
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetFIFOWatermarkLevel ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* mySTOP_ON_FTH )
+WS2812_status_t WS2812_GetFIFOWatermarkLevel ( I2C_parameters_t myI2Cparameters, WS2812_data_t* mySTOP_ON_FTH )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_CTRL_REG2;                                                     
+  cmd  =   WS2812_CTRL_REG2;                                                     
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
   /* Parse the data  */
-  mySTOP_ON_FTH->stopOnFTH   =  (LPS22HB_ctrl_reg2_stop_on_fth_t)( CTRL_REG2_STOP_ON_FTH_MASK & cmd );
+  mySTOP_ON_FTH->stopOnFTH   =  (WS2812_ctrl_reg2_stop_on_fth_t)( CTRL_REG2_STOP_ON_FTH_MASK & cmd );
  
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetSoftwareReset ( I2C_parameters_t )
+ * @brief       WS2812_SetSoftwareReset ( I2C_parameters_t )
  *
  * @details     It sets the software reset.
  *
@@ -778,7 +778,7 @@ LPS22HB_status_t LPS22HB_GetFIFOWatermarkLevel ( I2C_parameters_t myI2Cparameter
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetSoftwareReset.
+ * @return       Status of WS2812_SetSoftwareReset.
  *
  *
  * @author      Manuel Caballero
@@ -787,13 +787,13 @@ LPS22HB_status_t LPS22HB_GetFIFOWatermarkLevel ( I2C_parameters_t myI2Cparameter
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetSoftwareReset ( I2C_parameters_t myI2Cparameters )
+WS2812_status_t WS2812_SetSoftwareReset ( I2C_parameters_t myI2Cparameters )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
-  cmd[0]  =   LPS22HB_CTRL_REG2;                                                     
+  cmd[0]  =   WS2812_CTRL_REG2;                                                     
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
   
@@ -805,18 +805,18 @@ LPS22HB_status_t LPS22HB_SetSoftwareReset ( I2C_parameters_t myI2Cparameters )
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetSoftwareReset ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetSoftwareReset ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the software reset flag value.
  *
@@ -825,7 +825,7 @@ LPS22HB_status_t LPS22HB_SetSoftwareReset ( I2C_parameters_t myI2Cparameters )
  * @param[out]   mySWRESET:       Software reset flag value.
  *
  *
- * @return       Status of LPS22HB_GetSoftwareReset.
+ * @return       Status of WS2812_GetSoftwareReset.
  *
  *
  * @author      Manuel Caballero
@@ -834,35 +834,35 @@ LPS22HB_status_t LPS22HB_SetSoftwareReset ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetSoftwareReset ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* mySWRESET )
+WS2812_status_t WS2812_GetSoftwareReset ( I2C_parameters_t myI2Cparameters, WS2812_data_t* mySWRESET )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_CTRL_REG2;                                                     
+  cmd  =   WS2812_CTRL_REG2;                                                     
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
   /* Parse the data  */
-  mySWRESET->swreset   =  (LPS22HB_ctrl_reg2_swreset_t)( CTRL_REG2_SWRESET_MASK & cmd );
+  mySWRESET->swreset   =  (WS2812_ctrl_reg2_swreset_t)( CTRL_REG2_SWRESET_MASK & cmd );
  
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_TriggerOneShot ( I2C_parameters_t )
+ * @brief       WS2812_TriggerOneShot ( I2C_parameters_t )
  *
  * @details     It triggers the one-shot mode.
  *
@@ -871,7 +871,7 @@ LPS22HB_status_t LPS22HB_GetSoftwareReset ( I2C_parameters_t myI2Cparameters, LP
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_TriggerOneShot.
+ * @return       Status of WS2812_TriggerOneShot.
  *
  *
  * @author      Manuel Caballero
@@ -880,13 +880,13 @@ LPS22HB_status_t LPS22HB_GetSoftwareReset ( I2C_parameters_t myI2Cparameters, LP
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_TriggerOneShot ( I2C_parameters_t myI2Cparameters )
+WS2812_status_t WS2812_TriggerOneShot ( I2C_parameters_t myI2Cparameters )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
-  cmd[0]  =   LPS22HB_CTRL_REG2;                                                     
+  cmd[0]  =   WS2812_CTRL_REG2;                                                     
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
   
@@ -898,18 +898,18 @@ LPS22HB_status_t LPS22HB_TriggerOneShot ( I2C_parameters_t myI2Cparameters )
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetOneShot ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetOneShot ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the one-shot mode flag.
  *
@@ -918,7 +918,7 @@ LPS22HB_status_t LPS22HB_TriggerOneShot ( I2C_parameters_t myI2Cparameters )
  * @param[out]   myONE_SHOT:      One-shot flag value.
  *
  *
- * @return       Status of LPS22HB_GetOneShot.
+ * @return       Status of WS2812_GetOneShot.
  *
  *
  * @author      Manuel Caballero
@@ -927,36 +927,36 @@ LPS22HB_status_t LPS22HB_TriggerOneShot ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetOneShot ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myONE_SHOT )
+WS2812_status_t WS2812_GetOneShot ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myONE_SHOT )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_CTRL_REG2;                                                     
+  cmd  =   WS2812_CTRL_REG2;                                                     
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
   /* Parse the data  */
-  myONE_SHOT->one_shot   =  (LPS22HB_ctrl_reg2_one_shot_t)( CTRL_REG2_ONE_SHOT_MASK & cmd );
+  myONE_SHOT->one_shot   =  (WS2812_ctrl_reg2_one_shot_t)( CTRL_REG2_ONE_SHOT_MASK & cmd );
  
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetInterruptGeneration ( I2C_parameters_t , LPS22HB_ctrl_reg3_int_h_l_t , LPS22HB_ctrl_reg3_pp_od_t , LPS22HB_ctrl_reg3_f_fss5_t ,
- *                                               LPS22HB_ctrl_reg3_f_fth_t , LPS22HB_ctrl_reg3_f_ovr_t , LPS22HB_ctrl_reg3_drdy_t , LPS22HB_ctrl_reg3_int_s2_t )
+ * @brief       WS2812_SetInterruptGeneration ( I2C_parameters_t , WS2812_ctrl_reg3_int_h_l_t , WS2812_ctrl_reg3_pp_od_t , WS2812_ctrl_reg3_f_fss5_t ,
+ *                                               WS2812_ctrl_reg3_f_fth_t , WS2812_ctrl_reg3_f_ovr_t , WS2812_ctrl_reg3_drdy_t , WS2812_ctrl_reg3_int_s2_t )
  *
  * @details     It sets the interrupt generation enable: INT_DRDY pin control.
  *
@@ -972,7 +972,7 @@ LPS22HB_status_t LPS22HB_GetOneShot ( I2C_parameters_t myI2Cparameters, LPS22HB_
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetInterruptGeneration.
+ * @return       Status of WS2812_SetInterruptGeneration.
  *
  *
  * @author      Manuel Caballero
@@ -981,14 +981,14 @@ LPS22HB_status_t LPS22HB_GetOneShot ( I2C_parameters_t myI2Cparameters, LPS22HB_
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetInterruptGeneration   ( I2C_parameters_t myI2Cparameters, LPS22HB_ctrl_reg3_int_h_l_t myINT_H_L, LPS22HB_ctrl_reg3_pp_od_t myPP_OD, LPS22HB_ctrl_reg3_f_fss5_t myF_FSS5,
-                                                    LPS22HB_ctrl_reg3_f_fth_t myF_FTH, LPS22HB_ctrl_reg3_f_ovr_t myF_OVR, LPS22HB_ctrl_reg3_drdy_t myDRDY, LPS22HB_ctrl_reg3_int_s2_t myINT_S )
+WS2812_status_t WS2812_SetInterruptGeneration   ( I2C_parameters_t myI2Cparameters, WS2812_ctrl_reg3_int_h_l_t myINT_H_L, WS2812_ctrl_reg3_pp_od_t myPP_OD, WS2812_ctrl_reg3_f_fss5_t myF_FSS5,
+                                                    WS2812_ctrl_reg3_f_fth_t myF_FTH, WS2812_ctrl_reg3_f_ovr_t myF_OVR, WS2812_ctrl_reg3_drdy_t myDRDY, WS2812_ctrl_reg3_int_s2_t myINT_S )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
-  cmd[0]  =   LPS22HB_CTRL_REG3;                                                     
+  cmd[0]  =   WS2812_CTRL_REG3;                                                     
   cmd[1]  =   ( myINT_H_L | myPP_OD | myF_FSS5 | myF_FTH | myF_OVR | myDRDY | myINT_S );
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
  
@@ -996,18 +996,18 @@ LPS22HB_status_t LPS22HB_SetInterruptGeneration   ( I2C_parameters_t myI2Cparame
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetFIFO_Mode ( I2C_parameters_t , LPS22HB_data_t )
+ * @brief       WS2812_SetFIFO_Mode ( I2C_parameters_t , WS2812_data_t )
  *
  * @details     It sets the FIFO mode selection.
  *
@@ -1017,7 +1017,7 @@ LPS22HB_status_t LPS22HB_SetInterruptGeneration   ( I2C_parameters_t myI2Cparame
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetFIFO_Mode.
+ * @return       Status of WS2812_SetFIFO_Mode.
  *
  *
  * @author      Manuel Caballero
@@ -1026,13 +1026,13 @@ LPS22HB_status_t LPS22HB_SetInterruptGeneration   ( I2C_parameters_t myI2Cparame
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetFIFO_Mode ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myFIFOmode )
+WS2812_status_t WS2812_SetFIFO_Mode ( I2C_parameters_t myI2Cparameters, WS2812_data_t myFIFOmode )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
-  cmd[0]  =   LPS22HB_FIFO_CTRL;                                                     
+  cmd[0]  =   WS2812_FIFO_CTRL;                                                     
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
   
@@ -1044,18 +1044,18 @@ LPS22HB_status_t LPS22HB_SetFIFO_Mode ( I2C_parameters_t myI2Cparameters, LPS22H
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetFIFO_Mode ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetFIFO_Mode ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the FIFO mode selection.
  *
@@ -1064,7 +1064,7 @@ LPS22HB_status_t LPS22HB_SetFIFO_Mode ( I2C_parameters_t myI2Cparameters, LPS22H
  * @param[out]   myFIFOmode:      FIFO mode selection.
  *
  *
- * @return       Status of LPS22HB_GetFIFO_Mode.
+ * @return       Status of WS2812_GetFIFO_Mode.
  *
  *
  * @author      Manuel Caballero
@@ -1073,35 +1073,35 @@ LPS22HB_status_t LPS22HB_SetFIFO_Mode ( I2C_parameters_t myI2Cparameters, LPS22H
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetFIFO_Mode ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myFIFOmode )
+WS2812_status_t WS2812_GetFIFO_Mode ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myFIFOmode )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_FIFO_CTRL;                                                     
+  cmd  =   WS2812_FIFO_CTRL;                                                     
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
   /* Parse the data  */
-  myFIFOmode->f_mode   =  (LPS22HB_fifo_ctrl_f_mode_t)( FIFO_CTRL_F_MODE_MASK & cmd );
+  myFIFOmode->f_mode   =  (WS2812_fifo_ctrl_f_mode_t)( FIFO_CTRL_F_MODE_MASK & cmd );
  
 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetFIFO_Threshold ( I2C_parameters_t , LPS22HB_data_t )
+ * @brief       WS2812_SetFIFO_Threshold ( I2C_parameters_t , WS2812_data_t )
  *
  * @details     It sets the FIFO threshold (watermark) level selection.
  *
@@ -1111,7 +1111,7 @@ LPS22HB_status_t LPS22HB_GetFIFO_Mode ( I2C_parameters_t myI2Cparameters, LPS22H
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetFIFO_Threshold.
+ * @return       Status of WS2812_SetFIFO_Threshold.
  *
  *
  * @author      Manuel Caballero
@@ -1120,7 +1120,7 @@ LPS22HB_status_t LPS22HB_GetFIFO_Mode ( I2C_parameters_t myI2Cparameters, LPS22H
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myFIFOthreshold )
+WS2812_status_t WS2812_SetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, WS2812_data_t myFIFOthreshold )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
@@ -1128,12 +1128,12 @@ LPS22HB_status_t LPS22HB_SetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, L
   /* It cannot be greater than 31 level  */
   if ( myFIFOthreshold.wtm > 31U )
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
   else
   {
     /* Update the register   */
-    cmd[0]  =   LPS22HB_FIFO_CTRL;                                                     
+    cmd[0]  =   WS2812_FIFO_CTRL;                                                     
     aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
     aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
   
@@ -1145,18 +1145,18 @@ LPS22HB_status_t LPS22HB_SetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, L
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetFIFO_Threshold ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetFIFO_Threshold ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the FIFO threshold (watermark) level selection.
  *
@@ -1165,7 +1165,7 @@ LPS22HB_status_t LPS22HB_SetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, L
  * @param[out]   myFIFOthreshold: FIFO threshold (watermark) level selection.
  *
  *
- * @return       Status of LPS22HB_GetFIFO_Threshold.
+ * @return       Status of WS2812_GetFIFO_Threshold.
  *
  *
  * @author      Manuel Caballero
@@ -1174,13 +1174,13 @@ LPS22HB_status_t LPS22HB_SetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, L
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myFIFOthreshold )
+WS2812_status_t WS2812_GetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myFIFOthreshold )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_FIFO_CTRL;                                                     
+  cmd  =   WS2812_FIFO_CTRL;                                                     
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
@@ -1191,18 +1191,18 @@ LPS22HB_status_t LPS22HB_GetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, L
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetReferencePressure ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetReferencePressure ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets raw reference pressure.
  *
@@ -1211,7 +1211,7 @@ LPS22HB_status_t LPS22HB_GetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, L
  * @param[out]   myREFL:          Raw reference pressure.
  *
  *
- * @return       Status of LPS22HB_GetReferencePressure.
+ * @return       Status of WS2812_GetReferencePressure.
  *
  *
  * @author      Manuel Caballero
@@ -1220,13 +1220,13 @@ LPS22HB_status_t LPS22HB_GetFIFO_Threshold ( I2C_parameters_t myI2Cparameters, L
  * @pre         This function uses auto-increment to read more than one register in a raw.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetReferencePressure ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myREFL )
+WS2812_status_t WS2812_GetReferencePressure ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myREFL )
 {
   uint8_t      cmd[3]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]  =   LPS22HB_REF_P_XL;                                             
+  cmd[0]  =   WS2812_REF_P_XL;                                             
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -1241,18 +1241,18 @@ LPS22HB_status_t LPS22HB_GetReferencePressure ( I2C_parameters_t myI2Cparameters
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetReferencePressure ( I2C_parameters_t , LPS22HB_data_t )
+ * @brief       WS2812_SetReferencePressure ( I2C_parameters_t , WS2812_data_t )
  *
  * @details     It sets raw reference pressure.
  *
@@ -1262,7 +1262,7 @@ LPS22HB_status_t LPS22HB_GetReferencePressure ( I2C_parameters_t myI2Cparameters
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetReferencePressure.
+ * @return       Status of WS2812_SetReferencePressure.
  *
  *
  * @author      Manuel Caballero
@@ -1271,13 +1271,13 @@ LPS22HB_status_t LPS22HB_GetReferencePressure ( I2C_parameters_t myI2Cparameters
  * @pre         This function uses auto-increment to write more than one register in a raw.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetReferencePressure ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myREFL )
+WS2812_status_t WS2812_SetReferencePressure ( I2C_parameters_t myI2Cparameters, WS2812_data_t myREFL )
 {
   uint8_t      cmd[4]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]  =   LPS22HB_REF_P_XL;                            
+  cmd[0]  =   WS2812_REF_P_XL;                            
   cmd[1]  =   (uint8_t)( myREFL.ref_p );                         // REF_P_XL
   cmd[2]  =   (uint8_t)( myREFL.ref_p >> 8UL );                  // REF_P_L
   cmd[3]  =   (uint8_t)( myREFL.ref_p >> 16UL );                 // REF_P_H
@@ -1288,18 +1288,18 @@ LPS22HB_status_t LPS22HB_SetReferencePressure ( I2C_parameters_t myI2Cparameters
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetPressureOffset ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetPressureOffset ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the Pressure offset value.
  *
@@ -1308,7 +1308,7 @@ LPS22HB_status_t LPS22HB_SetReferencePressure ( I2C_parameters_t myI2Cparameters
  * @param[out]   myPressureOffset:  Pressure offset.
  *
  *
- * @return       Status of LPS22HB_GetPressureOffset.
+ * @return       Status of WS2812_GetPressureOffset.
  *
  *
  * @author      Manuel Caballero
@@ -1317,13 +1317,13 @@ LPS22HB_status_t LPS22HB_SetReferencePressure ( I2C_parameters_t myI2Cparameters
  * @pre         This function implemets auto-increment.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetPressureOffset ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myPressureOffset )
+WS2812_status_t WS2812_GetPressureOffset ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myPressureOffset )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]  =   LPS22HB_RPDS_L;                                   
+  cmd[0]  =   WS2812_RPDS_L;                                   
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
@@ -1336,18 +1336,18 @@ LPS22HB_status_t LPS22HB_GetPressureOffset ( I2C_parameters_t myI2Cparameters, L
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetPressureOffset ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_SetPressureOffset ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It sets the Pressure offset value.
  *
@@ -1357,7 +1357,7 @@ LPS22HB_status_t LPS22HB_GetPressureOffset ( I2C_parameters_t myI2Cparameters, L
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetPressureOffset.
+ * @return       Status of WS2812_SetPressureOffset.
  *
  *
  * @author      Manuel Caballero
@@ -1366,13 +1366,13 @@ LPS22HB_status_t LPS22HB_GetPressureOffset ( I2C_parameters_t myI2Cparameters, L
  * @pre         This function implements auto-increment.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetPressureOffset ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t myPressureOffset )
+WS2812_status_t WS2812_SetPressureOffset ( I2C_parameters_t myI2Cparameters, WS2812_data_t myPressureOffset )
 {
   uint8_t      cmd[3]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]  =   LPS22HB_RPDS_L;                                   
+  cmd[0]  =   WS2812_RPDS_L;                                   
   cmd[1]  =   (uint8_t)( myPressureOffset.rpds & 0xFF );
   cmd[2]  =   (uint8_t)( ( myPressureOffset.rpds >> 8U ) & 0xFF );
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -1381,18 +1381,18 @@ LPS22HB_status_t LPS22HB_SetPressureOffset ( I2C_parameters_t myI2Cparameters, L
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_SetPowerMode ( I2C_parameters_t , LPS22HB_ctrl_reg1_pd_t )
+ * @brief       WS2812_SetPowerMode ( I2C_parameters_t , WS2812_ctrl_reg1_pd_t )
  *
  * @details     It sets power mode.
  *
@@ -1402,7 +1402,7 @@ LPS22HB_status_t LPS22HB_SetPressureOffset ( I2C_parameters_t myI2Cparameters, L
  * @param[out]   N/A.
  *
  *
- * @return       Status of LPS22HB_SetPowerMode.
+ * @return       Status of WS2812_SetPowerMode.
  *
  *
  * @author      Manuel Caballero
@@ -1411,13 +1411,13 @@ LPS22HB_status_t LPS22HB_SetPressureOffset ( I2C_parameters_t myI2Cparameters, L
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_SetPowerMode ( I2C_parameters_t myI2Cparameters, LPS22HB_res_conf_lc_en_t myLC_EN )
+WS2812_status_t WS2812_SetPowerMode ( I2C_parameters_t myI2Cparameters, WS2812_res_conf_lc_en_t myLC_EN )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Update the register   */
-  cmd[0]  =   LPS22HB_RES_CONF;                                                     
+  cmd[0]  =   WS2812_RES_CONF;                                                     
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
   
@@ -1429,18 +1429,18 @@ LPS22HB_status_t LPS22HB_SetPowerMode ( I2C_parameters_t myI2Cparameters, LPS22H
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetInterruptSource ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetInterruptSource ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It reads the interrupt source register.
  *
@@ -1449,7 +1449,7 @@ LPS22HB_status_t LPS22HB_SetPowerMode ( I2C_parameters_t myI2Cparameters, LPS22H
  * @param[out]   myIntSource:     Interrupt source.
  *
  *
- * @return       Status of LPS22HB_GetInterruptSource.
+ * @return       Status of WS2812_GetInterruptSource.
  *
  *
  * @author      Manuel Caballero
@@ -1458,13 +1458,13 @@ LPS22HB_status_t LPS22HB_SetPowerMode ( I2C_parameters_t myI2Cparameters, LPS22H
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetInterruptSource ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myIntSource )
+WS2812_status_t WS2812_GetInterruptSource ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myIntSource )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_INT_SOURCE;                                                     
+  cmd  =   WS2812_INT_SOURCE;                                                     
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
@@ -1475,18 +1475,18 @@ LPS22HB_status_t LPS22HB_GetInterruptSource ( I2C_parameters_t myI2Cparameters, 
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetFIFO_Status ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetFIFO_Status ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It reads the FIFO status register.
  *
@@ -1495,7 +1495,7 @@ LPS22HB_status_t LPS22HB_GetInterruptSource ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   myFIFOstatus:    FIFO threshold (watermark) level selection.
  *
  *
- * @return       Status of LPS22HB_GetFIFO_Status.
+ * @return       Status of WS2812_GetFIFO_Status.
  *
  *
  * @author      Manuel Caballero
@@ -1504,13 +1504,13 @@ LPS22HB_status_t LPS22HB_GetInterruptSource ( I2C_parameters_t myI2Cparameters, 
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetFIFO_Status ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myFIFOstatus )
+WS2812_status_t WS2812_GetFIFO_Status ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myFIFOstatus )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_FIFO_STATUS;                                                     
+  cmd  =   WS2812_FIFO_STATUS;                                                     
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
@@ -1521,18 +1521,18 @@ LPS22HB_status_t LPS22HB_GetFIFO_Status ( I2C_parameters_t myI2Cparameters, LPS2
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetStatusRegister ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetStatusRegister ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It reads the status register.
  *
@@ -1541,7 +1541,7 @@ LPS22HB_status_t LPS22HB_GetFIFO_Status ( I2C_parameters_t myI2Cparameters, LPS2
  * @param[out]   myStatusRegister:  Status register.
  *
  *
- * @return       Status of LPS22HB_GetStatusRegister.
+ * @return       Status of WS2812_GetStatusRegister.
  *
  *
  * @author      Manuel Caballero
@@ -1550,13 +1550,13 @@ LPS22HB_status_t LPS22HB_GetFIFO_Status ( I2C_parameters_t myI2Cparameters, LPS2
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetStatusRegister ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myStatusRegister )
+WS2812_status_t WS2812_GetStatusRegister ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myStatusRegister )
 {
   uint8_t      cmd  = 0U;
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd  =   LPS22HB_STATUS;                                                     
+  cmd  =   WS2812_STATUS;                                                     
   aux  =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
   aux  =   i2c_read  ( myI2Cparameters, &cmd, 1U );
   
@@ -1567,18 +1567,18 @@ LPS22HB_status_t LPS22HB_GetStatusRegister ( I2C_parameters_t myI2Cparameters, L
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetRawPressure ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetRawPressure ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the raw pressure.
  *
@@ -1587,7 +1587,7 @@ LPS22HB_status_t LPS22HB_GetStatusRegister ( I2C_parameters_t myI2Cparameters, L
  * @param[out]   myRawPressure:   Raw pressure.
  *
  *
- * @return       Status of LPS22HB_GetRawPressure.
+ * @return       Status of WS2812_GetRawPressure.
  *
  *
  * @author      Manuel Caballero
@@ -1596,13 +1596,13 @@ LPS22HB_status_t LPS22HB_GetStatusRegister ( I2C_parameters_t myI2Cparameters, L
  * @pre         This function uses auto-increment.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetRawPressure ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myRawPressure )
+WS2812_status_t WS2812_GetRawPressure ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myRawPressure )
 {
   uint8_t      cmd[3]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]  =   LPS22HB_PRESS_OUT_XL;                                         
+  cmd[0]  =   WS2812_PRESS_OUT_XL;                                         
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
@@ -1617,18 +1617,18 @@ LPS22HB_status_t LPS22HB_GetRawPressure ( I2C_parameters_t myI2Cparameters, LPS2
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetRawTemperature ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetRawTemperature ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the raw temperature.
  *
@@ -1637,7 +1637,7 @@ LPS22HB_status_t LPS22HB_GetRawPressure ( I2C_parameters_t myI2Cparameters, LPS2
  * @param[out]   myRawTemperature:  Raw temperature.
  *
  *
- * @return       Status of LPS22HB_GetRawTemperature.
+ * @return       Status of WS2812_GetRawTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -1646,13 +1646,13 @@ LPS22HB_status_t LPS22HB_GetRawPressure ( I2C_parameters_t myI2Cparameters, LPS2
  * @pre         This function uses auto-increment.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetRawTemperature ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myRawTemperature )
+WS2812_status_t WS2812_GetRawTemperature ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myRawTemperature )
 {
   uint8_t      cmd[2]  = { 0U };
   i2c_status_t aux;
 
   /* Read the register   */
-  cmd[0]  =   LPS22HB_TEMP_OUT_L;                                        
+  cmd[0]  =   WS2812_TEMP_OUT_L;                                        
   aux     =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux     =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
@@ -1665,18 +1665,18 @@ LPS22HB_status_t LPS22HB_GetRawTemperature ( I2C_parameters_t myI2Cparameters, L
 
   if ( aux == I2C_SUCCESS )
   {
-    return   LPS22HB_SUCCESS;
+    return   WS2812_SUCCESS;
   }
   else
   {
-    return   LPS22HB_FAILURE;
+    return   WS2812_FAILURE;
   }
 }
 
 
 
 /**
- * @brief       LPS22HB_GetPressure ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetPressure ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the current pressure in mbar.
  *
@@ -1685,7 +1685,7 @@ LPS22HB_status_t LPS22HB_GetRawTemperature ( I2C_parameters_t myI2Cparameters, L
  * @param[out]   myPressure:        Current pressure in mbar.
  *
  *
- * @return       Status of LPS22HB_GetPressure.
+ * @return       Status of WS2812_GetPressure.
  *
  *
  * @author      Manuel Caballero
@@ -1694,12 +1694,12 @@ LPS22HB_status_t LPS22HB_GetRawTemperature ( I2C_parameters_t myI2Cparameters, L
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetPressure ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myPressure )
+WS2812_status_t WS2812_GetPressure ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myPressure )
 {
-  LPS22HB_status_t aux;
+  WS2812_status_t aux;
 
   /* Read raw pressure   */
-  aux  =   LPS22HB_GetRawPressure ( myI2Cparameters, &(*myPressure) );
+  aux  =   WS2812_GetRawPressure ( myI2Cparameters, &(*myPressure) );
   
 
   /* Check if the pressure value is negative   */
@@ -1725,7 +1725,7 @@ LPS22HB_status_t LPS22HB_GetPressure ( I2C_parameters_t myI2Cparameters, LPS22HB
 
 
 /**
- * @brief       LPS22HB_GetTemperature ( I2C_parameters_t , LPS22HB_data_t* )
+ * @brief       WS2812_GetTemperature ( I2C_parameters_t , WS2812_data_t* )
  *
  * @details     It gets the current temperature in Celsius degrees.
  *
@@ -1734,7 +1734,7 @@ LPS22HB_status_t LPS22HB_GetPressure ( I2C_parameters_t myI2Cparameters, LPS22HB
  * @param[out]   myTemperature:     Current temperature in Celsius degrees.
  *
  *
- * @return       Status of LPS22HB_GetTemperature.
+ * @return       Status of WS2812_GetTemperature.
  *
  *
  * @author      Manuel Caballero
@@ -1743,12 +1743,12 @@ LPS22HB_status_t LPS22HB_GetPressure ( I2C_parameters_t myI2Cparameters, LPS22HB
  * @pre         N/A.
  * @warning     N/A.
  */
-LPS22HB_status_t LPS22HB_GetTemperature ( I2C_parameters_t myI2Cparameters, LPS22HB_data_t* myTemperature )
+WS2812_status_t WS2812_GetTemperature ( I2C_parameters_t myI2Cparameters, WS2812_data_t* myTemperature )
 {
-  LPS22HB_status_t aux;
+  WS2812_status_t aux;
 
   /* Read raw temperature   */
-  aux  =   LPS22HB_GetRawTemperature ( myI2Cparameters, &(*myTemperature) );
+  aux  =   WS2812_GetRawTemperature ( myI2Cparameters, &(*myTemperature) );
   
 
   /* Calculate temperature  */
