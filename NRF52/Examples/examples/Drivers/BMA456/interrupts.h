@@ -36,9 +36,9 @@ void UART0_IRQHandler  ( void );
 
 
 /**@brief Variables.
- */
-extern volatile uint32_t myState;         
+ */         
 extern volatile uint8_t  *myPtr;
+extern volatile uint32_t  myState;
 
 
 #ifdef __cplusplus
