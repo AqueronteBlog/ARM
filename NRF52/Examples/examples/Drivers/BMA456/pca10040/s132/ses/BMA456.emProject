@@ -129,7 +129,9 @@
         </folder>
       </folder>
       <folder Name="BMA456">
-        <file file_name="../../../../../../../../Drivers/BMA456/BMA456.c" />
+        <file file_name="../../../../../../../../Drivers/BMA456/bma456_port.c" />
+        <file file_name="../../../../../../../../Drivers/BMA456/bma4.c" />
+        <file file_name="../../../../../../../../Drivers/BMA456/bma456.c" />
       </folder>
     </folder>
   </project>
