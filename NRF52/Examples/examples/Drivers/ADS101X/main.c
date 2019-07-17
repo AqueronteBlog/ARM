@@ -50,8 +50,8 @@ volatile uint8_t            *myPtr;                   /*!<   Pointer to point ou
 int main(void)
 {
   uint8_t           myMessage[ TX_BUFF_SIZE ];
-  I2C_parameters_t  myADS101X_I2C_parameters;
-  ADS101X_status_t  aux;
+//  I2C_parameters_t  myADS101X_I2C_parameters;
+//  ADS101X_status_t  aux;
 
 
 
@@ -60,17 +60,17 @@ int main(void)
   conf_UART   ();
   conf_TIMER0 ();
   
-  /* I2C definition   */
-  myADS101X_I2C_parameters.TWIinstance =    NRF_TWI0;
-  myADS101X_I2C_parameters.SDA         =    TWI0_SDA;
-  myADS101X_I2C_parameters.SCL         =    TWI0_SCL;
-  myADS101X_I2C_parameters.ADDR        =    ADS101X_ADDRESS_0;
-  myADS101X_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-  myADS101X_I2C_parameters.SDAport     =    NRF_P0;
-  myADS101X_I2C_parameters.SCLport     =    NRF_P0;
-
-  /* Configure I2C peripheral  */
-  aux  =   ADS101X_Init  ( myADS101X_I2C_parameters );
+//  /* I2C definition   */
+//  myADS101X_I2C_parameters.TWIinstance =    NRF_TWI0;
+//  myADS101X_I2C_parameters.SDA         =    TWI0_SDA;
+//  myADS101X_I2C_parameters.SCL         =    TWI0_SCL;
+//  myADS101X_I2C_parameters.ADDR        =    ADS101X_ADDRESS_0;
+//  myADS101X_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+//  myADS101X_I2C_parameters.SDAport     =    NRF_P0;
+//  myADS101X_I2C_parameters.SCLport     =    NRF_P0;
+//
+//  /* Configure I2C peripheral  */
+//  aux  =   ADS101X_Init  ( myADS101X_I2C_parameters );
 
 
 
