@@ -39,6 +39,11 @@
 volatile uint32_t myState;                        /*!<   State that indicates when to perform an ADC sample     */
 
 
+/**@brief Function prototypes.
+ */
+void myDelay_ns ( uint32_t myDelay_ns );          /*!<   User function for Delay                                */
+
+
 
 
 /**@brief Function for application main entry.
@@ -47,27 +52,34 @@ int main(void)
 {
   WS2812_status_t     aux;
   WS2812_data_t       myWS2812_Data;
+  WS2812_com_t        myWS2812_Bus;
+  WS2812_parameters_t myWS2812_parameters;
 
 
   conf_CLK    ();
   conf_GPIO   ();
   conf_TIMER0 ();
 
-  
-//  /* I2C definition   */
-//  myWS2812_I2C_parameters.TWIinstance =    NRF_TWI0;
-//  myWS2812_I2C_parameters.SDA         =    TWI0_SDA;
-//  myWS2812_I2C_parameters.SCL         =    TWI0_SCL;
-//  myWS2812_I2C_parameters.ADDR        =    WS2812_ADDRESS_1;
-//  myWS2812_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-//  myWS2812_I2C_parameters.SDAport     =    NRF_P0;
-//  myWS2812_I2C_parameters.SCLport     =    NRF_P0;
-//
-//  /* Configure I2C peripheral  */
-//  aux  =   WS2812_Init  ( myWS2812_I2C_parameters );
 
-  
+  myWS2812_Bus.delay_ns  = myDelay_ns;
 
+  /* WS2812 platform definition   */
+  myWS2812_parameters.DIN      =   27;
+  myWS2812_parameters.DINport  =   NRF_P0;
+
+  aux  =   WS2812_Init  ( myWS2812_parameters );
+  
+  /* WS2812 configuration: 8 RGB LEDs  */
+  myWS2812_Data.numberOfLEDs   =   8UL;
+  
+  /* WS2812 configuration: Fill up the buffer, red colour for all the LEDs  */
+  WS2812_num_leds_t   myLEDs[myWS2812_Data.numberOfLEDs];
+  for ( uint32_t i = 0UL; i < myWS2812_Data.numberOfLEDs; i++ )
+  {
+    myLEDs[i].red    =   0xFF;
+    myLEDs[i].green  =   0x00;
+    myLEDs[i].blue   =   0x00;
+  }
   
   
   myState  =   0;                             // Reset the variable
@@ -98,6 +110,27 @@ int main(void)
     //__NOP();
   }
 }
+
+
+
+
+void myDelay_ns ( uint32_t myDelay_ns )
+{
+  uint32_t i = 0;
+
+  NRF_TIMER1->TASKS_START = 1;    // Start Timer1
+
+  for ( i = 0; i < myDelay_ns; i++ )
+  {
+    while ( NRF_TIMER1->EVENTS_COMPARE[0] == 0 );
+    NRF_TIMER1->EVENTS_COMPARE[0]    =   0;
+  }
+
+  NRF_TIMER1->TASKS_STOP = 1;    // Stop Timer1
+}
+
+
+
 /**
  * @}
  */
