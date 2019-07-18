@@ -1,8 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: UART.
- * 				If '1' is received, LED1 is turned on, if '2' is received, the LED2 is turned on.
- * 				A message will be transmitted back, any other value will turn both LEDs off.
+ * @details     [todo]This example shows how to work with the internal peripheral: ADC and the buil-in Temperature sensor.
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
  *
@@ -31,7 +29,7 @@
 
 /**@brief Variables.
  */
-volatile uint8_t  myState	 =	 0U;		/*!<   State that indicates when to perform the next action   */
+volatile uint32_t  myState	 =	 0UL;		/*!<   State that indicates when to perform the next action   */
 volatile uint8_t  *myPtr;                   /*!<   Pointer to point out myMessage                         */
 
 
@@ -40,6 +38,7 @@ volatile uint8_t  *myPtr;                   /*!<   Pointer to point out myMessag
  */
 int main(int argc, char *argv[])
 {
+	float	 myTemperature	 =	 0UL;
 	uint8_t  myMessage[ TX_BUFF_SIZE ];
 
 	/**
@@ -52,17 +51,9 @@ int main(int argc, char *argv[])
 	/* Begin adding your custom code here */
 	SystemInit ();
 
-	/* Initialized the message	 */
-	myMessage[ 0 ]   =  'L';
-	myMessage[ 1 ]   =  'E';
-	myMessage[ 2 ]   =  'D';
-	myMessage[ 3 ]   =  ' ';
-	myMessage[ 4 ]   =  ' ';
-	myMessage[ 11 ]  =  '\n';
-
-
 	conf_CLK  ();
 	conf_GPIO ();
+	conf_ADC  ();
 	conf_UART ();
 
 
@@ -85,45 +76,16 @@ int main(int argc, char *argv[])
 		/* Enter in low power Flexi mode	 */
 		__WFI();
 
-		if ( myState != 0U )
+		if ( myState != 0UL )
 		{
-			/* Initialized the message	 */
-			myMessage[ 5 ]   =  'T';
-			myMessage[ 6 ]   =  'O';
-			myMessage[ 7 ]   =  'G';
-			myMessage[ 8 ]   =  'G';
-			myMessage[ 9 ]   =  'L';
-			myMessage[ 10 ]  =  'E';
+			/* Turn both LEDs on	 */
+			pADI_GPIO1->SET	|=	 DS4;
+			pADI_GPIO2->SET	|=	 DS3;
 
-			switch ( myState )
-			{
-				case '1':
-					/* Toggle LED1	 */
-					pADI_GPIO1->TGL	|=	 DS4;
-					myMessage [ 3 ]	 =	 '1';
-					break;
 
-				case '2':
-					/* Toggle LED2	 */
-					pADI_GPIO2->TGL	|=	 DS3;
-					myMessage [ 3 ]	 =   '2';
-					break;
+			/* Transmit data through the UART	 */
+			sprintf ( (char*)myMessage, "T: %0.2f C\r\n", myTemperature );
 
-				default:
-					/* Both LEDs off	 */
-					pADI_GPIO1->CLR	|=	 DS4;
-					pADI_GPIO2->CLR	|=	 DS3;
-
-					/* Initialized the message	 */
-					myMessage[ 3 ]   =  ' ';
-					myMessage[ 5 ]   =  'E';
-					myMessage[ 6 ]   =  'R';
-					myMessage[ 7 ]   =  'R';
-					myMessage[ 8 ]   =  'O';
-					myMessage[ 9 ]   =  'R';
-					myMessage[ 10 ]  =  '!';
-					break;
-			}
 
 			/* Check that is safe to send data	 */
 			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
@@ -135,8 +97,10 @@ int main(int argc, char *argv[])
 			/* Transmit Buffer Empty Interrupt: Enabled	 */
 			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
 
-			/* Reset variables	 */
-			myState	 =	 0U;
+			/* Reset variables and turn both LEDs off	 */
+			myState	 		 =	 0UL;
+			pADI_GPIO1->CLR	|=	 DS4;
+			pADI_GPIO2->CLR	|=	 DS3;
 		}
 	}
 
