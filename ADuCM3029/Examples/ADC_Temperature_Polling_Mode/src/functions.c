@@ -20,7 +20,7 @@
  * @brief       void conf_CLK  ( void )
  * @details     It activates the external HFOSC crystal oscillator ( 26MHz ).
  *
- * 					- ACLK: HFOSC/4 = 6.4MHz
+ * 					- ACLK: HFOSC/8 = 3.25MHz
  * 					- HCLK: HFOSC/4 = 6.4MHz
  * 					- PCLK: HFOSC/4 = 6.4MHz
  *
@@ -55,7 +55,7 @@ void conf_CLK  ( void )
 	 *  - PCLK/4 = 26MHz/4 = 6.5MHz
 	 */
 	pADI_CLKG0_CLK->CTL1	&=	~( ( 0b11111111 << BITP_CLKG_CLK_CTL1_ACLKDIVCNT ) | ( 0b111111 << BITP_CLKG_CLK_CTL1_PCLKDIVCNT ) | ( 0b111111 << BITP_CLKG_CLK_CTL1_HCLKDIVCNT ) );
-	pADI_CLKG0_CLK->CTL1	|=	 ( ( 0b00000100 << BITP_CLKG_CLK_CTL1_ACLKDIVCNT ) | ( 0b000100 << BITP_CLKG_CLK_CTL1_PCLKDIVCNT ) | ( 0b000100 << BITP_CLKG_CLK_CTL1_HCLKDIVCNT ) );
+	pADI_CLKG0_CLK->CTL1	|=	 ( ( 0b00001000 << BITP_CLKG_CLK_CTL1_ACLKDIVCNT ) | ( 0b000100 << BITP_CLKG_CLK_CTL1_PCLKDIVCNT ) | ( 0b000100 << BITP_CLKG_CLK_CTL1_HCLKDIVCNT ) );
 
 	/* Wait for HFOSC and LFXTAL to stabilize */
 	while ( ( pADI_CLKG0_OSC->CTL & ( ( 1U << BITP_CLKG_OSC_CTL_HFOSCOK ) | ( 1U << BITP_CLKG_OSC_CTL_LFOSCOK ) ) ) != ( ( 1U << BITP_CLKG_OSC_CTL_HFOSCOK ) | ( 1U << BITP_CLKG_OSC_CTL_LFOSCOK ) ) )
@@ -204,5 +204,66 @@ void conf_UART  ( void )
 	/* Enable interrupt	 */
 	NVIC_SetPriority ( UART_EVT_IRQn, 0UL );
 	NVIC_EnableIRQ   ( UART_EVT_IRQn );
+}
+
+
+
+/**
+ * @brief       void conf_ADC  ( void )
+ * @details     It configures the ADC peripheral.
+ *
+ * 					ADC:
+ * 					 - Powering up the ADC
+ * 					 - Temperature sensor enabled
+ * 					 - Polling mode
+ *
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        18/July/2019
+ * @version     18/July/2019      The ORIGIN
+ * @pre         Powering the ADC sequence: Datasheet p. 20-4
+ * @warning     N/A
+ */
+void conf_ADC  ( void )
+{
+	/* Powering up the ADC using external reference:
+	 * 	1. Set the ADC_CFG.PWRUP bit to power up the ADC
+	 * 	2. Set ADC_PWRUP.WAIT bits as 526/(CLKG_CLK_CTL1.PCLKDIVCNT field)
+	 * 	3. Assert the ADC_CFG.EN bit and enable the ADC
+	 * 	4. Wait for the ADC_STAT.RDY bit
+	 * 	5. Wait for the ADC_STAT.CALDONE bit
+	 * 	6. Set the ADC_CFG.STARTCAL bit to start the calibration cycle
+	 */
+	pADI_ADC0->CFG		|=	 ( 1U << BITP_ADC_CFG_PWRUP );
+	pADI_ADC0->PWRUP	&=	~( 0b1111111111 << BITP_ADC_PWRUP_WAIT );
+	pADI_ADC0->PWRUP	|=	 ( ( 256U / (uint16_t)( ( pADI_CLKG0_CLK->CTL1 & ( 0b111111 << BITP_CLKG_CLK_CTL1_PCLKDIVCNT ) ) >> BITP_CLKG_CLK_CTL1_PCLKDIVCNT ) ) >> BITP_ADC_PWRUP_WAIT );
+	pADI_ADC0->CFG		|=	 ( 1U << BITP_ADC_CFG_EN );
+	while ( ( pADI_ADC0->STAT & ( 1U << BITP_ADC_STAT_RDY ) ) != ( 1U << BITP_ADC_STAT_RDY ) );
+	pADI_ADC0->STAT		|=	 ( 1U << BITP_ADC_STAT_RDY );
+	while ( ( pADI_ADC0->STAT & ( 1U << BITP_ADC_STAT_CALDONE ) ) != ( 1U << BITP_ADC_STAT_CALDONE ) );
+	pADI_ADC0->STAT		|=	 ( 1U << BITP_ADC_STAT_CALDONE );
+	pADI_ADC0->CFG		|=	 ( 1U << BITP_ADC_CFG_STARTCAL );
+
+
+	/* Temperature sensor:
+	 *  - Enable temperature sensor
+	 *  - Wait for 300us before starting the conversion.
+	 * 	- Program the ADC_CNV_TIME.SAMPTIME bit to provide an acquisition time of 65us
+	 * 		- ACLK frequency = 26 MHz / ACLKDIV = 26 MHz / 8 = 3.25 MHz
+	 * 		- Number of clock cycles (ACLK) required for sampling: 3.25MHz * 65us = 211.25 ~ 212
+	 * 	- Don't invert receiver line (idling high).
+	*/
+	pADI_ADC0->CFG		|=	 ( 1U << BITP_ADC_CFG_TMPEN );
+	for ( uint32_t i = 0UL; i < 1920UL; i++ );
+
+	pADI_ADC0->CNV_TIME	&=	~( 0b11111111 << BITP_ADC_CNV_TIME_SAMPTIME );
+	pADI_ADC0->CNV_TIME	|=	 ( 212U << BITP_ADC_CNV_TIME_SAMPTIME );
 }
 
