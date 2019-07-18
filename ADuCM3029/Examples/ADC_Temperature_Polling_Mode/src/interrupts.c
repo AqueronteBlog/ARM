@@ -34,13 +34,6 @@
  */
 void UART_Int_Handler ( void )
 {
-	/* Rx	 */
-	if ( ( pADI_UART0->LSR & ( 1U << BITP_UART_LSR_DR ) ) == ( 1U << BITP_UART_LSR_DR ) )
-	{
-		/* Next action	 */
-		myState	 =	 (uint8_t)( pADI_UART0->RX );
-	}
-
 	/* Tx	 */
 	if ( ( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) ==  ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) )
 	{
