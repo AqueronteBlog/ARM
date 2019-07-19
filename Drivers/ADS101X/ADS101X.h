@@ -94,6 +94,120 @@ typedef enum
 } ADS101X_config_mux_t;
 
 
+/* PGA <11:9>
+ *    NOTE: Programmable gain amplifier configuration ( These bits serve NO function on the ADS1013 ).
+ */
+typedef enum
+{ 
+    CONFIG_PGA_MASK                     =   ( 0b111 << 9U ),   /*!<  PGA mask                                                     */
+    CONFIG_PGA_FSR_6_144_V              =   ( 0b000 << 9U ),   /*!<  FSR = ±6.144 V                                               */
+    CONFIG_PGA_FSR_4_096_V              =   ( 0b001 << 9U ),   /*!<  FSR = ±4.096 V                                               */
+    CONFIG_PGA_FSR_2_048_V              =   ( 0b010 << 9U ),   /*!<  FSR = ±2.048 V                                   [ Default ] */
+    CONFIG_PGA_FSR_1_024_V              =   ( 0b011 << 9U ),   /*!<  FSR = ±1.024 V                                               */
+    CONFIG_PGA_FSR_0_512_V              =   ( 0b100 << 9U ),   /*!<  FSR = ±0.512 V                                               */
+    CONFIG_PGA_FSR_0_256_V              =   ( 0b101 << 9U )    /*!<  FSR = ±0.256 V                                               */
+} ADS101X_config_pga_t;
+
+
+/* MODE <8>
+ *    NOTE: Device operating mode.
+ */
+typedef enum
+{ 
+    CONFIG_MODE_MASK                    =   ( 1U << 8U ),       /*!<  MODE mask                                                    */
+    CONFIG_MODE_CONTINUOUS_CONVERSION   =   ( 0U << 8U ),       /*!<  Continuous-conversion mode                                   */
+    CONFIG_MODE_SINGLE_SHOT             =   ( 1U << 8U )        /*!<  Single-shot mode or power-down state             [ Default ] */
+} ADS101X_config_mode_t;
+
+
+/* DR <7:5>
+ *    NOTE: Data rate.
+ */
+typedef enum
+{ 
+    CONFIG_DR_MASK                      =   ( 0b111 << 5U ),    /*!<  DR mask                                                       */
+    CONFIG_DR_128_SPS                   =   ( 0b000 << 5U ),    /*!<  128 SPS                                                       */
+    CONFIG_DR_250_SPS                   =   ( 0b001 << 5U ),    /*!<  250 SPS                                                       */
+    CONFIG_DR_490_SPS                   =   ( 0b010 << 5U ),    /*!<  490 SPS                                                       */
+    CONFIG_DR_920_SPS                   =   ( 0b011 << 5U ),    /*!<  920 SPS                                                       */
+    CONFIG_DR_1600_SPS                  =   ( 0b100 << 5U ),    /*!<  1600 SPS                                          [ Default ] */
+    CONFIG_DR_2400_SPS                  =   ( 0b101 << 5U ),    /*!<  2400 SPS                                                      */
+    CONFIG_DR_3300_SPS                  =   ( 0b110 << 5U )     /*!<  3300 SPS                                                      */
+} ADS101X_config_dr_t;
+
+
+/* COMP_MODE <4>
+ *    NOTE: Comparator mode ( ADS1014 and ADS1015 only )
+ */
+typedef enum
+{ 
+    CONFIG_COMP_MODE_MASK                   =   ( 1U << 4U ),   /*!<  COMP_MODE mask                                                */
+    CONFIG_COMP_MODE_TRADITIONAL_COMPARATOR =   ( 0U << 4U ),   /*!<  Traditional comparator                            [ Default ] */
+    CONFIG_COMP_MODE_WINDOW_COMPARATOR      =   ( 1U << 4U )    /*!<  Window comparator                                             */
+} ADS101X_config_comp_mode_t;
+
+
+/* COMP_POL <3>
+ *    NOTE: Comparator polarity ( ADS1014 and ADS1015 only )
+ */
+typedef enum
+{ 
+    CONFIG_COMP_POL_MASK                    =   ( 1U << 3U ),   /*!<  COMP_POL mask                                                 */
+    CONFIG_COMP_POL_ACTIVE_LOW              =   ( 0U << 3U ),   /*!<  Active low                                        [ Default ] */
+    CONFIG_COMP_POL_ACTIVE_HIGH             =   ( 1U << 3U )    /*!<  Active high                                                   */
+} ADS101X_config_comp_pol_t;
+
+
+/* COMP_LAT <2>
+ *    NOTE: Latching comparator ( ADS1014 and ADS1015 only )
+ */
+typedef enum
+{ 
+    CONFIG_COMP_LAT_MASK                    =   ( 1U << 2U ),   /*!<  COMP_LAT mask                                                 */
+    CONFIG_COMP_LAT_NONLATCHING_COMPARATOR  =   ( 0U << 2U ),   /*!<  Nonlatching comparator                            [ Default ] */
+    CONFIG_COMP_LAT_LATCHING_COMPARATOR     =   ( 1U << 2U )    /*!<  Latching comparator                                           */
+} ADS101X_config_comp_lat_t;
+
+
+/* COMP_QUE <1:0>
+ *    NOTE: Latching comparator ( ADS1014 and ADS1015 only )
+ */
+typedef enum
+{ 
+    CONFIG_COMP_QUE_MASK                          =   ( 0b11 << 0U ), /*!<  COMP_QUE mask                                                           */
+    CONFIG_COMP_QUE_ASSERT_AFTER_ONE_CONVERSION   =   ( 0b00 << 0U ), /*!<  Assert after one conversion                                             */
+    CONFIG_COMP_QUE_ASSERT_AFTER_TWO_CONVERSION   =   ( 0b01 << 0U ), /*!<  Assert after two conversions                                            */
+    CONFIG_COMP_QUE_ASSERT_AFTER_FOUR_CONVERSION  =   ( 0b10 << 0U ), /*!<  Assert after four conversions                                           */
+    CONFIG_COMP_QUE_DISABLED                      =   ( 0b11 << 0U )  /*!<  Disable comparator and set ALERT/RDY pin to high-impedance  [ Default ] */
+} ADS101X_config_comp_que_t;
+
+
+
+/**
+  * @brief   LO_THRESH REGISTER. ( Default: 0x8000 )
+  */
+/* LO_THRESH <15:4>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    LO_THRESH_MASK      =   ( 0b111111111111 << 4U )            /*!<  LO_THRESH mask                                                */
+} ADS101X_lo_thresh_t;
+
+
+
+/**
+  * @brief   HI_THRESH REGISTER. ( Default: 0x7FFF )
+  */
+/* HI_THRESH <15:4>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    HI_THRESH_MASK      =   ( 0b111111111111 << 4U )            /*!<  HI_THRESH mask                                                */
+} ADS101X_hi_thresh_t;
+
+
 
 
 
