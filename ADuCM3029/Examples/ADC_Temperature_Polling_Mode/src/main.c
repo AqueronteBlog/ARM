@@ -1,6 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: ADC and the buil-in Temperature sensor.
+ * @details     [todo]This example shows how to work with the internal peripheral: ADC and the built-in Temperature sensor with
+ * 				external reference ( VREF MUST be connected to 3.3V ).
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
  *
@@ -24,7 +25,10 @@
 
 /**@brief Constants.
  */
-#define TX_BUFF_SIZE  64                    /*!<   UART buffer size                                       */
+#define TX_BUFF_SIZE		64  	        /*!<   UART buffer size                                      */
+#define	RG					1.18			/*!<   Temperature: Constant parameter                       */
+#define	R_VIRTUAL_REFERENCE	1.223331		/*!<   Temperature: Constant parameter                       */
+#define	IDEAL_SENSITIVITY	0.001392736		/*!<   Temperature: Constant parameter                       */
 
 
 /**@brief Variables.
@@ -38,7 +42,9 @@ volatile uint8_t  *myPtr;                   /*!<   Pointer to point out myMessag
  */
 int main(int argc, char *argv[])
 {
-	float	 myTemperature	 =	 0UL;
+	uint16_t myTemperatureCode1	=	0UL;
+	uint16_t myTemperatureCode2	=	0UL;
+	float	 myTemperature	 	=	0UL;
 	uint8_t  myMessage[ TX_BUFF_SIZE ];
 
 	/**
@@ -51,10 +57,11 @@ int main(int argc, char *argv[])
 	/* Begin adding your custom code here */
 	SystemInit ();
 
-	conf_CLK  ();
-	conf_GPIO ();
-	conf_ADC  ();
-	conf_UART ();
+	conf_CLK    ();
+	conf_GPIO   ();
+	conf_ADC    ();
+	conf_UART   ();
+	conf_Timer0 ();
 
 
 	while ( 1 )
@@ -81,6 +88,27 @@ int main(int argc, char *argv[])
 			/* Turn both LEDs on	 */
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
+
+			/* Get temperature value	 */
+			pADI_ADC0->CNV_CFG	|=	 ( ( 1U << BITP_ADC_CNV_CFG_TMP ) | ( 1U << BITP_ADC_CNV_CFG_SINGLE )  );		// Enable TMP and start new conversion
+			while ( ( pADI_ADC0->STAT & ( 1U << BITP_ADC_STAT_TMPDONE ) ) != ( 1U <<BITP_ADC_STAT_TMPDONE ) );
+			pADI_ADC0->STAT	|=	 ( ( 1U << BITP_ADC_STAT_TMPDONE ) | ( 1U << BITP_ADC_STAT_CALDONE ) );				// Clear flag
+
+			myTemperatureCode1	 =	 pADI_ADC0->TMP_OUT;
+
+
+			pADI_ADC0->CNV_CFG	&=	~( 1U << BITP_ADC_CNV_CFG_TMP );												// Disable TMP
+			pADI_ADC0->CNV_CFG	|=	 ( ( 1U << BITP_ADC_CNV_CFG_TMP2 ) | ( 1U << BITP_ADC_CNV_CFG_SINGLE ) );		// Enable TMP2 and start new conversion
+			while ( ( pADI_ADC0->STAT & ( 1U << BITP_ADC_STAT_TMP2DONE ) ) != ( 1U <<BITP_ADC_STAT_TMP2DONE ) );
+			pADI_ADC0->STAT	|=	 ( ( 1U << BITP_ADC_STAT_TMP2DONE ) | ( 1U << BITP_ADC_STAT_CALDONE ) );			// Clear flag
+
+			myTemperatureCode2	|=	 pADI_ADC0->TMP2_OUT;
+
+			pADI_ADC0->CNV_CFG	&=	~( 1U << BITP_ADC_CNV_CFG_TMP2 );												// Disable TMP2
+
+			/* Calculate the temperature value in Celsius degrees	 */
+			myTemperature	 =	 ( ( myTemperatureCode1 / ( myTemperatureCode2 + RG * myTemperatureCode1 ) ) * ( R_VIRTUAL_REFERENCE / IDEAL_SENSITIVITY ) ) - 273.15;
+
 
 
 			/* Transmit data through the UART	 */
