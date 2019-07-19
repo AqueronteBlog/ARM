@@ -47,6 +47,19 @@ typedef enum
 
 
 /**
+  * @brief   DEVICE.
+  *           NOTE: The user MUST define which device to use: ADS1013, ADS1014 or ADS1015.
+  */
+typedef enum
+{
+    DEVICE_ADS1013    =   0x00,             /*!<  Device: ADS1013                                */
+    DEVICE_ADS1014    =   0x01,             /*!<  Device: ADS1014                                */
+    DEVICE_ADS1015    =   0x02              /*!<  Device: ADS1015                                */
+} ADS101X_device_t;
+
+
+
+/**
   * @brief   CONVERSION REGISTER. ( Default: 0x0000 )
   *           NOTE: The 16-bit Conversion register contains the result of the last conversion in binary two's complement format.
   *                 Following power-up, the Conversion register is cleared to 0, and remains 0 until the first conversion is completed.
@@ -221,13 +234,12 @@ typedef struct
   int32_t   rawPressure;                      /*!<  Raw pressure                      */
   int16_t   rawTemperature;                   /*!<  Raw temperature                   */
 
-  float     pressure;                         /*!<  Pressure in mbar                  */
-  float     temperature;                      /*!<  Temperature in Celsius degree     */
-
+  /* Configuration  */
+  ADS101X_config_os_t os;                     /*!<  Operational status                */
   
 
   /* Device identification   */
-  uint8_t                       deviceID;     /*!<  Device ID                                         */
+  ADS101X_device_t  device;                   /*!<  Device                            */
 } ADS101X_data_t;
 #endif
 
@@ -251,6 +263,14 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-ADS101X_status_t ADS101X_Init                     ( I2C_parameters_t myI2Cparameters                                        );
+ADS101X_status_t ADS101X_Init                   ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myADS101X  );
+
+/** It starts a new single conversion.
+  */
+ADS101X_status_t ADS101X_StartSingleConversion  ( I2C_parameters_t myI2Cparameters                            );
+
+/** It checks if the device is not currently performing a conversion.
+  */
+ADS101X_status_t ADS101X_GetOS                  ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myADS101X );
 
 
