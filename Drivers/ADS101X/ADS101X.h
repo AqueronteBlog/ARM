@@ -38,10 +38,11 @@ typedef enum
   */
 typedef enum
 {
-  ADS101X_CONVERSION  =   0x00,             /*!<  Conversion register                           */
-  ADS101X_CONFIG      =   0x01,             /*!<  Config register                               */
-  ADS101X_LO_THRESH   =   0x02,             /*!<  Lo threshold register                         */
-  ADS101X_HI_THRESH   =   0x03              /*!<  Hi threshold register                         */
+  ADS101X_CONVERSION    =   0x00,           /*!<  Conversion register                           */
+  ADS101X_CONFIG        =   0x01,           /*!<  Config register                               */
+  ADS101X_LO_THRESH     =   0x02,           /*!<  Lo threshold register                         */
+  ADS101X_HI_THRESH     =   0x03,           /*!<  Hi threshold register                         */
+  ADS101X_RESET_COMMAND =   0x06            /*!<  Reset command                                 */
 } ADS101X_register_map_t;
 
 
@@ -183,7 +184,7 @@ typedef enum
 
 
 /* COMP_QUE <1:0>
- *    NOTE: Latching comparator ( ADS1014 and ADS1015 only )
+ *    NOTE: Comparator queue and disable ( ADS1014 and ADS1015 only )
  */
 typedef enum
 { 
@@ -230,16 +231,26 @@ typedef enum
 #define ADS101X_VECTOR_STRUCT_H
 typedef struct
 {
-  /* Output registers  */
-  int32_t   rawPressure;                      /*!<  Raw pressure                      */
-  int16_t   rawTemperature;                   /*!<  Raw temperature                   */
+  /* Output  */
+  int16_t   raw_conversion;                 /*!<  Raw conversion value                                    */
 
   /* Configuration  */
-  ADS101X_config_os_t os;                     /*!<  Operational status                */
-  
+  ADS101X_config_os_t         os;           /*!<  Operational status                                      */
+  ADS101X_config_mux_t        mux;          /*!<  Input multiplexer configuration (ADS1015 only)          */
+  ADS101X_config_pga_t        pga;          /*!<  Programmable gain amplifier configuration (not ADS1013) */
+  ADS101X_config_mode_t       mode;         /*!<  Device operating mode                                   */
+  ADS101X_config_dr_t         dr;           /*!<  Data rate                                               */
+  ADS101X_config_comp_mode_t  comp_mode;    /*!<  Comparator mode (ADS1014 and ADS1015 only)              */
+  ADS101X_config_comp_pol_t   comp_pol;     /*!<  Comparator polarity (ADS1014 and ADS1015 only)          */
+  ADS101X_config_comp_lat_t   comp_lat;     /*!<  Latching comparator (ADS1014 and ADS1015 only)          */
+  ADS101X_config_comp_que_t   comp_que;     /*!<  Comparator queue and disable (ADS1014 and ADS1015 only) */
+
+  /* Thresholds  */
+  int16_t           lo_thresh;              /*!<  Low threshold value                                     */
+  int16_t           hi_thresh;              /*!<  High threshold value                                    */
 
   /* Device identification   */
-  ADS101X_device_t  device;                   /*!<  Device                            */
+  ADS101X_device_t  device;                 /*!<  Device. The user MUST identify the device               */
 } ADS101X_data_t;
 #endif
 
@@ -247,12 +258,15 @@ typedef struct
 
 
 /**
-  * @brief   INTERNAL CONSTANTS
+  * @brief   ERROR STATUS. INTERNAL CONSTANTS
   */
 typedef enum
 {
-    ADS101X_SUCCESS     =       0,
-    ADS101X_FAILURE     =       1
+    ADS101X_SUCCESS               =   0U,   /*!<  I2C communication success                       */
+    ADS101X_FAILURE               =   1U,   /*!<  I2C communication failure                       */
+    ADS101X_DEVICE_NOT_SUPPORTED  =   2U,   /*!<  Device not supported                            */
+    ADS101X_VALUE_OUT_OF_RANGE    =   3U,   /*!<  Value aout of range                             */
+    ADS101X_DATA_CORRUPTED        =   4U    /*!<  D and lo/hi threshold data                      */
 } ADS101X_status_t;
 
 
@@ -265,6 +279,14 @@ typedef enum
   */
 ADS101X_status_t ADS101X_Init                   ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myADS101X  );
 
+/** It triggers a softreset.
+  */
+ADS101X_status_t ADS101X_SoftReset              ( I2C_parameters_t myI2Cparameters                            );
+
+/** It gets the raw conversion value.
+  */
+ADS101X_status_t ADS101X_GetRawConversion       ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myD       );
+
 /** It starts a new single conversion.
   */
 ADS101X_status_t ADS101X_StartSingleConversion  ( I2C_parameters_t myI2Cparameters                            );
@@ -272,5 +294,61 @@ ADS101X_status_t ADS101X_StartSingleConversion  ( I2C_parameters_t myI2Cparamete
 /** It checks if the device is not currently performing a conversion.
   */
 ADS101X_status_t ADS101X_GetOS                  ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myADS101X );
+
+/** It sets input multiplexer configuration ( ADS1015 only ).
+  */
+ADS101X_status_t ADS101X_SetMux                 ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myADS101X  );
+
+/** It gets input multiplexer configuration ( ADS1015 only ).
+  */
+ADS101X_status_t ADS101X_GetMux                 ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myADS101X );
+
+/** It sets programmable gain amplifier ( not ADS1013 ).
+  */
+ADS101X_status_t ADS101X_SetGain                ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myPGA      );
+
+/** It gets programmable gain amplifier ( not ADS1013 ).
+  */
+ADS101X_status_t ADS101X_GetGain                ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myPGA     );
+
+/** It sets the device operating mode.
+  */
+ADS101X_status_t ADS101X_SetMode                ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myMode     );
+
+/** It gets the device operating mode.
+  */
+ADS101X_status_t ADS101X_GetMode                ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myMode    );
+
+/** It sets the data rate.
+  */
+ADS101X_status_t ADS101X_SetDataRate            ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myDR       );
+
+/** It gets the data rate.
+  */
+ADS101X_status_t ADS101X_GetDataRate            ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myDR      );
+
+/** It sets the comparator configuration.
+  */
+ADS101X_status_t ADS101X_SetComparator          ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myCOMP     );
+
+/** It gets the comparator configuration.
+  */
+ADS101X_status_t ADS101X_GetComparator          ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myCOMP    );
+
+/** It sets the low threshold value.
+  */
+ADS101X_status_t ADS101X_SetLowThresholdValue   ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myLoThres  );
+
+/** It gets the low threshold value.
+  */
+ADS101X_status_t ADS101X_GetLowThresholdValue   ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myLoThres );
+
+/** It sets the high threshold value.
+  */
+ADS101X_status_t ADS101X_SetHighThresholdValue  ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myHiThres  );
+
+/** It gets the high threshold value.
+  */
+ADS101X_status_t ADS101X_GetHighThresholdValue  ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myHiThres );
 
 
