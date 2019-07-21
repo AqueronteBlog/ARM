@@ -79,3 +79,8 @@ ADuCM3029/Examples/GPIO_Input_interrupt/Debug/
 ADuCM3029/Examples/WDT_Watchdog/Debug/
 ADuCM3029/Examples/UART/Debug/
 NRF52/Examples/examples/Drivers/WS2812/pca10040/s132/ses/Output/
+<<<<<<< HEAD
+ADuCM3029/Examples/ADC_Temperature_Polling_Mode/Debug/
+=======
+NRF52/Examples/examples/Drivers/ADS101X/pca10040/s132/ses/Output/
+>>>>>>> 4eead43e132b04f976be29d1948f6feb929ff4f4
