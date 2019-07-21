@@ -105,15 +105,16 @@ i2c_status_t i2c_init(I2C_parameters_t myI2Cparameters)
  *
  * @author      Manuel Caballero
  * @date        31/July/2018
- * @version     31/July/2018         The ORIGIN
+ * @version     21/July/2019         Timeouts are initialized at the beginning
+ *              31/July/2018         The ORIGIN
  * @pre         I2C communication is by polling mode.
  * @warning     N/A.
  */
 i2c_status_t i2c_write(I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uint32_t i2c_data_length, uint32_t i2c_generate_stop) 
 {
   uint32_t i = 0;
-  uint32_t i2c_timeout1 = 0;
-  uint32_t i2c_timeout2 = 0;
+  uint32_t i2c_timeout1 = I2C_TIMEOUT;
+  uint32_t i2c_timeout2 = I2C_TIMEOUT;
   uint32_t i2c_default_addr = 0;
 
   /* Save the default i2c address and set the one for this device  */
@@ -171,15 +172,16 @@ i2c_status_t i2c_write(I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uint
  *
  * @author      Manuel Caballero
  * @date        31/July/2018
- * @version     31/July/2018         The ORIGIN
+ * @version     21/July/2019         Timeouts are initialized at the beginning
+ *              31/July/2018         The ORIGIN
  * @pre         I2C communication is by polling mode.
  * @warning     N/A.
  */
 i2c_status_t i2c_read(I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uint32_t i2c_data_length) 
 {
   uint32_t i = 0;
-  uint32_t i2c_timeout1 = 0;
-  uint32_t i2c_timeout2 = 0;
+  uint32_t i2c_timeout1 = I2C_TIMEOUT;
+  uint32_t i2c_timeout2 = I2C_TIMEOUT;
   uint32_t i2c_default_addr = 0;
 
   /* Save the default i2c address and set the one for this device  */
