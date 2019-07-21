@@ -232,6 +232,7 @@ typedef enum
 typedef struct
 {
   /* Output  */
+  float     conversion;                     /*!<  Conversion value                                        */
   int16_t   raw_conversion;                 /*!<  Raw conversion value                                    */
 
   /* Configuration  */
@@ -285,7 +286,11 @@ ADS101X_status_t ADS101X_SoftReset              ( I2C_parameters_t myI2Cparamete
 
 /** It gets the raw conversion value.
   */
-ADS101X_status_t ADS101X_GetRawConversion       ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myD       );
+ADS101X_status_t ADS101X_GetRawConversion       ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myRawD    );
+
+/** It gets the conversion value.
+  */
+ADS101X_status_t ADS101X_GetConversion          ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myD       );
 
 /** It starts a new single conversion.
   */
