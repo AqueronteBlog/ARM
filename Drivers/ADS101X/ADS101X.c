@@ -40,7 +40,7 @@
  */
 ADS101X_status_t ADS101X_Init ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myADS101X  )
 {
-  i2c_status_t aux;
+  i2c_status_t aux =  I2C_SUCCESS;;
 
   aux  =   i2c_init ( myI2Cparameters );
 
@@ -73,7 +73,8 @@ ADS101X_status_t ADS101X_Init ( I2C_parameters_t myI2Cparameters, ADS101X_data_t
  *
  * @author      Manuel Caballero
  * @date        19/July/2019
- * @version     20/July/2019   Some comments were improved.
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   Some comments were improved.
  *              19/July/2019   The ORIGIN
  * @pre         This function can only be used when in power-down state and has no effect 
  *              when a conversion is ongoing.
@@ -81,17 +82,24 @@ ADS101X_status_t ADS101X_Init ( I2C_parameters_t myI2Cparameters, ADS101X_data_t
  */
 ADS101X_status_t ADS101X_StartSingleConversion ( I2C_parameters_t myI2Cparameters )
 {
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
+  uint8_t      cmd[3]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Read the register to mask it  */
   cmd[0]   =   ADS101X_CONFIG;
   aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 2U );
   
   /* Mask it and update the register   */
-  cmd[1]  |=   CONFIG_OS_BUSY;
-  aux     |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+  myConfig   =   cmd[1];
+  myConfig <<=   8U;
+  myConfig  |=   cmd[2];
+
+  myConfig  |=   CONFIG_OS_BUSY;
+  cmd[1]     =   (uint8_t)( myConfig >> 8U );
+  cmd[2]     =   (uint8_t)( myConfig );
+  aux       |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -122,22 +130,27 @@ ADS101X_status_t ADS101X_StartSingleConversion ( I2C_parameters_t myI2Cparameter
  *
  * @author      Manuel Caballero
  * @date        19/July/2019
- * @version     19/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              19/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
 ADS101X_status_t ADS101X_GetOS ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myADS101X )
 {
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
+  uint8_t      cmd[2]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Read the register to mask it  */
-  cmd   =   ADS101X_CONFIG;
-  aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux  |=   i2c_read  ( myI2Cparameters, &cmd, 1U );
+  cmd[0]   =   ADS101X_CONFIG;
+  aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     |=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
   /* Parse it   */
-  myADS101X->os  =   (ADS101X_config_os_t)( cmd & CONFIG_OS_MASK );
+  myConfig       =   cmd[0];
+  myConfig     <<=   8U;
+  myConfig      |=   cmd[1];
+  myADS101X->os  =   (ADS101X_config_os_t)( myConfig & CONFIG_OS_MASK );
 
 
 
@@ -169,14 +182,16 @@ ADS101X_status_t ADS101X_GetOS ( I2C_parameters_t myI2Cparameters, ADS101X_data_
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     ADS1015 only.
  */
 ADS101X_status_t ADS101X_SetMux ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myADS101X )
 {
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
+  uint8_t      cmd[3]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Only ADS1015 supports this functionality    */
   if ( myADS101X.device == DEVICE_ADS1015 )
@@ -184,12 +199,18 @@ ADS101X_status_t ADS101X_SetMux ( I2C_parameters_t myI2Cparameters, ADS101X_data
     /* Read the register to mask it  */
     cmd[0]   =   ADS101X_CONFIG;
     aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-    aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+    aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 2U );
   
     /* Mask it and update the register   */
-    cmd[1]  &=  ~CONFIG_MUX_MASK;
-    cmd[1]  |=   myADS101X.mux;
-    aux     |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    myConfig    =   cmd[1];
+    myConfig  <<=   8U;
+    myConfig   |=   cmd[2];
+
+    myConfig   &=  ~CONFIG_MUX_MASK;
+    myConfig   |=   myADS101X.mux;
+    cmd[1]      =   (uint8_t)( myConfig >> 8U );
+    cmd[2]      =   (uint8_t)( myConfig );
+    aux        |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   }
   else
   {
@@ -224,25 +245,30 @@ ADS101X_status_t ADS101X_SetMux ( I2C_parameters_t myI2Cparameters, ADS101X_data
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     ADS1015 only.
  */
 ADS101X_status_t ADS101X_GetMux ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myADS101X )
 {
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
+  uint8_t      cmd[2]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Only ADS1015 supports this functionality    */
   if ( myADS101X->device == DEVICE_ADS1015 )
   {
     /* Read the register to mask it  */
-    cmd   =   ADS101X_CONFIG;
-    aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-    aux  |=   i2c_read  ( myI2Cparameters, &cmd, 1U );
+    cmd[0]   =   ADS101X_CONFIG;
+    aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux     |=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
     /* Parse the data   */
-    myADS101X->mux   =   (ADS101X_config_mux_t)( cmd & CONFIG_MUX_MASK );
+    myConfig         =   cmd[0];
+    myConfig       <<=   8U;
+    myConfig        |=   cmd[1];
+    myADS101X->mux   =   (ADS101X_config_mux_t)( myConfig & CONFIG_MUX_MASK );
   }
   else
   {
@@ -278,14 +304,16 @@ ADS101X_status_t ADS101X_GetMux ( I2C_parameters_t myI2Cparameters, ADS101X_data
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     Not ADS1013.
  */
 ADS101X_status_t ADS101X_SetGain ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myPGA )
 {
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
+  uint8_t      cmd[3]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Only ADS1015/ADS1014 supports this functionality    */
   if ( myPGA.device != DEVICE_ADS1013 )
@@ -293,12 +321,18 @@ ADS101X_status_t ADS101X_SetGain ( I2C_parameters_t myI2Cparameters, ADS101X_dat
     /* Read the register to mask it  */
     cmd[0]   =   ADS101X_CONFIG;
     aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-    aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+    aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 2U );
   
     /* Mask it and update the register   */
-    cmd[1]  &=  ~CONFIG_PGA_MASK;
-    cmd[1]  |=   myPGA.pga;
-    aux     |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    myConfig    =   cmd[1];
+    myConfig  <<=   8U;
+    myConfig   |=   cmd[2];
+
+    myConfig   &=  ~CONFIG_PGA_MASK;
+    myConfig   |=   myPGA.pga;
+    cmd[1]      =   (uint8_t)( myConfig >> 8U );
+    cmd[2]      =   (uint8_t)( myConfig );
+    aux        |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   }
   else
   {
@@ -333,25 +367,30 @@ ADS101X_status_t ADS101X_SetGain ( I2C_parameters_t myI2Cparameters, ADS101X_dat
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     Not ADS1013.
  */
 ADS101X_status_t ADS101X_GetGain ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myPGA )
 {
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
+  uint8_t      cmd[2]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Only ADS1015/ADS1014 supports this functionality    */
   if ( myPGA->device != DEVICE_ADS1013 )
   {
     /* Read the register to mask it  */
-    cmd   =   ADS101X_CONFIG;
-    aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-    aux  |=   i2c_read  ( myI2Cparameters, &cmd, 1U );
+    cmd[0]   =   ADS101X_CONFIG;
+    aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux     |=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
     /* Parse the data   */
-    myPGA->pga   =   (ADS101X_config_pga_t)( cmd & CONFIG_PGA_MASK );
+    myConfig     =   cmd[0];
+    myConfig   <<=   8U;
+    myConfig    |=   cmd[1];
+    myPGA->pga   =   (ADS101X_config_pga_t)( myConfig & CONFIG_PGA_MASK );
   }
   else
   {
@@ -387,24 +426,32 @@ ADS101X_status_t ADS101X_GetGain ( I2C_parameters_t myI2Cparameters, ADS101X_dat
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
 ADS101X_status_t ADS101X_SetMode ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myMode )
 {
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
+  uint8_t      cmd[3]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Read the register to mask it  */
   cmd[0]   =   ADS101X_CONFIG;
   aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 2U );
   
   /* Mask it and update the register   */
-  cmd[1]  &=  ~CONFIG_MODE_MASK;
-  cmd[1]  |=   myMode.mode;
-  aux     |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+  myConfig    =   cmd[1];
+  myConfig  <<=   8U;
+  myConfig   |=   cmd[2];
+
+  myConfig   &=  ~CONFIG_MODE_MASK;
+  myConfig   |=   myMode.mode;
+  cmd[1]      =   (uint8_t)( myConfig >> 8U );
+  cmd[2]      =   (uint8_t)( myConfig );
+  aux        |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -435,22 +482,27 @@ ADS101X_status_t ADS101X_SetMode ( I2C_parameters_t myI2Cparameters, ADS101X_dat
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
 ADS101X_status_t ADS101X_GetMode ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myMode )
 {
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
+  uint8_t      cmd[2]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Read the register to mask it  */
-  cmd   =   ADS101X_CONFIG;
-  aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux  |=   i2c_read  ( myI2Cparameters, &cmd, 1U );
+  cmd[0]   =   ADS101X_CONFIG;
+  aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     |=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
   /* Parse the data   */
-  myMode->mode   =   (ADS101X_config_mode_t)( cmd & CONFIG_MODE_MASK );
+  myConfig       =   cmd[0];
+  myConfig     <<=   8U;
+  myConfig      |=   cmd[1];
+  myMode->mode   =   (ADS101X_config_mode_t)( myConfig & CONFIG_MODE_MASK );
 
 
 
@@ -482,24 +534,32 @@ ADS101X_status_t ADS101X_GetMode ( I2C_parameters_t myI2Cparameters, ADS101X_dat
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
 ADS101X_status_t ADS101X_SetDataRate ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myDR )
 {
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
+  uint8_t      cmd[3]   =  { 0U };
+  uint16_t     myConfig =  0U;  
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Read the register to mask it  */
   cmd[0]   =   ADS101X_CONFIG;
   aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-  aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+  aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 2U );
   
   /* Mask it and update the register   */
-  cmd[1]  &=  ~CONFIG_DR_MASK;
-  cmd[1]  |=   myDR.dr;
-  aux     |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+  myConfig    =   cmd[1];
+  myConfig  <<=   8U;
+  myConfig   |=   cmd[2];
+
+  myConfig   &=  ~CONFIG_DR_MASK;
+  myConfig   |=   myDR.dr;
+  cmd[1]      =   (uint8_t)( myConfig >> 8U );
+  cmd[2]      =   (uint8_t)( myConfig );
+  aux        |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -530,22 +590,27 @@ ADS101X_status_t ADS101X_SetDataRate ( I2C_parameters_t myI2Cparameters, ADS101X
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
 ADS101X_status_t ADS101X_GetDataRate ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myDR )
 {
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
+  uint8_t      cmd[2]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Read the register to mask it  */
-  cmd   =   ADS101X_CONFIG;
-  aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux  |=   i2c_read  ( myI2Cparameters, &cmd, 1U );
+  cmd[0]   =   ADS101X_CONFIG;
+  aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     |=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
   /* Parse the data   */
-  myDR->dr   =   (ADS101X_config_dr_t)( cmd & CONFIG_DR_MASK );
+  myConfig   =   cmd[0];
+  myConfig <<=   8U;
+  myConfig  |=   cmd[1];
+  myDR->dr   =   (ADS101X_config_dr_t)( myConfig & CONFIG_DR_MASK );
 
 
 
@@ -577,14 +642,16 @@ ADS101X_status_t ADS101X_GetDataRate ( I2C_parameters_t myI2Cparameters, ADS101X
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     ADS1014 and ADS1015 only.
  */
 ADS101X_status_t ADS101X_SetComparator ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myCOMP )
 {
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
+  uint8_t      cmd[3]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Only ADS1015/ADS1014 supports this functionality    */
   if ( myCOMP.device != DEVICE_ADS1013 )
@@ -592,12 +659,18 @@ ADS101X_status_t ADS101X_SetComparator ( I2C_parameters_t myI2Cparameters, ADS10
     /* Read the register to mask it  */
     cmd[0]   =   ADS101X_CONFIG;
     aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-    aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+    aux     |=   i2c_read  ( myI2Cparameters, &cmd[1], 2U );
   
     /* Mask it and update the register   */
-    cmd[1]  &=  ~( CONFIG_COMP_MODE_MASK | CONFIG_COMP_POL_MASK | CONFIG_COMP_LAT_MASK | CONFIG_COMP_QUE_MASK );
-    cmd[1]  |=   ( myCOMP.comp_mode | myCOMP.comp_pol | myCOMP.comp_lat | myCOMP.comp_que );
-    aux     |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    myConfig    =   cmd[1];
+    myConfig  <<=   8U;
+    myConfig   |=   cmd[2];
+
+    myConfig   &=  ~( CONFIG_COMP_MODE_MASK | CONFIG_COMP_POL_MASK | CONFIG_COMP_LAT_MASK | CONFIG_COMP_QUE_MASK );
+    myConfig   |=   ( myCOMP.comp_mode | myCOMP.comp_pol | myCOMP.comp_lat | myCOMP.comp_que );
+    cmd[1]      =   (uint8_t)( myConfig >> 8U );
+    cmd[2]      =   (uint8_t)( myConfig );
+    aux        |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   }
   else
   {
@@ -632,28 +705,34 @@ ADS101X_status_t ADS101X_SetComparator ( I2C_parameters_t myI2Cparameters, ADS10
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     ADS1014 and ADS1015 only.
  */
 ADS101X_status_t ADS101X_GetComparator ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myCOMP )
 {
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
+  uint8_t      cmd[2]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Only ADS1015/ADS1014 supports this functionality    */
   if ( myCOMP->device != DEVICE_ADS1013 )
   {
     /* Read the register to mask it  */
-    cmd   =   ADS101X_CONFIG;
-    aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-    aux  |=   i2c_read  ( myI2Cparameters, &cmd, 1U );
+    cmd[0]   =   ADS101X_CONFIG;
+    aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux     |=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
     /* Parse the data   */
-    myCOMP->comp_mode  =   (ADS101X_config_comp_mode_t)( cmd & CONFIG_COMP_MODE_MASK );
-    myCOMP->comp_pol   =   (ADS101X_config_comp_pol_t)( cmd & CONFIG_COMP_POL_MASK );
-    myCOMP->comp_lat   =   (ADS101X_config_comp_lat_t)( cmd & CONFIG_COMP_LAT_MASK );
-    myCOMP->comp_que   =   (ADS101X_config_comp_que_t)( cmd & CONFIG_COMP_QUE_MASK );
+    myConfig           =   cmd[0];
+    myConfig         <<=   8U;
+    myConfig          |=   cmd[1];
+
+    myCOMP->comp_mode  =   (ADS101X_config_comp_mode_t)( myConfig & CONFIG_COMP_MODE_MASK );
+    myCOMP->comp_pol   =   (ADS101X_config_comp_pol_t)( myConfig & CONFIG_COMP_POL_MASK );
+    myCOMP->comp_lat   =   (ADS101X_config_comp_lat_t)( myConfig & CONFIG_COMP_LAT_MASK );
+    myCOMP->comp_que   =   (ADS101X_config_comp_que_t)( myConfig & CONFIG_COMP_QUE_MASK );
   }
   else
   {
@@ -689,14 +768,15 @@ ADS101X_status_t ADS101X_GetComparator ( I2C_parameters_t myI2Cparameters, ADS10
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
 ADS101X_status_t ADS101X_SetLowThresholdValue ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myLoThres )
 {
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
+  uint8_t      cmd[3]  =  { 0U };
+  i2c_status_t aux     =  I2C_SUCCESS;
   
   /* lo-threshold cannot be greather than 4095  */
   if ( (uint16_t)myLoThres.lo_thresh > 4095U )
@@ -706,8 +786,11 @@ ADS101X_status_t ADS101X_SetLowThresholdValue ( I2C_parameters_t myI2Cparameters
   else
   {
     /* Update the register   */ 
+    myLoThres.lo_thresh <<= 4U;
+
     cmd[0]   =   ADS101X_LO_THRESH;
-    cmd[1]   =   ( myLoThres.lo_thresh << 4U );
+    cmd[1]   =   (uint8_t)( myLoThres.lo_thresh >> 8U );
+    cmd[2]   =   (uint8_t)( myLoThres.lo_thresh );
     aux     |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   }
 
@@ -739,25 +822,31 @@ ADS101X_status_t ADS101X_SetLowThresholdValue ( I2C_parameters_t myI2Cparameters
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
 ADS101X_status_t ADS101X_GetLowThresholdValue ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myLoThres )
 {
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
+  uint8_t      cmd[2]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Read the register to mask it  */
-  cmd   =   ADS101X_LO_THRESH;
-  aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux  |=   i2c_read  ( myI2Cparameters, &cmd, 1U );
+  cmd[0]   =   ADS101X_LO_THRESH;
+  aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     |=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
+  myConfig    =   cmd[0];
+  myConfig  <<=   8U;
+  myConfig   |=   cmd[1];
+
   /* Check if the reading is correct   */
-  if ( ( cmd & ~LO_THRESH_MASK ) == 0x0000 )
+  if ( ( myConfig & ~LO_THRESH_MASK ) == 0x0000 )
   {
     /* Parse the data   */
-    myLoThres->lo_thresh   =   cmd;
+    myLoThres->lo_thresh   =   myConfig;
     myLoThres->lo_thresh >>=   4U;
   }
   else
@@ -794,14 +883,15 @@ ADS101X_status_t ADS101X_GetLowThresholdValue ( I2C_parameters_t myI2Cparameters
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
 ADS101X_status_t ADS101X_SetHighThresholdValue ( I2C_parameters_t myI2Cparameters, ADS101X_data_t myHiThres )
 {
-  uint8_t      cmd[2]  =  { 0U };
-  i2c_status_t aux;
+  uint8_t      cmd[3]  =  { 0U };
+  i2c_status_t aux     =  I2C_SUCCESS;
   
   /* Hi_threshold cannot be greather than 4095  */
   if ( (uint16_t)myHiThres.hi_thresh > 4095U )
@@ -811,8 +901,11 @@ ADS101X_status_t ADS101X_SetHighThresholdValue ( I2C_parameters_t myI2Cparameter
   else
   {
     /* Update the register   */ 
+    myHiThres.hi_thresh <<= 4U;
+
     cmd[0]   =   ADS101X_HI_THRESH;
-    cmd[1]   =   ( myHiThres.hi_thresh << 4U );
+    cmd[1]   =   (uint8_t)( myHiThres.hi_thresh >> 8U );
+    cmd[2]   =   (uint8_t)( myHiThres.hi_thresh );
     aux     |=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
   }
 
@@ -844,25 +937,31 @@ ADS101X_status_t ADS101X_SetHighThresholdValue ( I2C_parameters_t myI2Cparameter
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
 ADS101X_status_t ADS101X_GetHighThresholdValue ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myHiThres )
 {
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
+  uint8_t      cmd[2]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Read the register to mask it  */
-  cmd   =   ADS101X_HI_THRESH;
-  aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux  |=   i2c_read  ( myI2Cparameters, &cmd, 1U );
+  cmd[0]   =   ADS101X_HI_THRESH;
+  aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     |=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
+  myConfig    =   cmd[0];
+  myConfig  <<=   8U;
+  myConfig   |=   cmd[1];
+
   /* Check if the reading is correct   */
-  if ( ( cmd & ~HI_THRESH_MASK ) == 0x000F )
+  if ( ( myConfig & ~HI_THRESH_MASK ) == 0x000F )
   {
     /* Parse the data   */
-    myHiThres->hi_thresh   =   cmd;
+    myHiThres->hi_thresh   =   myConfig;
     myHiThres->hi_thresh >>=   4U;
   }
   else
@@ -890,7 +989,7 @@ ADS101X_status_t ADS101X_GetHighThresholdValue ( I2C_parameters_t myI2Cparameter
  *
  * @param[in]    myI2Cparameters: I2C parameters.
  *
- * @param[out]   myD:             Raw conversion value.
+ * @param[out]   myRawD:          Raw conversion value.
  *
  *
  * @return       Status of ADS101X_GetRawConversion.
@@ -898,26 +997,32 @@ ADS101X_status_t ADS101X_GetHighThresholdValue ( I2C_parameters_t myI2Cparameter
  *
  * @author      Manuel Caballero
  * @date        20/July/2019
- * @version     20/July/2019   The ORIGIN
+ * @version     21/July/2019   Bug was fixed, the register is 16-bit long!
+ *              20/July/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-ADS101X_status_t ADS101X_GetRawConversion ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myD )
+ADS101X_status_t ADS101X_GetRawConversion ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myRawD )
 {
-  uint8_t      cmd  =  0U;
-  i2c_status_t aux;
+  uint8_t      cmd[2]   =  { 0U };
+  uint16_t     myConfig =  0U;
+  i2c_status_t aux      =  I2C_SUCCESS;
   
   /* Read the register to mask it  */
-  cmd   =   ADS101X_CONVERSION;
-  aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-  aux  |=   i2c_read  ( myI2Cparameters, &cmd, 1U );
+  cmd[0]   =   ADS101X_CONVERSION;
+  aux     |=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux     |=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
   
+  myConfig    =   cmd[0];
+  myConfig  <<=   8U;
+  myConfig   |=   cmd[1];
+
   /* Check if the reading is correct   */
-  if ( ( cmd & ~CONVERSION_D_MASK ) == 0x0000 )
+  if ( ( myConfig & ~CONVERSION_D_MASK ) == 0x0000 )
   {
     /* Parse the data   */
-    myD->raw_conversion   =   cmd;
-    myD->raw_conversion >>=   4U;
+    myRawD->raw_conversion   =   myConfig;
+    myRawD->raw_conversion >>=   4U;
   }
   else
   {
@@ -933,6 +1038,93 @@ ADS101X_status_t ADS101X_GetRawConversion ( I2C_parameters_t myI2Cparameters, AD
   {
     return   ADS101X_FAILURE;
   }
+}
+
+
+
+/**
+ * @brief       ADS101X_GetConversion ( I2C_parameters_t, ADS101X_data_t* );
+ *
+ * @details     It gets the conversion value
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myD:             Conversion value.
+ *
+ *
+ * @return       Status of ADS101X_GetConversion.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        21/July/2019
+ * @version     21/July/2019   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+ADS101X_status_t ADS101X_GetConversion ( I2C_parameters_t myI2Cparameters, ADS101X_data_t* myD )
+{
+  float             myGain    =  0.0;
+  float             myFactor  =  0.0;
+  ADS101X_status_t  aux       =  ADS101X_SUCCESS;
+  
+  /* Get the raw conversion value   */
+  aux  =   ADS101X_GetRawConversion ( myI2Cparameters, &(*myD) );
+  
+  /* Set up the gain accordingly   */
+  switch ( myD->device )
+  {
+    case DEVICE_ADS1013:
+      myGain   =   2.048;
+      break;
+    
+    default:
+    case DEVICE_ADS1014:
+    case DEVICE_ADS1015:
+      switch ( myD->pga )
+      {
+        case CONFIG_PGA_FSR_6_144_V:
+          myGain   =   6.144;
+          break;
+
+        case CONFIG_PGA_FSR_4_096_V:
+          myGain   =   4.096;
+          break;
+        
+        default:
+        case CONFIG_PGA_FSR_2_048_V:
+          myGain   =   2.048;
+          break;
+
+        case CONFIG_PGA_FSR_1_024_V:
+          myGain   =   1.024;
+          break;
+
+        case CONFIG_PGA_FSR_0_512_V:
+          myGain   =   0.512;
+          break;
+
+        case CONFIG_PGA_FSR_0_256_V:
+          myGain   =   0.256;
+          break;
+      }
+      break;
+  }
+
+  /* Calculate the conversion. Check full of scale  */
+  if ( myD->raw_conversion == 0x7FF0 )
+  {
+    myFactor  =   ( myGain * ( 2048.0 - 1.0 ) ) / 2048.0;
+  }
+  else
+  {
+    myFactor  =   myGain / 2048.0;
+  }
+
+  /* Result  */
+  myD->conversion  =   (float)( myFactor * myD->raw_conversion );
+
+
+  return   aux;
 }
 
 
