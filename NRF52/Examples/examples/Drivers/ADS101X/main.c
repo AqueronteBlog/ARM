@@ -1,9 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the external device: ADS101X. Every 1 seconds, a new
- *              pressure/temperature/wake-up event value is read and the data is transmitted through the UART ( Baud Rate: 230400 ).
- *
- *              The wake-up event is triggered by a double tap.
+ * @details     This example shows how to work with the external device: ADS1015. Every 1 seconds, a new
+ *              voltage measurement is performed and the result is transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
  *
@@ -44,7 +42,6 @@ volatile uint8_t            *myPtr;                   /*!<   Pointer to point ou
 
 
 
-
 /**@brief Function for application main entry.
  */
 int main(void)
@@ -53,7 +50,6 @@ int main(void)
   I2C_parameters_t  myADS101X_I2C_parameters;
   ADS101X_data_t    myADS101X_Data;
   ADS101X_status_t  aux;
-
 
 
   conf_CLK    ();
@@ -98,8 +94,7 @@ int main(void)
   myADS101X_Data.comp_que  =   CONFIG_COMP_QUE_DISABLED;
   aux  =   ADS101X_SetComparator  ( myADS101X_I2C_parameters, myADS101X_Data );
 
-  
-  
+   
   myState  =   0UL;                           // Reset the variable
   NRF_TIMER0->TASKS_START  =   1UL;           // Start Timer0
 
@@ -128,19 +123,18 @@ int main(void)
       }while( ( myADS101X_Data.os & CONFIG_OS_MASK ) == CONFIG_OS_BUSY );       // [TODO] Too dangerous! the uC may get stuck here
                                                                                 // [WORKAROUND] Insert a counter.
       /* Get the result  */
-      aux  =   ADS101X_GetRawConversion ( myADS101X_I2C_parameters, &myADS101X_Data );
+      aux  =   ADS101X_GetConversion ( myADS101X_I2C_parameters, &myADS101X_Data );
 
 
+      /* Transmit result through the UART  */
+      sprintf ( (char*)myMessage, "V = %d mV\r\n", (int32_t)( 1000 * myADS101X_Data.conversion ) );
 
-//      /* Transmit result through the UART  */
-//      sprintf ( (char*)myMessage, "V = mV\r\n",  );
-//
-//      NRF_UART0->TASKS_STOPRX  =   1UL;
-//      NRF_UART0->TASKS_STOPTX  =   1UL;
-//      myPtr                    =   &myMessage[0];
-//
-//      NRF_UART0->TASKS_STARTTX =   1UL;
-//      NRF_UART0->TXD           =   *myPtr;
+      NRF_UART0->TASKS_STOPRX  =   1UL;
+      NRF_UART0->TASKS_STOPTX  =   1UL;
+      myPtr                    =   &myMessage[0];
+
+      NRF_UART0->TASKS_STARTTX =   1UL;
+      NRF_UART0->TXD           =   *myPtr;
 
       /* Reset the variables   */
       myState          =   0UL;
