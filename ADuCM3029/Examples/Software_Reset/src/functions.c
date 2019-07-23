@@ -72,10 +72,6 @@ void conf_CLK  ( void )
  * @brief       void conf_GPIO  ( void )
  * @details     It configures GPIOs.
  *
- * 				- PORT0:
- * 					UART_Tx: P0_10
- * 					UART_Rx: P0_11
- *
  * 				- PORT1:
  * 					DS4 ( LED2 ): P1_15
  *
@@ -98,13 +94,13 @@ void conf_CLK  ( void )
  */
 void conf_GPIO  ( void )
 {
-	/* UART pins: Multiplexed function 1	 */
-	pADI_GPIO0->CFG	&=	~( ( 0b11 << BITP_GPIO_CFG_PIN10 ) | ( 0b11 << BITP_GPIO_CFG_PIN11 ) );
-	pADI_GPIO0->CFG	|=	 ( ( 0b01 << BITP_GPIO_CFG_PIN10 ) | ( 0b01 << BITP_GPIO_CFG_PIN11 ) );
-
 	/* Both pins as GPIOs	 */
 	pADI_GPIO2->CFG	&=	~( 0b11 << BITP_GPIO_CFG_PIN00 );
 	pADI_GPIO1->CFG	&=	~( 0b11 << BITP_GPIO_CFG_PIN15 );
+
+	/* Turn both LEDs off	 */
+	pADI_GPIO2->CLR	|=	DS3;
+	pADI_GPIO1->CLR	|=	DS4;
 
 	/* Drive Strength Select: Normal	 */
 	pADI_GPIO2->DS	&=	~( DS3 );
@@ -128,81 +124,3 @@ void conf_GPIO  ( void )
 	pADI_GPIO2->OEN	|=	 DS3;
 	pADI_GPIO1->OEN	|=	 DS4;
 }
-
-
-
-/**
- * @brief       void conf_UART  ( void )
- * @details     It configures the UART peripheral.
- *
- * 					UART:
- * 					 - Bypass the fractional divider
- * 					 - BaudRate = PCLK/[ 2^( OSR + 2 ) * DIV ] = 6500000/[ 2^( 1 + 2 ) * 7 ] ~ 116071.43
- * 					 - Rx interrupt enabled.
- *
- *
- * @param[in]    N/A.
- *
- * @param[out]   N/A.
- *
- *
- * @return      N/A
- *
- * @author      Manuel Caballero
- * @date        23/July/2019
- * @version     23/July/2019      The ORIGIN
- * @pre         N/A
- * @warning     N/A
- */
-void conf_UART  ( void )
-{
-	/* Disable auto baud	 */
-	pADI_UART0->ACR	&=	~( 1U << BITP_UART_ACR_ABE );
-
-	/* UART:
-	 * 	- UCLK automatically gated
-	 * 	- Don't invert receiver line (idling high).
-	*/
-	pADI_UART0->CTL	&=	~( ( 1U << BITP_UART_CTL_RXINV ) | ( 1U << BITP_UART_CTL_FORCECLK ) );
-
-	/* UART:
-	 *  - No parity
-	 *  - 1 Stop bit
-	 *  - 8-bit length
-	*/
-	pADI_UART0->LCR	&=	~( ( 1U << BITP_UART_LCR_BRK ) | ( 1U << BITP_UART_LCR_SP ) | ( 1U << BITP_UART_LCR_PEN ) | ( 1U << BITP_UART_LCR_STOP ) | ( 0b11 << BITP_UART_LCR_WLS ) );
-	pADI_UART0->LCR	|=	 ( 0b11 << BITP_UART_LCR_WLS );
-
-	/* UART:
-	 * 	- Rx FIFO Trigger Level: 1 byte to trigger RX interrupt
-	 * 	- Clear Tx and Rx FIFO
-	 * 	- FIFO as to Work in 16550 Mode: Disabled
-	*/
-	pADI_UART0->FCR	&=	~( ( 1U << BITP_UART_FCR_RFTRIG ) | ( 1U << BITP_UART_FCR_TFCLR ) | ( 1U << BITP_UART_FCR_RFCLR ) | ( 1U << BITP_UART_FCR_FIFOEN ) );
-
-	/*	Disable Rx When Transmitting	 */
-	pADI_UART0->RSC	|=	 ( 1U << BITP_UART_RSC_DISRX );
-
-	/* UART Baud Rate: BaudRate = 6500000/[ 2^( 1 + 2 ) * 7 ] ~ 116071.43
-	 *  - Bypass the fractional divider
-	 *   	Baud Rate = PCLK/[ 2^( OSR + 2 ) * DIV ]
-	 *  - OSR: 1 ( Over sample by 8 )
-	 *  - DIV: 7
-	*/
-	pADI_UART0->FBR		&=	~( 1U << BITP_UART_FBR_FBEN );
-	pADI_UART0->LCR2	&=	~( 0b11 << BITP_UART_LCR2_OSR );
-	pADI_UART0->LCR2	|=	 ( 0b01 << BITP_UART_LCR2_OSR );
-	pADI_UART0->DIV		 =	 ( 7U << BITP_UART_DIV_DIV );
-
-	/* UART interrupts:
-	 * 	- Rx interruptReceive Buffer Full Interrupt: Enabled
-	 * 	- The rest: Disabled
-	*/
-	pADI_UART0->IEN	&=	~( ( 1U << BITP_UART_IEN_EDMAR ) | ( 1U << BITP_UART_IEN_EDMAT ) | ( 1U << BITP_UART_IEN_EDSSI ) | ( 1U << BITP_UART_IEN_ELSI ) | ( 1U << BITP_UART_IEN_ETBEI ) | ( 1U << BITP_UART_IEN_ERBFI ) );
-	pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ERBFI );
-
-	/* Enable interrupt	 */
-	NVIC_SetPriority ( UART_EVT_IRQn, 0UL );
-	NVIC_EnableIRQ   ( UART_EVT_IRQn );
-}
-
