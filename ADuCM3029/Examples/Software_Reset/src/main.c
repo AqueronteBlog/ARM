@@ -26,13 +26,11 @@
 
 /**@brief Constants.
  */
-#define TX_BUFF_SIZE  64                    /*!<   UART buffer size                                       */
+
 
 
 /**@brief Variables.
  */
-volatile uint8_t  myState	 =	 0U;		/*!<   State that indicates when to perform the next action   */
-volatile uint8_t  *myPtr;                   /*!<   Pointer to point out myMessage                         */
 
 
 
@@ -40,8 +38,6 @@ volatile uint8_t  *myPtr;                   /*!<   Pointer to point out myMessag
  */
 int main(int argc, char *argv[])
 {
-	uint8_t  myMessage[ TX_BUFF_SIZE ];
-
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
 	 * the project.
@@ -52,92 +48,29 @@ int main(int argc, char *argv[])
 	/* Begin adding your custom code here */
 	SystemInit ();
 
-	/* Initialized the message	 */
-	myMessage[ 0 ]   =  'L';
-	myMessage[ 1 ]   =  'E';
-	myMessage[ 2 ]   =  'D';
-	myMessage[ 3 ]   =  ' ';
-	myMessage[ 4 ]   =  ' ';
-	myMessage[ 11 ]  =  '\n';
-
-
 	conf_CLK  ();
 	conf_GPIO ();
-	conf_UART ();
+
+	/* Generate a little delay	 */
+	for ( uint32_t i = 0UL; i < 0x23232; i++ );
+
+	/* Check if the reset was provoked by the software reset	 */
+	if ( ( pADI_PMG0->RST_STAT & ( 1U << BITP_PMG_RST_STAT_SWRST ) ) == ( 1U << BITP_PMG_RST_STAT_SWRST ) )
+	{
+		/* Turn both LEDs on	 */
+		pADI_GPIO1->SET	|=	 DS4;
+		pADI_GPIO2->SET	|=	 DS3;
+
+		/* Clear flag	 */
+		pADI_PMG0->RST_STAT	|=	 ( 1U << BITP_PMG_RST_STAT_SWRST );
+	}
+
+	/* Trigger a new software reset	 */
+	pADI_NVIC0->INTAIRC	 =	 ( 0x05FA0004 << BITP_NVIC_INTAIRC_VALUE );
 
 
 	while ( 1 )
 	{
-		/* Low power mode: Flexi Mode	 */
-		pADI_PMG0->PWRKEY	 =	 0x4859;
-		pADI_PMG0->PWRMOD	&=	~( 0b11 << BITP_PMG_PWRMOD_MODE );
-		pADI_PMG0->PWRKEY	 =	 0x0000;
-
-		/* Disable key protection for clock oscillator	 */
-		pADI_CLKG0_OSC->KEY	 =	 0xCB14U;
-
-		/* Clocks to all peripherals are gated off	 */
-		pADI_CLKG0_CLK->CTL5	|=	 ( 1U << BITP_CLKG_CLK_CTL5_PERCLKOFF );
-
-		/* Block registers	 */
-		pADI_CLKG0_OSC->KEY	 =	 0x0000U;
-
-		/* Enter in low power Flexi mode	 */
-		__WFI();
-
-		if ( myState != 0U )
-		{
-			/* Initialized the message	 */
-			myMessage[ 5 ]   =  'T';
-			myMessage[ 6 ]   =  'O';
-			myMessage[ 7 ]   =  'G';
-			myMessage[ 8 ]   =  'G';
-			myMessage[ 9 ]   =  'L';
-			myMessage[ 10 ]  =  'E';
-
-			switch ( myState )
-			{
-				case '1':
-					/* Toggle LED1	 */
-					pADI_GPIO1->TGL	|=	 DS4;
-					myMessage [ 3 ]	 =	 '1';
-					break;
-
-				case '2':
-					/* Toggle LED2	 */
-					pADI_GPIO2->TGL	|=	 DS3;
-					myMessage [ 3 ]	 =   '2';
-					break;
-
-				default:
-					/* Both LEDs off	 */
-					pADI_GPIO1->CLR	|=	 DS4;
-					pADI_GPIO2->CLR	|=	 DS3;
-
-					/* Initialized the message	 */
-					myMessage[ 3 ]   =  ' ';
-					myMessage[ 5 ]   =  'E';
-					myMessage[ 6 ]   =  'R';
-					myMessage[ 7 ]   =  'R';
-					myMessage[ 8 ]   =  'O';
-					myMessage[ 9 ]   =  'R';
-					myMessage[ 10 ]  =  '!';
-					break;
-			}
-
-			/* Check that is safe to send data	 */
-			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
-
-			/* Transmit data back	 */
-			myPtr            =   &myMessage[0];
-			pADI_UART0->TX	 =	 *myPtr;
-
-			/* Transmit Buffer Empty Interrupt: Enabled	 */
-			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
-
-			/* Reset variables	 */
-			myState	 =	 0U;
-		}
 	}
 
 	/* It should never reach here	 */
