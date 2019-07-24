@@ -1162,6 +1162,24 @@ SX1272_SX1273_status_t SX1272_SX1273_LoRa_SetPowerAmplifier ( SPI_parameters_t m
   cmd[1]  =  myPaConfig->paDac;
   aux     =  spi_transfer ( mySPIparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
+  /* Update the Overload Current Protection ( OCP ) for PA accordingly with the output power.
+   *
+   *          Power             |     I_DDT     |   Safety Factor x2   |   OcpTrim  |   I_limit   |    OCP    |  OcpTrim Limits  |       Imax       |      Formula           |    
+   * ---------------------------+---------------+----------------------+------------+-------------+-----------+------------------+------------------+------------------------+
+   * RFOP = +20 dBm on PA_BOOST |    125 [mA]   |       250 [mA]       |     27     |   240 [mA]  |  Enabled  |         27       |        240 [mA]  |  -30 + 10*OcpTrim [mA] |   
+   * RFOP = +17 dBm on PA_BOOST |     90 [mA]   |       180 [mA]       |     21     |   180 [mA]  |  Enabled  |    16 - 27       |  130 - 240 [mA]  |  -30 + 10*OcpTrim [mA] |   
+   * RFOP = +13 dBm on RFO pin  |     28 [mA]   |        56 [mA]       |      2     |    55 [mA]  |  Disabled |     0 - 15       |   45 - 120 [mA]  |   45 + 5*OcpTrim  [mA] |
+   * RFOP = + 7 dBm on RFO pin  |     18 [mA]   |        36 [mA]       |      0     |    45 [mA]  |  Disabled |     0 - 15       |   45 - 120 [mA]  |   45 + 5*OcpTrim  [mA] |   
+  */
+  cmd[0]  =  ( SX1272_SX1273_REG_OCP | 0x7F );          // Read access
+  aux     =  spi_transfer ( mySPIparameters, &cmd[0], 1U, &cmd[1], 1U );
+  
+  /* Mask the register   */
+  cmd[1]  &=  ~( LORA_REGOCP_OCP_ON_MASK | LORA_REGOCP_OCP_TRIM_MASK );
+  if ( myPaConfig->p_out < 13 )
+  {
+    cmd[1]  &=  ~( LORA_REGOCP_OCP_ON_MASK | LORA_REGOCP_OCP_TRIM_MASK );
+  }
 
 
 
