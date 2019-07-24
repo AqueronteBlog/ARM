@@ -1,10 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: UART.
- * 				If '1' is received, LED1 is turned on, if '2' is received, the LED2 is turned on.
- * 				A message will be transmitted back, any other value will turn both LEDs off.
- *
- * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
+ * @details     This example shows how to work with the internal peripheral: Software Reset.
+ * 				A software reset is triggered after a short period of time, both LEDs will blink.
  *
  *
  * @return      N/A
