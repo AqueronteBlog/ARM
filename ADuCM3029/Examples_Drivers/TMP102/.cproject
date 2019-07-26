@@ -22,16 +22,16 @@
 							<builder buildPath="${workspace_loc:/TMP102}/Debug" id="arm.toolchain.builder.base.78116283" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="arm.toolchain.builder.base"/>
 							<tool id="arm.toolchain.gcc.assembler.1296477613" name="CrossCore GCC ARM Embedded Assembler" superClass="arm.toolchain.gcc.assembler">
 								<option id="arm.assembler.option.debuginfo.1757237360" name="Generate debug information (-g)" superClass="arm.assembler.option.debuginfo" useByScannerDiscovery="false"/>
-								<option id="arm.toolchain.gcc.assembler.option.mcpu.1354968173" name="-mcpu" superClass="arm.toolchain.gcc.assembler.option.mcpu" value="cortex-m3" valueType="string"/>
-								<option id="arm.base.assembler.option.proc.1979996828" name="-mproc" superClass="arm.base.assembler.option.proc" value=" ADuCM3029" valueType="string"/>
-								<option id="arm.assembler.option.sirevision.1230869893" name="-msi-revision" superClass="arm.assembler.option.sirevision" value=" none" valueType="string"/>
-								<option id="arm.assembler.option.preprocessdefs.1683405759" name="Preprocessor definitions (-D):" superClass="arm.assembler.option.preprocessdefs" valueType="definedSymbols">
+								<option id="arm.toolchain.gcc.assembler.option.mcpu.1354968173" name="-mcpu" superClass="arm.toolchain.gcc.assembler.option.mcpu" useByScannerDiscovery="false" value="cortex-m3" valueType="string"/>
+								<option id="arm.base.assembler.option.proc.1979996828" name="-mproc" superClass="arm.base.assembler.option.proc" useByScannerDiscovery="false" value=" ADuCM3029" valueType="string"/>
+								<option id="arm.assembler.option.sirevision.1230869893" name="-msi-revision" superClass="arm.assembler.option.sirevision" useByScannerDiscovery="false" value=" none" valueType="string"/>
+								<option id="arm.assembler.option.preprocessdefs.1683405759" name="Preprocessor definitions (-D):" superClass="arm.assembler.option.preprocessdefs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="CORE0"/>
 									<listOptionValue builtIn="false" value="_DEBUG"/>
 									<listOptionValue builtIn="false" value="_RTE_"/>
 									<listOptionValue builtIn="false" value="__ADUCM3029__"/>
 								</option>
-								<option id="arm.assembler.option.additionaldirectories.1606477405" name="Additional include directories (-I):" superClass="arm.assembler.option.additionaldirectories" valueType="includePath">
+								<option id="arm.assembler.option.additionaldirectories.1606477405" name="Additional include directories (-I):" superClass="arm.assembler.option.additionaldirectories" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/system}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${cmsis_pack_root}/ARM/CMSIS/5.5.1/CMSIS/Core/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${cmsis_pack_root}/AnalogDevices/ADuCM302x_DFP/3.2.0/Include&quot;"/>
@@ -41,22 +41,24 @@
 								<inputType id="arm.toolchain.assembler.base.input.282634107" superClass="arm.toolchain.assembler.base.input"/>
 							</tool>
 							<tool id="arm.toolchain.gcc.c.compiler.2136090467" name="CrossCore GCC ARM Embedded C Compiler" superClass="arm.toolchain.gcc.c.compiler">
-								<option defaultValue="false" id="arm.base.compiler.option.optimization.enable.1075553132" name="Enable optimization" superClass="arm.base.compiler.option.optimization.enable" valueType="boolean"/>
-								<option defaultValue="arm.base.compiler.option.optimization.og" id="arm.base.compiler.option.optimization.1526861547" name="Optimization level" superClass="arm.base.compiler.option.optimization" valueType="enumerated"/>
-								<option defaultValue="true" id="arm.base.compiler.option.debug.1093651497" name="Generate debug information (-g)" superClass="arm.base.compiler.option.debug" valueType="boolean"/>
-								<option id="arm.toolchain.gcc.c.compiler.option.mcpu.41148043" name="-mcpu" superClass="arm.toolchain.gcc.c.compiler.option.mcpu" value="cortex-m3" valueType="string"/>
-								<option id="arm.base.compiler.option.proc.742247619" name="-mproc" superClass="arm.base.compiler.option.proc" value=" ADuCM3029" valueType="string"/>
-								<option id="arm.base.compiler.option.sirevision.1098125185" name="-msi-revision" superClass="arm.base.compiler.option.sirevision" value=" none" valueType="string"/>
-								<option id="arm.base.compiler.option.preprocessdefs.692432235" name="Preprocessor definitions (-D):" superClass="arm.base.compiler.option.preprocessdefs" valueType="definedSymbols">
+								<option defaultValue="false" id="arm.base.compiler.option.optimization.enable.1075553132" name="Enable optimization" superClass="arm.base.compiler.option.optimization.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option defaultValue="arm.base.compiler.option.optimization.og" id="arm.base.compiler.option.optimization.1526861547" name="Optimization level" superClass="arm.base.compiler.option.optimization" useByScannerDiscovery="false" valueType="enumerated"/>
+								<option defaultValue="true" id="arm.base.compiler.option.debug.1093651497" name="Generate debug information (-g)" superClass="arm.base.compiler.option.debug" useByScannerDiscovery="false" valueType="boolean"/>
+								<option id="arm.toolchain.gcc.c.compiler.option.mcpu.41148043" name="-mcpu" superClass="arm.toolchain.gcc.c.compiler.option.mcpu" useByScannerDiscovery="false" value="cortex-m3" valueType="string"/>
+								<option id="arm.base.compiler.option.proc.742247619" name="-mproc" superClass="arm.base.compiler.option.proc" useByScannerDiscovery="false" value=" ADuCM3029" valueType="string"/>
+								<option id="arm.base.compiler.option.sirevision.1098125185" name="-msi-revision" superClass="arm.base.compiler.option.sirevision" useByScannerDiscovery="false" value=" none" valueType="string"/>
+								<option id="arm.base.compiler.option.preprocessdefs.692432235" name="Preprocessor definitions (-D):" superClass="arm.base.compiler.option.preprocessdefs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="CORE0"/>
 									<listOptionValue builtIn="false" value="_DEBUG"/>
 									<listOptionValue builtIn="false" value="_RTE_"/>
 									<listOptionValue builtIn="false" value="__ADUCM3029__"/>
 								</option>
-								<option id="arm.toolchain.cpp.compiler.option.coreid.2047161719" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="arm.toolchain.cpp.compiler.option.coreid" value="0" valueType="string"/>
-								<option id="arm.base.compiler.option.include.paths.38628449" name="Additional include directories (-I):" superClass="arm.base.compiler.option.include.paths" valueType="includePath">
+								<option id="arm.toolchain.cpp.compiler.option.coreid.2047161719" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="arm.toolchain.cpp.compiler.option.coreid" useByScannerDiscovery="false" value="0" valueType="string"/>
+								<option id="arm.base.compiler.option.include.paths.38628449" name="Additional include directories (-I):" superClass="arm.base.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/system}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\Workspace\ARM\ADuCM3029\Basics\I2C&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\Workspace\ARM\Drivers\TMP102&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${cmsis_pack_root}/ARM/CMSIS/5.5.1/CMSIS/Core/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${cmsis_pack_root}/AnalogDevices/ADuCM302x_DFP/3.2.0/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/RTE&quot;"/>
@@ -65,12 +67,12 @@
 								<inputType id="arm.toolchain.gcc.c.input.785168210" superClass="arm.toolchain.gcc.c.input"/>
 							</tool>
 							<tool id="arm.toolchain.gcc.c.linker.449585210" name="CrossCore GCC ARM Embedded C Linker" superClass="arm.toolchain.gcc.c.linker">
-								<option id="arm.toolchain.gcc.c.linker.option.mcpu.1347313529" name="-mcpu" superClass="arm.toolchain.gcc.c.linker.option.mcpu" value="cortex-m3" valueType="string"/>
-								<option id="arm.linker.option.proc.1173869599" name="-mproc" superClass="arm.linker.option.proc" value=" ADuCM3029" valueType="string"/>
-								<option id="arm.linker.option.sirevision.896987198" name="-msi-revision" superClass="arm.linker.option.sirevision" value=" none" valueType="string"/>
-								<option id="arm.toolchain.gcc.c.linker.option.fpu.abi.1825519611" name="Float ABI" superClass="arm.toolchain.gcc.c.linker.option.fpu.abi" value="" valueType="enumerated"/>
-								<option id="arm.linker.option.ldprocessing.ldfile.1238059459" name="Custom linker script (-T)" superClass="arm.linker.option.ldprocessing.ldfile" value="${workspace_loc:/${ProjName}}/RTE/Device/ADuCM3029/ADuCM3029.ld" valueType="string"/>
-								<option id="arm.toolchain.gcc.c.linker.option.specs.1768928267" superClass="arm.toolchain.gcc.c.linker.option.specs" value="arm.toolchain.gcc.c.linker.option.specs.custom" valueType="enumerated"/>
+								<option id="arm.toolchain.gcc.c.linker.option.mcpu.1347313529" name="-mcpu" superClass="arm.toolchain.gcc.c.linker.option.mcpu" useByScannerDiscovery="false" value="cortex-m3" valueType="string"/>
+								<option id="arm.linker.option.proc.1173869599" name="-mproc" superClass="arm.linker.option.proc" useByScannerDiscovery="false" value=" ADuCM3029" valueType="string"/>
+								<option id="arm.linker.option.sirevision.896987198" name="-msi-revision" superClass="arm.linker.option.sirevision" useByScannerDiscovery="false" value=" none" valueType="string"/>
+								<option id="arm.toolchain.gcc.c.linker.option.fpu.abi.1825519611" name="Float ABI" superClass="arm.toolchain.gcc.c.linker.option.fpu.abi" useByScannerDiscovery="false" value="" valueType="enumerated"/>
+								<option id="arm.linker.option.ldprocessing.ldfile.1238059459" name="Custom linker script (-T)" superClass="arm.linker.option.ldprocessing.ldfile" useByScannerDiscovery="false" value="${workspace_loc:/${ProjName}}/RTE/Device/ADuCM3029/ADuCM3029.ld" valueType="string"/>
+								<option id="arm.toolchain.gcc.c.linker.option.specs.1768928267" name="Semihosting support" superClass="arm.toolchain.gcc.c.linker.option.specs" useByScannerDiscovery="false" value="arm.toolchain.gcc.c.linker.option.specs.custom" valueType="enumerated"/>
 								<inputType id="arm.linker.input.669666762" superClass="arm.linker.input">
 									<additionalInput kind="additionaldependency" paths="$(USER_OBJS)"/>
 								</inputType>
@@ -112,6 +114,7 @@
 					</folderInfo>
 					<folderInfo id="arm.toolchain.gcc.target.exe.debug.527762139.system" name="system" resourcePath="system">
 						<toolChain id="arm.gcc.toolchain.356075630" name="CrossCore GCC ARM Embedded Toolchain" superClass="arm.gcc.toolchain" unusedChildren="">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="arm.toolchain.platform.base" name="Development Platform" osList="all" superClass="arm.toolchain.platform.base"/>
 							<tool id="arm.toolchain.gcc.assembler.2065209644" name="CrossCore GCC ARM Embedded Assembler" superClass="arm.toolchain.gcc.assembler.1296477613">
 								<inputType id="arm.toolchain.assembler.base.input.960335117" superClass="arm.toolchain.assembler.base.input"/>
 							</tool>
@@ -244,6 +247,7 @@
 					</folderInfo>
 					<folderInfo id="arm.toolchain.gcc.target.exe.release.660836261.system" name="system" resourcePath="system">
 						<toolChain id="arm.gcc.toolchain.1610215914" name="CrossCore GCC ARM Embedded Toolchain" superClass="arm.gcc.toolchain" unusedChildren="">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="arm.toolchain.platform.base" name="Development Platform" osList="all" superClass="arm.toolchain.platform.base"/>
 							<tool id="arm.toolchain.gcc.assembler.1194245745" name="CrossCore GCC ARM Embedded Assembler" superClass="arm.toolchain.gcc.assembler.2037993091">
 								<inputType id="arm.toolchain.assembler.base.input.1158858067" superClass="arm.toolchain.assembler.base.input"/>
 							</tool>

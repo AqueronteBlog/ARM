@@ -22,6 +22,7 @@
 #include "board.h"
 #include "functions.h"
 #include "interrupts.h"
+#include "TMP102.h"
 
 
 /**@brief Constants.
