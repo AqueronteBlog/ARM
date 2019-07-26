@@ -50,6 +50,14 @@ typedef enum{
 } ADICUP3029_board_uart_t;
 
 
+/**@brief I2C.
+ */
+typedef enum{
+  I2C0_SCL  = 4U,						/*!<   I2C0_SCL: P0_04   				*/
+  I2C0_SDA  = 5U						/*!<   I2C0_SDA: P0_05   				*/
+} ADICUP3029_board_i2c_t;
+
+
 #ifdef __cplusplus
 }
 #endif
