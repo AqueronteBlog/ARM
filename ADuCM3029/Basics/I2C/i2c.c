@@ -59,7 +59,7 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 	i2cHigh	 =	 (uint8_t)( (float)( ( myI2Cparameters.pclkFrequency / ( 2.0 * myI2Cparameters.freq ) ) + 0.5 ) - 2.0 );
 	i2cLow	 =	 ( i2cHigh + 1U );
 
-	/* Both MUST be greater than 0	 */
+	/* Both MUST be greater than 0	  */
 	if ( ( i2cHigh > 0U ) && ( i2cLow > 0U ) )
 	{
 		myI2Cparameters.i2cInstance->DIV	 =	 (uint16_t)( ( i2cHigh << BITP_I2C_DIV_HIGH ) | ( i2cLow << BITP_I2C_DIV_LOW ) );
