@@ -123,11 +123,6 @@
       <file file_name="../../../../../../components/softdevice/common/nrf_sdh_soc.c" />
     </folder>
     <folder Name="Drivers">
-      <folder Name="Basics">
-        <folder Name="I2C">
-          <file file_name="../../../../../Basics/I2C/i2c.c" />
-        </folder>
-      </folder>
       <folder Name="DHT11">
         <file file_name="../../../../../../../../Drivers/DHT11/DHT11.c" />
       </folder>
