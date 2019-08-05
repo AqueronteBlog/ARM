@@ -30,23 +30,16 @@ typedef enum
 } DHT11_device_delays_t;
 
 
-
-
-
-#ifndef DHT11_VECTOR_STRUCT_H
-#define DHT11_VECTOR_STRUCT_H
-typedef struct
+/**
+  * @brief   DEVICE BUS STATUS.
+  *           NOTE: N/A.
+  */
+typedef enum
 {
-  /* Outputs  */
-  float     temperature;              /*!<  Temperature value                                       */
-  float     humidity;                 /*!<  Relative humidity value                                 */
-
-  uint16_t  rawTemperature;           /*!<  Temperature raw value                                   */
-  uint16_t  rawHumidity;              /*!<  Relative humidity raw value                             */
-
-  uint8_t   checksum;                 /*!<  Checksum                                                */
-} DHT11_data_t;
-#endif
+    DHT11_PIN_HIGH    =   1U,                           /*!<  Pin high                                        */
+    DHT11_PIN_LOW     =   0U,                           /*!<  Pin low                                         */
+    DHT11_PIN_UNKNOWN =   2U                            /*!<  Pin unknown                                     */
+} DHT11_device_bus_status_t;
 
 
 
@@ -64,12 +57,75 @@ typedef enum
 
 
 
+
+/**
+  * @brief   TYPEDEF DEFINITIONS.
+  */
+/**
+  * @brief   SET PIN HIGH OR LOW.
+  *           NOTE: The user MUST take care of these function. Bus communication function pointer which should be 
+  *                 mapped to the platform specific.
+  */
+typedef DHT11_status_t (*dht11_comm_out_fptr_t)( uint8_t myDHT11pin );
+
+/**
+  * @brief   READ PIN.
+  *           NOTE: The user MUST take care of these function. Bus communication function pointer which should be 
+  *                 mapped to the platform specific.
+  */
+typedef DHT11_status_t (*dht11_comm_in_fptr_t)( uint8_t myDHT11pin, DHT11_device_bus_status_t* myDHT11pinStatus );
+
+/**
+  * @brief   DEVICE DELAYS.
+  *           NOTE: Delay function pointer which should be mapped to the platform specific.
+  */
+typedef DHT11_status_t (*dht11_delay_fptr_t)( uint32_t myDHT11delay );
+
+
+
+
+#ifndef DHT11_VECTOR_STRUCT_H
+#define DHT11_VECTOR_STRUCT_H
+typedef struct{
+    /* DHT11: Set up the pin as an output: Low status  */
+    dht11_comm_out_fptr_t dht11_set_low;
+
+    /* DHT11: Set up the pin as an output: High status  */
+    dht11_comm_out_fptr_t dht11_set_high;
+
+    /* DHT11: Read pin  */
+    dht11_comm_in_fptr_t dht11_read_pin;
+
+    /* DHT11: Delay function  */
+    dht11_delay_fptr_t dht11_delay_us;
+} DHT11_comm_t;
+
+
+typedef struct
+{
+  /* Outputs  */
+  float     temperature;              /*!<  Temperature value                                       */
+  float     humidity;                 /*!<  Relative humidity value                                 */
+
+  uint16_t  rawTemperature;           /*!<  Temperature raw value                                   */
+  uint16_t  rawHumidity;              /*!<  Relative humidity raw value                             */
+
+  uint8_t   checksum;                 /*!<  Checksum                                                */
+} DHT11_data_t;
+#endif
+
+
+
+
+
+
+
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-/** It configures the I2C peripheral.
+/** It configures the GPIO peripheral.
   */
-//DHT11_status_t DHT11_Init                   ( I2C_parameters_t myI2Cparameters, DHT11_data_t myDHT11  );
+DHT11_status_t DHT11_Init ( DHT11_comm_t myDHT11 );
 
 
 
