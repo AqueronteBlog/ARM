@@ -18,12 +18,11 @@
 
 
 /**
- * @brief       DHT11_Init ( I2C_parameters_t, DHT11_data_t );
+ * @brief       DHT11_Init ( DHT11_comm_t myDHT11 )
  *
- * @details     [todo]It configures the I2C peripheral.
+ * @details     It configures the GPIO for the DHT11 device. Output pin and high output ( bus released )
  *
- * @param[in]    myI2Cparameters: I2C parameters.
- * @param[in]    myDHT11:       Device to use.
+ * @param[in]    myDHT11: GPIO parameters for this device.
  *
  * @param[out]   N/A.
  *
@@ -33,26 +32,20 @@
  *
  * @author      Manuel Caballero
  * @date        01/August/2019
- * @version     01/August/2019   The ORIGIN
+ * @version     02/August/2019   [todo]
+ *              01/August/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-DHT11_status_t DHT11_Init ( DHT11_data_t myDHT11  )
+DHT11_status_t DHT11_Init ( DHT11_comm_t myDHT11 )
 {
-  //i2c_status_t aux =  I2C_SUCCESS;;
+  DHT11_status_t aux =  DHT11_SUCCESS;
 
   //aux  =   i2c_init ( myI2Cparameters );
 
 
 
-  if ( 0 == 0 )
-  {
-    return   DHT11_SUCCESS;
-  }
-  else
-  {
-    return   DHT11_FAILURE;
-  }
+  return  aux;
 }
 
 
