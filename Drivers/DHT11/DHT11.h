@@ -87,17 +87,20 @@ typedef DHT11_status_t (*dht11_delay_fptr_t)( uint32_t myDHT11delay );
 #ifndef DHT11_VECTOR_STRUCT_H
 #define DHT11_VECTOR_STRUCT_H
 typedef struct{
+    /* DHT11: Pin  */
+    uint8_t                   pin;
+    
     /* DHT11: Set up the pin as an output: Low status  */
-    dht11_comm_out_fptr_t dht11_set_low;
+    dht11_comm_out_fptr_t     dht11_set_low;
 
     /* DHT11: Set up the pin as an output: High status  */
-    dht11_comm_out_fptr_t dht11_set_high;
+    dht11_comm_out_fptr_t     dht11_set_high;
 
     /* DHT11: Read pin  */
-    dht11_comm_in_fptr_t dht11_read_pin;
+    dht11_comm_in_fptr_t      dht11_read_pin;
 
     /* DHT11: Delay function  */
-    dht11_delay_fptr_t dht11_delay_us;
+    dht11_delay_fptr_t        dht11_delay_us;
 } DHT11_comm_t;
 
 
@@ -125,8 +128,10 @@ typedef struct
   */
 /** It configures the GPIO peripheral.
   */
-DHT11_status_t DHT11_Init ( DHT11_comm_t myDHT11 );
+DHT11_status_t DHT11_Init       ( DHT11_comm_t myDHT11                          );
 
-
+/** It gets the raw data: Temperature, Humidity and Checksum.
+  */
+DHT11_status_t DHT11_GetRawData ( DHT11_comm_t myDHT11, DHT11_data_t* myRawData );
 
 
