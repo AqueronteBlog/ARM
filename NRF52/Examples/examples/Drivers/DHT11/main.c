@@ -41,15 +41,24 @@ volatile uint32_t           myState;                  /*!<   State that indicate
 volatile uint8_t            *myPtr;                   /*!<   Pointer to point out myMessage       */
 
 
+/**@brief Function prototypes.
+ */
+DHT11_status_t myDHT11_SetPinHigh ( uint8_t myDHT11pin                                              );
+DHT11_status_t myDHT11_SetPinLow  ( uint8_t myDHT11pin                                              );
+DHT11_status_t myDHT11_ReadPin    ( uint8_t myDHT11pin, DHT11_device_bus_status_t* myDHT11pinStatus );
+DHT11_status_t myDHT11_Delay_us   ( uint32_t myDHT11delay                                           );
+
+
+
 
 /**@brief Function for application main entry.
  */
 int main(void)
 {
-  uint8_t           myMessage[ TX_BUFF_SIZE ];
-//  I2C_parameters_t  myDHT11_I2C_parameters;
-//  DHT11_data_t    myDHT11_Data;
-//  DHT11_status_t  aux;
+  uint8_t         myMessage[ TX_BUFF_SIZE ];
+  DHT11_comm_t    myDHT11_Dev;
+  DHT11_data_t    myDHT11_Data;
+  DHT11_status_t  aux;
 
 
   conf_CLK    ();
@@ -57,18 +66,14 @@ int main(void)
   conf_UART   ();
   conf_TIMER0 ();
   
-//  /* I2C definition   */
-//  myDHT11_I2C_parameters.TWIinstance =    NRF_TWI0;
-//  myDHT11_I2C_parameters.SDA         =    TWI0_SDA;
-//  myDHT11_I2C_parameters.SCL         =    TWI0_SCL;
-//  myDHT11_I2C_parameters.ADDR        =    DHT11_ADDRESS_GND;
-//  myDHT11_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-//  myDHT11_I2C_parameters.SDAport     =    NRF_P0;
-//  myDHT11_I2C_parameters.SCLport     =    NRF_P0;
-//
-//  /* Configure I2C peripheral  */
-//  myDHT11_Data.device  =   DEVICE_ADS1015;
-//  aux  =   DHT11_Init  ( myDHT11_I2C_parameters, myDHT11_Data );
+  /* DHT11 definition   */
+  myDHT11_Dev.pin              =   27UL;
+  myDHT11_Dev.dht11_delay_us   =   &myDHT11_Delay_us;
+  myDHT11_Dev.dht11_set_high   =   &myDHT11_SetPinHigh;
+  myDHT11_Dev.dht11_set_low    =   &myDHT11_SetPinLow;
+  myDHT11_Dev.dht11_read_pin   =   &myDHT11_ReadPin;
+
+  aux |=   DHT11_Init ( myDHT11_Dev );
 
 
 
@@ -92,20 +97,20 @@ int main(void)
     {
       NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );   // Turn all the LEDs on
       
-//      /* Trigger a new conversion  */
-//      aux  =   DHT11_StartSingleConversion ( myDHT11_I2C_parameters );
-//      
-//
-//
-//      /* Transmit result through the UART  */
-//      sprintf ( (char*)myMessage, "V = %d mV\r\n", (int32_t)( 1000 * myDHT11_Data.conversion ) );
-//
-//      NRF_UART0->TASKS_STOPRX  =   1UL;
-//      NRF_UART0->TASKS_STOPTX  =   1UL;
-//      myPtr                    =   &myMessage[0];
-//
-//      NRF_UART0->TASKS_STARTTX =   1UL;
-//      NRF_UART0->TXD           =   *myPtr;
+      /* Get a new data  */
+      aux |=   DHT11_GetData ( myDHT11_Dev, &myDHT11_Data );
+      
+
+
+      /* Transmit result through the UART  */
+      sprintf ( (char*)myMessage, "T = %d C | RH = %d %%\r\n", myDHT11_Data.temperature, myDHT11_Data.humidity );
+
+      NRF_UART0->TASKS_STOPRX  =   1UL;
+      NRF_UART0->TASKS_STOPTX  =   1UL;
+      myPtr                    =   &myMessage[0];
+
+      NRF_UART0->TASKS_STARTTX =   1UL;
+      NRF_UART0->TXD           =   *myPtr;
 
       /* Reset the variables   */
       myState          =   0UL;
@@ -113,6 +118,79 @@ int main(void)
     }
     //__NOP();
   }
+}
+
+
+
+
+
+DHT11_status_t myDHT11_Delay_us ( uint32_t myDHT11delay )
+{
+  /* Delay in us   */
+  nrf_delay_us( myDHT11delay );
+
+
+  return DHT11_SUCCESS;
+}
+
+
+
+DHT11_status_t myDHT11_SetPinHigh ( uint8_t myDHT11pin )
+{
+  /* Configure the pin as an output with 'high' output value   */
+  NRF_P0->OUTSET              = ( 1UL << myDHT11pin );
+
+  NRF_P0->PIN_CNF[myDHT11pin] = ( GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos   ) |
+                                ( GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos ) |
+                                ( GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos  ) |
+                                ( GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos ) |
+                                ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos );
+
+
+  return DHT11_SUCCESS;
+}
+
+
+
+DHT11_status_t myDHT11_SetPinLow  ( uint8_t myDHT11pin )
+{
+  /* Configure the pin as an output with 'low' output value   */
+  NRF_P0->OUTCLR              = ( 1UL << myDHT11pin );
+
+  NRF_P0->PIN_CNF[myDHT11pin] = ( GPIO_PIN_CNF_DIR_Output         <<  GPIO_PIN_CNF_DIR_Pos   ) |
+                                ( GPIO_PIN_CNF_INPUT_Disconnect   <<  GPIO_PIN_CNF_INPUT_Pos ) |
+                                ( GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos  ) |
+                                ( GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos ) |
+                                ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos );
+
+
+  return DHT11_SUCCESS;
+}
+
+
+
+DHT11_status_t myDHT11_ReadPin ( uint8_t myDHT11pin, DHT11_device_bus_status_t* myDHT11pinStatus )
+{
+  /* Configure the pin as an input   */
+  NRF_P0->PIN_CNF[myDHT11pin] = ( GPIO_PIN_CNF_DIR_Input          <<  GPIO_PIN_CNF_DIR_Pos    ) |
+                                ( GPIO_PIN_CNF_INPUT_Connect      <<  GPIO_PIN_CNF_INPUT_Pos  ) |
+                                ( GPIO_PIN_CNF_PULL_Pullup        <<  GPIO_PIN_CNF_PULL_Pos   ) |
+                                ( GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  ) |
+                                ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos  );
+
+  /* Get current value of the pin  */
+  if ( ( NRF_P0->IN & ( 1UL << myDHT11pin ) ) == ( DHT11_PIN_LOW << myDHT11pin ) )
+  {
+    *myDHT11pinStatus  =   DHT11_PIN_LOW;
+  }
+  else
+  {
+    *myDHT11pinStatus  =   DHT11_PIN_HIGH;
+  }
+
+
+
+  return DHT11_SUCCESS;
 }
 /**
  * @}
