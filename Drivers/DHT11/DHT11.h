@@ -26,6 +26,7 @@
 typedef enum
 {
     DHT11_START_SIGNAL              =   18000,         /*!<  Master: Start communication                    */
+    DHT11_SAMPLE_DATA               =   40,            /*!<  Sample data time                               */
     DHT11_WAIT_FOR_SENSOR_RESPONSE  =   40             /*!<  Master: Wait for sensor response               */
 } DHT11_device_delays_t;
 
@@ -40,6 +41,17 @@ typedef enum
     DHT11_PIN_LOW     =   0U,                           /*!<  Pin low                                         */
     DHT11_PIN_UNKNOWN =   2U                            /*!<  Pin unknown                                     */
 } DHT11_device_bus_status_t;
+
+
+/**
+  * @brief   CHECKSUM STATUS.
+  *           NOTE: N/A.
+  */
+typedef enum
+{
+    DHT11_CHECKSUM_OK    =   0U,                       /*!<  Checksum correct                                */
+    DHT11_CHECKSUM_ERROR =   1U                        /*!<  Checksum error                                  */
+} DHT11_checksum_status_t;
 
 
 
@@ -107,16 +119,18 @@ typedef struct{
 typedef struct
 {
   /* Outputs  */
-  float     temperature;              /*!<  Temperature value                                       */
-  float     humidity;                 /*!<  Relative humidity value                                 */
+  uint8_t   temperature;                    /*!<  Temperature value             */
+  uint8_t   humidity;                       /*!<  Relative humidity value       */
 
-  uint16_t  rawTemperature;           /*!<  Temperature raw value                                   */
-  uint16_t  rawHumidity;              /*!<  Relative humidity raw value                             */
+  uint16_t  rawTemperature;                 /*!<  Temperature raw value         */
+  uint16_t  rawHumidity;                    /*!<  Relative humidity raw value   */
 
-  uint8_t   checksum;                 /*!<  Checksum                                                */
+  uint8_t   checksum;                       /*!<  Checksum                      */
+
+  /* Checksum status   */
+  DHT11_checksum_status_t checksumStatus;   /*!<  Checksum status               */
 } DHT11_data_t;
 #endif
-
 
 
 
@@ -133,5 +147,9 @@ DHT11_status_t DHT11_Init       ( DHT11_comm_t myDHT11                          
 /** It gets the raw data: Temperature, Humidity and Checksum.
   */
 DHT11_status_t DHT11_GetRawData ( DHT11_comm_t myDHT11, DHT11_data_t* myRawData );
+
+/** It gets and calculates the current data: Temperature, Humidity and Checksum.
+  */
+DHT11_status_t DHT11_GetData    ( DHT11_comm_t myDHT11, DHT11_data_t* myData    );
 
 
