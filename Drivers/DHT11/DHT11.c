@@ -55,12 +55,12 @@ DHT11_status_t DHT11_Init ( DHT11_comm_t myDHT11 )
  *
  * @details     It gets the raw data: Temperature, Humidity and Checksum.
  *
- * @param[in]    myDHT11: GPIO parameters for this device.
+ * @param[in]    myDHT11:   GPIO parameters for this device.
  *
  * @param[out]   myRawData: Raw data: Temperature, Humidity and Checksum.
  *
  *
- * @return       Status of DHT11_Init.
+ * @return       Status of DHT11_GetRawData.
  *
  *
  * @author      Manuel Caballero
@@ -71,8 +71,11 @@ DHT11_status_t DHT11_Init ( DHT11_comm_t myDHT11 )
  */
 DHT11_status_t DHT11_GetRawData ( DHT11_comm_t myDHT11, DHT11_data_t* myRawData )
 {
+  uint8_t                    auxChecksum  =  0U;
+  uint8_t                    countData    =  0U;
+  uint64_t                   rawAuxData   =  0UL;
   DHT11_device_bus_status_t* pinStatus;
-  DHT11_status_t             aux       =  DHT11_SUCCESS;
+  DHT11_status_t             aux          =  DHT11_SUCCESS;
   
   /* The communication starts with the bus on 'high' level   */
   aux |=   myDHT11.dht11_set_high ( myDHT11.pin );
@@ -87,7 +90,123 @@ DHT11_status_t DHT11_GetRawData ( DHT11_comm_t myDHT11, DHT11_data_t* myRawData 
   *pinStatus   =   DHT11_PIN_UNKNOWN;
   do{
     aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
-  }while ( *pinStatus == ( DHT11_PIN_HIGH << myDHT11.pin ) );
+  }while ( *pinStatus == DHT11_PIN_HIGH );
+  
+  
+  /* 3. DHT11 sends out response signal  */
+  *pinStatus   =   DHT11_PIN_UNKNOWN;
+  do{
+    aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
+  }while ( *pinStatus == DHT11_PIN_LOW );
+
+  *pinStatus   =   DHT11_PIN_UNKNOWN;
+  do{
+    aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
+  }while ( *pinStatus == DHT11_PIN_HIGH );
+
+  /* 4. DHT11 sends output data  */
+  for ( countData = 0U; countData < 40U; countData++ )
+  {
+    /* Next bit  */
+    rawAuxData <<=   1UL;
+    
+    /* 4.1. DHT11 starts transmit 1-bit   */
+    *pinStatus   =   DHT11_PIN_UNKNOWN;
+    do{
+      aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
+    }while ( *pinStatus == DHT11_PIN_LOW );
+    
+    /* 4.2. MCU wait for sampling data   */
+    aux |=   myDHT11.dht11_delay_us ( DHT11_SAMPLE_DATA );
+
+    /* 4.3. MCU samples data   */
+    *pinStatus   =   DHT11_PIN_UNKNOWN;
+    aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
+
+    if ( *pinStatus == DHT11_PIN_LOW )
+    {
+      /* Data means '0'   */
+      rawAuxData  |=   0UL;
+    }
+    else
+    {
+      /* Data means '1'  */
+      rawAuxData  |=   1UL;
+
+      /* Wait fpr sync   */
+      *pinStatus   =   DHT11_PIN_UNKNOWN;
+      do{
+        aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
+      }while ( *pinStatus == DHT11_PIN_HIGH );
+    }
+  }
+
+  
+  /* Parse data  */
+  myRawData->rawHumidity     =   (uint16_t)( ( rawAuxData & 0xFFFF000000 ) >> 24U );
+  myRawData->rawTemperature  =   (uint16_t)( ( rawAuxData & 0x0000FFFF00 ) >> 8U );
+  myRawData->checksum        =   (uint8_t)( rawAuxData & 0x00000000FF );
+
+  /* Check checksum  */
+  auxChecksum  =   (uint8_t)( myRawData->rawHumidity + myRawData->rawTemperature );
+  if ( auxChecksum == myRawData->checksum )
+  {
+    myRawData->checksumStatus   =   DHT11_CHECKSUM_OK;
+  }
+  else
+  {
+    myRawData->checksumStatus   =   DHT11_CHECKSUM_ERROR;
+  }
+
+
+
+  return  aux;
+}
+
+
+
+/**
+ * @brief       DHT11_GetData ( DHT11_comm_t myDHT11 , DHT11_data_t* )
+ *
+ * @details     It gets the current data: Temperature, Humidity and Checksum.
+ *
+ * @param[in]    myDHT11: GPIO parameters for this device.
+ *
+ * @param[out]   myData:  Current data: Temperature, Humidity and Checksum.
+ *
+ *
+ * @return       Status of DHT11_GetData.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        06/August/2019
+ * @version     06/August/2019   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+DHT11_status_t DHT11_GetData ( DHT11_comm_t myDHT11, DHT11_data_t* myData )
+{
+  uint8_t        auxChecksum  =  0U;
+  DHT11_status_t aux          =  DHT11_SUCCESS;
+  
+  /* Get the raw data to be processed   */
+  aux |=   DHT11_GetRawData ( myDHT11, &(*myData) );
+
+  /* Parse the data  */
+  myData->humidity     =   (uint8_t)( myData->rawHumidity >> 8U );
+  myData->temperature  =   (uint8_t)( myData->rawTemperature >> 8U );
+  
+  /* Check checksum  */
+  auxChecksum  =   (uint8_t)( myData->rawHumidity + myData->rawTemperature );
+  if ( auxChecksum == myData->checksum )
+  {
+    myData->checksumStatus   =   DHT11_CHECKSUM_OK;
+  }
+  else
+  {
+    myData->checksumStatus   =   DHT11_CHECKSUM_ERROR;
+  }
+
 
 
   return  aux;
