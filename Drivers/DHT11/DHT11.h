@@ -13,8 +13,6 @@
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
-
-
 #include "stdint.h"
 #include "stdbool.h"
 
