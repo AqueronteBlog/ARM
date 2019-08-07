@@ -56,22 +56,23 @@ DHT11_status_t myDHT11_Delay_us   ( uint32_t myDHT11delay                       
 int main(void)
 {
   uint8_t         myMessage[ TX_BUFF_SIZE ];
+  uint8_t         myChecksum[] = "Ok";
   DHT11_comm_t    myDHT11_Dev;
   DHT11_data_t    myDHT11_Data;
-  DHT11_status_t  aux;
-
+  DHT11_status_t  aux = DHT11_SUCCESS;
 
   conf_CLK    ();
   conf_GPIO   ();
   conf_UART   ();
   conf_TIMER0 ();
   
+
   /* DHT11 definition   */
-  myDHT11_Dev.pin              =   27UL;
-  myDHT11_Dev.dht11_delay_us   =   &myDHT11_Delay_us;
-  myDHT11_Dev.dht11_set_high   =   &myDHT11_SetPinHigh;
-  myDHT11_Dev.dht11_set_low    =   &myDHT11_SetPinLow;
-  myDHT11_Dev.dht11_read_pin   =   &myDHT11_ReadPin;
+  myDHT11_Dev.pin              =   27U;
+  myDHT11_Dev.dht11_read_pin   =   myDHT11_ReadPin;
+  myDHT11_Dev.dht11_delay_us   =   myDHT11_Delay_us;
+  myDHT11_Dev.dht11_set_high   =   myDHT11_SetPinHigh;
+  myDHT11_Dev.dht11_set_low    =   myDHT11_SetPinLow;
 
   aux |=   DHT11_Init ( myDHT11_Dev );
 
@@ -100,10 +101,20 @@ int main(void)
       /* Get a new data  */
       aux |=   DHT11_GetData ( myDHT11_Dev, &myDHT11_Data );
       
-
+      /* Check checksum to validate data   */
+      if ( myDHT11_Data.checksumStatus == DHT11_CHECKSUM_OK )
+      {
+        myChecksum[0]  =   'O';
+        myChecksum[1]  =   'k';
+      }
+      else
+      {
+        myChecksum[0]  =   'E';
+        myChecksum[1]  =   'r';
+      }
 
       /* Transmit result through the UART  */
-      sprintf ( (char*)myMessage, "T = %d C | RH = %d %%\r\n", myDHT11_Data.temperature, myDHT11_Data.humidity );
+      sprintf ( (char*)myMessage, "T = %d C | RH = %d %% | Checksum = %s\r\n", myDHT11_Data.temperature, myDHT11_Data.humidity, myChecksum );
 
       NRF_UART0->TASKS_STOPRX  =   1UL;
       NRF_UART0->TASKS_STOPTX  =   1UL;
@@ -121,6 +132,31 @@ int main(void)
 }
 
 
+
+
+
+DHT11_status_t myDHT11_ReadPin ( uint8_t myDHT11pin, DHT11_device_bus_status_t* myDHT11pinStatus )
+{
+  /* Configure the pin as an input   */
+  NRF_P0->PIN_CNF[myDHT11pin] = ( GPIO_PIN_CNF_DIR_Input          <<  GPIO_PIN_CNF_DIR_Pos    ) |
+                                ( GPIO_PIN_CNF_INPUT_Connect      <<  GPIO_PIN_CNF_INPUT_Pos  ) |
+                                ( GPIO_PIN_CNF_PULL_Pullup        <<  GPIO_PIN_CNF_PULL_Pos   ) |
+                                ( GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  ) |
+                                ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos  );
+
+  /* Get current value of the pin  */
+  if ( ( NRF_P0->IN & ( 1UL << myDHT11pin ) ) == ( DHT11_PIN_LOW << myDHT11pin ) )
+  {
+    *myDHT11pinStatus  =   DHT11_PIN_LOW;
+  }
+  else
+  {
+    *myDHT11pinStatus  =   DHT11_PIN_HIGH;
+  }
+
+
+  return DHT11_SUCCESS;
+}
 
 
 
@@ -162,32 +198,6 @@ DHT11_status_t myDHT11_SetPinLow  ( uint8_t myDHT11pin )
                                 ( GPIO_PIN_CNF_PULL_Disabled      <<  GPIO_PIN_CNF_PULL_Pos  ) |
                                 ( GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos ) |
                                 ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos );
-
-
-  return DHT11_SUCCESS;
-}
-
-
-
-DHT11_status_t myDHT11_ReadPin ( uint8_t myDHT11pin, DHT11_device_bus_status_t* myDHT11pinStatus )
-{
-  /* Configure the pin as an input   */
-  NRF_P0->PIN_CNF[myDHT11pin] = ( GPIO_PIN_CNF_DIR_Input          <<  GPIO_PIN_CNF_DIR_Pos    ) |
-                                ( GPIO_PIN_CNF_INPUT_Connect      <<  GPIO_PIN_CNF_INPUT_Pos  ) |
-                                ( GPIO_PIN_CNF_PULL_Pullup        <<  GPIO_PIN_CNF_PULL_Pos   ) |
-                                ( GPIO_PIN_CNF_DRIVE_S0S1         <<  GPIO_PIN_CNF_DRIVE_Pos  ) |
-                                ( GPIO_PIN_CNF_SENSE_Disabled     <<  GPIO_PIN_CNF_SENSE_Pos  );
-
-  /* Get current value of the pin  */
-  if ( ( NRF_P0->IN & ( 1UL << myDHT11pin ) ) == ( DHT11_PIN_LOW << myDHT11pin ) )
-  {
-    *myDHT11pinStatus  =   DHT11_PIN_LOW;
-  }
-  else
-  {
-    *myDHT11pinStatus  =   DHT11_PIN_HIGH;
-  }
-
 
 
   return DHT11_SUCCESS;
