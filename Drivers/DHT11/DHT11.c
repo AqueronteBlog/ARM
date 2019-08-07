@@ -71,11 +71,11 @@ DHT11_status_t DHT11_Init ( DHT11_comm_t myDHT11 )
  */
 DHT11_status_t DHT11_GetRawData ( DHT11_comm_t myDHT11, DHT11_data_t* myRawData )
 {
-  uint8_t                    auxChecksum  =  0U;
-  uint8_t                    countData    =  0U;
-  uint64_t                   rawAuxData   =  0UL;
-  DHT11_device_bus_status_t* pinStatus;
-  DHT11_status_t             aux          =  DHT11_SUCCESS;
+  uint8_t                   auxChecksum  =  0U;
+  uint8_t                   countData    =  0U;
+  uint64_t                  rawAuxData   =  0UL;
+  DHT11_device_bus_status_t pinStatus    =  DHT11_PIN_UNKNOWN;
+  DHT11_status_t            aux          =  DHT11_SUCCESS;
   
   /* The communication starts with the bus on 'high' level   */
   aux |=   myDHT11.dht11_set_high ( myDHT11.pin );
@@ -87,22 +87,22 @@ DHT11_status_t DHT11_GetRawData ( DHT11_comm_t myDHT11, DHT11_data_t* myRawData 
   /* 2. MCU waits for DHT11 response   */
   aux |=   myDHT11.dht11_set_high ( myDHT11.pin );
   
-  *pinStatus   =   DHT11_PIN_UNKNOWN;
+  pinStatus   =   DHT11_PIN_UNKNOWN;
   do{
-    aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
-  }while ( *pinStatus == DHT11_PIN_HIGH );
+    aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &pinStatus );
+  }while ( pinStatus == DHT11_PIN_HIGH );
   
   
   /* 3. DHT11 sends out response signal  */
-  *pinStatus   =   DHT11_PIN_UNKNOWN;
+  pinStatus   =   DHT11_PIN_UNKNOWN;
   do{
-    aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
-  }while ( *pinStatus == DHT11_PIN_LOW );
+    aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &pinStatus );
+  }while ( pinStatus == DHT11_PIN_LOW );
 
-  *pinStatus   =   DHT11_PIN_UNKNOWN;
+  pinStatus   =   DHT11_PIN_UNKNOWN;
   do{
-    aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
-  }while ( *pinStatus == DHT11_PIN_HIGH );
+    aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &pinStatus );
+  }while ( pinStatus == DHT11_PIN_HIGH );
 
   /* 4. DHT11 sends output data  */
   for ( countData = 0U; countData < 40U; countData++ )
@@ -111,19 +111,18 @@ DHT11_status_t DHT11_GetRawData ( DHT11_comm_t myDHT11, DHT11_data_t* myRawData 
     rawAuxData <<=   1UL;
     
     /* 4.1. DHT11 starts transmit 1-bit   */
-    *pinStatus   =   DHT11_PIN_UNKNOWN;
+    pinStatus   =   DHT11_PIN_UNKNOWN;
     do{
-      aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
-    }while ( *pinStatus == DHT11_PIN_LOW );
+      aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &pinStatus );
+    }while ( pinStatus == DHT11_PIN_LOW );
     
     /* 4.2. MCU wait for sampling data   */
     aux |=   myDHT11.dht11_delay_us ( DHT11_SAMPLE_DATA );
 
     /* 4.3. MCU samples data   */
-    *pinStatus   =   DHT11_PIN_UNKNOWN;
-    aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
-
-    if ( *pinStatus == DHT11_PIN_LOW )
+    pinStatus   =   DHT11_PIN_UNKNOWN;
+    aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &pinStatus );
+    if ( pinStatus == DHT11_PIN_LOW )
     {
       /* Data means '0'   */
       rawAuxData  |=   0UL;
@@ -134,10 +133,10 @@ DHT11_status_t DHT11_GetRawData ( DHT11_comm_t myDHT11, DHT11_data_t* myRawData 
       rawAuxData  |=   1UL;
 
       /* Wait fpr sync   */
-      *pinStatus   =   DHT11_PIN_UNKNOWN;
+      pinStatus   =   DHT11_PIN_UNKNOWN;
       do{
-        aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &(*pinStatus) );
-      }while ( *pinStatus == DHT11_PIN_HIGH );
+        aux |=   myDHT11.dht11_read_pin ( myDHT11.pin, &pinStatus );
+      }while ( pinStatus == DHT11_PIN_HIGH );
     }
   }
 
@@ -148,7 +147,7 @@ DHT11_status_t DHT11_GetRawData ( DHT11_comm_t myDHT11, DHT11_data_t* myRawData 
   myRawData->checksum        =   (uint8_t)( rawAuxData & 0x00000000FF );
 
   /* Check checksum  */
-  auxChecksum  =   (uint8_t)( myRawData->rawHumidity + myRawData->rawTemperature );
+  auxChecksum  =   (uint8_t)( ( ( myRawData->rawHumidity & 0xFF00 ) >> 8U ) + ( myRawData->rawHumidity & 0x00FF ) + ( ( myRawData->rawTemperature & 0xFF00 ) >> 8U ) ) + ( myRawData->rawTemperature & 0x00FF );
   if ( auxChecksum == myRawData->checksum )
   {
     myRawData->checksumStatus   =   DHT11_CHECKSUM_OK;
@@ -197,7 +196,7 @@ DHT11_status_t DHT11_GetData ( DHT11_comm_t myDHT11, DHT11_data_t* myData )
   myData->temperature  =   (uint8_t)( myData->rawTemperature >> 8U );
   
   /* Check checksum  */
-  auxChecksum  =   (uint8_t)( myData->rawHumidity + myData->rawTemperature );
+  auxChecksum  =   (uint8_t)( ( ( myData->rawHumidity & 0xFF00 ) >> 8U ) + ( myData->rawHumidity & 0x00FF ) + ( ( myData->rawTemperature & 0xFF00 ) >> 8U ) ) + ( myData->rawTemperature & 0x00FF );
   if ( auxChecksum == myData->checksum )
   {
     myData->checksumStatus   =   DHT11_CHECKSUM_OK;
