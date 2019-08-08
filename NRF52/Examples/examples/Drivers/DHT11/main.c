@@ -134,7 +134,25 @@ int main(void)
 
 
 
-
+/**
+ * @brief       myDHT11_ReadPin ( uint8_t , DHT11_device_bus_status_t* )
+ *
+ * @details     It gets the status of the pin where the DHT11 device is connected.
+ *
+ * @param[in]    myDHT11pin:        DHT11 pin number connected to the platform.
+ *
+ * @param[out]   myDHT11pinStatus:  Status of the pin (HIGH/LOW).
+ *
+ *
+ * @return       Status of myDHT11_ReadPin.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        08/August/2019
+ * @version     08/August/2019   The ORIGIN
+ * @pre         The user must complete this function for the chosen platform in order to work with the DHT11 driver.
+ * @warning     N/A.
+ */
 DHT11_status_t myDHT11_ReadPin ( uint8_t myDHT11pin, DHT11_device_bus_status_t* myDHT11pinStatus )
 {
   /* Configure the pin as an input   */
@@ -160,6 +178,25 @@ DHT11_status_t myDHT11_ReadPin ( uint8_t myDHT11pin, DHT11_device_bus_status_t* 
 
 
 
+/**
+ * @brief       myDHT11_Delay_us ( uint32_t )
+ *
+ * @details     It generates a delay in micro-seconds.
+ *
+ * @param[in]    myDHT11delay:  Delay in micro-seconds.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of myDHT11_Delay_us.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        08/August/2019
+ * @version     08/August/2019   The ORIGIN
+ * @pre         The user must complete this function for the chosen platform in order to work with the DHT11 driver.
+ * @warning     N/A.
+ */
 DHT11_status_t myDHT11_Delay_us ( uint32_t myDHT11delay )
 {
   /* Delay in us   */
@@ -171,6 +208,25 @@ DHT11_status_t myDHT11_Delay_us ( uint32_t myDHT11delay )
 
 
 
+/**
+ * @brief       myDHT11_SetPinHigh ( uint8_t )
+ *
+ * @details     It sets the pin 'high'.
+ *
+ * @param[in]    myDHT11pin:  DHT11 pin number.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of myDHT11_SetPinHigh.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        08/August/2019
+ * @version     08/August/2019   The ORIGIN
+ * @pre         The user must complete this function for the chosen platform in order to work with the DHT11 driver.
+ * @warning     N/A.
+ */
 DHT11_status_t myDHT11_SetPinHigh ( uint8_t myDHT11pin )
 {
   /* Configure the pin as an output with 'high' output value   */
@@ -188,6 +244,26 @@ DHT11_status_t myDHT11_SetPinHigh ( uint8_t myDHT11pin )
 
 
 
+
+/**
+ * @brief       myDHT11_SetPinLow ( uint8_t )
+ *
+ * @details     It sets the pin 'low'.
+ *
+ * @param[in]    myDHT11pin:  DHT11 pin number.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of myDHT11_SetPinLow.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        08/August/2019
+ * @version     08/August/2019   The ORIGIN
+ * @pre         The user must complete this function for the chosen platform in order to work with the DHT11 driver.
+ * @warning     N/A.
+ */
 DHT11_status_t myDHT11_SetPinLow  ( uint8_t myDHT11pin )
 {
   /* Configure the pin as an output with 'low' output value   */
