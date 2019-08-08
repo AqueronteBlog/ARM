@@ -52,6 +52,16 @@ typedef enum
 } DHT11_checksum_status_t;
 
 
+/**
+  * @brief   TIMEOUT.
+  *           NOTE: This value is just an estimation, the user must check it out.
+  */
+typedef enum
+{
+    DHT11_TIMEOUT        =   0x23232                  /*!<  Timeout like a counter                          */
+} DHT11_timeout_t;
+
+
 
 
 /**
@@ -61,7 +71,8 @@ typedef enum
 {
     DHT11_SUCCESS               =   0U,   /*!<  Communication success                           */
     DHT11_FAILURE               =   1U,   /*!<  Communication failure                           */
-    DHT11_DATA_CORRUPTED        =   2U    /*!<  Checksum error                                  */
+    DHT11_DATA_CORRUPTED        =   2U,   /*!<  Checksum error                                  */
+    DHT11_BUS_TIMEOUT           =   3U    /*!<  Bus response timeout/error                      */
 } DHT11_status_t;
 
 
