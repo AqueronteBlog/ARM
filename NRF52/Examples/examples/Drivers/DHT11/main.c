@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the external device: ADS1015. Every 1 seconds, a new
- *              voltage measurement is performed and the result is transmitted through the UART ( Baud Rate: 230400 ).
+ * @details     This example shows how to work with the external device: DHT11. Every 1 seconds, a new
+ *              temperature and relative humidity measurement is performed and the result is transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
  *
@@ -13,7 +13,7 @@
  * @version     01/August/2019    The ORIGIN
  * @pre         This firmware was tested on the nrf52-DK with Segger Embedded Studio v4.18 ( SDK 14.2.0 ).
  * @warning     The softdevice (s132) is taken into account, Bluetooth was not used although.
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ). All rights reserved.
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 #include <stdio.h>
 
