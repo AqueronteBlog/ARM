@@ -84,3 +84,6 @@ ADuCM3029/Examples/ADC_Temperature_Polling_Mode/Debug/
 =======
 NRF52/Examples/examples/Drivers/ADS101X/pca10040/s132/ses/Output/
 >>>>>>> 4eead43e132b04f976be29d1948f6feb929ff4f4
+ADuCM3029/Examples_Drivers/TMP102/Debug/
+ADuCM3029/Examples/RemoteSystemsTempFiles/.project
+NRF52/Examples/examples/Drivers/DHT11/pca10040/s132/ses/Output/
