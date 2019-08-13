@@ -91,18 +91,41 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
  * @date        25/July/2019
  * @version     25/July/2019         The ORIGIN
  * @pre         I2C communication is by polling mode.
- * @warning     N/A.
+ * @warning     This function only implements 7-bit address for the moment.
  */
 i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uint32_t i2c_data_length, uint32_t i2c_generate_stop )
 {
-   uint32_t i2c_timeout1 		= I2C_TIMEOUT;
-   uint32_t i2c_timeout2 		= I2C_TIMEOUT;
-   uint32_t i2c_default_addr 	= 0UL;
+   uint32_t	i				=	0UL;
+   uint32_t i2c_timeout1 	= 	I2C_TIMEOUT;
+   uint32_t i2c_timeout2 	= 	I2C_TIMEOUT;
+
+   /* Enable Master	 */
+   myI2Cparameters.i2cInstance->MCTL	|=	( 1U << BITP_I2C_MCTL_MASEN );
+
+   /* First bit to be transmitted	 */
+   myI2Cparameters.i2cInstance->MTX		 =	 *i2c_buff++;
+
+   /* Write. ADDRESS: 7-bit address.	 */
+   myI2Cparameters.i2cInstance->ADDR1	 =	 (uint8_t)( ( myI2Cparameters.addr << 1UL ) | 0x01 );
+   myI2Cparameters.i2cInstance->ADDR2	 =	 0x00;
+
+   /* Transmission data, more than 1-bit	 */
+   for ( i = 0UL; i < i2c_data_length; i++ )
+   {
+	   while ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MTXREQ ) ) != ( 1U << BITP_I2C_MSTAT_MTXREQ ) )
+	   {
+		   // [todo] insert counter
+
+	   }
+	   myI2Cparameters.i2cInstance->MTX		 =	 *i2c_buff++;
+   }
 
 
-   /* 7-bit address	 */
-   i2c_default_addr						 =	 (uint8_t)( myI2Cparameters.addr << 1UL );
-   myI2Cparameters.i2cInstance->ADDR1	 =	 i2c_default_addr;
+   /* Wait for a STOP detected	 */
+   while ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_TCOMP ) ) != ( 1U << BITP_I2C_MSTAT_TCOMP ) )
+
+   /* Disable Master	 */
+   myI2Cparameters.i2cInstance->MCTL	&=	( 1U << BITP_I2C_MCTL_MASEN );
 
 
 
@@ -141,7 +164,6 @@ i2c_status_t i2c_read ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uin
 {
 	uint32_t i2c_timeout1 = I2C_TIMEOUT;
 	uint32_t i2c_timeout2 = I2C_TIMEOUT;
-	uint32_t i2c_default_addr = 0;
 
 
 
