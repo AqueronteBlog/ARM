@@ -95,9 +95,15 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
  */
 i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uint32_t i2c_data_length, uint32_t i2c_generate_stop )
 {
-   uint32_t i2c_timeout1 = I2C_TIMEOUT;
-   uint32_t i2c_timeout2 = I2C_TIMEOUT;
-   uint32_t i2c_default_addr = 0;
+   uint32_t i2c_timeout1 		= I2C_TIMEOUT;
+   uint32_t i2c_timeout2 		= I2C_TIMEOUT;
+   uint32_t i2c_default_addr 	= 0UL;
+
+
+   /* 7-bit address	 */
+   i2c_default_addr						 =	 (uint8_t)( myI2Cparameters.addr << 1UL );
+   myI2Cparameters.i2cInstance->ADDR1	 =	 i2c_default_addr;
+
 
 
 
