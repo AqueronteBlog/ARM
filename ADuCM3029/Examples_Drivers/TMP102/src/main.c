@@ -41,7 +41,11 @@ volatile uint8_t  *myPtr;                   /*!<   Pointer to point out myMessag
  */
 int main(int argc, char *argv[])
 {
-	uint8_t  myMessage[ TX_BUFF_SIZE ];
+	uint8_t  			 myMessage[ TX_BUFF_SIZE ];
+	I2C_parameters_t     myTMP102_I2C_parameters;
+	TMP102_vector_data_t myTMP102_Data;
+	TMP102_status_t      aux;
+
 
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
@@ -56,6 +60,26 @@ int main(int argc, char *argv[])
 	conf_CLK  ();
 	conf_GPIO ();
 	conf_UART ();
+
+
+	/* I2C definition   */
+	myTMP102_I2C_parameters.i2cInstance =    pADI_I2C0;
+	myTMP102_I2C_parameters.sda         =    I2C0_SDA;
+	myTMP102_I2C_parameters.scl         =    I2C0_SCL;
+	myTMP102_I2C_parameters.addr        =    TMP102_ADDRESS_A0_GROUND;
+	myTMP102_I2C_parameters.freq        =    400000;
+	myTMP102_I2C_parameters.sdaPort     =    pADI_GPIO0;
+	myTMP102_I2C_parameters.sclPort     =    pADI_GPIO0;
+
+	/* Configure I2C peripheral */
+	aux  =   TMP102_Init ( myTMP102_I2C_parameters );
+
+	while (1)
+	{
+		/* I2C driver test */
+		myTMP102_Data.THIGH_Register	 =	 0x2323;
+		aux  =   TMP102_Write_T_HIGH_Register ( myTMP102_I2C_parameters, myTMP102_Data );
+	}
 
 
 	while ( 1 )
