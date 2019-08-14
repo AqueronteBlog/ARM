@@ -105,6 +105,10 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    /* First bit to be transmitted	 */
    myI2Cparameters.i2cInstance->MTX		 =	 *i2c_buff++;
 
+   /* Start byte	 */
+   myI2Cparameters.i2cInstance->BYT		 =	 ( 0b00000001 << BITP_I2C_BYT_SBYTE );
+
+
    /* Write. ADDRESS: 7-bit address.	 */
    myI2Cparameters.i2cInstance->ADDR1	 =	 (uint8_t)( ( myI2Cparameters.addr << 1UL ) | 0x01 );
    myI2Cparameters.i2cInstance->ADDR2	 =	 0x00;
