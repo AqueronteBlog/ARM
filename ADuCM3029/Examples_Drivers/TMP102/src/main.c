@@ -63,13 +63,14 @@ int main(int argc, char *argv[])
 
 
 	/* I2C definition   */
-	myTMP102_I2C_parameters.i2cInstance =    pADI_I2C0;
-	myTMP102_I2C_parameters.sda         =    I2C0_SDA;
-	myTMP102_I2C_parameters.scl         =    I2C0_SCL;
-	myTMP102_I2C_parameters.addr        =    TMP102_ADDRESS_A0_GROUND;
-	myTMP102_I2C_parameters.freq        =    400000;
-	myTMP102_I2C_parameters.sdaPort     =    pADI_GPIO0;
-	myTMP102_I2C_parameters.sclPort     =    pADI_GPIO0;
+	myTMP102_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
+	myTMP102_I2C_parameters.sda         	 =    I2C0_SDA;
+	myTMP102_I2C_parameters.scl         	 =    I2C0_SCL;
+	myTMP102_I2C_parameters.addr        	 =    TMP102_ADDRESS_A0_GROUND;
+	myTMP102_I2C_parameters.freq        	 =    400000;
+	myTMP102_I2C_parameters.pclkFrequency	 =	  6400000;
+	myTMP102_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
+	myTMP102_I2C_parameters.sclPort     	 =    pADI_GPIO0;
 
 	/* Configure I2C peripheral */
 	aux  =   TMP102_Init ( myTMP102_I2C_parameters );
