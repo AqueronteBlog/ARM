@@ -39,11 +39,11 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 	uint8_t i2cLow	 =	 0U;
 
 	/* Multiplexed function 1 for I2C peripheral ( SDA and SCL )	 */
-	myI2Cparameters.sclPort->CFG	&=	~( 0b11 << ( myI2Cparameters.scl << 2U ) );
-	myI2Cparameters.sclPort->CFG	|=	 ( 0b01 << ( myI2Cparameters.scl << 2U ) );
+	myI2Cparameters.sclPort->CFG	&=	~( 0b11 << ( myI2Cparameters.scl << 1U ) );
+	myI2Cparameters.sclPort->CFG	|=	 ( 0b01 << ( myI2Cparameters.scl << 1U ) );
 
-	myI2Cparameters.sdaPort->CFG	&=	~( 0b11 << ( myI2Cparameters.sda << 2U ) );
-	myI2Cparameters.sdaPort->CFG	|=	 ( 0b01 << ( myI2Cparameters.sda << 2U ) );
+	myI2Cparameters.sdaPort->CFG	&=	~( 0b11 << ( myI2Cparameters.sda << 1U ) );
+	myI2Cparameters.sdaPort->CFG	|=	 ( 0b01 << ( myI2Cparameters.sda << 1U ) );
 
 	/* The drive strength must be enabled for SDA and SCL	 */
 	myI2Cparameters.sclPort->DS		|=	 ( 1U << myI2Cparameters.scl );
@@ -100,18 +100,16 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    uint32_t i2c_timeout2 	= 	I2C_TIMEOUT;
 
    /* Enable Master	 */
-   myI2Cparameters.i2cInstance->MCTL	|=	( 1U << BITP_I2C_MCTL_MASEN );
+   myI2Cparameters.i2cInstance->MCTL	|=	( ( 1U << BITP_I2C_MCTL_MASEN ) | ( 1U << BITP_I2C_MCTL_IENMRX ) | ( 1U << BITP_I2C_MCTL_IENMTX ) | ( 1U << BITP_I2C_MCTL_IENCMP ) );
 
    /* First bit to be transmitted	 */
    myI2Cparameters.i2cInstance->MTX		 =	 *i2c_buff++;
 
-   /* Start byte	 */
-   myI2Cparameters.i2cInstance->BYT		 =	 ( 0b00000001 << BITP_I2C_BYT_SBYTE );
-
-
    /* Write. ADDRESS: 7-bit address.	 */
-   myI2Cparameters.i2cInstance->ADDR1	 =	 (uint8_t)( ( myI2Cparameters.addr << 1UL ) | 0x01 );
+   myI2Cparameters.i2cInstance->ADDR1	 =	 (uint8_t)( ( myI2Cparameters.addr << 1UL ) & 0xFE );
    myI2Cparameters.i2cInstance->ADDR2	 =	 0x00;
+
+   myI2Cparameters.i2cInstance->BYT	 =	 (uint8_t)( 0b00000001 );
 
    /* Transmission data, more than 1-bit	 */
    for ( i = 0UL; i < i2c_data_length; i++ )
