@@ -99,8 +99,13 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    uint32_t i2c_timeout1 	= 	I2C_TIMEOUT;
    uint32_t i2c_timeout2 	= 	I2C_TIMEOUT;
 
+
+   /* Enable interrupt	 */
+   NVIC_SetPriority ( I2C_MST_EVT_IRQn, 0UL );
+   NVIC_EnableIRQ   ( I2C_MST_EVT_IRQn );
+
    /* Enable Master	 */
-   myI2Cparameters.i2cInstance->MCTL	|=	( ( 1U << BITP_I2C_MCTL_MASEN ) | ( 1U << BITP_I2C_MCTL_IENMRX ) | ( 1U << BITP_I2C_MCTL_IENMTX ) | ( 1U << BITP_I2C_MCTL_IENCMP ) );
+   myI2Cparameters.i2cInstance->MCTL	|=	( ( 1U << BITP_I2C_MCTL_MASEN ) | ( 1U << BITP_I2C_MCTL_IENMTX ) );
 
    /* First bit to be transmitted	 */
    myI2Cparameters.i2cInstance->MTX		 =	 *i2c_buff++;
@@ -109,10 +114,10 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    myI2Cparameters.i2cInstance->ADDR1	 =	 (uint8_t)( ( myI2Cparameters.addr << 1UL ) & 0xFE );
    myI2Cparameters.i2cInstance->ADDR2	 =	 0x00;
 
-   myI2Cparameters.i2cInstance->BYT	 =	 (uint8_t)( 0b00000001 );
 
    /* Transmission data, more than 1-bit	 */
-   for ( i = 0UL; i < i2c_data_length; i++ )
+   /*
+   for ( i = 0UL; i < i2c_data_length-1; i++ )
    {
 	   while ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MTXREQ ) ) != ( 1U << BITP_I2C_MSTAT_MTXREQ ) )
 	   {
@@ -121,14 +126,13 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
 	   }
 	   myI2Cparameters.i2cInstance->MTX		 =	 *i2c_buff++;
    }
-
+*/
 
    /* Wait for a STOP detected	 */
    while ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_TCOMP ) ) != ( 1U << BITP_I2C_MSTAT_TCOMP ) )
 
    /* Disable Master	 */
    myI2Cparameters.i2cInstance->MCTL	&=	( 1U << BITP_I2C_MCTL_MASEN );
-
 
 
 
@@ -179,4 +183,14 @@ i2c_status_t i2c_read ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uin
 	{
 		return I2C_SUCCESS;
 	}
+}
+
+
+
+
+void I2C0_Master_Int_Handler ( void )
+{
+	pADI_I2C0->MTX		 =	 0x23;
+	pADI_I2C0->MSTAT	|=	 ( 1U << BITP_I2C_MSTAT_MTXREQ );
+	__NOP();
 }
