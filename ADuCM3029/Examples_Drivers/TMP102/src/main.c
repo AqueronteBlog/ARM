@@ -46,7 +46,6 @@ int main(int argc, char *argv[])
 	TMP102_vector_data_t myTMP102_Data;
 	TMP102_status_t      aux;
 
-
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
 	 * the project.
@@ -60,6 +59,8 @@ int main(int argc, char *argv[])
 	conf_CLK  ();
 	conf_GPIO ();
 	conf_UART ();
+
+	//adi_i2c_ReadWrite
 
 
 	/* I2C definition   */
