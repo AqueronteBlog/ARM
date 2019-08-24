@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
 	conf_CLK  ();
 	conf_GPIO ();
-	conf_UART ();
+	//conf_UART ();
 
 	//adi_i2c_ReadWrite
 
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 	myTMP102_I2C_parameters.sda         	 =    I2C0_SDA;
 	myTMP102_I2C_parameters.scl         	 =    I2C0_SCL;
 	myTMP102_I2C_parameters.addr        	 =    TMP102_ADDRESS_A0_GROUND;
-	myTMP102_I2C_parameters.freq        	 =    400000;
+	myTMP102_I2C_parameters.freq        	 =    100000;
 	myTMP102_I2C_parameters.pclkFrequency	 =	  6400000;
 	myTMP102_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
 	myTMP102_I2C_parameters.sclPort     	 =    pADI_GPIO0;
