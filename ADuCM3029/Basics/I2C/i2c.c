@@ -89,7 +89,8 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        25/July/2019
- * @version     25/July/2019         The ORIGIN
+ * @version     24/August/2019       New timeout was added.
+ * 				25/July/2019         The ORIGIN
  * @pre         I2C communication is by polling mode.
  * @warning     This function only implements 7-bit address for the moment.
  */
@@ -98,46 +99,58 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    uint32_t	i				=	0UL;
    uint32_t i2c_timeout1 	= 	I2C_TIMEOUT;
    uint32_t i2c_timeout2 	= 	I2C_TIMEOUT;
+   uint32_t i2c_timeout3 	= 	I2C_TIMEOUT;
 
-
-   /* Enable interrupt	 */
-   NVIC_SetPriority ( I2C_MST_EVT_IRQn, 0UL );
-   NVIC_EnableIRQ   ( I2C_MST_EVT_IRQn );
 
    /* Enable Master	 */
-   myI2Cparameters.i2cInstance->MCTL	|=	( ( 1U << BITP_I2C_MCTL_MASEN ) | ( 1U << BITP_I2C_MCTL_IENMTX ) );
+   myI2Cparameters.i2cInstance->MCTL	|=	( ( 1U << BITP_I2C_MCTL_MASEN ));
+
+   myI2Cparameters.i2cInstance->STAT	|=	( 1U << BITP_I2C_STAT_MFLUSH );
+   myI2Cparameters.i2cInstance->STAT	&= ~( 1U << BITP_I2C_STAT_MFLUSH );
+
 
    /* First bit to be transmitted	 */
    myI2Cparameters.i2cInstance->MTX		 =	 *i2c_buff++;
 
+
    /* Write. ADDRESS: 7-bit address.	 */
-   myI2Cparameters.i2cInstance->ADDR1	 =	 (uint8_t)( ( myI2Cparameters.addr << 1UL ) & 0xFE );
    myI2Cparameters.i2cInstance->ADDR2	 =	 0x00;
+   myI2Cparameters.i2cInstance->ADDR1	 =	 (uint8_t)( ( myI2Cparameters.addr << 1UL ) & 0xFE );
 
 
    /* Transmission data, more than 1-bit	 */
-   /*
-   for ( i = 0UL; i < i2c_data_length-1; i++ )
+   for ( i = 0UL; i < ( i2c_data_length - 1UL ); i++ )
    {
-	   while ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MTXREQ ) ) != ( 1U << BITP_I2C_MSTAT_MTXREQ ) )
+	   /* Wait until the byte is transmitted properly or timeout	 */
+	   i2c_timeout1 	= 	I2C_TIMEOUT;
+	   while ( ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MTXREQ ) ) != ( 1U << BITP_I2C_MSTAT_MTXREQ ) ) && ( i2c_timeout1 > 0UL ))
 	   {
-		   // [todo] insert counter
-
+		   i2c_timeout1--;
 	   }
+
+	   /* Send next byte	 */
 	   myI2Cparameters.i2cInstance->MTX		 =	 *i2c_buff++;
    }
-*/
 
-   /* Wait for a STOP detected	 */
-   while ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_TCOMP ) ) != ( 1U << BITP_I2C_MSTAT_TCOMP ) )
+   /* Wait for a STOP detected driven by this master or timeout	 */
+   while ( ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MSTOP ) ) != ( 1U << BITP_I2C_MSTAT_MSTOP ) ) && ( i2c_timeout2 > 0UL ))
+   {
+	   i2c_timeout2--;
+   }
+
+   /* Wait until the peripheral is free or timeout	 */
+   while ( ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MBUSY ) ) == ( 1U << BITP_I2C_MSTAT_MBUSY ) ) && ( i2c_timeout3 > 0UL ))
+   {
+	   i2c_timeout3--;
+   }
 
    /* Disable Master	 */
-   myI2Cparameters.i2cInstance->MCTL	&=	( 1U << BITP_I2C_MCTL_MASEN );
+   myI2Cparameters.i2cInstance->MCTL	&=	~( 1U << BITP_I2C_MCTL_MASEN );
 
 
 
    /* Check if everything went fine   */
-   if ( ( i2c_timeout1 < 1U ) || ( i2c_timeout2 < 1U ) )
+   if ( ( i2c_timeout1 < 1UL ) || ( i2c_timeout2 < 1UL ) || ( i2c_timeout3 < 1UL ) )
    {
 	   return I2C_FAILURE;
    }
@@ -183,14 +196,4 @@ i2c_status_t i2c_read ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uin
 	{
 		return I2C_SUCCESS;
 	}
-}
-
-
-
-
-void I2C0_Master_Int_Handler ( void )
-{
-	pADI_I2C0->MTX		 =	 0x23;
-	pADI_I2C0->MSTAT	|=	 ( 1U << BITP_I2C_MSTAT_MTXREQ );
-	__NOP();
 }
