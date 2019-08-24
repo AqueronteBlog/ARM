@@ -87,3 +87,5 @@ NRF52/Examples/examples/Drivers/ADS101X/pca10040/s132/ses/Output/
 ADuCM3029/Examples_Drivers/TMP102/Debug/
 ADuCM3029/Examples/RemoteSystemsTempFiles/.project
 NRF52/Examples/examples/Drivers/DHT11/pca10040/s132/ses/Output/
+ADuCM3029/Examples_Drivers/TMP102/RTE/Device/ADuCM3029/adi_i2c_config.h
+ADuCM3029/Examples_Drivers/TMP102/RTE/Device/ADuCM3029/adi_pwr_config.h
