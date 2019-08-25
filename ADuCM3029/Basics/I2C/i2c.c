@@ -38,6 +38,7 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 	uint8_t i2cHigh	 =	 0U;
 	uint8_t i2cLow	 =	 0U;
 
+
 	/* Multiplexed function 1 for I2C peripheral ( SDA and SCL )	 */
 	myI2Cparameters.sclPort->CFG	&=	~( 0b11 << ( myI2Cparameters.scl << 1U ) );
 	myI2Cparameters.sclPort->CFG	|=	 ( 0b01 << ( myI2Cparameters.scl << 1U ) );
