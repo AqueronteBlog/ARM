@@ -43,9 +43,10 @@ typedef enum
   */
 typedef enum
 {
-    I2C_SUCCESS  	     =   0x00,
-    I2C_FAILURE  		 =   0x01,
-	I2C_WRONG_FREQUENCY  =   0x02
+    I2C_SUCCESS  	     			=   0x00,
+    I2C_FAILURE  		 			=   0x01,
+	I2C_WRONG_FREQUENCY  			=   0x02,
+	I2C_SILICON_ANOMALY_21000011  	=   0x03			/*!<   It applies to revision 1.2	 */
 } i2c_status_t;
 
 

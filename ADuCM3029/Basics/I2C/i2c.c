@@ -29,8 +29,11 @@
  *
  * @author      Manuel Caballero
  * @date        25/July/2019
- * @version     25/July/2019     The ORIGIN
+ * @version     26/August/2019   Master I2C anomaly was added.
+ * 				25/July/2019     The ORIGIN
  * @pre         I2C communication is by polling mode.
+ * @pre         This function takes into consideration the Master I2C anomaly: 21000011 - I2C Master Mode Fails
+ * 				to Generate Clock when Clock Dividers Are Too Small ( Silicon Anomaly List: ADuCM3027/9 ).
  * @warning     N/A.
  */
 i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
@@ -60,14 +63,22 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 	i2cHigh	 =	 (uint8_t)( (float)( ( myI2Cparameters.pclkFrequency / ( 2.0 * myI2Cparameters.freq ) ) + 0.5 ) - 2.0 );
 	i2cLow	 =	 ( i2cHigh + 1U );
 
-	/* Both MUST be greater than 0	 */
-	if ( ( i2cHigh > 0U ) && ( i2cLow > 0U ) )
+	/* Check Anomaly: 21000011 - I2C Master Mode Fails to Generate Clock when Clock Dividers Are Too Small	 */
+	if ( ( i2cHigh + i2cLow ) > 15U )
 	{
-		myI2Cparameters.i2cInstance->DIV	 =	 (uint16_t)( ( i2cHigh << BITP_I2C_DIV_HIGH ) | ( i2cLow << BITP_I2C_DIV_LOW ) );
+		/* Both MUST be greater than 0	 */
+		if ( ( i2cHigh > 0U ) && ( i2cLow > 0U ) )
+		{
+			myI2Cparameters.i2cInstance->DIV	 =	 (uint16_t)( ( i2cHigh << BITP_I2C_DIV_HIGH ) | ( i2cLow << BITP_I2C_DIV_LOW ) );
+		}
+		else
+		{
+			return I2C_WRONG_FREQUENCY;
+		}
 	}
 	else
 	{
-		return I2C_WRONG_FREQUENCY;
+		return I2C_SILICON_ANOMALY_21000011;
 	}
 
 	/* Peripheral configured successfully	 */
