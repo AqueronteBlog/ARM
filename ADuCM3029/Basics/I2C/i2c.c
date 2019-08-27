@@ -86,7 +86,7 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 }
 
 /**
- * @brief       i2c_write   ( I2C_parameters_t , uint8_t* , uint32_t , uint32_t  )
+ * @brief       i2c_write   ( I2C_parameters_t , uint8_t* , uint32_t , i2c_stop_bit_t  )
  * @details     It sends data through I2C bus.
  *
  * @param[in]    myI2Cparameters:       I2C parameters.
@@ -101,12 +101,13 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        25/July/2019
- * @version     24/August/2019       New timeout was added.
+ * @version     27/August/2019       STOP bit generated was added.
+ * 				24/August/2019       New timeout was added.
  * 				25/July/2019         The ORIGIN
  * @pre         I2C communication is by polling mode.
  * @warning     This function only implements 7-bit address for the moment.
  */
-i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uint32_t i2c_data_length, uint32_t i2c_generate_stop )
+i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uint32_t i2c_data_length, i2c_stop_bit_t i2c_generate_stop )
 {
    uint32_t	i				=	0UL;
    uint32_t i2c_timeout1 	= 	I2C_TIMEOUT;
@@ -135,7 +136,7 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    {
 	   /* Wait until the byte is transmitted properly or timeout	 */
 	   i2c_timeout1 	= 	I2C_TIMEOUT;
-	   while ( ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MTXREQ ) ) != ( 1U << BITP_I2C_MSTAT_MTXREQ ) ) && ( i2c_timeout1 > 0UL ))
+	   while ( ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MTXREQ ) ) != ( 1U << BITP_I2C_MSTAT_MTXREQ ) ) && ( i2c_timeout1 > 0UL ) )
 	   {
 		   i2c_timeout1--;
 	   }
@@ -144,20 +145,30 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
 	   myI2Cparameters.i2cInstance->MTX		 =	 *i2c_buff++;
    }
 
-   /* Wait for a STOP detected driven by this master or timeout	 */
-   while ( ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MSTOP ) ) != ( 1U << BITP_I2C_MSTAT_MSTOP ) ) && ( i2c_timeout2 > 0UL ))
+
+   /* Check if a STOP bit must be generated	 */
+   if ( i2c_generate_stop == I2C_STOP_BIT )
    {
-	   i2c_timeout2--;
+	   /* Wait for a STOP detected driven by this master or timeout	 */
+	   while ( ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MSTOP ) ) != ( 1U << BITP_I2C_MSTAT_MSTOP ) ) && ( i2c_timeout2 > 0UL ) )
+	   {
+		   i2c_timeout2--;
+	   }
+
+	   /* Wait until the peripheral is free or timeout	 */
+	   while ( ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MBUSY ) ) == ( 1U << BITP_I2C_MSTAT_MBUSY ) ) && ( i2c_timeout3 > 0UL ) )
+	   {
+		   i2c_timeout3--;
+	   }
+
+	   /* Disable Master	 */
+	   myI2Cparameters.i2cInstance->MCTL	&=	~( 1U << BITP_I2C_MCTL_MASEN );
+   }
+   else
+   {
+	   /* Do NOT generate STOP bit or disable the I2C peripheral yet	 */
    }
 
-   /* Wait until the peripheral is free or timeout	 */
-   while ( ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MBUSY ) ) == ( 1U << BITP_I2C_MSTAT_MBUSY ) ) && ( i2c_timeout3 > 0UL ))
-   {
-	   i2c_timeout3--;
-   }
-
-   /* Disable Master	 */
-   myI2Cparameters.i2cInstance->MCTL	&=	~( 1U << BITP_I2C_MCTL_MASEN );
 
 
 
@@ -171,6 +182,8 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
  	  return I2C_SUCCESS;
    }
 }
+
+
 
 /**
  * @brief       i2c_read   ( I2C_parameters_t , uint8_t* , uint32_t )
@@ -187,15 +200,47 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
  *
  * @author      Manuel Caballero
  * @date        25/July/2019
- * @version     25/July/2019         The ORIGIN
+ * @version     27/August/2019       Function implementation was completed.
+ * 				25/July/2019         The ORIGIN
  * @pre         I2C communication is by polling mode.
- * @warning     N/A.
+ * @warning     This function only implements 7-bit address for the moment.
  */
 i2c_status_t i2c_read ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uint32_t i2c_data_length )
 {
+	uint32_t i			  =	0UL;
 	uint32_t i2c_timeout1 = I2C_TIMEOUT;
 	uint32_t i2c_timeout2 = I2C_TIMEOUT;
 
+
+	/* Set how many bytes need to be read	 */
+	myI2Cparameters.i2cInstance->MRXCNT	 =	 ( i2c_data_length - 1UL );
+
+	/* Read. Generate a Re-start ADDRESS: 7-bit address.	 */
+	myI2Cparameters.i2cInstance->ADDR2	 =	 0x00;
+	myI2Cparameters.i2cInstance->ADDR1	 =	 (uint8_t)( ( myI2Cparameters.addr << 1UL ) | 0x01 );
+
+	/* Read the data	 */
+	for ( i = 0UL; i < i2c_data_length; i++ )
+	{
+		/* Wait until there is a byte into the FIFO or timeout	 */
+		i2c_timeout1 	= 	I2C_TIMEOUT;
+		while ( ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MRXREQ ) ) != ( 1U << BITP_I2C_MSTAT_MRXREQ ) ) && ( i2c_timeout1 > 0UL ) )
+		{
+			i2c_timeout1--;
+		}
+
+		*i2c_buff++	 =	 myI2Cparameters.i2cInstance->MRX;
+	}
+
+
+	/* Wait until the peripheral is free or timeout	 */
+	while ( ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_MBUSY ) ) == ( 1U << BITP_I2C_MSTAT_MBUSY ) ) && ( i2c_timeout2 > 0UL ) )
+	{
+		i2c_timeout2--;
+	}
+
+	/* Disable Master	 */
+	myI2Cparameters.i2cInstance->MCTL	&=	~( 1U << BITP_I2C_MCTL_MASEN );
 
 
 

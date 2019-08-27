@@ -83,7 +83,7 @@ typedef struct{
   */
 /** I2C writing function.
   */
-i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buff, uint32_t length, uint32_t i2c_generate_stop );
+i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buff, uint32_t length, i2c_stop_bit_t i2c_generate_stop );
 
 /** I2C reading function.
   */
