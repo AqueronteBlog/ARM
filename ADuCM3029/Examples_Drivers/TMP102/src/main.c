@@ -81,6 +81,9 @@ int main(int argc, char *argv[])
 		/* I2C driver test */
 		myTMP102_Data.THIGH_Register	 =	 0x2323;
 		aux  =   TMP102_Write_T_HIGH_Register ( myTMP102_I2C_parameters, myTMP102_Data );
+
+		myTMP102_Data.THIGH_Register	 =	 0x00;
+		aux  =   TMP102_Read_T_HIGH_Register ( myTMP102_I2C_parameters, &myTMP102_Data );
 	}
 
 
