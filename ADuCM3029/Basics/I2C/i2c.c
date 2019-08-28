@@ -29,7 +29,8 @@
  *
  * @author      Manuel Caballero
  * @date        25/July/2019
- * @version     26/August/2019   Master I2C anomaly was added.
+ * @version     28/August/2019   Some comments were improved.
+ * 				26/August/2019   Master I2C anomaly was added.
  * 				25/July/2019     The ORIGIN
  * @pre         I2C communication is by polling mode.
  * @pre         This function takes into consideration the Master I2C anomaly: 21000011 - I2C Master Mode Fails
@@ -54,7 +55,8 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 	myI2Cparameters.sdaPort->DS		|=	 ( 1U << myI2Cparameters.sda );
 
 	/* Check that there is NOT transaction in course to disable the master safely	 */
-	while ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_TCOMP ) ) == ( 1U << BITP_I2C_MSTAT_TCOMP ) );	//[TODO] INSERT TIMEOUT
+	while ( ( myI2Cparameters.i2cInstance->MSTAT & ( 1U << BITP_I2C_MSTAT_TCOMP ) ) == ( 1U << BITP_I2C_MSTAT_TCOMP ) );	// [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
+																															// [WORKAROUND] Insert a counter.
 
 	/* Disable I2C master	 */
 	myI2Cparameters.i2cInstance->MCTL	&=	~( 1U << BITP_I2C_MCTL_MASEN );
@@ -168,7 +170,6 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    {
 	   /* Do NOT generate STOP bit or disable the I2C peripheral yet	 */
    }
-
 
 
 
