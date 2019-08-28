@@ -206,3 +206,58 @@ void conf_UART  ( void )
 	NVIC_EnableIRQ   ( UART_EVT_IRQn );
 }
 
+
+
+/**
+ * @brief       void conf_Timer0  ( void )
+ * @details     It configures the Timer0.
+ *
+ *					TMR0:
+ * 						- TMR0_CLK: LFOSC/4 = 32768Hz/4 = 8192Hz
+ * 						- Count down
+ * 						- Periodic mode
+ * 						- Interrupt enabled
+ * 						- Overflow: 1s ( 8192 / 8192Hz = 1s )
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        28/August/2019
+ * @version     28/August/2019      The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void conf_Timer0  ( void )
+{
+	/* Timer0 must be released before is configured	 */
+	while ( ( pADI_TMR0->STAT & ( 1U << BITP_TMR_STAT_BUSY ) ) == ( 1U << BITP_TMR_STAT_BUSY ) );
+
+	/* Timer0
+	 *  - Synchronization bypass is disabled
+	 *  - Event will not be captured
+	 *  - TMR0 disabled
+	 *  - TMR0 CLK: LFOSC ( 32768 Hz )
+	 *  - TMR0 Prescaler: TMR0_CLK/4 ( 32768Hz / 4 = 8192Hz )
+	 *  - Timer is set to count down
+	 *	- Timer runs in periodic mode
+	 */
+	pADI_TMR0->CTL	&=	~( ( 1U << BITP_TMR_CTL_SYNCBYP ) | ( 1U << BITP_TMR_CTL_EVTEN ) | ( 0b11 << BITP_TMR_CTL_CLK ) | ( 1U << BITP_TMR_CTL_EN ) | ( 0b11 << BITP_TMR_CTL_PRE ) );
+	pADI_TMR0->CTL	|=	 ( ( 0b10 << BITP_TMR_CTL_CLK ) | ( 1U << BITP_TMR_CTL_MODE ) );
+
+	/* Timer0
+	 *  - Overflow every ~ 1 second ( 8192 * ( 1/ 8192 ) = 1s )
+	 */
+	pADI_TMR0->LOAD	 =	 8192U;
+
+	/* Clear interrupt: Timeout	 */
+	pADI_TMR0->CLRINT	|=	 ( 1U << BITP_TMR_CLRINT_TIMEOUT );
+
+	/* Enable interrupt	 */
+	NVIC_SetPriority ( TMR0_EVT_IRQn, 0UL );
+	NVIC_EnableIRQ   ( TMR0_EVT_IRQn );
+}
