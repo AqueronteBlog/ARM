@@ -15,6 +15,39 @@
 
 
 /**
+ * @brief       void GP_Tmr0_Int_Handler  ( void )
+ * @details     TMR0 subroutine.
+ *
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        28/August/2019
+ * @version     28/August/2019    The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void GP_Tmr0_Int_Handler ( void )
+{
+	/* Check if TMR0 interrupt pending	 */
+	if ( ( pADI_TMR0->STAT & ( 1U << BITP_TMR_STAT_TIMEOUT ) ) == ( 1U << BITP_TMR_STAT_TIMEOUT ) )
+	{
+		/* Next state	 */
+		myState	 =	 1UL;
+
+		/* Clear IRQ	 */
+		pADI_TMR0->CLRINT	|=	 ( 1U << BITP_TMR_CLRINT_TIMEOUT );
+	}
+}
+
+
+
+/**
  * @brief       void UART_Int_Handler  ( void )
  * @details     UART subroutine.
  *
