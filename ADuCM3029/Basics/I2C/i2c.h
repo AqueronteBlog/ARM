@@ -43,9 +43,10 @@ typedef enum
   */
 typedef enum
 {
-    I2C_SUCCESS  	     =   0x00,
-    I2C_FAILURE  		 =   0x01,
-	I2C_WRONG_FREQUENCY  =   0x02
+    I2C_SUCCESS  	     			=   0x00,
+    I2C_FAILURE  		 			=   0x01,
+	I2C_WRONG_FREQUENCY  			=   0x02,
+	I2C_SILICON_ANOMALY_21000011  	=   0x03			/*!<   It applies to revision 1.2	 */
 } i2c_status_t;
 
 
@@ -82,7 +83,7 @@ typedef struct{
   */
 /** I2C writing function.
   */
-i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buff, uint32_t length, uint32_t i2c_generate_stop );
+i2c_status_t    i2c_write   ( I2C_parameters_t myI2Cparameters, uint8_t* i2c_buff, uint32_t length, i2c_stop_bit_t i2c_generate_stop );
 
 /** I2C reading function.
   */
