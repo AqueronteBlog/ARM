@@ -1,8 +1,8 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: UART.
- * 				If '1' is received, LED1 is turned on, if '2' is received, the LED2 is turned on.
- * 				A message will be transmitted back, any other value will turn both LEDs off.
+ * @details     This example shows how to work with the external device: TMP102.
+ * 				A new temperature measurement is sampled every 1 second and transmitted through
+ * 				the UART (115200 baud).
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
  *
@@ -56,11 +56,11 @@ int main(int argc, char *argv[])
 	/* Begin adding your custom code here */
 	SystemInit ();
 
-	conf_CLK  ();
-	conf_GPIO ();
-	//conf_UART ();
+	conf_CLK  	();
+	conf_GPIO 	();
+	conf_UART 	();
+	conf_Timer0 ();
 
-	//adi_i2c_ReadWrite
 
 
 	/* I2C definition   */
@@ -76,15 +76,27 @@ int main(int argc, char *argv[])
 	/* Configure I2C peripheral */
 	aux  =   TMP102_Init ( myTMP102_I2C_parameters );
 
-	while (1)
-	{
-		/* I2C driver test */
-		myTMP102_Data.THIGH_Register	 =	 0x2323;
-		aux  =   TMP102_Write_T_HIGH_Register ( myTMP102_I2C_parameters, myTMP102_Data );
+	/* Read TLOW value */
+	aux  =   TMP102_Read_T_LOW_Register         ( myTMP102_I2C_parameters, &myTMP102_Data );
 
-		myTMP102_Data.THIGH_Register	 =	 0x00;
-		aux  =   TMP102_Read_T_HIGH_Register ( myTMP102_I2C_parameters, &myTMP102_Data );
-	}
+	/* Read THIGH value */
+	aux  =   TMP102_Read_T_HIGH_Register        ( myTMP102_I2C_parameters, &myTMP102_Data );
+
+	/* Set polarity LOW */
+	aux  =   TMP102_SetPolarityAlertPinOutput   ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_POL_ALERT_PIN_ACTIVE_LOW );
+
+	/* Set Normal mode operation */
+	aux  =   TMP102_SetModeOperation            ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_EM_NORMAL_MODE_OPERATION );
+
+	/* Set Conversion Rate: 4Hz */
+	aux  =   TMP102_SetConversionRate           ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_CR_4_HZ );
+
+	/* Set Shutdown mode */
+	aux  =   TMP102_SetShutdownMode             ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_SD_ENABLED );
+
+
+	/* Enable Timer0	 */
+	pADI_TMR0->CTL	|=	 ( 1U << BITP_TMR_CTL_EN );
 
 
 	while ( 1 )
@@ -108,7 +120,26 @@ int main(int argc, char *argv[])
 
 		if ( myState != 0U )
 		{
+			/* Turn both LEDs on	 */
+			pADI_GPIO1->SET	|=	 DS4;
+			pADI_GPIO2->SET	|=	 DS3;
 
+			/* New reading */
+			aux  =   TMP102_TriggerSingleTemperatureConversion ( myTMP102_I2C_parameters );
+
+			/* Wait until the conversion is finished    */
+			do
+			{
+				aux      =   TMP102_ReadConfigurationRegister ( myTMP102_I2C_parameters, &myTMP102_Data );
+			}while( ( myTMP102_Data.ConfigurationRegister & TMP102_CONFIGURATION_OS_MASK ) == TMP102_CONFIGURATION_OS_BUSY );   // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
+			                                                                                                                    // [WORKAROUND] Insert a counter.
+
+			/* Read the new temperature value */
+			aux  =   TMP102_GetTemperature ( myTMP102_I2C_parameters, &myTMP102_Data );
+
+
+			/* Transmit data through the UART	 */
+			sprintf ( (char*)myMessage, "T: %0.4f C\r\n", myTMP102_Data.Temperature );
 
 			/* Check that is safe to send data	 */
 			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
@@ -120,8 +151,10 @@ int main(int argc, char *argv[])
 			/* Transmit Buffer Empty Interrupt: Enabled	 */
 			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
 
-			/* Reset variables	 */
-			myState	 =	 0U;
+			/* Reset variables and turn both LEDs off	 */
+			myState	 		 =	 0UL;
+			pADI_GPIO1->CLR	|=	 DS4;
+			pADI_GPIO2->CLR	|=	 DS3;
 		}
 	}
 

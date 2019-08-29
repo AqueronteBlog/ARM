@@ -27,7 +27,8 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-extern void UART_Int_Handler ( void );
+extern void UART_Int_Handler 	( void );
+extern void GP_Tmr0_Int_Handler ( void );
 
 
 /**@brief Constants.
