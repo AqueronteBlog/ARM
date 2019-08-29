@@ -1,8 +1,8 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: UART.
- * 				If '1' is received, LED1 is turned on, if '2' is received, the LED2 is turned on.
- * 				A message will be transmitted back, any other value will turn both LEDs off.
+ * @details     This example shows how to work with the external device: TMP102.
+ * 				A new temperature measurement is sampled every 1 second and transmitted through
+ * 				the UART (115200 baud).
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
  *
