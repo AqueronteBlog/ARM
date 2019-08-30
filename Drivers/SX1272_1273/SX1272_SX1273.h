@@ -3235,7 +3235,7 @@ typedef struct
   lora_pa_mode_t                                  paSelect;                 /*!<  LoRa: Power Amplifier output pin          */
   int8_t                                          p_out;                    /*!<  LoRa: PA max output power in dBmn          */
   lora_regpadac_pa_dac_t                          paDac;                    /*!<  LoRa: Higher power settings of the PA     */
-
+  
 
   uint8_t                     deviceID;         /*!<  Device ID                     */
   uint8_t                     deviceRevision;   /*!<  Device Revision               */
