@@ -1,6 +1,6 @@
 /**
  * @brief       BME280.h
- * @details     [todo]Low power gas, pressure, temperature and humidity sensor.
+ * @details     Combined humidity and pressure sensor.
  *              Header file.
  *
  *
