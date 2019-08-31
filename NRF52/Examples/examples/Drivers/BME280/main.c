@@ -1,9 +1,7 @@
 /**
  * @brief       main.c
  * @details     [TODO]This example shows how to work with the external device: BME280. Every 1 seconds, a new
- *              pressure/temperature/wake-up event value is read and the data is transmitted through the UART ( Baud Rate: 230400 ).
- *
- *              The wake-up event is triggered by a double tap.
+ *              pressure/temperature/humidity sample is read and the data is transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
  *
@@ -13,9 +11,9 @@
  * @author      Manuel Caballero
  * @date        30/August/2019
  * @version     30/August/2019    The ORIGIN
- * @pre         This firmware was tested on the nrf52-DK with Segger Embedded Studio v4.16 ( SDK 14.2.0 ).
+ * @pre         This firmware was tested on the nrf52-DK with Segger Embedded Studio v4.18 ( SDK 14.2.0 ).
  * @warning     The softdevice (s132) is taken into account, Bluetooth was not used although.
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ). All rights reserved.
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 #include <stdio.h>
 
@@ -50,11 +48,12 @@ volatile I2C_parameters_t   myBME280_I2C_parameters;  /*!<   I2C configuration  
  */
 int main(void)
 {
-  uint8_t           myMessage[ TX_BUFF_SIZE ];
-  uint8_t           myWakeUpInfo[]  = { "OFF" };
-  BME280_status_t   aux;
-  struct bme280_dev dev;
-  int8_t rslt = BME280_OK;
+  uint8_t             myMessage[ TX_BUFF_SIZE ];
+  BME280_status_t     aux;
+  uint8_t             settings_sel;
+  struct bme280_dev   dev;
+  struct bme280_data  comp_data;
+  int8_t              rslt = BME280_OK;
 
 
   conf_CLK    ();
@@ -80,8 +79,17 @@ int main(void)
 
   aux  =   BME280_Init_I2C  ( myBME280_I2C_parameters );
 
+  /* Configure the device in Force mode */
+  dev.settings.osr_h  = BME280_OVERSAMPLING_1X;
+  dev.settings.osr_p  = BME280_OVERSAMPLING_16X;
+  dev.settings.osr_t  = BME280_OVERSAMPLING_2X;
+  dev.settings.filter = BME280_FILTER_COEFF_16;
+
+  settings_sel = BME280_OSR_PRESS_SEL | BME280_OSR_TEMP_SEL | BME280_OSR_HUM_SEL | BME280_FILTER_SEL;
+
+  aux  =  bme280_set_sensor_settings(settings_sel, &dev);
   
-  
+
   
   myState  =   0UL;                           // Reset the variable
   NRF_TIMER0->TASKS_START  =   1UL;           // Start Timer0
@@ -102,10 +110,18 @@ int main(void)
     {
       NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );   // Turn all the LEDs on
       
+      /* Trigger a new sample   */
+      aux = bme280_set_sensor_mode(BME280_FORCED_MODE, &dev);
       
-		
+      /* Wait for the measurement to complete and print data @25Hz */
+      dev.delay_ms(40);
+      
+      /* Get the data  */
+      aux = bme280_get_sensor_data(BME280_ALL, &comp_data, &dev);
+	
+                
       /* Transmit result through the UART  */
-      //sprintf ( (char*)myMessage, "X: %d mg | Y: %d mg | Z: %d mg | T: %d C | WakeUp: %s\r\n", ( 1000 * sens_data.x ) / myRange, ( 1000 * sens_data.y ) / myRange, ( 1000 * sens_data.z ) / myRange, temp / BMA4_SCALE_TEMP, myWakeUpInfo );
+      sprintf ( (char*)myMessage, "T: %d C | P: %d Pa | RH: %d %%\r\n", comp_data.temperature, comp_data.pressure, comp_data.humidity );
 
       NRF_UART0->TASKS_STOPRX  =   1UL;
       NRF_UART0->TASKS_STOPTX  =   1UL;
