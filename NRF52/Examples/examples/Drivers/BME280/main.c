@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: BME280. Every 1 seconds, a new
+ * @details     This example shows how to work with the external device: BME280. Every 1 seconds, a new
  *              pressure/temperature/humidity sample is read and the data is transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
@@ -69,15 +69,18 @@ int main(void)
   myBME280_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
   myBME280_I2C_parameters.SDAport     =    NRF_P0;
   myBME280_I2C_parameters.SCLport     =    NRF_P0;
+  
+  aux  =   BME280_Init_I2C  ( myBME280_I2C_parameters );
 
-  /* Configure I2C peripheral  */
+  /* Configure the device I2C interface  */
   dev.dev_id    =   BME280_I2C_ADDR_PRIM;
   dev.intf      =   BME280_I2C_INTF;
   dev.read      =   user_i2c_read;
   dev.write     =   user_i2c_write;
   dev.delay_ms  =   user_delay_ms;
-
-  aux  =   BME280_Init_I2C  ( myBME280_I2C_parameters );
+  
+  aux  =  bme280_init(&dev);
+  
 
   /* Configure the device in Force mode */
   dev.settings.osr_h  = BME280_OVERSAMPLING_1X;
@@ -121,7 +124,7 @@ int main(void)
 	
                 
       /* Transmit result through the UART  */
-      sprintf ( (char*)myMessage, "T: %d C | P: %d Pa | RH: %d %%\r\n", comp_data.temperature, comp_data.pressure, comp_data.humidity );
+      sprintf ( (char*)myMessage, "T: %ld C | P: %ld Pa | RH: %ld %%\r\n", ( comp_data.temperature / 100 ), comp_data.pressure, ( comp_data.humidity / 1024 ) );
 
       NRF_UART0->TASKS_STOPRX  =   1UL;
       NRF_UART0->TASKS_STOPTX  =   1UL;
