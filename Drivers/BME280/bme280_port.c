@@ -202,7 +202,7 @@ int8_t user_i2c_write ( uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uin
      */
 
     i2c_status_t aux;
-    uint8_t      cmd[40] =  { 0 };
+    uint8_t      cmd[64] =  { 0 };
     uint32_t     i       =   0;
 
     /* Prepare the data to be sent   */
