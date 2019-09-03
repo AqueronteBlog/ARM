@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: ADC and the built-in Temperature sensor with
+ * @details     [todo] This example shows how to work with the internal peripheral: ADC and the built-in Temperature sensor with
  * 				external reference ( VREF MUST be connected to 3.3V ).
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
