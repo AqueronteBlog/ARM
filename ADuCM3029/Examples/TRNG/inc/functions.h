@@ -28,7 +28,7 @@ extern "C" {
 void conf_CLK    ( void );
 void conf_GPIO   ( void );
 void conf_UART   ( void );
-void conf_ADC    ( void );
+void conf_TRNG   ( void );
 void conf_Timer0 ( void );
 
 
