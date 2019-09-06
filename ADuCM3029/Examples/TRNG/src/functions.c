@@ -210,7 +210,10 @@ void conf_UART  ( void )
 
 /**
  * @brief       void conf_TRNG  ( void )
- * @details     [TODO]It configures the ADC peripheral.
+ * @details     It configures the TRNG peripheral.
+ *
+ * 				TNRG:
+ * 					- 8-bit.
  *
  *
  *
@@ -223,7 +226,8 @@ void conf_UART  ( void )
  *
  * @author      Manuel Caballero
  * @date        03/September/2019
- * @version     03/September/2019      The ORIGIN
+ * @version     06/September/2019      Some comments were added.
+ * 				03/September/2019      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
