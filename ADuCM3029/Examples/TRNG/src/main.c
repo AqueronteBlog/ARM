@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: ADC and the built-in Temperature sensor with
- * 				external reference ( VREF MUST be connected to 3.3V ).
+ * @details     This example shows how to work with the internal peripheral: TRNG. Every 1 second a new random number
+ * 				is generated and transmitted over the UART ( Baud: 115200 ).
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
  *
@@ -94,14 +94,14 @@ int main(int argc, char *argv[])
 			/* Wait until there is a new random number	 */
 			while ( ( pADI_RNG0->STAT & ( 1U << BITP_RNG_STAT_RNRDY ) ) != ( 1U << BITP_RNG_STAT_RNRDY ) );
 
-			/* Get the new random data	 */
-			myRNG	 =	 pADI_RNG0->DATA;
+			/* Get the new random data ( 8-bit )	 */
+			myRNG	 =	 ( pADI_RNG0->DATA & 0xFF );
 
 			/* Disable the RNG	 */
 			pADI_RNG0->CTL	&=	~( 1U << BITP_RNG_CTL_EN );
 
 			/* Transmit data through the UART	 */
-			sprintf ( (char*)myMessage, "RNG: %ld C\r\n", myRNG );
+			sprintf ( (char*)myMessage, "RNG: %ld\r\n", myRNG );
 
 			/* Check that is safe to send data	 */
 			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
