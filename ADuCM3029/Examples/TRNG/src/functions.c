@@ -209,14 +209,12 @@ void conf_UART  ( void )
 
 
 /**
- * @brief       void conf_ADC  ( void )
- * @details     It configures the ADC peripheral.
+ * @brief       void conf_TRNG  ( void )
+ * @details     It configures the TRNG peripheral.
  *
- * 					ADC:
- * 					 - Powering up the ADC
- * 					 - Temperature sensor enabled
- * 					 - Polling mode
- * 					 - External reference
+ * 				TNRG:
+ * 					- 8-bit.
+ *
  *
  *
  * @param[in]    N/A.
@@ -228,47 +226,24 @@ void conf_UART  ( void )
  *
  * @author      Manuel Caballero
  * @date        03/September/2019
- * @version     03/September/2019      The ORIGIN
- * @pre         Powering the ADC sequence: Datasheet p. 20-4
+ * @version     06/September/2019      Some comments were added.
+ * 				03/September/2019      The ORIGIN
+ * @pre         N/A
  * @warning     N/A
  */
-void conf_ADC  ( void )
+void conf_TRNG  ( void )
 {
-	/* Powering up the ADC using external reference:
-	 * 	1. Set the ADC_CFG.PWRUP bit to power up the ADC
-	 * 	2. Set ADC_PWRUP.WAIT bits as 526/(CLKG_CLK_CTL1.PCLKDIVCNT field)
-	 * 	3. Assert the ADC_CFG.EN bit and enable the ADC
-	 * 	4. Wait for the ADC_STAT.RDY bit
-	 * 	5. Wait for the ADC_STAT.CALDONE bit
-	 * 	6. Set the ADC_CFG.STARTCAL bit to start the calibration cycle
-	 */
-	pADI_ADC0->CFG		|=	 ( 1U << BITP_ADC_CFG_PWRUP );
-	pADI_ADC0->PWRUP	&=	~( 0b1111111111 << BITP_ADC_PWRUP_WAIT );
-	pADI_ADC0->PWRUP	|=	 ( ( 256U / (uint16_t)( ( pADI_CLKG0_CLK->CTL1 & ( 0b111111 << BITP_CLKG_CLK_CTL1_PCLKDIVCNT ) ) >> BITP_CLKG_CLK_CTL1_PCLKDIVCNT ) ) >> BITP_ADC_PWRUP_WAIT );
+	/* Disable the RNG	 */
+	pADI_RNG0->CTL	&=	~( 1U << BITP_RNG_CTL_EN );
 
-	pADI_ADC0->CFG		|=	 ( 1U << BITP_ADC_CFG_EN );
-	while ( ( pADI_ADC0->STAT & ( 1U << BITP_ADC_STAT_RDY ) ) != ( 1U << BITP_ADC_STAT_RDY ) );
-	pADI_ADC0->STAT		|=	 ( 1U << BITP_ADC_STAT_RDY );
-	//while ( ( pADI_ADC0->STAT & ( 1U << BITP_ADC_STAT_CALDONE ) ) != ( 1U << BITP_ADC_STAT_CALDONE ) );
-	//pADI_ADC0->STAT		|=	 ( 1U << BITP_ADC_STAT_CALDONE );
-	pADI_ADC0->CFG		|=	 ( 1U << BITP_ADC_CFG_STARTCAL );
-	while ( ( pADI_ADC0->STAT & ( 1U << BITP_ADC_STAT_CALDONE ) ) != ( 1U << BITP_ADC_STAT_CALDONE ) );
-	pADI_ADC0->STAT		|=	 ( 1U << BITP_ADC_STAT_CALDONE );
+	/* Generate a Single Byte	 */
+	pADI_RNG0->CTL	|=	 ( 1U << BITP_RNG_CTL_SINGLE );
 
-
-	/* Temperature sensor:
-	 *  - Enable temperature sensor
-	 *  - Wait for 300us before starting the conversion.
-	 * 	- Program the ADC_CNV_TIME.SAMPTIME bit to provide an acquisition time of 65us
-	 * 		- ACLK frequency = 26 MHz / ACLKDIV = 26 MHz / 8 = 3.25 MHz
-	 * 		- Number of clock cycles (ACLK) required for sampling: 3.25MHz * 65us = 211.25 ~ 212
-	 * 	- Don't invert receiver line (idling high).
-	*/
-	pADI_ADC0->CFG		|=	 ( 1U << BITP_ADC_CFG_TMPEN );
-	for ( uint32_t i = 0UL; i < 1920UL; i++ );
-
-	pADI_ADC0->CNV_TIME	&=	~( 0b11111111 << BITP_ADC_CNV_TIME_SAMPTIME );
-	pADI_ADC0->CNV_TIME	|=	 ( 212U << BITP_ADC_CNV_TIME_SAMPTIME );
+//	/* Clear all the flags	 */
+//	pADI_RNG0->STAT	|=	 ( ( 1U << BITP_RNG_STAT_STUCK ) | ( 1U << BITP_RNG_STAT_RNRDY ) );
+//
+//	/* Enable the RNG	 */
+//	pADI_RNG0->CTL	|=	 ( 1U << BITP_RNG_CTL_EN );
 }
 
 
