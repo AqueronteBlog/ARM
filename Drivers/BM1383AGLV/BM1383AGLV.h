@@ -109,6 +109,44 @@ typedef enum
 } BM1383AGLV_mode_control_ave_num_t;
 
 
+/* DREN <4>
+ *    NOTE: DRDY pin Enable.
+ */
+typedef enum
+{
+	MODE_CONTROL_DREN_MASK     		=   ( 1U << 4U ), 	/*!<  DREN mask                             	        */
+	MODE_CONTROL_DREN_DRDY_DISABLE	=   ( 0U << 4U ), 	/*!<  DRDY pin Disable                     	[ Default ] */
+	MODE_CONTROL_DREN_DRDY_ENABLE 	=   ( 1U << 4U )  	/*!<  DRDY pin Enable                     				*/
+} BM1383AGLV_mode_control_dren_t;
+
+
+/* MODE <1:0>
+ *    NOTE: Set measurement mode.
+ */
+typedef enum
+{
+	MODE_CONTROL_MODE_MASK     		=   ( 0b11 << 0U ), /*!<  MODE mask                                        */
+	MODE_CONTROL_MODE_STAND_BY      =   ( 0b00 << 0U ), /*!<  Stand by                             [ Default ] */
+	MODE_CONTROL_MODE_ONE_SHOT		=   ( 0b01 << 0U ), /*!<  One shot                    					   */
+	MODE_CONTROL_MODE_CONTINUOUS    =   ( 0b10 << 0U )  /*!<  Continuous				                       */
+} BM1383AGLV_mode_control_mode_t;
+
+
+/**
+  * @brief   STATUS REGISTER
+  */
+/* RD_DRDY <0>
+ *    NOTE: Pressure and temperature measurement data ready bit.
+ */
+typedef enum
+{
+	STATUS_RD_DRDY_MASK       		=   ( 1U << 0U ),    /*!<  RD_DRDY mask                      		       						*/
+	STATUS_RD_DRDY_DATA_MEASURING   =   ( 0U << 0U ),    /*!<  Measurement data output is not yet available (measuring)	[ Default ] */
+	STATUS_RD_DRDY_DATA_AVAILABLE	=   ( 1U << 0U )     /*!<  Measurement data output is available								   	*/
+} BM1383AGLV_reset_rd_drdy_t;
+
+
+
 
 
 #ifndef BM1383AGLV_VECTOR_STRUCT_H
@@ -116,14 +154,15 @@ typedef enum
 typedef struct
 {
     /* Output registers  */
-    int16_t   rawHumidity;     /*!<  Raw humidity                  */
-    int16_t   rawTemperature;  /*!<  Raw temperature               */
+    int32_t rawPressure;     	/*!<  Raw pressure                  */
+    int16_t	rawTemperature;  	/*!<  Raw temperature               */
 
-    float     humidity;        /*!<  Humidity value                */
-    float     temperature;     /*!<  Temperature value             */
+    float   pressure;        	/*!<  Pressure value                */
+    float   temperature;     	/*!<  Temperature value             */
 
     /* Device identification   */
-    uint8_t   deviceID;        /*!<  Device ID                     */
+    uint8_t id1;        		/*!<  Device ID1                    */
+    uint8_t id2;        		/*!<  Device ID2                    */
 } BM1383AGLV_data_t;
 #endif
 
