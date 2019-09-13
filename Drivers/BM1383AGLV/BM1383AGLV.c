@@ -63,39 +63,363 @@ BM1383AGLV_status_t BM1383AGLV_Init ( I2C_parameters_t myI2Cparameters )
  *
  * @param[in]    myI2Cparameters: I2C parameters.
  *
- * @param[out]   myDeviceID:      Device ID.
+ * @param[out]   myDeviceID:      Device ID ( ID1 and ID2 ).
  *
  *
  * @return       Status of BM1383AGLV_GetDeviceID.
  *
  *
  * @author      Manuel Caballero
- * @date        09/September/2019
- * @version     09/September/2019     The ORIGIN
- * @pre         N/A
+ * @date        12/September/2019
+ * @version     12/September/2019     The ORIGIN
+ * @pre         This function uses auto-increment.
  * @warning     N/A.
  */
-//BM1383AGLV_status_t BM1383AGLV_GetDeviceID ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myDeviceID )
-//{
-//  uint8_t      cmd  = 0U;
-//  i2c_status_t aux;
-//
-//  /* Read the register   */
-//  cmd   =   BM1383AGLV_WHO_AM_I;
-//  aux   =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-//  aux   =   i2c_read  ( myI2Cparameters, &cmd, 1U );
-//
-//  /* Mask it and update it with the new value  */
-//  myDeviceID->deviceID   =   cmd;
-//
-//
-//
-//  if ( aux == I2C_SUCCESS )
-//  {
-//    return   BM1383AGLV_SUCCESS;
-//  }
-//  else
-//  {
-//    return   BM1383AGLV_FAILURE;
-//  }
-//}
+BM1383AGLV_status_t BM1383AGLV_GetDeviceID ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myDeviceID )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]	 =   BM1383AGLV_ID1;
+  aux   	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux   	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+  /* Parse the data  */
+  myDeviceID->id1   =   cmd[0];
+  myDeviceID->id2   =   cmd[1];
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BM1383AGLV_SUCCESS;
+  }
+  else
+  {
+    return   BM1383AGLV_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BM1383AGLV_SetPowerDown ( I2C_parameters_t , BM1383AGLV_data_t )
+ *
+ * @details     It sets the power-down mode.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myPwrDown: 	  Power down mode.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BM1383AGLV_SetPowerDown.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/September/2019
+ * @version     12/September/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BM1383AGLV_status_t BM1383AGLV_SetPowerDown ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t myPwrDown )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Write the register   */
+  cmd[0]	 =   BM1383AGLV_POWER_DOWN;
+  cmd[1]	 =	 myPwrDown.pwr_down;
+  aux   	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BM1383AGLV_SUCCESS;
+  }
+  else
+  {
+    return   BM1383AGLV_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BM1383AGLV_GetPowerDown ( I2C_parameters_t , BM1383AGLV_data_t* )
+ *
+ * @details     It gets the power-down mode.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myPwrDown: 	  Power down mode.
+ *
+ *
+ * @return       Status of BM1383AGLV_GetPowerDown.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/September/2019
+ * @version     12/September/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BM1383AGLV_status_t BM1383AGLV_GetPowerDown ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myPwrDown )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd	 =   BM1383AGLV_POWER_DOWN;
+  aux  	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux    =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data	 */
+  myPwrDown->pwr_down	 =	 (BM1383AGLV_power_down_pwr_down_t)cmd;
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BM1383AGLV_SUCCESS;
+  }
+  else
+  {
+    return   BM1383AGLV_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BM1383AGLV_SetSoftReset ( I2C_parameters_t , BM1383AGLV_data_t )
+ *
+ * @details     It produces a soft-reset.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myRSTB: 		  Reset mode.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BM1383AGLV_SetSoftReset.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/September/2019
+ * @version     12/September/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BM1383AGLV_status_t BM1383AGLV_SetSoftReset ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t myRSTB )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Write the register   */
+  cmd[0]	 =   BM1383AGLV_RESET;
+  cmd[1]	 =	 myRSTB.rstb;
+  aux   	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BM1383AGLV_SUCCESS;
+  }
+  else
+  {
+    return   BM1383AGLV_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BM1383AGLV_GetSoftResetFlag ( I2C_parameters_t , BM1383AGLV_data_t* )
+ *
+ * @details     It gets the soft-reset flag.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myRSTB: 	  	  Soft-reset flag.
+ *
+ *
+ * @return       Status of BM1383AGLV_GetSoftResetFlag.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/September/2019
+ * @version     12/September/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BM1383AGLV_status_t BM1383AGLV_GetSoftResetFlag ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myRSTB )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd	 =   BM1383AGLV_RESET;
+  aux  	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux    =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data	 */
+  myRSTB->rstb	 =	 (BM1383AGLV_reset_rstb_t)cmd;
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BM1383AGLV_SUCCESS;
+  }
+  else
+  {
+    return   BM1383AGLV_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BM1383AGLV_SetModeControl ( I2C_parameters_t , BM1383AGLV_data_t )
+ *
+ * @details     It sets the mode control.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myModeCont: 	  AVE_NUM, DREN and MODE.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BM1383AGLV_SetModeControl.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/September/2019
+ * @version     12/September/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BM1383AGLV_status_t BM1383AGLV_SetModeControl ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t myModeCont )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register to mask   */
+  cmd[0]	 =   BM1383AGLV_MODE_CONTROL;
+  aux   	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux    	 =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+  /* Mask the register and update it	 */
+  cmd[1]	&=	~( MODE_CONTROL_AVE_NUM_MASK | MODE_CONTROL_DREN_MASK | MODE_CONTROL_MODE_MASK );
+  cmd[1]	|=	 ( myModeCont.ave_num | myModeCont.dren | myModeCont.mode );
+  aux   	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BM1383AGLV_SUCCESS;
+  }
+  else
+  {
+    return   BM1383AGLV_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BM1383AGLV_GetModeControl ( I2C_parameters_t , BM1383AGLV_data_t* )
+ *
+ * @details     It gets the mode control.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myModeCont: 	  AVE_NUM, DREN and MODE.
+ *
+ *
+ * @return       Status of BM1383AGLV_GetModeControl.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/September/2019
+ * @version     12/September/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BM1383AGLV_status_t BM1383AGLV_GetModeControl ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myModeCont )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd	 =   BM1383AGLV_MODE_CONTROL;
+  aux  	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux    =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data	 */
+  myModeCont->ave_num	 =	 (BM1383AGLV_mode_control_ave_num_t)( cmd & MODE_CONTROL_AVE_NUM_MASK );
+  myModeCont->dren		 =	 (BM1383AGLV_mode_control_dren_t)( cmd & MODE_CONTROL_DREN_MASK );
+  myModeCont->mode		 =	 (BM1383AGLV_mode_control_mode_t)( cmd & MODE_CONTROL_MODE_MASK );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BM1383AGLV_SUCCESS;
+  }
+  else
+  {
+    return   BM1383AGLV_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BM1383AGLV_GetStatus ( I2C_parameters_t , BM1383AGLV_data_t* )
+ *
+ * @details     It gets the status flag.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myRD_DRDY: 	  Pressure and temperature measurement data ready bit.
+ *
+ *
+ * @return       Status of BM1383AGLV_GetStatus.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/September/2019
+ * @version     12/September/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BM1383AGLV_status_t BM1383AGLV_GetStatus ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myRD_DRDY )
+{
+  uint8_t      cmd  = 0U;
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd	 =   BM1383AGLV_STATUS;
+  aux  	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux    =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+  /* Parse the data	 */
+  myRD_DRDY->rd_drdy	 =	 (BM1383AGLV_reset_rd_drdy_t)( cmd );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BM1383AGLV_SUCCESS;
+  }
+  else
+  {
+    return   BM1383AGLV_FAILURE;
+  }
+}
