@@ -154,15 +154,25 @@ typedef enum
 typedef struct
 {
     /* Output registers  */
-    int32_t rawPressure;     	/*!<  Raw pressure                  */
-    int16_t	rawTemperature;  	/*!<  Raw temperature               */
+    int32_t rawPressure;     						/*!<  Raw pressure                  */
+    int16_t	rawTemperature;  						/*!<  Raw temperature               */
 
-    float   pressure;        	/*!<  Pressure value                */
-    float   temperature;     	/*!<  Temperature value             */
+    float   pressure;        						/*!<  Pressure value                */
+    float   temperature;     						/*!<  Temperature value             */
+
+    /* Mode control	 */
+    BM1383AGLV_mode_control_ave_num_t ave_num;		/*!<  Average number of measurement */
+    BM1383AGLV_mode_control_dren_t	  dren;			/*!<  DRDY pin Enable	            */
+    BM1383AGLV_mode_control_mode_t	  mode;			/*!<  Set measurement mode	        */
+
+    /* Device status	 */
+    BM1383AGLV_power_down_pwr_down_t pwr_down;		/*!<  Power mode		            */
+    BM1383AGLV_reset_rstb_t			 rstb;			/*!<  Reset				            */
+    BM1383AGLV_reset_rd_drdy_t		 rd_drdy;		/*!<  Status flag		            */
 
     /* Device identification   */
-    uint8_t id1;        		/*!<  Device ID1                    */
-    uint8_t id2;        		/*!<  Device ID2                    */
+    uint8_t id1;        							/*!<  Device ID1                    */
+    uint8_t id2;        							/*!<  Device ID2                    */
 } BM1383AGLV_data_t;
 #endif
 
@@ -186,8 +196,36 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-BM1383AGLV_status_t BM1383AGLV_Init               ( I2C_parameters_t myI2Cparameters                                          );
+BM1383AGLV_status_t BM1383AGLV_Init               ( I2C_parameters_t myI2Cparameters                                );
 
-/** It gets the device identification.
+/** It gets the device identifications.
   */
-BM1383AGLV_status_t BM1383AGLV_GetDeviceID        ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myDeviceID               );
+BM1383AGLV_status_t BM1383AGLV_GetDeviceID        ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myDeviceID	);
+
+/** It sets the power-down mode.
+  */
+BM1383AGLV_status_t BM1383AGLV_SetPowerDown       ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t myPwrDown	);
+
+/** It gets the power-down mode.
+  */
+BM1383AGLV_status_t BM1383AGLV_GetPowerDown       ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myPwrDown	);
+
+/** It sets the soft-reset.
+  */
+BM1383AGLV_status_t BM1383AGLV_SetSoftReset       ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t myRSTB		);
+
+/** It gets the reset flag.
+  */
+BM1383AGLV_status_t BM1383AGLV_GetSoftResetFlag   ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myRSTB		);
+
+/** It sets the mode control.
+  */
+BM1383AGLV_status_t BM1383AGLV_SetModeControl     ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t myModeCont	);
+
+/** It gets the mode control.
+  */
+BM1383AGLV_status_t BM1383AGLV_GetModeControl	  ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myModeCont	);
+
+/** It gets the status flag.
+  */
+BM1383AGLV_status_t BM1383AGLV_GetStatus		  ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myRD_DRDY	);
