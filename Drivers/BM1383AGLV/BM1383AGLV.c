@@ -423,3 +423,104 @@ BM1383AGLV_status_t BM1383AGLV_GetStatus ( I2C_parameters_t myI2Cparameters, BM1
     return   BM1383AGLV_FAILURE;
   }
 }
+
+
+
+/**
+ * @brief       BM1383AGLV_GetRawPressure ( I2C_parameters_t , BM1383AGLV_data_t* )
+ *
+ * @details     It gets the raw pressure.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myRawP: 	  	  Raw Pressure value.
+ *
+ *
+ * @return       Status of BM1383AGLV_GetRawPressure.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        13/September/2019
+ * @version     13/September/2019     The ORIGIN
+ * @pre         This function uses auto-increment.
+ * @warning     N/A.
+ */
+BM1383AGLV_status_t BM1383AGLV_GetRawPressure ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myRawP )
+{
+  uint8_t      cmd[3]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]	 =   BM1383AGLV_PRESSURE_MSB;
+  aux  	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux    	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+  /* Parse the data	 */
+  myRawP->rawPressure	 =	 cmd[0];
+  myRawP->rawPressure  <<=	 8U;
+  myRawP->rawPressure	|=	 cmd[1];
+  myRawP->rawPressure  <<=	 8U;
+  myRawP->rawPressure	|=	 cmd[2];
+
+  myRawP->rawPressure  >>=	 2U;
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BM1383AGLV_SUCCESS;
+  }
+  else
+  {
+    return   BM1383AGLV_FAILURE;
+  }
+}
+
+
+
+/**
+ * @brief       BM1383AGLV_GetRawTemperature ( I2C_parameters_t , BM1383AGLV_data_t* )
+ *
+ * @details     It gets the raw temperature.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myRawT: 	  	  Raw Temperature value.
+ *
+ *
+ * @return       Status of BM1383AGLV_GetRawTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        13/September/2019
+ * @version     13/September/2019     The ORIGIN
+ * @pre         This function uses auto-increment.
+ * @warning     N/A.
+ */
+BM1383AGLV_status_t BM1383AGLV_GetRawTemperature ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myRawT )
+{
+  uint8_t      cmd[2]  = { 0U };
+  i2c_status_t aux;
+
+  /* Read the register   */
+  cmd[0]	 =   BM1383AGLV_TEMPERATURE_MSB;
+  aux  	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+  aux    	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+  /* Parse the data	 */
+  myRawT->rawTemperature	=	 cmd[0];
+  myRawT->rawTemperature  <<=	 8U;
+  myRawT->rawTemperature   |=	 cmd[1];
+
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   BM1383AGLV_SUCCESS;
+  }
+  else
+  {
+    return   BM1383AGLV_FAILURE;
+  }
+}
