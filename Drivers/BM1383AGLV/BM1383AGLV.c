@@ -524,3 +524,77 @@ BM1383AGLV_status_t BM1383AGLV_GetRawTemperature ( I2C_parameters_t myI2Cparamet
     return   BM1383AGLV_FAILURE;
   }
 }
+
+
+
+/**
+ * @brief       BM1383AGLV_GetPressure ( I2C_parameters_t , BM1383AGLV_data_t* )
+ *
+ * @details     It gets the pressure.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myP: 	  	  	  Pressure value.
+ *
+ *
+ * @return       Status of BM1383AGLV_GetPressure.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        16/September/2019
+ * @version     16/September/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BM1383AGLV_status_t BM1383AGLV_GetPressure ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myP )
+{
+  BM1383AGLV_status_t aux;
+
+  /* Read the register   */
+  aux	 =   BM1383AGLV_GetRawPressure ( myI2Cparameters, &(*myP) );
+
+  /* Parse the data	 */
+  myP->pressure	 =	 ( ( ( ( myP->rawPressure >> 14U ) & 0xFF ) * 16384.0 ) + ( ( myP->rawPressure >> 6U ) & 0xFF ) * 64.0 );
+  myP->pressure	/=	2048.0;
+
+
+
+  return   aux;
+}
+
+
+
+/**
+ * @brief       BM1383AGLV_GetTemperature ( I2C_parameters_t , BM1383AGLV_data_t* )
+ *
+ * @details     It gets the temperature.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myT: 	  	  	  Temperature value.
+ *
+ *
+ * @return       Status of BM1383AGLV_GetTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        16/September/2019
+ * @version     16/September/2019     The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BM1383AGLV_status_t BM1383AGLV_GetTemperature ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myT )
+{
+  BM1383AGLV_status_t aux;
+
+  /* Read the register   */
+  aux	 =   BM1383AGLV_GetRawTemperature ( myI2Cparameters, &(*myT) );
+
+  /* Parse the data	 */
+  myT->temperature	 =	 ( ( ( ( myT->rawTemperature >> 8U ) & 0xFF ) * 256.0 ) + ( myT->rawTemperature & 0xFF ) );
+  myT->temperature	/=	32.0;
+
+
+
+  return   aux;
+}
