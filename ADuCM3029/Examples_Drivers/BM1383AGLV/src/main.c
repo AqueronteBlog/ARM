@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     This example shows how to work with the external device: BM1383AGLV.
+ * @details     [todo]This example shows how to work with the external device: BM1383AGLV.
  * 				A new temperature measurement is sampled every 1 second and transmitted through
  * 				the UART (115200 baud).
  *
@@ -43,8 +43,8 @@ int main(int argc, char *argv[])
 {
 	uint8_t  			 myMessage[ TX_BUFF_SIZE ];
 	I2C_parameters_t     myBM1383AGLV_I2C_parameters;
-	//BM1383AGLV_vector_data_t myBM1383AGLV_Data;
-	BM1383AGLV_status_t      aux;
+	BM1383AGLV_data_t 	 myBM1383AGLV_Data;
+	BM1383AGLV_status_t  aux;
 
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
@@ -63,18 +63,35 @@ int main(int argc, char *argv[])
 
 
 
-//	/* I2C definition   */
-//	myBM1383AGLV_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
-//	myBM1383AGLV_I2C_parameters.sda         	 =    I2C0_SDA;
-//	myBM1383AGLV_I2C_parameters.scl         	 =    I2C0_SCL;
-//	myBM1383AGLV_I2C_parameters.addr        	 =    BM1383AGLV_ADDRESS_A0_GROUND;
-//	myBM1383AGLV_I2C_parameters.freq        	 =    100000;
-//	myBM1383AGLV_I2C_parameters.pclkFrequency	 =	  6400000;
-//	myBM1383AGLV_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
-//	myBM1383AGLV_I2C_parameters.sclPort     	 =    pADI_GPIO0;
-//
-//	/* Configure I2C peripheral */
-//	aux  =   BM1383AGLV_Init ( myBM1383AGLV_I2C_parameters );
+	/* I2C definition   */
+	myBM1383AGLV_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
+	myBM1383AGLV_I2C_parameters.sda         	 =    I2C0_SDA;
+	myBM1383AGLV_I2C_parameters.scl         	 =    I2C0_SCL;
+	myBM1383AGLV_I2C_parameters.addr        	 =    BM1383AGLV_ADDRESS;
+	myBM1383AGLV_I2C_parameters.freq        	 =    100000;
+	myBM1383AGLV_I2C_parameters.pclkFrequency	 =	  6400000;
+	myBM1383AGLV_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
+	myBM1383AGLV_I2C_parameters.sclPort     	 =    pADI_GPIO0;
+
+	/* Configure I2C peripheral */
+	aux  =   BM1383AGLV_Init ( myBM1383AGLV_I2C_parameters );
+
+	/* Get device IDs	 */
+	aux	 =	 BM1383AGLV_GetDeviceID ( myBM1383AGLV_I2C_parameters, &myBM1383AGLV_Data );
+
+	/* Configure the device: 2 samples | DRDY pin disabled | One-shot mode	 */
+	myBM1383AGLV_Data.ave_num	 =	 MODE_CONTROL_AVE_NUM_AVERAGE_2;
+	myBM1383AGLV_Data.dren		 =	 MODE_CONTROL_DREN_DRDY_DISABLE;
+	myBM1383AGLV_Data.mode		 =	 MODE_CONTROL_MODE_ONE_SHOT;
+	aux	 =	 BM1383AGLV_SetModeControl ( myBM1383AGLV_I2C_parameters, myBM1383AGLV_Data );
+
+	/* Measurement control block is ACTIVE	 */
+	myBM1383AGLV_Data.rstb	 =	 RESET_RSTB_ACTIVE;
+	aux	 =	 BM1383AGLV_SetSoftReset ( myBM1383AGLV_I2C_parameters, myBM1383AGLV_Data );
+
+	/* Device in Active mode	 */
+	myBM1383AGLV_Data.pwr_down	 =	 POWER_DOWN_PWR_DOWN_ACTIVE;
+	aux	 =	 BM1383AGLV_SetPowerDown ( myBM1383AGLV_I2C_parameters, myBM1383AGLV_Data );
 
 
 
@@ -107,22 +124,22 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-//			/* New reading */
-//			aux  =   BM1383AGLV_TriggerSingleTemperatureConversion ( myBM1383AGLV_I2C_parameters );
-//
-//			/* Wait until the conversion is finished    */
-//			do
-//			{
-//				aux      =   BM1383AGLV_ReadConfigurationRegister ( myBM1383AGLV_I2C_parameters, &myBM1383AGLV_Data );
-//			}while( ( myBM1383AGLV_Data.ConfigurationRegister & BM1383AGLV_CONFIGURATION_OS_MASK ) == BM1383AGLV_CONFIGURATION_OS_BUSY );   // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
-//			                                                                                                                    // [WORKAROUND] Insert a counter.
-//
-//			/* Read the new temperature value */
-//			aux  =   BM1383AGLV_GetTemperature ( myBM1383AGLV_I2C_parameters, &myBM1383AGLV_Data );
-//
-//
-//			/* Transmit data through the UART	 */
-//			sprintf ( (char*)myMessage, "T: %0.4f C\r\n", myBM1383AGLV_Data.Temperature );
+			/* Wait until the conversion is finished    */
+			do
+			{
+				aux      =   BM1383AGLV_GetStatus ( myBM1383AGLV_I2C_parameters, &myBM1383AGLV_Data );
+			}while( ( myBM1383AGLV_Data.rd_drdy & STATUS_RD_DRDY_MASK ) == STATUS_RD_DRDY_DATA_MEASURING );   // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
+						                                                                                      // [WORKAROUND] Insert a counter.
+
+			/* Get pressure */
+			aux  =   BM1383AGLV_GetPressure ( myBM1383AGLV_I2C_parameters, &myBM1383AGLV_Data );
+
+			/* Get temperature	 */
+			aux  =   BM1383AGLV_GetTemperature ( myBM1383AGLV_I2C_parameters, &myBM1383AGLV_Data );
+
+
+			/* Transmit data through the UART	 */
+			sprintf ( (char*)myMessage, "P: %0.2f hPa | T: %0.2f C\r\n", myBM1383AGLV_Data.pressure, myBM1383AGLV_Data.temperature );
 
 			/* Check that is safe to send data	 */
 			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
