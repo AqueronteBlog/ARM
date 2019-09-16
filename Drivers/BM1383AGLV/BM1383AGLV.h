@@ -237,3 +237,11 @@ BM1383AGLV_status_t BM1383AGLV_GetRawPressure     ( I2C_parameters_t myI2Cparame
 /** It gets the raw temperature.
   */
 BM1383AGLV_status_t BM1383AGLV_GetRawTemperature  ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myRawT		);
+
+/** It gets the pressure.
+  */
+BM1383AGLV_status_t BM1383AGLV_GetPressure     	  ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myP		);
+
+/** It gets the temperature.
+  */
+BM1383AGLV_status_t BM1383AGLV_GetTemperature  	  ( I2C_parameters_t myI2Cparameters, BM1383AGLV_data_t* myT		);
