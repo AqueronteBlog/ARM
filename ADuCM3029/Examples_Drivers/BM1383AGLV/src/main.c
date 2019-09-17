@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
  * @details     [todo]This example shows how to work with the external device: BM1383AGLV.
- * 				A new temperature measurement is sampled every 1 second and transmitted through
+ * 				A new temperature and pressure measurement is sampled every 1 second and transmitted through
  * 				the UART (115200 baud).
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
@@ -79,11 +79,9 @@ int main(int argc, char *argv[])
 	/* Get device IDs	 */
 	aux	 =	 BM1383AGLV_GetDeviceID ( myBM1383AGLV_I2C_parameters, &myBM1383AGLV_Data );
 
-	/* Configure the device: 2 samples | DRDY pin disabled | One-shot mode	 */
-	myBM1383AGLV_Data.ave_num	 =	 MODE_CONTROL_AVE_NUM_AVERAGE_2;
+	/* Configure the device: 1 sample | DRDY pin disabled | One-shot mode	 */
+	myBM1383AGLV_Data.ave_num	 =	 MODE_CONTROL_AVE_NUM_SINGLE;
 	myBM1383AGLV_Data.dren		 =	 MODE_CONTROL_DREN_DRDY_DISABLE;
-	myBM1383AGLV_Data.mode		 =	 MODE_CONTROL_MODE_ONE_SHOT;
-	aux	 =	 BM1383AGLV_SetModeControl ( myBM1383AGLV_I2C_parameters, myBM1383AGLV_Data );
 
 	/* Measurement control block is ACTIVE	 */
 	myBM1383AGLV_Data.rstb	 =	 RESET_RSTB_ACTIVE;
@@ -92,7 +90,6 @@ int main(int argc, char *argv[])
 	/* Device in Active mode	 */
 	myBM1383AGLV_Data.pwr_down	 =	 POWER_DOWN_PWR_DOWN_ACTIVE;
 	aux	 =	 BM1383AGLV_SetPowerDown ( myBM1383AGLV_I2C_parameters, myBM1383AGLV_Data );
-
 
 
 	/* Enable Timer0	 */
@@ -123,6 +120,10 @@ int main(int argc, char *argv[])
 			/* Turn both LEDs on	 */
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
+
+			/* Trigegr a new sample	 */
+			myBM1383AGLV_Data.mode		 =	 MODE_CONTROL_MODE_ONE_SHOT;
+			aux	 =	 BM1383AGLV_SetModeControl ( myBM1383AGLV_I2C_parameters, myBM1383AGLV_Data );
 
 			/* Wait until the conversion is finished    */
 			do
