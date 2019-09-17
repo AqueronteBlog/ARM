@@ -441,7 +441,8 @@ BM1383AGLV_status_t BM1383AGLV_GetStatus ( I2C_parameters_t myI2Cparameters, BM1
  *
  * @author      Manuel Caballero
  * @date        13/September/2019
- * @version     13/September/2019     The ORIGIN
+ * @version     17/September/2019     No need to manipulate the bits.
+ * 				13/September/2019     The ORIGIN
  * @pre         This function uses auto-increment.
  * @warning     N/A.
  */
@@ -462,7 +463,7 @@ BM1383AGLV_status_t BM1383AGLV_GetRawPressure ( I2C_parameters_t myI2Cparameters
   myRawP->rawPressure  <<=	 8U;
   myRawP->rawPressure	|=	 cmd[2];
 
-  myRawP->rawPressure  >>=	 2U;
+  //myRawP->rawPressure  >>=	 2U;
 
 
 
@@ -542,7 +543,8 @@ BM1383AGLV_status_t BM1383AGLV_GetRawTemperature ( I2C_parameters_t myI2Cparamet
  *
  * @author      Manuel Caballero
  * @date        16/September/2019
- * @version     16/September/2019     The ORIGIN
+ * @version     17/September/2019     The pressure is calculated correctly now.
+ * 				16/September/2019     The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -554,7 +556,7 @@ BM1383AGLV_status_t BM1383AGLV_GetPressure ( I2C_parameters_t myI2Cparameters, B
   aux	 =   BM1383AGLV_GetRawPressure ( myI2Cparameters, &(*myP) );
 
   /* Parse the data	 */
-  myP->pressure	 =	 ( ( ( ( myP->rawPressure >> 14U ) & 0xFF ) * 16384.0 ) + ( ( myP->rawPressure >> 6U ) & 0xFF ) * 64.0 );
+  myP->pressure	 =	 ( ( ( ( myP->rawPressure >> 16U ) & 0xFF ) * 16384.0 ) + ( ( myP->rawPressure >> 8U ) & 0xFF ) * 64.0 ) + ( myP->rawPressure & 0xFF );
   myP->pressure	/=	2048.0;
 
 
