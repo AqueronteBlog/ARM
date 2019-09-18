@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the external device: BM1383AGLV.
+ * @details     This example shows how to work with the external device: BM1383AGLV.
  * 				A new temperature and pressure measurement is sampled every 1 second and transmitted through
  * 				the UART (115200 baud).
  *
