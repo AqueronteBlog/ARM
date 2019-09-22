@@ -27,7 +27,7 @@ extern "C" {
  */
 void conf_CLK    ( void );
 void conf_GPIO   ( void );
-void conf_UART   ( void );
+void conf_BEEP   ( void );
 
 
 
