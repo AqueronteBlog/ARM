@@ -148,7 +148,8 @@ void conf_GPIO  ( void )
  *
  * @author      Manuel Caballero
  * @date        21/September/2019
- * @version     21/September/2019      The ORIGIN
+ * @version     23/September/2019      This funtion is ready to be tested.
+ * 				21/September/2019      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -157,6 +158,8 @@ void conf_BEEP  ( void )
 	/* Disable Beep	 */
 	pADI_BEEP0->CFG	&=	~( 1U << BITP_BEEP_CFG_EN );
 
+	pADI_BEEP0->TONEA	&=	~( ( 0b1111111 << BITP_BEEP_TONEA_FREQ ) | ( 0xFF << BITP_BEEP_TONEA_DUR ) );
+	pADI_BEEP0->TONEA	|=	 ( (0x20 << BITP_BEEP_TONEA_FREQ ) | ( 0xFA << BITP_BEEP_TONEA_DUR ) );
 
 
 	/* Enable Beep	 */
