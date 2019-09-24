@@ -33,7 +33,6 @@
 
 
 
-
 /**@brief Function for application main entry.
  */
 int main(int argc, char *argv[])
