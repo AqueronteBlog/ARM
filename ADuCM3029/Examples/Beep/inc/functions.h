@@ -28,7 +28,7 @@ extern "C" {
 void conf_CLK    ( void );
 void conf_GPIO   ( void );
 void conf_BEEP   ( void );
-
+void conf_Timer0 ( void );
 
 
 /**@brief Constants.
