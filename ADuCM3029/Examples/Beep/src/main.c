@@ -1,8 +1,7 @@
 /**
  * @brief       main.c
  * @details     [todo]This example shows how to work with the internal peripheral: BEEP.
- * 				If '1' is received, LED1 is turned on, if '2' is received, the LED2 is turned on.
- * 				A message will be transmitted back, any other value will turn both LEDs off.
+ * 				Every 1s a new beep is generated with duration of 100ms.
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
  *
@@ -30,7 +29,7 @@
 
 /**@brief Variables.
  */
-
+volatile uint32_t myState	 =	 0UL;
 
 
 /**@brief Function for application main entry.
@@ -48,10 +47,13 @@ int main(int argc, char *argv[])
 	SystemInit ();
 
 
-	conf_CLK  ();
-	conf_GPIO ();
-	conf_BEEP ();
+	conf_CLK    ();
+	conf_GPIO   ();
+	conf_BEEP   ();
+	conf_Timer0 ();
 
+	/* Enable Timer0	 */
+	pADI_TMR0->CTL	|=	 ( 1U << BITP_TMR_CTL_EN );
 
 	while ( 1 )
 	{
@@ -72,7 +74,14 @@ int main(int argc, char *argv[])
 		/* Enter in low power Flexi mode	 */
 		__WFI();
 
+		if ( myState == 1UL )
+		{
+			/* Enable Beep	 */
+			pADI_BEEP0->CFG	|=	 ( 1U << BITP_BEEP_CFG_EN );
 
+			/* Reset state	 */
+			myState	 =	 0UL;
+		}
 	}
 
 	/* It should never reach here	 */
