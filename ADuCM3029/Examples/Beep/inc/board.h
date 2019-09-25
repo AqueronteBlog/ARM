@@ -50,6 +50,14 @@ typedef enum{
 } ADICUP3029_board_uart_t;
 
 
+/**@brief BEEP.
+ */
+typedef enum{
+  BEEP_POS  = (uint16_t)( 1U << 8U ),	/*!<   UART_TX: P0_08   				*/
+  BEEP_NEG  = (uint16_t)( 1U << 9U )	/*!<   UART_RX: P0_09   				*/
+} ADICUP3029_board_beep_t;
+
+
 #ifdef __cplusplus
 }
 #endif
