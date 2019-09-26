@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the internal peripheral: BEEP.
+ * @details     This example shows how to work with the internal peripheral: BEEP.
  * 				Every 1s a new beep is generated with duration of 100ms.
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
