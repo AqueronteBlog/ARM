@@ -37,6 +37,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "variables.h"
+#include "functions.h"
+#include "interrupts.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -61,7 +65,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint32_t myDelay;              				/*!<  Delay                        */
+uint32_t mySystemCoreClock;					/*!<  System CLK in MHz  		   */
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
