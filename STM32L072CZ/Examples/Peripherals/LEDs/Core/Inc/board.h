@@ -21,7 +21,10 @@
 */
 typedef enum
 {
-    LED1         =   5              /*!<  PA_5                        */
+    LD1         =   5,             /*!<  PB_5                        */
+	LD2         =   5,             /*!<  PA_5                        */
+	LD3         =   6,             /*!<  PB_6                        */
+	LD4         =   7              /*!<  PB_7                        */
 } B_L072Z_LRWAN1_leds_t;
 
 
