@@ -1,10 +1,8 @@
 /* USER CODE BEGIN Header */
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the digital-to-analog converter ( DAC ). A triangular wave form is created
- * 				with a period of 860ms ( The DAC's frequency is controlled by the RTC ). The LED1 is connected to the DAC's output.
- *
- * 				The microcontroller will remain in low power the rest of the time.
+ * @details     This example shows how to work with the GPIO peripheral as an output. LD1, LD2, LD3 and LED4 change their
+ * 				state every 1s.
  *
  *
  * @return      N/A
@@ -65,8 +63,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint32_t myDelay;              				/*!<  Delay                        */
-uint32_t mySystemCoreClock;					/*!<  System CLK in MHz  		   */
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -109,6 +106,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
+  Conf_GPIO ();
+
 
   /* USER CODE END 2 */
 
@@ -116,6 +115,19 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  /* Delay of 500ms	 */
+	  HAL_Delay ( 500 );
+
+	  /* Turn on all the LEDs	 */
+	  GPIOB->BSRR	|=	 ( GPIO_BSRR_BS_5 | GPIO_BSRR_BS_6 | GPIO_BSRR_BS_7 );
+	  GPIOA->BSRR	|=	 GPIO_BSRR_BS_5;
+
+	  /* Delay of 500ms	 */
+	  HAL_Delay ( 500 );
+
+	  /* Turn off all the LEDs	 */
+	  GPIOB->BRR	|=	( GPIO_BRR_BR_5 | GPIO_BRR_BR_6 | GPIO_BRR_BR_7 );
+	  GPIOA->BRR	|=	 GPIO_BRR_BR_5;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
