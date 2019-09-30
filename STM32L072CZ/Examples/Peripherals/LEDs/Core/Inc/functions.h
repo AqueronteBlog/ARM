@@ -19,9 +19,7 @@
 
 /**@brief Functions prototypes.
  */
-void Conf_CLK  	   ( void );
 void Conf_GPIO 	   ( void );
-void Conf_SYSTICK  ( uint32_t myticks );
 
 
 
