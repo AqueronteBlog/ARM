@@ -35,13 +35,12 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "variables.h"
-#include "functions.h"
-#include "interrupts.h"
-
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "variables.h"
+#include "functions.h"
+#include "interrupts.h"
 
 /* USER CODE END Includes */
 
@@ -52,6 +51,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define SYSTEM_CORE_CLK		2097000U
+#define TIMER_TIM2__CLK		SYSTEM_CORE_CLK
 
 /* USER CODE END PD */
 
@@ -106,28 +107,16 @@ int main(void)
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
-  Conf_GPIO ();
-
+  Conf_GPIO 	 ();
+  Conf_TimerTIM2 ( TIMER_TIM2__CLK );
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  TIM2->CR1	|=	 TIM_CR1_CEN;		// Enable Timer TIM2
   while (1)
   {
-	  /* Delay of 500ms	 */
-	  HAL_Delay ( 500 );
-
-	  /* Turn on all the LEDs	 */
-	  GPIOB->BSRR	|=	 ( GPIO_BSRR_BS_5 | GPIO_BSRR_BS_6 | GPIO_BSRR_BS_7 );
-	  GPIOA->BSRR	|=	 GPIO_BSRR_BS_5;
-
-	  /* Delay of 500ms	 */
-	  HAL_Delay ( 500 );
-
-	  /* Turn off all the LEDs	 */
-	  GPIOB->BRR	|=	( GPIO_BRR_BR_5 | GPIO_BRR_BR_6 | GPIO_BRR_BR_7 );
-	  GPIOA->BRR	|=	 GPIO_BRR_BR_5;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -149,9 +138,10 @@ void SystemClock_Config(void)
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI;
+  RCC_OscInitStruct.MSIState = RCC_MSI_ON;
+  RCC_OscInitStruct.MSICalibrationValue = 0;
+  RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_5;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -161,7 +151,7 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_MSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
