@@ -11,7 +11,7 @@
  * @pre         N/A
  * @warning     N/A
  */
-#include "variables.h"
+#include "board.h"
 
 
 #ifndef INTERRUPTS_H_
@@ -20,7 +20,7 @@
 
 /**@brief Subroutine prototypes.
  */
-
+extern void TIM2_IRQHandler (void);
 
 
 /**@brief Constants.
