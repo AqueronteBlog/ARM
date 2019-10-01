@@ -14,13 +14,13 @@
 #ifndef FUNCTIONS_H_
 #define FUNCTIONS_H_
 
-#include "stm32l0xx_hal.h"
+#include "board.h"
 
 
 /**@brief Functions prototypes.
  */
-void Conf_GPIO 	   ( void );
-
+void Conf_GPIO 	    ( void 			 );
+void Conf_TimerTIM2 ( uint32_t myCLK );
 
 
 #endif /* FUNCTIONS_H_ */
