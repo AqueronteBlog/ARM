@@ -11,10 +11,11 @@
  * @pre         N/A
  * @warning     N/A
  */
+#include "stm32l0xx_hal.h"
+
 
 #ifndef BOARD_H_
 #define BOARD_H_
-
 
 /**
   * @brief   LEDs
