@@ -109,6 +109,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Conf_GPIO 	 ();
   Conf_TimerTIM2 ( TIMER_TIM2__CLK );
+  Conf_TimerTIM6 ( TIMER_TIM2__CLK );
 
   /* USER CODE END 2 */
 
