@@ -142,3 +142,64 @@ void Conf_TimerTIM2 ( uint32_t myCLK )
 	 */
 	TIM2->CR1	|=	 ( TIM_CR1_ARPE | TIM_CR1_URS | TIM_CR1_DIR );
 }
+
+
+
+/**
+ * @brief       void Conf_TimerTIM6 ( uint32_t )
+ * @details     It configures basic timer TIM6.
+ *
+ *				-TIM6:
+ * 					-- f_TIM6 = myCLK / ( PSC + 1 ) = 2.097MHz / ( 1998 + 1 ) ~ 1.049 kHz
+ * 					-- Interrupt ENABLED.
+ * 					-- Overflow: Every 2 second ( ARR / f_TIM6 ) = ( 2098 / 1049 ) ~ 2s
+ * 						--- Prescaler = 1999 - 1 = 1998.
+ * 						--- ARR = 2098.
+ *
+ * @param[in]    myCLK:	Timer TIM6 clock.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        02/October/2019
+ * @version		02/October/2019   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void Conf_TimerTIM6 ( uint32_t myCLK )
+{
+	/* Timer TIM6 clock enable	 */
+	RCC->APB1ENR	|=	 RCC_APB1ENR_TIM6EN;
+
+	/* Timer TIM2:
+	 * 	- Disable timer TIM6
+	 * 	- Counter is not stopped at update event
+	 * 	- UEV enabled
+	 */
+	TIM6->CR1	&=	~( TIM_CR1_CEN | TIM_CR1_OPM | TIM_CR1_UDIS );
+
+	/* Reset counter	 */
+	TIM6->CNT	 =	 (uint16_t)0U;
+	TIM6->PSC	 =	 (uint16_t)( 1999 - 1U );						// Prescaler = 1998
+	TIM6->ARR	 =	 (uint16_t)( myCLK / ( TIM2->PSC + 1U ) );		// Overflow every ~ 2s: f_Timer TIM6: myCLK / ( PSC + 1 ) = 2.097MHz / ( 1998 + 1 ) = 1.049 kHz )
+
+	/* Clear Update interrupt flag	 */
+	TIM6->SR	&=	~( TIM_SR_UIF );
+
+	/* Enable Interrupt	 */
+	NVIC_SetPriority ( TIM6_IRQn, 1 ); 								// Set Priority to 1
+	NVIC_EnableIRQ   ( TIM6_IRQn );  								// Enable TIM6_IRQn interrupt in NVIC
+
+	/* Update interrupt enable	 */
+	TIM6->DIER	|=	 ( TIM_DIER_UIE );
+
+	/* Timer TIM6:
+	 * 	- Auto-reload preload enable
+	 * 	- Only counter overflow/underflow generates an update interrupt
+	 */
+	TIM6->CR1	|=	 ( TIM_CR1_ARPE | TIM_CR1_URS );
+}

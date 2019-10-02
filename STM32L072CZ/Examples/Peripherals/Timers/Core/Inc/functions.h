@@ -21,6 +21,7 @@
  */
 void Conf_GPIO 	    ( void 			 );
 void Conf_TimerTIM2 ( uint32_t myCLK );
+void Conf_TimerTIM6 ( uint32_t myCLK );
 
 
 #endif /* FUNCTIONS_H_ */
