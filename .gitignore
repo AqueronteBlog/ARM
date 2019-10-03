@@ -93,3 +93,4 @@ NRF52/Examples/examples/Drivers/BME280/pca10040/s132/ses/Output/
 ADuCM3029/Examples_Drivers/BM1383AGLV/Debug/
 STM32L072CZ/Examples/Peripherals/LEDs/Debug/
 STM32L072CZ/Examples/Peripherals/Timers/Debug/
+STM32L072CZ/Examples/Peripherals/LPTIM/Debug/
