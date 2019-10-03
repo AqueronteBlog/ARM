@@ -1,8 +1,10 @@
 /* USER CODE BEGIN Header */
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the GPIO peripheral as an output. LD1, LD2, LD3 and LED4 change their
- * 				state every 1s.
+ * @details     This example shows how to work with the Timer peripherals.
+ * 					LED1: Every   1s	( TIM2, interrupt mode ).
+ * 					LED2: Every   2s	( TIM6, interrupt mode ).
+ * 					LED3: Every 0.5s	( TIM7, polling mode ).
  *
  *
  * @return      N/A
@@ -52,7 +54,9 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define SYSTEM_CORE_CLK		2097000U
-#define TIMER_TIM2__CLK		SYSTEM_CORE_CLK
+#define TIMER_TIM2_CLK		SYSTEM_CORE_CLK
+#define TIMER_TIM6_CLK		SYSTEM_CORE_CLK
+#define TIMER_TIM7_CLK		SYSTEM_CORE_CLK
 
 /* USER CODE END PD */
 
@@ -108,16 +112,35 @@ int main(void)
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
   Conf_GPIO 	 ();
-  Conf_TimerTIM2 ( TIMER_TIM2__CLK );
-  Conf_TimerTIM6 ( TIMER_TIM2__CLK );
+  Conf_TimerTIM2 ( TIMER_TIM2_CLK );
+  Conf_TimerTIM6 ( TIMER_TIM6_CLK );
+  Conf_TimerTIM7 ( TIMER_TIM7_CLK );
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   TIM2->CR1	|=	 TIM_CR1_CEN;		// Enable Timer TIM2
+  TIM6->CR1	|=	 TIM_CR1_CEN;		// Enable Timer TIM6
+  TIM7->CR1	|=	 TIM_CR1_CEN;		// Enable Timer TIM7
   while (1)
   {
+	  /* Wait until TIM7 overflows	 */
+	  while ( ( TIM7->SR & TIM_SR_UIF_Msk ) != TIM_SR_UIF );
+	  /* Clear flag	 */
+	  TIM7->SR	&=	~TIM_SR_UIF;
+
+	  /* Check last status of the LED3	 */
+	  if ( ( GPIOB->ODR & ( 1 << LD3 ) ) == ( 1 << LD3 ) )
+	  {
+		  GPIOB->BRR	=	( 1 << LD3 );		// Turn it OFF
+	  }
+	  else
+	  {
+		  GPIOB->BSRR	=	( 1 << LD3 );		// Turn it ON
+	  }
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
