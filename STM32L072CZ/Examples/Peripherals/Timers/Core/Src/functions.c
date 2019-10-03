@@ -122,8 +122,8 @@ void Conf_TimerTIM2 ( uint32_t myCLK )
 
 	/* Reset counter	 */
 	TIM2->CNT	 =	 (uint16_t)0U;
-	TIM2->PSC	 =	 (uint16_t)( 1000U - 1U );						// Prescaler = 999
-	TIM2->ARR	 =	 (uint16_t)( myCLK / ( TIM2->PSC + 1U ) );		// Overflow every ~ 1s: f_Timer TIM2: myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz )
+	TIM2->PSC	 =	 (uint16_t)( 1000U - 1U );									// Prescaler = 999
+	TIM2->ARR	 =	 (uint16_t)( 1 * ( myCLK / ( TIM2->PSC + 1U ) ) + 0.5 );	// Overflow every ~ 1s: f_Timer TIM2: myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz )
 
 	/* Clear Update interrupt flag	 */
 	TIM2->SR	&=	~( TIM_SR_UIF );
@@ -175,7 +175,7 @@ void Conf_TimerTIM6 ( uint32_t myCLK )
 	/* Timer TIM6 clock enable	 */
 	RCC->APB1ENR	|=	 RCC_APB1ENR_TIM6EN;
 
-	/* Timer TIM2:
+	/* Timer TIM6:
 	 * 	- Disable timer TIM6
 	 * 	- Counter is not stopped at update event
 	 * 	- UEV enabled
@@ -184,8 +184,8 @@ void Conf_TimerTIM6 ( uint32_t myCLK )
 
 	/* Reset counter	 */
 	TIM6->CNT	 =	 (uint16_t)0U;
-	TIM6->PSC	 =	 (uint16_t)( 1999 - 1U );						// Prescaler = 1998
-	TIM6->ARR	 =	 (uint16_t)( myCLK / ( TIM2->PSC + 1U ) );		// Overflow every ~ 2s: f_Timer TIM6: myCLK / ( PSC + 1 ) = 2.097MHz / ( 1998 + 1 ) = 1.049 kHz )
+	TIM6->PSC	 =	 (uint16_t)( 1999 - 1U );									// Prescaler = 1998
+	TIM6->ARR	 =	 (uint16_t)( 2 * ( myCLK / ( TIM6->PSC + 1U ) ) + 0.5 );	// Overflow every ~ 2s: f_Timer TIM6: myCLK / ( PSC + 1 ) = 2.097MHz / ( 1998 + 1 ) = 1.049 kHz )
 
 	/* Clear Update interrupt flag	 */
 	TIM6->SR	&=	~( TIM_SR_UIF );
@@ -202,4 +202,61 @@ void Conf_TimerTIM6 ( uint32_t myCLK )
 	 * 	- Only counter overflow/underflow generates an update interrupt
 	 */
 	TIM6->CR1	|=	 ( TIM_CR1_ARPE | TIM_CR1_URS );
+}
+
+
+
+/**
+ * @brief       void Conf_TimerTIM7 ( uint32_t )
+ * @details     It configures basic timer TIM7.
+ *
+ *				-TIM7:
+ * 					-- f_TIM7 = myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) ~ 2.097 kHz
+ * 					-- Interrupt DISABLED.
+ * 					-- Overflow: Every 0.5 second ( ARR / f_TIM6 ) = ( 1049 / 2097 ) ~ 0.5s
+ * 						--- Prescaler = 1000 - 1 = 999.
+ * 						--- ARR = 1049.
+ *
+ * @param[in]    myCLK:	Timer TIM7 clock.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        03/October/2019
+ * @version		03/October/2019   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void Conf_TimerTIM7 ( uint32_t myCLK )
+{
+	/* Timer TIM7 clock enable	 */
+	RCC->APB1ENR	|=	 RCC_APB1ENR_TIM7EN;
+
+	/* Timer TIM7:
+	 * 	- Disable timer TIM7
+	 * 	- Counter is not stopped at update event
+	 * 	- UEV enabled
+	 */
+	TIM7->CR1	&=	~( TIM_CR1_CEN | TIM_CR1_OPM | TIM_CR1_UDIS );
+
+	/* Reset counter	 */
+	TIM7->CNT	 =	 (uint16_t)0U;
+	TIM7->PSC	 =	 (uint16_t)( 1000 - 1U );									// Prescaler = 999
+	TIM7->ARR	 =	 (uint16_t)( 0.5 * ( myCLK / ( TIM7->PSC + 1U ) ) + 0.5 );	// Overflow every ~ 0.5s: f_Timer TIM7: myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz )
+
+	/* Clear Update interrupt flag	 */
+	TIM7->SR	&=	~( TIM_SR_UIF );
+
+	/* Update interrupt disabled	 */
+	TIM7->DIER	&=	~( TIM_DIER_UIE );
+
+	/* Timer TIM7:
+	 * 	- Auto-reload preload enable
+	 * 	- Only counter overflow/underflow generates an update interrupt
+	 */
+	TIM7->CR1	|=	 ( TIM_CR1_ARPE | TIM_CR1_URS );
 }
