@@ -109,8 +109,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
-  Conf_GPIO 	 ();
-  Conf_TimerTIM2 ( TIMER_TIM2_CLK );
+  Conf_GPIO  ();
+  Conf_LPTIM ( TIMER_TIM2_CLK );
 
   /* USER CODE END 2 */
 
