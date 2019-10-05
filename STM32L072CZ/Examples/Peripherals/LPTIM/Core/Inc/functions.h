@@ -19,10 +19,9 @@
 
 /**@brief Functions prototypes.
  */
-void Conf_GPIO 	    ( void 			 );
-void Conf_TimerTIM2 ( uint32_t myCLK );
-void Conf_TimerTIM6 ( uint32_t myCLK );
-void Conf_TimerTIM7 ( uint32_t myCLK );
+void Conf_CLK 	( void 			 );
+void Conf_GPIO 	( void 			 );
+void Conf_LPTIM ( uint32_t myCLK );
 
 
 #endif /* FUNCTIONS_H_ */

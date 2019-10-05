@@ -16,6 +16,31 @@
 #include "functions.h"
 
 /**
+ * @brief       void Conf_CLK ( void )
+ * @details     It configures the CLKs.
+ * 					- LPTIM: LSI
+ *
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        05/October/2019
+ * @version		05/October/2019   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void Conf_CLK ( void )
+{
+	/* LPTIM: LSI	 */
+	RCC->CCIPR	&=	 ~( RCC_CCIPR_LPUART1SEL );
+	RCC->CCIPR	|=	  ( RCC_CCIPR_LPUART1SEL_0 );
+
+}
+
+
+
+/**
  * @brief       void Conf_GPIO ( void )
  * @details     It configures GPIO to work with the LEDs.
  *
@@ -76,8 +101,8 @@ void Conf_GPIO ( void )
 
 
 /**
- * @brief       void Conf_TimerTIM2 ( uint32_t )
- * @details     It configures timer TIM2.
+ * @brief       void Conf_LPTIM ( uint32_t )
+ * @details     [TODO]It configures timer TIM2.
  *
  *				-TIM2:
  * 					-- f_TIM2 = myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz
@@ -101,19 +126,15 @@ void Conf_GPIO ( void )
  * @pre         N/A
  * @warning     N/A
  */
-void Conf_TimerTIM2 ( uint32_t myCLK )
+void Conf_LPTIM ( uint32_t myCLK )
 {
-	/* Timer TIM2 clock enable	 */
-	RCC->APB1ENR	|=	 RCC_APB1ENR_TIM2EN;
+	/* Low-power Timer LPTIM clock enable	 */
+	RCC->APB1ENR	|=	 RCC_APB1ENR_LPTIM1EN;
 
-	/* Timer TIM2:
-	 * 	- Disable timer TIM2
-	 * 	- Clock division: t_DTS = t_CK_INT
-	 * 	- Edge-aligned mode
-	 * 	- Counter is not stopped at update event
-	 * 	- UEV enabled
+	/* Timer LPTIM:
+	 * 	- Disable timer LPTIM
 	 */
-	TIM2->CR1	&=	~( TIM_CR1_CEN | TIM_CR1_CKD | TIM_CR1_CMS | TIM_CR1_DIR | TIM_CR1_OPM | TIM_CR1_UDIS );
+	LPTIM1->CR	&=	~( LPTIM_CR_ENABLE );
 
 	/* Timer TIM2:
 	 *  - Master mode
@@ -129,16 +150,14 @@ void Conf_TimerTIM2 ( uint32_t myCLK )
 	TIM2->SR	&=	~( TIM_SR_UIF );
 
 	/* Enable Interrupt	 */
-	NVIC_SetPriority ( TIM2_IRQn, 1 ); 								// Set Priority to 1
-	NVIC_EnableIRQ   ( TIM2_IRQn );  								// Enable TIM2_IRQn interrupt in NVIC
+	NVIC_SetPriority ( LPTIM1_IRQn, 1 ); 							// Set Priority to 1
+	NVIC_EnableIRQ   ( LPTIM1_IRQn );  								// Enable LPTIM1_IRQn interrupt in NVIC
 
 	/* Update interrupt enable	 */
 	TIM2->DIER	|=	 ( TIM_DIER_UIE );
 
-	/* Timer TIM2:
-	 * 	- Auto-reload preload enable
-	 * 	- Only counter overflow/underflow generates an update interrupt
-	 * 	- Counter used as downcounter
+	/* Low-power Timer LPTIM:
+	 * 	- Enabled
 	 */
-	TIM2->CR1	|=	 ( TIM_CR1_ARPE | TIM_CR1_URS | TIM_CR1_DIR );
+	LPTIM1->CR	|=	 ( LPTIM_CR_ENABLE );
 }
