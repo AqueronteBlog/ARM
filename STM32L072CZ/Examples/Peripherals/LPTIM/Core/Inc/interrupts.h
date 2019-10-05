@@ -20,8 +20,8 @@
 
 /**@brief Subroutine prototypes.
  */
-extern void TIM2_IRQHandler (void);
-extern void TIM6_IRQHandler (void);
+extern void LPTIM_IRQHandler (void);
+
 
 /**@brief Constants.
  */

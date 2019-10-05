@@ -14,8 +14,8 @@
 
 
 /**
- * @brief       void TIM2_IRQHandler ()
- * @details     [todo]If TIM2 happens, change the status of the LED1 then.
+ * @brief       void LPTIM_IRQHandler ()
+ * @details     [todo]If LPTIM happens, change the status of the LED1 then.
  *
  *
  * @return      N/A
@@ -26,7 +26,7 @@
  * @pre         N/A.
  * @warning     N/A
  */
-void TIM2_IRQHandler(void)
+void LPTIM_IRQHandler(void)
 {
 	if ( ( TIM2->SR & TIM_SR_UIF_Msk ) == TIM_SR_UIF )
     {
