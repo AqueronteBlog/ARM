@@ -35,7 +35,6 @@ void Conf_CLK ( void )
 	/* LPTIM: LSI	 */
 	RCC->CCIPR	&=	 ~( RCC_CCIPR_LPUART1SEL );
 	RCC->CCIPR	|=	  ( RCC_CCIPR_LPUART1SEL_0 );
-
 }
 
 
