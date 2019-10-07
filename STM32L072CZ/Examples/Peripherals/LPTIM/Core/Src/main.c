@@ -109,6 +109,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
+  Conf_CLK	 ();
   Conf_GPIO  ();
   Conf_LPTIM ( TIMER_TIM2_CLK );
 
@@ -116,7 +117,9 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  TIM2->CR1	|=	 TIM_CR1_CEN;		// Enable Timer TIM2
+  LPTIM1->CR	|=	 ( LPTIM_CR_ENABLE );		// Enable Timer LPTIM
+  LPTIM1->ARR	 =	 (uint16_t)32768;
+  LPTIM1->CR	|=	 ( LPTIM_CR_CNTSTRT );		// Enable Timer LPTIM
   while (1)
   {
     /* USER CODE END WHILE */
