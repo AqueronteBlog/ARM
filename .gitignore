@@ -94,3 +94,4 @@ ADuCM3029/Examples_Drivers/BM1383AGLV/Debug/
 STM32L072CZ/Examples/Peripherals/LEDs/Debug/
 STM32L072CZ/Examples/Peripherals/Timers/Debug/
 STM32L072CZ/Examples/Peripherals/LPTIM/Debug/
+*.launch
