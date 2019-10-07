@@ -32,6 +32,12 @@
  */
 void Conf_CLK ( void )
 {
+	/* LSI enabled	 */
+	RCC->CSR	|=	 ( RCC_CSR_LSION );
+
+	/* Wait until LSI is ready	 */
+	while ( ( RCC->CSR & RCC_CSR_LSIRDY_Msk ) != RCC_CSR_LSIRDY );
+
 	/* LPTIM: LSI	 */
 	RCC->CCIPR	&=	 ~( RCC_CCIPR_LPUART1SEL );
 	RCC->CCIPR	|=	  ( RCC_CCIPR_LPUART1SEL_0 );
@@ -135,28 +141,21 @@ void Conf_LPTIM ( uint32_t myCLK )
 	 */
 	LPTIM1->CR	&=	~( LPTIM_CR_ENABLE );
 
-	/* Timer TIM2:
-	 *  - Master mode
+	/* LPTIM:
+	 *  - The counter is incremented following each internal clock pulse
+	 *  - Trigger: Software trigger (counting start is initiated by software)
+	 *  - Clock prescaler: f_LPTIM/1
+	 *  - CKSEL: LPTIM is clocked by internal clock source (APB clock or any of the embedded oscillators)
 	 */
-	TIM2->SMCR	&=	~( TIM_SMCR_SMS | TIM_SMCR_TS );
+	LPTIM1->CFGR	&=	~( LPTIM_CFGR_COUNTMODE | LPTIM_CFGR_TRIGSEL | LPTIM_CFGR_PRESC | LPTIM_CFGR_CKSEL );
 
-	/* Reset counter	 */
-	TIM2->CNT	 =	 (uint16_t)0U;
-	TIM2->PSC	 =	 (uint16_t)( 1000U - 1U );									// Prescaler = 999
-	TIM2->ARR	 =	 (uint16_t)( 1 * ( myCLK / ( TIM2->PSC + 1U ) ) + 0.5 );	// Overflow every ~ 1s: f_Timer TIM2: myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz )
-
-	/* Clear Update interrupt flag	 */
-	TIM2->SR	&=	~( TIM_SR_UIF );
+	/* Autoreload register update OK Clear Flag	 */
+	LPTIM1->ICR	|=	 ( LPTIM_ICR_ARROKCF );
 
 	/* Enable Interrupt	 */
 	NVIC_SetPriority ( LPTIM1_IRQn, 1 ); 							// Set Priority to 1
 	NVIC_EnableIRQ   ( LPTIM1_IRQn );  								// Enable LPTIM1_IRQn interrupt in NVIC
 
-	/* Update interrupt enable	 */
-	TIM2->DIER	|=	 ( TIM_DIER_UIE );
-
-	/* Low-power Timer LPTIM:
-	 * 	- Enabled
-	 */
-	LPTIM1->CR	|=	 ( LPTIM_CR_ENABLE );
+	/* ARRM interrupt enabled	 */
+	LPTIM1->IER	|=	 LPTIM_IER_ARRMIE;
 }
