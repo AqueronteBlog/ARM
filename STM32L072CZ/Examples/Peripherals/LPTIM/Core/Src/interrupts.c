@@ -41,6 +41,6 @@ void LPTIM1_IRQHandler(void)
     	}
 
     	/* Clear flag	 */
-    	LPTIM1->ICR	|=	 LPTIM_ICR_ARROKCF;
+    	LPTIM1->ICR	|=	 LPTIM_ICR_ARRMCF;
     }
 }
