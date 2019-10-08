@@ -119,7 +119,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   LPTIM1->CR	|=	 ( LPTIM_CR_ENABLE );		// Enable Timer LPTIM
   LPTIM1->ARR	 =	 (uint16_t)32768;
-  LPTIM1->CR	|=	 ( LPTIM_CR_CNTSTRT );		// Enable Timer LPTIM
+  LPTIM1->CR	|=	 ( LPTIM_CR_CNTSTRT );		// LPTIM in Continuous mode
   while (1)
   {
     /* USER CODE END WHILE */
