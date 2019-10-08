@@ -26,7 +26,8 @@
  *
  * @author      Manuel Caballero
  * @date        05/October/2019
- * @version		05/October/2019   The ORIGIN
+ * @version		08/October/2019   BUG was fixed, LPTIM instead of LPUART.
+ * 				05/October/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -39,8 +40,8 @@ void Conf_CLK ( void )
 	while ( ( RCC->CSR & RCC_CSR_LSIRDY_Msk ) != RCC_CSR_LSIRDY );
 
 	/* LPTIM: LSI	 */
-	RCC->CCIPR	&=	 ~( RCC_CCIPR_LPUART1SEL );
-	RCC->CCIPR	|=	  ( RCC_CCIPR_LPUART1SEL_0 );
+	RCC->CCIPR	&=	 ~( RCC_CCIPR_LPTIM1SEL );
+	RCC->CCIPR	|=	  ( RCC_CCIPR_LPTIM1SEL_0 );
 }
 
 
@@ -149,8 +150,9 @@ void Conf_LPTIM ( uint32_t myCLK )
 	 */
 	LPTIM1->CFGR	&=	~( LPTIM_CFGR_COUNTMODE | LPTIM_CFGR_TRIGSEL | LPTIM_CFGR_PRESC | LPTIM_CFGR_CKSEL );
 
+
 	/* Autoreload register update OK Clear Flag	 */
-	LPTIM1->ICR	|=	 ( LPTIM_ICR_ARROKCF );
+	LPTIM1->ICR	|=	 ( LPTIM_ICR_ARRMCF );
 
 	/* Enable Interrupt	 */
 	NVIC_SetPriority ( LPTIM1_IRQn, 1 ); 							// Set Priority to 1
