@@ -47,6 +47,34 @@ void Conf_CLK ( void )
 
 
 /**
+ * @brief       void Conf_Range ( void )
+ * @details     It configures the voltage scaling configuration: 1.2V ( Range 3 ).
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        09/October/2019
+ * @version		09/October/2019   The ORIGIN
+ * @pre         N/A
+ * @warning     Make sure that the f_CORE <= 4.2MHz.
+ */
+void Conf_Range ( void )
+{
+	/* Wait until Regulator is ready in the selected voltage range	 */
+	while ( ( PWR->CSR & PWR_CSR_VOSF_Msk ) == PWR_CSR_VOSF );
+
+	/* Voltage scaling configuration: 1.2V ( range 3 )	 */
+	PWR->CR	&=	 ~( PWR_CR_VOS );
+	PWR->CR	|=	  ( PWR_CR_VOS_0 | PWR_CR_VOS_1 );
+
+	/* Wait until Regulator is ready in the selected voltage range	 */
+	while ( ( PWR->CSR & PWR_CSR_VOSF_Msk ) == PWR_CSR_VOSF );
+}
+
+
+
+/**
  * @brief       void Conf_GPIO ( void )
  * @details     It configures GPIO to work with the LEDs.
  *
@@ -55,8 +83,6 @@ void Conf_CLK ( void )
  * 						- LD2:	PA_5
  * 						- LD3:	PB_6
  * 						- LD4:	PB_7
- *
- *
  *
  * @return      NA
  *
@@ -107,18 +133,15 @@ void Conf_GPIO ( void )
 
 
 /**
- * @brief       void Conf_LPTIM ( uint32_t )
- * @details     [TODO]It configures timer TIM2.
+ * @brief       void Conf_LPTIM ( void )
+ * @details     It configures low-power timer LPTIM.
  *
- *				-TIM2:
- * 					-- f_TIM2 = myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz
- * 					-- Interrupt ENABLED.
- * 					-- Overflow: Every 1 second ( ARR / f_TIM2 ) = ( 2097 / 2097 ) = 1
- * 						--- Downcounter.
- * 						--- Prescaler = 1000 - 1 = 999.
- * 						--- ARR = 2097.
+ *				-LPTIM:
+ * 					-- f_lptim = LSI = 32.768 kHz
+ * 					-- ARRM Interrupt ENABLED.
+ * 					-- Overflow: Every 1 second ( ARR / LSI ) = ( 32768 / 32768 ) = 1s
  *
- * @param[in]    myCLK:	Timer TIM2 clock.
+ * @param[in]    N/A.
  *
  * @param[out]   N/A.
  *
@@ -128,11 +151,12 @@ void Conf_GPIO ( void )
  *
  * @author      Manuel Caballero
  * @date        03/October/2019
- * @version		03/October/2019   The ORIGIN
+ * @version		09/October/2019   Comments were updated.
+ * 				03/October/2019   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
-void Conf_LPTIM ( uint32_t myCLK )
+void Conf_LPTIM ( void )
 {
 	/* Low-power Timer LPTIM clock enable	 */
 	RCC->APB1ENR	|=	 RCC_APB1ENR_LPTIM1EN;
@@ -149,7 +173,6 @@ void Conf_LPTIM ( uint32_t myCLK )
 	 *  - CKSEL: LPTIM is clocked by internal clock source (APB clock or any of the embedded oscillators)
 	 */
 	LPTIM1->CFGR	&=	~( LPTIM_CFGR_COUNTMODE | LPTIM_CFGR_TRIGSEL | LPTIM_CFGR_PRESC | LPTIM_CFGR_CKSEL );
-
 
 	/* Autoreload register update OK Clear Flag	 */
 	LPTIM1->ICR	|=	 ( LPTIM_ICR_ARRMCF );

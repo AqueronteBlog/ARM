@@ -19,9 +19,10 @@
 
 /**@brief Functions prototypes.
  */
-void Conf_CLK 	( void 			 );
-void Conf_GPIO 	( void 			 );
-void Conf_LPTIM ( uint32_t myCLK );
+void Conf_CLK 	( void );
+void Conf_GPIO 	( void );
+void Conf_LPTIM ( void );
+void Conf_Range ( void );
 
 
 #endif /* FUNCTIONS_H_ */
