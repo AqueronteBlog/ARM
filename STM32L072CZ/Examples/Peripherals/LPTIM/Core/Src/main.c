@@ -1,10 +1,9 @@
 /* USER CODE BEGIN Header */
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the Timer peripherals.
- * 					LED1: Every   1s	( TIM2, interrupt mode ).
- * 					LED2: Every   2s	( TIM6, interrupt mode ).
- * 					LED3: Every 0.5s	( TIM7, polling mode ).
+ * @details     This example shows how to work with the low-power timer ( LPTIM ). Every 1s, LD1 blinks.
+ *
+ * 				The rest of the time, the uC is on STOP mode ( low-power mode ).
  *
  *
  * @return      N/A
@@ -54,7 +53,8 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define SYSTEM_CORE_CLK		2097000U
-#define TIMER_TIM2_CLK		SYSTEM_CORE_CLK
+#define SYSTEM_LSI_CLK		32768U
+#define TIMER_LPTM_CLK		SYSTEM_LSI_CLK
 
 /* USER CODE END PD */
 
@@ -111,17 +111,20 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Conf_CLK	 ();
   Conf_GPIO  ();
-  Conf_LPTIM ( TIMER_TIM2_CLK );
+  Conf_LPTIM ();
+  Conf_Range ();
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   LPTIM1->CR	|=	 ( LPTIM_CR_ENABLE );		// Enable Timer LPTIM
-  LPTIM1->ARR	 =	 (uint16_t)32768;
+  LPTIM1->ARR	 =	 (uint16_t)SYSTEM_LSI_CLK;
   LPTIM1->CR	|=	 ( LPTIM_CR_CNTSTRT );		// LPTIM in Continuous mode
   while (1)
   {
+	  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+	  HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
