@@ -95,3 +95,4 @@ STM32L072CZ/Examples/Peripherals/LEDs/Debug/
 STM32L072CZ/Examples/Peripherals/Timers/Debug/
 STM32L072CZ/Examples/Peripherals/LPTIM/Debug/
 *.launch
+ADuCM3029/Examples_Drivers/HDC2080/Debug/
