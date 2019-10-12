@@ -195,96 +195,173 @@ typedef enum
 } HDC2080_temp_offset_adjust_t;
 
 
-
-
-
-
-
-
-
 /**
-  * @brief   POWER_DOWN REGISTER
-  */
-/* PWR_DOWN <0>
- *    NOTE: Power down or active mode.
+  * @brief   HUM_OFFSET_ADJUST REGISTER
+  *				NOTE: Humidity offset adjustment. Added to the converted Humidity value.
  */
 typedef enum
 {
-	POWER_DOWN_PWR_DOWN_MASK       	=   ( 1U << 0U ),    /*!<  POWER_DOWN mask                          		*/
-	POWER_DOWN_PWR_DOWN_POWER_DOWN	=   ( 0U << 0U ),    /*!<  Power down				    		[ Default ] */
-	POWER_DOWN_PWR_DOWN_ACTIVE      =   ( 1U << 0U )     /*!<  Active					                		*/
-} HDC2080_power_down_pwr_down_t;
+	HUM_OFFSET_ADJUST_MASK				=   0xFF,						/*!<  HUM_OFFSET_ADJUST mask       	        	*/
+	HUM_OFFSET_ADJUST_MINUS_25_RH		=   ( 1U << 7U ),				/*!<  HUM_OFFSET_ADJUST: –25   %RH  			*/
+	HUM_OFFSET_ADJUST_12_5_RH			=   ( 1U << 6U ),				/*!<  HUM_OFFSET_ADJUST:  12.5 %RH  			*/
+	HUM_OFFSET_ADJUST_6_3_RH			=   ( 1U << 5U ),				/*!<  HUM_OFFSET_ADJUST:   6.3 %RH 				*/
+	HUM_OFFSET_ADJUST_3_1_RH			=   ( 1U << 4U ),				/*!<  HUM_OFFSET_ADJUST:   3.1 %RH  			*/
+	HUM_OFFSET_ADJUST_1_6_RH			=   ( 1U << 3U ),				/*!<  HUM_OFFSET_ADJUST:   1.6 %RH  			*/
+	HUM_OFFSET_ADJUST_0_8_RH			=   ( 1U << 2U ),				/*!<  HUM_OFFSET_ADJUST:   0.8 %RH  			*/
+	HUM_OFFSET_ADJUST_0_4_RH			=   ( 1U << 1U ),				/*!<  HUM_OFFSET_ADJUST:   0.4 %RH 				*/
+	HUM_OFFSET_ADJUST_0_2_RH			=   ( 1U << 0U ) 				/*!<  HUM_OFFSET_ADJUST:   0.2 %RH  			*/
+} HDC2080_hum_offset_adjust_t;
+
 
 
 /**
-  * @brief   RESET REGISTER
+  * @brief   RESET_DRDY_INT_CONF REGISTER
   */
-/* RSTB <0>
+/* SOFT_RES <7>
+ *    NOTE: EEPROM value reload and registers reset.
+ */
+typedef enum
+{
+	RESET_DRDY_INT_CONF_SOFT_RES_MASK	=   ( 1U << 7U ),				/*!<  SOFT_RES mask                          			*/
+	RESET_DRDY_INT_CONF_SOFT_RES_NORMAL	=   ( 0U << 7U ),				/*!<  Normal Operation mode, this bit is self-clear		*/
+	RESET_DRDY_INT_CONF_SOFT_RES_RESET	=   ( 1U << 7U )				/*!<  Soft Reset 		        						*/
+} HDC2080_reset_drdy_int_conf_soft_res_t;
+
+
+/* AMM <6:4>
+ *    NOTE: EEPROM value reload and registers reset.
+ */
+typedef enum
+{
+	RESET_DRDY_INT_CONF_AMM_MASK		=   ( 0b111 << 4U ),			/*!<  AMM mask                          		*/
+	RESET_DRDY_INT_CONF_AMM_DISABLED	=   ( 0b000 << 4U ),			/*!<  Disabled. Initiate measurement via I2C	*/
+	RESET_DRDY_INT_CONF_AMM_0_008_HZ	=   ( 0b001 << 4U ),			/*!<  1/120Hz (1 samples every 2 minutes)		*/
+	RESET_DRDY_INT_CONF_AMM_0_017_HZ	=   ( 0b010 << 4U ),			/*!<  1/60Hz (1 samples every minute)			*/
+	RESET_DRDY_INT_CONF_AMM_0_1_HZ		=   ( 0b011 << 4U ),			/*!<  0.1Hz (1 samples every 10 seconds)		*/
+	RESET_DRDY_INT_CONF_AMM_0_2_HZ		=   ( 0b100 << 4U ),			/*!<  0.2 Hz (1 samples every 5 second)			*/
+	RESET_DRDY_INT_CONF_AMM_1_HZ		=   ( 0b101 << 4U ),			/*!<  1Hz (1 samples every second)				*/
+	RESET_DRDY_INT_CONF_AMM_2_HZ		=   ( 0b110 << 4U ),			/*!<  2Hz (2 samples every second)				*/
+	RESET_DRDY_INT_CONF_AMM_5_HZ		=   ( 0b111 << 4U ) 			/*!<  5Hz (5 samples every second)				*/
+} HDC2080_reset_drdy_int_conf_amm_t;
+
+
+/* HEAT_EN <3>
  *    NOTE: N/A.
  */
 typedef enum
 {
-	RESET_RSTB_MASK       			=   ( 1U << 0U ),    /*!<  RSTB mask                          		       	*/
-	RESET_RSTB_RESET          		=   ( 0U << 0U ),    /*!<  Measurement control block is reset  	[ Default ] */
-	RESET_RSTB_ACTIVE          		=   ( 1U << 0U )     /*!<  Measurement control block is active  		   	*/
-} HDC2080_reset_rstb_t;
+	RESET_DRDY_INT_CONF_HEAT_EN_MASK	=   ( 1U << 3U ),				/*!<  HEAT_EN mask                        		*/
+	RESET_DRDY_INT_CONF_HEAT_EN_OFF		=   ( 0U << 3U ),				/*!<  Heater off								*/
+	RESET_DRDY_INT_CONF_HEAT_EN_ON		=   ( 1U << 3U )				/*!<  Heater on									*/
+} HDC2080_reset_drdy_int_conf_heat_en_t;
+
+
+/* DRDY/INT_EN <2>
+ *    NOTE: DRDY/INT_EN pin configuration.
+ */
+typedef enum
+{
+	RESET_DRDY_INT_CONF_DRDY_INT_EN_MASK	=   ( 1U << 2U ),			/*!<  DRDY/INT_EN mask                     		*/
+	RESET_DRDY_INT_CONF_DRDY_INT_EN_HIGH_Z	=   ( 0U << 2U ),			/*!<  High Z									*/
+	RESET_DRDY_INT_CONF_DRDY_INT_EN_ENABLED	=   ( 1U << 2U )			/*!<  Enable									*/
+} HDC2080_reset_drdy_int_conf_drdr_int_en_t;
+
+
+/* INT_POL <1>
+ *    NOTE: Interrupt polarity.
+ */
+typedef enum
+{
+	RESET_DRDY_INT_CONF_INT_POL_MASK		=   ( 1U << 1U ),			/*!<  INT_POL mask                        		*/
+	RESET_DRDY_INT_CONF_INT_POL_ACTIVE_LOW	=   ( 0U << 1U ),			/*!<  Active Low								*/
+	RESET_DRDY_INT_CONF_INT_POL_ACTIVE_HIGH	=   ( 1U << 1U )			/*!<  Active High								*/
+} HDC2080_reset_drdy_int_conf_int_pol_t;
+
+
+/* INT_MODE <0>
+ *    NOTE: Interrupt mode.
+ */
+typedef enum
+{
+	RESET_DRDY_INT_CONF_INT_MODE_MASK				=   ( 1U << 0U ),	/*!<  INT_MODE mask                        		*/
+	RESET_DRDY_INT_CONF_INT_MODE_LEVEL_SENSITIVE	=   ( 0U << 0U ),	/*!<  Level sensitive							*/
+	RESET_DRDY_INT_CONF_INT_MODE_COMPARATOR_MODE	=   ( 1U << 0U )	/*!<  Comparator mode							*/
+} HDC2080_reset_drdy_int_conf_int_mode_t;
 
 
 
 /**
-  * @brief   MODE_CONTROL REGISTER
+  * @brief   MEASUREMENT CONFIGURATION REGISTER
   */
-/* AVE_NUM <7:5>
- *    NOTE: Set the average number of measurement data.
+/* TRES <7:6>
+ *    NOTE: Temperature resolution.
  */
 typedef enum
 {
-	MODE_CONTROL_AVE_NUM_MASK     	=   ( 0b111 << 5U ), /*!<  AVE_NUM mask                                     */
-	MODE_CONTROL_AVE_NUM_SINGLE     =   ( 0b000 << 5U ), /*!<  AVE_NUM: Single                                  */
-	MODE_CONTROL_AVE_NUM_AVERAGE_2  =   ( 0b001 << 5U ), /*!<  AVE_NUM: Average of  2 times         [ Default ] */
-	MODE_CONTROL_AVE_NUM_AVERAGE_4  =   ( 0b010 << 5U ), /*!<  AVE_NUM: Average of  4 times                     */
-	MODE_CONTROL_AVE_NUM_AVERAGE_8  =   ( 0b011 << 5U ), /*!<  AVE_NUM: Average of  8 times                     */
-	MODE_CONTROL_AVE_NUM_AVERAGE_16 =   ( 0b100 << 5U ), /*!<  AVE_NUM: Average of 16 times                     */
-	MODE_CONTROL_AVE_NUM_AVERAGE_32 =   ( 0b101 << 5U ), /*!<  AVE_NUM: Average of 32 times                     */
-	MODE_CONTROL_AVE_NUM_AVERAGE_64 =   ( 0b110 << 5U )  /*!<  AVE_NUM: Average of 64 times                     */
-} HDC2080_mode_control_ave_num_t;
+    MEASUREMENT_CONF_TRES_MASK				=   ( 0b11 << 6U ),			/*!<  TRES mask                          		*/
+	MEASUREMENT_CONF_TRES_14_BIT			=   ( 0b00 << 6U ),			/*!<  14 bit						            */
+	MEASUREMENT_CONF_TRES_11_BIT			=   ( 0b01 << 6U ),			/*!<  11 bit						            */
+	MEASUREMENT_CONF_TRES_9_BIT				=   ( 0b10 << 6U )  		/*!<   9 bit						            */
+} HDC2080_measurement_configuration_tres_t;
 
 
-/* DREN <4>
- *    NOTE: DRDY pin Enable.
+
+/* HRES <5:4>
+ *    NOTE: Humidity resolution.
  */
 typedef enum
 {
-	MODE_CONTROL_DREN_MASK     		=   ( 1U << 4U ), 	/*!<  DREN mask                             	        */
-	MODE_CONTROL_DREN_DRDY_DISABLE	=   ( 0U << 4U ), 	/*!<  DRDY pin Disable                     	[ Default ] */
-	MODE_CONTROL_DREN_DRDY_ENABLE 	=   ( 1U << 4U )  	/*!<  DRDY pin Enable                     				*/
-} HDC2080_mode_control_dren_t;
+    MEASUREMENT_CONF_HRES_MASK				=   ( 0b11 << 4U ),			/*!<  HRES mask                          		*/
+	MEASUREMENT_CONF_HRES_14_BIT			=   ( 0b00 << 4U ),			/*!<  14 bit						            */
+	MEASUREMENT_CONF_HRES_11_BIT			=   ( 0b01 << 4U ),			/*!<  11 bit						            */
+	MEASUREMENT_CONF_HRES_9_BIT				=   ( 0b10 << 4U )  		/*!<   9 bit						            */
+} HDC2080_measurement_configuration_hres_t;
 
 
-/* MODE <1:0>
- *    NOTE: Set measurement mode.
+
+/* MEAS_CONF <2:1>
+ *    NOTE: Measurement configuration.
  */
 typedef enum
 {
-	MODE_CONTROL_MODE_MASK     		=   ( 0b11 << 0U ), /*!<  MODE mask                                        */
-	MODE_CONTROL_MODE_STAND_BY      =   ( 0b00 << 0U ), /*!<  Stand by                             [ Default ] */
-	MODE_CONTROL_MODE_ONE_SHOT		=   ( 0b01 << 0U ), /*!<  One shot                    					   */
-	MODE_CONTROL_MODE_CONTINUOUS    =   ( 0b10 << 0U )  /*!<  Continuous				                       */
-} HDC2080_mode_control_mode_t;
+    MEASUREMENT_CONF_MEAS_CONF_MASK					=   ( 0b11 << 1U ),	/*!<  MEAS_CONF mask                       		*/
+	MEASUREMENT_CONF_MEAS_CONF_HUMIDITY_TEMPERATURE	=   ( 0b00 << 1U ),	/*!<  Humidity + Temperature		            */
+	MEASUREMENT_CONF_MEAS_CONF_TEMPERATURE_ONLY		=   ( 0b01 << 1U )	/*!<  Temperature only				            */
+} HDC2080_measurement_configuration_meas_conf_t;
+
+
+
+/* MEAS_TRIG <0>
+ *    NOTE: Self-clearing bit when measurement completed.
+ */
+typedef enum
+{
+    MEASUREMENT_CONF_MEAS_TRIG_MASK					=   ( 1U << 0U ),	/*!<  MEAS_TRIG mask                       		*/
+	MEASUREMENT_CONF_MEAS_TRIG_NO_ACTION			=   ( 0U << 0U ),	/*!<  no action						            */
+	MEASUREMENT_CONF_MEAS_TRIG_START_MEASUREMENT	=   ( 1U << 0U )	/*!<  Start measurement				            */
+} HDC2080_measurement_configuration_meas_trig_t;
+
 
 
 /**
-  * @brief   STATUS REGISTER
+  * @brief   MANUFACTURER ID REGISTERS
   */
-/* RD_DRDY <0>
- *    NOTE: Pressure and temperature measurement data ready bit.
- */
 typedef enum
 {
-	STATUS_RD_DRDY_MASK       		=   ( 1U << 0U ),    /*!<  RD_DRDY mask                      		       						*/
-	STATUS_RD_DRDY_DATA_MEASURING   =   ( 0U << 0U ),    /*!<  Measurement data output is not yet available (measuring)	[ Default ] */
-	STATUS_RD_DRDY_DATA_AVAILABLE	=   ( 1U << 0U )     /*!<  Measurement data output is available								   	*/
-} HDC2080_reset_rd_drdy_t;
+	MANUFACTURER_ID_LOW				=   0x54,							/*!<  MANUFACTURER ID low	              		*/
+	MANUFACTURER_ID_HIGH			=   0x49							/*!<  MANUFACTURER ID high			            */
+} HDC2080_manufacturer_ids_t;
+
+
+
+/**
+  * @brief   DEVICE ID REGISTERS
+  */
+typedef enum
+{
+	DEVICE_ID_LOW					=   0xD0,							/*!<  DEVICE ID low	              				*/
+	DEVICE_ID_HIGH					=   0x07							/*!<  DEVICE ID high			           		*/
+} HDC2080_device_ids_t;
 
 
 
@@ -295,25 +372,40 @@ typedef enum
 typedef struct
 {
     /* Output registers  */
-    int32_t rawPressure;     						/*!<  Raw pressure                  */
-    int16_t	rawTemperature;  						/*!<  Raw temperature               */
+    uint16_t rawHumidity;     							/*!<  Raw humidity                  */
+    uint16_t rawTemperature;  							/*!<  Raw temperature               */
 
-    float   pressure;        						/*!<  Pressure value                */
-    float   temperature;     						/*!<  Temperature value             */
+    float   humidity;        							/*!<  Humidity value                */
+    float   temperature;     							/*!<  Temperature value             */
 
-    /* Mode control	 */
-    HDC2080_mode_control_ave_num_t ave_num;		/*!<  Average number of measurement */
-    HDC2080_mode_control_dren_t	  dren;			/*!<  DRDY pin Enable	            */
-    HDC2080_mode_control_mode_t	  mode;			/*!<  Set measurement mode	        */
+    uint8_t	rawTemperature_max;							/*!<  Raw temperature max           */
+    uint8_t	rawHumidity_max;							/*!<  Raw humidity max    	        */
 
-    /* Device status	 */
-    HDC2080_power_down_pwr_down_t pwr_down;		/*!<  Power mode		            */
-    HDC2080_reset_rstb_t			 rstb;			/*!<  Reset				            */
-    HDC2080_reset_rd_drdy_t		 rd_drdy;		/*!<  Status flag		            */
+    float	temperature_max;							/*!<  Temperature max           	*/
+    float	humidity_max;								/*!<  Humidity max    	        	*/
 
-    /* Device identification   */
-    uint8_t id1;        							/*!<  Device ID1                    */
-    uint8_t id2;        							/*!<  Device ID2                    */
+
+    /* Interrupt DRDY Field Descriptions	 */
+    HDC2080_interrupt_drdy_drdy_status_t drdy_status;	/*!<  DataReady bit status 							*/
+    HDC2080_interrupt_drdy_th_status_t	 th_status;		/*!<  Temperature threshold HIGH Interrupt status	*/
+    HDC2080_interrupt_drdy_tl_status_t	 tl_status;		/*!<  Temperature threshold LOW Interrupt status    */
+    HDC2080_interrupt_drdy_hh_status_t	 hh_status;		/*!<  Humidity threshold HIGH Interrupt status	    */
+    HDC2080_interrupt_drdy_hl_status_t	 hl_status;		/*!<  Humidity threshold LOW Interrupt status	    */
+
+    /* Interrupt Configuration Field Descriptions	 */
+    HDC2080_interrupt_enable_drdy_enable_t drdy_enable;	/*!<  DataReady Interrupt enable					*/
+    HDC2080_interrupt_enable_th_enable_t   th_enable;	/*!<  Temperature threshold HIGH Interrupt enable	*/
+    HDC2080_interrupt_enable_tl_enable_t   tl_enable;	/*!<  Temperature threshold LOW Interrupt enable    */
+    HDC2080_interrupt_enable_hh_enable_t   hh_enable;	/*!<  Humidity threshold HIGH Interrupt enable	    */
+    HDC2080_interrupt_enable_hl_enable_t   hl_enable;	/*!<  Humidity threshold LOW Interrupt enable	    */
+
+    /*  Threshold	 */
+    uint16_t	rawTemp_thres;							/*!<  Temperature threshold 						*/
+    uint16_t	rawHum_thres;							/*!<  Humidity threshold 							*/
+
+    /* Device identifications   */
+    uint16_t manufacturer_id;        					/*!<  Manufacturer ID              */
+    uint16_t device_id;        							/*!<  Device ID                    */
 } HDC2080_data_t;
 #endif
 
