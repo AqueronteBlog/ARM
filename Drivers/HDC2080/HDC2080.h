@@ -403,6 +403,7 @@ typedef struct
     uint16_t	rawTemp_thres;							/*!<  Temperature threshold 						*/
     uint16_t	rawHum_thres;							/*!<  Humidity threshold 							*/
 
+
     /* Device identifications   */
     uint16_t manufacturer_id;        					/*!<  Manufacturer ID              */
     uint16_t device_id;        							/*!<  Device ID                    */
