@@ -381,16 +381,9 @@ typedef struct
     uint8_t	rawTemperature_max;							/*!<  Raw temperature max           */
     uint8_t	rawHumidity_max;							/*!<  Raw humidity max    	        */
 
-    float	temperature_max;							/*!<  Temperature max           	*/
-    float	humidity_max;								/*!<  Humidity max    	        	*/
-
 
     /* Interrupt DRDY Field Descriptions	 */
-    HDC2080_interrupt_drdy_drdy_status_t drdy_status;	/*!<  DataReady bit status 							*/
-    HDC2080_interrupt_drdy_th_status_t	 th_status;		/*!<  Temperature threshold HIGH Interrupt status	*/
-    HDC2080_interrupt_drdy_tl_status_t	 tl_status;		/*!<  Temperature threshold LOW Interrupt status    */
-    HDC2080_interrupt_drdy_hh_status_t	 hh_status;		/*!<  Humidity threshold HIGH Interrupt status	    */
-    HDC2080_interrupt_drdy_hl_status_t	 hl_status;		/*!<  Humidity threshold LOW Interrupt status	    */
+    uint8_t	interrupt_drdy_status;						/*!<  Interrupt DRDY status	    	*/
 
     /* Interrupt Configuration Field Descriptions	 */
     HDC2080_interrupt_enable_drdy_enable_t drdy_enable;	/*!<  DataReady Interrupt enable					*/
@@ -403,6 +396,15 @@ typedef struct
     uint16_t	rawTemp_thres;							/*!<  Temperature threshold 						*/
     uint16_t	rawHum_thres;							/*!<  Humidity threshold 							*/
 
+    /* Configuration Field Descriptions	 */
+    HDC2080_reset_drdy_int_conf_soft_res_t	soft_res;	/*!<  Soft reset flag								*/
+    HDC2080_reset_drdy_int_conf_amm_t		amm;		/*!<  Auto Measurement Mode							*/
+
+    /*  Measurement Configuration Field Descriptions	 */
+    HDC2080_measurement_configuration_tres_t 	  tres;			/*!<  Temperature resolution						*/
+    HDC2080_measurement_configuration_hres_t 	  hres;			/*!<  Humidity resolution							*/
+    HDC2080_measurement_configuration_meas_conf_t meas_conf;	/*!<  Measurement configuration						*/
+    HDC2080_measurement_configuration_meas_trig_t meas_trig;	/*!<  Measurement trigger							*/
 
     /* Device identifications   */
     uint16_t manufacturer_id;        					/*!<  Manufacturer ID              */
@@ -430,52 +432,33 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-HDC2080_status_t HDC2080_Init               ( I2C_parameters_t myI2Cparameters                                );
-
-/** It gets the device identifications.
-  */
-HDC2080_status_t HDC2080_GetDeviceID        ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myDeviceID	);
-
-/** It sets the power-down mode.
-  */
-HDC2080_status_t HDC2080_SetPowerDown       ( I2C_parameters_t myI2Cparameters, HDC2080_data_t myPwrDown	);
-
-/** It gets the power-down mode.
-  */
-HDC2080_status_t HDC2080_GetPowerDown       ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myPwrDown	);
-
-/** It sets the soft-reset.
-  */
-HDC2080_status_t HDC2080_SetSoftReset       ( I2C_parameters_t myI2Cparameters, HDC2080_data_t myRSTB		);
-
-/** It gets the reset flag.
-  */
-HDC2080_status_t HDC2080_GetSoftResetFlag   ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myRSTB		);
-
-/** It sets the mode control.
-  */
-HDC2080_status_t HDC2080_SetModeControl     ( I2C_parameters_t myI2Cparameters, HDC2080_data_t myModeCont	);
-
-/** It gets the mode control.
-  */
-HDC2080_status_t HDC2080_GetModeControl	  ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myModeCont	);
-
-/** It gets the status flag.
-  */
-HDC2080_status_t HDC2080_GetStatus		  ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myRD_DRDY	);
-
-/** It gets the raw pressure.
-  */
-HDC2080_status_t HDC2080_GetRawPressure     ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myRawP		);
+HDC2080_status_t HDC2080_Init               		( I2C_parameters_t myI2Cparameters                                		);
 
 /** It gets the raw temperature.
   */
-HDC2080_status_t HDC2080_GetRawTemperature  ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myRawT		);
+HDC2080_status_t HDC2080_GetRawTemperature  		( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myRawTemperature	);
 
-/** It gets the pressure.
+/** It gets the current temperature.
   */
-HDC2080_status_t HDC2080_GetPressure     	  ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myP		);
+HDC2080_status_t HDC2080_GetTemperature  			( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myTemperature		);
 
-/** It gets the temperature.
+/** It gets the raw humidity.
   */
-HDC2080_status_t HDC2080_GetTemperature  	  ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myT		);
+HDC2080_status_t HDC2080_GetRawHumidity  			( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myRawHumidity		);
+
+/** It gets the current humidity.
+  */
+HDC2080_status_t HDC2080_GetHumidity	  			( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myHumidity			);
+
+/** It gets the interrupt DRDY status.
+  */
+HDC2080_status_t HDC2080_GetInterrupt_DRDY_Status	( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myStatus			);
+
+/** It writes the temperature max register ( raw value ).
+  */
+HDC2080_status_t HDC2080_ConfTemperatureMax			( I2C_parameters_t myI2Cparameters, HDC2080_data_t myTemperatureMax		);
+
+/** It writes the humidity max register ( raw value ).
+  */
+HDC2080_status_t HDC2080_ConfHumidityMax			( I2C_parameters_t myI2Cparameters, HDC2080_data_t myHumidityMax		);
+
