@@ -381,6 +381,9 @@ typedef struct
     uint8_t	rawTemperature_max;							/*!<  Raw temperature max           */
     uint8_t	rawHumidity_max;							/*!<  Raw humidity max    	        */
 
+    /* Offsets	 */
+    uint8_t	temp_offset_adjust;							/*!<  Temperature offset   	        */
+    uint8_t	hum_offset_adjust;							/*!<  Humidity offset   	        */
 
     /* Interrupt DRDY Field Descriptions	 */
     uint8_t	interrupt_drdy_status;						/*!<  Interrupt DRDY status	    	*/
@@ -392,9 +395,11 @@ typedef struct
     HDC2080_interrupt_enable_hh_enable_t   hh_enable;	/*!<  Humidity threshold HIGH Interrupt enable	    */
     HDC2080_interrupt_enable_hl_enable_t   hl_enable;	/*!<  Humidity threshold LOW Interrupt enable	    */
 
-    /*  Threshold	 */
-    uint16_t	rawTemp_thres;							/*!<  Temperature threshold 						*/
-    uint16_t	rawHum_thres;							/*!<  Humidity threshold 							*/
+    /*  Thresholds	 */
+    uint8_t	temp_thres_low;								/*!<  Temperature threshold low						*/
+    uint8_t	temp_thres_high;							/*!<  Temperature threshold low						*/
+    uint8_t	hum_thres_low;								/*!<  Humidity threshold low						*/
+    uint8_t	hum_thres_high;								/*!<  Humidity threshold low						*/
 
     /* Configuration Field Descriptions	 */
     HDC2080_reset_drdy_int_conf_soft_res_t	soft_res;	/*!<  Soft reset flag								*/
@@ -461,4 +466,53 @@ HDC2080_status_t HDC2080_ConfTemperatureMax			( I2C_parameters_t myI2Cparameters
 /** It writes the humidity max register ( raw value ).
   */
 HDC2080_status_t HDC2080_ConfHumidityMax			( I2C_parameters_t myI2Cparameters, HDC2080_data_t myHumidityMax		);
+
+/** It sets the interrupt configuration.
+  */
+HDC2080_status_t HDC2080_SetInterruptConfiguration	( I2C_parameters_t myI2Cparameters, HDC2080_data_t myIntConfiguration	);
+
+/** It gets the interrupt configuration.
+  */
+HDC2080_status_t HDC2080_GetInterruptConfiguration	( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myIntConfiguration	);
+
+/** It sets the temperature offset.
+  */
+HDC2080_status_t HDC2080_SetTemperatureOffset		( I2C_parameters_t myI2Cparameters, HDC2080_data_t myTemperatureOffset	);
+
+/** It gets the temperature offset ( raw value ).
+  */
+HDC2080_status_t HDC2080_GetTemperatureOffset		( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myTemperatureOffset	);
+
+/** It sets the humidity offset.
+  */
+HDC2080_status_t HDC2080_SetHumidityOffset			( I2C_parameters_t myI2Cparameters, HDC2080_data_t myHumidityOffset		);
+
+/** It gets the humidity offset ( raw value ).
+  */
+HDC2080_status_t HDC2080_GetHumidityOffset			( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myHumidityOffset	);
+
+/** It sets the temperature threshold low value ( raw value ).
+  */
+HDC2080_status_t HDC2080_SetTemperatureThresLow		( I2C_parameters_t myI2Cparameters, HDC2080_data_t myTempThresLow		);
+
+/** It gets the temperature threshold low value ( raw value ).
+  */
+HDC2080_status_t HDC2080_GetTemperatureThresLow		( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myTempThresLow		);
+
+/** It sets the h threshold low value ( raw value ).
+  */
+HDC2080_status_t HDC2080_SetTemperatureThresLow		( I2C_parameters_t myI2Cparameters, HDC2080_data_t myTempThresLow		);
+
+/** It gets the temperature threshold high value ( raw value ).
+  */
+HDC2080_status_t HDC2080_GetTemperatureThresHigh	( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myTempThresHigh		);
+
+/** It sets the humidity threshold low value ( raw value ).
+  */
+HDC2080_status_t HDC2080_SetHumidityThresLow		( I2C_parameters_t myI2Cparameters, HDC2080_data_t myHumThresLow		);
+
+/** It gets the humidity threshold low value ( raw value ).
+  */
+HDC2080_status_t HDC2080_GetHumidityThresLow		( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myHumThresLow		);
+
 
