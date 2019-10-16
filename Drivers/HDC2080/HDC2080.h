@@ -499,9 +499,9 @@ HDC2080_status_t HDC2080_SetTemperatureThresLow		( I2C_parameters_t myI2Cparamet
   */
 HDC2080_status_t HDC2080_GetTemperatureThresLow		( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myTempThresLow		);
 
-/** It sets the h threshold low value ( raw value ).
+/** It sets the temperature threshold high value ( raw value ).
   */
-HDC2080_status_t HDC2080_SetTemperatureThresLow		( I2C_parameters_t myI2Cparameters, HDC2080_data_t myTempThresLow		);
+HDC2080_status_t HDC2080_SetTemperatureThresHigh	( I2C_parameters_t myI2Cparameters, HDC2080_data_t myTempThresLow		);
 
 /** It gets the temperature threshold high value ( raw value ).
   */
@@ -514,5 +514,17 @@ HDC2080_status_t HDC2080_SetHumidityThresLow		( I2C_parameters_t myI2Cparameters
 /** It gets the humidity threshold low value ( raw value ).
   */
 HDC2080_status_t HDC2080_GetHumidityThresLow		( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myHumThresLow		);
+
+/** It sets the humidity threshold high value ( raw value ).
+  */
+HDC2080_status_t HDC2080_SetHumidityThresHigh		( I2C_parameters_t myI2Cparameters, HDC2080_data_t myHumThresLow		);
+
+/** It gets the humidity threshold high value ( raw value ).
+  */
+HDC2080_status_t HDC2080_GetHumidityThresHigh		( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myHumThresLow		);
+
+/** It makes a soft reset.
+  */
+HDC2080_status_t HDC2080_SetSoftReset				( I2C_parameters_t myI2Cparameters										);
 
 
