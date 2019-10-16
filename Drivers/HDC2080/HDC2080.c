@@ -991,3 +991,50 @@ HDC2080_status_t HDC2080_GetHumidityThresHigh	( I2C_parameters_t myI2Cparameters
 		return   HDC2080_FAILURE;
 	}
 }
+
+
+
+/**
+ * @brief       HDC2080_SetSoftReset ( I2C_parameters_t )
+ *
+ * @details     It makes a soft reset.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of HDC2080_SetSoftReset.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        16/October/2019
+ * @version     16/October/2019   The ORIGIN
+ * @pre         This bit is self-clear.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_SetSoftReset ( I2C_parameters_t myI2Cparameters )
+{
+	uint8_t		 cmd[2]  = { 0U };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux		 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+	/* Update the register	 */
+	cmd[1]	|=	 RESET_DRDY_INT_CONF_SOFT_RES_RESET;
+	aux		 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
