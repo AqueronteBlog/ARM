@@ -254,7 +254,7 @@ HDC2080_status_t HDC2080_GetInterrupt_DRDY_Status ( I2C_parameters_t myI2Cparame
 
 
 	/* Parse data   */
-	myStatus->interrupt_drdy_status	 =	 cmd;
+	myStatus->interrupt_drdy_status	 =	 (HDC2080_interrupt_drdy_drdy_status_t)( INTERRUPT_DRDY_DRDY_STATUS_MASK & cmd );
 
 
 
@@ -1026,6 +1026,527 @@ HDC2080_status_t HDC2080_SetSoftReset ( I2C_parameters_t myI2Cparameters )
 	/* Update the register	 */
 	cmd[1]	|=	 RESET_DRDY_INT_CONF_SOFT_RES_RESET;
 	aux		 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_GetSoftReset ( I2C_parameters_t , HDC2080_data_t* )
+ *
+ * @details     It checks the soft reset flag.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   mySoftResetFlag: Soft reset flag.
+ *
+ *
+ * @return       Status of HDC2080_SetSoftReset.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        17/October/2019
+ * @version     17/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_GetSoftReset ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* mySoftResetFlag )
+{
+	uint8_t		 cmd  = 0U;
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+	/* Parse the data	 */
+	mySoftResetFlag->soft_res	 =	 (HDC2080_reset_drdy_int_conf_soft_res_t)( RESET_DRDY_INT_CONF_SOFT_RES_MASK & cmd );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_SetAutoMeasurementMode ( I2C_parameters_t , HDC2080_data_t )
+ *
+ * @details     It sets auto measurement mode ( AMM ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myAMM: 		  Auto measurement mode.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of HDC2080_SetAutoMeasurementMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        17/October/2019
+ * @version     17/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_SetAutoMeasurementMode	( I2C_parameters_t myI2Cparameters, HDC2080_data_t myAMM )
+{
+	uint8_t		 cmd[2]  = { 0U };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+	/* Update the register	 */
+	cmd[1]	&=	~( RESET_DRDY_INT_CONF_AMM_MASK );
+	cmd[1]	|=	 ( myAMM.amm );
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_GetAutoMeasurementMode ( I2C_parameters_t , HDC2080_data_t* )
+ *
+ * @details     It gets auto measurement mode ( AMM ).
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myAMM: 		  Auto measurement mode.
+ *
+ *
+ * @return       Status of HDC2080_GetAutoMeasurementMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        17/October/2019
+ * @version     17/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_GetAutoMeasurementMode	( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myAMM )
+{
+	uint8_t		 cmd  = 0U;
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+	/* Parse the data	 */
+	myAMM->amm	 =	(HDC2080_reset_drdy_int_conf_amm_t)( RESET_DRDY_INT_CONF_AMM_MASK & cmd );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_SetHeaterMode ( I2C_parameters_t , HDC2080_data_t )
+ *
+ * @details     It sets the heater mode.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ * @param[in]    myHeatEn: 		  Heater mode: On/Off.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of HDC2080_SetHeaterMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        17/October/2019
+ * @version     17/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_SetHeaterMode ( I2C_parameters_t myI2Cparameters, HDC2080_data_t myHeatEn )
+{
+	uint8_t		 cmd[2]  = { 0U };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+	/* Update the register	 */
+	cmd[1]	&=	~( RESET_DRDY_INT_CONF_HEAT_EN_MASK );
+	cmd[1]	|=	 ( myHeatEn.heater_en );
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_GetHeaterMode ( I2C_parameters_t , HDC2080_data_t* )
+ *
+ * @details     It gets the heater mode.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myHeatEn: 		  Heater mode: On/Off..
+ *
+ *
+ * @return       Status of HDC2080_GetHeaterMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        17/October/2019
+ * @version     17/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_GetHeaterMode ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myHeatEn )
+{
+	uint8_t		 cmd  = 0U;
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+	/* Parse the data	 */
+	myHeatEn->heater_en	 =	(HDC2080_reset_drdy_int_conf_heat_en_t)( RESET_DRDY_INT_CONF_HEAT_EN_MASK & cmd );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_SetPinConfifuration ( I2C_parameters_t , HDC2080_data_t )
+ *
+ * @details     It sets the DRDY/INT_EN pin configuration.
+ *
+ * @param[in]    myI2Cparameters: 	 I2C parameters.
+ * @param[in]    myPinConfiguration: DRDY/INT_EN pin configuration.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of HDC2080_SetPinConfifuration.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        17/October/2019
+ * @version     17/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_SetPinConfifuration ( I2C_parameters_t myI2Cparameters, HDC2080_data_t myPinConfiguration )
+{
+	uint8_t		 cmd[2]  = { 0U };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+	/* Update the register	 */
+	cmd[1]	&=	~( RESET_DRDY_INT_CONF_DRDY_INT_EN_MASK );
+	cmd[1]	|=	 ( myPinConfiguration.drdy_intEn );
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_GetPinConfifuration ( I2C_parameters_t , HDC2080_data_t* )
+ *
+ * @details     It gets the DRDY/INT_EN pin configuration.
+ *
+ * @param[in]    myI2Cparameters: 	 I2C parameters.
+ *
+ * @param[out]   myPinConfiguration: DRDY/INT_EN pin configuration..
+ *
+ *
+ * @return       Status of HDC2080_GetPinConfifuration.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        17/October/2019
+ * @version     17/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_GetPinConfifuration ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myPinConfiguration )
+{
+	uint8_t		 cmd  = 0U;
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+	/* Update the register	 */
+	myPinConfiguration->drdy_intEn	 =	(HDC2080_reset_drdy_int_conf_drdr_int_en_t)( RESET_DRDY_INT_CONF_DRDY_INT_EN_MASK & cmd );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_SetInterruptPolarity ( I2C_parameters_t , HDC2080_data_t )
+ *
+ * @details     It sets the interrupt polarity
+ *
+ * @param[in]    myI2Cparameters: 	I2C parameters.
+ * @param[in]    myIntPol: 			Interrupt polarity: Active Low/High.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of HDC2080_SetInterruptPolarity.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        17/October/2019
+ * @version     17/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_SetInterruptPolarity ( I2C_parameters_t myI2Cparameters, HDC2080_data_t myIntPol )
+{
+	uint8_t		 cmd[2]  = { 0U };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+	/* Update the register	 */
+	cmd[1]	&=	~( RESET_DRDY_INT_CONF_INT_POL_MASK );
+	cmd[1]	|=	 ( myIntPol.int_pol );
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_GetInterruptPolarity ( I2C_parameters_t , HDC2080_data_t* )
+ *
+ * @details     It gets the interrupt polarity
+ *
+ * @param[in]    myI2Cparameters: 	I2C parameters.
+ *
+ * @param[out]   myIntPol: 			Interrupt polarity: Active Low/High.
+ *
+ *
+ * @return       Status of HDC2080_GetInterruptPolarity.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        17/October/2019
+ * @version     17/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_GetInterruptPolarity ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myIntPol )
+{
+	uint8_t		 cmd  = 0U;
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+	/* Update the register	 */
+	myIntPol->int_pol	 =	(HDC2080_reset_drdy_int_conf_int_pol_t)( RESET_DRDY_INT_CONF_INT_POL_MASK & cmd );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_SetInterruptMode ( I2C_parameters_t , HDC2080_data_t )
+ *
+ * @details     It sets the interrupt mode
+ *
+ * @param[in]    myI2Cparameters: 	I2C parameters.
+ * @param[in]    myIntMode: 		Interrupt mode: Level sensitive/Comparator mode.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of HDC2080_SetInterruptMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        17/October/2019
+ * @version     17/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_SetInterruptMode ( I2C_parameters_t myI2Cparameters, HDC2080_data_t myIntMode )
+{
+	uint8_t		 cmd[2]  = { 0U };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+	/* Update the register	 */
+	cmd[1]	&=	~( RESET_DRDY_INT_CONF_INT_MODE_MASK );
+	cmd[1]	|=	 ( myIntMode.int_mode );
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_GetInterruptMode ( I2C_parameters_t , HDC2080_data_t* )
+ *
+ * @details     It gets the interrupt mode
+ *
+ * @param[in]    myI2Cparameters: 	I2C parameters.
+ *
+ * @param[out]   myIntMode: 		Interrupt mode: Level sensitive/Comparator mode.
+ *
+ *
+ * @return       Status of HDC2080_GetInterruptMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        17/October/2019
+ * @version     17/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_GetInterruptMode ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myIntMode )
+{
+	uint8_t		 cmd  = 0U;
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd	 =   HDC2080_RESET_DRDY_INT_CONF;
+	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+	/* Update the register	 */
+	myIntMode->int_mode	 =	(HDC2080_reset_drdy_int_conf_int_mode_t)( RESET_DRDY_INT_CONF_INT_MODE_MASK & cmd );
 
 
 
