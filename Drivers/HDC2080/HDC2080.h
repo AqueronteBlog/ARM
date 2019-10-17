@@ -402,8 +402,12 @@ typedef struct
     uint8_t	hum_thres_high;								/*!<  Humidity threshold low						*/
 
     /* Configuration Field Descriptions	 */
-    HDC2080_reset_drdy_int_conf_soft_res_t	soft_res;	/*!<  Soft reset flag								*/
-    HDC2080_reset_drdy_int_conf_amm_t		amm;		/*!<  Auto Measurement Mode							*/
+    HDC2080_reset_drdy_int_conf_soft_res_t	  soft_res;		/*!<  Soft reset flag								*/
+    HDC2080_reset_drdy_int_conf_amm_t		  amm;			/*!<  Auto Measurement Mode							*/
+    HDC2080_reset_drdy_int_conf_heat_en_t	  heater_en;	/*!<  Heater Mode									*/
+    HDC2080_reset_drdy_int_conf_drdr_int_en_t drdy_intEn;	/*!<  DRDY/INT_EN pin configuration					*/
+    HDC2080_reset_drdy_int_conf_int_pol_t	  int_pol;		/*!<  Interrupt polarity							*/
+    HDC2080_reset_drdy_int_conf_int_mode_t	  int_mode;		/*!<  Interrupt mode								*/
 
     /*  Measurement Configuration Field Descriptions	 */
     HDC2080_measurement_configuration_tres_t 	  tres;			/*!<  Temperature resolution						*/
@@ -526,5 +530,49 @@ HDC2080_status_t HDC2080_GetHumidityThresHigh		( I2C_parameters_t myI2Cparameter
 /** It makes a soft reset.
   */
 HDC2080_status_t HDC2080_SetSoftReset				( I2C_parameters_t myI2Cparameters										);
+
+/** It checks the soft reset flag.
+  */
+HDC2080_status_t HDC2080_GetSoftReset				( I2C_parameters_t myI2Cparameters, HDC2080_data_t* mySoftResetFlag		);
+
+/** It sets auto measurement mode ( AMM ).
+  */
+HDC2080_status_t HDC2080_SetAutoMeasurementMode		( I2C_parameters_t myI2Cparameters, HDC2080_data_t myAMM				);
+
+/** It gets auto measurement mode ( AMM ).
+  */
+HDC2080_status_t HDC2080_GetAutoMeasurementMode		( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myAMM				);
+
+/** It sets the heater.
+  */
+HDC2080_status_t HDC2080_SetHeaterMode				( I2C_parameters_t myI2Cparameters, HDC2080_data_t myHeatEn				);
+
+/** It gets the heater status.
+  */
+HDC2080_status_t HDC2080_GetHeaterMode				( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myHeatEn			);
+
+/** It sets the DRDY/INT_EN pin configuration.
+  */
+HDC2080_status_t HDC2080_SetPinConfifuration		( I2C_parameters_t myI2Cparameters, HDC2080_data_t myPinConfiguration	);
+
+/** It gets the DRDY/INT_EN pin configuration.
+  */
+HDC2080_status_t HDC2080_GetPinConfiguration		( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myPinConfiguration	);
+
+/** It sets the interrupt polarity.
+  */
+HDC2080_status_t HDC2080_SetInterruptPolarity		( I2C_parameters_t myI2Cparameters, HDC2080_data_t myIntPol				);
+
+/** It gets the interrupt polarity.
+  */
+HDC2080_status_t HDC2080_GetInterruptPolarity		( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myIntPol			);
+
+/** It sets the interrupt mode.
+  */
+HDC2080_status_t HDC2080_SetInterruptMode			( I2C_parameters_t myI2Cparameters, HDC2080_data_t myIntMode			);
+
+/** It gets the interrupt mode.
+  */
+HDC2080_status_t HDC2080_GetInterruptMode			( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myIntMode			);
 
 
