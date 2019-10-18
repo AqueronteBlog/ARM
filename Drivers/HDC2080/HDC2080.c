@@ -1550,6 +1550,7 @@ HDC2080_status_t HDC2080_GetInterruptMode ( I2C_parameters_t myI2Cparameters, HD
 
 
 
+
 	if ( aux == I2C_SUCCESS )
 	{
 		return   HDC2080_SUCCESS;
