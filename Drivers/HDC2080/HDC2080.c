@@ -1549,7 +1549,6 @@ HDC2080_status_t HDC2080_GetInterruptMode ( I2C_parameters_t myI2Cparameters, HD
 	myIntMode->int_mode	 =	(HDC2080_reset_drdy_int_conf_int_mode_t)( RESET_DRDY_INT_CONF_INT_MODE_MASK & cmd );
 
 
-
 	if ( aux == I2C_SUCCESS )
 	{
 		return   HDC2080_SUCCESS;
