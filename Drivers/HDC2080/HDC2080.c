@@ -171,7 +171,7 @@ HDC2080_status_t HDC2080_GetRawHumidity  ( I2C_parameters_t myI2Cparameters, HDC
 
 	/* Parse data   */
 	myRawHumidity->rawHumidity	 =	 cmd[1];
-	myRawHumidity->rawHumidity   <<=	 8U;
+	myRawHumidity->rawHumidity <<=	 8U;
 	myRawHumidity->rawHumidity	|=	 cmd[0];
 
 
@@ -1327,7 +1327,7 @@ HDC2080_status_t HDC2080_SetPinConfifuration ( I2C_parameters_t myI2Cparameters,
 
 
 /**
- * @brief       HDC2080_GetPinConfifuration ( I2C_parameters_t , HDC2080_data_t* )
+ * @brief       HDC2080_GetPinConfiguration ( I2C_parameters_t , HDC2080_data_t* )
  *
  * @details     It gets the DRDY/INT_EN pin configuration.
  *
@@ -1336,7 +1336,7 @@ HDC2080_status_t HDC2080_SetPinConfifuration ( I2C_parameters_t myI2Cparameters,
  * @param[out]   myPinConfiguration: DRDY/INT_EN pin configuration..
  *
  *
- * @return       Status of HDC2080_GetPinConfifuration.
+ * @return       Status of HDC2080_GetPinConfiguration.
  *
  *
  * @author      Manuel Caballero
@@ -1345,7 +1345,7 @@ HDC2080_status_t HDC2080_SetPinConfifuration ( I2C_parameters_t myI2Cparameters,
  * @pre         N/A.
  * @warning     N/A.
  */
-HDC2080_status_t HDC2080_GetPinConfifuration ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myPinConfiguration )
+HDC2080_status_t HDC2080_GetPinConfiguration ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myPinConfiguration )
 {
 	uint8_t		 cmd  = 0U;
 	i2c_status_t aux;
@@ -1450,7 +1450,7 @@ HDC2080_status_t HDC2080_GetInterruptPolarity ( I2C_parameters_t myI2Cparameters
 	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
 	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
-	/* Update the register	 */
+	/* Parse the data	 */
 	myIntPol->int_pol	 =	(HDC2080_reset_drdy_int_conf_int_pol_t)( RESET_DRDY_INT_CONF_INT_POL_MASK & cmd );
 
 
@@ -1545,8 +1545,294 @@ HDC2080_status_t HDC2080_GetInterruptMode ( I2C_parameters_t myI2Cparameters, HD
 	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
 	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
-	/* Update the register	 */
+	/* Parse the data	 */
 	myIntMode->int_mode	 =	(HDC2080_reset_drdy_int_conf_int_mode_t)( RESET_DRDY_INT_CONF_INT_MODE_MASK & cmd );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_SetMeasurementConf ( I2C_parameters_t , HDC2080_data_t )
+ *
+ * @details     It sets the measurement configuration.
+ *
+ * @param[in]    myI2Cparameters: 	I2C parameters.
+ * @param[in]    myMeasConf: 		Temperature resolution, Humidity resolution and Measurement configuration.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of HDC2080_SetMeasurementConf.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        31/October/2019
+ * @version     31/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_SetMeasurementConf	( I2C_parameters_t myI2Cparameters, HDC2080_data_t myMeasConf )
+{
+	uint8_t		 cmd[2]  = { 0U };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   HDC2080_MEASUREMENT_CONFIGURATION;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+	/* Update the register	 */
+	cmd[1]	&=	~( MEASUREMENT_CONF_TRES_MASK | MEASUREMENT_CONF_HRES_MASK | MEASUREMENT_CONF_MEAS_CONF_MASK );
+	cmd[1]	|=	 ( myMeasConf.tres | myMeasConf.hres | myMeasConf.meas_conf );
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_GetMeasurementConf ( I2C_parameters_t , HDC2080_data_t* )
+ *
+ * @details     It gets the measurement configuration.
+ *
+ * @param[in]    myI2Cparameters: 	I2C parameters.
+ *
+ * @param[out]   myMeasConf: 		Temperature resolution, Humidity resolution and Measurement configuration.
+ *
+ *
+ * @return       Status of HDC2080_GetMeasurementConf.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        31/October/2019
+ * @version     31/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_GetMeasurementConf	( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myMeasConf )
+{
+	uint8_t		 cmd  = 0U;
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd	 =   HDC2080_MEASUREMENT_CONFIGURATION;
+	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+	/* Parse the data	 */
+	myMeasConf->tres	 	 =	(HDC2080_measurement_configuration_tres_t)( MEASUREMENT_CONF_TRES_MASK & cmd );
+	myMeasConf->hres	 	 =	(HDC2080_measurement_configuration_hres_t)( MEASUREMENT_CONF_HRES_MASK & cmd );
+	myMeasConf->meas_conf	 =	(HDC2080_measurement_configuration_meas_conf_t)( MEASUREMENT_CONF_MEAS_CONF_MASK & cmd );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_StartMeasurementTrigger ( I2C_parameters_t )
+ *
+ * @details     It triggers a new measurement.
+ *
+ * @param[in]    myI2Cparameters: 	I2C parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of HDC2080_StartMeasurementTrigger.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        31/October/2019
+ * @version     31/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_StartMeasurementTrigger ( I2C_parameters_t myI2Cparameters )
+{
+	uint8_t		 cmd[2]  = { 0U };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   HDC2080_MEASUREMENT_CONFIGURATION;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[1], 1U );
+
+	/* Update the register	 */
+	cmd[1]	|=	 MEASUREMENT_CONF_MEAS_TRIG_START_MEASUREMENT;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_GetMeasurementTrigger ( I2C_parameters_t , HDC2080_data_t* )
+ *
+ * @details     It gets the measurement trigger flag.
+ *
+ * @param[in]    myI2Cparameters: 	I2C parameters.
+ *
+ * @param[out]   myMeasTrig:		Measurement trigger flag.
+ *
+ *
+ * @return       Status of HDC2080_GetMeasurementTrigger.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        31/October/2019
+ * @version     31/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_GetMeasurementTrigger ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myMeasTrig )
+{
+	uint8_t		 cmd  = 0U;
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd	 =   HDC2080_MEASUREMENT_CONFIGURATION;
+	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+	/* Parse the data	 */
+	myMeasTrig->meas_trig	 =	(HDC2080_measurement_configuration_meas_trig_t)( MEASUREMENT_CONF_MEAS_TRIG_MASK & cmd );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_GetManufacturerID ( I2C_parameters_t , HDC2080_data_t* )
+ *
+ * @details     It gets the manufacturer ID.
+ *
+ * @param[in]    myI2Cparameters: 	I2C parameters.
+ *
+ * @param[out]   myManufacturerID:	Manufacturer ID.
+ *
+ *
+ * @return       Status of HDC2080_GetManufacturerID.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        31/October/2019
+ * @version     31/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_GetManufacturerID ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myManufacturerID )
+{
+	uint8_t		 cmd[2]  = { 0U };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   HDC2080_MANUFACTURER_ID_LOW;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+	/* Parse the data	 */
+	myManufacturerID->manufacturer_id	 =	 cmd[1];
+	myManufacturerID->manufacturer_id  <<=	 8U;
+	myManufacturerID->manufacturer_id	|=	 cmd[0];
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   HDC2080_SUCCESS;
+	}
+	else
+	{
+		return   HDC2080_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       HDC2080_GetDeviceID ( I2C_parameters_t , HDC2080_data_t* )
+ *
+ * @details     It gets the device ID.
+ *
+ * @param[in]    myI2Cparameters: 	I2C parameters.
+ *
+ * @param[out]   myDeviceID:		Device ID.
+ *
+ *
+ * @return       Status of HDC2080_GetDeviceID.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        31/October/2019
+ * @version     31/October/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+HDC2080_status_t HDC2080_GetDeviceID ( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myDeviceID )
+{
+	uint8_t		 cmd[2]  = { 0U };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   HDC2080_DEVICE_ID_LOW;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+	/* Parse the data	 */
+	myDeviceID->device_id	 =	 cmd[1];
+	myDeviceID->device_id  <<=	 8U;
+	myDeviceID->device_id	|=	 cmd[0];
 
 
 
