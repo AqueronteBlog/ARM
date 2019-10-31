@@ -575,4 +575,28 @@ HDC2080_status_t HDC2080_SetInterruptMode			( I2C_parameters_t myI2Cparameters, 
   */
 HDC2080_status_t HDC2080_GetInterruptMode			( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myIntMode			);
 
+/** It sets the measurement configuration.
+  */
+HDC2080_status_t HDC2080_SetMeasurementConf			( I2C_parameters_t myI2Cparameters, HDC2080_data_t myMeasConf			);
+
+/** It gets the measurement configuration.
+  */
+HDC2080_status_t HDC2080_GetMeasurementConf			( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myMeasConf			);
+
+/** It triggers a new measurement.
+  */
+HDC2080_status_t HDC2080_StartMeasurementTrigger	( I2C_parameters_t myI2Cparameters										);
+
+/** It gets the measurement trigger flag.
+  */
+HDC2080_status_t HDC2080_GetMeasurementTrigger		( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myMeasTrig			);
+
+/** It gets the manufacturer ID.
+  */
+HDC2080_status_t HDC2080_GetManufacturerID			( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myManufacturerID	);
+
+/** It gets the device ID.
+  */
+HDC2080_status_t HDC2080_GetDeviceID				( I2C_parameters_t myI2Cparameters, HDC2080_data_t* myDeviceID			);
+
 
