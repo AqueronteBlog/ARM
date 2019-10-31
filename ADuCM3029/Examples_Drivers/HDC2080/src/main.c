@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
  * @details     [todo]This example shows how to work with the external device: HDC2080.
- * 				A new temperature and pressure measurement is sampled every 1 second and transmitted through
+ * 				A new temperature and humidity measurement is sampled every 1 second and transmitted through
  * 				the UART (115200 baud).
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
@@ -41,10 +41,10 @@ volatile uint8_t  *myPtr;                   /*!<   Pointer to point out myMessag
  */
 int main(int argc, char *argv[])
 {
-	uint8_t  			 myMessage[ TX_BUFF_SIZE ];
-//	I2C_parameters_t     myHDC2080_I2C_parameters;
-//	HDC2080_data_t 	 myHDC2080_Data;
-//	HDC2080_status_t  aux;
+	uint8_t  			myMessage[ TX_BUFF_SIZE ];
+	I2C_parameters_t    myHDC2080_I2C_parameters;
+	HDC2080_data_t 	 	myHDC2080_Data;
+	HDC2080_status_t  	aux;
 
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
@@ -62,34 +62,56 @@ int main(int argc, char *argv[])
 	conf_Timer0 ();
 
 
-
 	/* I2C definition   */
-//	myHDC2080_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
-//	myHDC2080_I2C_parameters.sda         	 =    I2C0_SDA;
-//	myHDC2080_I2C_parameters.scl         	 =    I2C0_SCL;
-//	myHDC2080_I2C_parameters.addr        	 =    HDC2080_ADDRESS;
-//	myHDC2080_I2C_parameters.freq        	 =    100000;
-//	myHDC2080_I2C_parameters.pclkFrequency	 =	  6400000;
-//	myHDC2080_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
-//	myHDC2080_I2C_parameters.sclPort     	 =    pADI_GPIO0;
-//
-//	/* Configure I2C peripheral */
-//	aux  =   HDC2080_Init ( myHDC2080_I2C_parameters );
-//
-//	/* Get device IDs	 */
-//	aux	 =	 HDC2080_GetDeviceID ( myHDC2080_I2C_parameters, &myHDC2080_Data );
-//
-//	/* Configure the device: 1 sample | DRDY pin disabled | One-shot mode	 */
-//	myHDC2080_Data.ave_num	 =	 MODE_CONTROL_AVE_NUM_SINGLE;
-//	myHDC2080_Data.dren		 =	 MODE_CONTROL_DREN_DRDY_DISABLE;
-//
-//	/* Measurement control block is ACTIVE	 */
-//	myHDC2080_Data.rstb	 =	 RESET_RSTB_ACTIVE;
-//	aux	 =	 HDC2080_SetSoftReset ( myHDC2080_I2C_parameters, myHDC2080_Data );
-//
-//	/* Device in Active mode	 */
-//	myHDC2080_Data.pwr_down	 =	 POWER_DOWN_PWR_DOWN_ACTIVE;
-//	aux	 =	 HDC2080_SetPowerDown ( myHDC2080_I2C_parameters, myHDC2080_Data );
+	myHDC2080_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
+	myHDC2080_I2C_parameters.sda         	 =    I2C0_SDA;
+	myHDC2080_I2C_parameters.scl         	 =    I2C0_SCL;
+	myHDC2080_I2C_parameters.addr        	 =    HDC2080_ADDRESS_GND;
+	myHDC2080_I2C_parameters.freq        	 =    100000;
+	myHDC2080_I2C_parameters.pclkFrequency	 =	  6400000;
+	myHDC2080_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
+	myHDC2080_I2C_parameters.sclPort     	 =    pADI_GPIO0;
+
+	/* Configure I2C peripheral */
+	aux  =   HDC2080_Init ( myHDC2080_I2C_parameters );
+
+	/* Perform a software reset */
+	aux	 =	 HDC2080_SetSoftReset ( myHDC2080_I2C_parameters );
+	do{
+		aux	 =	 HDC2080_GetSoftReset ( myHDC2080_I2C_parameters, &myHDC2080_Data );
+	}while( ( myHDC2080_Data.soft_res & RESET_DRDY_INT_CONF_SOFT_RES_MASK ) == RESET_DRDY_INT_CONF_SOFT_RES_RESET );
+
+	/* Get Manufacturer IDs	 */
+	aux	 =	 HDC2080_GetManufacturerID ( myHDC2080_I2C_parameters, &myHDC2080_Data );
+
+	/* Get device IDs	 */
+	aux	 =	 HDC2080_GetDeviceID ( myHDC2080_I2C_parameters, &myHDC2080_Data );
+
+	/* Auto measurement mode: Disable (  Initiate measurement via I2C )	 */
+	myHDC2080_Data.amm	 =	 RESET_DRDY_INT_CONF_AMM_DISABLED;
+	aux	 =	 HDC2080_SetAutoMeasurementMode ( myHDC2080_I2C_parameters, myHDC2080_Data );
+
+	/* Heater off	 */
+	myHDC2080_Data.heater_en	 =	 RESET_DRDY_INT_CONF_HEAT_EN_OFF;
+	aux	 =	 HDC2080_SetHeaterMode ( myHDC2080_I2C_parameters, myHDC2080_Data );
+
+	/* DRDY/INT_EN pin configuration: High Z	 */
+	myHDC2080_Data.drdy_intEn	 =	 RESET_DRDY_INT_CONF_DRDY_INT_EN_HIGH_Z;
+	aux	 =	 HDC2080_SetHeaterMode ( myHDC2080_I2C_parameters, myHDC2080_Data );
+
+	/* All interrupts are disabled	 */
+	myHDC2080_Data.drdy_enable	=	 INTERRUPT_DRDY_DRDY_ENABLE_INTERRUPT_DISABLE;
+	myHDC2080_Data.th_enable	=	 INTERRUPT_DRDY_TH_ENABLE_INTERRUPT_DISABLE;
+	myHDC2080_Data.tl_enable	=	 INTERRUPT_DRDY_TL_ENABLE_INTERRUPT_DISABLE;
+	myHDC2080_Data.hh_enable	=	 INTERRUPT_DRDY_HH_ENABLE_INTERRUPT_DISABLE;
+	myHDC2080_Data.hl_enable	=	 INTERRUPT_DRDY_HL_ENABLE_INTERRUPT_DISABLE;
+	aux						 	=	 HDC2080_SetInterruptConfiguration ( myHDC2080_I2C_parameters, myHDC2080_Data );
+
+	/* Measurement configuration: Humidity and Temperature 14-bit resolution. Both measurement enabled	 */
+	myHDC2080_Data.tres			=	 MEASUREMENT_CONF_TRES_14_BIT;
+	myHDC2080_Data.hres			=	 MEASUREMENT_CONF_HRES_14_BIT;
+	myHDC2080_Data.meas_conf	=	 MEASUREMENT_CONF_MEAS_CONF_HUMIDITY_TEMPERATURE;
+	aux						 	=	 HDC2080_SetMeasurementConf ( myHDC2080_I2C_parameters, myHDC2080_Data );
 
 
 	/* Enable Timer0	 */
@@ -121,36 +143,35 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-//			/* Trigegr a new sample	 */
-//			myHDC2080_Data.mode		 =	 MODE_CONTROL_MODE_ONE_SHOT;
-//			aux	 =	 HDC2080_SetModeControl ( myHDC2080_I2C_parameters, myHDC2080_Data );
-//
-//			/* Wait until the conversion is finished    */
-//			do
-//			{
-//				aux      =   HDC2080_GetStatus ( myHDC2080_I2C_parameters, &myHDC2080_Data );
-//			}while( ( myHDC2080_Data.rd_drdy & STATUS_RD_DRDY_MASK ) == STATUS_RD_DRDY_DATA_MEASURING );   // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
-//						                                                                                      // [WORKAROUND] Insert a counter.
-//
-//			/* Get pressure */
-//			aux  =   HDC2080_GetPressure ( myHDC2080_I2C_parameters, &myHDC2080_Data );
-//
-//			/* Get temperature	 */
-//			aux  =   HDC2080_GetTemperature ( myHDC2080_I2C_parameters, &myHDC2080_Data );
-//
-//
-//			/* Transmit data through the UART	 */
-//			sprintf ( (char*)myMessage, "P: %0.2f hPa | T: %0.2f C\r\n", myHDC2080_Data.pressure, myHDC2080_Data.temperature );
-//
-//			/* Check that is safe to send data	 */
-//			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
-//
-//			/* Transmit data back	 */
-//			myPtr            =   &myMessage[0];
-//			pADI_UART0->TX	 =	 *myPtr;
-//
-//			/* Transmit Buffer Empty Interrupt: Enabled	 */
-//			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
+			/* Trigegr a new sample	 */
+			aux	 =	 HDC2080_StartMeasurementTrigger ( myHDC2080_I2C_parameters );
+
+			/* Wait until the conversion is finished    */
+			do
+			{
+				aux      =   HDC2080_GetMeasurementTrigger ( myHDC2080_I2C_parameters, &myHDC2080_Data );
+			}while( ( myHDC2080_Data.meas_trig & MEASUREMENT_CONF_MEAS_TRIG_MASK ) != MEASUREMENT_CONF_MEAS_TRIG_NO_ACTION );    // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
+						                                                                                      	  	  	  	  	 // [WORKAROUND] Insert a counter.
+
+			/* Get temperature */
+			aux  =   HDC2080_GetTemperature ( myHDC2080_I2C_parameters, &myHDC2080_Data );
+
+			/* Get humidity	 */
+			aux  =   HDC2080_GetHumidity ( myHDC2080_I2C_parameters, &myHDC2080_Data );
+
+
+			/* Transmit data through the UART	 */
+			sprintf ( (char*)myMessage, "T: %0.2f C | RH: %0.2f %%\r\n", myHDC2080_Data.temperature, myHDC2080_Data.humidity );
+
+			/* Check that is safe to send data	 */
+			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
+
+			/* Transmit data back	 */
+			myPtr            =   &myMessage[0];
+			pADI_UART0->TX	 =	 *myPtr;
+
+			/* Transmit Buffer Empty Interrupt: Enabled	 */
+			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
 
 			/* Reset variables and turn both LEDs off	 */
 			myState	 		 =	 0UL;
