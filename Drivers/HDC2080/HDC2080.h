@@ -348,8 +348,8 @@ typedef enum
   */
 typedef enum
 {
-	MANUFACTURER_ID_LOW				=   0x54,							/*!<  MANUFACTURER ID low	              		*/
-	MANUFACTURER_ID_HIGH			=   0x49							/*!<  MANUFACTURER ID high			            */
+	MANUFACTURER_ID_LOW				=   0x49,							/*!<  MANUFACTURER ID low	              		*/
+	MANUFACTURER_ID_HIGH			=   0x54							/*!<  MANUFACTURER ID high			            */
 } HDC2080_manufacturer_ids_t;
 
 
