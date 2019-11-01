@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-			/* Trigegr a new sample	 */
+			/* Trigger a new sample	 */
 			aux	 =	 HDC2080_StartMeasurementTrigger ( myHDC2080_I2C_parameters );
 
 			/* Wait until the conversion is finished    */
