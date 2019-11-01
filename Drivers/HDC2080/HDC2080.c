@@ -131,7 +131,7 @@ HDC2080_status_t HDC2080_GetTemperature  ( I2C_parameters_t myI2Cparameters, HDC
 	aux   	 =   HDC2080_GetRawTemperature  ( myI2Cparameters, &(*myTemperature) );
 
 	/* Parse data   */
-	myTemperature->temperature	=	( ( myTemperature->rawTemperature ) / 65536 ) * 165 - 40;
+	myTemperature->temperature	=	( (float)( myTemperature->rawTemperature ) / 65536.0 ) * 165.0 - 40.0;
 
 
 	return   aux;
@@ -215,7 +215,7 @@ HDC2080_status_t HDC2080_GetHumidity  ( I2C_parameters_t myI2Cparameters, HDC208
 	aux   	 =   HDC2080_GetRawHumidity  ( myI2Cparameters, &(*myHumidity) );
 
 	/* Parse data   */
-	myHumidity->humidity	=	( ( myHumidity->rawHumidity ) / 65536 ) * 100;
+	myHumidity->humidity	=	( (float)( myHumidity->rawHumidity ) / 65536.0 ) * 100.0;
 
 
 	return   aux;
