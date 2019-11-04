@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the external device: HDC2080.
+ * @details     This example shows how to work with the external device: HDC2080.
  * 				A new temperature and humidity measurement is sampled every 1 second and transmitted through
  * 				the UART (115200 baud).
  *
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-			/* Trigegr a new sample	 */
+			/* Trigger a new sample	 */
 			aux	 =	 HDC2080_StartMeasurementTrigger ( myHDC2080_I2C_parameters );
 
 			/* Wait until the conversion is finished    */
