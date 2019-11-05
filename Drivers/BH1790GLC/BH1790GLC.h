@@ -11,7 +11,7 @@
  * @version     04/November/2019    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
- * @pre         This code belongs to Nimbus Centre ( https://www.nimbus.cit.ie ).
+ * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
 
@@ -21,13 +21,12 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESSES
+  * @brief   DEFAULT ADDRESS
   */
 typedef enum
 {
-  BH1790GLC_ADDRESS_GND  =   0b1000000,         	/*!<   ADDR connected to GND                        */
-  BH1790GLC_ADDRESS_VDD  =   0b1000001          	/*!<   ADDR connected to VDD                        */
-} BH1790GLC_addresses_t;
+  BH1790GLC_ADDRESS  =   0b1011011          /*!<   ADDR                         	*/
+} BH1790GLC_address_t;
 
 
 
@@ -36,145 +35,36 @@ typedef enum
   */
 typedef enum
 {
-  BH1790GLC_TEMPERATURE_LOW        	=   0x00,	/*!<  Temperature [7:0]		                         						*/
-  BH1790GLC_TEMPERATURE_HIGH         	=   0x01,   /*!<  Temperature [15:8]							     					*/
-  BH1790GLC_HUMIDITY_LOW      		=   0x02,   /*!<  Humidity [7:0]                        								*/
-  BH1790GLC_HUMIDITY_HIGH	         	=   0x03,   /*!<  Humidity [15:8]	                             						*/
-  BH1790GLC_INTERRUPT_DRDY    		=   0x04,   /*!<  DataReady and interrupt configuration                        			*/
-  BH1790GLC_TEMPERATURE_MAX		    =   0x05,   /*!<  Maximum measured temperature (Not supported in Auto Measurement Mode)	*/
-  BH1790GLC_HUMIDITY_MAX    			=   0x06,   /*!<  Maximum measured humidity (Not supported in Auto Measurement Mode)	*/
-  BH1790GLC_INTERRUPT_ENABLE    		=   0x07,   /*!<  Interrupt Enable	                 									*/
-  BH1790GLC_TEMP_OFFSET_ADJUST   		=   0x08,   /*!<  Temperature offset adjustment	                 						*/
-  BH1790GLC_HUM_OFFSET_ADJUST 		=   0x09,   /*!<  Humidity offset adjustment                      						*/
-  BH1790GLC_TEMP_THR_L 				=   0x0A,   /*!<  Temperature Threshold Low                      						*/
-  BH1790GLC_TEMP_THR_H 				=   0x0B,   /*!<  Temperature Threshold High                        					*/
-  BH1790GLC_RH_THR_L 					=   0x0C,   /*!<  Humidity threshold Low                       							*/
-  BH1790GLC_RH_THR_H 					=   0x0D,   /*!<  Humidity threshold High                       						*/
-  BH1790GLC_RESET_DRDY_INT_CONF 		=   0x0E,   /*!<  Soft Reset and Interrupt Configuration                        		*/
-  BH1790GLC_MEASUREMENT_CONFIGURATION	=   0x0F,   /*!<  Measurement configuration                       						*/
-  BH1790GLC_MANUFACTURER_ID_LOW 		=   0xFC,   /*!<  Manufacturer ID Low                       							*/
-  BH1790GLC_MANUFACTURER_ID_HIGH 		=   0xFD,   /*!<  Manufacturer ID High                      							*/
-  BH1790GLC_DEVICE_ID_LOW 			=   0xFE,   /*!<  Device ID Low                       									*/
-  BH1790GLC_DEVICE_ID_HIGH 			=   0xFF    /*!<  Device ID High                      									*/
+  BH1790GLC_MANUFACTURER_ID     =   0x0F,	/*!<  Manufacturer ID                   */
+  BH1790GLC_PART_ID			    =   0x10,   /*!<  Part ID							*/
+  BH1790GLC_RESET		      	=   0x40,   /*!<  SWRESET                       	*/
+  BH1790GLC_MEAS_CONTROL1	    =   0x41,   /*!<  Measurement setting Control       */
+  BH1790GLC_MEAS_CONTROL2    	=   0x42,   /*!<  Measurement setting Control       */
+  BH1790GLC_MEAS_START			=   0x43,   /*!<  Start Measurement					*/
+  BH1790GLC_DATAOUT_LEDOFF_LSB 	=   0x54,   /*!<  Measurement Data LSB (LED OFF)	*/
+  BH1790GLC_DATAOUT_LEDOFF_MSB	=   0x55,   /*!<  Measurement Data MSB (LED OFF)	*/
+  BH1790GLC_DATAOUT_LEDON_LSB   =   0x56,   /*!<  Measurement Data LSB (LED ON)     */
+  BH1790GLC_DATAOUT_LEDON_MSB 	=   0x57    /*!<  Measurement Data MSB (LED ON)     */
 } BH1790GLC_register_map_t;
 
 
 
 /**
-  * @brief   INTERRUPT/DRDY REGISTER
+  * @brief   MANUFACTOR ID
   */
-/* DRDY_STATUS <7>
- *    NOTE: DataReady bit status. DRDY_STATUS is cleared to 0 when read.
- */
 typedef enum
 {
-    INTERRUPT_DRDY_DRDY_STATUS_MASK				=   ( 1U << 7U ),	/*!<  DRDY_STATUS mask                          */
-	INTERRUPT_DRDY_DRDY_STATUS_DATA_NOT_READY	=   ( 0U << 7U ),	/*!<  DRDY_STATUS data not ready                */
-	INTERRUPT_DRDY_DRDY_STATUS_DATA_READY		=   ( 1U << 7U )	/*!<  DRDY_STATUS data ready 		            */
-} BH1790GLC_interrupt_drdy_drdy_status_t;
-
-
-/* TH_STATUS <6>
- *    NOTE: Temperature threshold HIGH Interrupt status. TH_STATUS is cleared to 0 when read.
- */
-typedef enum
-{
-    INTERRUPT_DRDY_TH_STATUS_MASK				=   ( 1U << 6U ),	/*!<  TH_STATUS mask 	                        */
-	INTERRUPT_DRDY_TH_STATUS_NO_INTERRUPT		=   ( 0U << 6U ),	/*!<  No interrupt				                */
-	INTERRUPT_DRDY_TH_STATUS_INTERRUPT			=   ( 1U << 6U )	/*!<  Interrupt				 		            */
-} BH1790GLC_interrupt_drdy_th_status_t;
-
-
-/* TL_STATUS <5>
- *    NOTE: Temperature threshold LOW Interrupt status. TL_STATUS is cleared to 0 when read.
- */
-typedef enum
-{
-    INTERRUPT_DRDY_TL_STATUS_MASK				=   ( 1U << 5U ),	/*!<  TL_STATUS mask 	                        */
-	INTERRUPT_DRDY_TL_STATUS_NO_INTERRUPT		=   ( 0U << 5U ),	/*!<  No interrupt				                */
-	INTERRUPT_DRDY_TL_STATUS_INTERRUPT			=   ( 1U << 5U )	/*!<  Interrupt				 		            */
-} BH1790GLC_interrupt_drdy_tl_status_t;
-
-
-/* HH_STATUS <4>
- *    NOTE: Humidity threshold HIGH Interrupt status. HH_STATUS is cleared to 0 when read.
- */
-typedef enum
-{
-    INTERRUPT_DRDY_HH_STATUS_MASK				=   ( 1U << 4U ),	/*!<  HH_STATUS mask 	                        */
-	INTERRUPT_DRDY_HH_STATUS_NO_INTERRUPT		=   ( 0U << 4U ),	/*!<  No interrupt				                */
-	INTERRUPT_DRDY_HH_STATUS_INTERRUPT			=   ( 1U << 4U )	/*!<  Interrupt				 		            */
-} BH1790GLC_interrupt_drdy_hh_status_t;
-
-
-/* HL_STATUS <3>
- *    NOTE: Humidity threshold LOW Interrupt status. HL_STATUS is cleared to 0 when read.
- */
-typedef enum
-{
-    INTERRUPT_DRDY_HL_STATUS_MASK				=   ( 1U << 3U ),	/*!<  HL_STATUS mask 	                        */
-	INTERRUPT_DRDY_HL_STATUS_NO_INTERRUPT		=   ( 0U << 3U ),	/*!<  No interrupt				                */
-	INTERRUPT_DRDY_HL_STATUS_INTERRUPT			=   ( 1U << 3U ) 	/*!<  Interrupt				 		            */
-} BH1790GLC_interrupt_drdy_hl_status_t;
-
+    MANUFACTOR_ID_MANUFACTURER_ID	=   0xE0	/*!<  Manufacturer ID                         	*/
+} BH1790GLC_manufactor_id_manufacturer_id_t;
 
 
 /**
-  * @brief   INTERRUPT CONFIGURATION REGISTER
+  * @brief   PART ID
   */
-/* DRDY_STATUS <7>
- *    NOTE: DataReady interrupt enable.
- */
 typedef enum
 {
-    INTERRUPT_DRDY_DRDY_ENABLE_MASK					=   ( 1U << 7U ),	/*!<  DRDY_ENABLE mask                          */
-	INTERRUPT_DRDY_DRDY_ENABLE_INTERRUPT_DISABLE	=   ( 0U << 7U ),	/*!<  DRDY_ENABLE interrupt disable             */
-	INTERRUPT_DRDY_DRDY_ENABLE_INTERRUPT_ENABLE		=   ( 1U << 7U )	/*!<  DRDY_ENABLE interrupt enable 		        */
-} BH1790GLC_interrupt_enable_drdy_enable_t;
-
-
-/* TH_ENABLE <6>
- *    NOTE: Temperature threshold HIGH Interrupt enable.
- */
-typedef enum
-{
-    INTERRUPT_DRDY_TH_ENABLE_MASK					=   ( 1U << 6U ),	/*!<  TH_ENABLE mask 	                        */
-	INTERRUPT_DRDY_TH_ENABLE_INTERRUPT_DISABLE		=   ( 0U << 6U ),	/*!<  Interrupt disable			                */
-	INTERRUPT_DRDY_TH_ENABLE_INTERRUPT_ENABLE		=   ( 1U << 6U ),	/*!<  Interrupt	enable		 		            */
-} BH1790GLC_interrupt_enable_th_enable_t;
-
-
-/* TL_ENABLE <5>
- *    NOTE: Temperature threshold LOW Interrupt enable.
- */
-typedef enum
-{
-    INTERRUPT_DRDY_TL_ENABLE_MASK					=   ( 1U << 5U ),	/*!<  TL_ENABLE mask 	                        */
-	INTERRUPT_DRDY_TL_ENABLE_INTERRUPT_DISABLE		=   ( 0U << 5U ),	/*!<  Interrupt disable			                */
-	INTERRUPT_DRDY_TL_ENABLE_INTERRUPT_ENABLE		=   ( 1U << 5U ),	/*!<  Interrupt	enable		 		            */
-} BH1790GLC_interrupt_enable_tl_enable_t;
-
-
-/* HH_ENABLE <4>
- *    NOTE: Humidity threshold HIGH Interrupt enable.
- */
-typedef enum
-{
-    INTERRUPT_DRDY_HH_ENABLE_MASK					=   ( 1U << 4U ),	/*!<  HH_ENABLE mask 	                        */
-	INTERRUPT_DRDY_HH_ENABLE_INTERRUPT_DISABLE		=   ( 0U << 4U ),	/*!<  Interrupt disable			                */
-	INTERRUPT_DRDY_HH_ENABLE_INTERRUPT_ENABLE		=   ( 1U << 4U ),	/*!<  Interrupt	enable		 		            */
-} BH1790GLC_interrupt_enable_hh_enable_t;
-
-
-/* HL_ENABLE <3>
- *    NOTE: Humidity threshold LOW Interrupt enable.
- */
-typedef enum
-{
-    INTERRUPT_DRDY_HL_ENABLE_MASK					=   ( 1U << 3U ),	/*!<  HL_ENABLE mask 	                        */
-	INTERRUPT_DRDY_HL_ENABLE_INTERRUPT_DISABLE		=   ( 0U << 3U ),	/*!<  Interrupt disable			                */
-	INTERRUPT_DRDY_HL_ENABLE_INTERRUPT_ENABLE		=   ( 1U << 3U ),	/*!<  Interrupt	enable		 		            */
-} BH1790GLC_interrupt_enable_hl_enable_t;
+    PART_ID							=   0x0D	/*!<  Part ID					 		        */
+} BH1790GLC_part_id_t;
 
 
 /**
@@ -371,53 +261,11 @@ typedef enum
 #define BH1790GLC_VECTOR_STRUCT_H
 typedef struct
 {
-    /* Output registers  */
-    uint16_t rawHumidity;     							/*!<  Raw humidity                  */
-    uint16_t rawTemperature;  							/*!<  Raw temperature               */
 
-    float   humidity;        							/*!<  Humidity value                */
-    float   temperature;     							/*!<  Temperature value             */
-
-    uint8_t	rawTemperature_max;							/*!<  Raw temperature max           */
-    uint8_t	rawHumidity_max;							/*!<  Raw humidity max    	        */
-
-    /* Offsets	 */
-    uint8_t	temp_offset_adjust;							/*!<  Temperature offset   	        */
-    uint8_t	hum_offset_adjust;							/*!<  Humidity offset   	        */
-
-    /* Interrupt DRDY Field Descriptions	 */
-    uint8_t	interrupt_drdy_status;						/*!<  Interrupt DRDY status	    	*/
-
-    /* Interrupt Configuration Field Descriptions	 */
-    BH1790GLC_interrupt_enable_drdy_enable_t drdy_enable;	/*!<  DataReady Interrupt enable					*/
-    BH1790GLC_interrupt_enable_th_enable_t   th_enable;	/*!<  Temperature threshold HIGH Interrupt enable	*/
-    BH1790GLC_interrupt_enable_tl_enable_t   tl_enable;	/*!<  Temperature threshold LOW Interrupt enable    */
-    BH1790GLC_interrupt_enable_hh_enable_t   hh_enable;	/*!<  Humidity threshold HIGH Interrupt enable	    */
-    BH1790GLC_interrupt_enable_hl_enable_t   hl_enable;	/*!<  Humidity threshold LOW Interrupt enable	    */
-
-    /*  Thresholds	 */
-    uint8_t	temp_thres_low;								/*!<  Temperature threshold low						*/
-    uint8_t	temp_thres_high;							/*!<  Temperature threshold low						*/
-    uint8_t	hum_thres_low;								/*!<  Humidity threshold low						*/
-    uint8_t	hum_thres_high;								/*!<  Humidity threshold low						*/
-
-    /* Configuration Field Descriptions	 */
-    BH1790GLC_reset_drdy_int_conf_soft_res_t	  soft_res;		/*!<  Soft reset flag								*/
-    BH1790GLC_reset_drdy_int_conf_amm_t		  amm;			/*!<  Auto Measurement Mode							*/
-    BH1790GLC_reset_drdy_int_conf_heat_en_t	  heater_en;	/*!<  Heater Mode									*/
-    BH1790GLC_reset_drdy_int_conf_drdr_int_en_t drdy_intEn;	/*!<  DRDY/INT_EN pin configuration					*/
-    BH1790GLC_reset_drdy_int_conf_int_pol_t	  int_pol;		/*!<  Interrupt polarity							*/
-    BH1790GLC_reset_drdy_int_conf_int_mode_t	  int_mode;		/*!<  Interrupt mode								*/
-
-    /*  Measurement Configuration Field Descriptions	 */
-    BH1790GLC_measurement_configuration_tres_t 	  tres;			/*!<  Temperature resolution						*/
-    BH1790GLC_measurement_configuration_hres_t 	  hres;			/*!<  Humidity resolution							*/
-    BH1790GLC_measurement_configuration_meas_conf_t meas_conf;	/*!<  Measurement configuration						*/
-    BH1790GLC_measurement_configuration_meas_trig_t meas_trig;	/*!<  Measurement trigger							*/
 
     /* Device identifications   */
-    uint16_t manufacturer_id;        					/*!<  Manufacturer ID              */
-    uint16_t device_id;        							/*!<  Device ID                    */
+    uint8_t manufacturer_id;        					/*!<  Manufacturer ID              */
+    uint8_t PART_id;        							/*!<  Part ID                      */
 } BH1790GLC_data_t;
 #endif
 
