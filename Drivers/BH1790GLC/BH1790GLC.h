@@ -50,208 +50,74 @@ typedef enum
 
 
 /**
-  * @brief   MANUFACTOR ID
+  * @brief   MANUFACTOR ID REGISTER
   */
 typedef enum
 {
-    MANUFACTOR_ID_MANUFACTURER_ID	=   0xE0	/*!<  Manufacturer ID                         	*/
+    MANUFACTOR_ID_MANUFACTURER_ID				=   0xE0			/*!<  Manufacturer ID                         	*/
 } BH1790GLC_manufactor_id_manufacturer_id_t;
 
 
 /**
-  * @brief   PART ID
+  * @brief   PART ID REGISTER
   */
 typedef enum
 {
-    PART_ID							=   0x0D	/*!<  Part ID					 		        */
-} BH1790GLC_part_id_t;
+	PART_ID_PART_ID								=   0x0D			/*!<  Part ID					 		        */
+} BH1790GLC_part_id_part_id_t;
 
 
 /**
-  * @brief   TEMP_OFFSET_ADJUST REGISTER
-  *				NOTE: Temperature offset adjustment. Added to the converted temperature value.
+  * @brief   RESET REGISTER
+ */
+/* SWRESET <7>
+ *    NOTE: Software reset.
  */
 typedef enum
 {
-	TEMP_OFFSET_ADJUST_MASK				=   0xFF,						/*!<  TEMP_OFFSET_ADJUST mask       	        */
-	TEMP_OFFSET_ADJUST_MINUS_20_62_C	=   ( 1U << 7U ),				/*!<  TEMP_OFFSET_ADJUST: –20.62°C  			*/
-	TEMP_OFFSET_ADJUST_10_32_C			=   ( 1U << 6U ),				/*!<  TEMP_OFFSET_ADJUST:  10.32°C  			*/
-	TEMP_OFFSET_ADJUST_5_16_C			=   ( 1U << 5U ),				/*!<  TEMP_OFFSET_ADJUST:   5.16°C  			*/
-	TEMP_OFFSET_ADJUST_2_58_C			=   ( 1U << 4U ),				/*!<  TEMP_OFFSET_ADJUST:   2.58°C  			*/
-	TEMP_OFFSET_ADJUST_1_28_C			=   ( 1U << 3U ),				/*!<  TEMP_OFFSET_ADJUST:   1.28°C  			*/
-	TEMP_OFFSET_ADJUST_0_64_C			=   ( 1U << 2U ),				/*!<  TEMP_OFFSET_ADJUST:   0.64°C  			*/
-	TEMP_OFFSET_ADJUST_0_32_C			=   ( 1U << 1U ),				/*!<  TEMP_OFFSET_ADJUST:   0.32°C  			*/
-	TEMP_OFFSET_ADJUST_0_16_C			=   ( 1U << 0U ) 				/*!<  TEMP_OFFSET_ADJUST:   0.16°C  			*/
-} BH1790GLC_temp_offset_adjust_t;
+	RESET_SWRESET_MASK							=   ( 1U << 7U ),	/*!<  SWRESET mask       	    			    */
+	RESET_SWRESET_ENABLED						=   ( 1U << 7U ),	/*!<  Software reset is performed				*/
+	RESET_SWRESET_DISABLED						=   ( 0U << 7U ) 	/*!<  Software reset is completed	 			*/
+} BH1790GLC_reset_swreset_t;
 
 
 /**
-  * @brief   HUM_OFFSET_ADJUST REGISTER
-  *				NOTE: Humidity offset adjustment. Added to the converted Humidity value.
+  * @brief   MEAS_CONTROL1 REGISTER
+  *
+ */
+/* RDY <7>
+ *    NOTE: OSC block.
  */
 typedef enum
 {
-	HUM_OFFSET_ADJUST_MASK				=   0xFF,						/*!<  HUM_OFFSET_ADJUST mask       	        	*/
-	HUM_OFFSET_ADJUST_MINUS_25_RH		=   ( 1U << 7U ),				/*!<  HUM_OFFSET_ADJUST: –25   %RH  			*/
-	HUM_OFFSET_ADJUST_12_5_RH			=   ( 1U << 6U ),				/*!<  HUM_OFFSET_ADJUST:  12.5 %RH  			*/
-	HUM_OFFSET_ADJUST_6_3_RH			=   ( 1U << 5U ),				/*!<  HUM_OFFSET_ADJUST:   6.3 %RH 				*/
-	HUM_OFFSET_ADJUST_3_1_RH			=   ( 1U << 4U ),				/*!<  HUM_OFFSET_ADJUST:   3.1 %RH  			*/
-	HUM_OFFSET_ADJUST_1_6_RH			=   ( 1U << 3U ),				/*!<  HUM_OFFSET_ADJUST:   1.6 %RH  			*/
-	HUM_OFFSET_ADJUST_0_8_RH			=   ( 1U << 2U ),				/*!<  HUM_OFFSET_ADJUST:   0.8 %RH  			*/
-	HUM_OFFSET_ADJUST_0_4_RH			=   ( 1U << 1U ),				/*!<  HUM_OFFSET_ADJUST:   0.4 %RH 				*/
-	HUM_OFFSET_ADJUST_0_2_RH			=   ( 1U << 0U ) 				/*!<  HUM_OFFSET_ADJUST:   0.2 %RH  			*/
-} BH1790GLC_hum_offset_adjust_t;
+	MEAS_CONTROL1_RDY_MASK						=   ( 1U << 7U ),	/*!<  RDY mask       	        				*/
+	MEAS_CONTROL1_RDY_PROHIBITED				=   ( 0U << 7U ),	/*!<  Prohibited								*/
+	MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE			=   ( 1U << 0U ) 	/*!<  OSC block clock to internal block			*/
+} BH1790GLC_meas_control1_rdy_t;
 
 
-
-/**
-  * @brief   RESET_DRDY_INT_CONF REGISTER
-  */
-/* SOFT_RES <7>
- *    NOTE: EEPROM value reload and registers reset.
+/* LED_LIGHTING_FREQ <2>
+ *    NOTE: Select LED emitting frequency.
  */
 typedef enum
 {
-	RESET_DRDY_INT_CONF_SOFT_RES_MASK	=   ( 1U << 7U ),				/*!<  SOFT_RES mask                          			*/
-	RESET_DRDY_INT_CONF_SOFT_RES_NORMAL	=   ( 0U << 7U ),				/*!<  Normal Operation mode, this bit is self-clear		*/
-	RESET_DRDY_INT_CONF_SOFT_RES_RESET	=   ( 1U << 7U )				/*!<  Soft Reset 		        						*/
-} BH1790GLC_reset_drdy_int_conf_soft_res_t;
+	MEAS_CONTROL1_LED_LIGHTING_FREQ_MASK		=   ( 1U << 2U ),		/*!<  LED_LIGHTLING_FREQ mask      				*/
+	MEAS_CONTROL1_LED_LIGHTING_FREQ_128HZ_MODE	=   ( 0U << 2U ),		/*!<  128Hz Mode								*/
+	MEAS_CONTROL1_LED_LIGHTING_FREQ_64HZ_MODE	=   ( 1U << 2U ) 		/*!<  64Hz Mode									*/
+} BH1790GLC_meas_control1_led_lighting_freq_t;
 
 
-/* AMM <6:4>
- *    NOTE: EEPROM value reload and registers reset.
+/* RCYCLE <1:0>
+ *    NOTE: Select Data reading frequency.
  */
 typedef enum
 {
-	RESET_DRDY_INT_CONF_AMM_MASK		=   ( 0b111 << 4U ),			/*!<  AMM mask                          		*/
-	RESET_DRDY_INT_CONF_AMM_DISABLED	=   ( 0b000 << 4U ),			/*!<  Disabled. Initiate measurement via I2C	*/
-	RESET_DRDY_INT_CONF_AMM_0_008_HZ	=   ( 0b001 << 4U ),			/*!<  1/120Hz (1 samples every 2 minutes)		*/
-	RESET_DRDY_INT_CONF_AMM_0_017_HZ	=   ( 0b010 << 4U ),			/*!<  1/60Hz (1 samples every minute)			*/
-	RESET_DRDY_INT_CONF_AMM_0_1_HZ		=   ( 0b011 << 4U ),			/*!<  0.1Hz (1 samples every 10 seconds)		*/
-	RESET_DRDY_INT_CONF_AMM_0_2_HZ		=   ( 0b100 << 4U ),			/*!<  0.2 Hz (1 samples every 5 second)			*/
-	RESET_DRDY_INT_CONF_AMM_1_HZ		=   ( 0b101 << 4U ),			/*!<  1Hz (1 samples every second)				*/
-	RESET_DRDY_INT_CONF_AMM_2_HZ		=   ( 0b110 << 4U ),			/*!<  2Hz (2 samples every second)				*/
-	RESET_DRDY_INT_CONF_AMM_5_HZ		=   ( 0b111 << 4U ) 			/*!<  5Hz (5 samples every second)				*/
-} BH1790GLC_reset_drdy_int_conf_amm_t;
+	MEAS_CONTROL1_RCYCLE_MASK					=   ( 0b11 << 0U ),		/*!<  RCYCLE mask      							*/
+	MEAS_CONTROL1_RCYCLE_64HZ_MODE				=   ( 0b01 << 0U ),		/*!<  128Hz Mode								*/
+	MEAS_CONTROL1_RCYCLE_32HZ_MODE				=   ( 0b10 << 0U ) 		/*!<  64Hz Mode									*/
+} BH1790GLC_meas_control1_rcycle_t;
 
 
-/* HEAT_EN <3>
- *    NOTE: N/A.
- */
-typedef enum
-{
-	RESET_DRDY_INT_CONF_HEAT_EN_MASK	=   ( 1U << 3U ),				/*!<  HEAT_EN mask                        		*/
-	RESET_DRDY_INT_CONF_HEAT_EN_OFF		=   ( 0U << 3U ),				/*!<  Heater off								*/
-	RESET_DRDY_INT_CONF_HEAT_EN_ON		=   ( 1U << 3U )				/*!<  Heater on									*/
-} BH1790GLC_reset_drdy_int_conf_heat_en_t;
-
-
-/* DRDY/INT_EN <2>
- *    NOTE: DRDY/INT_EN pin configuration.
- */
-typedef enum
-{
-	RESET_DRDY_INT_CONF_DRDY_INT_EN_MASK	=   ( 1U << 2U ),			/*!<  DRDY/INT_EN mask                     		*/
-	RESET_DRDY_INT_CONF_DRDY_INT_EN_HIGH_Z	=   ( 0U << 2U ),			/*!<  High Z									*/
-	RESET_DRDY_INT_CONF_DRDY_INT_EN_ENABLED	=   ( 1U << 2U )			/*!<  Enable									*/
-} BH1790GLC_reset_drdy_int_conf_drdr_int_en_t;
-
-
-/* INT_POL <1>
- *    NOTE: Interrupt polarity.
- */
-typedef enum
-{
-	RESET_DRDY_INT_CONF_INT_POL_MASK		=   ( 1U << 1U ),			/*!<  INT_POL mask                        		*/
-	RESET_DRDY_INT_CONF_INT_POL_ACTIVE_LOW	=   ( 0U << 1U ),			/*!<  Active Low								*/
-	RESET_DRDY_INT_CONF_INT_POL_ACTIVE_HIGH	=   ( 1U << 1U )			/*!<  Active High								*/
-} BH1790GLC_reset_drdy_int_conf_int_pol_t;
-
-
-/* INT_MODE <0>
- *    NOTE: Interrupt mode.
- */
-typedef enum
-{
-	RESET_DRDY_INT_CONF_INT_MODE_MASK				=   ( 1U << 0U ),	/*!<  INT_MODE mask                        		*/
-	RESET_DRDY_INT_CONF_INT_MODE_LEVEL_SENSITIVE	=   ( 0U << 0U ),	/*!<  Level sensitive							*/
-	RESET_DRDY_INT_CONF_INT_MODE_COMPARATOR_MODE	=   ( 1U << 0U )	/*!<  Comparator mode							*/
-} BH1790GLC_reset_drdy_int_conf_int_mode_t;
-
-
-
-/**
-  * @brief   MEASUREMENT CONFIGURATION REGISTER
-  */
-/* TRES <7:6>
- *    NOTE: Temperature resolution.
- */
-typedef enum
-{
-    MEASUREMENT_CONF_TRES_MASK				=   ( 0b11 << 6U ),			/*!<  TRES mask                          		*/
-	MEASUREMENT_CONF_TRES_14_BIT			=   ( 0b00 << 6U ),			/*!<  14 bit						            */
-	MEASUREMENT_CONF_TRES_11_BIT			=   ( 0b01 << 6U ),			/*!<  11 bit						            */
-	MEASUREMENT_CONF_TRES_9_BIT				=   ( 0b10 << 6U )  		/*!<   9 bit						            */
-} BH1790GLC_measurement_configuration_tres_t;
-
-
-
-/* HRES <5:4>
- *    NOTE: Humidity resolution.
- */
-typedef enum
-{
-    MEASUREMENT_CONF_HRES_MASK				=   ( 0b11 << 4U ),			/*!<  HRES mask                          		*/
-	MEASUREMENT_CONF_HRES_14_BIT			=   ( 0b00 << 4U ),			/*!<  14 bit						            */
-	MEASUREMENT_CONF_HRES_11_BIT			=   ( 0b01 << 4U ),			/*!<  11 bit						            */
-	MEASUREMENT_CONF_HRES_9_BIT				=   ( 0b10 << 4U )  		/*!<   9 bit						            */
-} BH1790GLC_measurement_configuration_hres_t;
-
-
-
-/* MEAS_CONF <2:1>
- *    NOTE: Measurement configuration.
- */
-typedef enum
-{
-    MEASUREMENT_CONF_MEAS_CONF_MASK					=   ( 0b11 << 1U ),	/*!<  MEAS_CONF mask                       		*/
-	MEASUREMENT_CONF_MEAS_CONF_HUMIDITY_TEMPERATURE	=   ( 0b00 << 1U ),	/*!<  Humidity + Temperature		            */
-	MEASUREMENT_CONF_MEAS_CONF_TEMPERATURE_ONLY		=   ( 0b01 << 1U )	/*!<  Temperature only				            */
-} BH1790GLC_measurement_configuration_meas_conf_t;
-
-
-
-/* MEAS_TRIG <0>
- *    NOTE: Self-clearing bit when measurement completed.
- */
-typedef enum
-{
-    MEASUREMENT_CONF_MEAS_TRIG_MASK					=   ( 1U << 0U ),	/*!<  MEAS_TRIG mask                       		*/
-	MEASUREMENT_CONF_MEAS_TRIG_NO_ACTION			=   ( 0U << 0U ),	/*!<  no action						            */
-	MEASUREMENT_CONF_MEAS_TRIG_START_MEASUREMENT	=   ( 1U << 0U )	/*!<  Start measurement				            */
-} BH1790GLC_measurement_configuration_meas_trig_t;
-
-
-
-/**
-  * @brief   MANUFACTURER ID REGISTERS
-  */
-typedef enum
-{
-	MANUFACTURER_ID_LOW				=   0x49,							/*!<  MANUFACTURER ID low	              		*/
-	MANUFACTURER_ID_HIGH			=   0x54							/*!<  MANUFACTURER ID high			            */
-} BH1790GLC_manufacturer_ids_t;
-
-
-
-/**
-  * @brief   DEVICE ID REGISTERS
-  */
-typedef enum
-{
-	DEVICE_ID_LOW					=   0xD0,							/*!<  DEVICE ID low	              				*/
-	DEVICE_ID_HIGH					=   0x07							/*!<  DEVICE ID high			           		*/
-} BH1790GLC_device_ids_t;
 
 
 
