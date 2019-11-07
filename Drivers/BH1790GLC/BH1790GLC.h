@@ -92,7 +92,7 @@ typedef enum
 {
 	MEAS_CONTROL1_RDY_MASK						=   ( 1U << 7U ),	/*!<  RDY mask       	        				*/
 	MEAS_CONTROL1_RDY_PROHIBITED				=   ( 0U << 7U ),	/*!<  Prohibited								*/
-	MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE			=   ( 1U << 0U ) 	/*!<  OSC block clock to internal block			*/
+	MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE			=   ( 1U << 7U ) 	/*!<  OSC block clock to internal block			*/
 } BH1790GLC_meas_control1_rdy_t;
 
 
@@ -116,6 +116,67 @@ typedef enum
 	MEAS_CONTROL1_RCYCLE_64HZ_MODE				=   ( 0b01 << 0U ),		/*!<  128Hz Mode								*/
 	MEAS_CONTROL1_RCYCLE_32HZ_MODE				=   ( 0b10 << 0U ) 		/*!<  64Hz Mode									*/
 } BH1790GLC_meas_control1_rcycle_t;
+
+
+/**
+  * @brief   MEAS_CONTROL2 REGISTER
+  *
+ */
+/* LED_EN <7:6>
+ *    NOTE: Select LED driver mode.
+ */
+typedef enum
+{
+	MEAS_CONTROL2_LED_EN_MASK					=   ( 0b11 << 6U ),		/*!<  LED_EN mask     	        				*/
+	MEAS_CONTROL2_LED_EN_0						=   ( 0b00 << 6U ),		/*!<  LED1 and LED2 pulsed light emit			*/
+	MEAS_CONTROL2_LED_EN_1						=   ( 0b01 << 6U ), 	/*!<  LED1 constant light LED2 pulsed light emit*/
+	MEAS_CONTROL2_LED_EN_2						=   ( 0b10 << 6U ), 	/*!<  LED1 pulsed light emit LED2 constant light*/
+	MEAS_CONTROL2_LED_EN_3						=   ( 0b11 << 6U )  	/*!<  LED1 and LED2 constant light 				*/
+} BH1790GLC_meas_control2_led_en_t;
+
+
+/* LED_ON_TIME <5>
+ *    NOTE: Select LED emitting time.
+ */
+typedef enum
+{
+	MEAS_CONTROL2_LED_ON_TIME_MASK				=   ( 1U << 5U ),		/*!<  LED_ON_TIME mask  						*/
+	MEAS_CONTROL2_LED_ON_TIME_0_3_MS_MODE		=   ( 0U << 5U ),		/*!<  0.3ms Mode								*/
+	MEAS_CONTROL2_LED_ON_TIME_0_6_MS_MODE		=   ( 1U << 5U ) 		/*!<  0.6ms Mode								*/
+} BH1790GLC_meas_control2_led_on_time_t;
+
+
+/* LED_CURRENT <3:0>
+ *    NOTE: Select LED lighting current.
+ */
+typedef enum
+{
+	MEAS_CONTROL2_LED_CURRENT_MASK				=   ( 0b1111 << 0U ),	/*!<  LED_CURRENT mask  						*/
+	MEAS_CONTROL2_LED_CURRENT_0_MA_MODE			=   ( 0x0 << 0U ),		/*!<  0mA Mode									*/
+	MEAS_CONTROL2_LED_CURRENT_1_MA_MODE			=   ( 0x8 << 0U ),		/*!<  1mA Mode									*/
+	MEAS_CONTROL2_LED_CURRENT_2_MA_MODE			=   ( 0x9 << 0U ),		/*!<  2mA Mode									*/
+	MEAS_CONTROL2_LED_CURRENT_3_MA_MODE			=   ( 0xA << 0U ),		/*!<  3mA Mode									*/
+	MEAS_CONTROL2_LED_CURRENT_6_MA_MODE			=   ( 0xB << 0U ),		/*!<  6mA Mode									*/
+	MEAS_CONTROL2_LED_CURRENT_10_MA_MODE		=   ( 0xC << 0U ),		/*!<  10mA Mode									*/
+	MEAS_CONTROL2_LED_CURRENT_20_MA_MODE		=   ( 0xD << 0U ),		/*!<  20mA Mode									*/
+	MEAS_CONTROL2_LED_CURRENT_30_MA_MODE		=   ( 0xE << 0U ),		/*!<  30mA Mode									*/
+	MEAS_CONTROL2_LED_CURRENT_60_MA_MODE		=   ( 0xF << 0U ) 		/*!<  60mA Mode									*/
+} BH1790GLC_meas_control2_led_current_t;
+
+
+/**
+  * @brief   MEAS_START REGISTER
+  *
+ */
+/* LED_EN <0>
+ *    NOTE: Flag of start measurement. Start measurement by writing 'MEAS_ST=1' after writing 'RDY=1'. Measurement doesn’t restart if writing
+ *    		'MEAS_ST=1' after start measurement. When stop measurement, write 'SWRESET=1' without writing 'MEAS_ST=0'.
+ */
+typedef enum
+{
+	MEAS_START_MEAS_ST_MASK						=   ( 1U << 0U ),		/*!<  MEAS_ST mask     	        				*/
+	MEAS_START_MEAS_ST_MEASUREMENT_START		=   ( 1U << 0U )  		/*!<  Measurement start							*/
+} BH1790GLC_meas_start_meas_st_t;
 
 
 
