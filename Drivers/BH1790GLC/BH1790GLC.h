@@ -188,11 +188,13 @@ typedef enum
 #define BH1790GLC_VECTOR_STRUCT_H
 typedef struct
 {
-
+	/* Raw dataout	 */
+	uint16_t dataOut_LED_OFF;							/*!<  Green Data Count Value when LED no emitting	*/
+	uint16_t dataOut_LED_ON;							/*!<  Green Data Count Value when LED emitting		*/
 
     /* Device identifications   */
-    uint8_t manufacturer_id;        					/*!<  Manufacturer ID              */
-    uint8_t PART_id;        							/*!<  Part ID                      */
+    uint8_t manufacturer_id;        					/*!<  Manufacturer ID              					*/
+    uint8_t part_id;        							/*!<  Part ID                      					*/
 } BH1790GLC_data_t;
 #endif
 
