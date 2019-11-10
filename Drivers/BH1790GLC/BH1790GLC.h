@@ -182,7 +182,6 @@ typedef enum
 
 
 
-
 #ifndef BH1790GLC_VECTOR_STRUCT_H
 #define BH1790GLC_VECTOR_STRUCT_H
 typedef struct
