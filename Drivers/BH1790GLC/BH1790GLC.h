@@ -186,12 +186,17 @@ typedef enum
 typedef struct
 {
 	/* Raw dataout	 */
-	uint16_t dataOut_LED_OFF;							/*!<  Green Data Count Value when LED no emitting	*/
-	uint16_t dataOut_LED_ON;							/*!<  Green Data Count Value when LED emitting		*/
+	uint16_t dataOut_LED_OFF;										/*!<  Green Data Count Value when LED no emitting	*/
+	uint16_t dataOut_LED_ON;										/*!<  Green Data Count Value when LED emitting		*/
+
+	/* System control setting	 */
+	BH1790GLC_meas_control1_rdy_t 				rdy;				/*!<  OSC block is supply clock to internal block	*/
+	BH1790GLC_meas_control1_led_lighting_freq_t led_lighting_freq;	/*!<  Select LED emitting frequency					*/
+	BH1790GLC_meas_control1_rcycle_t			rcycle;				/*!<  Select Measurement time 						*/
 
     /* Device identifications   */
-    uint8_t manufacturer_id;        					/*!<  Manufacturer ID              					*/
-    uint8_t part_id;        							/*!<  Part ID                      					*/
+    uint8_t manufacturer_id;        								/*!<  Manufacturer ID              					*/
+    uint8_t part_id;        										/*!<  Part ID                      					*/
 } BH1790GLC_data_t;
 #endif
 
@@ -215,162 +220,25 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-BH1790GLC_status_t BH1790GLC_Init               		( I2C_parameters_t myI2Cparameters                                		);
-
-/** It gets the raw temperature.
-  */
-BH1790GLC_status_t BH1790GLC_GetRawTemperature  		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myRawTemperature	);
-
-/** It gets the current temperature.
-  */
-BH1790GLC_status_t BH1790GLC_GetTemperature  			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myTemperature		);
-
-/** It gets the raw humidity.
-  */
-BH1790GLC_status_t BH1790GLC_GetRawHumidity  			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myRawHumidity		);
-
-/** It gets the current humidity.
-  */
-BH1790GLC_status_t BH1790GLC_GetHumidity	  			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myHumidity			);
-
-/** It gets the interrupt DRDY status.
-  */
-BH1790GLC_status_t BH1790GLC_GetInterrupt_DRDY_Status	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myStatus			);
-
-/** It writes the temperature max register ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_ConfTemperatureMax			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myTemperatureMax		);
-
-/** It writes the humidity max register ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_ConfHumidityMax			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myHumidityMax		);
-
-/** It sets the interrupt configuration.
-  */
-BH1790GLC_status_t BH1790GLC_SetInterruptConfiguration	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myIntConfiguration	);
-
-/** It gets the interrupt configuration.
-  */
-BH1790GLC_status_t BH1790GLC_GetInterruptConfiguration	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myIntConfiguration	);
-
-/** It sets the temperature offset.
-  */
-BH1790GLC_status_t BH1790GLC_SetTemperatureOffset		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myTemperatureOffset	);
-
-/** It gets the temperature offset ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_GetTemperatureOffset		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myTemperatureOffset	);
-
-/** It sets the humidity offset.
-  */
-BH1790GLC_status_t BH1790GLC_SetHumidityOffset			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myHumidityOffset		);
-
-/** It gets the humidity offset ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_GetHumidityOffset			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myHumidityOffset	);
-
-/** It sets the temperature threshold low value ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_SetTemperatureThresLow		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myTempThresLow		);
-
-/** It gets the temperature threshold low value ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_GetTemperatureThresLow		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myTempThresLow		);
-
-/** It sets the temperature threshold high value ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_SetTemperatureThresHigh	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myTempThresLow		);
-
-/** It gets the temperature threshold high value ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_GetTemperatureThresHigh	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myTempThresHigh		);
-
-/** It sets the humidity threshold low value ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_SetHumidityThresLow		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myHumThresLow		);
-
-/** It gets the humidity threshold low value ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_GetHumidityThresLow		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myHumThresLow		);
-
-/** It sets the humidity threshold high value ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_SetHumidityThresHigh		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myHumThresLow		);
-
-/** It gets the humidity threshold high value ( raw value ).
-  */
-BH1790GLC_status_t BH1790GLC_GetHumidityThresHigh		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myHumThresLow		);
-
-/** It makes a soft reset.
-  */
-BH1790GLC_status_t BH1790GLC_SetSoftReset				( I2C_parameters_t myI2Cparameters										);
-
-/** It checks the soft reset flag.
-  */
-BH1790GLC_status_t BH1790GLC_GetSoftReset				( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* mySoftResetFlag		);
-
-/** It sets auto measurement mode ( AMM ).
-  */
-BH1790GLC_status_t BH1790GLC_SetAutoMeasurementMode		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myAMM				);
-
-/** It gets auto measurement mode ( AMM ).
-  */
-BH1790GLC_status_t BH1790GLC_GetAutoMeasurementMode		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myAMM				);
-
-/** It sets the heater.
-  */
-BH1790GLC_status_t BH1790GLC_SetHeaterMode				( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myHeatEn				);
-
-/** It gets the heater status.
-  */
-BH1790GLC_status_t BH1790GLC_GetHeaterMode				( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myHeatEn			);
-
-/** It sets the DRDY/INT_EN pin configuration.
-  */
-BH1790GLC_status_t BH1790GLC_SetPinConfifuration		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myPinConfiguration	);
-
-/** It gets the DRDY/INT_EN pin configuration.
-  */
-BH1790GLC_status_t BH1790GLC_GetPinConfiguration		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myPinConfiguration	);
-
-/** It sets the interrupt polarity.
-  */
-BH1790GLC_status_t BH1790GLC_SetInterruptPolarity		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myIntPol				);
-
-/** It gets the interrupt polarity.
-  */
-BH1790GLC_status_t BH1790GLC_GetInterruptPolarity		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myIntPol			);
-
-/** It sets the interrupt mode.
-  */
-BH1790GLC_status_t BH1790GLC_SetInterruptMode			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myIntMode			);
-
-/** It gets the interrupt mode.
-  */
-BH1790GLC_status_t BH1790GLC_GetInterruptMode			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myIntMode			);
-
-/** It sets the measurement configuration.
-  */
-BH1790GLC_status_t BH1790GLC_SetMeasurementConf			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myMeasConf			);
-
-/** It gets the measurement configuration.
-  */
-BH1790GLC_status_t BH1790GLC_GetMeasurementConf			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myMeasConf			);
-
-/** It triggers a new measurement.
-  */
-BH1790GLC_status_t BH1790GLC_StartMeasurementTrigger	( I2C_parameters_t myI2Cparameters										);
-
-/** It gets the measurement trigger flag.
-  */
-BH1790GLC_status_t BH1790GLC_GetMeasurementTrigger		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myMeasTrig			);
+BH1790GLC_status_t BH1790GLC_Init               ( I2C_parameters_t myI2Cparameters                                		);
 
 /** It gets the manufacturer ID.
   */
-BH1790GLC_status_t BH1790GLC_GetManufacturerID			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myManufacturerID	);
+BH1790GLC_status_t BH1790GLC_GetManufacturerID	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myManufacturerID	);
 
-/** It gets the device ID.
+/** It gets the part ID.
   */
-BH1790GLC_status_t BH1790GLC_GetDeviceID				( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myDeviceID			);
+BH1790GLC_status_t BH1790GLC_GetPartID  		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myPartID			);
 
+/** It performs a soft reset.
+  */
+BH1790GLC_status_t BH1790GLC_SoftReset  		( I2C_parameters_t myI2Cparameters										);
+
+/** It sets the system control setting.
+  */
+BH1790GLC_status_t BH1790GLC_SetSystemControl	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myMeasControl1		);
+
+/** It gets the system control setting.
+  */
+BH1790GLC_status_t BH1790GLC_GetSystemControl	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myMeasControl1	);
 
