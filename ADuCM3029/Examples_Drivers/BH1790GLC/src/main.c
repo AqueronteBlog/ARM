@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
  * @details     [todo]This example shows how to work with the external device: BH1790GLC.
- * 				A new temperature and humidity measurement is sampled every 1 second and transmitted through
+ * 				A new sample is triggered every 1 second and transmitted through
  * 				the UART (115200 baud).
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
@@ -42,9 +42,9 @@ volatile uint8_t  *myPtr;                   /*!<   Pointer to point out myMessag
 int main(int argc, char *argv[])
 {
 	uint8_t  			myMessage[ TX_BUFF_SIZE ];
-//	I2C_parameters_t    myBH1790GLC_I2C_parameters;
-//	BH1790GLC_data_t 	myBH1790GLC_Data;
-//	BH1790GLC_status_t  aux;
+	I2C_parameters_t    myBH1790GLC_I2C_parameters;
+	BH1790GLC_data_t 	myBH1790GLC_Data;
+	BH1790GLC_status_t  aux;
 
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
@@ -62,26 +62,43 @@ int main(int argc, char *argv[])
 	conf_Timer0 ();
 
 
-//	/* I2C definition   */
-//	myBH1790GLC_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
-//	myBH1790GLC_I2C_parameters.sda         	 =    I2C0_SDA;
-//	myBH1790GLC_I2C_parameters.scl         	 =    I2C0_SCL;
-//	myBH1790GLC_I2C_parameters.addr        	 =    BH1790GLC_ADDRESS_GND;
-//	myBH1790GLC_I2C_parameters.freq        	 =    100000;
-//	myBH1790GLC_I2C_parameters.pclkFrequency	 =	  6400000;
-//	myBH1790GLC_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
-//	myBH1790GLC_I2C_parameters.sclPort     	 =    pADI_GPIO0;
-//
-//	/* Configure I2C peripheral */
-//	aux  =   BH1790GLC_Init ( myBH1790GLC_I2C_parameters );
-//
-//	/* Get Manufacturer IDs	 */
-//	aux	 =	 BH1790GLC_GetManufacturerID ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
-//
-//	/* Get device IDs	 */
-//	aux	 =	 BH1790GLC_GetDeviceID ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
+	/* I2C definition   */
+	myBH1790GLC_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
+	myBH1790GLC_I2C_parameters.sda         	 =    I2C0_SDA;
+	myBH1790GLC_I2C_parameters.scl         	 =    I2C0_SCL;
+	myBH1790GLC_I2C_parameters.addr        	 =    BH1790GLC_ADDRESS;
+	myBH1790GLC_I2C_parameters.freq        	 =    100000;
+	myBH1790GLC_I2C_parameters.pclkFrequency =	  6400000;
+	myBH1790GLC_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
+	myBH1790GLC_I2C_parameters.sclPort     	 =    pADI_GPIO0;
 
+	/* Configure I2C peripheral */
+	aux  =   BH1790GLC_Init ( myBH1790GLC_I2C_parameters );
 
+	/* Get Manufacturer IDs	 */
+	aux	 =	 BH1790GLC_GetManufacturerID ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
+
+	/* Get part IDs	 */
+	aux	 =	 BH1790GLC_GetPartID ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
+
+	/* Performs a software reset	 */
+	aux	 =	 BH1790GLC_SoftReset ( myBH1790GLC_I2C_parameters );
+
+	/* Wait until the OSC is ready	 */
+	do{
+		aux	 =	 BH1790GLC_GetSystemControl ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
+	}while( myBH1790GLC_Data.rdy != MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE );
+
+	/* Configure the system control setting	 */
+	myBH1790GLC_Data.led_lighting_freq	 =	 MEAS_CONTROL1_LED_LIGHTING_FREQ_128HZ_MODE;
+	myBH1790GLC_Data.rcycle				 =	 MEAS_CONTROL1_RCYCLE_32HZ_MODE;
+	aux	 =	 BH1790GLC_SetSystemControl ( myBH1790GLC_I2C_parameters, myBH1790GLC_Data );
+
+	/* Configure the measurement control setting	 */
+	myBH1790GLC_Data.led_en	 		 =	 MEAS_CONTROL2_LED_EN_0;
+	myBH1790GLC_Data.led_on_time	 =	 MEAS_CONTROL2_LED_ON_TIME_0_3_MS_MODE;
+	myBH1790GLC_Data.led_current	 =	 MEAS_CONTROL2_LED_CURRENT_1_MA_MODE;
+	aux	 =	 BH1790GLC_SetMeasurementControl ( myBH1790GLC_I2C_parameters, myBH1790GLC_Data );
 
 	/* Enable Timer0	 */
 	pADI_TMR0->CTL	|=	 ( 1U << BITP_TMR_CTL_EN );
@@ -112,35 +129,27 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-//			/* Trigger a new sample	 */
-//			aux	 =	 BH1790GLC_StartMeasurementTrigger ( myBH1790GLC_I2C_parameters );
-//
-//			/* Wait until the conversion is finished    */
-//			do
-//			{
-//				aux      =   BH1790GLC_GetMeasurementTrigger ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
-//			}while( ( myBH1790GLC_Data.meas_trig & MEASUREMENT_CONF_MEAS_TRIG_MASK ) != MEASUREMENT_CONF_MEAS_TRIG_NO_ACTION );    // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
-//						                                                                                      	  	  	  	  	 // [WORKAROUND] Insert a counter.
-//
-//			/* Get temperature */
-//			aux  =   BH1790GLC_GetTemperature ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
-//
-//			/* Get humidity	 */
-//			aux  =   BH1790GLC_GetHumidity ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
-//
-//
-//			/* Transmit data through the UART	 */
-//			sprintf ( (char*)myMessage, "T: %0.2f C | RH: %0.2f %%\r\n", myBH1790GLC_Data.temperature, myBH1790GLC_Data.humidity );
-//
-//			/* Check that is safe to send data	 */
-//			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
-//
-//			/* Transmit data back	 */
-//			myPtr            =   &myMessage[0];
-//			pADI_UART0->TX	 =	 *myPtr;
-//
-//			/* Transmit Buffer Empty Interrupt: Enabled	 */
-//			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
+			/* Trigger a new sample	 */
+			aux	 =	 BH1790GLC_StartMeasurement ( myBH1790GLC_I2C_parameters );
+
+			// Wait T_INT
+
+			/* Get the raw DATAOUT values: DATAOUT_LEDOFF and DATAOUT_LEDON	 */
+			aux  =   BH1790GLC_GetRawDataOut ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
+
+
+			/* Transmit data through the UART	 */
+			sprintf ( (char*)myMessage, "LED OFF: %x | LED ON: %x\r\n", myBH1790GLC_Data.dataOut_LED_OFF, myBH1790GLC_Data.dataOut_LED_ON );
+
+			/* Check that is safe to send data	 */
+			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
+
+			/* Transmit data back	 */
+			myPtr            =   &myMessage[0];
+			pADI_UART0->TX	 =	 *myPtr;
+
+			/* Transmit Buffer Empty Interrupt: Enabled	 */
+			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
 
 			/* Reset variables and turn both LEDs off	 */
 			myState	 		 =	 0UL;
