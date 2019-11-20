@@ -194,6 +194,11 @@ typedef struct
 	BH1790GLC_meas_control1_led_lighting_freq_t led_lighting_freq;	/*!<  Select LED emitting frequency					*/
 	BH1790GLC_meas_control1_rcycle_t			rcycle;				/*!<  Select Measurement time 						*/
 
+	/* Measurement control setting	 */
+	BH1790GLC_meas_control2_led_en_t			led_en;				/*!<  Select LED driver mode						*/
+	BH1790GLC_meas_control2_led_on_time_t		led_on_time;		/*!<  Select LED emitting time						*/
+	BH1790GLC_meas_control2_led_current_t		led_current;		/*!<  Select LED driver current						*/
+
     /* Device identifications   */
     uint8_t manufacturer_id;        								/*!<  Manufacturer ID              					*/
     uint8_t part_id;        										/*!<  Part ID                      					*/
@@ -220,25 +225,41 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-BH1790GLC_status_t BH1790GLC_Init               ( I2C_parameters_t myI2Cparameters                                		);
+BH1790GLC_status_t BH1790GLC_Init               	( I2C_parameters_t myI2Cparameters                                		);
 
 /** It gets the manufacturer ID.
   */
-BH1790GLC_status_t BH1790GLC_GetManufacturerID	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myManufacturerID	);
+BH1790GLC_status_t BH1790GLC_GetManufacturerID		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myManufacturerID	);
 
 /** It gets the part ID.
   */
-BH1790GLC_status_t BH1790GLC_GetPartID  		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myPartID			);
+BH1790GLC_status_t BH1790GLC_GetPartID  			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myPartID			);
 
 /** It performs a soft reset.
   */
-BH1790GLC_status_t BH1790GLC_SoftReset  		( I2C_parameters_t myI2Cparameters										);
+BH1790GLC_status_t BH1790GLC_SoftReset  			( I2C_parameters_t myI2Cparameters										);
 
 /** It sets the system control setting.
   */
-BH1790GLC_status_t BH1790GLC_SetSystemControl	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myMeasControl1		);
+BH1790GLC_status_t BH1790GLC_SetSystemControl		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myMeasControl1		);
 
 /** It gets the system control setting.
   */
-BH1790GLC_status_t BH1790GLC_GetSystemControl	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myMeasControl1	);
+BH1790GLC_status_t BH1790GLC_GetSystemControl		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myMeasControl1	);
+
+/** It sets the measurement control setting.
+  */
+BH1790GLC_status_t BH1790GLC_SetMeasurementControl	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myMeasControl2		);
+
+/** It gets the measurement control setting.
+  */
+BH1790GLC_status_t BH1790GLC_GetMeasurementControl	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myMeasControl2	);
+
+/** It triggers a new measurement sample.
+  */
+BH1790GLC_status_t BH1790GLC_StartMeasurement		( I2C_parameters_t myI2Cparameters										);
+
+/** It gets the DATAOUT ( DATAOUT_LEDOFF and DATAOUT_LEDON data ). Raw data value.
+  */
+BH1790GLC_status_t BH1790GLC_GetRawDataOut			( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myRawDataOut		);
 

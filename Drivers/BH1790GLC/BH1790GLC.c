@@ -286,3 +286,198 @@ BH1790GLC_status_t BH1790GLC_GetSystemControl ( I2C_parameters_t myI2Cparameters
 		return   BH1790GLC_FAILURE;
 	}
 }
+
+
+
+/**
+ * @brief       BH1790GLC_SetMeasurementControl ( I2C_parameters_t , BH1790GLC_data_t )
+ *
+ * @details     It sets the measurement control setting.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myMeasControl2:    Measurement control parameters: LED_EN, LED_ON_TIME and LED_CURRENT.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BH1790GLC_SetMeasurementControl.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/November/2019
+ * @version     20/November/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BH1790GLC_status_t BH1790GLC_SetMeasurementControl ( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myMeasControl2 )
+{
+	uint8_t		 cmd[2] = { 0 };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   BH1790GLC_MEAS_CONTROL2;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], 1U );
+
+	/* Mask and Update the register	 */
+	cmd[1]	&=  ~( MEAS_CONTROL2_LED_EN_MASK | MEAS_CONTROL2_LED_ON_TIME_MASK | MEAS_CONTROL2_LED_CURRENT_MASK );
+	cmd[1]	|=   ( myMeasControl2.led_en | myMeasControl2.led_on_time | myMeasControl2.led_current );
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   BH1790GLC_SUCCESS;
+	}
+	else
+	{
+		return   BH1790GLC_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       BH1790GLC_GetMeasurementControl ( I2C_parameters_t , BH1790GLC_data_t* )
+ *
+ * @details     It gets the measurement control setting.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myMeasControl2:    Measurement control parameters: LED_EN, LED_ON_TIME and LED_CURRENT.
+ *
+ *
+ * @return       Status of BH1790GLC_GetMeasurementControl.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/November/2019
+ * @version     20/November/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+BH1790GLC_status_t BH1790GLC_GetMeasurementControl ( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myMeasControl2 )
+{
+	uint8_t		 cmd = 0;
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd	 =   BH1790GLC_MEAS_CONTROL2;
+	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
+
+	/* Parse the data	 */
+	myMeasControl2->led_en	 	 =	(BH1790GLC_meas_control2_led_en_t)( cmd & MEAS_CONTROL2_LED_EN_MASK );
+	myMeasControl2->led_on_time	 =	(BH1790GLC_meas_control2_led_on_time_t)( cmd & MEAS_CONTROL2_LED_ON_TIME_MASK );
+	myMeasControl2->led_current	 =	(BH1790GLC_meas_control2_led_current_t)( cmd & MEAS_CONTROL2_LED_CURRENT_MASK );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   BH1790GLC_SUCCESS;
+	}
+	else
+	{
+		return   BH1790GLC_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       BH1790GLC_StartMeasurement ( I2C_parameters_t )
+ *
+ * @details     It triggers a new measurement sample.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of BH1790GLC_StartMeasurement.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/November/2019
+ * @version     20/November/2019   The ORIGIN
+ * @pre         Start measurement by writing “MEAS_ST=1” after writing “RDY=1”. Measurement doesn’t
+ * 				restart if writing “MEAS_ST=1” after start measurement. When stop measurement, write “SWRESET=1”
+ * 				without writing “MEAS_ST=0” (for changing some parameters as well).
+ * @pre         The user MUST RESPECT the measurement time, T_INT = 28ms ( maximum ).
+ * @warning     N/A.
+ */
+BH1790GLC_status_t BH1790GLC_StartMeasurement ( I2C_parameters_t myI2Cparameters )
+{
+	uint8_t		 cmd[2] = { 0 };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   BH1790GLC_MEAS_START;
+	cmd[1]	 =	 MEAS_START_MEAS_ST_MEASUREMENT_START;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   BH1790GLC_SUCCESS;
+	}
+	else
+	{
+		return   BH1790GLC_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       BH1790GLC_GetRawDataOut ( I2C_parameters_t )
+ *
+ * @details     It gets the DATAOUT ( DATAOUT_LEDOFF and DATAOUT_LEDON data ). Raw data value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myRawDataOut:		Raw data for DATAOUT_LEDOFF and DATAOUT_LEDON.
+ *
+ *
+ * @return       Status of BH1790GLC_GetRawDataOut.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/November/2019
+ * @version     20/November/2019   The ORIGIN
+ * @pre         This function uses auto-increment.
+ * @warning     N/A.
+ */
+BH1790GLC_status_t BH1790GLC_GetRawDataOut ( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myRawDataOut )
+{
+	uint8_t		 cmd[4] = { 0 };
+	i2c_status_t aux;
+
+	/* Read the register */
+	cmd[0]	 =   BH1790GLC_DATAOUT_LEDOFF_LSB;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+	/* Parse the data	 */
+	myRawDataOut->dataOut_LED_OFF	 =	 cmd[1];
+	myRawDataOut->dataOut_LED_OFF  <<=	 8U;
+	myRawDataOut->dataOut_LED_OFF	 =	 cmd[0];
+
+	myRawDataOut->dataOut_LED_ON	 =	 cmd[3];
+	myRawDataOut->dataOut_LED_ON  <<=	 8U;
+	myRawDataOut->dataOut_LED_ON	 =	 cmd[2];
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   BH1790GLC_SUCCESS;
+	}
+	else
+	{
+		return   BH1790GLC_FAILURE;
+	}
+}
