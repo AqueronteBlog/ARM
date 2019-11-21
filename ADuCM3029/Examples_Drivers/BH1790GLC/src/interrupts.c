@@ -40,6 +40,7 @@ void GP_Tmr0_Int_Handler ( void )
 		/* Next state	 */
 		myState	 =	 1UL;
 
+
 		/* Clear IRQ	 */
 		pADI_TMR0->CLRINT	|=	 ( 1U << BITP_TMR_CLRINT_TIMEOUT );
 	}
