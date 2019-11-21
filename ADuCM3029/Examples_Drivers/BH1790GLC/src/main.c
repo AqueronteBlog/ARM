@@ -27,13 +27,13 @@
 
 /**@brief Constants.
  */
-#define TX_BUFF_SIZE  64                    /*!<   UART buffer size                                       */
+#define TX_BUFF_SIZE  64                /*!<   UART buffer size                                       */
 
 
 /**@brief Variables.
  */
-volatile uint8_t  myState	 =	 0U;		/*!<   State that indicates when to perform the next action   */
-volatile uint8_t  *myPtr;                   /*!<   Pointer to point out myMessage                         */
+volatile uint32_t  myState	 =	 0UL;   /*!<   State that indicates when to perform the next action   */
+volatile uint8_t   *myPtr;             	/*!<   Pointer to point out myMessage                         */
 
 
 
@@ -84,21 +84,26 @@ int main(int argc, char *argv[])
 	/* Performs a software reset	 */
 	aux	 =	 BH1790GLC_SoftReset ( myBH1790GLC_I2C_parameters );
 
-	/* Wait until the OSC is ready	 */
-	do{
-		aux	 =	 BH1790GLC_GetSystemControl ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
-	}while( myBH1790GLC_Data.rdy != MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE );
-
 	/* Configure the system control setting	 */
+	myBH1790GLC_Data.rdy				 =	 MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE;
 	myBH1790GLC_Data.led_lighting_freq	 =	 MEAS_CONTROL1_LED_LIGHTING_FREQ_128HZ_MODE;
 	myBH1790GLC_Data.rcycle				 =	 MEAS_CONTROL1_RCYCLE_32HZ_MODE;
 	aux	 =	 BH1790GLC_SetSystemControl ( myBH1790GLC_I2C_parameters, myBH1790GLC_Data );
 
 	/* Configure the measurement control setting	 */
-	myBH1790GLC_Data.led_en	 		 =	 MEAS_CONTROL2_LED_EN_0;
+	myBH1790GLC_Data.led_en	 		 =	 MEAS_CONTROL2_LED_EN_3;
 	myBH1790GLC_Data.led_on_time	 =	 MEAS_CONTROL2_LED_ON_TIME_0_3_MS_MODE;
-	myBH1790GLC_Data.led_current	 =	 MEAS_CONTROL2_LED_CURRENT_1_MA_MODE;
+	myBH1790GLC_Data.led_current	 =	 MEAS_CONTROL2_LED_CURRENT_0_MA_MODE;
 	aux	 =	 BH1790GLC_SetMeasurementControl ( myBH1790GLC_I2C_parameters, myBH1790GLC_Data );
+
+	/* Wait until the OSC is ready	 */
+//	do{
+//		aux	 =	 BH1790GLC_GetSystemControl ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
+//	}while( myBH1790GLC_Data.rdy != MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE );
+
+	/* Trigger a new sample	 */
+	aux	 	 =	 BH1790GLC_StartMeasurement ( myBH1790GLC_I2C_parameters );
+
 
 	/* Enable Timer0	 */
 	pADI_TMR0->CTL	|=	 ( 1U << BITP_TMR_CTL_EN );
@@ -123,20 +128,14 @@ int main(int argc, char *argv[])
 		/* Enter in low power Flexi mode	 */
 		__WFI();
 
-		if ( myState != 0U )
+		if ( myState != 0UL )
 		{
 			/* Turn both LEDs on	 */
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-			/* Trigger a new sample	 */
-			aux	 =	 BH1790GLC_StartMeasurement ( myBH1790GLC_I2C_parameters );
-
-			// Wait T_INT
-
 			/* Get the raw DATAOUT values: DATAOUT_LEDOFF and DATAOUT_LEDON	 */
-			aux  =   BH1790GLC_GetRawDataOut ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
-
+			aux  	 =   BH1790GLC_GetRawDataOut ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
 
 			/* Transmit data through the UART	 */
 			sprintf ( (char*)myMessage, "LED OFF: %x | LED ON: %x\r\n", myBH1790GLC_Data.dataOut_LED_OFF, myBH1790GLC_Data.dataOut_LED_ON );
