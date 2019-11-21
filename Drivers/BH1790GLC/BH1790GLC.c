@@ -198,7 +198,7 @@ BH1790GLC_status_t BH1790GLC_SoftReset ( I2C_parameters_t myI2Cparameters )
  * @details     It sets the system control setting.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myMeasControl1:    System control parameters: LED_LIGHTING_FREQ and RCYCLE.
+ * @param[in]    myMeasControl1:    System control parameters: RDY, LED_LIGHTING_FREQ and RCYCLE.
  *
  * @param[out]   N/A.
  *
@@ -208,7 +208,8 @@ BH1790GLC_status_t BH1790GLC_SoftReset ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        19/November/2019
- * @version     19/November/2019   The ORIGIN
+ * @version     21/November/2019   RDY must be activated in order to make the sensor work.
+ * 				19/November/2019   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -223,8 +224,8 @@ BH1790GLC_status_t BH1790GLC_SetSystemControl ( I2C_parameters_t myI2Cparameters
 	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], 1U );
 
 	/* Mask and Update the register	 */
-	cmd[1]	&=  ~( MEAS_CONTROL1_LED_LIGHTING_FREQ_MASK | MEAS_CONTROL1_RCYCLE_MASK );
-	cmd[1]	|=   ( myMeasControl1.led_lighting_freq | myMeasControl1.rcycle );
+	cmd[1]	&=  ~( MEAS_CONTROL1_RDY_MASK | MEAS_CONTROL1_LED_LIGHTING_FREQ_MASK | MEAS_CONTROL1_RCYCLE_MASK );
+	cmd[1]	|=   ( myMeasControl1.rdy | myMeasControl1.led_lighting_freq | myMeasControl1.rcycle );
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
