@@ -239,25 +239,9 @@ BH1790GLC_status_t BH1790GLC_GetPartID  			( I2C_parameters_t myI2Cparameters, B
   */
 BH1790GLC_status_t BH1790GLC_SoftReset  			( I2C_parameters_t myI2Cparameters										);
 
-/** It sets the system control setting.
-  */
-BH1790GLC_status_t BH1790GLC_SetSystemControl		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myMeasControl1		);
-
-/** It gets the system control setting.
-  */
-BH1790GLC_status_t BH1790GLC_GetSystemControl		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myMeasControl1	);
-
-/** It sets the measurement control setting.
-  */
-BH1790GLC_status_t BH1790GLC_SetMeasurementControl	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myMeasControl2		);
-
-/** It gets the measurement control setting.
-  */
-BH1790GLC_status_t BH1790GLC_GetMeasurementControl	( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myMeasControl2	);
-
 /** It triggers a new measurement sample.
   */
-BH1790GLC_status_t BH1790GLC_StartMeasurement		( I2C_parameters_t myI2Cparameters										);
+BH1790GLC_status_t BH1790GLC_StartMeasurement		( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myConfData			);
 
 /** It gets the DATAOUT ( DATAOUT_LEDOFF and DATAOUT_LEDON data ). Raw data value.
   */
