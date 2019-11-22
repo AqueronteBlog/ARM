@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
  * @details     [todo]This example shows how to work with the external device: BH1790GLC.
- * 				A new sample is triggered every 1 second and transmitted through
+ * 				A new sample is read every 1 second and transmitted through
  * 				the UART (115200 baud).
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
@@ -86,23 +86,16 @@ int main(int argc, char *argv[])
 
 	/* Configure the system control setting	 */
 	myBH1790GLC_Data.rdy				 =	 MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE;
-	myBH1790GLC_Data.led_lighting_freq	 =	 MEAS_CONTROL1_LED_LIGHTING_FREQ_128HZ_MODE;
+	myBH1790GLC_Data.led_lighting_freq	 =	 MEAS_CONTROL1_LED_LIGHTING_FREQ_64HZ_MODE;
 	myBH1790GLC_Data.rcycle				 =	 MEAS_CONTROL1_RCYCLE_32HZ_MODE;
-	aux	 =	 BH1790GLC_SetSystemControl ( myBH1790GLC_I2C_parameters, myBH1790GLC_Data );
 
 	/* Configure the measurement control setting	 */
-	myBH1790GLC_Data.led_en	 		 =	 MEAS_CONTROL2_LED_EN_3;
-	myBH1790GLC_Data.led_on_time	 =	 MEAS_CONTROL2_LED_ON_TIME_0_3_MS_MODE;
-	myBH1790GLC_Data.led_current	 =	 MEAS_CONTROL2_LED_CURRENT_0_MA_MODE;
-	aux	 =	 BH1790GLC_SetMeasurementControl ( myBH1790GLC_I2C_parameters, myBH1790GLC_Data );
+	myBH1790GLC_Data.led_en	 		 =	 MEAS_CONTROL2_LED_EN_0;
+	myBH1790GLC_Data.led_on_time	 =	 MEAS_CONTROL2_LED_ON_TIME_0_6_MS_MODE;
+	myBH1790GLC_Data.led_current	 =	 MEAS_CONTROL2_LED_CURRENT_1_MA_MODE;
 
-	/* Wait until the OSC is ready	 */
-//	do{
-//		aux	 =	 BH1790GLC_GetSystemControl ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
-//	}while( myBH1790GLC_Data.rdy != MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE );
-
-	/* Trigger a new sample	 */
-	aux	 	 =	 BH1790GLC_StartMeasurement ( myBH1790GLC_I2C_parameters );
+	/* Start measurement	 */
+	aux	 	 =	 BH1790GLC_StartMeasurement ( myBH1790GLC_I2C_parameters, myBH1790GLC_Data );
 
 
 	/* Enable Timer0	 */
