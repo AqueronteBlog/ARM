@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the external device: BH1790GLC.
+ * @details     This example shows how to work with the external device: BH1790GLC.
  * 				A new sample is read every 1 second and transmitted through
  * 				the UART (115200 baud).
  *
