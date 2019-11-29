@@ -97,3 +97,4 @@ STM32L072CZ/Examples/Peripherals/LPTIM/Debug/
 *.launch
 ADuCM3029/Examples_Drivers/HDC2080/Debug/
 ADuCM3029/Examples_Drivers/BH1790GLC/Debug/
+ADuCM3029/Examples_Drivers/VEML6030/Debug/
