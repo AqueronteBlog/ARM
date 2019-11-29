@@ -1,24 +1,24 @@
 /**
- * @brief       BH1790GLC.c
- * @details     Optical Sensor for Heart Rate Monitor IC.
+ * @brief       VEML6030.c
+ * @details     High Accuracy Ambient Light Sensor With I 2 C Interface.
  *              Functions file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        04/November/2019
- * @version     04/November/2019    The ORIGIN
+ * @date        29/November/2019
+ * @version     29/November/2019    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "BH1790GLC.h"
+#include "VEML6030.h"
 
 
 /**
- * @brief       BH1790GLC_Init ( I2C_parameters_t )
+ * @brief       VEML6030_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,7 +27,7 @@
  * @param[out]   N/A.
  *
  *
- * @return       Status of BH1790GLC_Init.
+ * @return       Status of VEML6030_Init.
  *
  *
  * @author      Manuel Caballero
@@ -36,7 +36,7 @@
  * @pre         N/A
  * @warning     N/A.
  */
-BH1790GLC_status_t BH1790GLC_Init ( I2C_parameters_t myI2Cparameters )
+VEML6030_status_t VEML6030_Init ( I2C_parameters_t myI2Cparameters )
 {
 	i2c_status_t aux;
 
@@ -45,18 +45,18 @@ BH1790GLC_status_t BH1790GLC_Init ( I2C_parameters_t myI2Cparameters )
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   BH1790GLC_SUCCESS;
+		return   VEML6030_SUCCESS;
 	}
 	else
 	{
-		return   BH1790GLC_FAILURE;
+		return   VEML6030_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       BH1790GLC_GetManufacturerID ( I2C_parameters_t , BH1790GLC_data_t* )
+ * @brief       VEML6030_GetManufacturerID ( I2C_parameters_t , VEML6030_data_t* )
  *
  * @details     It gets the manufacturer ID.
  *
@@ -65,7 +65,7 @@ BH1790GLC_status_t BH1790GLC_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   myManufacturerID:	Manufacturer ID.
  *
  *
- * @return       Status of BH1790GLC_GetManufacturerID.
+ * @return       Status of VEML6030_GetManufacturerID.
  *
  *
  * @author      Manuel Caballero
@@ -74,13 +74,13 @@ BH1790GLC_status_t BH1790GLC_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A
  * @warning     N/A.
  */
-BH1790GLC_status_t BH1790GLC_GetManufacturerID ( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myManufacturerID )
+VEML6030_status_t VEML6030_GetManufacturerID ( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myManufacturerID )
 {
 	uint8_t		 cmd = 0;
 	i2c_status_t aux;
 
 	/* Read the register */
-	cmd	 =   BH1790GLC_MANUFACTURER_ID;
+	cmd	 =   VEML6030_MANUFACTURER_ID;
 	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
 	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
@@ -92,18 +92,18 @@ BH1790GLC_status_t BH1790GLC_GetManufacturerID ( I2C_parameters_t myI2Cparameter
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   BH1790GLC_SUCCESS;
+		return   VEML6030_SUCCESS;
 	}
 	else
 	{
-		return   BH1790GLC_FAILURE;
+		return   VEML6030_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       BH1790GLC_GetPartID ( I2C_parameters_t , BH1790GLC_data_t* )
+ * @brief       VEML6030_GetPartID ( I2C_parameters_t , VEML6030_data_t* )
  *
  * @details     It gets the part ID.
  *
@@ -112,7 +112,7 @@ BH1790GLC_status_t BH1790GLC_GetManufacturerID ( I2C_parameters_t myI2Cparameter
  * @param[out]   myPartID:			Part ID.
  *
  *
- * @return       Status of BH1790GLC_GetPartID.
+ * @return       Status of VEML6030_GetPartID.
  *
  *
  * @author      Manuel Caballero
@@ -121,13 +121,13 @@ BH1790GLC_status_t BH1790GLC_GetManufacturerID ( I2C_parameters_t myI2Cparameter
  * @pre         N/A
  * @warning     N/A.
  */
-BH1790GLC_status_t BH1790GLC_GetPartID ( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myPartID )
+VEML6030_status_t VEML6030_GetPartID ( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myPartID )
 {
 	uint8_t		 cmd = 0;
 	i2c_status_t aux;
 
 	/* Read the register */
-	cmd	 =   BH1790GLC_PART_ID;
+	cmd	 =   VEML6030_PART_ID;
 	aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
 	aux	 =   i2c_read  ( myI2Cparameters, &cmd, 1U );
 
@@ -139,18 +139,18 @@ BH1790GLC_status_t BH1790GLC_GetPartID ( I2C_parameters_t myI2Cparameters, BH179
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   BH1790GLC_SUCCESS;
+		return   VEML6030_SUCCESS;
 	}
 	else
 	{
-		return   BH1790GLC_FAILURE;
+		return   VEML6030_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       BH1790GLC_SoftReset ( I2C_parameters_t )
+ * @brief       VEML6030_SoftReset ( I2C_parameters_t )
  *
  * @details     It performs a software reset.
  *
@@ -159,7 +159,7 @@ BH1790GLC_status_t BH1790GLC_GetPartID ( I2C_parameters_t myI2Cparameters, BH179
  * @param[out]   N/A.
  *
  *
- * @return       Status of BH1790GLC_SoftReset.
+ * @return       Status of VEML6030_SoftReset.
  *
  *
  * @author      Manuel Caballero
@@ -168,13 +168,13 @@ BH1790GLC_status_t BH1790GLC_GetPartID ( I2C_parameters_t myI2Cparameters, BH179
  * @pre         N/A
  * @warning     N/A.
  */
-BH1790GLC_status_t BH1790GLC_SoftReset ( I2C_parameters_t myI2Cparameters )
+VEML6030_status_t VEML6030_SoftReset ( I2C_parameters_t myI2Cparameters )
 {
 	uint8_t		 cmd[2] = { 0 };
 	i2c_status_t aux;
 
 	/* Update the register */
-	cmd[0]	 =   BH1790GLC_RESET;
+	cmd[0]	 =   VEML6030_RESET;
 	cmd[1]	 =   RESET_SWRESET_ENABLED;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
@@ -182,17 +182,17 @@ BH1790GLC_status_t BH1790GLC_SoftReset ( I2C_parameters_t myI2Cparameters )
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   BH1790GLC_SUCCESS;
+		return   VEML6030_SUCCESS;
 	}
 	else
 	{
-		return   BH1790GLC_FAILURE;
+		return   VEML6030_FAILURE;
 	}
 }
 
 
 /**
- * @brief       BH1790GLC_StartMeasurement ( I2C_parameters_t , BH1790GLC_data_t )
+ * @brief       VEML6030_StartMeasurement ( I2C_parameters_t , VEML6030_data_t )
  *
  * @details     It triggers a new measurement sample.
  *
@@ -202,7 +202,7 @@ BH1790GLC_status_t BH1790GLC_SoftReset ( I2C_parameters_t myI2Cparameters )
  * @param[out]   N/A.
  *
  *
- * @return       Status of BH1790GLC_StartMeasurement.
+ * @return       Status of VEML6030_StartMeasurement.
  *
  *
  * @author      Manuel Caballero
@@ -218,13 +218,13 @@ BH1790GLC_status_t BH1790GLC_SoftReset ( I2C_parameters_t myI2Cparameters )
  * @warning     System control setting and measurement control setting must be initialized in order to guarantee
  * 				the correct behavior of the device.
  */
-BH1790GLC_status_t BH1790GLC_StartMeasurement ( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t myConfData )
+VEML6030_status_t VEML6030_StartMeasurement ( I2C_parameters_t myI2Cparameters, VEML6030_data_t myConfData )
 {
 	uint8_t		 cmd[4] = { 0 };
 	i2c_status_t aux;
 
 	/* Write the register */
-	cmd[0]	 =   BH1790GLC_MEAS_CONTROL1;
+	cmd[0]	 =   VEML6030_MEAS_CONTROL1;
 	cmd[1]	 =   ( myConfData.rdy | myConfData.led_lighting_freq | myConfData.rcycle );
 	cmd[2]	 =	 ( myConfData.led_en | myConfData.led_on_time | myConfData.led_current );
 	cmd[3]	 =	 MEAS_START_MEAS_ST_MEASUREMENT_START;
@@ -234,18 +234,18 @@ BH1790GLC_status_t BH1790GLC_StartMeasurement ( I2C_parameters_t myI2Cparameters
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   BH1790GLC_SUCCESS;
+		return   VEML6030_SUCCESS;
 	}
 	else
 	{
-		return   BH1790GLC_FAILURE;
+		return   VEML6030_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       BH1790GLC_GetRawDataOut ( I2C_parameters_t )
+ * @brief       VEML6030_GetRawDataOut ( I2C_parameters_t )
  *
  * @details     It gets the DATAOUT ( DATAOUT_LEDOFF and DATAOUT_LEDON data ). Raw data value.
  *
@@ -254,7 +254,7 @@ BH1790GLC_status_t BH1790GLC_StartMeasurement ( I2C_parameters_t myI2Cparameters
  * @param[out]   myRawDataOut:		Raw data for DATAOUT_LEDOFF and DATAOUT_LEDON.
  *
  *
- * @return       Status of BH1790GLC_GetRawDataOut.
+ * @return       Status of VEML6030_GetRawDataOut.
  *
  *
  * @author      Manuel Caballero
@@ -263,13 +263,13 @@ BH1790GLC_status_t BH1790GLC_StartMeasurement ( I2C_parameters_t myI2Cparameters
  * @pre         This function uses auto-increment.
  * @warning     N/A.
  */
-BH1790GLC_status_t BH1790GLC_GetRawDataOut ( I2C_parameters_t myI2Cparameters, BH1790GLC_data_t* myRawDataOut )
+VEML6030_status_t VEML6030_GetRawDataOut ( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myRawDataOut )
 {
 	uint8_t		 cmd[4] = { 0 };
 	i2c_status_t aux;
 
 	/* Read the register */
-	cmd[0]	 =   BH1790GLC_DATAOUT_LEDOFF_LSB;
+	cmd[0]	 =   VEML6030_DATAOUT_LEDOFF_LSB;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
 	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -286,10 +286,10 @@ BH1790GLC_status_t BH1790GLC_GetRawDataOut ( I2C_parameters_t myI2Cparameters, B
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   BH1790GLC_SUCCESS;
+		return   VEML6030_SUCCESS;
 	}
 	else
 	{
-		return   BH1790GLC_FAILURE;
+		return   VEML6030_FAILURE;
 	}
 }
