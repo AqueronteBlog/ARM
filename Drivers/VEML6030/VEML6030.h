@@ -1,6 +1,6 @@
 /**
  * @brief       VEML6030.h
- * @details     High Accuracy Ambient Light Sensor With I 2 C Interface.
+ * @details     High Accuracy Ambient Light Sensor With I2C Interface.
  *              Header file.
  *
  *
@@ -21,31 +21,29 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESS
+  * @brief   DEFAULT ADDRESSES
   */
 typedef enum
 {
-  VEML6030_ADDRESS  =   0b1011011          /*!<   ADDR                         	*/
-} VEML6030_address_t;
+	VEML6030_ADDRESS_GND  =   0b0010000,     /*!<   ADDR = GND                   	*/
+	VEML6030_ADDRESS_VDD  =   0b1001000      /*!<   ADDR = VDD                   	*/
+} VEML6030_addresses_t;
 
 
 
 /**
-  * @brief   REGISTER MAP
+  * @brief   COMMAND REGISTER FORMAT
   */
 typedef enum
 {
-  VEML6030_MANUFACTURER_ID     =   0x0F,	/*!<  Manufacturer ID                   */
-  VEML6030_PART_ID			    =   0x10,   /*!<  Part ID							*/
-  VEML6030_RESET		      	=   0x40,   /*!<  SWRESET                       	*/
-  VEML6030_MEAS_CONTROL1	    =   0x41,   /*!<  Measurement setting Control       */
-  VEML6030_MEAS_CONTROL2    	=   0x42,   /*!<  Measurement setting Control       */
-  VEML6030_MEAS_START			=   0x43,   /*!<  Start Measurement					*/
-  VEML6030_DATAOUT_LEDOFF_LSB 	=   0x54,   /*!<  Measurement Data LSB (LED OFF)	*/
-  VEML6030_DATAOUT_LEDOFF_MSB	=   0x55,   /*!<  Measurement Data MSB (LED OFF)	*/
-  VEML6030_DATAOUT_LEDON_LSB   =   0x56,   /*!<  Measurement Data LSB (LED ON)     */
-  VEML6030_DATAOUT_LEDON_MSB 	=   0x57    /*!<  Measurement Data MSB (LED ON)     */
-} VEML6030_register_map_t;
+  VEML6030_ALS_CONF     		=   0x00,	/*!<  Configuration register            */
+  VEML6030_ALS_WH			    =   0x01,   /*!<  High Threshold Windows Setting	*/
+  VEML6030_ALS_WL		      	=   0x02,   /*!<  Low Threshold Windows Setting		*/
+  VEML6030_POWER_SAVING		    =   0x03,   /*!<  Power Saving Mode: PSM		    */
+  VEML6030_ALS			    	=   0x04,   /*!<  ALS High Resolution Output Data   */
+  VEML6030_WHITE				=   0x05,   /*!<  White Channel Output Data			*/
+  VEML6030_ALS_INT			 	=   0x06    /*!<  Interrupt status				    */
+} VEML6030_command_register_format_t;
 
 
 
@@ -230,20 +228,4 @@ VEML6030_status_t VEML6030_Init               	( I2C_parameters_t myI2Cparameter
 /** It gets the manufacturer ID.
   */
 VEML6030_status_t VEML6030_GetManufacturerID		( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myManufacturerID	);
-
-/** It gets the part ID.
-  */
-VEML6030_status_t VEML6030_GetPartID  			( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myPartID			);
-
-/** It performs a soft reset.
-  */
-VEML6030_status_t VEML6030_SoftReset  			( I2C_parameters_t myI2Cparameters										);
-
-/** It triggers a new measurement sample.
-  */
-VEML6030_status_t VEML6030_StartMeasurement		( I2C_parameters_t myI2Cparameters, VEML6030_data_t myConfData			);
-
-/** It gets the DATAOUT ( DATAOUT_LEDOFF and DATAOUT_LEDON data ). Raw data value.
-  */
-VEML6030_status_t VEML6030_GetRawDataOut			( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myRawDataOut		);
 
