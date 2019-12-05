@@ -42,9 +42,9 @@ volatile uint8_t   *myPtr;             	/*!<   Pointer to point out myMessage   
 int main(int argc, char *argv[])
 {
 	uint8_t  			myMessage[ TX_BUFF_SIZE ];
-	I2C_parameters_t    myVEML6030_I2C_parameters;
-	VEML6030_data_t 	myVEML6030_Data;
-	VEML6030_status_t  aux;
+//	I2C_parameters_t    myVEML6030_I2C_parameters;
+//	VEML6030_data_t 	myVEML6030_Data;
+//	VEML6030_status_t  aux;
 
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
@@ -63,39 +63,27 @@ int main(int argc, char *argv[])
 
 
 	/* I2C definition   */
-	myVEML6030_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
-	myVEML6030_I2C_parameters.sda         	 =    I2C0_SDA;
-	myVEML6030_I2C_parameters.scl         	 =    I2C0_SCL;
-	myVEML6030_I2C_parameters.addr        	 =    VEML6030_ADDRESS;
-	myVEML6030_I2C_parameters.freq        	 =    100000;
-	myVEML6030_I2C_parameters.pclkFrequency =	  6400000;
-	myVEML6030_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
-	myVEML6030_I2C_parameters.sclPort     	 =    pADI_GPIO0;
+//	myVEML6030_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
+//	myVEML6030_I2C_parameters.sda         	 =    I2C0_SDA;
+//	myVEML6030_I2C_parameters.scl         	 =    I2C0_SCL;
+//	myVEML6030_I2C_parameters.addr        	 =    VEML6030_ADDRESS_GND;
+//	myVEML6030_I2C_parameters.freq        	 =    100000;
+//	myVEML6030_I2C_parameters.pclkFrequency =	  6400000;
+//	myVEML6030_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
+//	myVEML6030_I2C_parameters.sclPort     	 =    pADI_GPIO0;
+//
+//	/* Configure I2C peripheral */
+//	aux  =   VEML6030_Init ( myVEML6030_I2C_parameters );
+//
+//	/* Get Manufacturer IDs	 */
+//	aux	 =	 VEML6030_GetManufacturerID ( myVEML6030_I2C_parameters, &myVEML6030_Data );
+//
+//	/* Get part IDs	 */
+//	aux	 =	 VEML6030_GetPartID ( myVEML6030_I2C_parameters, &myVEML6030_Data );
+//
+//	/* Performs a software reset	 */
+//	aux	 =	 VEML6030_SoftReset ( myVEML6030_I2C_parameters );
 
-	/* Configure I2C peripheral */
-	aux  =   VEML6030_Init ( myVEML6030_I2C_parameters );
-
-	/* Get Manufacturer IDs	 */
-	aux	 =	 VEML6030_GetManufacturerID ( myVEML6030_I2C_parameters, &myVEML6030_Data );
-
-	/* Get part IDs	 */
-	aux	 =	 VEML6030_GetPartID ( myVEML6030_I2C_parameters, &myVEML6030_Data );
-
-	/* Performs a software reset	 */
-	aux	 =	 VEML6030_SoftReset ( myVEML6030_I2C_parameters );
-
-	/* Configure the system control setting	 */
-	myVEML6030_Data.rdy				 =	 MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE;
-	myVEML6030_Data.led_lighting_freq	 =	 MEAS_CONTROL1_LED_LIGHTING_FREQ_64HZ_MODE;
-	myVEML6030_Data.rcycle				 =	 MEAS_CONTROL1_RCYCLE_32HZ_MODE;
-
-	/* Configure the measurement control setting	 */
-	myVEML6030_Data.led_en	 		 =	 MEAS_CONTROL2_LED_EN_0;
-	myVEML6030_Data.led_on_time	 =	 MEAS_CONTROL2_LED_ON_TIME_0_6_MS_MODE;
-	myVEML6030_Data.led_current	 =	 MEAS_CONTROL2_LED_CURRENT_1_MA_MODE;
-
-	/* Start measurement	 */
-	aux	 	 =	 VEML6030_StartMeasurement ( myVEML6030_I2C_parameters, myVEML6030_Data );
 
 
 	/* Enable Timer0	 */
@@ -127,21 +115,21 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-			/* Get the raw DATAOUT values: DATAOUT_LEDOFF and DATAOUT_LEDON	 */
-			aux  	 =   VEML6030_GetRawDataOut ( myVEML6030_I2C_parameters, &myVEML6030_Data );
-
-			/* Transmit data through the UART	 */
-			sprintf ( (char*)myMessage, "LED OFF: %x | LED ON: %x\r\n", myVEML6030_Data.dataOut_LED_OFF, myVEML6030_Data.dataOut_LED_ON );
-
-			/* Check that is safe to send data	 */
-			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
-
-			/* Transmit data back	 */
-			myPtr            =   &myMessage[0];
-			pADI_UART0->TX	 =	 *myPtr;
+//			/* Get the raw DATAOUT values: DATAOUT_LEDOFF and DATAOUT_LEDON	 */
+//			aux  	 =   VEML6030_GetRawDataOut ( myVEML6030_I2C_parameters, &myVEML6030_Data );
+//
+//			/* Transmit data through the UART	 */
+//			sprintf ( (char*)myMessage, "LED OFF: %x | LED ON: %x\r\n", myVEML6030_Data.dataOut_LED_OFF, myVEML6030_Data.dataOut_LED_ON );
+//
+//			/* Check that is safe to send data	 */
+//			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
+//
+//			/* Transmit data back	 */
+//			myPtr            =   &myMessage[0];
+//			pADI_UART0->TX	 =	 *myPtr;
 
 			/* Transmit Buffer Empty Interrupt: Enabled	 */
-			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
+			//pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
 
 			/* Reset variables and turn both LEDs off	 */
 			myState	 		 =	 0UL;
