@@ -220,13 +220,34 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-VEML6030_status_t VEML6030_Init               	( I2C_parameters_t myI2Cparameters                                		);
+VEML6030_status_t VEML6030_Init               		( I2C_parameters_t myI2Cparameters                                		);
 
 /** It sets the configuration register.
   */
-VEML6030_status_t VEML6030_SetConfiguration		( I2C_parameters_t myI2Cparameters, VEML6030_data_t myALS_Conf			);
+VEML6030_status_t VEML6030_SetConfiguration			( I2C_parameters_t myI2Cparameters, VEML6030_data_t myALS_Conf			);
 
-/** It gets the configuration register value.
+/** It sets the high threshold windows value.
   */
-VEML6030_status_t VEML6030_GetConfiguration		( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myALS_Conf			);
+VEML6030_status_t VEML6030_SetHighThreshold			( I2C_parameters_t myI2Cparameters, VEML6030_data_t myALS_WH			);
+
+/** It sets the low threshold windows value.
+  */
+VEML6030_status_t VEML6030_SetLowThreshold			( I2C_parameters_t myI2Cparameters, VEML6030_data_t myALS_WL			);
+
+/** It sets the power saving modes.
+  */
+VEML6030_status_t VEML6030_SetPowerSavingModes		( I2C_parameters_t myI2Cparameters, VEML6030_data_t myPSM				);
+
+/** It gets the ALS high resolution output data.
+  */
+VEML6030_status_t VEML6030_GetALS_OuputData			( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myALS				);
+
+/** It gets the WHITE output data.
+  */
+VEML6030_status_t VEML6030_GetWhiteChannelOuputData	( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myWhite			);
+
+/** It gets the Interrupt status value.
+  */
+VEML6030_status_t VEML6030_GetInterruptStatus		( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myIntStatus		);
+
 
