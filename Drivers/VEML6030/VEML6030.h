@@ -168,6 +168,15 @@ typedef enum
 
 
 
+/**
+  * @brief   APPLICATION
+ */
+#define TYPICAL_RESOLUTION_GAIN_2_IT_800MS	(float)0.0036			/*!<  Typical resolution: Gain 2 | IT 800ms    */
+
+
+
+
+
 
 #ifndef VEML6030_VECTOR_STRUCT_H
 #define VEML6030_VECTOR_STRUCT_H
