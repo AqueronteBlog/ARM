@@ -259,4 +259,8 @@ VEML6030_status_t VEML6030_GetWhiteChannelOuputData	( I2C_parameters_t myI2Cpara
   */
 VEML6030_status_t VEML6030_GetInterruptStatus		( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myIntStatus		);
 
+/** It calculates the total lux value.
+  */
+VEML6030_status_t VEML6030_CalculateLuxValue		( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myLuxValue			);
+
 
