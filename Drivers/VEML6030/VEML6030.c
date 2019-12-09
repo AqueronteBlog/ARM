@@ -389,3 +389,36 @@ VEML6030_status_t VEML6030_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
 
 
 
+/**
+ * @brief       VEML6030_CalculateLuxValue ( I2C_parameters_t , VEML6030_data_t* )
+ *
+ * @details     It calculates the total lux value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myLuxValue:   		Raw ALS output data.
+ *
+ * @param[out]   myLuxValue:	   	Lux value.
+ *
+ *
+ * @return       Status of VEML6030_CalculateLuxValue.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        09/December/2019
+ * @version     09/December/2019   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myLuxValue )
+{
+
+
+
+
+
+
+	return   VEML6030_SUCCESS;
+}
+
+
+
