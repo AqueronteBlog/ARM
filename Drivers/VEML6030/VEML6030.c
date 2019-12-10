@@ -416,7 +416,6 @@ VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters,
 
 
 
-
 	return   VEML6030_SUCCESS;
 }
 
