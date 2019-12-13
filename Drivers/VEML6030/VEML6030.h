@@ -183,29 +183,32 @@ typedef enum
 typedef struct
 {
 	/* Raw ALS high resolution output data	 */
-	uint16_t als_high_resolution_output_data;				/*!< Raw ALS high resolution output data			*/
+	uint16_t als_high_resolution_output_data;				/*!< Raw ALS high resolution output data					*/
 
 	/* Raw WHITE output data	 */
-	uint16_t white_output_data;								/*!< Raw WHITE output data							*/
+	uint16_t white_output_data;								/*!< Raw WHITE output data									*/
 
 	/* Raw threshold windows setting	 */
-	uint16_t high_threshold_windows_setting;				/*!< Raw ALS high threshold window setting			*/
-	uint16_t low_threshold_windows_setting;					/*!< Raw ALS low threshold window setting			*/
+	uint16_t high_threshold_windows_setting;				/*!< Raw ALS high threshold window setting					*/
+	uint16_t low_threshold_windows_setting;					/*!< Raw ALS low threshold window setting					*/
 
 	/* Configuration register	 */
-	VEML6030_als_conf_als_gain_t	als_gain;				/*!< Gain selection									*/
-	VEML6030_als_conf_als_it_t		als_it;					/*!< ALS integration time setting					*/
-	VEML6030_als_conf_als_pers_t	als_pers;				/*!< ALS persistence protect number setting			*/
-	VEML6030_als_conf_als_int_en_t	als_int_en;				/*!< ALS interrupt enable setting					*/
-	VEML6030_als_conf_als_sd_t		als_sd;					/*!< ALS shut down setting							*/
+	VEML6030_als_conf_als_gain_t	als_gain;				/*!< Gain selection											*/
+	VEML6030_als_conf_als_it_t		als_it;					/*!< ALS integration time setting							*/
+	VEML6030_als_conf_als_pers_t	als_pers;				/*!< ALS persistence protect number setting					*/
+	VEML6030_als_conf_als_int_en_t	als_int_en;				/*!< ALS interrupt enable setting							*/
+	VEML6030_als_conf_als_sd_t		als_sd;					/*!< ALS shut down setting									*/
 
 	/* Power saving modes	 */
-	VEML6030_power_saving_psm_t		psm;					/*!< Power saving mode								*/
-	VEML6030_power_saving_psm_en_t	psm_en;					/*!< Power saving mode enable setting				*/
+	VEML6030_power_saving_psm_t		psm;					/*!< Power saving mode										*/
+	VEML6030_power_saving_psm_en_t	psm_en;					/*!< Power saving mode enable setting						*/
 
 	/* Interrupt status	 */
-	VEML6030_als_int_int_th_low_t	int_th_low;				/*!< Indicated if a low threshold exceed			*/
-	VEML6030_als_int_int_th_high_t	int_th_high;			/*!< Indicated if a high threshold exceed			*/
+	VEML6030_als_int_int_th_low_t	int_th_low;				/*!< Indicated if a low threshold exceed					*/
+	VEML6030_als_int_int_th_high_t	int_th_high;			/*!< Indicated if a high threshold exceed					*/
+
+	/* Application information	 */
+	float	resolution;										/*!< Resolution regarding the integration time and the gain	*/
 } VEML6030_data_t;
 #endif
 
