@@ -414,6 +414,7 @@ VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters,
 	/* Initial resolution	 */
 	myLuxValue->resolution	 =	 TYPICAL_RESOLUTION_GAIN_2_IT_800MS;
 
+
 	/* Calculate the resolution regarding the integration time	 */
 	switch ( myLuxValue->als_it )
 	{
