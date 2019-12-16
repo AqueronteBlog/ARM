@@ -411,31 +411,39 @@ VEML6030_status_t VEML6030_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
  */
 VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myLuxValue )
 {
+	uint32_t	auxRes	 =	 0U;
+
 	/* Initial resolution	 */
-	myLuxValue->resolution	 =	 TYPICAL_RESOLUTION_GAIN_2_IT_800MS;
+	auxRes	 =	 TYPICAL_RESOLUTION_GAIN_2_IT_800MS;
+	//myLuxValue->resolution	 =	 TYPICAL_RESOLUTION_GAIN_2_IT_800MS;
 
 
 	/* Calculate the resolution regarding the integration time	 */
 	switch ( myLuxValue->als_it )
 	{
 		case ALS_CONF_ALS_IT_25MS:
-			myLuxValue->resolution *=	 32.0;
+			auxRes <<=	 5U;	// auxRes *= 32
+			//myLuxValue->resolution *=	 32.0;
 			break;
 
 		case ALS_CONF_ALS_IT_50MS:
-			myLuxValue->resolution *=	 16.0;
+			auxRes <<=	 4U;	// auxRes *= 16
+			//myLuxValue->resolution *=	 16.0;
 			break;
 
 		case ALS_CONF_ALS_IT_100MS:
-			myLuxValue->resolution *=	 8.0;
+			auxRes <<=	 3U;	// auxRes *= 8
+			//myLuxValue->resolution *=	 8.0;
 			break;
 
 		case ALS_CONF_ALS_IT_200MS:
-			myLuxValue->resolution *=	 4.0;
+			auxRes <<=	 2U;	// auxRes *= 4
+			//myLuxValue->resolution *=	 4.0;
 			break;
 
 		case ALS_CONF_ALS_IT_400MS:
-			myLuxValue->resolution	*=	 2.0;
+			auxRes <<=	 1U;	// auxRes *= 2
+			//myLuxValue->resolution	*=	 2.0;
 			break;
 
 		default:
@@ -447,7 +455,8 @@ VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters,
 	switch ( myLuxValue->als_gain )
 	{
 		case ALS_CONF_ALS_GAIN_X1:
-			myLuxValue->resolution	*=	 2.0;
+			auxRes <<=	 1U;	// auxRes *= 2
+			//myLuxValue->resolution	*=	 2.0;
 			break;
 
 		default:
@@ -455,11 +464,13 @@ VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters,
 			break;
 
 		case ALS_CONF_ALS_GAIN_X1_4:
-			myLuxValue->resolution	*=	 8.0;
+			auxRes <<=	 3U;	// auxRes *= 8
+			//myLuxValue->resolution	*=	 8.0;
 			break;
 
 		case ALS_CONF_ALS_GAIN_X1_8:
-			myLuxValue->resolution	*=	 16.0;
+			auxRes <<=	 4U;	// auxRes *= 16
+			//myLuxValue->resolution	*=	 16.0;
 			break;
 	}
 
