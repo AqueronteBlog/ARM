@@ -171,7 +171,8 @@ typedef enum
 /**
   * @brief   APPLICATION
  */
-#define TYPICAL_RESOLUTION_GAIN_2_IT_800MS	(float)0.0036			/*!<  Typical resolution: Gain 2 | IT 800ms    */
+#define TYPICAL_RESOLUTION_GAIN_2_IT_800MS	(uint32_t)36			/*!<  Typical resolution: Gain 2 | IT 800ms ( 0.0036 * 10000 = 36    */
+//#define TYPICAL_RESOLUTION_GAIN_2_IT_800MS	(float)0.0036			/*!<  Typical resolution: Gain 2 | IT 800ms    */
 
 
 
