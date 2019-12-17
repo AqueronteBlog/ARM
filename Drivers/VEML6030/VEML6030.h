@@ -17,6 +17,7 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include "math.h"
 #include "i2c.h"
 
 
@@ -209,6 +210,7 @@ typedef struct
 	VEML6030_als_int_int_th_high_t	int_th_high;			/*!< Indicated if a high threshold exceed					*/
 
 	/* Application information	 */
+	float	light_level;									/*!< Light level [lux]										*/
 	float	resolution;										/*!< Resolution regarding the integration time and the gain	*/
 } VEML6030_data_t;
 #endif

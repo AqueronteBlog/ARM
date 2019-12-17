@@ -405,17 +405,19 @@ VEML6030_status_t VEML6030_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
  *
  * @author      Manuel Caballero
  * @date        09/December/2019
- * @version     09/December/2019   The ORIGIN
+ * @version     17/December/2019   Compensation formula was added.
+ * 				09/December/2019   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
 VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myLuxValue )
 {
 	uint32_t	auxRes	 =	 0U;
+	double		a1 = 0, a2 = 0, a3 = 0, a4 = 0;
+
 
 	/* Initial resolution	 */
 	auxRes	 =	 TYPICAL_RESOLUTION_GAIN_2_IT_800MS;
-	//myLuxValue->resolution	 =	 TYPICAL_RESOLUTION_GAIN_2_IT_800MS;
 
 
 	/* Calculate the resolution regarding the integration time	 */
@@ -423,27 +425,22 @@ VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters,
 	{
 		case ALS_CONF_ALS_IT_25MS:
 			auxRes <<=	 5U;	// auxRes *= 32
-			//myLuxValue->resolution *=	 32.0;
 			break;
 
 		case ALS_CONF_ALS_IT_50MS:
 			auxRes <<=	 4U;	// auxRes *= 16
-			//myLuxValue->resolution *=	 16.0;
 			break;
 
 		case ALS_CONF_ALS_IT_100MS:
 			auxRes <<=	 3U;	// auxRes *= 8
-			//myLuxValue->resolution *=	 8.0;
 			break;
 
 		case ALS_CONF_ALS_IT_200MS:
 			auxRes <<=	 2U;	// auxRes *= 4
-			//myLuxValue->resolution *=	 4.0;
 			break;
 
 		case ALS_CONF_ALS_IT_400MS:
 			auxRes <<=	 1U;	// auxRes *= 2
-			//myLuxValue->resolution	*=	 2.0;
 			break;
 
 		default:
@@ -456,7 +453,6 @@ VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters,
 	{
 		case ALS_CONF_ALS_GAIN_X1:
 			auxRes <<=	 1U;	// auxRes *= 2
-			//myLuxValue->resolution	*=	 2.0;
 			break;
 
 		default:
@@ -465,15 +461,30 @@ VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters,
 
 		case ALS_CONF_ALS_GAIN_X1_4:
 			auxRes <<=	 3U;	// auxRes *= 8
-			//myLuxValue->resolution	*=	 8.0;
 			break;
 
 		case ALS_CONF_ALS_GAIN_X1_8:
 			auxRes <<=	 4U;	// auxRes *= 16
-			//myLuxValue->resolution	*=	 16.0;
 			break;
 	}
 
+
+	/* Calculate the resolution	 */
+	myLuxValue->resolution	 =	 (float)( auxRes / 10000.0 );
+
+	/* Calculate the light level	 */
+	myLuxValue->light_level	 =	 (float)( ( myLuxValue->als_high_resolution_output_data * auxRes ) / 10000.0 );
+
+	/* Check if a correction formula needs to be applied	 */
+	if ( myLuxValue->light_level > 1000 )
+	{
+		a1	 =	 0.00000000000060135*pow((uint32_t)myLuxValue->light_level, 4);
+		a2	 =	 0.0000000093924*pow((uint32_t)myLuxValue->light_level, 3);
+		a3	 =	 0.000081488*pow((uint32_t)myLuxValue->light_level, 2);
+		a4	 =	 1.0023*myLuxValue->light_level;
+
+		myLuxValue->light_level	 =	(float)( a1 - a2 + a3 + a4 );
+	}
 
 	return   VEML6030_SUCCESS;
 }
