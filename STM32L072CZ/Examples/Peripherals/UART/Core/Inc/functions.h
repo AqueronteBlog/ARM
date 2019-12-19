@@ -21,6 +21,7 @@
  */
 void Conf_CLK 	( void );
 void Conf_GPIO 	( void );
+void Conf_UART5	( void );
 void Conf_LPTIM ( void );
 void Conf_Range ( void );
 

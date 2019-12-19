@@ -75,13 +75,17 @@ void Conf_Range ( void )
 
 /**
  * @brief       void Conf_GPIO ( void )
- * @details     It configures GPIO to work with the LEDs.
+ * @details     It configures GPIOs.
  *
  *					LEDs:
  * 						- LD1:	PB_5
  * 						- LD2:	PA_5
  * 						- LD3:	PB_6
  * 						- LD4:	PB_7
+ *
+ * 					UART5:
+ * 						- UART5_TX:	PB_3
+ * 						- UART5_RX:	PB_4
  *
  * @return      NA
  *
@@ -127,6 +131,12 @@ void Conf_GPIO ( void )
 
 	/* GPIOA Output: PB_6 reset	 */
 	GPIOA->BSRR	|=	 GPIO_BSRR_BR_5;
+
+	/* UART5:
+	 * 	- Alternate function mode
+	 */
+	GPIOB->MODER	&=	~( GPIO_MODER_MODE3 | GPIO_MODER_MODE4 );
+	GPIOB->MODER	|=	 ( GPIO_MODER_MODE3_1 | GPIO_MODER_MODE4_1 );
 }
 
 
@@ -160,6 +170,58 @@ void Conf_LPTIM ( void )
 	RCC->APB1ENR	|=	 RCC_APB1ENR_LPTIM1EN;
 
 	/* Timer LPTIM:
+	 * 	- Disable timer LPTIM
+	 */
+	LPTIM1->CR	&=	~( LPTIM_CR_ENABLE );
+
+	/* LPTIM:
+	 *  - The counter is incremented following each internal clock pulse
+	 *  - Trigger: Software trigger (counting start is initiated by software)
+	 *  - Clock prescaler: f_LPTIM/1
+	 *  - CKSEL: LPTIM is clocked by internal clock source (APB clock or any of the embedded oscillators)
+	 */
+	LPTIM1->CFGR	&=	~( LPTIM_CFGR_COUNTMODE | LPTIM_CFGR_TRIGSEL | LPTIM_CFGR_PRESC | LPTIM_CFGR_CKSEL );
+
+	/* Autoreload register update OK Clear Flag	 */
+	LPTIM1->ICR	|=	 ( LPTIM_ICR_ARRMCF );
+
+	/* Enable Interrupt	 */
+	NVIC_SetPriority ( LPTIM1_IRQn, 1 ); 							// Set Priority to 1
+	NVIC_EnableIRQ   ( LPTIM1_IRQn );  								// Enable LPTIM1_IRQn interrupt in NVIC
+
+	/* ARRM interrupt enabled	 */
+	LPTIM1->IER	|=	 LPTIM_IER_ARRMIE;
+}
+
+
+
+/**
+ * @brief       void Conf_UART5 ( void )
+ * @details     It configures UART5.
+ *
+ *				-UART5:
+ * 					-- [TODO]
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        19/December/2019
+ * @version		19/December/2019   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void Conf_UART5 ( void )
+{
+	/* UART clock enable	 */
+	RCC->APB1ENR	|=	 RCC_APB1ENR_USART5EN;
+
+	/* UART5:
 	 * 	- Disable timer LPTIM
 	 */
 	LPTIM1->CR	&=	~( LPTIM_CR_ENABLE );
