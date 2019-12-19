@@ -111,6 +111,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Conf_CLK	 ();
   Conf_GPIO  ();
+  Conf_UART5 ();
   Conf_LPTIM ();
   Conf_Range ();
 
