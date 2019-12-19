@@ -29,4 +29,13 @@ typedef enum
 } B_L072Z_LRWAN1_leds_t;
 
 
+/**
+  * @brief   UART5
+*/
+typedef enum
+{
+	USART5_TX   =   3,             /*!<  PB_3                        */
+	USART5_RX   =   4              /*!<  PB_4                        */
+} B_L072Z_LRWAN1_uart5_t;
+
 #endif /* BOARD_H_ */
