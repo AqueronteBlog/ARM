@@ -53,8 +53,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define SYSTEM_CORE_CLK		2097000U
-#define SYSTEM_LSI_CLK		32768U
-#define TIMER_LPTM_CLK		SYSTEM_LSI_CLK
+#define UART5_CLK			SYSTEM_CORE_CLK
 
 /* USER CODE END PD */
 
@@ -109,19 +108,14 @@ int main(void)
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
-  Conf_CLK	 ();
   Conf_GPIO  ();
-  Conf_UART5 ();
-  Conf_LPTIM ();
+  Conf_UART5 ( UART5_CLK, 115200 );
   Conf_Range ();
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  LPTIM1->CR	|=	 ( LPTIM_CR_ENABLE );		// Enable Timer LPTIM
-  LPTIM1->ARR	 =	 (uint16_t)SYSTEM_LSI_CLK;
-  LPTIM1->CR	|=	 ( LPTIM_CR_CNTSTRT );		// LPTIM in Continuous mode
   while (1)
   {
 	  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
