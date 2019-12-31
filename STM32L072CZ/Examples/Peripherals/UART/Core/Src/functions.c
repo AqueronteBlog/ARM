@@ -3,7 +3,7 @@
  * @details     Functions.
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        18/December/2019
@@ -16,41 +16,11 @@
 #include "functions.h"
 
 /**
- * @brief       void Conf_CLK ( void )
- * @details     It configures the CLKs.
- * 					- LPTIM: LSI
- *
- *
- *
- * @return      NA
- *
- * @author      Manuel Caballero
- * @date        18/December/2019
- * @version		18/December/2019   The ORIGIN
- * @pre         N/A
- * @warning     N/A
- */
-void Conf_CLK ( void )
-{
-	/* LSI enabled	 */
-	RCC->CSR	|=	 ( RCC_CSR_LSION );
-
-	/* Wait until LSI is ready	 */
-	while ( ( RCC->CSR & RCC_CSR_LSIRDY_Msk ) != RCC_CSR_LSIRDY );
-
-	/* LPTIM: LSI	 */
-	RCC->CCIPR	&=	 ~( RCC_CCIPR_LPTIM1SEL );
-	RCC->CCIPR	|=	  ( RCC_CCIPR_LPTIM1SEL_0 );
-}
-
-
-
-/**
  * @brief       void Conf_Range ( void )
  * @details     It configures the voltage scaling configuration: 1.2V ( Range 3 ).
  *
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        18/December/2019
@@ -87,7 +57,7 @@ void Conf_Range ( void )
  * 						- UART5_TX:	PB_3
  * 						- UART5_RX:	PB_4
  *
- * @return      NA
+ * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        18/December/2019
@@ -142,105 +112,122 @@ void Conf_GPIO ( void )
 
 
 /**
- * @brief       void Conf_LPTIM ( void )
- * @details     It configures low-power timer LPTIM.
- *
- *				-LPTIM:
- * 					-- f_lptim = LSI = 32.768 kHz
- * 					-- ARRM Interrupt ENABLED.
- * 					-- Overflow: Every 1 second ( ARR / LSI ) = ( 32768 / 32768 ) = 1s
- *
- * @param[in]    N/A.
- *
- * @param[out]   N/A.
- *
- *
- *
- * @return      NA
- *
- * @author      Manuel Caballero
- * @date        18/December/2019
- * @version		18/December/2019   The ORIGIN
- * @pre         N/A
- * @warning     N/A
- */
-void Conf_LPTIM ( void )
-{
-	/* Low-power Timer LPTIM clock enable	 */
-	RCC->APB1ENR	|=	 RCC_APB1ENR_LPTIM1EN;
-
-	/* Timer LPTIM:
-	 * 	- Disable timer LPTIM
-	 */
-	LPTIM1->CR	&=	~( LPTIM_CR_ENABLE );
-
-	/* LPTIM:
-	 *  - The counter is incremented following each internal clock pulse
-	 *  - Trigger: Software trigger (counting start is initiated by software)
-	 *  - Clock prescaler: f_LPTIM/1
-	 *  - CKSEL: LPTIM is clocked by internal clock source (APB clock or any of the embedded oscillators)
-	 */
-	LPTIM1->CFGR	&=	~( LPTIM_CFGR_COUNTMODE | LPTIM_CFGR_TRIGSEL | LPTIM_CFGR_PRESC | LPTIM_CFGR_CKSEL );
-
-	/* Autoreload register update OK Clear Flag	 */
-	LPTIM1->ICR	|=	 ( LPTIM_ICR_ARRMCF );
-
-	/* Enable Interrupt	 */
-	NVIC_SetPriority ( LPTIM1_IRQn, 1 ); 							// Set Priority to 1
-	NVIC_EnableIRQ   ( LPTIM1_IRQn );  								// Enable LPTIM1_IRQn interrupt in NVIC
-
-	/* ARRM interrupt enabled	 */
-	LPTIM1->IER	|=	 LPTIM_IER_ARRMIE;
-}
-
-
-
-/**
- * @brief       void Conf_UART5 ( void )
+ * @brief       void Conf_UART5 ( uint32_t , uint32_t )
  * @details     It configures UART5.
  *
- *				-UART5:
- * 					-- [TODO]
+ *				- UART5:
+ * 					-- UART5 BaudRate = 115200, 8-bit, 1-bit STOP, NO Parity
+ * 					-- Tx/Rx Interrupts ENABLED
  *
- * @param[in]    N/A.
+ *
+ * @param[in]    myCK:			UART Clock ( f_CK ).
+ * @param[in]    myBaudRate:	UART baud rate.
  *
  * @param[out]   N/A.
  *
  *
  *
- * @return      NA
+ * @return      Status of Conf_UART5.
  *
  * @author      Manuel Caballero
  * @date        19/December/2019
- * @version		19/December/2019   The ORIGIN
- * @pre         N/A
+ * @version		31/December/2019   myCLK and myBaudRate were added.
+ * 				19/December/2019   The ORIGIN
+ *
+ * @pre         OVER8 is calculated automatically
  * @warning     N/A
  */
-void Conf_UART5 ( void )
+uart_status_t Conf_UART5 ( uint32_t myCK, uint32_t myBaudRate )
 {
+	uint32_t	myUSARTDIV	=	0UL;
+
+
 	/* UART clock enable	 */
 	RCC->APB1ENR	|=	 RCC_APB1ENR_USART5EN;
 
 	/* UART5:
-	 * 	- Disable timer LPTIM
+	 * 	- Disable UART5
 	 */
-	LPTIM1->CR	&=	~( LPTIM_CR_ENABLE );
+	USART5->CR1	&=	~USART_CR1_UE;
 
-	/* LPTIM:
-	 *  - The counter is incremented following each internal clock pulse
-	 *  - Trigger: Software trigger (counting start is initiated by software)
-	 *  - Clock prescaler: f_LPTIM/1
-	 *  - CKSEL: LPTIM is clocked by internal clock source (APB clock or any of the embedded oscillators)
+	/* UART5:
+	 * 	- Worth length: Start bit, 8 data bits, 1 stop bits.
+	 * 	- Parity control disabled
+	 * 	- Transmitter is disabled
+	 * 	- Receiver is disabled
 	 */
-	LPTIM1->CFGR	&=	~( LPTIM_CFGR_COUNTMODE | LPTIM_CFGR_TRIGSEL | LPTIM_CFGR_PRESC | LPTIM_CFGR_CKSEL );
+	USART5->CR1	&=	~( USART_CR1_M1 | USART_CR1_OVER8 | USART_CR1_PCE | USART_CR1_TE | USART_CR1_RE );
 
-	/* Autoreload register update OK Clear Flag	 */
-	LPTIM1->ICR	|=	 ( LPTIM_ICR_ARRMCF );
+	/* UART5:
+	 * 	- Auto baud rate detection is disabled
+	 * 	- TX pin signal works using the standard logic levels
+	 * 	- RX pin signal works using the standard logic levels
+	 * 	- TX/RX pins are used as defined in standard pinout
+	 * 	- 1 stop bit
+	 * 	- CK pin disabled
+	 */
+	USART5->CR2	&=	~( USART_CR2_ABREN | USART_CR2_TXINV | USART_CR2_RXINV | USART_CR2_SWAP | USART_CR2_STOP | USART_CR2_CLKEN );
 
-	/* Enable Interrupt	 */
-	NVIC_SetPriority ( LPTIM1_IRQn, 1 ); 							// Set Priority to 1
-	NVIC_EnableIRQ   ( LPTIM1_IRQn );  								// Enable LPTIM1_IRQn interrupt in NVIC
+	/* UART5:
+	 * 	- CTS hardware flow control disabled
+	 * 	- RTS hardware flow control disabled
+	 * 	- DMA mode is disabled for transmission
+	 * 	- DMA mode is disabled for reception
+	 * 	- Smartcard Mode disabled
+	 * 	- NACK transmission in case of parity error is disabled
+	 * 	- Half duplex mode is not selected
+	 * 	- IrDA disabled
+	 * 	- Error interrupt enable: Interrupt is inhibited
+	 */
+	USART5->CR3	&=	~( USART_CR3_CTSE | USART_CR3_RTSE | USART_CR3_DMAT | USART_CR3_DMAR | USART_CR3_SCEN | USART_CR3_NACK | USART_CR3_HDSEL | USART_CR3_IREN | USART_CR3_EIE );
 
-	/* ARRM interrupt enabled	 */
-	LPTIM1->IER	|=	 LPTIM_IER_ARRMIE;
+	/* UART5
+	 *  - Check oversampling by 16 if it isn´t possible, try oversampling by 8. NOTE: It rounds the result by default.
+	 */
+	USART5->BRR	&=	~( USART_BRR_DIV_FRACTION | USART_BRR_DIV_MANTISSA );
+
+	myUSARTDIV	 =	(uint32_t)( ( myCK / myBaudRate ) + 0.5 );
+	if ( myUSARTDIV >= 16 )
+	{
+		/* Oversampling by 16	 */
+		USART5->CR1	&=	~( USART_CR1_OVER8 );
+
+		/* Update mantissa	 */
+		USART5->BRR	|=	 ( ( myUSARTDIV & USART_BRR_DIV_MANTISSA_Msk ) << USART_BRR_DIV_MANTISSA_Pos );
+	}
+	else
+	{
+		/* Check oversampling by 8	 */
+		myUSARTDIV	*=	 2UL;
+		if ( myUSARTDIV >= 16 )
+		{
+			/* Oversampling by 8	 */
+			USART5->CR1	|=	 USART_CR1_OVER8;
+
+			/* Update mantissa	 */
+			USART5->BRR	|=	 ( ( ( myUSARTDIV & USART_BRR_DIV_MANTISSA_Msk ) >> 1UL ) << USART_BRR_DIV_MANTISSA_Pos );
+			USART5->BRR	&=	 0b011;																						// BRR[3] must be kept cleared
+		}
+		else
+		{
+			return UART_OVERSAMPLING_INCOMPATIBLE;
+		}
+	}
+
+	/* Update fraction	 */
+	USART5->BRR	|=	 ( ( myUSARTDIV & USART_BRR_DIV_FRACTION_Msk ) << USART_BRR_DIV_FRACTION_Pos );
+
+	/* UART5 Interrupts
+	 *  - Clear all interrupt flags ( in those supported modes )
+	 */
+	USART5->ICR	|=	 ( USART_ICR_PECF | USART_ICR_FECF | USART_ICR_NCF | USART_ICR_ORECF | USART_ICR_IDLECF | USART_ICR_TCCF | USART_ICR_CMCF );
+
+	NVIC_SetPriority ( USART4_5_IRQn, 1 ); 									// Set Priority to 1
+	NVIC_EnableIRQ   ( USART4_5_IRQn );  										// Enable UART5_IRQn interrupt in NVIC
+
+	/* Enable UART5, RX and RX interrupt	 */
+	USART5->CR1	|=	 ( USART_CR1_RE | USART_CR1_RXNEIE | USART_CR1_UE );
+
+
+	return UART_SUCCESS;
 }

@@ -16,7 +16,15 @@
 #ifndef VARIABLES_H_
 #define VARIABLES_H_
 
-
+/**
+  * @brief   UART. INTERNAL CONSTANTS
+  */
+typedef enum
+{
+    UART_SUCCESS  	     			=   0x00,
+    UART_FAILURE  		 			=   0x01,
+	UART_OVERSAMPLING_INCOMPATIBLE	=   0x02
+} uart_status_t;
 
 
 #endif /* VARIABLES_H_ */

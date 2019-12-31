@@ -20,7 +20,7 @@
 
 /**@brief Subroutine prototypes.
  */
-extern void LPTIM1_IRQHandler (void);
+extern void USART4_5_IRQHandler (void);
 
 
 /**@brief Constants.
