@@ -30,6 +30,8 @@ extern void USART4_5_IRQHandler (void);
 
 /**@brief Variables.
  */
+extern volatile uint8_t  myRX;
+extern volatile uint8_t  *myPtr;
 
 
 
