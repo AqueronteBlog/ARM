@@ -223,7 +223,7 @@ uart_status_t Conf_UART5 ( uint32_t myCK, uint32_t myBaudRate )
 	USART5->ICR	|=	 ( USART_ICR_PECF | USART_ICR_FECF | USART_ICR_NCF | USART_ICR_ORECF | USART_ICR_IDLECF | USART_ICR_TCCF | USART_ICR_CMCF );
 
 	NVIC_SetPriority ( USART4_5_IRQn, 1 ); 									// Set Priority to 1
-	NVIC_EnableIRQ   ( USART4_5_IRQn );  										// Enable UART5_IRQn interrupt in NVIC
+	NVIC_EnableIRQ   ( USART4_5_IRQn );  									// Enable UART5_IRQn interrupt in NVIC
 
 	/* Enable UART5, RX and RX interrupt	 */
 	USART5->CR1	|=	 ( USART_CR1_RE | USART_CR1_RXNEIE | USART_CR1_UE );

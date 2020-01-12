@@ -55,6 +55,7 @@
 #define SYSTEM_CORE_CLK		2097000U
 #define UART5_CLK			SYSTEM_CORE_CLK
 
+#define TX_BUFF_SIZE  		32	                     		/*!<   UART buffer size                              		*/
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -65,6 +66,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      			/*!<  Message to be transmitted through the UART         	*/
+volatile uint8_t  *myPtr;                         			/*!<  Pointer to point out myMessage                     	*/
+volatile uint8_t  myRX;                         			/*!<  Data from RX UART				                     	*/
 
 /* USER CODE END PV */
 
@@ -118,8 +122,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
-	  HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	  //__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+	  //HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
