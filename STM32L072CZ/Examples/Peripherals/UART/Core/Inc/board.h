@@ -30,6 +30,16 @@ typedef enum
 
 
 /**
+  * @brief   UART2
+*/
+typedef enum
+{
+	USART2_TX   =   2,             /*!<  PA_2                        */
+	USART2_RX   =   3              /*!<  PA_3                        */
+} B_L072Z_LRWAN1_uart2_t;
+
+
+/**
   * @brief   UART5
 */
 typedef enum
