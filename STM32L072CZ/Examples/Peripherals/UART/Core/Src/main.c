@@ -53,7 +53,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define SYSTEM_CORE_CLK		2097000U
-#define UART5_CLK			SYSTEM_CORE_CLK
+#define UART2_CLK			SYSTEM_CORE_CLK
 
 #define TX_BUFF_SIZE  		32	                     		/*!<   UART buffer size                              		*/
 /* USER CODE END PD */
@@ -113,7 +113,7 @@ int main(void)
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
   Conf_GPIO  ();
-  Conf_UART5 ( UART5_CLK, 115200 );
+  Conf_UART2 ( UART2_CLK, 115200 );
   Conf_Range ();
 
   /* USER CODE END 2 */
