@@ -69,6 +69,8 @@
 volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      			/*!<  Message to be transmitted through the UART         	*/
 volatile uint8_t  *myPtr;                         			/*!<  Pointer to point out myMessage                     	*/
 volatile uint8_t  myRX;                         			/*!<  Data from RX UART				                     	*/
+volatile uint32_t myUART_TxEnd;                     		/*!<  It indicates when an UART transmission is finished	*/
+volatile uint32_t myState;                        			/*!<  State that indicates when performs a new reading		*/
 
 /* USER CODE END PV */
 
@@ -122,11 +124,35 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  //__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
-	  //HAL_PWR_EnterSTOPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+	  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  if ( myState == 1UL )
+	  {
+		  GPIOA->BSRR	 =	 ( 1UL << LD1 );					// Turn it ON
+
+
+		  /* Parse the data	 */
+		  sprintf ( (char*)myMessage, "Temperature: C\r\n" );
+
+		  /* Transmit data through the UART	 */
+		  myPtr   	 	 =   &myMessage[0];
+		  USART2->TDR	 =	 *myPtr;
+		  USART2->CR1	|=	 USART_CR1_TE;						// Transmitter Enabled
+
+		  /* Low power: Sleep mode, wait until all data was sent through the UART	 */
+		  do{
+			  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+		  }while ( myUART_TxEnd == 0UL );
+
+
+		  /* Reset variables	 */
+		  myUART_TxEnd	 =	 0UL;
+		  myState	 	 =	 0UL;
+		  GPIOA->BRR	 =	( 1UL << LD1 );				// Turn it OFF
+	  }
   }
   /* USER CODE END 3 */
 }
