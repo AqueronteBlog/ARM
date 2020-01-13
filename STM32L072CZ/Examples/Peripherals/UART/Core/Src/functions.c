@@ -61,7 +61,7 @@ void Conf_Range ( void )
  *
  * @author      Manuel Caballero
  * @date        18/December/2019
- * @version		13/January/2019   	UART2 instead of UART5
+ * @version		13/January/2020   	UART2 instead of UART5
  * 				18/December/2019   	The ORIGIN
  * @pre         N/A
  * @warning     N/A
@@ -135,7 +135,8 @@ void Conf_GPIO ( void )
  *
  * @author      Manuel Caballero
  * @date        19/December/2019
- * @version		31/December/2019   myCLK and myBaudRate were added.
+ * @version		13/January/2020    UART2 used instead of UART5. TX interrupt is enabled.
+ * 				31/December/2019   myCLK and myBaudRate were added.
  * 				19/December/2019   The ORIGIN
  *
  * @pre         OVER8 is calculated automatically
@@ -190,14 +191,14 @@ uart_status_t Conf_UART2 ( uint32_t myCK, uint32_t myBaudRate )
 	 */
 	USART2->BRR	&=	~( USART_BRR_DIV_FRACTION | USART_BRR_DIV_MANTISSA );
 
-	myUSARTDIV	 =	(uint32_t)( ( myCK / myBaudRate ) + 0.5 );
+	myUSARTDIV	 =	( ( myCK / myBaudRate ) + 0.5 );
 	if ( myUSARTDIV >= 16 )
 	{
 		/* Oversampling by 16	 */
 		USART2->CR1	&=	~( USART_CR1_OVER8 );
 
 		/* Update mantissa	 */
-		USART2->BRR	|=	 ( ( myUSARTDIV & USART_BRR_DIV_MANTISSA_Msk ) << USART_BRR_DIV_MANTISSA_Pos );
+		USART2->BRR	|=	 ( myUSARTDIV & USART_BRR_DIV_MANTISSA_Msk );
 	}
 	else
 	{
@@ -209,7 +210,7 @@ uart_status_t Conf_UART2 ( uint32_t myCK, uint32_t myBaudRate )
 			USART2->CR1	|=	 USART_CR1_OVER8;
 
 			/* Update mantissa	 */
-			USART2->BRR	|=	 ( ( ( myUSARTDIV & USART_BRR_DIV_MANTISSA_Msk ) >> 1UL ) << USART_BRR_DIV_MANTISSA_Pos );
+			USART2->BRR	|=	 ( ( myUSARTDIV & USART_BRR_DIV_MANTISSA_Msk ) >> 1UL );
 			USART2->BRR	&=	 0b011;																						// BRR[3] must be kept cleared
 		}
 		else
@@ -219,7 +220,7 @@ uart_status_t Conf_UART2 ( uint32_t myCK, uint32_t myBaudRate )
 	}
 
 	/* Update fraction	 */
-	USART2->BRR	|=	 ( ( myUSARTDIV & USART_BRR_DIV_FRACTION_Msk ) << USART_BRR_DIV_FRACTION_Pos );
+	USART2->BRR	|=	 ( myUSARTDIV & USART_BRR_DIV_FRACTION_Msk );
 
 	/* UART5 Interrupts
 	 *  - Clear all interrupt flags ( in those supported modes )
@@ -229,8 +230,8 @@ uart_status_t Conf_UART2 ( uint32_t myCK, uint32_t myBaudRate )
 	NVIC_SetPriority ( USART2_IRQn, 1 ); 								// Set Priority to 1
 	NVIC_EnableIRQ   ( USART2_IRQn );  									// Enable UART2_IRQn interrupt in NVIC
 
-	/* Enable UART2, RX and RX interrupt	 */
-	USART2->CR1	|=	 ( USART_CR1_RE | USART_CR1_RXNEIE | USART_CR1_UE );
+	/* Enable UART2, TX, RX and RX interrupt	 */
+	USART2->CR1	|=	 ( USART_CR1_TCIE | USART_CR1_RE | USART_CR1_RXNEIE | USART_CR1_UE );
 
 
 	return UART_SUCCESS;
