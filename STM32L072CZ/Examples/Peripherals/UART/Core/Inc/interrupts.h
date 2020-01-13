@@ -32,7 +32,7 @@ extern void USART2_IRQHandler (void);
  */
 extern volatile uint8_t  myRX;
 extern volatile uint8_t  *myPtr;
-
-
+extern volatile uint32_t myUART_TxEnd;
+extern volatile uint32_t myState;
 
 #endif /* INTERRUPTS_H_ */

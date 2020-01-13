@@ -31,6 +31,7 @@ void USART2_IRQHandler ( void )
 	/* RX: RECEIVE	 */
 	if ( ( USART2->ISR & USART_ISR_RXNE_Msk ) == USART_ISR_RXNE )
 	{
+		myState	 =	 1UL;
 		myRX	 =	 USART2->RDR;
 	}
 
@@ -43,8 +44,8 @@ void USART2_IRQHandler ( void )
 		/* Stop transmitting data when that character is found */
 		if ( *myPtr  == '\n' )
 		{
-			//myUART_TxEnd	 =	 1UL;
-			USART2->CR1	&=	~USART_CR1_TE;						// Transmitter Disabled
+			myUART_TxEnd	 =	 1UL;
+			USART2->CR1		&=	~USART_CR1_TE;						// Transmitter Disabled
 		}
 		else
 		{
