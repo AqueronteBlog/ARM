@@ -21,7 +21,7 @@
 /**@brief Functions prototypes.
  */
 void 			Conf_GPIO 	( void );
-uart_status_t	Conf_UART5	( uint32_t myCK, uint32_t myBaudRate );
+uart_status_t	Conf_UART2	( uint32_t myCK, uint32_t myBaudRate );
 void 			Conf_Range ( void );
 
 

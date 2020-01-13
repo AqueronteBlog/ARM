@@ -53,15 +53,16 @@ void Conf_Range ( void )
  * 						- LD3:	PB_6
  * 						- LD4:	PB_7
  *
- * 					UART5:
- * 						- UART5_TX:	PB_3
- * 						- UART5_RX:	PB_4
+ * 					UART2:
+ * 						- UART2_TX:	PA_2
+ * 						- UART2_RX:	PA_3
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        18/December/2019
- * @version		18/December/2019   The ORIGIN
+ * @version		13/January/2019   	UART2 instead of UART5
+ * 				18/December/2019   	The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -102,21 +103,24 @@ void Conf_GPIO ( void )
 	/* GPIOA Output: PB_6 reset	 */
 	GPIOA->BSRR	|=	 GPIO_BSRR_BR_5;
 
-	/* UART5:
+	/* UART2:
 	 * 	- Alternate function mode
 	 */
-	GPIOB->MODER	&=	~( GPIO_MODER_MODE3 | GPIO_MODER_MODE4 );
-	GPIOB->MODER	|=	 ( GPIO_MODER_MODE3_1 | GPIO_MODER_MODE4_1 );
+	GPIOA->MODER	&=	~( GPIO_MODER_MODE2 | GPIO_MODER_MODE3 );
+	GPIOA->MODER	|=	 ( GPIO_MODER_MODE2_1 | GPIO_MODER_MODE3_1 );
+
+	GPIOA->AFR[0]	&=	~( GPIO_AFRL_AFSEL2 | GPIO_AFRL_AFSEL3 );
+	GPIOA->AFR[0]	|=	 ( ( 0b0100 << GPIO_AFRL_AFSEL2_Pos ) | ( 0b0100 << GPIO_AFRL_AFSEL3_Pos ) );
 }
 
 
 
 /**
- * @brief       void Conf_UART5 ( uint32_t , uint32_t )
- * @details     It configures UART5.
+ * @brief       void Conf_UART2 ( uint32_t , uint32_t )
+ * @details     It configures UART2.
  *
- *				- UART5:
- * 					-- UART5 BaudRate = 115200, 8-bit, 1-bit STOP, NO Parity
+ *				- UART2:
+ * 					-- UART2 BaudRate = 115200, 8-bit, 1-bit STOP, NO Parity
  * 					-- Tx/Rx Interrupts ENABLED
  *
  *
@@ -137,28 +141,28 @@ void Conf_GPIO ( void )
  * @pre         OVER8 is calculated automatically
  * @warning     N/A
  */
-uart_status_t Conf_UART5 ( uint32_t myCK, uint32_t myBaudRate )
+uart_status_t Conf_UART2 ( uint32_t myCK, uint32_t myBaudRate )
 {
 	uint32_t	myUSARTDIV	=	0UL;
 
 
 	/* UART clock enable	 */
-	RCC->APB1ENR	|=	 RCC_APB1ENR_USART5EN;
+	RCC->APB1ENR	|=	 RCC_APB1ENR_USART2EN;
 
-	/* UART5:
-	 * 	- Disable UART5
+	/* UART2:
+	 * 	- Disable UART2
 	 */
-	USART5->CR1	&=	~USART_CR1_UE;
+	USART2->CR1	&=	~USART_CR1_UE;
 
-	/* UART5:
+	/* UART2:
 	 * 	- Worth length: Start bit, 8 data bits, 1 stop bits.
 	 * 	- Parity control disabled
 	 * 	- Transmitter is disabled
 	 * 	- Receiver is disabled
 	 */
-	USART5->CR1	&=	~( USART_CR1_M1 | USART_CR1_OVER8 | USART_CR1_PCE | USART_CR1_TE | USART_CR1_RE );
+	USART2->CR1	&=	~( USART_CR1_M1 | USART_CR1_OVER8 | USART_CR1_PCE | USART_CR1_TE | USART_CR1_RE );
 
-	/* UART5:
+	/* UART2:
 	 * 	- Auto baud rate detection is disabled
 	 * 	- TX pin signal works using the standard logic levels
 	 * 	- RX pin signal works using the standard logic levels
@@ -166,9 +170,9 @@ uart_status_t Conf_UART5 ( uint32_t myCK, uint32_t myBaudRate )
 	 * 	- 1 stop bit
 	 * 	- CK pin disabled
 	 */
-	USART5->CR2	&=	~( USART_CR2_ABREN | USART_CR2_TXINV | USART_CR2_RXINV | USART_CR2_SWAP | USART_CR2_STOP | USART_CR2_CLKEN );
+	USART2->CR2	&=	~( USART_CR2_ABREN | USART_CR2_TXINV | USART_CR2_RXINV | USART_CR2_SWAP | USART_CR2_STOP | USART_CR2_CLKEN );
 
-	/* UART5:
+	/* UART2:
 	 * 	- CTS hardware flow control disabled
 	 * 	- RTS hardware flow control disabled
 	 * 	- DMA mode is disabled for transmission
@@ -179,21 +183,21 @@ uart_status_t Conf_UART5 ( uint32_t myCK, uint32_t myBaudRate )
 	 * 	- IrDA disabled
 	 * 	- Error interrupt enable: Interrupt is inhibited
 	 */
-	USART5->CR3	&=	~( USART_CR3_CTSE | USART_CR3_RTSE | USART_CR3_DMAT | USART_CR3_DMAR | USART_CR3_SCEN | USART_CR3_NACK | USART_CR3_HDSEL | USART_CR3_IREN | USART_CR3_EIE );
+	USART2->CR3	&=	~( USART_CR3_CTSE | USART_CR3_RTSE | USART_CR3_DMAT | USART_CR3_DMAR | USART_CR3_SCEN | USART_CR3_NACK | USART_CR3_HDSEL | USART_CR3_IREN | USART_CR3_EIE );
 
-	/* UART5
+	/* UART2
 	 *  - Check oversampling by 16 if it isn´t possible, try oversampling by 8. NOTE: It rounds the result by default.
 	 */
-	USART5->BRR	&=	~( USART_BRR_DIV_FRACTION | USART_BRR_DIV_MANTISSA );
+	USART2->BRR	&=	~( USART_BRR_DIV_FRACTION | USART_BRR_DIV_MANTISSA );
 
 	myUSARTDIV	 =	(uint32_t)( ( myCK / myBaudRate ) + 0.5 );
 	if ( myUSARTDIV >= 16 )
 	{
 		/* Oversampling by 16	 */
-		USART5->CR1	&=	~( USART_CR1_OVER8 );
+		USART2->CR1	&=	~( USART_CR1_OVER8 );
 
 		/* Update mantissa	 */
-		USART5->BRR	|=	 ( ( myUSARTDIV & USART_BRR_DIV_MANTISSA_Msk ) << USART_BRR_DIV_MANTISSA_Pos );
+		USART2->BRR	|=	 ( ( myUSARTDIV & USART_BRR_DIV_MANTISSA_Msk ) << USART_BRR_DIV_MANTISSA_Pos );
 	}
 	else
 	{
@@ -202,11 +206,11 @@ uart_status_t Conf_UART5 ( uint32_t myCK, uint32_t myBaudRate )
 		if ( myUSARTDIV >= 16 )
 		{
 			/* Oversampling by 8	 */
-			USART5->CR1	|=	 USART_CR1_OVER8;
+			USART2->CR1	|=	 USART_CR1_OVER8;
 
 			/* Update mantissa	 */
-			USART5->BRR	|=	 ( ( ( myUSARTDIV & USART_BRR_DIV_MANTISSA_Msk ) >> 1UL ) << USART_BRR_DIV_MANTISSA_Pos );
-			USART5->BRR	&=	 0b011;																						// BRR[3] must be kept cleared
+			USART2->BRR	|=	 ( ( ( myUSARTDIV & USART_BRR_DIV_MANTISSA_Msk ) >> 1UL ) << USART_BRR_DIV_MANTISSA_Pos );
+			USART2->BRR	&=	 0b011;																						// BRR[3] must be kept cleared
 		}
 		else
 		{
@@ -215,18 +219,18 @@ uart_status_t Conf_UART5 ( uint32_t myCK, uint32_t myBaudRate )
 	}
 
 	/* Update fraction	 */
-	USART5->BRR	|=	 ( ( myUSARTDIV & USART_BRR_DIV_FRACTION_Msk ) << USART_BRR_DIV_FRACTION_Pos );
+	USART2->BRR	|=	 ( ( myUSARTDIV & USART_BRR_DIV_FRACTION_Msk ) << USART_BRR_DIV_FRACTION_Pos );
 
 	/* UART5 Interrupts
 	 *  - Clear all interrupt flags ( in those supported modes )
 	 */
-	USART5->ICR	|=	 ( USART_ICR_PECF | USART_ICR_FECF | USART_ICR_NCF | USART_ICR_ORECF | USART_ICR_IDLECF | USART_ICR_TCCF | USART_ICR_CMCF );
+	USART2->ICR	|=	 ( USART_ICR_PECF | USART_ICR_FECF | USART_ICR_NCF | USART_ICR_ORECF | USART_ICR_IDLECF | USART_ICR_TCCF | USART_ICR_CMCF );
 
-	NVIC_SetPriority ( USART4_5_IRQn, 1 ); 									// Set Priority to 1
-	NVIC_EnableIRQ   ( USART4_5_IRQn );  									// Enable UART5_IRQn interrupt in NVIC
+	NVIC_SetPriority ( USART2_IRQn, 1 ); 								// Set Priority to 1
+	NVIC_EnableIRQ   ( USART2_IRQn );  									// Enable UART2_IRQn interrupt in NVIC
 
-	/* Enable UART5, RX and RX interrupt	 */
-	USART5->CR1	|=	 ( USART_CR1_RE | USART_CR1_RXNEIE | USART_CR1_UE );
+	/* Enable UART2, RX and RX interrupt	 */
+	USART2->CR1	|=	 ( USART_CR1_RE | USART_CR1_RXNEIE | USART_CR1_UE );
 
 
 	return UART_SUCCESS;
