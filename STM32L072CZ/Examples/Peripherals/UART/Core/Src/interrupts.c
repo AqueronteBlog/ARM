@@ -14,8 +14,8 @@
 
 
 /**
- * @brief       void USART4_5_IRQHandler ()
- * @details     USART4 and USART5 interrupt subroutine.
+ * @brief       void USART2_IRQHandler ()
+ * @details     USART2 interrupt subroutine.
  *
  *
  * @return      N/A
@@ -26,29 +26,29 @@
  * @pre         N/A.
  * @warning     N/A
  */
-void USART4_5_IRQHandler ( void )
+void USART2_IRQHandler ( void )
 {
-	/* TX: TRANSMISSION COMPLETE	 */
-	if ( ( USART5->ISR & USART_ISR_TC_Msk ) == 	USART_ISR_TC )
+	/* RX: RECEIVE	 */
+	if ( ( USART2->ISR & USART_ISR_RXNE_Msk ) == USART_ISR_RXNE )
 	{
-		USART5->ICR	|=	 USART_ICR_TCCF ;						// Clear flag
+		myRX	 =	 USART2->RDR;
+	}
+
+
+	/* TX: TRANSMISSION COMPLETE	 */
+	if ( ( USART2->ISR & USART_ISR_TC_Msk ) == 	USART_ISR_TC )
+	{
+		USART2->ICR	|=	 USART_ICR_TCCF ;						// Clear flag
 
 		/* Stop transmitting data when that character is found */
 		if ( *myPtr  == '\n' )
 		{
 			//myUART_TxEnd	 =	 1UL;
-			USART5->CR1	&=	~USART_CR1_TE;						// Transmitter Disabled
+			USART2->CR1	&=	~USART_CR1_TE;						// Transmitter Disabled
 		}
 		else
 		{
-			USART5->TDR	 =	 *++myPtr;
+			USART2->TDR	 =	 *++myPtr;
 		}
-	}
-
-
-	/* RX: RECEIVE	 */
-	if ( ( USART5->ISR & USART_ISR_RXNE_Msk ) == USART_ISR_RXNE )
-	{
-		myRX	 =	 USART5->RDR;
 	}
 }
