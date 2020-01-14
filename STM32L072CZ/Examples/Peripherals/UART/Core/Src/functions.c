@@ -186,12 +186,13 @@ uart_status_t Conf_UART2 ( uint32_t myCK, uint32_t myBaudRate )
 	 */
 	USART2->CR3	&=	~( USART_CR3_CTSE | USART_CR3_RTSE | USART_CR3_DMAT | USART_CR3_DMAR | USART_CR3_SCEN | USART_CR3_NACK | USART_CR3_HDSEL | USART_CR3_IREN | USART_CR3_EIE );
 
+
 	/* UART2
 	 *  - Check oversampling by 16 if it isn´t possible, try oversampling by 8. NOTE: It rounds the result by default.
 	 */
 	USART2->BRR	&=	~( USART_BRR_DIV_FRACTION | USART_BRR_DIV_MANTISSA );
 
-	myUSARTDIV	 =	( ( myCK / myBaudRate ) + 0.5 );
+	myUSARTDIV	 =	(uint32_t)( ( myCK / myBaudRate ) + 0.5 );
 	if ( myUSARTDIV >= 16 )
 	{
 		/* Oversampling by 16	 */
