@@ -44,8 +44,8 @@ void USART2_IRQHandler ( void )
 		/* Stop transmitting data when that character is found */
 		if ( *myPtr  == '\n' )
 		{
-			myUART_TxEnd	 =	 1UL;
-			USART2->CR1		&=	~USART_CR1_TE;						// Transmitter Disabled
+			myUART_TxEnd	 =	 0UL;
+			USART2->CR1		&=	~USART_CR1_TE;					// Transmitter Disabled
 		}
 		else
 		{
