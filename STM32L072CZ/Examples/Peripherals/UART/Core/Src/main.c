@@ -1,9 +1,19 @@
 /* USER CODE BEGIN Header */
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the low-power timer ( LPTIM ). Every 1s, LD1 blinks.
+ * @details     This example shows how to work with the UART5. The LEDs will change their state if the user
+ * 				sends a command through the serial port.
  *
- * 				The rest of the time, the uC is on STOP mode ( low-power mode ).
+ * 				User's command:
+ * 					'1': Change the state of LED1
+ * 					'2': Change the state of LED2
+ * 					'3': Change the state of LED3
+ * 					'4': Change the state of LED4
+ *
+ *				The system will send "ERROR" for other command.
+ *
+ *
+ * 				The rest of the time, the uC is on SLEEP mode ( low-power mode ).
  *
  *
  * @return      N/A
@@ -14,6 +24,7 @@
  * @pre         This firmware was tested on the B-L072Z-LRWAN1 board with STM32CubeIDE vs1.0.2. This project was generated using
  * 				SMT32CubeMX ( just to generate a template ).
  * @warning     Although HAL driver was generated, just the Low Power functions are used.
+ * @warning     STM32L072x8/B/Z Errata sheet ( DocID027206 Rev 4 ). I2C and USART cannot wake up the device from Stop mode.
  */
 /**
   ******************************************************************************
@@ -66,7 +77,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-volatile uint8_t  myMessage[ TX_BUFF_SIZE ];      			/*!<  Message to be transmitted through the UART         	*/
 volatile uint8_t  *myPtr;                         			/*!<  Pointer to point out myMessage                     	*/
 volatile uint8_t  myRX;                         			/*!<  Data from RX UART				                     	*/
 volatile uint32_t myUART_TxEnd;                     		/*!<  It indicates when an UART transmission is finished	*/
@@ -92,6 +102,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+	uint8_t  myMessage[ TX_BUFF_SIZE ];
 
   /* USER CODE END 1 */
   
@@ -124,34 +135,154 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+	  __HAL_PWR_CLEAR_FLAG (PWR_FLAG_WU);
 	  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if ( myState == 1UL )
+	  if ( ( myState == 1UL ) && ( myUART_TxEnd == 0UL ) )
 	  {
-		  GPIOA->BSRR	 =	 ( 1UL << LD1 );					// Turn it ON
+		  switch ( myRX )
+		  {
+		  case '1':
+			  if ( ( GPIOB->ODR & ( 1UL << LD1 ) ) == ( 1UL << LD1 ) )
+			  {
+				  myMessage[ 0 ]   =  'L';
+				  myMessage[ 1 ]   =  'E';
+				  myMessage[ 2 ]   =  'D';
+				  myMessage[ 3 ]   =  '1';
+				  myMessage[ 4 ]   =  ' ';
+				  myMessage[ 5 ]   =  'O';
+				  myMessage[ 6 ]   =  'F';
+				  myMessage[ 7 ]   =  'F';
+				  myMessage[ 8 ]   =  '\n';
 
+				  GPIOB->BRR	 =	( 1UL << LD1 );				// Turn it OFF
+			  }
+			  else
+			  {
+				  myMessage[ 0 ]   =  'L';
+				  myMessage[ 1 ]   =  'E';
+				  myMessage[ 2 ]   =  'D';
+				  myMessage[ 3 ]   =  '1';
+				  myMessage[ 4 ]   =  ' ';
+				  myMessage[ 5 ]   =  'O';
+				  myMessage[ 6 ]   =  'N';
+				  myMessage[ 7 ]   =  '\n';
 
-		  /* Parse the data	 */
-		  sprintf ( (char*)myMessage, "Temperature: C\r\n" );
+				  GPIOB->BSRR	 =	 ( 1UL << LD1 );			// Turn it ON
+			  }
+			  break;
+
+		  case '2':
+			  if ( ( GPIOA->ODR & ( 1UL << LD2 ) ) == ( 1UL << LD2 ) )
+			  {
+				  myMessage[ 0 ]   =  'L';
+				  myMessage[ 1 ]   =  'E';
+				  myMessage[ 2 ]   =  'D';
+				  myMessage[ 3 ]   =  '2';
+				  myMessage[ 4 ]   =  ' ';
+				  myMessage[ 5 ]   =  'O';
+				  myMessage[ 6 ]   =  'F';
+				  myMessage[ 7 ]   =  'F';
+				  myMessage[ 8 ]   =  '\n';
+
+			  	  GPIOA->BRR	 =	( 1UL << LD2 );				// Turn it OFF
+			  }
+			  else
+			  {
+				  myMessage[ 0 ]   =  'L';
+				  myMessage[ 1 ]   =  'E';
+				  myMessage[ 2 ]   =  'D';
+				  myMessage[ 3 ]   =  '2';
+				  myMessage[ 4 ]   =  ' ';
+				  myMessage[ 5 ]   =  'O';
+				  myMessage[ 6 ]   =  'N';
+				  myMessage[ 7 ]   =  '\n';
+
+			  	  GPIOA->BSRR	 =	 ( 1UL << LD2 );			// Turn it ON
+			  }
+			  break;
+
+		  case '3':
+			  if ( ( GPIOB->ODR & ( 1UL << LD3 ) ) == ( 1UL << LD3 ) )
+			  {
+				  myMessage[ 0 ]   =  'L';
+				  myMessage[ 1 ]   =  'E';
+				  myMessage[ 2 ]   =  'D';
+				  myMessage[ 3 ]   =  '3';
+				  myMessage[ 4 ]   =  ' ';
+				  myMessage[ 5 ]   =  'O';
+				  myMessage[ 6 ]   =  'F';
+				  myMessage[ 7 ]   =  'F';
+				  myMessage[ 8 ]   =  '\n';
+
+			  	  GPIOB->BRR	 =	( 1UL << LD3 );				// Turn it OFF
+			  }
+			  else
+			  {
+				  myMessage[ 0 ]   =  'L';
+				  myMessage[ 1 ]   =  'E';
+				  myMessage[ 2 ]   =  'D';
+				  myMessage[ 3 ]   =  '3';
+				  myMessage[ 4 ]   =  ' ';
+				  myMessage[ 5 ]   =  'O';
+				  myMessage[ 6 ]   =  'N';
+				  myMessage[ 7 ]   =  '\n';
+
+			   	  GPIOB->BSRR	 =	 ( 1UL << LD3 );			// Turn it ON
+			  }
+			  break;
+
+		  case '4':
+			  if ( ( GPIOB->ODR & ( 1UL << LD4 ) ) == ( 1UL << LD4 ) )
+			  {
+				  myMessage[ 0 ]   =  'L';
+				  myMessage[ 1 ]   =  'E';
+				  myMessage[ 2 ]   =  'D';
+				  myMessage[ 3 ]   =  '4';
+				  myMessage[ 4 ]   =  ' ';
+				  myMessage[ 5 ]   =  'O';
+				  myMessage[ 6 ]   =  'F';
+				  myMessage[ 7 ]   =  'F';
+				  myMessage[ 8 ]   =  '\n';
+
+  			  	  GPIOB->BRR	 =	( 1UL << LD4 );				// Turn it OFF
+  			  }
+  			  else
+  			  {
+  				  myMessage[ 0 ]   =  'L';
+  				  myMessage[ 1 ]   =  'E';
+  				  myMessage[ 2 ]   =  'D';
+  				  myMessage[ 3 ]   =  '4';
+  				  myMessage[ 4 ]   =  ' ';
+  				  myMessage[ 5 ]   =  'O';
+  				  myMessage[ 6 ]   =  'N';
+  				  myMessage[ 7 ]   =  '\n';
+
+  			  	  GPIOB->BSRR	 =	 ( 1UL << LD4 );			// Turn it ON
+  			  }
+			  break;
+
+		  default:
+			  myMessage[ 0 ]   =  'E';
+			  myMessage[ 1 ]   =  'R';
+			  myMessage[ 2 ]   =  'R';
+			  myMessage[ 3 ]   =  'O';
+			  myMessage[ 4 ]   =  'R';
+			  myMessage[ 5 ]   =  '\n';
+			  break;
+
+		  }
 
 		  /* Transmit data through the UART	 */
 		  myPtr   	 	 =   &myMessage[0];
 		  USART2->TDR	 =	 *myPtr;
 		  USART2->CR1	|=	 USART_CR1_TE;						// Transmitter Enabled
 
-		  /* Low power: Sleep mode, wait until all data was sent through the UART	 */
-		  do{
-			  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
-		  }while ( myUART_TxEnd == 0UL );
-
-
 		  /* Reset variables	 */
-		  myUART_TxEnd	 =	 0UL;
+		  myUART_TxEnd   =   1UL;
 		  myState	 	 =	 0UL;
-		  GPIOA->BRR	 =	( 1UL << LD1 );				// Turn it OFF
 	  }
   }
   /* USER CODE END 3 */
