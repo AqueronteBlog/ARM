@@ -1,6 +1,6 @@
 /**
  * @brief       VEML6030.h
- * @details     High Accuracy Ambient Light Sensor With I 2 C Interface.
+ * @details     High Accuracy Ambient Light Sensor With I2C Interface.
  *              Header file.
  *
  *
@@ -17,166 +17,165 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include "math.h"
 #include "i2c.h"
 
 
 /**
-  * @brief   DEFAULT ADDRESS
+  * @brief   DEFAULT ADDRESSES
   */
 typedef enum
 {
-  VEML6030_ADDRESS  =   0b1011011          /*!<   ADDR                         	*/
-} VEML6030_address_t;
+	VEML6030_ADDRESS_GND  =   0b0010000,     /*!<   ADDR = GND                   	*/
+	VEML6030_ADDRESS_VDD  =   0b1001000      /*!<   ADDR = VDD                   	*/
+} VEML6030_addresses_t;
 
 
 
 /**
-  * @brief   REGISTER MAP
+  * @brief   COMMAND REGISTER FORMAT
   */
 typedef enum
 {
-  VEML6030_MANUFACTURER_ID     =   0x0F,	/*!<  Manufacturer ID                   */
-  VEML6030_PART_ID			    =   0x10,   /*!<  Part ID							*/
-  VEML6030_RESET		      	=   0x40,   /*!<  SWRESET                       	*/
-  VEML6030_MEAS_CONTROL1	    =   0x41,   /*!<  Measurement setting Control       */
-  VEML6030_MEAS_CONTROL2    	=   0x42,   /*!<  Measurement setting Control       */
-  VEML6030_MEAS_START			=   0x43,   /*!<  Start Measurement					*/
-  VEML6030_DATAOUT_LEDOFF_LSB 	=   0x54,   /*!<  Measurement Data LSB (LED OFF)	*/
-  VEML6030_DATAOUT_LEDOFF_MSB	=   0x55,   /*!<  Measurement Data MSB (LED OFF)	*/
-  VEML6030_DATAOUT_LEDON_LSB   =   0x56,   /*!<  Measurement Data LSB (LED ON)     */
-  VEML6030_DATAOUT_LEDON_MSB 	=   0x57    /*!<  Measurement Data MSB (LED ON)     */
-} VEML6030_register_map_t;
+  VEML6030_ALS_CONF     		=   0x00,	/*!<  Configuration register            */
+  VEML6030_ALS_WH			    =   0x01,   /*!<  High Threshold Windows Setting	*/
+  VEML6030_ALS_WL		      	=   0x02,   /*!<  Low Threshold Windows Setting		*/
+  VEML6030_POWER_SAVING		    =   0x03,   /*!<  Power Saving Mode: PSM		    */
+  VEML6030_ALS			    	=   0x04,   /*!<  ALS High Resolution Output Data   */
+  VEML6030_WHITE				=   0x05,   /*!<  White Channel Output Data			*/
+  VEML6030_ALS_INT			 	=   0x06    /*!<  Interrupt status				    */
+} VEML6030_command_register_format_t;
 
 
 
 /**
-  * @brief   MANUFACTOR ID REGISTER
-  */
+  * @brief   CONFIGURATION REGISTER
+ */
+/* ALS_GAIN <12:11>
+ *    NOTE: Gain selection.
+ */
 typedef enum
 {
-    MANUFACTOR_ID_MANUFACTURER_ID				=   0xE0			/*!<  Manufacturer ID                         	*/
-} VEML6030_manufactor_id_manufacturer_id_t;
+	ALS_CONF_ALS_GAIN_MASK					=   ( 0b11 << 11U ),	/*!<  ALS_GAIN mask       	    			    */
+	ALS_CONF_ALS_GAIN_X1					=   ( 0b00 << 11U ),	/*!<  ALS gain x 1								*/
+	ALS_CONF_ALS_GAIN_X2					=   ( 0b01 << 11U ), 	/*!<  ALS gain x 2					 			*/
+	ALS_CONF_ALS_GAIN_X1_8					=   ( 0b10 << 11U ), 	/*!<  ALS gain x 1/8				 			*/
+	ALS_CONF_ALS_GAIN_X1_4					=   ( 0b11 << 11U ) 	/*!<  ALS gain x 1/4				 			*/
+} VEML6030_als_conf_als_gain_t;
+
+
+/* ALS_IT <9:6>
+ *    NOTE: ALS integration time setting.
+ */
+typedef enum
+{
+	ALS_CONF_ALS_IT_MASK					=   ( 0b1111 << 6U ),	/*!<  ALS_IT mask       	    			    */
+	ALS_CONF_ALS_IT_25MS					=   ( 0b1100 << 6U ),	/*!<   25 ms	 								*/
+	ALS_CONF_ALS_IT_50MS					=   ( 0b1000 << 6U ), 	/*!<   50 ms						 			*/
+	ALS_CONF_ALS_IT_100MS					=   ( 0b0000 << 6U ), 	/*!<  100 ms						 			*/
+	ALS_CONF_ALS_IT_200MS					=   ( 0b0001 << 6U ), 	/*!<  200 ms						 			*/
+	ALS_CONF_ALS_IT_400MS					=   ( 0b0010 << 6U ), 	/*!<  400 ms						 			*/
+	ALS_CONF_ALS_IT_800MS					=   ( 0b0011 << 6U )  	/*!<  800 ms						 			*/
+} VEML6030_als_conf_als_it_t;
+
+
+/* ALS_PERS <5:4>
+ *    NOTE: ALS persistence protect number setting.
+ */
+typedef enum
+{
+	ALS_CONF_ALS_PERS_MASK					=   ( 0b11 << 4U ),		/*!<  ALS_PERS mask       	    			    */
+	ALS_CONF_ALS_PERS_1	  					=   ( 0b00 << 4U ),		/*!<  ALS 1										*/
+	ALS_CONF_ALS_PERS_2						=   ( 0b01 << 4U ), 	/*!<  ALS 2					 					*/
+	ALS_CONF_ALS_PERS_4						=   ( 0b10 << 4U ), 	/*!<  ALS 4							 			*/
+	ALS_CONF_ALS_PERS_8						=   ( 0b11 << 4U ) 		/*!<  ALS 8							 			*/
+} VEML6030_als_conf_als_pers_t;
+
+
+/* ALS_INT_EN <1>
+ *    NOTE: ALS interrupt enable setting.
+ */
+typedef enum
+{
+	ALS_CONF_ALS_INT_EN_MASK				=   ( 1U << 1U ),		/*!<  ALS_INT_EN mask      	    			    */
+	ALS_CONF_ALS_INT_EN_DISABLE  			=   ( 0U << 1U ),		/*!<  ALS INT disable							*/
+	ALS_CONF_ALS_INT_EN_ENABLE				=   ( 1U << 1U )  		/*!<  ALS INT enable		 					*/
+} VEML6030_als_conf_als_int_en_t;
+
+
+/* ALS_SD <0>
+ *    NOTE: ALS shut down setting.
+ */
+typedef enum
+{
+	ALS_CONF_ALS_SD_MASK					=   ( 1U << 0U ),		/*!<  ALS_SD mask      		    			    */
+	ALS_CONF_ALS_SD_POWER_ON  				=   ( 0U << 0U ),		/*!<  ALS power on								*/
+	ALS_CONF_ALS_SD_SHUTDOWN				=   ( 1U << 0U )  		/*!<  ALS shut down			 					*/
+} VEML6030_als_conf_als_sd_t;
+
 
 
 /**
-  * @brief   PART ID REGISTER
-  */
+  * @brief   POWER SAVING MODES
+ */
+/* PSM <2:1>
+ *    NOTE: Power saving mode; see table "Refresh time".
+ */
 typedef enum
 {
-	PART_ID_PART_ID								=   0x0D			/*!<  Part ID					 		        */
-} VEML6030_part_id_part_id_t;
+	POWER_SAVING_PSM_MASK					=   ( 0b11 << 1U ),		/*!<  PSM mask  	     	    			    */
+	POWER_SAVING_PSM_MODE_1					=   ( 0b00 << 1U ),		/*!<  mode 1									*/
+	POWER_SAVING_PSM_MODE_2					=   ( 0b01 << 1U ), 	/*!<  mode 2					 				*/
+	POWER_SAVING_PSM_MODE_3					=   ( 0b10 << 1U ), 	/*!<  mode 3				 					*/
+	POWER_SAVING_PSM_MODE_4					=   ( 0b11 << 1U ) 		/*!<  mode 4						 			*/
+} VEML6030_power_saving_psm_t;
+
+
+/* PSM_EN <0>
+ *    NOTE: Power saving mode; see table "Refresh time".
+ */
+typedef enum
+{
+	POWER_SAVING_PSM_EN_MASK				=   ( 1U << 0U ),		/*!<  PSM_EN mask  	     	    			    */
+	POWER_SAVING_PSM_EN_DISABLE				=   ( 0U << 0U ),		/*!<  Disable									*/
+	POWER_SAVING_PSM_EN_ENABLE				=   ( 1U << 0U )  		/*!<  Enable					 				*/
+} VEML6030_power_saving_psm_en_t;
+
 
 
 /**
-  * @brief   RESET REGISTER
+  * @brief   INTERRUPT STATUS
  */
-/* SWRESET <7>
- *    NOTE: Software reset.
+/* INT_TH_LOW <15>
+ *    NOTE: Read bit. Indicated a low threshold exceed.
  */
 typedef enum
 {
-	RESET_SWRESET_MASK							=   ( 1U << 7U ),	/*!<  SWRESET mask       	    			    */
-	RESET_SWRESET_ENABLED						=   ( 1U << 7U ),	/*!<  Software reset is performed				*/
-	RESET_SWRESET_DISABLED						=   ( 0U << 7U ) 	/*!<  Software reset is completed	 			*/
-} VEML6030_reset_swreset_t;
+	ALS_INT_INT_TH_LOW_MASK					=   ( 1U << 15U ),		/*!<  INT_TH_LOW mask  	   	    			    */
+	ALS_INT_INT_TH_LOW_NO_EXCEEDED			=   ( 0U << 15U ),		/*!<  A low threshold no exceed					*/
+	ALS_INT_INT_TH_LOW_EXCEEDED				=   ( 1U << 15U ) 		/*!<  Indicated a low threshold exceed 			*/
+} VEML6030_als_int_int_th_low_t;
+
+
+/* INT_TH_HIGH <14>
+ *    NOTE: Read bit. Indicated a high threshold exceed.
+ */
+typedef enum
+{
+	ALS_INT_INT_TH_HIGH_MASK				=   ( 1U << 14U ),		/*!<  INT_TH_HIGH mask  		   			    */
+	ALS_INT_INT_TH_HIGH_NO_EXCEEDED			=   ( 0U << 14U ),		/*!<  A high threshold no exceed				*/
+	ALS_INT_INT_TH_HIGH_EXCEEDED			=   ( 1U << 14U ) 		/*!<  Indicated a high threshold exceed 		*/
+} VEML6030_als_int_int_th_high_t;
+
 
 
 /**
-  * @brief   MEAS_CONTROL1 REGISTER
-  *
+  * @brief   APPLICATION
  */
-/* RDY <7>
- *    NOTE: OSC block.
- */
-typedef enum
-{
-	MEAS_CONTROL1_RDY_MASK						=   ( 1U << 7U ),	/*!<  RDY mask       	        				*/
-	MEAS_CONTROL1_RDY_PROHIBITED				=   ( 0U << 7U ),	/*!<  Prohibited								*/
-	MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE			=   ( 1U << 7U ) 	/*!<  OSC block clock to internal block			*/
-} VEML6030_meas_control1_rdy_t;
+#define TYPICAL_RESOLUTION_GAIN_2_IT_800MS	(uint32_t)36			/*!<  Typical resolution: Gain 2 | IT 800ms ( 0.0036 * 10000 = 36    */
+//#define TYPICAL_RESOLUTION_GAIN_2_IT_800MS	(float)0.0036			/*!<  Typical resolution: Gain 2 | IT 800ms    */
 
 
-/* LED_LIGHTING_FREQ <2>
- *    NOTE: Select LED emitting frequency.
- */
-typedef enum
-{
-	MEAS_CONTROL1_LED_LIGHTING_FREQ_MASK		=   ( 1U << 2U ),		/*!<  LED_LIGHTLING_FREQ mask      				*/
-	MEAS_CONTROL1_LED_LIGHTING_FREQ_128HZ_MODE	=   ( 0U << 2U ),		/*!<  128Hz Mode								*/
-	MEAS_CONTROL1_LED_LIGHTING_FREQ_64HZ_MODE	=   ( 1U << 2U ) 		/*!<  64Hz Mode									*/
-} VEML6030_meas_control1_led_lighting_freq_t;
-
-
-/* RCYCLE <1:0>
- *    NOTE: Select Data reading frequency.
- */
-typedef enum
-{
-	MEAS_CONTROL1_RCYCLE_MASK					=   ( 0b11 << 0U ),		/*!<  RCYCLE mask      							*/
-	MEAS_CONTROL1_RCYCLE_64HZ_MODE				=   ( 0b01 << 0U ),		/*!<  128Hz Mode								*/
-	MEAS_CONTROL1_RCYCLE_32HZ_MODE				=   ( 0b10 << 0U ) 		/*!<  64Hz Mode									*/
-} VEML6030_meas_control1_rcycle_t;
-
-
-/**
-  * @brief   MEAS_CONTROL2 REGISTER
-  *
- */
-/* LED_EN <7:6>
- *    NOTE: Select LED driver mode.
- */
-typedef enum
-{
-	MEAS_CONTROL2_LED_EN_MASK					=   ( 0b11 << 6U ),		/*!<  LED_EN mask     	        				*/
-	MEAS_CONTROL2_LED_EN_0						=   ( 0b00 << 6U ),		/*!<  LED1 and LED2 pulsed light emit			*/
-	MEAS_CONTROL2_LED_EN_1						=   ( 0b01 << 6U ), 	/*!<  LED1 constant light LED2 pulsed light emit*/
-	MEAS_CONTROL2_LED_EN_2						=   ( 0b10 << 6U ), 	/*!<  LED1 pulsed light emit LED2 constant light*/
-	MEAS_CONTROL2_LED_EN_3						=   ( 0b11 << 6U )  	/*!<  LED1 and LED2 constant light 				*/
-} VEML6030_meas_control2_led_en_t;
-
-
-/* LED_ON_TIME <5>
- *    NOTE: Select LED emitting time.
- */
-typedef enum
-{
-	MEAS_CONTROL2_LED_ON_TIME_MASK				=   ( 1U << 5U ),		/*!<  LED_ON_TIME mask  						*/
-	MEAS_CONTROL2_LED_ON_TIME_0_3_MS_MODE		=   ( 0U << 5U ),		/*!<  0.3ms Mode								*/
-	MEAS_CONTROL2_LED_ON_TIME_0_6_MS_MODE		=   ( 1U << 5U ) 		/*!<  0.6ms Mode								*/
-} VEML6030_meas_control2_led_on_time_t;
-
-
-/* LED_CURRENT <3:0>
- *    NOTE: Select LED lighting current.
- */
-typedef enum
-{
-	MEAS_CONTROL2_LED_CURRENT_MASK				=   ( 0b1111 << 0U ),	/*!<  LED_CURRENT mask  						*/
-	MEAS_CONTROL2_LED_CURRENT_0_MA_MODE			=   ( 0x0 << 0U ),		/*!<  0mA Mode									*/
-	MEAS_CONTROL2_LED_CURRENT_1_MA_MODE			=   ( 0x8 << 0U ),		/*!<  1mA Mode									*/
-	MEAS_CONTROL2_LED_CURRENT_2_MA_MODE			=   ( 0x9 << 0U ),		/*!<  2mA Mode									*/
-	MEAS_CONTROL2_LED_CURRENT_3_MA_MODE			=   ( 0xA << 0U ),		/*!<  3mA Mode									*/
-	MEAS_CONTROL2_LED_CURRENT_6_MA_MODE			=   ( 0xB << 0U ),		/*!<  6mA Mode									*/
-	MEAS_CONTROL2_LED_CURRENT_10_MA_MODE		=   ( 0xC << 0U ),		/*!<  10mA Mode									*/
-	MEAS_CONTROL2_LED_CURRENT_20_MA_MODE		=   ( 0xD << 0U ),		/*!<  20mA Mode									*/
-	MEAS_CONTROL2_LED_CURRENT_30_MA_MODE		=   ( 0xE << 0U ),		/*!<  30mA Mode									*/
-	MEAS_CONTROL2_LED_CURRENT_60_MA_MODE		=   ( 0xF << 0U ) 		/*!<  60mA Mode									*/
-} VEML6030_meas_control2_led_current_t;
-
-
-/**
-  * @brief   MEAS_START REGISTER
-  *
- */
-/* LED_EN <0>
- *    NOTE: Flag of start measurement. Start measurement by writing 'MEAS_ST=1' after writing 'RDY=1'. Measurement doesn’t restart if writing
- *    		'MEAS_ST=1' after start measurement. When stop measurement, write 'SWRESET=1' without writing 'MEAS_ST=0'.
- */
-typedef enum
-{
-	MEAS_START_MEAS_ST_MASK						=   ( 1U << 0U ),		/*!<  MEAS_ST mask     	        				*/
-	MEAS_START_MEAS_ST_MEASUREMENT_START		=   ( 1U << 0U )  		/*!<  Measurement start							*/
-} VEML6030_meas_start_meas_st_t;
 
 
 
@@ -185,23 +184,34 @@ typedef enum
 #define VEML6030_VECTOR_STRUCT_H
 typedef struct
 {
-	/* Raw dataout	 */
-	uint16_t dataOut_LED_OFF;										/*!<  Green Data Count Value when LED no emitting	*/
-	uint16_t dataOut_LED_ON;										/*!<  Green Data Count Value when LED emitting		*/
+	/* Raw ALS high resolution output data	 */
+	uint16_t als_high_resolution_output_data;				/*!< Raw ALS high resolution output data					*/
 
-	/* System control setting	 */
-	VEML6030_meas_control1_rdy_t 				rdy;				/*!<  OSC block is supply clock to internal block	*/
-	VEML6030_meas_control1_led_lighting_freq_t led_lighting_freq;	/*!<  Select LED emitting frequency					*/
-	VEML6030_meas_control1_rcycle_t			rcycle;				/*!<  Select Measurement time 						*/
+	/* Raw WHITE output data	 */
+	uint16_t white_output_data;								/*!< Raw WHITE output data									*/
 
-	/* Measurement control setting	 */
-	VEML6030_meas_control2_led_en_t			led_en;				/*!<  Select LED driver mode						*/
-	VEML6030_meas_control2_led_on_time_t		led_on_time;		/*!<  Select LED emitting time						*/
-	VEML6030_meas_control2_led_current_t		led_current;		/*!<  Select LED driver current						*/
+	/* Raw threshold windows setting	 */
+	uint16_t high_threshold_windows_setting;				/*!< Raw ALS high threshold window setting					*/
+	uint16_t low_threshold_windows_setting;					/*!< Raw ALS low threshold window setting					*/
 
-    /* Device identifications   */
-    uint8_t manufacturer_id;        								/*!<  Manufacturer ID              					*/
-    uint8_t part_id;        										/*!<  Part ID                      					*/
+	/* Configuration register	 */
+	VEML6030_als_conf_als_gain_t	als_gain;				/*!< Gain selection											*/
+	VEML6030_als_conf_als_it_t		als_it;					/*!< ALS integration time setting							*/
+	VEML6030_als_conf_als_pers_t	als_pers;				/*!< ALS persistence protect number setting					*/
+	VEML6030_als_conf_als_int_en_t	als_int_en;				/*!< ALS interrupt enable setting							*/
+	VEML6030_als_conf_als_sd_t		als_sd;					/*!< ALS shut down setting									*/
+
+	/* Power saving modes	 */
+	VEML6030_power_saving_psm_t		psm;					/*!< Power saving mode										*/
+	VEML6030_power_saving_psm_en_t	psm_en;					/*!< Power saving mode enable setting						*/
+
+	/* Interrupt status	 */
+	VEML6030_als_int_int_th_low_t	int_th_low;				/*!< Indicated if a low threshold exceed					*/
+	VEML6030_als_int_int_th_high_t	int_th_high;			/*!< Indicated if a high threshold exceed					*/
+
+	/* Application information	 */
+	float	light_level;									/*!< Light level [lux]										*/
+	float	resolution;										/*!< Resolution regarding the integration time and the gain	*/
 } VEML6030_data_t;
 #endif
 
@@ -225,25 +235,38 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-VEML6030_status_t VEML6030_Init               	( I2C_parameters_t myI2Cparameters                                		);
+VEML6030_status_t VEML6030_Init               		( I2C_parameters_t myI2Cparameters                                		);
 
-/** It gets the manufacturer ID.
+/** It sets the configuration register.
   */
-VEML6030_status_t VEML6030_GetManufacturerID		( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myManufacturerID	);
+VEML6030_status_t VEML6030_SetConfiguration			( I2C_parameters_t myI2Cparameters, VEML6030_data_t myALS_Conf			);
 
-/** It gets the part ID.
+/** It sets the high threshold windows value.
   */
-VEML6030_status_t VEML6030_GetPartID  			( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myPartID			);
+VEML6030_status_t VEML6030_SetHighThreshold			( I2C_parameters_t myI2Cparameters, VEML6030_data_t myALS_WH			);
 
-/** It performs a soft reset.
+/** It sets the low threshold windows value.
   */
-VEML6030_status_t VEML6030_SoftReset  			( I2C_parameters_t myI2Cparameters										);
+VEML6030_status_t VEML6030_SetLowThreshold			( I2C_parameters_t myI2Cparameters, VEML6030_data_t myALS_WL			);
 
-/** It triggers a new measurement sample.
+/** It sets the power saving modes.
   */
-VEML6030_status_t VEML6030_StartMeasurement		( I2C_parameters_t myI2Cparameters, VEML6030_data_t myConfData			);
+VEML6030_status_t VEML6030_SetPowerSavingModes		( I2C_parameters_t myI2Cparameters, VEML6030_data_t myPSM				);
 
-/** It gets the DATAOUT ( DATAOUT_LEDOFF and DATAOUT_LEDON data ). Raw data value.
+/** It gets the ALS high resolution output data.
   */
-VEML6030_status_t VEML6030_GetRawDataOut			( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myRawDataOut		);
+VEML6030_status_t VEML6030_GetALS_OuputData			( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myALS				);
+
+/** It gets the WHITE output data.
+  */
+VEML6030_status_t VEML6030_GetWhiteChannelOuputData	( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myWhite			);
+
+/** It gets the Interrupt status value.
+  */
+VEML6030_status_t VEML6030_GetInterruptStatus		( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myIntStatus		);
+
+/** It calculates the total lux value.
+  */
+VEML6030_status_t VEML6030_CalculateLuxValue		( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myLuxValue			);
+
 
