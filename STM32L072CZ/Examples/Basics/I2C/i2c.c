@@ -36,7 +36,6 @@
 i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 {
 
-
 	/* Peripheral configured successfully	 */
 	return I2C_SUCCESS;
 }
