@@ -46,7 +46,11 @@
 #include "variables.h"
 #include "functions.h"
 #include "interrupts.h"
-#include "BH1790GLC.h"
+#if defined (WORK_FROM_HOME)
+#include "D:/Workspace/ARM/Drivers/BH1790GLC/BH1790GLC.h"
+#else
+#include "D:/vsProjects/ARM/Drivers/BH1790GLC/BH1790GLC.h"
+#endif
 
 /* USER CODE END Includes */
 
