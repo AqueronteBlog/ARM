@@ -29,12 +29,41 @@
  *
  * @author      Manuel Caballero
  * @date        16/January/2020
- * @version     16/January/2020     The ORIGIN
+ * @version     19/January/2020     analog filter enabled, all flags are reset.
+ * 				16/January/2020     The ORIGIN
  * @pre         I2C communication is by polling mode.
+ * @pre         Only 7-bit addressing mode implemented.
  * @warning     N/A.
  */
 i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 {
+	/* I2C
+	 *  - I2C disabled
+	 *  - Transmit (TXIS) interrupt disabled
+	 *  - Receive (RXNE) interrupt disabled
+	 *  - Not acknowledge (NACKF) received interrupts disabled
+	 *  - Stop detection (STOPF) interrupt disabled
+	 *  - Transfer Complete interrupt disabled
+	 *  - Error detection interrupts disabled
+	 *  - Digital filter disabled
+	 *  - Analog noise filter enabled
+	 *  - DMA mode disabled for transmission
+	 *  - DMA mode disabled for reception
+	 *  - Slave byte control disabled
+	 */
+	myI2Cparameters.i2cInstance->CR1	&=	~( I2C_CR1_PE | I2C_CR1_TXIE | I2C_CR1_RXIE | I2C_CR1_NACKIE | I2C_CR1_STOPIE | I2C_CR1_TCIE | I2C_CR1_ERRIE | I2C_CR1_DNF | I2C_CR1_TXDMAEN | I2C_CR1_RXDMAEN | I2C_CR1_SBC );
+	myI2Cparameters.i2cInstance->CR1	&=	~( I2C_CR1_ANFOFF );
+
+	/* I2C
+	 *  - The master operates in 7-bit addressing mode
+	 */
+	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_ADD10 );
+
+
+	/* Clear all the falgs	 */
+	myI2Cparameters.i2cInstance->ICR	|=	 ( I2C_ICR_ADDRCF | I2C_ICR_NACKCF | I2C_ICR_STOPCF | I2C_ICR_BERRCF | I2C_ICR_ARLOCF | I2C_ICR_OVRCF | I2C_ICR_PECCF | I2C_ICR_TIMOUTCF | I2C_ICR_ALERTCF );
+
+
 
 	/* Peripheral configured successfully	 */
 	return I2C_SUCCESS;
