@@ -54,8 +54,8 @@ typedef enum
   */
 typedef struct{
     /* Port for pins: SDA and SCL  */
-	//ADI_GPIO_TypeDef* sdaPort;
-	//ADI_GPIO_TypeDef* sclPort;
+	GPIO_TypeDef* sdaPort;
+	GPIO_TypeDef* sclPort;
 
     /* Pin number  */
     uint32_t sda;
@@ -68,7 +68,7 @@ typedef struct{
     uint32_t addr;
 
     /* I2C instance  */
-    //ADI_I2C_TypeDef* i2cInstance;
+    I2C_TypeDef* i2cInstance;
 
     /* Core clock that drives the I2C peripheral	 */
     uint32_t pclkFrequency;
