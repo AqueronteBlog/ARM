@@ -29,7 +29,8 @@
  *
  * @author      Manuel Caballero
  * @date        16/January/2020
- * @version     19/January/2020     analog filter enabled, all flags are reset.
+ * @version     20/January/2020     I2Cclock source was added.
+ * 				19/January/2020     Analog filter enabled, all flags are reset.
  * 				16/January/2020     The ORIGIN
  * @pre         I2C communication is by polling mode.
  * @pre         Only 7-bit addressing mode implemented.
@@ -37,6 +38,81 @@
  */
 i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 {
+	/* Turn on the I2C peripheral clock	 */
+	switch ( myI2Cparameters.i2cClockSource )
+	{
+	default:
+	case I2C_CLOCK_SOURCE_APB:
+		if ( myI2Cparameters.i2cInstance == I2C1 )
+		{
+			RCC->CCIPR		&=	~( RCC_CCIPR_I2C1SEL_Msk );
+			RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C1EN );
+		}
+		else if ( myI2Cparameters.i2cInstance == I2C2 )
+		{
+			/* I2C2 has a fixed clock source to PCK1 (APB)	 */
+			RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C2EN );
+		}
+		else if ( myI2Cparameters.i2cInstance == I2C3 )
+		{
+			RCC->CCIPR		&=	~( RCC_CCIPR_I2C3SEL_Msk );
+			RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C3EN );
+		}
+		else
+		{
+			return I2C_WRONG_I2C_DECLARATION;
+		}
+		break;
+
+	case I2C_CLOCK_SOURCE_HSI16:
+		if ( myI2Cparameters.i2cInstance == I2C1 )
+		{
+			RCC->CCIPR		&=	~( RCC_CCIPR_I2C1SEL_Msk );
+			RCC->CCIPR		|=	 ( RCC_CCIPR_I2C1SEL_1 );
+			//RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C1EN );
+		}
+		else if ( myI2Cparameters.i2cInstance == I2C2 )
+		{
+			return I2C_WRONG_I2C_CLOCK_SOURCE;
+		}
+		else if ( myI2Cparameters.i2cInstance == I2C3 )
+		{
+			RCC->CCIPR		&=	~( RCC_CCIPR_I2C3SEL_Msk );
+			RCC->CCIPR		|=	 ( RCC_CCIPR_I2C1SEL_1 );
+			//RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C3EN );
+		}
+		else
+		{
+			return I2C_WRONG_I2C_DECLARATION;
+		}
+		break;
+
+	case I2C_CLOCK_SOURCE_SYSCLK:
+		if ( myI2Cparameters.i2cInstance == I2C1 )
+		{
+			RCC->CCIPR		&=	~( RCC_CCIPR_I2C1SEL_Msk );
+			RCC->CCIPR		|=	 ( RCC_CCIPR_I2C1SEL_0 );
+			//RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C1EN );
+		}
+		else if ( myI2Cparameters.i2cInstance == I2C2 )
+		{
+			return I2C_WRONG_I2C_CLOCK_SOURCE;
+		}
+		else if ( myI2Cparameters.i2cInstance == I2C3 )
+		{
+			RCC->CCIPR		&=	~( RCC_CCIPR_I2C3SEL_Msk );
+			RCC->CCIPR		|=	 ( RCC_CCIPR_I2C1SEL_0 );
+			//RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C3EN );
+		}
+		else
+		{
+			return I2C_WRONG_I2C_DECLARATION;
+		}
+		break;
+	}
+
+
+
 	/* I2C
 	 *  - I2C disabled
 	 *  - Transmit (TXIS) interrupt disabled
@@ -60,7 +136,7 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_ADD10 );
 
 
-	/* Clear all the falgs	 */
+	/* Clear all the flags	 */
 	myI2Cparameters.i2cInstance->ICR	|=	 ( I2C_ICR_ADDRCF | I2C_ICR_NACKCF | I2C_ICR_STOPCF | I2C_ICR_BERRCF | I2C_ICR_ARLOCF | I2C_ICR_OVRCF | I2C_ICR_PECCF | I2C_ICR_TIMOUTCF | I2C_ICR_ALERTCF );
 
 

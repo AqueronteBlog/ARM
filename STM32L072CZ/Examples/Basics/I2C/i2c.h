@@ -34,8 +34,15 @@ typedef enum
 
 typedef enum
 {
-    I2C_TIMEOUT    =   232323
+    I2C_TIMEOUT    	=   232323
 } i2c_timeouts_t;
+
+typedef enum
+{
+    I2C_CLOCK_SOURCE_APB	=   0x00,
+	I2C_CLOCK_SOURCE_HSI16  =   0x01,
+	I2C_CLOCK_SOURCE_SYSCLK =   0x02
+} i2c_clock_source_t;
 
 
 /**
@@ -45,7 +52,9 @@ typedef enum
 {
     I2C_SUCCESS  	     			=   0x00,
     I2C_FAILURE  		 			=   0x01,
-	I2C_WRONG_FREQUENCY  			=   0x02
+	I2C_WRONG_I2C_DECLARATION		=   0x02,
+	I2C_WRONG_I2C_CLOCK_SOURCE		=   0x03,
+	I2C_WRONG_FREQUENCY  			=   0x04
 } i2c_status_t;
 
 
@@ -72,6 +81,9 @@ typedef struct{
 
     /* Core clock that drives the I2C peripheral	 */
     uint32_t pclkFrequency;
+
+    /* I2C clock source	 */
+    i2c_clock_source_t i2cClockSource;
 } I2C_parameters_t;
 
 
