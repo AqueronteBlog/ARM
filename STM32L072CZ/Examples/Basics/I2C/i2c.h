@@ -44,6 +44,13 @@ typedef enum
 	I2C_CLOCK_SOURCE_SYSCLK =   0x02
 } i2c_clock_source_t;
 
+typedef enum
+{
+    I2C_STANDARD_MODE_100KHZ	=   0x00,
+	I2C_FAST_MODE_400KHZ  		=   0x01,
+	I2C_FAST_MODE_PLUS_1MHZ 	=   0x02
+} i2c_frequencies_t;
+
 
 /**
   * @brief   INTERNAL CONSTANTS
@@ -71,7 +78,7 @@ typedef struct{
     uint32_t scl;
 
     /* I2C frequency   */
-    uint32_t freq;
+    i2c_frequencies_t freq;
 
     /* I2C Address   */
     uint32_t addr;

@@ -174,6 +174,8 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
 
 
 
+
+
    /* Check if everything went fine   */
    if ( ( i2c_timeout1 < 1UL ) || ( i2c_timeout2 < 1UL ) || ( i2c_timeout3 < 1UL ) )
    {
