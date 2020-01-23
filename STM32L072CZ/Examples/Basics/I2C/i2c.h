@@ -82,7 +82,6 @@ typedef struct{
 
     /* I2C Address   */
     uint32_t addr;
-
     /* I2C instance  */
     I2C_TypeDef* i2cInstance;
 
