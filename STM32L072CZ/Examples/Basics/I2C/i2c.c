@@ -64,6 +64,7 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 		}
 		break;
 
+
 	case I2C_CLOCK_SOURCE_HSI16:
 		if ( myI2Cparameters.i2cInstance == I2C1 )
 		{
