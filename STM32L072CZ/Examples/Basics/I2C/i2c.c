@@ -38,7 +38,6 @@
  */
 i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 {
-
 	/* Turn on the I2C peripheral clock	 */
 	switch ( myI2Cparameters.i2cClockSource )
 	{
