@@ -134,8 +134,13 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 
 	/* I2C
 	 *  - The master operates in 7-bit addressing mode
+	 *  - Auto-end disabled
+	 *  - The transfer is completed after the NBYTES data transfer (STOP or RESTART will follow)
+	 *  - The master only sends the 1st 7 bits of the 10 bit address, followed by Read direction
+	 *  - The master operates in 7-bit addressing mode
 	 */
-	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_ADD10 );
+	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_ADD10 | I2C_CR2_AUTOEND | I2C_CR2_RELOAD | I2C_CR2_ADD10 );
+	myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_HEAD10R );
 
 
 	/* Clear all the flags	 */
@@ -163,30 +168,87 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        16/January/2020
- * @version     16/January/2020         The ORIGIN
+ * @version     20/February/2020        Logic was added for TX data less than 255.
+ * 				16/January/2020         The ORIGIN
  * @pre         I2C communication is by polling mode.
  * @warning     This function only implements 7-bit address for the moment.
  */
 i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uint32_t i2c_data_length, i2c_stop_bit_t i2c_generate_stop )
 {
-   uint32_t	i				=	0UL;
    uint32_t i2c_timeout1 	= 	I2C_TIMEOUT;
    uint32_t i2c_timeout2 	= 	I2C_TIMEOUT;
    uint32_t i2c_timeout3 	= 	I2C_TIMEOUT;
 
+   /* I2C
+   	 *  - Master requests a write transfer
+   	 *  - Update the slave address
+   	 *  - Update the number of bytes to be transmitted
+   	 */
+   	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_RD_WRN | I2C_CR2_SADD | I2C_CR2_NBYTES );
+   	myI2Cparameters.i2cInstance->CR2	|=	 ( ( myI2Cparameters.addr << 1UL ) | ( i2c_data_length << I2C_CR2_NBYTES_Pos ) );
+
+   	/* I2C
+   	  *  - Reset all the interrupts ( flags )
+   	  */
+   	 myI2Cparameters.i2cInstance->ICR	|=	 ( I2C_ICR_ADDRCF | I2C_ICR_NACKCF | I2C_ICR_STOPCF | I2C_ICR_BERRCF | I2C_ICR_ARLOCF | I2C_ICR_OVRCF );
+
+   	 /* Start sequence	 */
+   	 myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_START );
+
+   	 /* Transmit all the data	 */
+   	 while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_TC_Msk ) != I2C_ISR_TC ) && ( i2c_timeout1 != 0UL ) )
+   	 {
+   		 /* Check NACK flag ( device not found)	 */
+   		 if ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_NACKF_Msk ) == I2C_ISR_NACKF )
+   		 {
+   			 return I2C_FAILURE;
+   		 }
+   		 else
+   		 {
+   			 /* Transmit the next data	 */
+   			 myI2Cparameters.i2cInstance->TXDR	 =	 *i2c_buff++;
+   			 i2c_timeout1						 =	 I2C_TIMEOUT;
+
+   			 /* Wait until the data is transmitted or timeout	 */
+   			 while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_TXIS_Msk ) != I2C_ISR_TXIS ) && ( i2c_timeout1 != 0UL) )
+   			 {
+   				i2c_timeout1--;
+   			 }
+   		 }
+   	 }
+
+   	 /* Wait until all data was transmitted or timeout	 */
+   	 while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_TC_Msk ) != I2C_ISR_TC ) && ( i2c_timeout1 != 0UL) && ( i2c_timeout2 != 0UL) )
+   	 {
+   		 i2c_timeout2--;
+   	 }
+
+   	 /* Check if a RE-START or STOP condition is required	 */
+   	 if ( i2c_generate_stop == I2C_STOP_BIT )
+   	 {
+   		myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_STOP );
+
+   		/* Wait until the STOP signal is transmitted or timeout	 */
+   		while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_TXIS_Msk ) != I2C_ISR_TXIS ) && ( i2c_timeout1 != 0UL) && ( i2c_timeout2 != 0UL) && ( i2c_timeout3 != 0UL) )
+   		{
+   			i2c_timeout3--;
+   		}
+
+   		/* Clear STOP flag	 */
+   		myI2Cparameters.i2cInstance->ICR	|=	 ( I2C_ICR_STOPCF );
+   	 }
 
 
 
-
-   /* Check if everything went fine   */
-   if ( ( i2c_timeout1 < 1UL ) || ( i2c_timeout2 < 1UL ) || ( i2c_timeout3 < 1UL ) )
-   {
-	   return I2C_FAILURE;
-   }
-   else
-   {
- 	  return I2C_SUCCESS;
-   }
+   	 /* Check if everything went fine   */
+   	 if ( ( i2c_timeout1 < 1UL ) || ( i2c_timeout2 < 1UL ) || ( i2c_timeout3 < 1UL ) )
+   	 {
+   		 return I2C_FAILURE;
+   	 }
+   	 else
+   	 {
+   		 return I2C_SUCCESS;
+   	 }
 }
 
 
