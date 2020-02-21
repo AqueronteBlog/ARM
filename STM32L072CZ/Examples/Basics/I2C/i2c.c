@@ -175,6 +175,7 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
  */
 i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uint32_t i2c_data_length, i2c_stop_bit_t i2c_generate_stop )
 {
+
    uint32_t i2c_timeout1 	= 	I2C_TIMEOUT;
    uint32_t i2c_timeout2 	= 	I2C_TIMEOUT;
    uint32_t i2c_timeout3 	= 	I2C_TIMEOUT;
