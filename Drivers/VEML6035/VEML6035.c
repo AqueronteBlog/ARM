@@ -1,24 +1,24 @@
 /**
- * @brief       VEML6030.c
- * @details     High Accuracy Ambient Light Sensor With I2C Interface.
+ * @brief       VEML6035.c
+ * @details     Low Power, High Sensitivity, I2C Ambient Light Sensor.
  *              Functions file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        29/November/2019
- * @version     29/November/2019    The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "VEML6030.h"
+#include "VEML6035.h"
 
 
 /**
- * @brief       VEML6030_Init ( I2C_parameters_t )
+ * @brief       VEML6035_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,16 +27,16 @@
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6030_Init.
+ * @return       Status of VEML6035_Init.
  *
  *
  * @author      Manuel Caballero
- * @date        04/November/2019
- * @version     04/November/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6030_status_t VEML6030_Init ( I2C_parameters_t myI2Cparameters )
+VEML6035_status_t VEML6035_Init ( I2C_parameters_t myI2Cparameters )
 {
 	i2c_status_t aux;
 
@@ -45,18 +45,18 @@ VEML6030_status_t VEML6030_Init ( I2C_parameters_t myI2Cparameters )
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6030_SUCCESS;
+		return   VEML6035_SUCCESS;
 	}
 	else
 	{
-		return   VEML6030_FAILURE;
+		return   VEML6035_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6030_SetConfiguration ( I2C_parameters_t , VEML6030_data_t )
+ * @brief       VEML6035_SetConfiguration ( I2C_parameters_t , VEML6035_data_t )
  *
  * @details     It sets the configuration register.
  *
@@ -66,16 +66,16 @@ VEML6030_status_t VEML6030_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6030_SetConfiguration.
+ * @return       Status of VEML6035_SetConfiguration.
  *
  *
  * @author      Manuel Caballero
- * @date        06/December/2019
- * @version     06/December/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6030_status_t VEML6030_SetConfiguration ( I2C_parameters_t myI2Cparameters, VEML6030_data_t myALS_Conf )
+VEML6035_status_t VEML6035_SetConfiguration ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_Conf )
 {
 	uint8_t		 cmd[3]  = { 0 };
 	uint16_t	 aux_reg = 0U;
@@ -84,7 +84,7 @@ VEML6030_status_t VEML6030_SetConfiguration ( I2C_parameters_t myI2Cparameters, 
 	/* Update the register	 */
 	aux_reg	 =	 ( myALS_Conf.als_gain | myALS_Conf.als_it | myALS_Conf.als_pers | myALS_Conf.als_int_en | myALS_Conf.als_sd );
 
-	cmd[0]	 =   VEML6030_ALS_CONF;
+	cmd[0]	 =   VEML6035_ALS_CONF;
 	cmd[1]	 =	 (uint8_t)( aux_reg >> 2U );
 	cmd[2]	 =	 (uint8_t)( aux_reg & 0xFF );
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -93,18 +93,18 @@ VEML6030_status_t VEML6030_SetConfiguration ( I2C_parameters_t myI2Cparameters, 
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6030_SUCCESS;
+		return   VEML6035_SUCCESS;
 	}
 	else
 	{
-		return   VEML6030_FAILURE;
+		return   VEML6035_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6030_SetHighThreshold ( I2C_parameters_t , VEML6030_data_t )
+ * @brief       VEML6035_SetHighThreshold ( I2C_parameters_t , VEML6035_data_t )
  *
  * @details     It sets the high threshold windows value.
  *
@@ -114,22 +114,22 @@ VEML6030_status_t VEML6030_SetConfiguration ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6030_SetHighThreshold.
+ * @return       Status of VEML6035_SetHighThreshold.
  *
  *
  * @author      Manuel Caballero
- * @date        07/December/2019
- * @version     07/December/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6030_status_t VEML6030_SetHighThreshold ( I2C_parameters_t myI2Cparameters, VEML6030_data_t myALS_WH )
+VEML6035_status_t VEML6035_SetHighThreshold ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_WH )
 {
 	uint8_t		 cmd[3]  = { 0 };
 	i2c_status_t aux;
 
 	/* Update the register	 */
-	cmd[0]	 =   VEML6030_ALS_WH;
+	cmd[0]	 =   VEML6035_ALS_WH;
 	cmd[1]	 =	 (uint8_t)( myALS_WH.high_threshold_windows_setting >> 2U );
 	cmd[2]	 =	 (uint8_t)( myALS_WH.high_threshold_windows_setting & 0xFF );
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -138,18 +138,18 @@ VEML6030_status_t VEML6030_SetHighThreshold ( I2C_parameters_t myI2Cparameters, 
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6030_SUCCESS;
+		return   VEML6035_SUCCESS;
 	}
 	else
 	{
-		return   VEML6030_FAILURE;
+		return   VEML6035_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6030_SetLowThreshold ( I2C_parameters_t , VEML6030_data_t )
+ * @brief       VEML6035_SetLowThreshold ( I2C_parameters_t , VEML6035_data_t )
  *
  * @details     It sets the low threshold windows value.
  *
@@ -159,22 +159,22 @@ VEML6030_status_t VEML6030_SetHighThreshold ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6030_SetHighThreshold.
+ * @return       Status of VEML6035_SetHighThreshold.
  *
  *
  * @author      Manuel Caballero
- * @date        07/December/2019
- * @version     07/December/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6030_status_t VEML6030_SetLowThreshold ( I2C_parameters_t myI2Cparameters, VEML6030_data_t myALS_WL )
+VEML6035_status_t VEML6035_SetLowThreshold ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_WL )
 {
 	uint8_t		 cmd[3]  = { 0 };
 	i2c_status_t aux;
 
 	/* Update the register	 */
-	cmd[0]	 =   VEML6030_ALS_WL;
+	cmd[0]	 =   VEML6035_ALS_WL;
 	cmd[1]	 =	 (uint8_t)( myALS_WL.low_threshold_windows_setting >> 2U );
 	cmd[2]	 =	 (uint8_t)( myALS_WL.low_threshold_windows_setting & 0xFF );
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -183,18 +183,18 @@ VEML6030_status_t VEML6030_SetLowThreshold ( I2C_parameters_t myI2Cparameters, V
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6030_SUCCESS;
+		return   VEML6035_SUCCESS;
 	}
 	else
 	{
-		return   VEML6030_FAILURE;
+		return   VEML6035_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6030_SetPowerSavingModes ( I2C_parameters_t , VEML6030_data_t )
+ * @brief       VEML6035_SetPowerSavingModes ( I2C_parameters_t , VEML6035_data_t )
  *
  * @details     It sets the power saving modes.
  *
@@ -204,16 +204,16 @@ VEML6030_status_t VEML6030_SetLowThreshold ( I2C_parameters_t myI2Cparameters, V
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6030_SetPowerSavingModes.
+ * @return       Status of VEML6035_SetPowerSavingModes.
  *
  *
  * @author      Manuel Caballero
- * @date        07/December/2019
- * @version     07/December/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6030_status_t VEML6030_SetPowerSavingModes ( I2C_parameters_t myI2Cparameters, VEML6030_data_t myPSM )
+VEML6035_status_t VEML6035_SetPowerSavingModes ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myPSM )
 {
 	uint8_t		 cmd[3]  = { 0 };
 	uint16_t	 aux_reg = 0U;
@@ -222,7 +222,7 @@ VEML6030_status_t VEML6030_SetPowerSavingModes ( I2C_parameters_t myI2Cparameter
 	/* Update the register	 */
 	aux_reg	 =	 ( myPSM.psm | myPSM.psm_en );
 
-	cmd[0]	 =   VEML6030_POWER_SAVING;
+	cmd[0]	 =   VEML6035_POWER_SAVING;
 	cmd[1]	 =	 (uint8_t)( aux_reg >> 2U );
 	cmd[2]	 =	 (uint8_t)( aux_reg & 0xFF );
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -231,18 +231,18 @@ VEML6030_status_t VEML6030_SetPowerSavingModes ( I2C_parameters_t myI2Cparameter
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6030_SUCCESS;
+		return   VEML6035_SUCCESS;
 	}
 	else
 	{
-		return   VEML6030_FAILURE;
+		return   VEML6035_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6030_GetALS_OuputData ( I2C_parameters_t , VEML6030_data_t* )
+ * @brief       VEML6035_GetALS_OuputData ( I2C_parameters_t , VEML6035_data_t* )
  *
  * @details     It gets the ALS high resolution output data.
  *
@@ -251,22 +251,22 @@ VEML6030_status_t VEML6030_SetPowerSavingModes ( I2C_parameters_t myI2Cparameter
  * @param[out]   myALS:		   		ALS high resolution output data.
  *
  *
- * @return       Status of VEML6030_GetALS_OuputData.
+ * @return       Status of VEML6035_GetALS_OuputData.
  *
  *
  * @author      Manuel Caballero
- * @date        07/December/2019
- * @version     07/December/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         This function returns raw data.
  * @warning     N/A.
  */
-VEML6030_status_t VEML6030_GetALS_OuputData ( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myALS )
+VEML6035_status_t VEML6035_GetALS_OuputData ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS )
 {
 	uint8_t		 cmd[2]  = { 0 };
 	i2c_status_t aux;
 
 	/* Read the register	 */
-	cmd[0]	 =   VEML6030_ALS;
+	cmd[0]	 =   VEML6035_ALS;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
 	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -279,18 +279,18 @@ VEML6030_status_t VEML6030_GetALS_OuputData ( I2C_parameters_t myI2Cparameters, 
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6030_SUCCESS;
+		return   VEML6035_SUCCESS;
 	}
 	else
 	{
-		return   VEML6030_FAILURE;
+		return   VEML6035_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6030_GetWhiteChannelOuputData ( I2C_parameters_t , VEML6030_data_t* )
+ * @brief       VEML6035_GetWhiteChannelOuputData ( I2C_parameters_t , VEML6035_data_t* )
  *
  * @details     It gets the WHITE output data.
  *
@@ -299,22 +299,22 @@ VEML6030_status_t VEML6030_GetALS_OuputData ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   myWhite:	   		WHITE output data.
  *
  *
- * @return       Status of VEML6030_GetWhiteChannelOuputData.
+ * @return       Status of VEML6035_GetWhiteChannelOuputData.
  *
  *
  * @author      Manuel Caballero
- * @date        07/December/2019
- * @version     07/December/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         This function returns raw data.
  * @warning     N/A.
  */
-VEML6030_status_t VEML6030_GetWhiteChannelOuputData	( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myWhite )
+VEML6035_status_t VEML6035_GetWhiteChannelOuputData	( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myWhite )
 {
 	uint8_t		 cmd[2]  = { 0 };
 	i2c_status_t aux;
 
 	/* Read the register	 */
-	cmd[0]	 =   VEML6030_WHITE;
+	cmd[0]	 =   VEML6035_WHITE;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
 	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -327,18 +327,18 @@ VEML6030_status_t VEML6030_GetWhiteChannelOuputData	( I2C_parameters_t myI2Cpara
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6030_SUCCESS;
+		return   VEML6035_SUCCESS;
 	}
 	else
 	{
-		return   VEML6030_FAILURE;
+		return   VEML6035_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6030_GetInterruptStatus ( I2C_parameters_t , VEML6030_data_t* )
+ * @brief       VEML6035_GetInterruptStatus ( I2C_parameters_t , VEML6035_data_t* )
  *
  * @details     It gets the Interrupt status value.
  *
@@ -347,23 +347,23 @@ VEML6030_status_t VEML6030_GetWhiteChannelOuputData	( I2C_parameters_t myI2Cpara
  * @param[out]   myIntStatus:	   	Status for: int_th_low and int_th_high.
  *
  *
- * @return       Status of VEML6030_GetInterruptStatus.
+ * @return       Status of VEML6035_GetInterruptStatus.
  *
  *
  * @author      Manuel Caballero
- * @date        07/December/2019
- * @version     07/December/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
-VEML6030_status_t VEML6030_GetInterruptStatus ( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myIntStatus )
+VEML6035_status_t VEML6035_GetInterruptStatus ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myIntStatus )
 {
 	uint8_t		 cmd[2]  = { 0 };
 	uint16_t	 aux_reg = 0U;
 	i2c_status_t aux;
 
 	/* Read the register	 */
-	cmd[0]	 =   VEML6030_ALS_INT;
+	cmd[0]	 =   VEML6035_ALS_INT;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
 	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -372,25 +372,25 @@ VEML6030_status_t VEML6030_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
 	aux_reg						<<=	 8U;
 	aux_reg						|=	 cmd[1];
 
-	myIntStatus->int_th_high	 =	(VEML6030_als_int_int_th_high_t)( aux_reg & ALS_INT_INT_TH_HIGH_MASK );
-	myIntStatus->int_th_low		|=	(VEML6030_als_int_int_th_low_t)( aux_reg & ALS_INT_INT_TH_LOW_MASK );
+	myIntStatus->int_th_high	 =	(VEML6035_als_int_int_th_high_t)( aux_reg & ALS_INT_INT_TH_HIGH_MASK );
+	myIntStatus->int_th_low		|=	(VEML6035_als_int_int_th_low_t)( aux_reg & ALS_INT_INT_TH_LOW_MASK );
 
 
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6030_SUCCESS;
+		return   VEML6035_SUCCESS;
 	}
 	else
 	{
-		return   VEML6030_FAILURE;
+		return   VEML6035_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6030_CalculateLuxValue ( I2C_parameters_t , VEML6030_data_t* )
+ * @brief       VEML6035_CalculateLuxValue ( I2C_parameters_t , VEML6035_data_t* )
  *
  * @details     It calculates the total lux value.
  *
@@ -400,17 +400,16 @@ VEML6030_status_t VEML6030_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
  * @param[out]   myLuxValue:	   	Lux value, resolution.
  *
  *
- * @return       Status of VEML6030_CalculateLuxValue.
+ * @return       Status of VEML6035_CalculateLuxValue.
  *
  *
  * @author      Manuel Caballero
- * @date        09/December/2019
- * @version     17/December/2019   Compensation formula was added.
- * 				09/December/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         NOT Tested!.
  * @warning     N/A.
  */
-VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myLuxValue )
+VEML6035_status_t VEML6035_CalculateLuxValue ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myLuxValue )
 {
 	uint32_t	auxRes	 =	 0U;
 	double		a1 = 0, a2 = 0, a3 = 0, a4 = 0;
@@ -486,7 +485,7 @@ VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters,
 		myLuxValue->light_level	 =	(float)( a1 - a2 + a3 + a4 );
 	}
 
-	return   VEML6030_SUCCESS;
+	return   VEML6035_SUCCESS;
 }
 
 
