@@ -368,4 +368,20 @@ VEML6035_status_t VEML6035_SetShutDownMode			( I2C_parameters_t myI2Cparameters,
   */
 VEML6035_status_t VEML6035_GetShutDownMode			( I2C_parameters_t myI2Cparameters, VEML6035_data_t* mySD							);
 
+/** It sets the high threshold value.
+  */
+VEML6035_status_t VEML6035_SetHighThreshold			( I2C_parameters_t myI2Cparameters, VEML6035_data_t myHighThreshold					);
+
+/** It gets the high threshold value.
+  */
+VEML6035_status_t VEML6035_GetHighThreshold			( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myHighThreshold				);
+
+/** It sets the low threshold value.
+  */
+VEML6035_status_t VEML6035_SetLowThreshold			( I2C_parameters_t myI2Cparameters, VEML6035_data_t myLowThreshold					);
+
+/** It gets the low threshold value.
+  */
+VEML6035_status_t VEML6035_GetLowThreshold			( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myLowThreshold					);
+
 
