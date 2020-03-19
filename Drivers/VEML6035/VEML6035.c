@@ -1036,5 +1036,117 @@ VEML6035_status_t VEML6035_GetLowThreshold ( I2C_parameters_t myI2Cparameters, V
 
 
 
+/**
+ * @brief       VEML6035_SetPowerSafeMode ( I2C_parameters_t , VEML6035_data_t )
+ *
+ * @details     It sets the power safe mode register.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myPowerSafeMode:   PSM_WAIT and PSM_EN values.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of VEML6035_SetPowerSafeMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_SetPowerSafeMode ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myPowerSafeMode )
+{
+	uint8_t			cmd[3]			 =	{0};
+	uint16_t		auxPowerSafeMode =  0U;
+	i2c_status_t	aux;
+
+
+	/* Read the register	 */
+	cmd[0]	 =	 VEML6035_POWER_SAVING;
+	aux		 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux		|=   i2c_read  ( myI2Cparameters, &cmd[1], 2U );
+
+
+	/* Update the register	 */
+	auxPowerSafeMode	 =	 cmd[1];
+	auxPowerSafeMode   <<=	 8U;
+	auxPowerSafeMode	|=	 cmd[2];
+
+	auxPowerSafeMode	&=	~( POWER_SAVING_PSM_EN_MASK | POWER_SAVING_PSM_WAIT_MASK );
+	auxPowerSafeMode	|=	 ( myPowerSafeMode.psm_en | myPowerSafeMode.psm_wait );
+
+	cmd[1]	 =	 (uint8_t)( auxPowerSafeMode >> 8U );
+	cmd[2]	 =	 (uint8_t)( auxPowerSafeMode );
+	aux 	|=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   VEML6035_SUCCESS;
+	}
+	else
+	{
+		return   VEML6035_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       VEML6035_GetPowerSafeMode ( I2C_parameters_t , VEML6035_data_t* )
+ *
+ * @details     It gets the power safe mode register value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myPowerSafeMode:   PSM_WAIT and PSM_EN values.
+ *
+ *
+ * @return       Status of VEML6035_GetPowerSafeMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_GetPowerSafeMode ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myPowerSafeMode )
+{
+	uint8_t			cmd[2]			 =	{0U};
+	uint16_t		auxPowerSafeMode =  0U;
+	i2c_status_t 	aux;
+
+
+	/* Read the register	 */
+	cmd[0]	 =	 VEML6035_POWER_SAVING;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+	/* Parse the data	 */
+	auxPowerSafeMode	 =	 cmd[0];
+	auxPowerSafeMode   <<=	 8U;
+	auxPowerSafeMode	|=	 cmd[1];
+
+	myPowerSafeMode->psm_wait	=	(VEML6035_power_saving_psm_wait_t)( auxPowerSafeMode & POWER_SAVING_PSM_WAIT_MASK );
+	myPowerSafeMode->psm_en		=	(VEML6035_power_saving_psm_en_t)( auxPowerSafeMode & POWER_SAVING_PSM_EN_MASK );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   VEML6035_SUCCESS;
+	}
+	else
+	{
+		return   VEML6035_FAILURE;
+	}
+}
+
+
+
 
 
