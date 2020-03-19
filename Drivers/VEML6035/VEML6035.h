@@ -22,12 +22,11 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESSES
+  * @brief   DEFAULT ADDRESS
   */
 typedef enum
 {
-	VEML6035_ADDRESS_GND  =   0b0010000,     /*!<   ADDR = GND                   	*/
-	VEML6035_ADDRESS_VDD  =   0b1001000      /*!<   ADDR = VDD                   	*/
+	VEML6035_ADDRESS			=   0b0101001      /*!<   Address		                   	*/
 } VEML6035_addresses_t;
 
 
@@ -37,13 +36,13 @@ typedef enum
   */
 typedef enum
 {
-  VEML6035_ALS_CONF     		=   0x00,	/*!<  Configuration register            */
-  VEML6035_ALS_WH			    =   0x01,   /*!<  High Threshold Windows Setting	*/
-  VEML6035_ALS_WL		      	=   0x02,   /*!<  Low Threshold Windows Setting		*/
-  VEML6035_POWER_SAVING		    =   0x03,   /*!<  Power Saving Mode: PSM		    */
-  VEML6035_ALS			    	=   0x04,   /*!<  ALS High Resolution Output Data   */
-  VEML6035_WHITE				=   0x05,   /*!<  White Channel Output Data			*/
-  VEML6035_ALS_INT			 	=   0x06    /*!<  Interrupt status				    */
+  VEML6035_ALS_CONF     		=   0x00,	/*!<  ALS gain, integration time, interrupt, and shut down	*/
+  VEML6035_ALS_WH			    =   0x01,   /*!<  High Threshold Windows Setting						*/
+  VEML6035_ALS_WL		      	=   0x02,   /*!<  Low Threshold Windows Setting							*/
+  VEML6035_POWER_SAVING		    =   0x03,   /*!<  Power Saving Mode: PSM		    					*/
+  VEML6035_ALS			    	=   0x04,   /*!<  ALS High Resolution Output Data   					*/
+  VEML6035_WHITE				=   0x05,   /*!<  White Channel Output Data								*/
+  VEML6035_ALS_INT			 	=   0x06    /*!<  Crossing threshold INT trigger event		    		*/
 } VEML6035_command_register_format_t;
 
 
@@ -51,21 +50,41 @@ typedef enum
 /**
   * @brief   CONFIGURATION REGISTER
  */
-/* ALS_GAIN <12:11>
- *    NOTE: Gain selection.
+/* SENS <12>
+ *    NOTE: Sensitivity.
  */
 typedef enum
 {
-	ALS_CONF_ALS_GAIN_MASK					=   ( 0b11 << 11U ),	/*!<  ALS_GAIN mask       	    			    */
-	ALS_CONF_ALS_GAIN_X1					=   ( 0b00 << 11U ),	/*!<  ALS gain x 1								*/
-	ALS_CONF_ALS_GAIN_X2					=   ( 0b01 << 11U ), 	/*!<  ALS gain x 2					 			*/
-	ALS_CONF_ALS_GAIN_X1_8					=   ( 0b10 << 11U ), 	/*!<  ALS gain x 1/8				 			*/
-	ALS_CONF_ALS_GAIN_X1_4					=   ( 0b11 << 11U ) 	/*!<  ALS gain x 1/4				 			*/
-} VEML6035_als_conf_als_gain_t;
+	ALS_CONF_SENS_MASK					=   ( 1UL << 12U ),			/*!<  SENS mask       	    			    	*/
+	ALS_CONF_SENS_HIGH_SENSITIVITY		=   ( 0UL << 12U ),			/*!<  High sensitivity (1 x)					*/
+	ALS_CONF_SENS_LOW_SENSITIVITY		=   ( 1UL << 12U ) 			/*!<  Low sensitivity (1/8 x)			 		*/
+} VEML6035_als_conf_sens_t;
+
+
+/* DG <11>
+ *    NOTE: Digital gain.
+ */
+typedef enum
+{
+	ALS_CONF_DG_MASK					=   ( 1UL << 11U ),			/*!<  DG mask       	    			    	*/
+	ALS_CONF_DG_NORMAL					=   ( 0UL << 11U ),			/*!<  Normal									*/
+	ALS_CONF_DG_DOUBLE					=   ( 1UL << 11U ) 			/*!<  Double							 		*/
+} VEML6035_als_conf_dg_t;
+
+
+/* GAIN <10>
+ *    NOTE: Gain.
+ */
+typedef enum
+{
+	ALS_CONF_GAIN_MASK					=   ( 1UL << 10U ),			/*!<  GAIN mask       	    			    	*/
+	ALS_CONF_GAIN_NORMAL_SENSITIVITY	=   ( 0UL << 10U ),			/*!<  Normal sensitivity						*/
+	ALS_CONF_GAIN_DOUBLE_SENSITIVITY	=   ( 1UL << 10U ) 			/*!<  Double sensitivity				 		*/
+} VEML6035_als_conf_gain_t;
 
 
 /* ALS_IT <9:6>
- *    NOTE: ALS integration time setting.
+ *    NOTE: ALS integration time setting which represents how long ALS can update the readout value.
  */
 typedef enum
 {
@@ -80,7 +99,8 @@ typedef enum
 
 
 /* ALS_PERS <5:4>
- *    NOTE: ALS persistence protect number setting.
+ *    NOTE: ALS interrupt persistence setting. The interrupt pin is triggered while sensor reading is out of threshold windows
+ *    		after consecutive number of measurement cycle.
  */
 typedef enum
 {
@@ -92,25 +112,47 @@ typedef enum
 } VEML6035_als_conf_als_pers_t;
 
 
-/* ALS_INT_EN <1>
- *    NOTE: ALS interrupt enable setting.
+/* INT_CHANNEL <3>
+ *    NOTE: Selection for which channel the interrupt should trigger.
  */
 typedef enum
 {
-	ALS_CONF_ALS_INT_EN_MASK				=   ( 1U << 1U ),		/*!<  ALS_INT_EN mask      	    			    */
-	ALS_CONF_ALS_INT_EN_DISABLE  			=   ( 0U << 1U ),		/*!<  ALS INT disable							*/
-	ALS_CONF_ALS_INT_EN_ENABLE				=   ( 1U << 1U )  		/*!<  ALS INT enable		 					*/
+	ALS_CONF_ALS_INT_CHANNEL_MASK			=   ( 1U << 3U ),		/*!<  ALS_INT_EN mask      	    			    */
+	ALS_CONF_ALS_INT_CHANNEL_ALS_CHANNEL	=   ( 0U << 3U ),		/*!<  ALS CH interrupt							*/
+	ALS_CONF_ALS_INT_CHANNEL_WHITE_CHANNEL	=   ( 1U << 3U )  		/*!<  WHITE CH interrupt	 					*/
+} VEML6035_als_conf_als_int_channel_t;
+
+
+/* CHANNEL_EN <2>
+ *    NOTE: Channel enable function.
+ */
+typedef enum
+{
+	ALS_CONF_ALS_CHANNEL_EN_MASK			=   ( 1U << 2U ),		/*!<  CHANNEL_EN mask  		    			    */
+	ALS_CONF_ALS_CHANNEL_EN_ALS_CH_ONLY		=   ( 0U << 2U ),		/*!<  ALS CH enable only						*/
+	ALS_CONF_ALS_CHANNEL_EN_ALS_WHITE_CH	=   ( 1U << 2U )  		/*!<  ALS and WHITE CH enable					*/
+} VEML6035_als_conf_als_channel_en_t;
+
+
+/* INT_EN <1>
+ *    NOTE: Interrupt enable setting.
+ */
+typedef enum
+{
+	ALS_CONF_ALS_INT_EN_MASK				=   ( 1U << 1U ),		/*!<  INT_EN mask  			    			    */
+	ALS_CONF_ALS_INT_EN_INT_DISABLE			=   ( 0U << 1U ),		/*!<  INT disable								*/
+	ALS_CONF_ALS_INT_EN_INT_ENABLE			=   ( 1U << 1U )  		/*!<  INT enable								*/
 } VEML6035_als_conf_als_int_en_t;
 
 
-/* ALS_SD <0>
- *    NOTE: ALS shut down setting.
+/* SD <0>
+ *    NOTE: Shut down setting.
  */
 typedef enum
 {
-	ALS_CONF_ALS_SD_MASK					=   ( 1U << 0U ),		/*!<  ALS_SD mask      		    			    */
-	ALS_CONF_ALS_SD_POWER_ON  				=   ( 0U << 0U ),		/*!<  ALS power on								*/
-	ALS_CONF_ALS_SD_SHUTDOWN				=   ( 1U << 0U )  		/*!<  ALS shut down			 					*/
+	ALS_CONF_ALS_SD_MASK					=   ( 1U << 0U ),		/*!<  SD mask  				    			    */
+	ALS_CONF_ALS_SD_POWER_ON				=   ( 0U << 0U ),		/*!<  Power on									*/
+	ALS_CONF_ALS_SD_SHUTDOWN				=   ( 1U << 0U )  		/*!<  Shutdown									*/
 } VEML6035_als_conf_als_sd_t;
 
 
@@ -118,17 +160,17 @@ typedef enum
 /**
   * @brief   POWER SAVING MODES
  */
-/* PSM <2:1>
+/* PSM_WAIT <2:1>
  *    NOTE: Power saving mode; see table "Refresh time".
  */
 typedef enum
 {
-	POWER_SAVING_PSM_MASK					=   ( 0b11 << 1U ),		/*!<  PSM mask  	     	    			    */
-	POWER_SAVING_PSM_MODE_1					=   ( 0b00 << 1U ),		/*!<  mode 1									*/
-	POWER_SAVING_PSM_MODE_2					=   ( 0b01 << 1U ), 	/*!<  mode 2					 				*/
-	POWER_SAVING_PSM_MODE_3					=   ( 0b10 << 1U ), 	/*!<  mode 3				 					*/
-	POWER_SAVING_PSM_MODE_4					=   ( 0b11 << 1U ) 		/*!<  mode 4						 			*/
-} VEML6035_power_saving_psm_t;
+	POWER_SAVING_PSM_WAIT_MASK				=   ( 0b11 << 1U ),		/*!<  PSM_WAIT mask       	    			    */
+	POWER_SAVING_PSM_WAIT_0_4_S				=   ( 0b00 << 1U ),		/*!<  0.4 s										*/
+	POWER_SAVING_PSM_WAIT_0_8_S				=   ( 0b01 << 1U ), 	/*!<  0.8 s						 				*/
+	POWER_SAVING_PSM_WAIT_1_6_S				=   ( 0b10 << 1U ), 	/*!<  1.6 s					 					*/
+	POWER_SAVING_PSM_WAIT_3_2_S				=   ( 0b11 << 1U ) 		/*!<  3.2 s							 			*/
+} VEML6035_power_saving_psm_wait_t;
 
 
 /* PSM_EN <0>
@@ -147,24 +189,24 @@ typedef enum
   * @brief   INTERRUPT STATUS
  */
 /* INT_TH_LOW <15>
- *    NOTE: Read bit. Indicated a low threshold exceed.
+ *    NOTE: Read bit. Low threshold interrupt flag.
  */
 typedef enum
 {
 	ALS_INT_INT_TH_LOW_MASK					=   ( 1U << 15U ),		/*!<  INT_TH_LOW mask  	   	    			    */
-	ALS_INT_INT_TH_LOW_NO_EXCEEDED			=   ( 0U << 15U ),		/*!<  A low threshold no exceed					*/
-	ALS_INT_INT_TH_LOW_EXCEEDED				=   ( 1U << 15U ) 		/*!<  Indicated a low threshold exceed 			*/
+	ALS_INT_INT_TH_LOW_INT_NOT_TRIGGERED	=   ( 0U << 15U ),		/*!<  Interrupt not triggered					*/
+	ALS_INT_INT_TH_LOW_INT_OCCURRED			=   ( 1U << 15U ) 		/*!<  Interrupt occurred			 			*/
 } VEML6035_als_int_int_th_low_t;
 
 
 /* INT_TH_HIGH <14>
- *    NOTE: Read bit. Indicated a high threshold exceed.
+ *    NOTE: Read bit. High threshold interrupt flag.
  */
 typedef enum
 {
 	ALS_INT_INT_TH_HIGH_MASK				=   ( 1U << 14U ),		/*!<  INT_TH_HIGH mask  		   			    */
-	ALS_INT_INT_TH_HIGH_NO_EXCEEDED			=   ( 0U << 14U ),		/*!<  A high threshold no exceed				*/
-	ALS_INT_INT_TH_HIGH_EXCEEDED			=   ( 1U << 14U ) 		/*!<  Indicated a high threshold exceed 		*/
+	ALS_INT_INT_TH_HIGH_INT_NOT_TRIGGERED	=   ( 0U << 14U ),		/*!<  Interrupt not triggered					*/
+	ALS_INT_INT_TH_HIGH_INT_OCCURRED		=   ( 1U << 14U ) 		/*!<  Interrupt occurred			 			*/
 } VEML6035_als_int_int_th_high_t;
 
 
@@ -172,10 +214,7 @@ typedef enum
 /**
   * @brief   APPLICATION
  */
-#define TYPICAL_RESOLUTION_GAIN_2_IT_800MS	(uint32_t)36			/*!<  Typical resolution: Gain 2 | IT 800ms ( 0.0036 * 10000 = 36    */
-//#define TYPICAL_RESOLUTION_GAIN_2_IT_800MS	(float)0.0036			/*!<  Typical resolution: Gain 2 | IT 800ms    */
-
-
+#define TYPICAL_RESOLUTION_DG_1_GAIN_1_SENS_0_IT_800MS	(uint32_t)4	/*!<  Typical resolution: DG 1 | Gain 1 | SENS 0 | IT 800ms ( 0.0004 * 10000 = 4    */
 
 
 
@@ -185,33 +224,37 @@ typedef enum
 typedef struct
 {
 	/* Raw ALS high resolution output data	 */
-	uint16_t als_high_resolution_output_data;				/*!< Raw ALS high resolution output data					*/
+	uint16_t als_high_resolution_output_data;				/*!< Raw ALS high resolution output data							*/
 
 	/* Raw WHITE output data	 */
-	uint16_t white_output_data;								/*!< Raw WHITE output data									*/
+	uint16_t white_channel_output_data;						/*!< Raw WHITE channel output data									*/
 
 	/* Raw threshold windows setting	 */
-	uint16_t high_threshold_windows_setting;				/*!< Raw ALS high threshold window setting					*/
-	uint16_t low_threshold_windows_setting;					/*!< Raw ALS low threshold window setting					*/
+	uint16_t high_threshold_windows_setting;				/*!< Raw ALS high threshold window setting							*/
+	uint16_t low_threshold_windows_setting;					/*!< Raw ALS low threshold window setting							*/
 
 	/* Configuration register	 */
-	VEML6035_als_conf_als_gain_t	als_gain;				/*!< Gain selection											*/
-	VEML6035_als_conf_als_it_t		als_it;					/*!< ALS integration time setting							*/
-	VEML6035_als_conf_als_pers_t	als_pers;				/*!< ALS persistence protect number setting					*/
-	VEML6035_als_conf_als_int_en_t	als_int_en;				/*!< ALS interrupt enable setting							*/
-	VEML6035_als_conf_als_sd_t		als_sd;					/*!< ALS shut down setting									*/
+	VEML6035_als_conf_sens_t			als_sens;			/*!< ALS Sensitivity selection										*/
+	VEML6035_als_conf_dg_t				als_dg;				/*!< ALS digital gain												*/
+	VEML6035_als_conf_gain_t			als_gain;			/*!< ALS gain														*/
+	VEML6035_als_conf_als_it_t			als_it;				/*!< ALS integration time											*/
+	VEML6035_als_conf_als_pers_t		als_pers;			/*!< ALS interrupt persistence setting								*/
+	VEML6035_als_conf_als_int_channel_t	als_int_channel;	/*!< ALS selection for which channel the interrupt should trigger	*/
+	VEML6035_als_conf_als_channel_en_t	als_channel_en;		/*!< ALS channel enable function									*/
+	VEML6035_als_conf_als_int_en_t		als_int_en;			/*!< ALS interrupt enable setting									*/
+	VEML6035_als_conf_als_sd_t			als_sd;				/*!< ALS Shut down setting											*/
 
 	/* Power saving modes	 */
-	VEML6035_power_saving_psm_t		psm;					/*!< Power saving mode										*/
-	VEML6035_power_saving_psm_en_t	psm_en;					/*!< Power saving mode enable setting						*/
+	VEML6035_power_saving_psm_wait_t	psm_wait;			/*!< Defines the wait time between the measurements					*/
+	VEML6035_power_saving_psm_en_t		psm_en;				/*!< Power saving mode enable setting								*/
 
 	/* Interrupt status	 */
-	VEML6035_als_int_int_th_low_t	int_th_low;				/*!< Indicated if a low threshold exceed					*/
-	VEML6035_als_int_int_th_high_t	int_th_high;			/*!< Indicated if a high threshold exceed					*/
+	VEML6035_als_int_int_th_low_t		int_th_low;			/*!< Low threshold interrupt flag									*/
+	VEML6035_als_int_int_th_high_t		int_th_high;		/*!< High threshold interrupt flag									*/
 
 	/* Application information	 */
-	float	light_level;									/*!< Light level [lux]										*/
-	float	resolution;										/*!< Resolution regarding the integration time and the gain	*/
+	float	light_level;									/*!< Light level [lux]												*/
+	float	resolution;										/*!< Resolution regarding the integration time and the gain			*/
 } VEML6035_data_t;
 #endif
 
