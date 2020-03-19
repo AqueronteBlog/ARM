@@ -221,6 +221,22 @@ typedef enum
 
 #ifndef VEML6035_VECTOR_STRUCT_H
 #define VEML6035_VECTOR_STRUCT_H
+/* Configuration register	 */
+typedef struct
+{
+	VEML6035_als_conf_sens_t			als_sens;			/*!< ALS Sensitivity selection										*/
+	VEML6035_als_conf_dg_t				als_dg;				/*!< ALS digital gain												*/
+	VEML6035_als_conf_gain_t			als_gain;			/*!< ALS gain														*/
+	VEML6035_als_conf_als_it_t			als_it;				/*!< ALS integration time											*/
+	VEML6035_als_conf_als_pers_t		als_pers;			/*!< ALS interrupt persistence setting								*/
+	VEML6035_als_conf_als_int_channel_t	als_int_channel;	/*!< ALS selection for which channel the interrupt should trigger	*/
+	VEML6035_als_conf_als_channel_en_t	als_channel_en;		/*!< ALS channel enable function									*/
+	VEML6035_als_conf_als_int_en_t		als_int_en;			/*!< ALS interrupt enable setting									*/
+	VEML6035_als_conf_als_sd_t			als_sd;				/*!< ALS Shut down setting											*/
+} VEML6035_configuration_register_t;
+
+
+
 typedef struct
 {
 	/* Raw ALS high resolution output data	 */
@@ -234,15 +250,7 @@ typedef struct
 	uint16_t low_threshold_windows_setting;					/*!< Raw ALS low threshold window setting							*/
 
 	/* Configuration register	 */
-	VEML6035_als_conf_sens_t			als_sens;			/*!< ALS Sensitivity selection										*/
-	VEML6035_als_conf_dg_t				als_dg;				/*!< ALS digital gain												*/
-	VEML6035_als_conf_gain_t			als_gain;			/*!< ALS gain														*/
-	VEML6035_als_conf_als_it_t			als_it;				/*!< ALS integration time											*/
-	VEML6035_als_conf_als_pers_t		als_pers;			/*!< ALS interrupt persistence setting								*/
-	VEML6035_als_conf_als_int_channel_t	als_int_channel;	/*!< ALS selection for which channel the interrupt should trigger	*/
-	VEML6035_als_conf_als_channel_en_t	als_channel_en;		/*!< ALS channel enable function									*/
-	VEML6035_als_conf_als_int_en_t		als_int_en;			/*!< ALS interrupt enable setting									*/
-	VEML6035_als_conf_als_sd_t			als_sd;				/*!< ALS Shut down setting											*/
+	VEML6035_configuration_register_t	configuration;		/*!< Configuration parameters										*/
 
 	/* Power saving modes	 */
 	VEML6035_power_saving_psm_wait_t	psm_wait;			/*!< Defines the wait time between the measurements					*/
@@ -278,38 +286,86 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-VEML6035_status_t VEML6035_Init               		( I2C_parameters_t myI2Cparameters                                		);
+VEML6035_status_t VEML6035_Init               		( I2C_parameters_t myI2Cparameters                              					);
 
-/** It sets the configuration register.
+/** It reads the configuration register.
   */
-VEML6035_status_t VEML6035_SetConfiguration			( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_Conf			);
+VEML6035_status_t VEML6035_GetConfigurationRegister	( I2C_parameters_t myI2Cparameters, VEML6035_configuration_register_t* myConfReg	);
 
-/** It sets the high threshold windows value.
+/** It writes the configuration register.
   */
-VEML6035_status_t VEML6035_SetHighThreshold			( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_WH			);
+VEML6035_status_t VEML6035_SetConfigurationRegister	( I2C_parameters_t myI2Cparameters, VEML6035_configuration_register_t myConfReg		);
 
-/** It sets the low threshold windows value.
+/** It sets the sensitivity value.
   */
-VEML6035_status_t VEML6035_SetLowThreshold			( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_WL			);
+VEML6035_status_t VEML6035_SetSensitivity			( I2C_parameters_t myI2Cparameters, VEML6035_data_t mySENS							);
 
-/** It sets the power saving modes.
+/** It gets the sensitivity value.
   */
-VEML6035_status_t VEML6035_SetPowerSavingModes		( I2C_parameters_t myI2Cparameters, VEML6035_data_t myPSM				);
+VEML6035_status_t VEML6035_GetSensitivity			( I2C_parameters_t myI2Cparameters, VEML6035_data_t* mySENS							);
 
-/** It gets the ALS high resolution output data.
+/** It sets the DG value.
   */
-VEML6035_status_t VEML6035_GetALS_OuputData			( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS				);
+VEML6035_status_t VEML6035_SetDG					( I2C_parameters_t myI2Cparameters, VEML6035_data_t myDG							);
 
-/** It gets the WHITE output data.
+/** It gets the DG value.
   */
-VEML6035_status_t VEML6035_GetWhiteChannelOuputData	( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myWhite			);
+VEML6035_status_t VEML6035_GetDG					( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myDG							);
 
-/** It gets the Interrupt status value.
+/** It sets the gain value.
   */
-VEML6035_status_t VEML6035_GetInterruptStatus		( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myIntStatus		);
+VEML6035_status_t VEML6035_SetGain					( I2C_parameters_t myI2Cparameters, VEML6035_data_t myGain							);
 
-/** It calculates the total lux value.
+/** It gets the gain value.
   */
-VEML6035_status_t VEML6035_CalculateLuxValue		( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myLuxValue			);
+VEML6035_status_t VEML6035_GetGain					( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myGain							);
+
+/** It sets the integration time value.
+  */
+VEML6035_status_t VEML6035_SetIntegrationTime		( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_IT						);
+
+/** It gets the integration time value.
+  */
+VEML6035_status_t VEML6035_GetIntegrationTime		( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS_IT						);
+
+/** It sets the interrupt persistence value.
+  */
+VEML6035_status_t VEML6035_SetInterruptPersistence	( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_PERS						);
+
+/** It gets the interrupt persistence value.
+  */
+VEML6035_status_t VEML6035_GetInterruptPersistence	( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS_PERS						);
+
+/** It sets the channel interrupt value.
+  */
+VEML6035_status_t VEML6035_SetChannelInterrupt		( I2C_parameters_t myI2Cparameters, VEML6035_data_t myINT_CHANNEL					);
+
+/** It gets the channel interrupt value.
+  */
+VEML6035_status_t VEML6035_GetChannelInterrupt		( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myINT_CHANNEL					);
+
+/** It sets the channel enable value.
+  */
+VEML6035_status_t VEML6035_SetChannelEnable			( I2C_parameters_t myI2Cparameters, VEML6035_data_t myCHANNEL_EN					);
+
+/** It gets the channel enable value.
+  */
+VEML6035_status_t VEML6035_GetChannelEnable			( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myCHANNEL_EN					);
+
+/** It sets the interrupt enable value.
+  */
+VEML6035_status_t VEML6035_SetInterruptEnable		( I2C_parameters_t myI2Cparameters, VEML6035_data_t myINT_EN						);
+
+/** It gets the interrupt enable value.
+  */
+VEML6035_status_t VEML6035_GetInterruptEnable		( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myINT_EN						);
+
+/** It sets the shutdown mode.
+  */
+VEML6035_status_t VEML6035_SetShutDownMode			( I2C_parameters_t myI2Cparameters, VEML6035_data_t mySD							);
+
+/** It gets the shutdown mode.
+  */
+VEML6035_status_t VEML6035_GetShutDownMode			( I2C_parameters_t myI2Cparameters, VEML6035_data_t* mySD							);
 
 
