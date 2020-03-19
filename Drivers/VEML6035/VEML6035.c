@@ -56,38 +56,49 @@ VEML6035_status_t VEML6035_Init ( I2C_parameters_t myI2Cparameters )
 
 
 /**
- * @brief       VEML6035_SetConfiguration ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       VEML6035_GetConfigurationRegister ( I2C_parameters_t , VEML6035_configuration_register_t* )
  *
- * @details     It sets the configuration register.
+ * @details     It reads the configuration register.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myALS_Conf:   		ALS gain, integration time, interrupt, and shut down.
  *
- * @param[out]   N/A.
+ * @param[out]   myConfReg:   		Configuration values.
  *
  *
- * @return       Status of VEML6035_SetConfiguration.
+ * @return       Status of VEML6035_GetConfigurationRegister.
  *
  *
  * @author      Manuel Caballero
- * @date        17/March/2020
- * @version     17/March/2020   The ORIGIN
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetConfiguration ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_Conf )
+VEML6035_status_t VEML6035_GetConfigurationRegister	( I2C_parameters_t myI2Cparameters, VEML6035_configuration_register_t* myConfReg )
 {
-	uint8_t		 cmd[3]  = { 0 };
-	uint16_t	 aux_reg = 0U;
+	uint8_t		 cmd[2]  			= 	{ 0 };
+	uint16_t	 auxConfiguration	=	 0U;
 	i2c_status_t aux;
 
-	/* Update the register	 */
-	aux_reg	 =	 ( myALS_Conf.als_gain | myALS_Conf.als_it | myALS_Conf.als_pers | myALS_Conf.als_int_en | myALS_Conf.als_sd );
-
+	/* Read the register	 */
 	cmd[0]	 =   VEML6035_ALS_CONF;
-	cmd[1]	 =	 (uint8_t)( aux_reg >> 2U );
-	cmd[2]	 =	 (uint8_t)( aux_reg & 0xFF );
-	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1UL, I2C_NO_STOP_BIT );
+	aux	 	|=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+	/* Update the data	 */
+	auxConfiguration	 =	 cmd[0];
+	auxConfiguration   <<=	 8U;
+	auxConfiguration	|=	 cmd[1];
+
+	myConfReg->als_sens	 		 =	 (VEML6035_als_conf_sens_t)( auxConfiguration & ALS_CONF_SENS_MASK );
+	myConfReg->als_dg	 		 =	 (VEML6035_als_conf_dg_t)( auxConfiguration & ALS_CONF_DG_MASK );
+	myConfReg->als_gain	 		 =	 (VEML6035_als_conf_gain_t)( auxConfiguration & ALS_CONF_GAIN_MASK );
+	myConfReg->als_it	 		 =	 (VEML6035_als_conf_als_it_t)( auxConfiguration & ALS_CONF_ALS_IT_MASK );
+	myConfReg->als_pers	 		 =	 (VEML6035_als_conf_als_pers_t)( auxConfiguration & ALS_CONF_ALS_PERS_MASK );
+	myConfReg->als_int_channel	 =	 (VEML6035_als_conf_als_int_channel_t)( auxConfiguration & ALS_CONF_ALS_INT_CHANNEL_MASK );
+	myConfReg->als_channel_en	 =	 (VEML6035_als_conf_als_channel_en_t)( auxConfiguration & ALS_CONF_ALS_CHANNEL_EN_MASK );
+	myConfReg->als_int_en		 =	 (VEML6035_als_conf_als_int_en_t)( auxConfiguration & ALS_CONF_ALS_INT_EN_MASK );
+	myConfReg->als_sd			 =	 (VEML6035_als_conf_als_sd_t)( auxConfiguration & ALS_CONF_ALS_SD_MASK );
 
 
 
@@ -104,35 +115,38 @@ VEML6035_status_t VEML6035_SetConfiguration ( I2C_parameters_t myI2Cparameters, 
 
 
 /**
- * @brief       VEML6035_SetHighThreshold ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       VEML6035_SetConfigurationRegister ( I2C_parameters_t , VEML6035_configuration_register_t )
  *
- * @details     It sets the high threshold windows value.
+ * @details     It writes the configuration register.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myALS_WH:   		High threshold windows value.
+ * @param[in]    myConfReg:   		It writes the configuration values.
  *
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetHighThreshold.
+ * @return       Status of VEML6035_SetConfigurationRegister.
  *
  *
  * @author      Manuel Caballero
- * @date        17/March/2020
- * @version     17/March/2020   The ORIGIN
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
  * @pre         N/A
- * @warning     N/A.
+ * @warning     It is advisable to use VEML6035_GetConfigurationRegister first, in order to mask the values of
+ * 				the register.
  */
-VEML6035_status_t VEML6035_SetHighThreshold ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_WH )
+VEML6035_status_t VEML6035_SetConfigurationRegister	( I2C_parameters_t myI2Cparameters, VEML6035_configuration_register_t myConfReg )
 {
-	uint8_t		 cmd[3]  = { 0 };
+	uint8_t		 cmd[3]				= 	{ 0 };
+	uint16_t	 auxConfiguration	=	 0U;
 	i2c_status_t aux;
 
 	/* Update the register	 */
-	cmd[0]	 =   VEML6035_ALS_WH;
-	cmd[1]	 =	 (uint8_t)( myALS_WH.high_threshold_windows_setting >> 2U );
-	cmd[2]	 =	 (uint8_t)( myALS_WH.high_threshold_windows_setting & 0xFF );
-	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+	auxConfiguration	 =	 ( myConfReg.als_sens | myConfReg.als_dg | myConfReg.als_gain | myConfReg.als_it | myConfReg.als_pers | myConfReg.als_int_channel | myConfReg.als_channel_en | myConfReg.als_int_en | myConfReg.als_sd );
+	cmd[0]				 =	 VEML6035_ALS_CONF;
+	cmd[1]				 =	 (uint8_t)( auxConfiguration >> 8U );
+	cmd[2]				 =	 (uint8_t)( auxConfiguration );
+	aux					 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -149,344 +163,688 @@ VEML6035_status_t VEML6035_SetHighThreshold ( I2C_parameters_t myI2Cparameters, 
 
 
 /**
- * @brief       VEML6035_SetLowThreshold ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       VEML6035_SetSensitivity ( I2C_parameters_t , VEML6035_data_t )
  *
- * @details     It sets the low threshold windows value.
+ * @details     It sets the sensitivity value.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myALS_WL:   		Low threshold windows value.
+ * @param[in]    mySENS:   			Sensitivity value.
  *
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetHighThreshold.
+ * @return       Status of VEML6035_SetSensitivity.
  *
  *
  * @author      Manuel Caballero
- * @date        17/March/2020
- * @version     17/March/2020   The ORIGIN
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetLowThreshold ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_WL )
+VEML6035_status_t VEML6035_SetSensitivity ( I2C_parameters_t myI2Cparameters, VEML6035_data_t mySENS )
 {
-	uint8_t		 cmd[3]  = { 0 };
-	i2c_status_t aux;
-
-	/* Update the register	 */
-	cmd[0]	 =   VEML6035_ALS_WL;
-	cmd[1]	 =	 (uint8_t)( myALS_WL.low_threshold_windows_setting >> 2U );
-	cmd[2]	 =	 (uint8_t)( myALS_WL.low_threshold_windows_setting & 0xFF );
-	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
 
 
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
-	if ( aux == I2C_SUCCESS )
-	{
-		return   VEML6035_SUCCESS;
-	}
-	else
-	{
-		return   VEML6035_FAILURE;
-	}
+	/* Parse the data and update the register	 */
+	auxConfiguration.als_sens	 =	 mySENS.configuration.als_sens;
+	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+
+
+	return   aux;
 }
 
 
 
 /**
- * @brief       VEML6035_SetPowerSavingModes ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       VEML6035_GetSensitivity ( I2C_parameters_t , VEML6035_data_t* )
  *
- * @details     It sets the power saving modes.
+ * @details     It gets the sensitivity value.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myPSM:		   		PSM and PSM_EN.
+ *
+ * @param[out]   mySENS:   			Sensitivity value.
+ *
+ *
+ * @return       Status of VEML6035_GetSensitivity.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_GetSensitivity ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* mySENS )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data	 */
+	mySENS->configuration.als_sens	 =	 auxConfiguration.als_sens;
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_SetDG ( I2C_parameters_t , VEML6035_data_t )
+ *
+ * @details     It sets the DG value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myDG:   			DG value.
  *
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetPowerSavingModes.
+ * @return       Status of VEML6035_SetDG.
  *
  *
  * @author      Manuel Caballero
- * @date        17/March/2020
- * @version     17/March/2020   The ORIGIN
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetPowerSavingModes ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myPSM )
+VEML6035_status_t VEML6035_SetDG ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myDG )
 {
-	uint8_t		 cmd[3]  = { 0 };
-	uint16_t	 aux_reg = 0U;
-	i2c_status_t aux;
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
 
-	/* Update the register	 */
-	aux_reg	 =	 ( myPSM.psm | myPSM.psm_en );
-
-	cmd[0]	 =   VEML6035_POWER_SAVING;
-	cmd[1]	 =	 (uint8_t)( aux_reg >> 2U );
-	cmd[2]	 =	 (uint8_t)( aux_reg & 0xFF );
-	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
-
-
-
-	if ( aux == I2C_SUCCESS )
-	{
-		return   VEML6035_SUCCESS;
-	}
-	else
-	{
-		return   VEML6035_FAILURE;
-	}
-}
-
-
-
-/**
- * @brief       VEML6035_GetALS_OuputData ( I2C_parameters_t , VEML6035_data_t* )
- *
- * @details     It gets the ALS high resolution output data.
- *
- * @param[in]    myI2Cparameters:   I2C parameters.
- *
- * @param[out]   myALS:		   		ALS high resolution output data.
- *
- *
- * @return       Status of VEML6035_GetALS_OuputData.
- *
- *
- * @author      Manuel Caballero
- * @date        17/March/2020
- * @version     17/March/2020   The ORIGIN
- * @pre         This function returns raw data.
- * @warning     N/A.
- */
-VEML6035_status_t VEML6035_GetALS_OuputData ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS )
-{
-	uint8_t		 cmd[2]  = { 0 };
-	i2c_status_t aux;
 
 	/* Read the register	 */
-	cmd[0]	 =   VEML6035_ALS;
-	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
-	/* Parse the data	 */
-	myALS->als_high_resolution_output_data	 =	 cmd[0];
-	myALS->als_high_resolution_output_data <<=	 8U;
-	myALS->als_high_resolution_output_data	|=	 cmd[1];
+	/* Parse the data and update the register	 */
+	auxConfiguration.als_dg	 =	 myDG.configuration.als_dg;
+	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
 
 
-
-	if ( aux == I2C_SUCCESS )
-	{
-		return   VEML6035_SUCCESS;
-	}
-	else
-	{
-		return   VEML6035_FAILURE;
-	}
+	return   aux;
 }
 
 
 
 /**
- * @brief       VEML6035_GetWhiteChannelOuputData ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       VEML6035_GetDG ( I2C_parameters_t , VEML6035_data_t* )
  *
- * @details     It gets the WHITE output data.
+ * @details     It gets the DG value.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
  *
- * @param[out]   myWhite:	   		WHITE output data.
+ * @param[out]   myDG:   			DG value..
  *
  *
- * @return       Status of VEML6035_GetWhiteChannelOuputData.
+ * @return       Status of VEML6035_GetDG.
  *
  *
  * @author      Manuel Caballero
- * @date        17/March/2020
- * @version     17/March/2020   The ORIGIN
- * @pre         This function returns raw data.
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetWhiteChannelOuputData	( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myWhite )
+VEML6035_status_t VEML6035_GetDG ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myDG )
 {
-	uint8_t		 cmd[2]  = { 0 };
-	i2c_status_t aux;
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
 
 	/* Read the register	 */
-	cmd[0]	 =   VEML6035_WHITE;
-	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data	 */
-	myWhite->white_output_data	 =	 cmd[0];
-	myWhite->white_output_data <<=	 8U;
-	myWhite->white_output_data	|=	 cmd[1];
+	myDG->configuration.als_dg	 =	 auxConfiguration.als_dg;
 
 
-
-	if ( aux == I2C_SUCCESS )
-	{
-		return   VEML6035_SUCCESS;
-	}
-	else
-	{
-		return   VEML6035_FAILURE;
-	}
+	return   aux;
 }
 
 
 
 /**
- * @brief       VEML6035_GetInterruptStatus ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       VEML6035_SetGain ( I2C_parameters_t , VEML6035_data_t )
  *
- * @details     It gets the Interrupt status value.
+ * @details     It sets the gain value.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myGain:   			Gain value.
  *
- * @param[out]   myIntStatus:	   	Status for: int_th_low and int_th_high.
+ * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_GetInterruptStatus.
+ * @return       Status of VEML6035_SetGain.
  *
  *
  * @author      Manuel Caballero
- * @date        17/March/2020
- * @version     17/March/2020   The ORIGIN
- * @pre         N/A.
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetInterruptStatus ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myIntStatus )
+VEML6035_status_t VEML6035_SetGain ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myGain )
 {
-	uint8_t		 cmd[2]  = { 0 };
-	uint16_t	 aux_reg = 0U;
-	i2c_status_t aux;
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
 
 	/* Read the register	 */
-	cmd[0]	 =   VEML6035_ALS_INT;
-	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
-	/* Parse the data	 */
-	aux_reg						 =	 cmd[0];
-	aux_reg						<<=	 8U;
-	aux_reg						|=	 cmd[1];
-
-	myIntStatus->int_th_high	 =	(VEML6035_als_int_int_th_high_t)( aux_reg & ALS_INT_INT_TH_HIGH_MASK );
-	myIntStatus->int_th_low		|=	(VEML6035_als_int_int_th_low_t)( aux_reg & ALS_INT_INT_TH_LOW_MASK );
+	/* Parse the data and update the register	 */
+	auxConfiguration.als_gain	 =	 myGain.configuration.als_gain;
+	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
 
 
-
-	if ( aux == I2C_SUCCESS )
-	{
-		return   VEML6035_SUCCESS;
-	}
-	else
-	{
-		return   VEML6035_FAILURE;
-	}
+	return   aux;
 }
 
 
 
 /**
- * @brief       VEML6035_CalculateLuxValue ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       VEML6035_GetGain ( I2C_parameters_t , VEML6035_data_t* )
  *
- * @details     It calculates the total lux value.
+ * @details     It gets the gain value.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
- * @param[in]    myLuxValue:   		Raw ALS output data.
  *
- * @param[out]   myLuxValue:	   	Lux value, resolution.
+ * @param[out]   myGain:   			Gain value.
  *
  *
- * @return       Status of VEML6035_CalculateLuxValue.
+ * @return       Status of VEML6035_GetGain.
  *
  *
  * @author      Manuel Caballero
- * @date        17/March/2020
- * @version     17/March/2020   The ORIGIN
- * @pre         NOT Tested!.
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_CalculateLuxValue ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myLuxValue )
+VEML6035_status_t VEML6035_GetGain ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myGain )
 {
-	uint32_t	auxRes	 =	 0U;
-	double		a1 = 0, a2 = 0, a3 = 0, a4 = 0;
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
 
 
-	/* Initial resolution	 */
-	auxRes	 =	 TYPICAL_RESOLUTION_GAIN_2_IT_800MS;
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data	 */
+	myGain->configuration.als_gain	 =	 auxConfiguration.als_gain;
 
 
-	/* Calculate the resolution regarding the integration time	 */
-	switch ( myLuxValue->als_it )
-	{
-		case ALS_CONF_ALS_IT_25MS:
-			auxRes <<=	 5U;	// auxRes *= 32
-			break;
-
-		case ALS_CONF_ALS_IT_50MS:
-			auxRes <<=	 4U;	// auxRes *= 16
-			break;
-
-		case ALS_CONF_ALS_IT_100MS:
-			auxRes <<=	 3U;	// auxRes *= 8
-			break;
-
-		case ALS_CONF_ALS_IT_200MS:
-			auxRes <<=	 2U;	// auxRes *= 4
-			break;
-
-		case ALS_CONF_ALS_IT_400MS:
-			auxRes <<=	 1U;	// auxRes *= 2
-			break;
-
-		default:
-		case ALS_CONF_ALS_IT_800MS:
-			break;
-	}
-
-	/* Calculate the resolution regarding the gain	 */
-	switch ( myLuxValue->als_gain )
-	{
-		case ALS_CONF_ALS_GAIN_X1:
-			auxRes <<=	 1U;	// auxRes *= 2
-			break;
-
-		default:
-		case ALS_CONF_ALS_GAIN_X2:
-			break;
-
-		case ALS_CONF_ALS_GAIN_X1_4:
-			auxRes <<=	 3U;	// auxRes *= 8
-			break;
-
-		case ALS_CONF_ALS_GAIN_X1_8:
-			auxRes <<=	 4U;	// auxRes *= 16
-			break;
-	}
-
-
-	/* Calculate the resolution	 */
-	myLuxValue->resolution	 =	 (float)( auxRes / 10000.0 );
-
-	/* Calculate the light level	 */
-	myLuxValue->light_level	 =	 (float)( ( myLuxValue->als_high_resolution_output_data * auxRes ) / 10000.0 );
-
-	/* Check if a correction formula needs to be applied	 */
-	if ( myLuxValue->light_level > 1000 )
-	{
-		a1	 =	 0.00000000000060135*pow((uint32_t)myLuxValue->light_level, 4);
-		a2	 =	 0.0000000093924*pow((uint32_t)myLuxValue->light_level, 3);
-		a3	 =	 0.000081488*pow((uint32_t)myLuxValue->light_level, 2);
-		a4	 =	 1.0023*myLuxValue->light_level;
-
-		myLuxValue->light_level	 =	(float)( a1 - a2 + a3 + a4 );
-	}
-
-	return   VEML6035_SUCCESS;
+	return   aux;
 }
+
+
+
+/**
+ * @brief       VEML6035_SetIntegrationTime ( I2C_parameters_t , VEML6035_data_t )
+ *
+ * @details     It sets the integration time value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myALS_IT:   		Integration time value.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of VEML6035_SetIntegrationTime.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_SetIntegrationTime ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_IT )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data and update the register	 */
+	auxConfiguration.als_it	 =	 myALS_IT.configuration.als_it;
+	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_GetIntegrationTime ( I2C_parameters_t , VEML6035_data_t* )
+ *
+ * @details     It gets the integration time value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myALS_IT:   		Integration Time value.
+ *
+ *
+ * @return       Status of VEML6035_GetIntegrationTime.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_GetIntegrationTime ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS_IT )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data	 */
+	myALS_IT->configuration.als_it	 =	 auxConfiguration.als_it;
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_SetInterruptPersistence ( I2C_parameters_t , VEML6035_data_t )
+ *
+ * @details     It sets the interrupt persistence value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myALS_PERS:   		Interrupt persistence value.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of VEML6035_SetInterruptPersistence.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_SetInterruptPersistence ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_PERS )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data and update the register	 */
+	auxConfiguration.als_pers	 =	 myALS_PERS.configuration.als_pers;
+	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_GetInterruptPersistence ( I2C_parameters_t , VEML6035_data_t* )
+ *
+ * @details     It gets the interrupt persistence value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myALS_PERS:   		Interrupt persistence value.
+ *
+ *
+ * @return       Status of VEML6035_GetInterruptPersistence.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_GetInterruptPersistence ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS_PERS )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data	 */
+	myALS_PERS->configuration.als_pers	 =	 auxConfiguration.als_pers;
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_SetChannelInterrupt ( I2C_parameters_t , VEML6035_data_t )
+ *
+ * @details     It sets the channel interrupt value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myINT_CHANNEL:   	Channel interrupt value.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of VEML6035_SetChannelInterrupt.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_SetChannelInterrupt ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myINT_CHANNEL )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data and update the register	 */
+	auxConfiguration.als_int_channel	 =	 myINT_CHANNEL.configuration.als_int_channel;
+	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_GetChannelInterrupt ( I2C_parameters_t , VEML6035_data_t* )
+ *
+ * @details     It gets the channel interrupt value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myINT_CHANNEL:   	Channel interrupt value.
+ *
+ *
+ * @return       Status of VEML6035_GetChannelInterrupt.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_GetChannelInterrupt ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myINT_CHANNEL )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data	 */
+	myINT_CHANNEL->configuration.als_int_channel	 =	 auxConfiguration.als_int_channel;
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_SetChannelEnable ( I2C_parameters_t , VEML6035_data_t )
+ *
+ * @details     It sets the channel enable value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myCHANNEL_EN:   	Channel enable value.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of VEML6035_SetChannelEnable.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_SetChannelEnable ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myCHANNEL_EN )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data and update the register	 */
+	auxConfiguration.als_channel_en	 =	 myCHANNEL_EN.configuration.als_channel_en;
+	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_GetChannelEnable ( I2C_parameters_t , VEML6035_data_t* )
+ *
+ * @details     It gets the channel enable value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myCHANNEL_EN:   	Channel enable value.
+ *
+ *
+ * @return       Status of VEML6035_GetChannelEnable.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_GetChannelEnable ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myCHANNEL_EN )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data	 */
+	myCHANNEL_EN->configuration.als_channel_en	 =	 auxConfiguration.als_channel_en;
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_SetInterruptEnable ( I2C_parameters_t , VEML6035_data_t )
+ *
+ * @details     It sets the interrupt enable value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myINT_EN:   		Interrupt enable value.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of VEML6035_SetInterruptEnable.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_SetInterruptEnable ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myINT_EN )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data and update the register	 */
+	auxConfiguration.als_int_en	 =	 myINT_EN.configuration.als_int_en;
+	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_GetInterruptEnable ( I2C_parameters_t , VEML6035_data_t* )
+ *
+ * @details     It gets the interrupt enable value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myINT_EN:   		Interrupt enable value.
+ *
+ *
+ * @return       Status of VEML6035_GetInterruptEnable.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_GetInterruptEnable ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myINT_EN )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data	 */
+	myINT_EN->configuration.als_int_en	 =	 auxConfiguration.als_int_en;
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_SetShutDownMode ( I2C_parameters_t , VEML6035_data_t )
+ *
+ * @details     It sets the interrupt enable value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    mySD:   			Shutdown mode.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of VEML6035_SetShutDownMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_SetShutDownMode ( I2C_parameters_t myI2Cparameters, VEML6035_data_t mySD )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data and update the register	 */
+	auxConfiguration.als_sd	 =	 mySD.configuration.als_sd;
+	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+
+
+	return   aux;
+}
+
+
+
+/**
+ * @brief       VEML6035_GetShutDownMode ( I2C_parameters_t , VEML6035_data_t* )
+ *
+ * @details     It gets the shutdown mode.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   mySD:   			Shutdown mode.
+ *
+ *
+ * @return       Status of VEML6035_GetShutDownMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        19/March/2020
+ * @version     19/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_GetShutDownMode ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* mySD )
+{
+	VEML6035_configuration_register_t	auxConfiguration;
+	VEML6035_status_t 					aux;
+
+
+	/* Read the register	 */
+	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+
+	/* Parse the data	 */
+	mySD->configuration.als_sd	 =	 auxConfiguration.als_sd;
+
+
+	return   aux;
+}
+
+
 
 
 
