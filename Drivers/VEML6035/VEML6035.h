@@ -384,4 +384,12 @@ VEML6035_status_t VEML6035_SetLowThreshold			( I2C_parameters_t myI2Cparameters,
   */
 VEML6035_status_t VEML6035_GetLowThreshold			( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myLowThreshold					);
 
+/** It sets the power safe mode register.
+  */
+VEML6035_status_t VEML6035_SetPowerSafeMode			( I2C_parameters_t myI2Cparameters, VEML6035_data_t myPowerSafeMode					);
+
+/** It gets the power safe mode register.
+  */
+VEML6035_status_t VEML6035_GetPowerSafeMode			( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myPowerSafeMode				);
+
 
