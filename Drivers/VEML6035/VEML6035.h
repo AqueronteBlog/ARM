@@ -214,7 +214,7 @@ typedef enum
 /**
   * @brief   APPLICATION
  */
-#define TYPICAL_RESOLUTION_DG_1_GAIN_1_SENS_0_IT_800MS	(uint32_t)4	/*!<  Typical resolution: DG 1 | Gain 1 | SENS 0 | IT 800ms ( 0.0004 * 10000 = 4    */
+#define VEML6035_MAXIMUM_RESOLUTION	(float)0.0004					/*!<  Maximum resolution    							*/
 
 
 
@@ -403,5 +403,9 @@ VEML6035_status_t VEML6035_GetWhiteChannelOutputData( I2C_parameters_t myI2Cpara
 /** It gets the interrupt status.
   */
 VEML6035_status_t VEML6035_GetInterruptStatus		( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myIF							);
+
+/** It calculates the lux level and the current resolution.
+  */
+void VEML6035_CalculateLuxLevel						( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myLux							);
 
 

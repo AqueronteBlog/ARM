@@ -1296,3 +1296,97 @@ VEML6035_status_t VEML6035_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
 		return   VEML6035_FAILURE;
 	}
 }
+
+
+
+/**
+ * @brief       VEML6035_CalculateLuxLevel ( I2C_parameters_t , VEML6035_data_t* )
+ *
+ * @details     It calculates the lux level and the current resolution.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myLux:  			Lux value and current resolution.
+ *
+ *
+ * @return       N/A.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/March/2020
+ * @version     20/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     The device VEML6035 must be configured properly before calling this function.
+ * @warning     VEML6035_GetALS_HighResOutputData function must be called before calling this function.
+ */
+void VEML6035_CalculateLuxLevel ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myLux )
+{
+	uint8_t  auxGain = 0U, auxSens = 0U, auxDG = 0U;
+	uint16_t auxIT = 0U;
+
+	/* 1. Identify the parameters	 */
+	/* Integration time	 */
+	switch ( myLux->configuration.als_it )
+	{
+	case ALS_CONF_ALS_IT_25MS:
+		auxIT	 =	 25U;
+		break;
+
+	case ALS_CONF_ALS_IT_50MS:
+		auxIT	 =	 50U;
+		break;
+
+	default:
+	case ALS_CONF_ALS_IT_100MS:
+		auxIT	 =	 100U;
+		break;
+
+	case ALS_CONF_ALS_IT_200MS:
+		auxIT	 =	 200;
+		break;
+
+	case ALS_CONF_ALS_IT_400MS:
+		auxIT	 =	 400;
+		break;
+
+	case ALS_CONF_ALS_IT_800MS:
+		auxIT	 =	 800;
+		break;
+	}
+
+	/* Digital gain ( DG )	 */
+	if ( myLux->configuration.als_dg == ALS_CONF_DG_NORMAL )
+	{
+		auxDG	 =	 1U;
+	}
+	else
+	{
+		auxDG	 =	 2U;
+	}
+
+	/* Gain	 */
+	if ( myLux->configuration.als_gain == ALS_CONF_GAIN_NORMAL_SENSITIVITY )
+	{
+		auxGain	 =	 1U;
+	}
+	else
+	{
+		auxGain	 =	 2U;
+	}
+
+	/* Sensitivity	 */
+	if ( myLux->configuration.als_sens == ALS_CONF_SENS_HIGH_SENSITIVITY )
+	{
+		auxSens	 =	 1U;
+	}
+	else
+	{
+		auxSens	 =	 8U;
+	}
+
+	/* 2. Calculate the current resolution	 */
+	myLux->resolution	 =	 (float)( VEML6035_MAXIMUM_RESOLUTION * ( 800U / auxIT ) * ( 2U / auxDG ) * ( 2U / auxGain ) * ( 8U * auxSens ) );
+
+	/* 3. Calculate the lux value	 */
+	myLux->light_level	 =	 (float)( myLux->resolution * myLux->als_high_resolution_output_data );
+}
