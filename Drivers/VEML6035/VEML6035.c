@@ -1148,5 +1148,151 @@ VEML6035_status_t VEML6035_GetPowerSafeMode ( I2C_parameters_t myI2Cparameters, 
 
 
 
+/**
+ * @brief       VEML6035_GetALS_HighResOutputData ( I2C_parameters_t , VEML6035_data_t* )
+ *
+ * @details     It gets the ALS high resolution output data ( raw data ).
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myALS:   			ALS high resolution output data ( raw data ).
+ *
+ *
+ * @return       Status of VEML6035_GetALS_HighResOutputData.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/March/2020
+ * @version     20/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_GetALS_HighResOutputData	( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS )
+{
+	uint8_t			cmd[2]	=	{0U};
+	i2c_status_t 	aux;
 
 
+	/* Read the register	 */
+	cmd[0]	 =	 VEML6035_ALS;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+	/* Parse the data	 */
+	myALS->als_high_resolution_output_data	  =	 cmd[0];
+	myALS->als_high_resolution_output_data	<<=	 8U;
+	myALS->als_high_resolution_output_data	 |=	 cmd[1];
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   VEML6035_SUCCESS;
+	}
+	else
+	{
+		return   VEML6035_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       VEML6035_GetWhiteChannelOutputData ( I2C_parameters_t , VEML6035_data_t* )
+ *
+ * @details     It gets the white channel output data ( raw data ).
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myWhite:  			White channel output data ( raw data ).
+ *
+ *
+ * @return       Status of VEML6035_GetWhiteChannelOutputData.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/March/2020
+ * @version     20/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_GetWhiteChannelOutputData ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myWhite )
+{
+	uint8_t			cmd[2]	=	{0U};
+	i2c_status_t 	aux;
+
+
+	/* Read the register	 */
+	cmd[0]	 =	 VEML6035_WHITE;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+	/* Parse the data	 */
+	myWhite->white_channel_output_data	  =	 cmd[0];
+	myWhite->white_channel_output_data	<<=	 8U;
+	myWhite->white_channel_output_data	 |=	 cmd[1];
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   VEML6035_SUCCESS;
+	}
+	else
+	{
+		return   VEML6035_FAILURE;
+	}
+}
+
+
+
+/**
+ * @brief       VEML6035_GetInterruptStatus ( I2C_parameters_t , VEML6035_data_t* )
+ *
+ * @details     It gets the interrupt status.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myIF:  			IF_L and IF_H.
+ *
+ *
+ * @return       Status of VEML6035_GetInterruptStatus.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/March/2020
+ * @version     20/March/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+VEML6035_status_t VEML6035_GetInterruptStatus ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myIF )
+{
+	uint8_t			cmd[2]				=	{0U};
+	uint16_t		auxIntTriggerEvent	=	0U;
+	i2c_status_t 	aux;
+
+
+	/* Read the register	 */
+	cmd[0]	 =	 VEML6035_ALS_INT;
+	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+	aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+	/* Parse the data	 */
+	auxIntTriggerEvent	 =	 cmd[0];
+	auxIntTriggerEvent <<=	 8U;
+	auxIntTriggerEvent	|=	 cmd[1];
+
+	myIF->int_th_high	 =	(VEML6035_als_int_int_th_high_t)( auxIntTriggerEvent & ALS_INT_INT_TH_HIGH_MASK );
+	myIF->int_th_low	 =	(VEML6035_als_int_int_th_low_t)( auxIntTriggerEvent & ALS_INT_INT_TH_LOW_MASK );
+
+
+
+	if ( aux == I2C_SUCCESS )
+	{
+		return   VEML6035_SUCCESS;
+	}
+	else
+	{
+		return   VEML6035_FAILURE;
+	}
+}
