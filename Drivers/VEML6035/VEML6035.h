@@ -392,4 +392,16 @@ VEML6035_status_t VEML6035_SetPowerSafeMode			( I2C_parameters_t myI2Cparameters
   */
 VEML6035_status_t VEML6035_GetPowerSafeMode			( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myPowerSafeMode				);
 
+/** It gets the ALS high resolution output data ( raw data ).
+  */
+VEML6035_status_t VEML6035_GetALS_HighResOutputData	( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS							);
+
+/** It gets the white channel output data ( raw data ).
+  */
+VEML6035_status_t VEML6035_GetWhiteChannelOutputData( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myWhite						);
+
+/** It gets the interrupt status.
+  */
+VEML6035_status_t VEML6035_GetInterruptStatus		( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myIF							);
+
 
