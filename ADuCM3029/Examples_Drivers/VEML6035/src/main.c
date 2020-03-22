@@ -75,9 +75,9 @@ int main(int argc, char *argv[])
 	/* Configure I2C peripheral */
 	aux  =   VEML6035_Init ( myVEML6035_I2C_parameters );
 
-//	/* Power on the device	 */
-//	myVEML6035_Data.als_sd	 =	 ALS_CONF_ALS_SD_POWER_ON;
-//	aux	 =	 VEML6035_SetConfiguration ( myVEML6035_I2C_parameters, myVEML6035_Data );
+	/* Power on the device	 */
+	myVEML6035_Data.configuration.als_sd	 =	 ALS_CONF_ALS_SD_POWER_ON;
+	aux	 =	 VEML6035_SetShutDownMode ( myVEML6035_I2C_parameters, myVEML6035_Data );
 //
 //	/* Wait until the device is stable ( wait >= 2.5ms )	 */
 //	for ( uint32_t i = 0UL; i < 0x2323; i++);
