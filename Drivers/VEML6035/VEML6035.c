@@ -1385,7 +1385,7 @@ void VEML6035_CalculateLuxLevel ( I2C_parameters_t myI2Cparameters, VEML6035_dat
 	}
 
 	/* 2. Calculate the current resolution	 */
-	myLux->resolution	 =	 (float)( VEML6035_MAXIMUM_RESOLUTION * ( 800U / auxIT ) * ( 2U / auxDG ) * ( 2U / auxGain ) * ( 8U * auxSens ) );
+	myLux->resolution	 =	 (float)( VEML6035_MAXIMUM_RESOLUTION * ( 800U / auxIT ) * ( 2U / auxDG ) * ( 2U / auxGain ) * auxSens );
 
 	/* 3. Calculate the lux value	 */
 	myLux->light_level	 =	 (float)( myLux->resolution * myLux->als_high_resolution_output_data );
