@@ -75,18 +75,42 @@ int main(int argc, char *argv[])
 	/* Configure I2C peripheral */
 	aux  =   VEML6035_Init ( myVEML6035_I2C_parameters );
 
+	/* Power off the device	 */
+	myVEML6035_Data.configuration.als_sd	 =	 ALS_CONF_ALS_SD_SHUTDOWN;
+	aux	 =	 VEML6035_SetShutDownMode ( myVEML6035_I2C_parameters, myVEML6035_Data );
+
+	/* Set sensitivity: low sensitivity ( 1/8x )	 */
+	myVEML6035_Data.configuration.als_sens	 =	 ALS_CONF_SENS_LOW_SENSITIVITY;
+	aux	 =	 VEML6035_SetSensitivity ( myVEML6035_I2C_parameters, myVEML6035_Data );
+
+	/* Set digital gain (DG): Normal	 */
+	myVEML6035_Data.configuration.als_dg	 =	 ALS_CONF_DG_NORMAL;
+	aux	 =	 VEML6035_SetDG ( myVEML6035_I2C_parameters, myVEML6035_Data );
+
+	/* Set Gain: Normal sensitivity	 */
+	myVEML6035_Data.configuration.als_gain	 =	 ALS_CONF_GAIN_NORMAL_SENSITIVITY;
+	aux	 =	 VEML6035_SetGain ( myVEML6035_I2C_parameters, myVEML6035_Data );
+
+	/* Set ALS integration time: Integration time 800ms	 */
+	myVEML6035_Data.configuration.als_it	 =	 ALS_CONF_ALS_IT_800MS;
+	aux	 =	 VEML6035_SetIntegrationTime ( myVEML6035_I2C_parameters, myVEML6035_Data );
+
+	/* Set Channel enable function: ALS and WHITE CH enable	 */
+	myVEML6035_Data.configuration.als_channel_en	 =	 ALS_CONF_ALS_CHANNEL_EN_ALS_WHITE_CH;
+	aux	 =	 VEML6035_SetChannelEnable ( myVEML6035_I2C_parameters, myVEML6035_Data );
+
+	/* Set Interrupt: INT disable	 */
+	myVEML6035_Data.configuration.als_int_channel	 =	 ALS_CONF_ALS_INT_EN_INT_DISABLE;
+	aux	 =	 VEML6035_SetInterruptEnable ( myVEML6035_I2C_parameters, myVEML6035_Data );
+
+	/* Set Power safe mode: PSM_WAIT 0.8s | PSM enabled	 */
+	myVEML6035_Data.psm_wait	 =	 POWER_SAVING_PSM_WAIT_0_8_S;
+	myVEML6035_Data.psm_en		 =	 POWER_SAVING_PSM_EN_ENABLE;
+	aux	 =	 VEML6035_SetPowerSafeMode ( myVEML6035_I2C_parameters, myVEML6035_Data );
+
 	/* Power on the device	 */
 	myVEML6035_Data.configuration.als_sd	 =	 ALS_CONF_ALS_SD_POWER_ON;
 	aux	 =	 VEML6035_SetShutDownMode ( myVEML6035_I2C_parameters, myVEML6035_Data );
-//
-//	/* Wait until the device is stable ( wait >= 2.5ms )	 */
-//	for ( uint32_t i = 0UL; i < 0x2323; i++);
-//
-//	/* Configure the device: Integration time 100ms | Gain x1 | Interrupt disabled	 */
-//	myVEML6035_Data.als_it	 	 =	 ALS_CONF_ALS_IT_100MS;
-//	myVEML6035_Data.als_gain 	 =	 ALS_CONF_ALS_GAIN_X1;
-//	myVEML6035_Data.als_int_en	 =	 ALS_CONF_ALS_INT_EN_DISABLE;
-//	aux	 =	 VEML6035_SetConfiguration ( myVEML6035_I2C_parameters, myVEML6035_Data );
 
 
 	/* Enable Timer0	 */
@@ -119,17 +143,17 @@ int main(int argc, char *argv[])
 			pADI_GPIO2->SET	|=	 DS3;
 
 			/* Get the raw light data	 */
-//			aux  	 =   VEML6035_GetALS_OuputData ( myVEML6035_I2C_parameters, &myVEML6035_Data );
-//
-//			/* Calculate light data and resolution	 */
-//			aux  	 =   VEML6035_CalculateLuxValue ( myVEML6035_I2C_parameters, &myVEML6035_Data );
-//
-//			/* Power on the device: New sample	 */
-//			myVEML6035_Data.als_sd	 =	 ALS_CONF_ALS_SD_POWER_ON;
-//			aux	 =	 VEML6035_SetConfiguration ( myVEML6035_I2C_parameters, myVEML6035_Data );
-//
-//			/* Transmit data through the UART	 */
-//			sprintf ( (char*)myMessage, "Raw Lux: %d | Lux: %0.4f lx\r\n", myVEML6035_Data.als_high_resolution_output_data, myVEML6035_Data.light_level );
+			aux  	 =   VEML6035_GetALS_HighResOutputData ( myVEML6035_I2C_parameters, &myVEML6035_Data );
+
+			/* Get the raw white channel output data	 */
+			aux  	 =   VEML6035_GetWhiteChannelOutputData ( myVEML6035_I2C_parameters, &myVEML6035_Data );
+
+			/* Calculate light data and resolution	 */
+			VEML6035_CalculateLuxLevel ( myVEML6035_I2C_parameters, &myVEML6035_Data );
+
+
+			/* Transmit data through the UART	 */
+			sprintf ( (char*)myMessage, "White counter: %d | Lux: %0.4f lx\r\n", myVEML6035_Data.white_channel_output_data, myVEML6035_Data.light_level );
 
 			/* Check that is safe to send data	 */
 			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
@@ -139,7 +163,7 @@ int main(int argc, char *argv[])
 			pADI_UART0->TX	 =	 *myPtr;
 
 			/* Transmit Buffer Empty Interrupt: Enabled	 */
-			//pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
+			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
 
 			/* Reset variables and turn both LEDs off	 */
 			myState	 		 =	 0UL;
