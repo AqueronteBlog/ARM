@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        04/November/2019
- * @version     04/November/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -32,8 +32,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        04/November/2019
- * @version     04/November/2019      The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -91,8 +91,8 @@ void conf_CLK  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        04/November/2019
- * @version     04/November/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -149,8 +149,8 @@ void conf_GPIO  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        04/November/2019
- * @version     04/November/2019      The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -227,8 +227,8 @@ void conf_UART  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        04/November/2019
- * @version     04/November/2019      The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
