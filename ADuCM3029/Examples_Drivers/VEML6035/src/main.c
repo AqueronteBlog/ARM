@@ -1,8 +1,7 @@
 /**
  * @brief       main.c
  * @details     This example shows how to work with the external device: VEML6035.
- * 				A new sample is read every 1 second and transmitted through
- * 				the UART (115200 baud).
+ * 				A new sample is read every 1 second and transmitted through the UART (115200 baud).
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
  *
@@ -10,10 +9,10 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        29/November/2019
- * @version     29/November/2019    The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020    The ORIGIN
  * @pre         This firmware was tested on the ADICUP3029 with CrossCore Embedded Studio v2.8.3.0.
- * @warning     NOT Tested!.
+ * @warning     N/A.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ). All rights reserved.
  */
 
@@ -83,16 +82,16 @@ int main(int argc, char *argv[])
 	myVEML6035_Data.configuration.als_sens	 =	 ALS_CONF_SENS_LOW_SENSITIVITY;
 	aux	 =	 VEML6035_SetSensitivity ( myVEML6035_I2C_parameters, myVEML6035_Data );
 
-	/* Set digital gain (DG): Normal	 */
-	myVEML6035_Data.configuration.als_dg	 =	 ALS_CONF_DG_NORMAL;
+	/* Set digital gain (DG): Double	 */
+	myVEML6035_Data.configuration.als_dg	 =	 ALS_CONF_DG_DOUBLE;
 	aux	 =	 VEML6035_SetDG ( myVEML6035_I2C_parameters, myVEML6035_Data );
 
-	/* Set Gain: Normal sensitivity	 */
-	myVEML6035_Data.configuration.als_gain	 =	 ALS_CONF_GAIN_NORMAL_SENSITIVITY;
+	/* Set Gain: Double sensitivity	 */
+	myVEML6035_Data.configuration.als_gain	 =	 ALS_CONF_GAIN_DOUBLE_SENSITIVITY;
 	aux	 =	 VEML6035_SetGain ( myVEML6035_I2C_parameters, myVEML6035_Data );
 
-	/* Set ALS integration time: Integration time 800ms	 */
-	myVEML6035_Data.configuration.als_it	 =	 ALS_CONF_ALS_IT_800MS;
+	/* Set ALS integration time: Integration time 100ms	 */
+	myVEML6035_Data.configuration.als_it	 =	 ALS_CONF_ALS_IT_100MS;
 	aux	 =	 VEML6035_SetIntegrationTime ( myVEML6035_I2C_parameters, myVEML6035_Data );
 
 	/* Set Channel enable function: ALS and WHITE CH enable	 */
@@ -103,7 +102,7 @@ int main(int argc, char *argv[])
 	myVEML6035_Data.configuration.als_int_channel	 =	 ALS_CONF_ALS_INT_EN_INT_DISABLE;
 	aux	 =	 VEML6035_SetInterruptEnable ( myVEML6035_I2C_parameters, myVEML6035_Data );
 
-	/* Set Power safe mode: PSM_WAIT 0.8s | PSM enabled	 */
+	/* Set Power safe mode: PSM WAIT 0.8s | PSM disabled	 */
 	myVEML6035_Data.psm_wait	 =	 POWER_SAVING_PSM_WAIT_0_8_S;
 	myVEML6035_Data.psm_en		 =	 POWER_SAVING_PSM_EN_ENABLE;
 	aux	 =	 VEML6035_SetPowerSafeMode ( myVEML6035_I2C_parameters, myVEML6035_Data );
