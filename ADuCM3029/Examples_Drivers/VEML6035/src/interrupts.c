@@ -5,8 +5,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        04/November/2019
- * @version     04/November/2019   The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -27,8 +27,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        04/November/2019
- * @version     04/November/2019    The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020    The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -61,8 +61,8 @@ void GP_Tmr0_Int_Handler ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        25/July/2019
- * @version     25/July/2019    The ORIGIN
+ * @date        17/March/2020
+ * @version     17/March/2020    The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
