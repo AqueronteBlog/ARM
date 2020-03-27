@@ -406,6 +406,6 @@ VEML6035_status_t VEML6035_GetInterruptStatus		( I2C_parameters_t myI2Cparameter
 
 /** It calculates the lux level and the current resolution.
   */
-void VEML6035_CalculateLuxLevel						( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myLux							);
+void VEML6035_CalculateLuxLevel						( VEML6035_data_t* myLux															);
 
 

@@ -1300,7 +1300,7 @@ VEML6035_status_t VEML6035_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
 
 
 /**
- * @brief       VEML6035_CalculateLuxLevel ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       VEML6035_CalculateLuxLevel ( VEML6035_data_t* )
  *
  * @details     It calculates the lux level and the current resolution.
  *
@@ -1319,7 +1319,7 @@ VEML6035_status_t VEML6035_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
  * @warning     The device VEML6035 must be configured properly before calling this function.
  * @warning     VEML6035_GetALS_HighResOutputData function must be called before calling this function.
  */
-void VEML6035_CalculateLuxLevel ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myLux )
+void VEML6035_CalculateLuxLevel ( VEML6035_data_t* myLux )
 {
 	uint8_t  auxGain = 0U, auxSens = 0U, auxDG = 0U;
 	uint16_t auxIT = 0U;
