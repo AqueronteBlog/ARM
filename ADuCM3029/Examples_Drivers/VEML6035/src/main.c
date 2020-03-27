@@ -99,11 +99,11 @@ int main(int argc, char *argv[])
 	aux	 =	 VEML6035_SetChannelEnable ( myVEML6035_I2C_parameters, myVEML6035_Data );
 
 	/* Set Interrupt: INT disable	 */
-	myVEML6035_Data.configuration.als_int_channel	 =	 ALS_CONF_ALS_INT_EN_INT_DISABLE;
+	myVEML6035_Data.configuration.als_int_en	 =	 ALS_CONF_ALS_INT_EN_INT_DISABLE;
 	aux	 =	 VEML6035_SetInterruptEnable ( myVEML6035_I2C_parameters, myVEML6035_Data );
 
 	/* Set Power safe mode: PSM WAIT 0.8s | PSM disabled	 */
-	myVEML6035_Data.psm_wait	 =	 POWER_SAVING_PSM_WAIT_0_8_S;
+	myVEML6035_Data.psm_wait	 =	 POWER_SAVING_PSM_WAIT_0_4_S;
 	myVEML6035_Data.psm_en		 =	 POWER_SAVING_PSM_EN_ENABLE;
 	aux	 =	 VEML6035_SetPowerSafeMode ( myVEML6035_I2C_parameters, myVEML6035_Data );
 
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 			aux  	 =   VEML6035_GetWhiteChannelOutputData ( myVEML6035_I2C_parameters, &myVEML6035_Data );
 
 			/* Calculate light data and resolution	 */
-			VEML6035_CalculateLuxLevel ( myVEML6035_I2C_parameters, &myVEML6035_Data );
+			VEML6035_CalculateLuxLevel ( &myVEML6035_Data );
 
 
 			/* Transmit data through the UART	 */
