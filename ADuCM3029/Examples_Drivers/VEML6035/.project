@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>VEML6030</name>
+	<name>VEML6035</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -14,6 +14,12 @@
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
 			<triggers>full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.analog.crosscore.managedbuilder.core.cleanbuilder</name>
+			<triggers>clean,</triggers>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -37,7 +43,7 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>Drivers/VEML6030</name>
+			<name>Drivers/VEML6035</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -52,14 +58,14 @@
 			<locationURI>PARENT-2-PROJECT_LOC/Basics/I2C/i2c.h</locationURI>
 		</link>
 		<link>
-			<name>Drivers/VEML6030/VEML6030.c</name>
+			<name>Drivers/VEML6035/VEML6035.c</name>
 			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Drivers/VEML6030/VEML6030.c</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/Drivers/VEML6035/VEML6035.c</locationURI>
 		</link>
 		<link>
-			<name>Drivers/VEML6030/VEML6030.h</name>
+			<name>Drivers/VEML6035/VEML6035.h</name>
 			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Drivers/VEML6030/VEML6030.h</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/Drivers/VEML6035/VEML6035.h</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>

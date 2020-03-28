@@ -407,7 +407,7 @@ VEML6030_status_t VEML6030_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
  * @date        09/December/2019
  * @version     17/December/2019   Compensation formula was added.
  * 				09/December/2019   The ORIGIN
- * @pre         N/A.
+ * @pre         NOT Tested!.
  * @warning     N/A.
  */
 VEML6030_status_t VEML6030_CalculateLuxValue ( I2C_parameters_t myI2Cparameters, VEML6030_data_t* myLuxValue )

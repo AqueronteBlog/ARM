@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the external device: VEML6030.
+ * @details     This example shows how to work with the external device: VEML6030.
  * 				A new sample is read every 1 second and transmitted through
  * 				the UART (115200 baud).
  *
@@ -13,7 +13,7 @@
  * @date        29/November/2019
  * @version     29/November/2019    The ORIGIN
  * @pre         This firmware was tested on the ADICUP3029 with CrossCore Embedded Studio v2.8.3.0.
- * @warning     N/A.
+ * @warning     NOT Tested!.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ). All rights reserved.
  */
 
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 	aux	 =	 VEML6030_SetConfiguration ( myVEML6030_I2C_parameters, myVEML6030_Data );
 
 	/* Wait until the device is stable ( wait >= 2.5ms )	 */
-	for ( uint32_t i = 0UL; i < 0x23232; i++);
+	for ( uint32_t i = 0UL; i < 0x2323; i++);
 
 	/* Configure the device: Integration time 100ms | Gain x1 | Interrupt disabled	 */
 	myVEML6030_Data.als_it	 	 =	 ALS_CONF_ALS_IT_100MS;
