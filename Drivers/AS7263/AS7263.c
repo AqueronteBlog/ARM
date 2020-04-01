@@ -1,24 +1,24 @@
 /**
- * @brief       VEML6035.c
- * @details     Low Power, High Sensitivity, I2C Ambient Light Sensor.
+ * @brief       AS7263.c
+ * @details     6-Channel NIR Spectral_ID Device with Electronic Shutter and Smart Interface.
  *              Functions file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        17/March/2020
- * @version     17/March/2020    The ORIGIN
+ * @date        01/April/2020
+ * @version     01/April/2020    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 
-#include "VEML6035.h"
+#include "AS7263.h"
 
 
 /**
- * @brief       VEML6035_Init ( I2C_parameters_t )
+ * @brief       AS7263_Init ( I2C_parameters_t )
  *
  * @details     It configures the I2C peripheral.
  *
@@ -27,16 +27,16 @@
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_Init.
+ * @return       Status of AS7263_Init.
  *
  *
  * @author      Manuel Caballero
- * @date        17/March/2020
- * @version     17/March/2020   The ORIGIN
+ * @date        01/April/2020
+ * @version     01/April/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_Init ( I2C_parameters_t myI2Cparameters )
+AS7263_status_t AS7263_Init ( I2C_parameters_t myI2Cparameters )
 {
 	i2c_status_t aux;
 
@@ -45,18 +45,18 @@ VEML6035_status_t VEML6035_Init ( I2C_parameters_t myI2Cparameters )
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_GetConfigurationRegister ( I2C_parameters_t , VEML6035_configuration_register_t* )
+ * @brief       AS7263_GetConfigurationRegister ( I2C_parameters_t , AS7263_configuration_register_t* )
  *
  * @details     It reads the configuration register.
  *
@@ -65,7 +65,7 @@ VEML6035_status_t VEML6035_Init ( I2C_parameters_t myI2Cparameters )
  * @param[out]   myConfReg:   		Configuration values.
  *
  *
- * @return       Status of VEML6035_GetConfigurationRegister.
+ * @return       Status of AS7263_GetConfigurationRegister.
  *
  *
  * @author      Manuel Caballero
@@ -74,14 +74,14 @@ VEML6035_status_t VEML6035_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetConfigurationRegister	( I2C_parameters_t myI2Cparameters, VEML6035_configuration_register_t* myConfReg )
+AS7263_status_t AS7263_GetConfigurationRegister	( I2C_parameters_t myI2Cparameters, AS7263_configuration_register_t* myConfReg )
 {
 	uint8_t		 cmd[2]  			= 	{ 0 };
 	uint16_t	 auxConfiguration	=	 0U;
 	i2c_status_t aux;
 
 	/* Read the register	 */
-	cmd[0]	 =   VEML6035_ALS_CONF;
+	cmd[0]	 =   AS7263_ALS_CONF;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1UL, I2C_NO_STOP_BIT );
 	aux	 	|=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -90,32 +90,32 @@ VEML6035_status_t VEML6035_GetConfigurationRegister	( I2C_parameters_t myI2Cpara
 	auxConfiguration   <<=	 8U;
 	auxConfiguration	|=	 cmd[1];
 
-	myConfReg->als_sens	 		 =	 (VEML6035_als_conf_sens_t)( auxConfiguration & ALS_CONF_SENS_MASK );
-	myConfReg->als_dg	 		 =	 (VEML6035_als_conf_dg_t)( auxConfiguration & ALS_CONF_DG_MASK );
-	myConfReg->als_gain	 		 =	 (VEML6035_als_conf_gain_t)( auxConfiguration & ALS_CONF_GAIN_MASK );
-	myConfReg->als_it	 		 =	 (VEML6035_als_conf_als_it_t)( auxConfiguration & ALS_CONF_ALS_IT_MASK );
-	myConfReg->als_pers	 		 =	 (VEML6035_als_conf_als_pers_t)( auxConfiguration & ALS_CONF_ALS_PERS_MASK );
-	myConfReg->als_int_channel	 =	 (VEML6035_als_conf_als_int_channel_t)( auxConfiguration & ALS_CONF_ALS_INT_CHANNEL_MASK );
-	myConfReg->als_channel_en	 =	 (VEML6035_als_conf_als_channel_en_t)( auxConfiguration & ALS_CONF_ALS_CHANNEL_EN_MASK );
-	myConfReg->als_int_en		 =	 (VEML6035_als_conf_als_int_en_t)( auxConfiguration & ALS_CONF_ALS_INT_EN_MASK );
-	myConfReg->als_sd			 =	 (VEML6035_als_conf_als_sd_t)( auxConfiguration & ALS_CONF_ALS_SD_MASK );
+	myConfReg->als_sens	 		 =	 (AS7263_als_conf_sens_t)( auxConfiguration & ALS_CONF_SENS_MASK );
+	myConfReg->als_dg	 		 =	 (AS7263_als_conf_dg_t)( auxConfiguration & ALS_CONF_DG_MASK );
+	myConfReg->als_gain	 		 =	 (AS7263_als_conf_gain_t)( auxConfiguration & ALS_CONF_GAIN_MASK );
+	myConfReg->als_it	 		 =	 (AS7263_als_conf_als_it_t)( auxConfiguration & ALS_CONF_ALS_IT_MASK );
+	myConfReg->als_pers	 		 =	 (AS7263_als_conf_als_pers_t)( auxConfiguration & ALS_CONF_ALS_PERS_MASK );
+	myConfReg->als_int_channel	 =	 (AS7263_als_conf_als_int_channel_t)( auxConfiguration & ALS_CONF_ALS_INT_CHANNEL_MASK );
+	myConfReg->als_channel_en	 =	 (AS7263_als_conf_als_channel_en_t)( auxConfiguration & ALS_CONF_ALS_CHANNEL_EN_MASK );
+	myConfReg->als_int_en		 =	 (AS7263_als_conf_als_int_en_t)( auxConfiguration & ALS_CONF_ALS_INT_EN_MASK );
+	myConfReg->als_sd			 =	 (AS7263_als_conf_als_sd_t)( auxConfiguration & ALS_CONF_ALS_SD_MASK );
 
 
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_SetConfigurationRegister ( I2C_parameters_t , VEML6035_configuration_register_t )
+ * @brief       AS7263_SetConfigurationRegister ( I2C_parameters_t , AS7263_configuration_register_t )
  *
  * @details     It writes the configuration register.
  *
@@ -125,17 +125,17 @@ VEML6035_status_t VEML6035_GetConfigurationRegister	( I2C_parameters_t myI2Cpara
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetConfigurationRegister.
+ * @return       Status of AS7263_SetConfigurationRegister.
  *
  *
  * @author      Manuel Caballero
  * @date        19/March/2020
  * @version     19/March/2020   The ORIGIN
  * @pre         N/A
- * @warning     It is advisable to use VEML6035_GetConfigurationRegister first, in order to mask the values of
+ * @warning     It is advisable to use AS7263_GetConfigurationRegister first, in order to mask the values of
  * 				the register.
  */
-VEML6035_status_t VEML6035_SetConfigurationRegister	( I2C_parameters_t myI2Cparameters, VEML6035_configuration_register_t myConfReg )
+AS7263_status_t AS7263_SetConfigurationRegister	( I2C_parameters_t myI2Cparameters, AS7263_configuration_register_t myConfReg )
 {
 	uint8_t		 cmd[3]				= 	{ 0 };
 	uint16_t	 auxConfiguration	=	 0U;
@@ -143,7 +143,7 @@ VEML6035_status_t VEML6035_SetConfigurationRegister	( I2C_parameters_t myI2Cpara
 
 	/* Update the register	 */
 	auxConfiguration	 =	 ( myConfReg.als_sens | myConfReg.als_dg | myConfReg.als_gain | myConfReg.als_it | myConfReg.als_pers | myConfReg.als_int_channel | myConfReg.als_channel_en | myConfReg.als_int_en | myConfReg.als_sd );
-	cmd[0]				 =	 VEML6035_ALS_CONF;
+	cmd[0]				 =	 AS7263_ALS_CONF;
 	cmd[1]				 =	 (uint8_t)( auxConfiguration >> 8U );
 	cmd[2]				 =	 (uint8_t)( auxConfiguration );
 	aux					 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -152,18 +152,18 @@ VEML6035_status_t VEML6035_SetConfigurationRegister	( I2C_parameters_t myI2Cpara
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_SetSensitivity ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetSensitivity ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the sensitivity value.
  *
@@ -173,7 +173,7 @@ VEML6035_status_t VEML6035_SetConfigurationRegister	( I2C_parameters_t myI2Cpara
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetSensitivity.
+ * @return       Status of AS7263_SetSensitivity.
  *
  *
  * @author      Manuel Caballero
@@ -182,18 +182,18 @@ VEML6035_status_t VEML6035_SetConfigurationRegister	( I2C_parameters_t myI2Cpara
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetSensitivity ( I2C_parameters_t myI2Cparameters, VEML6035_data_t mySENS )
+AS7263_status_t AS7263_SetSensitivity ( I2C_parameters_t myI2Cparameters, AS7263_data_t mySENS )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data and update the register	 */
 	auxConfiguration.als_sens	 =	 mySENS.configuration.als_sens;
-	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+	aux	 	 =   AS7263_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
 
 
 	return   aux;
@@ -202,7 +202,7 @@ VEML6035_status_t VEML6035_SetSensitivity ( I2C_parameters_t myI2Cparameters, VE
 
 
 /**
- * @brief       VEML6035_GetSensitivity ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetSensitivity ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the sensitivity value.
  *
@@ -211,7 +211,7 @@ VEML6035_status_t VEML6035_SetSensitivity ( I2C_parameters_t myI2Cparameters, VE
  * @param[out]   mySENS:   			Sensitivity value.
  *
  *
- * @return       Status of VEML6035_GetSensitivity.
+ * @return       Status of AS7263_GetSensitivity.
  *
  *
  * @author      Manuel Caballero
@@ -220,14 +220,14 @@ VEML6035_status_t VEML6035_SetSensitivity ( I2C_parameters_t myI2Cparameters, VE
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetSensitivity ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* mySENS )
+AS7263_status_t AS7263_GetSensitivity ( I2C_parameters_t myI2Cparameters, AS7263_data_t* mySENS )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data	 */
 	mySENS->configuration.als_sens	 =	 auxConfiguration.als_sens;
@@ -239,7 +239,7 @@ VEML6035_status_t VEML6035_GetSensitivity ( I2C_parameters_t myI2Cparameters, VE
 
 
 /**
- * @brief       VEML6035_SetDG ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetDG ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the DG value.
  *
@@ -249,7 +249,7 @@ VEML6035_status_t VEML6035_GetSensitivity ( I2C_parameters_t myI2Cparameters, VE
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetDG.
+ * @return       Status of AS7263_SetDG.
  *
  *
  * @author      Manuel Caballero
@@ -258,18 +258,18 @@ VEML6035_status_t VEML6035_GetSensitivity ( I2C_parameters_t myI2Cparameters, VE
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetDG ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myDG )
+AS7263_status_t AS7263_SetDG ( I2C_parameters_t myI2Cparameters, AS7263_data_t myDG )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data and update the register	 */
 	auxConfiguration.als_dg	 =	 myDG.configuration.als_dg;
-	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+	aux	 	 =   AS7263_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
 
 
 	return   aux;
@@ -278,7 +278,7 @@ VEML6035_status_t VEML6035_SetDG ( I2C_parameters_t myI2Cparameters, VEML6035_da
 
 
 /**
- * @brief       VEML6035_GetDG ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetDG ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the DG value.
  *
@@ -287,7 +287,7 @@ VEML6035_status_t VEML6035_SetDG ( I2C_parameters_t myI2Cparameters, VEML6035_da
  * @param[out]   myDG:   			DG value..
  *
  *
- * @return       Status of VEML6035_GetDG.
+ * @return       Status of AS7263_GetDG.
  *
  *
  * @author      Manuel Caballero
@@ -296,14 +296,14 @@ VEML6035_status_t VEML6035_SetDG ( I2C_parameters_t myI2Cparameters, VEML6035_da
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetDG ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myDG )
+AS7263_status_t AS7263_GetDG ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myDG )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data	 */
 	myDG->configuration.als_dg	 =	 auxConfiguration.als_dg;
@@ -315,7 +315,7 @@ VEML6035_status_t VEML6035_GetDG ( I2C_parameters_t myI2Cparameters, VEML6035_da
 
 
 /**
- * @brief       VEML6035_SetGain ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetGain ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the gain value.
  *
@@ -325,7 +325,7 @@ VEML6035_status_t VEML6035_GetDG ( I2C_parameters_t myI2Cparameters, VEML6035_da
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetGain.
+ * @return       Status of AS7263_SetGain.
  *
  *
  * @author      Manuel Caballero
@@ -334,18 +334,18 @@ VEML6035_status_t VEML6035_GetDG ( I2C_parameters_t myI2Cparameters, VEML6035_da
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetGain ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myGain )
+AS7263_status_t AS7263_SetGain ( I2C_parameters_t myI2Cparameters, AS7263_data_t myGain )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data and update the register	 */
 	auxConfiguration.als_gain	 =	 myGain.configuration.als_gain;
-	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+	aux	 	 =   AS7263_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
 
 
 	return   aux;
@@ -354,7 +354,7 @@ VEML6035_status_t VEML6035_SetGain ( I2C_parameters_t myI2Cparameters, VEML6035_
 
 
 /**
- * @brief       VEML6035_GetGain ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetGain ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the gain value.
  *
@@ -363,7 +363,7 @@ VEML6035_status_t VEML6035_SetGain ( I2C_parameters_t myI2Cparameters, VEML6035_
  * @param[out]   myGain:   			Gain value.
  *
  *
- * @return       Status of VEML6035_GetGain.
+ * @return       Status of AS7263_GetGain.
  *
  *
  * @author      Manuel Caballero
@@ -372,14 +372,14 @@ VEML6035_status_t VEML6035_SetGain ( I2C_parameters_t myI2Cparameters, VEML6035_
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetGain ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myGain )
+AS7263_status_t AS7263_GetGain ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myGain )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data	 */
 	myGain->configuration.als_gain	 =	 auxConfiguration.als_gain;
@@ -391,7 +391,7 @@ VEML6035_status_t VEML6035_GetGain ( I2C_parameters_t myI2Cparameters, VEML6035_
 
 
 /**
- * @brief       VEML6035_SetIntegrationTime ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetIntegrationTime ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the integration time value.
  *
@@ -401,7 +401,7 @@ VEML6035_status_t VEML6035_GetGain ( I2C_parameters_t myI2Cparameters, VEML6035_
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetIntegrationTime.
+ * @return       Status of AS7263_SetIntegrationTime.
  *
  *
  * @author      Manuel Caballero
@@ -410,18 +410,18 @@ VEML6035_status_t VEML6035_GetGain ( I2C_parameters_t myI2Cparameters, VEML6035_
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetIntegrationTime ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_IT )
+AS7263_status_t AS7263_SetIntegrationTime ( I2C_parameters_t myI2Cparameters, AS7263_data_t myALS_IT )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data and update the register	 */
 	auxConfiguration.als_it	 =	 myALS_IT.configuration.als_it;
-	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+	aux	 	 =   AS7263_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
 
 
 	return   aux;
@@ -430,7 +430,7 @@ VEML6035_status_t VEML6035_SetIntegrationTime ( I2C_parameters_t myI2Cparameters
 
 
 /**
- * @brief       VEML6035_GetIntegrationTime ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetIntegrationTime ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the integration time value.
  *
@@ -439,7 +439,7 @@ VEML6035_status_t VEML6035_SetIntegrationTime ( I2C_parameters_t myI2Cparameters
  * @param[out]   myALS_IT:   		Integration Time value.
  *
  *
- * @return       Status of VEML6035_GetIntegrationTime.
+ * @return       Status of AS7263_GetIntegrationTime.
  *
  *
  * @author      Manuel Caballero
@@ -448,14 +448,14 @@ VEML6035_status_t VEML6035_SetIntegrationTime ( I2C_parameters_t myI2Cparameters
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetIntegrationTime ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS_IT )
+AS7263_status_t AS7263_GetIntegrationTime ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myALS_IT )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data	 */
 	myALS_IT->configuration.als_it	 =	 auxConfiguration.als_it;
@@ -467,7 +467,7 @@ VEML6035_status_t VEML6035_GetIntegrationTime ( I2C_parameters_t myI2Cparameters
 
 
 /**
- * @brief       VEML6035_SetInterruptPersistence ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetInterruptPersistence ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the interrupt persistence value.
  *
@@ -477,7 +477,7 @@ VEML6035_status_t VEML6035_GetIntegrationTime ( I2C_parameters_t myI2Cparameters
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetInterruptPersistence.
+ * @return       Status of AS7263_SetInterruptPersistence.
  *
  *
  * @author      Manuel Caballero
@@ -486,18 +486,18 @@ VEML6035_status_t VEML6035_GetIntegrationTime ( I2C_parameters_t myI2Cparameters
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetInterruptPersistence ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myALS_PERS )
+AS7263_status_t AS7263_SetInterruptPersistence ( I2C_parameters_t myI2Cparameters, AS7263_data_t myALS_PERS )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data and update the register	 */
 	auxConfiguration.als_pers	 =	 myALS_PERS.configuration.als_pers;
-	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+	aux	 	 =   AS7263_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
 
 
 	return   aux;
@@ -506,7 +506,7 @@ VEML6035_status_t VEML6035_SetInterruptPersistence ( I2C_parameters_t myI2Cparam
 
 
 /**
- * @brief       VEML6035_GetInterruptPersistence ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetInterruptPersistence ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the interrupt persistence value.
  *
@@ -515,7 +515,7 @@ VEML6035_status_t VEML6035_SetInterruptPersistence ( I2C_parameters_t myI2Cparam
  * @param[out]   myALS_PERS:   		Interrupt persistence value.
  *
  *
- * @return       Status of VEML6035_GetInterruptPersistence.
+ * @return       Status of AS7263_GetInterruptPersistence.
  *
  *
  * @author      Manuel Caballero
@@ -524,14 +524,14 @@ VEML6035_status_t VEML6035_SetInterruptPersistence ( I2C_parameters_t myI2Cparam
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetInterruptPersistence ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS_PERS )
+AS7263_status_t AS7263_GetInterruptPersistence ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myALS_PERS )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data	 */
 	myALS_PERS->configuration.als_pers	 =	 auxConfiguration.als_pers;
@@ -543,7 +543,7 @@ VEML6035_status_t VEML6035_GetInterruptPersistence ( I2C_parameters_t myI2Cparam
 
 
 /**
- * @brief       VEML6035_SetChannelInterrupt ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetChannelInterrupt ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the channel interrupt value.
  *
@@ -553,7 +553,7 @@ VEML6035_status_t VEML6035_GetInterruptPersistence ( I2C_parameters_t myI2Cparam
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetChannelInterrupt.
+ * @return       Status of AS7263_SetChannelInterrupt.
  *
  *
  * @author      Manuel Caballero
@@ -562,18 +562,18 @@ VEML6035_status_t VEML6035_GetInterruptPersistence ( I2C_parameters_t myI2Cparam
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetChannelInterrupt ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myINT_CHANNEL )
+AS7263_status_t AS7263_SetChannelInterrupt ( I2C_parameters_t myI2Cparameters, AS7263_data_t myINT_CHANNEL )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data and update the register	 */
 	auxConfiguration.als_int_channel	 =	 myINT_CHANNEL.configuration.als_int_channel;
-	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+	aux	 	 =   AS7263_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
 
 
 	return   aux;
@@ -582,7 +582,7 @@ VEML6035_status_t VEML6035_SetChannelInterrupt ( I2C_parameters_t myI2Cparameter
 
 
 /**
- * @brief       VEML6035_GetChannelInterrupt ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetChannelInterrupt ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the channel interrupt value.
  *
@@ -591,7 +591,7 @@ VEML6035_status_t VEML6035_SetChannelInterrupt ( I2C_parameters_t myI2Cparameter
  * @param[out]   myINT_CHANNEL:   	Channel interrupt value.
  *
  *
- * @return       Status of VEML6035_GetChannelInterrupt.
+ * @return       Status of AS7263_GetChannelInterrupt.
  *
  *
  * @author      Manuel Caballero
@@ -600,14 +600,14 @@ VEML6035_status_t VEML6035_SetChannelInterrupt ( I2C_parameters_t myI2Cparameter
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetChannelInterrupt ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myINT_CHANNEL )
+AS7263_status_t AS7263_GetChannelInterrupt ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myINT_CHANNEL )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data	 */
 	myINT_CHANNEL->configuration.als_int_channel	 =	 auxConfiguration.als_int_channel;
@@ -619,7 +619,7 @@ VEML6035_status_t VEML6035_GetChannelInterrupt ( I2C_parameters_t myI2Cparameter
 
 
 /**
- * @brief       VEML6035_SetChannelEnable ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetChannelEnable ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the channel enable value.
  *
@@ -629,7 +629,7 @@ VEML6035_status_t VEML6035_GetChannelInterrupt ( I2C_parameters_t myI2Cparameter
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetChannelEnable.
+ * @return       Status of AS7263_SetChannelEnable.
  *
  *
  * @author      Manuel Caballero
@@ -638,18 +638,18 @@ VEML6035_status_t VEML6035_GetChannelInterrupt ( I2C_parameters_t myI2Cparameter
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetChannelEnable ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myCHANNEL_EN )
+AS7263_status_t AS7263_SetChannelEnable ( I2C_parameters_t myI2Cparameters, AS7263_data_t myCHANNEL_EN )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data and update the register	 */
 	auxConfiguration.als_channel_en	 =	 myCHANNEL_EN.configuration.als_channel_en;
-	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+	aux	 	 =   AS7263_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
 
 
 	return   aux;
@@ -658,7 +658,7 @@ VEML6035_status_t VEML6035_SetChannelEnable ( I2C_parameters_t myI2Cparameters, 
 
 
 /**
- * @brief       VEML6035_GetChannelEnable ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetChannelEnable ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the channel enable value.
  *
@@ -667,7 +667,7 @@ VEML6035_status_t VEML6035_SetChannelEnable ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   myCHANNEL_EN:   	Channel enable value.
  *
  *
- * @return       Status of VEML6035_GetChannelEnable.
+ * @return       Status of AS7263_GetChannelEnable.
  *
  *
  * @author      Manuel Caballero
@@ -676,14 +676,14 @@ VEML6035_status_t VEML6035_SetChannelEnable ( I2C_parameters_t myI2Cparameters, 
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetChannelEnable ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myCHANNEL_EN )
+AS7263_status_t AS7263_GetChannelEnable ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myCHANNEL_EN )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data	 */
 	myCHANNEL_EN->configuration.als_channel_en	 =	 auxConfiguration.als_channel_en;
@@ -695,7 +695,7 @@ VEML6035_status_t VEML6035_GetChannelEnable ( I2C_parameters_t myI2Cparameters, 
 
 
 /**
- * @brief       VEML6035_SetInterruptEnable ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetInterruptEnable ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the interrupt enable value.
  *
@@ -705,7 +705,7 @@ VEML6035_status_t VEML6035_GetChannelEnable ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetInterruptEnable.
+ * @return       Status of AS7263_SetInterruptEnable.
  *
  *
  * @author      Manuel Caballero
@@ -714,18 +714,18 @@ VEML6035_status_t VEML6035_GetChannelEnable ( I2C_parameters_t myI2Cparameters, 
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetInterruptEnable ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myINT_EN )
+AS7263_status_t AS7263_SetInterruptEnable ( I2C_parameters_t myI2Cparameters, AS7263_data_t myINT_EN )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data and update the register	 */
 	auxConfiguration.als_int_en	 =	 myINT_EN.configuration.als_int_en;
-	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+	aux	 	 =   AS7263_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
 
 
 	return   aux;
@@ -734,7 +734,7 @@ VEML6035_status_t VEML6035_SetInterruptEnable ( I2C_parameters_t myI2Cparameters
 
 
 /**
- * @brief       VEML6035_GetInterruptEnable ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetInterruptEnable ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the interrupt enable value.
  *
@@ -743,7 +743,7 @@ VEML6035_status_t VEML6035_SetInterruptEnable ( I2C_parameters_t myI2Cparameters
  * @param[out]   myINT_EN:   		Interrupt enable value.
  *
  *
- * @return       Status of VEML6035_GetInterruptEnable.
+ * @return       Status of AS7263_GetInterruptEnable.
  *
  *
  * @author      Manuel Caballero
@@ -752,14 +752,14 @@ VEML6035_status_t VEML6035_SetInterruptEnable ( I2C_parameters_t myI2Cparameters
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetInterruptEnable ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myINT_EN )
+AS7263_status_t AS7263_GetInterruptEnable ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myINT_EN )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data	 */
 	myINT_EN->configuration.als_int_en	 =	 auxConfiguration.als_int_en;
@@ -771,7 +771,7 @@ VEML6035_status_t VEML6035_GetInterruptEnable ( I2C_parameters_t myI2Cparameters
 
 
 /**
- * @brief       VEML6035_SetShutDownMode ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetShutDownMode ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the interrupt enable value.
  *
@@ -781,7 +781,7 @@ VEML6035_status_t VEML6035_GetInterruptEnable ( I2C_parameters_t myI2Cparameters
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetShutDownMode.
+ * @return       Status of AS7263_SetShutDownMode.
  *
  *
  * @author      Manuel Caballero
@@ -790,18 +790,18 @@ VEML6035_status_t VEML6035_GetInterruptEnable ( I2C_parameters_t myI2Cparameters
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetShutDownMode ( I2C_parameters_t myI2Cparameters, VEML6035_data_t mySD )
+AS7263_status_t AS7263_SetShutDownMode ( I2C_parameters_t myI2Cparameters, AS7263_data_t mySD )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data and update the register	 */
 	auxConfiguration.als_sd	 =	 mySD.configuration.als_sd;
-	aux	 	 =   VEML6035_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
+	aux	 	 =   AS7263_SetConfigurationRegister ( myI2Cparameters, auxConfiguration );
 
 
 	return   aux;
@@ -810,7 +810,7 @@ VEML6035_status_t VEML6035_SetShutDownMode ( I2C_parameters_t myI2Cparameters, V
 
 
 /**
- * @brief       VEML6035_GetShutDownMode ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetShutDownMode ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the shutdown mode.
  *
@@ -819,7 +819,7 @@ VEML6035_status_t VEML6035_SetShutDownMode ( I2C_parameters_t myI2Cparameters, V
  * @param[out]   mySD:   			Shutdown mode.
  *
  *
- * @return       Status of VEML6035_GetShutDownMode.
+ * @return       Status of AS7263_GetShutDownMode.
  *
  *
  * @author      Manuel Caballero
@@ -828,14 +828,14 @@ VEML6035_status_t VEML6035_SetShutDownMode ( I2C_parameters_t myI2Cparameters, V
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetShutDownMode ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* mySD )
+AS7263_status_t AS7263_GetShutDownMode ( I2C_parameters_t myI2Cparameters, AS7263_data_t* mySD )
 {
-	VEML6035_configuration_register_t	auxConfiguration;
-	VEML6035_status_t 					aux;
+	AS7263_configuration_register_t	auxConfiguration;
+	AS7263_status_t 					aux;
 
 
 	/* Read the register	 */
-	aux	 	 =   VEML6035_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
+	aux	 	 =   AS7263_GetConfigurationRegister ( myI2Cparameters, &auxConfiguration );
 
 	/* Parse the data	 */
 	mySD->configuration.als_sd	 =	 auxConfiguration.als_sd;
@@ -847,7 +847,7 @@ VEML6035_status_t VEML6035_GetShutDownMode ( I2C_parameters_t myI2Cparameters, V
 
 
 /**
- * @brief       VEML6035_SetHighThreshold ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetHighThreshold ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the high threshold value.
  *
@@ -857,7 +857,7 @@ VEML6035_status_t VEML6035_GetShutDownMode ( I2C_parameters_t myI2Cparameters, V
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetHighThreshold.
+ * @return       Status of AS7263_SetHighThreshold.
  *
  *
  * @author      Manuel Caballero
@@ -866,14 +866,14 @@ VEML6035_status_t VEML6035_GetShutDownMode ( I2C_parameters_t myI2Cparameters, V
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetHighThreshold ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myHighThreshold )
+AS7263_status_t AS7263_SetHighThreshold ( I2C_parameters_t myI2Cparameters, AS7263_data_t myHighThreshold )
 {
 	uint8_t			cmd[3]	=	{0};
 	i2c_status_t 	aux;
 
 
 	/* Update the register	 */
-	cmd[0]	 =	 VEML6035_ALS_WH;
+	cmd[0]	 =	 AS7263_ALS_WH;
 	cmd[1]	 =	 (uint8_t)( myHighThreshold.int_th_high >> 8U );
 	cmd[2]	 =	 (uint8_t)( myHighThreshold.int_th_high );
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -882,18 +882,18 @@ VEML6035_status_t VEML6035_SetHighThreshold ( I2C_parameters_t myI2Cparameters, 
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_GetHighThreshold ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetHighThreshold ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the high threshold value.
  *
@@ -902,7 +902,7 @@ VEML6035_status_t VEML6035_SetHighThreshold ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   myHighThreshold:   High threshold value.
  *
  *
- * @return       Status of VEML6035_GetHighThreshold.
+ * @return       Status of AS7263_GetHighThreshold.
  *
  *
  * @author      Manuel Caballero
@@ -911,14 +911,14 @@ VEML6035_status_t VEML6035_SetHighThreshold ( I2C_parameters_t myI2Cparameters, 
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetHighThreshold ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myHighThreshold )
+AS7263_status_t AS7263_GetHighThreshold ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myHighThreshold )
 {
 	uint8_t			cmd[2]	=	{0};
 	i2c_status_t 	aux;
 
 
 	/* Read the register	 */
-	cmd[0]	 =	 VEML6035_ALS_WH;
+	cmd[0]	 =	 AS7263_ALS_WH;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
 	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -931,18 +931,18 @@ VEML6035_status_t VEML6035_GetHighThreshold ( I2C_parameters_t myI2Cparameters, 
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_SetLowThreshold ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetLowThreshold ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the low threshold value.
  *
@@ -952,7 +952,7 @@ VEML6035_status_t VEML6035_GetHighThreshold ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetLowThreshold.
+ * @return       Status of AS7263_SetLowThreshold.
  *
  *
  * @author      Manuel Caballero
@@ -961,14 +961,14 @@ VEML6035_status_t VEML6035_GetHighThreshold ( I2C_parameters_t myI2Cparameters, 
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetLowThreshold ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myLowThreshold )
+AS7263_status_t AS7263_SetLowThreshold ( I2C_parameters_t myI2Cparameters, AS7263_data_t myLowThreshold )
 {
 	uint8_t			cmd[3]	=	{0};
 	i2c_status_t 	aux;
 
 
 	/* Update the register	 */
-	cmd[0]	 =	 VEML6035_ALS_WL;
+	cmd[0]	 =	 AS7263_ALS_WL;
 	cmd[1]	 =	 (uint8_t)( myLowThreshold.int_th_low >> 8U );
 	cmd[2]	 =	 (uint8_t)( myLowThreshold.int_th_low );
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
@@ -977,18 +977,18 @@ VEML6035_status_t VEML6035_SetLowThreshold ( I2C_parameters_t myI2Cparameters, V
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_GetLowThreshold ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetLowThreshold ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the low threshold value.
  *
@@ -997,7 +997,7 @@ VEML6035_status_t VEML6035_SetLowThreshold ( I2C_parameters_t myI2Cparameters, V
  * @param[out]   myLowThreshold:    Low threshold value.
  *
  *
- * @return       Status of VEML6035_GetLowThreshold.
+ * @return       Status of AS7263_GetLowThreshold.
  *
  *
  * @author      Manuel Caballero
@@ -1006,14 +1006,14 @@ VEML6035_status_t VEML6035_SetLowThreshold ( I2C_parameters_t myI2Cparameters, V
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetLowThreshold ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myLowThreshold )
+AS7263_status_t AS7263_GetLowThreshold ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myLowThreshold )
 {
 	uint8_t			cmd[2]	=	{0};
 	i2c_status_t 	aux;
 
 
 	/* Read the register	 */
-	cmd[0]	 =	 VEML6035_ALS_WL;
+	cmd[0]	 =	 AS7263_ALS_WL;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
 	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -1026,18 +1026,18 @@ VEML6035_status_t VEML6035_GetLowThreshold ( I2C_parameters_t myI2Cparameters, V
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_SetPowerSafeMode ( I2C_parameters_t , VEML6035_data_t )
+ * @brief       AS7263_SetPowerSafeMode ( I2C_parameters_t , AS7263_data_t )
  *
  * @details     It sets the power safe mode register.
  *
@@ -1047,7 +1047,7 @@ VEML6035_status_t VEML6035_GetLowThreshold ( I2C_parameters_t myI2Cparameters, V
  * @param[out]   N/A.
  *
  *
- * @return       Status of VEML6035_SetPowerSafeMode.
+ * @return       Status of AS7263_SetPowerSafeMode.
  *
  *
  * @author      Manuel Caballero
@@ -1056,7 +1056,7 @@ VEML6035_status_t VEML6035_GetLowThreshold ( I2C_parameters_t myI2Cparameters, V
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_SetPowerSafeMode ( I2C_parameters_t myI2Cparameters, VEML6035_data_t myPowerSafeMode )
+AS7263_status_t AS7263_SetPowerSafeMode ( I2C_parameters_t myI2Cparameters, AS7263_data_t myPowerSafeMode )
 {
 	uint8_t			cmd[3]			 =	{0};
 	uint16_t		auxPowerSafeMode =  0U;
@@ -1064,7 +1064,7 @@ VEML6035_status_t VEML6035_SetPowerSafeMode ( I2C_parameters_t myI2Cparameters, 
 
 
 	/* Read the register	 */
-	cmd[0]	 =	 VEML6035_POWER_SAVING;
+	cmd[0]	 =	 AS7263_POWER_SAVING;
 	aux		 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
 	aux		|=   i2c_read  ( myI2Cparameters, &cmd[1], 2U );
 
@@ -1085,18 +1085,18 @@ VEML6035_status_t VEML6035_SetPowerSafeMode ( I2C_parameters_t myI2Cparameters, 
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_GetPowerSafeMode ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetPowerSafeMode ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the power safe mode register value.
  *
@@ -1105,7 +1105,7 @@ VEML6035_status_t VEML6035_SetPowerSafeMode ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   myPowerSafeMode:   PSM_WAIT and PSM_EN values.
  *
  *
- * @return       Status of VEML6035_GetPowerSafeMode.
+ * @return       Status of AS7263_GetPowerSafeMode.
  *
  *
  * @author      Manuel Caballero
@@ -1114,7 +1114,7 @@ VEML6035_status_t VEML6035_SetPowerSafeMode ( I2C_parameters_t myI2Cparameters, 
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetPowerSafeMode ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myPowerSafeMode )
+AS7263_status_t AS7263_GetPowerSafeMode ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myPowerSafeMode )
 {
 	uint8_t			cmd[2]			 =	{0U};
 	uint16_t		auxPowerSafeMode =  0U;
@@ -1122,7 +1122,7 @@ VEML6035_status_t VEML6035_GetPowerSafeMode ( I2C_parameters_t myI2Cparameters, 
 
 
 	/* Read the register	 */
-	cmd[0]	 =	 VEML6035_POWER_SAVING;
+	cmd[0]	 =	 AS7263_POWER_SAVING;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
 	aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -1131,25 +1131,25 @@ VEML6035_status_t VEML6035_GetPowerSafeMode ( I2C_parameters_t myI2Cparameters, 
 	auxPowerSafeMode   <<=	 8U;
 	auxPowerSafeMode	|=	 cmd[1];
 
-	myPowerSafeMode->psm_wait	=	(VEML6035_power_saving_psm_wait_t)( auxPowerSafeMode & POWER_SAVING_PSM_WAIT_MASK );
-	myPowerSafeMode->psm_en		=	(VEML6035_power_saving_psm_en_t)( auxPowerSafeMode & POWER_SAVING_PSM_EN_MASK );
+	myPowerSafeMode->psm_wait	=	(AS7263_power_saving_psm_wait_t)( auxPowerSafeMode & POWER_SAVING_PSM_WAIT_MASK );
+	myPowerSafeMode->psm_en		=	(AS7263_power_saving_psm_en_t)( auxPowerSafeMode & POWER_SAVING_PSM_EN_MASK );
 
 
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_GetALS_HighResOutputData ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetALS_HighResOutputData ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the ALS high resolution output data ( raw data ).
  *
@@ -1158,7 +1158,7 @@ VEML6035_status_t VEML6035_GetPowerSafeMode ( I2C_parameters_t myI2Cparameters, 
  * @param[out]   myALS:   			ALS high resolution output data ( raw data ).
  *
  *
- * @return       Status of VEML6035_GetALS_HighResOutputData.
+ * @return       Status of AS7263_GetALS_HighResOutputData.
  *
  *
  * @author      Manuel Caballero
@@ -1167,14 +1167,14 @@ VEML6035_status_t VEML6035_GetPowerSafeMode ( I2C_parameters_t myI2Cparameters, 
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetALS_HighResOutputData	( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myALS )
+AS7263_status_t AS7263_GetALS_HighResOutputData	( I2C_parameters_t myI2Cparameters, AS7263_data_t* myALS )
 {
 	uint8_t			cmd[2]	=	{0U};
 	i2c_status_t 	aux;
 
 
 	/* Read the register	 */
-	cmd[0]	 =	 VEML6035_ALS;
+	cmd[0]	 =	 AS7263_ALS;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
 	aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -1187,18 +1187,18 @@ VEML6035_status_t VEML6035_GetALS_HighResOutputData	( I2C_parameters_t myI2Cpara
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_GetWhiteChannelOutputData ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetWhiteChannelOutputData ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the white channel output data ( raw data ).
  *
@@ -1207,7 +1207,7 @@ VEML6035_status_t VEML6035_GetALS_HighResOutputData	( I2C_parameters_t myI2Cpara
  * @param[out]   myWhite:  			White channel output data ( raw data ).
  *
  *
- * @return       Status of VEML6035_GetWhiteChannelOutputData.
+ * @return       Status of AS7263_GetWhiteChannelOutputData.
  *
  *
  * @author      Manuel Caballero
@@ -1216,14 +1216,14 @@ VEML6035_status_t VEML6035_GetALS_HighResOutputData	( I2C_parameters_t myI2Cpara
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetWhiteChannelOutputData ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myWhite )
+AS7263_status_t AS7263_GetWhiteChannelOutputData ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myWhite )
 {
 	uint8_t			cmd[2]	=	{0U};
 	i2c_status_t 	aux;
 
 
 	/* Read the register	 */
-	cmd[0]	 =	 VEML6035_WHITE;
+	cmd[0]	 =	 AS7263_WHITE;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
 	aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -1236,18 +1236,18 @@ VEML6035_status_t VEML6035_GetWhiteChannelOutputData ( I2C_parameters_t myI2Cpar
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_GetInterruptStatus ( I2C_parameters_t , VEML6035_data_t* )
+ * @brief       AS7263_GetInterruptStatus ( I2C_parameters_t , AS7263_data_t* )
  *
  * @details     It gets the interrupt status.
  *
@@ -1256,7 +1256,7 @@ VEML6035_status_t VEML6035_GetWhiteChannelOutputData ( I2C_parameters_t myI2Cpar
  * @param[out]   myIF:  			IF_L and IF_H.
  *
  *
- * @return       Status of VEML6035_GetInterruptStatus.
+ * @return       Status of AS7263_GetInterruptStatus.
  *
  *
  * @author      Manuel Caballero
@@ -1265,7 +1265,7 @@ VEML6035_status_t VEML6035_GetWhiteChannelOutputData ( I2C_parameters_t myI2Cpar
  * @pre         N/A
  * @warning     N/A.
  */
-VEML6035_status_t VEML6035_GetInterruptStatus ( I2C_parameters_t myI2Cparameters, VEML6035_data_t* myIF )
+AS7263_status_t AS7263_GetInterruptStatus ( I2C_parameters_t myI2Cparameters, AS7263_data_t* myIF )
 {
 	uint8_t			cmd[2]				=	{0U};
 	uint16_t		auxIntTriggerEvent	=	0U;
@@ -1273,7 +1273,7 @@ VEML6035_status_t VEML6035_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
 
 
 	/* Read the register	 */
-	cmd[0]	 =	 VEML6035_ALS_INT;
+	cmd[0]	 =	 AS7263_ALS_INT;
 	aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
 	aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
@@ -1282,25 +1282,25 @@ VEML6035_status_t VEML6035_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
 	auxIntTriggerEvent <<=	 8U;
 	auxIntTriggerEvent	|=	 cmd[1];
 
-	myIF->int_th_high	 =	(VEML6035_als_int_int_th_high_t)( auxIntTriggerEvent & ALS_INT_INT_TH_HIGH_MASK );
-	myIF->int_th_low	 =	(VEML6035_als_int_int_th_low_t)( auxIntTriggerEvent & ALS_INT_INT_TH_LOW_MASK );
+	myIF->int_th_high	 =	(AS7263_als_int_int_th_high_t)( auxIntTriggerEvent & ALS_INT_INT_TH_HIGH_MASK );
+	myIF->int_th_low	 =	(AS7263_als_int_int_th_low_t)( auxIntTriggerEvent & ALS_INT_INT_TH_LOW_MASK );
 
 
 
 	if ( aux == I2C_SUCCESS )
 	{
-		return   VEML6035_SUCCESS;
+		return   AS7263_SUCCESS;
 	}
 	else
 	{
-		return   VEML6035_FAILURE;
+		return   AS7263_FAILURE;
 	}
 }
 
 
 
 /**
- * @brief       VEML6035_CalculateLuxLevel ( VEML6035_data_t* )
+ * @brief       AS7263_CalculateLuxLevel ( AS7263_data_t* )
  *
  * @details     It calculates the lux level and the current resolution.
  *
@@ -1316,10 +1316,10 @@ VEML6035_status_t VEML6035_GetInterruptStatus ( I2C_parameters_t myI2Cparameters
  * @date        20/March/2020
  * @version     20/March/2020   The ORIGIN
  * @pre         N/A
- * @warning     The device VEML6035 must be configured properly before calling this function.
- * @warning     VEML6035_GetALS_HighResOutputData function must be called before calling this function.
+ * @warning     The device AS7263 must be configured properly before calling this function.
+ * @warning     AS7263_GetALS_HighResOutputData function must be called before calling this function.
  */
-void VEML6035_CalculateLuxLevel ( VEML6035_data_t* myLux )
+void AS7263_CalculateLuxLevel ( AS7263_data_t* myLux )
 {
 	uint8_t  auxGain = 0U, auxSens = 0U, auxDG = 0U;
 	uint16_t auxIT = 0U;
@@ -1385,7 +1385,7 @@ void VEML6035_CalculateLuxLevel ( VEML6035_data_t* myLux )
 	}
 
 	/* 2. Calculate the current resolution	 */
-	myLux->resolution	 =	 (float)( VEML6035_MAXIMUM_RESOLUTION * ( 800U / auxIT ) * ( 2U / auxDG ) * ( 2U / auxGain ) * auxSens );
+	myLux->resolution	 =	 (float)( AS7263_MAXIMUM_RESOLUTION * ( 800U / auxIT ) * ( 2U / auxDG ) * ( 2U / auxGain ) * auxSens );
 
 	/* 3. Calculate the lux value	 */
 	myLux->light_level	 =	 (float)( myLux->resolution * myLux->als_high_resolution_output_data );
