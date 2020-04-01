@@ -26,7 +26,7 @@
   */
 typedef enum
 {
-	AS7263_ADDRESS			=   0b0101001      /*!<   Address		                   	*/
+	AS7263_ADDRESS			=   0b1001001      /*!<   Address		                */
 } AS7263_addresses_t;
 
 
@@ -36,13 +36,30 @@ typedef enum
   */
 typedef enum
 {
-  AS7263_ALS_CONF     		=   0x00,	/*!<  ALS gain, integration time, interrupt, and shut down	*/
-  AS7263_ALS_WH			    =   0x01,   /*!<  High Threshold Windows Setting						*/
-  AS7263_ALS_WL		      	=   0x02,   /*!<  Low Threshold Windows Setting							*/
-  AS7263_POWER_SAVING		    =   0x03,   /*!<  Power Saving Mode: PSM		    					*/
-  AS7263_ALS			    	=   0x04,   /*!<  ALS High Resolution Output Data   					*/
-  AS7263_WHITE				=   0x05,   /*!<  White Channel Output Data								*/
-  AS7263_ALS_INT			 	=   0x06    /*!<  Crossing threshold INT trigger event		    		*/
+  AS7263_HW_VERSION    		=   0x00,		/*!<  Hardware version					*/
+  AS7263_FW_VERSION		    =   0x02,   	/*!<  Firmware version					*/
+  AS7263_CONTROL_SETUP     	=   0x04,   	/*!<  Control setup						*/
+  AS7263_INT_T			    =   0x05,   	/*!<  Integration time				    */
+  AS7263_DEVICE_TEMP    	=   0x06,   	/*!<  Device temperature				*/
+  AS7263_LED_CONTROL		=   0x07,   	/*!<  LED control						*/
+  AS7263_R_HIGH			 	=   0x08,   	/*!<  Channel R High Data Byte			*/
+  AS7263_R_LOW			 	=   0x09,   	/*!<  Channel R Low Data Byte			*/
+  AS7263_S_HIGH			 	=   0x0A,   	/*!<  Channel S high Data Byte			*/
+  AS7263_S_LOW			 	=   0x0B,   	/*!<  Channel S low Data Byte			*/
+  AS7263_T_HIGH			 	=   0x0C,   	/*!<  Channel T high Data Byte			*/
+  AS7263_T_LOW			 	=   0x0D,   	/*!<  Channel T low Data Byte			*/
+  AS7263_U_HIGH			 	=   0x0E,   	/*!<  Channel U high Data Byte			*/
+  AS7263_U_LOW			 	=   0x0F,   	/*!<  Channel U low Data Byte			*/
+  AS7263_V_HIGH			 	=   0x10,   	/*!<  Channel V high Data Byte			*/
+  AS7263_V_LOW			 	=   0x11,   	/*!<  Channel V low Data Byte			*/
+  AS7263_W_HIGH			 	=   0x12,   	/*!<  Channel W high Data Byte			*/
+  AS7263_W_LOW			 	=   0x13,   	/*!<  Channel W low Data Byte			*/
+  AS7263_R_CAL			 	=   0x14,   	/*!<  Channel R Calibrated Data			*/
+  AS7263_S_CAL			 	=   0x18,   	/*!<  Channel S Calibrated Data			*/
+  AS7263_T_CAL			 	=   0x1C,   	/*!<  Channel T Calibrated Data			*/
+  AS7263_U_CAL			 	=   0x20,   	/*!<  Channel U Calibrated Data			*/
+  AS7263_V_CAL			 	=   0x24,   	/*!<  Channel V Calibrated Data			*/
+  AS7263_W_CAL			 	=   0x28    	/*!<  Channel W Calibrated Data			*/
 } AS7263_command_register_format_t;
 
 
