@@ -189,6 +189,58 @@ typedef enum
 
 
 
+/**
+  * @brief   LED CONTROL
+ */
+/* ICL_DRV <5:4>
+ *    NOTE: LED_DRV current limit.
+ */
+typedef enum
+{
+	LED_CONTROL_ICL_DRV_MASK			=   ( 0b11 << 4U ),			/*!<  ICL_DRV Mask						    	*/
+	LED_CONTROL_ICL_DRV_12_5_MA			=   ( 0b00 << 4U ),			/*!<  LED_DRV current limit: 12.5mA	[Default]   */
+	LED_CONTROL_ICL_DRV_25_MA			=   ( 0b01 << 4U ),			/*!<  LED_DRV current limit: 25mA		    	*/
+	LED_CONTROL_ICL_DRV_50_MA			=   ( 0b10 << 4U ),			/*!<  LED_DRV current limit: 50mA		    	*/
+	LED_CONTROL_ICL_DRV_100_MA			=   ( 0b11 << 4U )			/*!<  LED_DRV current limit: 100mA		    	*/
+} AS7263_led_control_icl_drv;
+
+
+/* LED_DRV <3>
+ *    NOTE: Enable LED_DRV.
+ */
+typedef enum
+{
+	LED_CONTROL_LED_DRV_MASK			=   ( 1U << 3U ),			/*!<  LED_DRV Mask						    	*/
+	LED_CONTROL_LED_DRV_ENABLED			=   ( 1U << 3U ),			/*!<  LED_DRV enabled						    */
+	LED_CONTROL_LED_DRV_DISABLED		=   ( 0U << 3U )			/*!<  LED_DRV disabled				[Default]   */
+} AS7263_led_control_led_drv;
+
+
+/* ICL_IND <2:1>
+ *    NOTE: LED_IND current limit.
+ */
+typedef enum
+{
+	LED_CONTROL_ICL_IND_MASK			=   ( 0b11 << 1U ),			/*!<  ICL_IND Mask						    	*/
+	LED_CONTROL_ICL_IND_1_MA			=   ( 0b00 << 1U ),			/*!<  LED_IND current limit: 1mA	[Default]   */
+	LED_CONTROL_ICL_IND_2_MA			=   ( 0b01 << 1U ),			/*!<  LED_IND current limit: 2mA		    	*/
+	LED_CONTROL_ICL_IND_4_MA			=   ( 0b10 << 1U ),			/*!<  LED_IND current limit: 4mA		    	*/
+	LED_CONTROL_ICL_IND_8_MA			=   ( 0b11 << 1U )			/*!<  LED_IND current limit: 8mA		    	*/
+} AS7263_led_control_icl_ind;
+
+
+/* LED_IND <0>
+ *    NOTE: Enable LED_IND.
+ */
+typedef enum
+{
+	LED_CONTROL_LED_IND_MASK			=   ( 1U << 0U ),			/*!<  LED_IND Mask						    	*/
+	LED_CONTROL_LED_IND_ENABLED			=   ( 1U << 0U ),			/*!<  LED_IND enabled						    */
+	LED_CONTROL_LED_IND_DISABLED		=   ( 0U << 0U )			/*!<  LED_IND disabled				[Default]   */
+} AS7263_led_control_led_ind;
+
+
+
 
 
 
