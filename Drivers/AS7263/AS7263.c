@@ -11,7 +11,7 @@
  * @version     01/April/2020    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
+ * @pre         This code belongs to Nimbus Centre ( https://www.nimbus.cit.ie ).
  */
 
 #include "AS7263.h"
