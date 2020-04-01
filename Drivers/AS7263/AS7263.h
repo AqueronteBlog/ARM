@@ -86,6 +86,46 @@ typedef enum
 
 
 
+/**
+  * @brief   FIRMWARE VERSION
+ */
+/* MINOR_VERSION_1_0 <7:6>
+ *    NOTE: Minor Version [1:0].
+ */
+typedef enum
+{
+	FW_VERSION_MINOR_VERSION_1_0_MASK	=   ( 0b11 << 6U )			/*!<  Minor Version [1:0]				    	*/
+} AS7263_fw_version_minor_version_1_0;
+
+
+/* SUB_VERSION <5:0>
+ *    NOTE: Sub Version
+ */
+typedef enum
+{
+	FW_VERSION_SUB_VERSION_MASK			=   ( 0b111111 << 0U )		/*!<  Sub version	    			    		*/
+} AS7263_fw_version_sub_version;
+
+
+/* MAJOR_VERSION <7:4>
+ *    NOTE: Major Version.
+ */
+typedef enum
+{
+	FW_VERSION_MAJOR_VERSION_MASK		=   ( 0b1111 << 4U )		/*!<  Major Version						    	*/
+} AS7263_fw_version_major_version;
+
+
+/* MINOR_VERSION_5_2 <3:0>
+ *    NOTE: Minor Version [1:0].
+ */
+typedef enum
+{
+	FW_VERSION_MINOR_VERSION_5_2_MASK	=   ( 0b1111 << 0U )		/*!<  Minor Version [5:2]				    	*/
+} AS7263_fw_version_minor_version_5_2;
+
+
+
 
 
 
