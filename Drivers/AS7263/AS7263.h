@@ -11,7 +11,7 @@
  * @version     01/April/2020    The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
+ * @pre         This code belongs to Nimbus Centre ( https://www.nimbus.cit.ie ).
  */
 
 
@@ -26,7 +26,7 @@
   */
 typedef enum
 {
-	AS7263_ADDRESS			=   0b1001001      /*!<   Address		                */
+	AS7263_ADDRESS			=   0b1001001   /*!<   Address		                	*/
 } AS7263_addresses_t;
 
 
@@ -243,10 +243,26 @@ typedef enum
 
 
 
-
-
 #ifndef AS7263_VECTOR_STRUCT_H
 #define AS7263_VECTOR_STRUCT_H
+/* Hardware version	 */
+typedef struct
+{
+	uint8_t device_type;				/*!< Hardware: Device type number									*/
+	uint8_t hw_version;					/*!< Hardware: Hardware version										*/
+} AS7263_hw_version;
+
+
+/* Firmware version	 */
+typedef struct
+{
+	uint8_t minor_version;				/*!< Firmware: Minor version										*/
+	uint8_t major_version;				/*!< Firmware: Major version										*/
+	uint8_t subversion;					/*!< Firmware: Subversion											*/
+} AS7263_fw_version;
+
+
+/* USER: User´s global variables	 */
 typedef struct
 {
 	/* Raw ALS high resolution output data	 */
@@ -255,9 +271,11 @@ typedef struct
 	/* Raw WHITE output data	 */
 	uint16_t white_channel_output_data;						/*!< Raw WHITE channel output data									*/
 
-	/* Raw threshold windows setting	 */
-	uint16_t high_threshold_windows_setting;				/*!< Raw ALS high threshold window setting							*/
-	uint16_t low_threshold_windows_setting;					/*!< Raw ALS low threshold window setting							*/
+	/* Hardware version	 */
+	AS7263_hw_version hw_version;							/*!< Hardware parameters											*/
+
+	/* Firmware version	 */
+	AS7263_fw_version fw_version;							/*!< Firmware parameters											*/
 } AS7263_data_t;
 #endif
 
