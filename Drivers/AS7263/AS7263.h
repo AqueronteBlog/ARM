@@ -126,6 +126,69 @@ typedef enum
 
 
 
+/**
+  * @brief   CONTROL SETUP
+ */
+/* RST <7>
+ *    NOTE: Soft Reset, Set to 1 for soft reset, goes to 0 automatically after the reset.
+ */
+typedef enum
+{
+	CONTROL_SETUP_RST_MASK				=   ( 1U << 7U ),			/*!<  RST Mask							    	*/
+	CONTROL_SETUP_RST_SOFTRESET			=   ( 1U << 7U ),			/*!<  Soft reset						    	*/
+	CONTROL_SETUP_RST_NORMAL			=   ( 0U << 7U ) 			/*!<  Normal operation					    	*/
+} AS7263_control_setup_rst;
+
+
+/* INT <6>
+ *    NOTE: Enable interrupt pin output (INT).
+ */
+typedef enum
+{
+	CONTROL_SETUP_INT_MASK				=   ( 1U << 6U ),			/*!<  INT Mask							    	*/
+	CONTROL_SETUP_INT_ENABLE			=   ( 1U << 6U ),			/*!<  Pin interrupt enabled				    	*/
+	CONTROL_SETUP_INT_DISABLE			=   ( 0U << 6U ) 			/*!<  Pin interrupt disabled 			    	*/
+} AS7263_control_setup_int;
+
+
+/* GAIN <5:4>
+ *    NOTE: Sensor Channel Gain Setting (all channels).
+ */
+typedef enum
+{
+	CONTROL_SETUP_GAIN_MASK				=   ( 0b11 << 4U ),			/*!<  GAIN Mask							    	*/
+	CONTROL_SETUP_GAIN_1X				=   ( 0b00 << 4U ),			/*!<  Gain: 1x						[Default]   */
+	CONTROL_SETUP_GAIN_3_7X				=   ( 0b01 << 4U ),			/*!<  Gain: 3.7x						    	*/
+	CONTROL_SETUP_GAIN_16X				=   ( 0b10 << 4U ),			/*!<  Gain: 16x							    	*/
+	CONTROL_SETUP_GAIN_64X				=   ( 0b11 << 4U ) 			/*!<  Gain: 64x							    	*/
+} AS7263_control_setup_gain;
+
+
+/* BANK <3:2>
+ *    NOTE: Data Conversion Type (continuous).
+ */
+typedef enum
+{
+	CONTROL_SETUP_BANK_MASK				=   ( 0b11 << 2U ),			/*!<  BANK Mask							    	*/
+	CONTROL_SETUP_BANK_MODE_0			=   ( 0b00 << 2U ),			/*!<  Mode 0							    	*/
+	CONTROL_SETUP_BANK_MODE_1			=   ( 0b01 << 2U ),			/*!<  Mode 1							    	*/
+	CONTROL_SETUP_BANK_MODE_2			=   ( 0b10 << 2U ),			/*!<  Mode 2						[Default]   */
+	CONTROL_SETUP_BANK_MODE_3			=   ( 0b11 << 2U ) 			/*!<  Mode 3: One-shot					    	*/
+} AS7263_control_setup_bank;
+
+
+/* DATA_RDY <1>
+ *    NOTE: Data Ready to Read, sets INT active if interrupt is enabled. Can be polled if not using INT.
+ */
+typedef enum
+{
+	CONTROL_SETUP_DATA_RDY_MASK			=   ( 1U << 1U ),			/*!<  DATA_RDY Mask						    	*/
+	CONTROL_SETUP_DATA_RDY_READY		=   ( 1U << 1U ),			/*!<  Data ready						    	*/
+	CONTROL_SETUP_DATA_RDY_BUSY			=   ( 0U << 1U ) 			/*!<  Data no ready			 			    	*/
+} AS7263_control_setup_data_rdy;
+
+
+
 
 
 
