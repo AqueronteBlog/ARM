@@ -265,11 +265,6 @@ typedef struct
 /* USER: User´s global variables	 */
 typedef struct
 {
-	/* Raw ALS high resolution output data	 */
-	uint16_t als_high_resolution_output_data;				/*!< Raw ALS high resolution output data							*/
-
-	/* Raw WHITE output data	 */
-	uint16_t white_channel_output_data;						/*!< Raw WHITE channel output data									*/
 
 	/* Hardware version	 */
 	AS7263_hw_version hw_version;							/*!< Hardware parameters											*/
