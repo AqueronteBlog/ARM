@@ -77,6 +77,32 @@ typedef enum
 
 
 /**
+  * @brief   PHYSICAL REGISTERS: STATUS REGISTER
+  */
+/* TX_VALID <1>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  AS7263_STATUS_REGISTER_TX_VALID_MASK		=   ( 1U << 1U ),	/*!<  TX_VALID mask									*/
+  AS7263_STATUS_REGISTER_TX_VALID_NEW_DATA	=   ( 0U << 1U ),   /*!<  New data may be written to WRITE register		*/
+  AS7263_STATUS_REGISTER_TX_VALID_BUSY	 	=   ( 1U << 1U )    /*!<  WRITE register occupied. Do NOT write			*/
+} AS7263_status_register_tx_valid_t;
+
+
+/* RX_VALID <0>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  AS7263_STATUS_REGISTER_RX_VALID_MASK		=   ( 1U << 0U ),	/*!<  RX_VALID mask									*/
+  AS7263_STATUS_REGISTER_RX_VALID_BUSY		=   ( 0U << 0U ),   /*!<  No data is ready to be read in READ register	*/
+  AS7263_STATUS_REGISTER_RX_VALID_AVAILABLE	=   ( 1U << 0U )    /*!<  Data byte available in READ register			*/
+} AS7263_status_register_rx_valid_t;
+
+
+
+/**
   * @brief   HARDWARE VERSION
  */
 /* DEVICE_TYPE <7:0>
@@ -366,118 +392,9 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-AS7263_status_t AS7263_Init               			( I2C_parameters_t myI2Cparameters                              					);
+AS7263_status_t AS7263_Init               			( I2C_parameters_t myI2Cparameters                              						);
 
-/** I²C Virtual Register Byte Write.
+/** I2C Virtual Register Byte Write.
   */
-AS7263_status_t AS7263_I2C_VirtualRegisterByteWrite	( I2C_parameters_t myI2Cparameters, AS7263_data_t mySENS							);
-
-/** I²C Virtual Register Byte Read.
-  */
-AS7263_status_t AS7263_I2C_VirtualRegisterByteRead	( I2C_parameters_t myI2Cparameters, AS7263_data_t* mySENS							);
-
-/** It sets the DG value.
-  */
-AS7263_status_t AS7263_SetDG					( I2C_parameters_t myI2Cparameters, AS7263_data_t myDG							);
-
-/** It gets the DG value.
-  */
-AS7263_status_t AS7263_GetDG					( I2C_parameters_t myI2Cparameters, AS7263_data_t* myDG							);
-
-/** It sets the gain value.
-  */
-AS7263_status_t AS7263_SetGain					( I2C_parameters_t myI2Cparameters, AS7263_data_t myGain							);
-
-/** It gets the gain value.
-  */
-AS7263_status_t AS7263_GetGain					( I2C_parameters_t myI2Cparameters, AS7263_data_t* myGain							);
-
-/** It sets the integration time value.
-  */
-AS7263_status_t AS7263_SetIntegrationTime		( I2C_parameters_t myI2Cparameters, AS7263_data_t myALS_IT						);
-
-/** It gets the integration time value.
-  */
-AS7263_status_t AS7263_GetIntegrationTime		( I2C_parameters_t myI2Cparameters, AS7263_data_t* myALS_IT						);
-
-/** It sets the interrupt persistence value.
-  */
-AS7263_status_t AS7263_SetInterruptPersistence	( I2C_parameters_t myI2Cparameters, AS7263_data_t myALS_PERS						);
-
-/** It gets the interrupt persistence value.
-  */
-AS7263_status_t AS7263_GetInterruptPersistence	( I2C_parameters_t myI2Cparameters, AS7263_data_t* myALS_PERS						);
-
-/** It sets the channel interrupt value.
-  */
-AS7263_status_t AS7263_SetChannelInterrupt		( I2C_parameters_t myI2Cparameters, AS7263_data_t myINT_CHANNEL					);
-
-/** It gets the channel interrupt value.
-  */
-AS7263_status_t AS7263_GetChannelInterrupt		( I2C_parameters_t myI2Cparameters, AS7263_data_t* myINT_CHANNEL					);
-
-/** It sets the channel enable value.
-  */
-AS7263_status_t AS7263_SetChannelEnable			( I2C_parameters_t myI2Cparameters, AS7263_data_t myCHANNEL_EN					);
-
-/** It gets the channel enable value.
-  */
-AS7263_status_t AS7263_GetChannelEnable			( I2C_parameters_t myI2Cparameters, AS7263_data_t* myCHANNEL_EN					);
-
-/** It sets the interrupt enable value.
-  */
-AS7263_status_t AS7263_SetInterruptEnable		( I2C_parameters_t myI2Cparameters, AS7263_data_t myINT_EN						);
-
-/** It gets the interrupt enable value.
-  */
-AS7263_status_t AS7263_GetInterruptEnable		( I2C_parameters_t myI2Cparameters, AS7263_data_t* myINT_EN						);
-
-/** It sets the shutdown mode.
-  */
-AS7263_status_t AS7263_SetShutDownMode			( I2C_parameters_t myI2Cparameters, AS7263_data_t mySD							);
-
-/** It gets the shutdown mode.
-  */
-AS7263_status_t AS7263_GetShutDownMode			( I2C_parameters_t myI2Cparameters, AS7263_data_t* mySD							);
-
-/** It sets the high threshold value.
-  */
-AS7263_status_t AS7263_SetHighThreshold			( I2C_parameters_t myI2Cparameters, AS7263_data_t myHighThreshold					);
-
-/** It gets the high threshold value.
-  */
-AS7263_status_t AS7263_GetHighThreshold			( I2C_parameters_t myI2Cparameters, AS7263_data_t* myHighThreshold				);
-
-/** It sets the low threshold value.
-  */
-AS7263_status_t AS7263_SetLowThreshold			( I2C_parameters_t myI2Cparameters, AS7263_data_t myLowThreshold					);
-
-/** It gets the low threshold value.
-  */
-AS7263_status_t AS7263_GetLowThreshold			( I2C_parameters_t myI2Cparameters, AS7263_data_t* myLowThreshold					);
-
-/** It sets the power safe mode register.
-  */
-AS7263_status_t AS7263_SetPowerSafeMode			( I2C_parameters_t myI2Cparameters, AS7263_data_t myPowerSafeMode					);
-
-/** It gets the power safe mode register.
-  */
-AS7263_status_t AS7263_GetPowerSafeMode			( I2C_parameters_t myI2Cparameters, AS7263_data_t* myPowerSafeMode				);
-
-/** It gets the ALS high resolution output data ( raw data ).
-  */
-AS7263_status_t AS7263_GetALS_HighResOutputData	( I2C_parameters_t myI2Cparameters, AS7263_data_t* myALS							);
-
-/** It gets the white channel output data ( raw data ).
-  */
-AS7263_status_t AS7263_GetWhiteChannelOutputData( I2C_parameters_t myI2Cparameters, AS7263_data_t* myWhite						);
-
-/** It gets the interrupt status.
-  */
-AS7263_status_t AS7263_GetInterruptStatus		( I2C_parameters_t myI2Cparameters, AS7263_data_t* myIF							);
-
-/** It calculates the lux level and the current resolution.
-  */
-void AS7263_CalculateLuxLevel						( AS7263_data_t* myLux															);
-
+AS7263_status_t AS7263_I2C_VirtualRegisterByteWrite	( I2C_parameters_t myI2Cparameters, AS7263_command_register_set_t virtualReg, uint8_t d	);
 
