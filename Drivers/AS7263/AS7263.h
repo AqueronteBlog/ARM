@@ -262,15 +262,75 @@ typedef struct
 } AS7263_fw_version;
 
 
+/* Control registers	 */
+typedef struct
+{
+	AS7263_control_setup_int  intpin;		/*!< Enable/Disable interrupt pin									*/
+	AS7263_control_setup_gain gain;			/*!< Sensor Channel Gain Setting									*/
+	AS7263_control_setup_bank bankmode;		/*!< Data Conversion Type (continuous)								*/
+} AS7263_control_registers;
+
+
+/* LED control	 */
+typedef struct
+{
+	AS7263_led_control_icl_drv	icl_drv;	/*!< LED_DRV current limit											*/
+	AS7263_led_control_led_drv	led_drv;	/*!< Enable LED_DRV													*/
+	AS7263_led_control_icl_ind  icl_ind;	/*!< LED_IND current limit											*/
+	AS7263_led_control_led_ind  led_ind;	/*!< Enable LED_IND													*/
+} AS7263_led_control;
+
+
+/* Sensor RAW data	 */
+typedef struct
+{
+	uint16_t	r;							/*!< Channel R raw data												*/
+	uint16_t	s;							/*!< Channel S raw data												*/
+	uint16_t	t;							/*!< Channel T raw data												*/
+	uint16_t	u;							/*!< Channel U raw data												*/
+	uint16_t	v;							/*!< Channel V raw data												*/
+	uint16_t	w;							/*!< Channel W raw data												*/
+} AS7263_sensor_raw_data;
+
+
+/* Sensor calibrated data	 */
+typedef struct
+{
+	uint32_t	r_cal;						/*!< Channel R calibrated data										*/
+	uint32_t	s_cal;						/*!< Channel S calibrated data										*/
+	uint32_t	t_cal;						/*!< Channel T calibrated data										*/
+	uint32_t	u_cal;						/*!< Channel U calibrated data										*/
+	uint32_t	v_cal;						/*!< Channel V calibrated data										*/
+	uint32_t	w_cal;						/*!< Channel W calibrated data										*/
+} AS7263_sensor_calibrated_data;
+
+
 /* USER: User´s global variables	 */
 typedef struct
 {
+	/* Sensor calibrated data	 */
+	AS7263_sensor_calibrated_data	sensor_calibrated_data;		/*!< Sensor Calibrated Data Registers								*/
+
+	/* Sensor Raw Data Registers	 */
+	AS7263_sensor_raw_data	 		sensor_raw_data;			/*!< Sensor Raw Data Registers										*/
+
+	/* LED control	 */
+	AS7263_led_control		 		led_control;				/*!< LED control parameters											*/
+
+	/* Integration time	 */
+	uint8_t					 		int_t;						/*!< Integration time: <value> * 2.8ms								*/
+
+	/* Device temperature	 */
+	uint8_t			 		 		device_temp;				/*!< Device temperature data byte (°C)								*/
+
+	/* Control registers	 */
+	AS7263_control_registers 		control_setup;				/*!< Control setup parameters										*/
 
 	/* Hardware version	 */
-	AS7263_hw_version hw_version;							/*!< Hardware parameters											*/
+	AS7263_hw_version 		 		hw_version;					/*!< Hardware parameters											*/
 
 	/* Firmware version	 */
-	AS7263_fw_version fw_version;							/*!< Firmware parameters											*/
+	AS7263_fw_version 		 		fw_version;					/*!< Firmware parameters											*/
 } AS7263_data_t;
 #endif
 
