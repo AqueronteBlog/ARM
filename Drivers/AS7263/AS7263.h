@@ -65,6 +65,18 @@ typedef enum
 
 
 /**
+  * @brief   PHYSICAL REGISTERS
+  */
+typedef enum
+{
+  AS7263_STATUS_REGISTER	=   0x00,		/*!<  Status register					*/
+  AS7263_WRITE_REGISTER		=   0x01,   	/*!<  Write register					*/
+  AS7263_READ_REGISTER	 	=   0x02    	/*!<  Read register						*/
+} AS7263_physical_registers_t;
+
+
+
+/**
   * @brief   HARDWARE VERSION
  */
 /* DEVICE_TYPE <7:0>
@@ -354,15 +366,15 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-AS7263_status_t AS7263_Init               		( I2C_parameters_t myI2Cparameters                              					);
+AS7263_status_t AS7263_Init               			( I2C_parameters_t myI2Cparameters                              					);
 
-/** It sets the sensitivity value.
+/** I²C Virtual Register Byte Write.
   */
-AS7263_status_t AS7263_SetSensitivity			( I2C_parameters_t myI2Cparameters, AS7263_data_t mySENS							);
+AS7263_status_t AS7263_I2C_VirtualRegisterByteWrite	( I2C_parameters_t myI2Cparameters, AS7263_data_t mySENS							);
 
-/** It gets the sensitivity value.
+/** I²C Virtual Register Byte Read.
   */
-AS7263_status_t AS7263_GetSensitivity			( I2C_parameters_t myI2Cparameters, AS7263_data_t* mySENS							);
+AS7263_status_t AS7263_I2C_VirtualRegisterByteRead	( I2C_parameters_t myI2Cparameters, AS7263_data_t* mySENS							);
 
 /** It sets the DG value.
   */
