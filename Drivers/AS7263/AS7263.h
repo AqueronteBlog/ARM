@@ -380,8 +380,9 @@ typedef struct
   */
 typedef enum
 {
-    AS7263_SUCCESS     =       0,
-    AS7263_FAILURE     =       1
+    AS7263_SUCCESS     		 =   0,
+    AS7263_FAILURE     		 =   1,
+	AS7263_ERROR_TX_PENDING  =	 2
 } AS7263_status_t;
 
 
