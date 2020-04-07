@@ -139,3 +139,4 @@ AS7263_status_t AS7263_I2C_VirtualRegisterByteWrite	( I2C_parameters_t myI2Cpara
 
 	return myStatus;
 }
+
