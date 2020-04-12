@@ -230,3 +230,75 @@ AS7263_status_t AS7263_I2C_VirtualRegisterByteRead	( I2C_parameters_t myI2Cparam
 
 	return myStatus;
 }
+
+
+
+/**
+ * @brief       AS7263_GetDeviceType ( I2C_parameters_t , AS7263_hw_version* )
+ *
+ * @details     Get device type number.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myDeviceType:   	Device type number.
+ *
+ *
+ * @return       Status of AS7263_GetDeviceType.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/April/2020
+ * @version     12/April/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetDeviceType ( I2C_parameters_t myI2Cparameters, AS7263_hw_version* myDeviceType )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+
+	/* Read the register	 */
+	cmd	 =   AS7263_DEVICE_TYPE;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead	( myI2Cparameters, cmd, &myDeviceType->device_type );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetHardwareVersion ( I2C_parameters_t , AS7263_hw_version* )
+ *
+ * @details     Get HW version.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myHWversion:   	Hardware version.
+ *
+ *
+ * @return       Status of AS7263_GetHardwareVersion.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/April/2020
+ * @version     12/April/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetHardwareVersion ( I2C_parameters_t myI2Cparameters, AS7263_hw_version* myHWversion )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+
+	/* Read the register	 */
+	cmd	 =   AS7263_HW_VERSION;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead	( myI2Cparameters, cmd, &myHWversion->hw_version );
+
+
+
+	return aux;
+}
