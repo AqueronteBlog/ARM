@@ -72,7 +72,8 @@ AS7263_status_t AS7263_Init ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        05/April/2020
- * @version     05/April/2020   The ORIGIN
+ * @version     12/April/2020   If everything goes fine, it has to return success.
+ * 				05/April/2020   The ORIGIN
  * @pre         The user does NOT need to use this function, this is an internal function
  * @warning     N/A.
  */
@@ -117,10 +118,100 @@ AS7263_status_t AS7263_I2C_VirtualRegisterByteWrite	( I2C_parameters_t myI2Cpara
 			cmd[0]	 =   AS7263_WRITE_REGISTER;
 			cmd[1]	 =	 d;
 			aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+			myStatus =	 AS7263_SUCCESS;
 		}
 		else if ( myTimeout < 1UL )
 		{
 			myStatus	 =	 AS7263_ERROR_TX_PENDING;
+		}
+		else
+		{
+			myStatus	 =   AS7263_FAILURE;
+		}
+	}
+	else if ( myTimeout < 1UL )
+	{
+		myStatus	 =	 AS7263_ERROR_TX_PENDING;
+	}
+	else
+	{
+		myStatus	 =   AS7263_FAILURE;
+	}
+
+
+	return myStatus;
+}
+
+
+
+/**
+ * @brief       AS7263_I2C_VirtualRegisterByteRead ( I2C_parameters_t , AS7263_command_register_set_t , uint8_t* )
+ *
+ * @details     I2C Virtual Register Byte Read.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    virtualReg:   		Virtual register.
+ *
+ * @param[out]   d:   				Byte to read.
+ *
+ *
+ * @return       Status of AS7263_I2C_VirtualRegisterByteRead.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/April/2020
+ * @version     12/April/2020   The ORIGIN
+ * @pre         The user does NOT need to use this function, this is an internal function
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_I2C_VirtualRegisterByteRead	( I2C_parameters_t myI2Cparameters, AS7263_command_register_set_t virtualReg, uint8_t* d )
+{
+	uint8_t		 	cmd[2]		=	{ 0U };
+	uint32_t	 	myTimeout  	=	0UL;
+	i2c_status_t 	aux;
+	AS7263_status_t myStatus	=	AS7263_FAILURE;
+
+
+	/* 1. Read slave I2C status to see if the read buffer is ready	 */
+	myTimeout	 =	 0x23232;
+	do{
+		cmd[0]	 =   AS7263_STATUS_REGISTER;
+		aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+		aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], 1U );
+		myTimeout--;
+	}while( ( ( cmd[0] & AS7263_STATUS_REGISTER_TX_VALID_MASK) == AS7263_STATUS_REGISTER_TX_VALID_BUSY ) && ( aux == I2C_SUCCESS ) && ( myTimeout > 0UL ) );
+
+	/* Check the status	 */
+	if ( ( aux == I2C_SUCCESS ) && ( myTimeout > 0UL ) )
+	{
+		/* 2. Send the virtual register address (setting bit 7 to indicate a pending write)	 */
+		cmd[0]	 =   AS7263_WRITE_REGISTER;
+		cmd[1]	 =	 (uint8_t)( virtualReg | 0x80 );
+		aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+		/* 3. Read slave I2C status to see if the read buffer is ready	 */
+		myTimeout	 =	 0x23232;
+		do{
+			cmd[0]	 =   AS7263_STATUS_REGISTER;
+			aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+			aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], 1U );
+			myTimeout--;
+		}while( ( ( cmd[0] & AS7263_STATUS_REGISTER_RX_VALID_MASK) == AS7263_STATUS_REGISTER_RX_VALID_BUSY ) && ( aux == I2C_SUCCESS ) && ( myTimeout > 0UL ) );
+
+		/* Check the status	 */
+		if ( ( aux == I2C_SUCCESS ) && ( myTimeout > 0UL ) )
+		{
+			/* 4. Read the data to complete the operation	 */
+			cmd[0]	 =   AS7263_READ_REGISTER;
+			aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_STOP_BIT );
+
+			*d	 	 =	 cmd[0];
+			myStatus =	 AS7263_SUCCESS;
+		}
+		else if ( myTimeout < 1UL )
+		{
+			myStatus	 =	 AS7263_ERROR_RX_PENDING;
 		}
 		else
 		{
