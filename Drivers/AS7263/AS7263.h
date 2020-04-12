@@ -38,7 +38,8 @@ typedef enum
 {
   AS7263_DEVICE_TYPE   		=   0x00,		/*!<  Device type number				*/
   AS7263_HW_VERSION    		=   0x01,		/*!<  Hardware version					*/
-  AS7263_FW_VERSION		    =   0x02,   	/*!<  Firmware version					*/
+  AS7263_FW_VERSION_1	    =   0x02,   	/*!<  Firmware version					*/
+  AS7263_FW_VERSION_2	    =   0x03,   	/*!<  Firmware version					*/
   AS7263_CONTROL_SETUP     	=   0x04,   	/*!<  Control setup						*/
   AS7263_INT_T			    =   0x05,   	/*!<  Integration time				    */
   AS7263_DEVICE_TEMP    	=   0x06,   	/*!<  Device temperature				*/
@@ -409,7 +410,11 @@ AS7263_status_t AS7263_I2C_VirtualRegisterByteRead	( I2C_parameters_t myI2Cparam
   */
 AS7263_status_t AS7263_GetDeviceType				( I2C_parameters_t myI2Cparameters, AS7263_hw_version* myDeviceType							);
 
-/** Get HW version.
+/** Get HW ( hardware ) version.
   */
 AS7263_status_t AS7263_GetHardwareVersion			( I2C_parameters_t myI2Cparameters, AS7263_hw_version* myHWversion							);
+
+/** Get FW ( firmware ) version.
+  */
+AS7263_status_t AS7263_GetFirmwareVersion			( I2C_parameters_t myI2Cparameters, AS7263_fw_version* myFWversion							);
 
