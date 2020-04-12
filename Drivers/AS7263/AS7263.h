@@ -305,6 +305,7 @@ typedef struct
 /* Control registers	 */
 typedef struct
 {
+	AS7263_control_setup_rst  rst;			/*!< Softreset status												*/
 	AS7263_control_setup_int  intpin;		/*!< Enable/Disable interrupt pin									*/
 	AS7263_control_setup_gain gain;			/*!< Sensor Channel Gain Setting									*/
 	AS7263_control_setup_bank bankmode;		/*!< Data Conversion Type (continuous)								*/
@@ -418,3 +419,18 @@ AS7263_status_t AS7263_GetHardwareVersion			( I2C_parameters_t myI2Cparameters, 
   */
 AS7263_status_t AS7263_GetFirmwareVersion			( I2C_parameters_t myI2Cparameters, AS7263_fw_version* myFWversion							);
 
+/** Set softreset.
+  */
+AS7263_status_t AS7263_SetSoftReset					( I2C_parameters_t myI2Cparameters															);
+
+/** Get softreset status.
+  */
+AS7263_status_t AS7263_GetSoftResetStatus			( I2C_parameters_t myI2Cparameters, AS7263_control_setup_rst* myRST							);
+
+/** Set enable/disable interrupt pin output.
+  */
+AS7263_status_t AS7263_SetEnableIntPinOutput		( I2C_parameters_t myI2Cparameters, AS7263_control_setup_int myINT							);
+
+/** Get interrupt pin output state.
+  */
+AS7263_status_t AS7263_GetEnableIntPinOutput		( I2C_parameters_t myI2Cparameters, AS7263_control_setup_int* myINT							);

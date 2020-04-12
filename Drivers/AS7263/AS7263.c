@@ -349,3 +349,160 @@ AS7263_status_t AS7263_GetFirmwareVersion ( I2C_parameters_t myI2Cparameters, AS
 
 	return aux;
 }
+
+
+
+/**
+ * @brief       AS7263_SetSoftReset ( I2C_parameters_t )
+ *
+ * @details     Set softreset.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of AS7263_SetSoftReset.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/April/2020
+ * @version     12/April/2020   The ORIGIN
+ * @pre         The user must check the device has rebooted correctly before starting a new communication again.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_SetSoftReset ( I2C_parameters_t myI2Cparameters )
+{
+	uint8_t		 	cmd[2]	=	{ 0U };
+	AS7263_status_t aux		=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd[0]	 =   AS7263_CONTROL_SETUP;
+	aux	 	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd[0], &cmd[1] );
+
+	/* Parse the data and Write the register	 */
+	cmd[1]	&=   CONTROL_SETUP_RST_MASK;
+	cmd[1]	|=   CONTROL_SETUP_RST_SOFTRESET;
+	aux		 =   AS7263_I2C_VirtualRegisterByteWrite ( myI2Cparameters, cmd[0], cmd[1] );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetSoftResetStatus ( I2C_parameters_t , AS7263_control_setup_rst* )
+ *
+ * @details     Get softreset status.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myRST:				Softreset status.
+ *
+ *
+ * @return       Status of AS7263_GetSoftResetStatus.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/April/2020
+ * @version     12/April/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetSoftResetStatus ( I2C_parameters_t myI2Cparameters, AS7263_control_setup_rst* myRST )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd	 =   AS7263_CONTROL_SETUP;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+	/* Parse the data	 */
+	*myRST	 =	 (AS7263_control_setup_rst)( cmd & CONTROL_SETUP_RST_MASK );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_SetEnableIntPinOutput ( I2C_parameters_t , AS7263_control_setup_int )
+ *
+ * @details     Set enable/disable interrupt pin output.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myINT:   			INT pin output enable/disable.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of AS7263_SetEnableIntPinOutput.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/April/2020
+ * @version     12/April/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_SetEnableIntPinOutput ( I2C_parameters_t myI2Cparameters, AS7263_control_setup_int myINT )
+{
+	uint8_t		 	cmd[2]	=	{ 0U };
+	AS7263_status_t aux		=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd[0]	 =   AS7263_CONTROL_SETUP;
+	aux	 	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd[0], &cmd[1] );
+
+	/* Parse the data and Write the register	 */
+	cmd[1]	&=   CONTROL_SETUP_INT_MASK;
+	cmd[1]	|=   myINT;
+	aux		 =   AS7263_I2C_VirtualRegisterByteWrite ( myI2Cparameters, cmd[0], cmd[1] );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetEnableIntPinOutput ( I2C_parameters_t , AS7263_control_setup_int )
+ *
+ * @details     Get enable/disable interrupt pin output status.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myINT:   			INT pin output enable/disable status.
+ *
+ *
+ * @return       Status of AS7263_GetEnableIntPinOutput.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        12/April/2020
+ * @version     12/April/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetEnableIntPinOutput ( I2C_parameters_t myI2Cparameters, AS7263_control_setup_int* myINT )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd	 =   AS7263_CONTROL_SETUP;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+	/* Parse the data	 */
+	*myINT	 =	 (AS7263_control_setup_int)( cmd & CONTROL_SETUP_INT_MASK );
+
+
+
+	return aux;
+}
