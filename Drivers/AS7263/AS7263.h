@@ -382,7 +382,8 @@ typedef enum
 {
     AS7263_SUCCESS     		 =   0,
     AS7263_FAILURE     		 =   1,
-	AS7263_ERROR_TX_PENDING  =	 2
+	AS7263_ERROR_TX_PENDING  =	 2,
+	AS7263_ERROR_RX_PENDING  =	 3
 } AS7263_status_t;
 
 
@@ -393,9 +394,13 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-AS7263_status_t AS7263_Init               			( I2C_parameters_t myI2Cparameters                              						);
+AS7263_status_t AS7263_Init               			( I2C_parameters_t myI2Cparameters                              							);
 
 /** I2C Virtual Register Byte Write.
   */
-AS7263_status_t AS7263_I2C_VirtualRegisterByteWrite	( I2C_parameters_t myI2Cparameters, AS7263_command_register_set_t virtualReg, uint8_t d	);
+AS7263_status_t AS7263_I2C_VirtualRegisterByteWrite	( I2C_parameters_t myI2Cparameters, AS7263_command_register_set_t virtualReg, uint8_t d		);
+
+/** I2C Virtual Register Byte Read.
+  */
+AS7263_status_t AS7263_I2C_VirtualRegisterByteRead	( I2C_parameters_t myI2Cparameters, AS7263_command_register_set_t virtualReg, uint8_t* d	);
 
