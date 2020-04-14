@@ -506,3 +506,4 @@ AS7263_status_t AS7263_GetEnableIntPinOutput ( I2C_parameters_t myI2Cparameters,
 
 	return aux;
 }
+
