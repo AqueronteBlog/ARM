@@ -498,3 +498,7 @@ AS7263_status_t AS7263_SetLED_IND_Status			( I2C_parameters_t myI2Cparameters, A
 /** Get LED_IND status: Enabled/Disabled.
   */
 AS7263_status_t AS7263_GetLED_IND_Status			( I2C_parameters_t myI2Cparameters, AS7263_led_control_led_ind* myLED_IND					);
+
+/** Get sensor raw data.
+  */
+AS7263_status_t AS7263_GetSensorRawData				( I2C_parameters_t myI2Cparameters, AS7263_sensor_raw_data* mySensorRawData					);

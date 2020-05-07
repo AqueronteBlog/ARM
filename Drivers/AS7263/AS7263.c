@@ -1132,3 +1132,71 @@ AS7263_status_t AS7263_GetLED_IND_Status ( I2C_parameters_t myI2Cparameters, AS7
 
 	return aux;
 }
+
+
+
+/**
+ * @brief       AS7263_GetSensorRawData ( I2C_parameters_t , AS7263_sensor_raw_data* )
+ *
+ * @details     Get sensor raw data ( all channels ).
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   mySensorRawData:   Sensor raw data ( all channels ).
+ *
+ *
+ * @return       Status of AS7263_GetSensorRawData.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetSensorRawData	( I2C_parameters_t myI2Cparameters, AS7263_sensor_raw_data* mySensorRawData )
+{
+	uint8_t		 	cmd			 =	0U;
+	uint8_t			i			 =	0U;
+	uint16_t		auxSensor[6] = 	{ 0U };
+	AS7263_status_t aux			 =	AS7263_FAILURE;
+
+	enum 			dataByteType {HIGH_DATA_BYTE, LOW_DATA_BYTE} dataByte;
+
+
+	dataByte	 =	 HIGH_DATA_BYTE;
+	for ( i = AS7263_R_HIGH; i < ( AS7263_W_LOW + 1U ); i++ )
+	{
+		/* Read the register	 */
+		cmd	 =   i;
+		aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+		/* Check byte position	 */
+		if ( dataByte == HIGH_DATA_BYTE )
+		{
+			auxSensor[i - AS7263_R_HIGH]	 =	 cmd;
+			auxSensor[i - AS7263_R_HIGH]   <<=	 8U;
+
+			dataByte	 =	 LOW_DATA_BYTE;
+		}
+		else
+		{
+			auxSensor[i - AS7263_R_HIGH - 1U]	|=	 cmd;
+
+			dataByte	 =	 HIGH_DATA_BYTE;
+		}
+	}
+
+	/* Parse the data	 */
+	mySensorRawData->r	 =	 auxSensor[0];
+	mySensorRawData->s	 =	 auxSensor[1];
+	mySensorRawData->t	 =	 auxSensor[2];
+	mySensorRawData->u	 =	 auxSensor[3];
+	mySensorRawData->v	 =	 auxSensor[4];
+	mySensorRawData->w	 =	 auxSensor[5];
+
+
+
+
+	return aux;
+}
