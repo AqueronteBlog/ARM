@@ -472,7 +472,7 @@ AS7263_status_t AS7263_SetEnableIntPinOutput ( I2C_parameters_t myI2Cparameters,
 
 
 /**
- * @brief       AS7263_GetEnableIntPinOutput ( I2C_parameters_t , AS7263_control_setup_int )
+ * @brief       AS7263_GetEnableIntPinOutput ( I2C_parameters_t , AS7263_control_setup_int* )
  *
  * @details     Get enable/disable interrupt pin output status.
  *
@@ -501,6 +501,202 @@ AS7263_status_t AS7263_GetEnableIntPinOutput ( I2C_parameters_t myI2Cparameters,
 
 	/* Parse the data	 */
 	*myINT	 =	 (AS7263_control_setup_int)( cmd & CONTROL_SETUP_INT_MASK );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_SetChannelsGain ( I2C_parameters_t , AS7263_control_setup_gain )
+ *
+ * @details     Set sensor channel gain setting ( all channels ).
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myGAIN:   			Gain for all channels.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of AS7263_SetChannelsGain.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_SetChannelsGain ( I2C_parameters_t myI2Cparameters, AS7263_control_setup_gain myGAIN )
+{
+	uint8_t		 	cmd[2]	=	{ 0U };
+	AS7263_status_t aux		=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd[0]	 =   AS7263_CONTROL_SETUP;
+	aux	 	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd[0], &cmd[1] );
+
+	/* Parse the data and Write the register	 */
+	cmd[1]	&=   CONTROL_SETUP_GAIN_MASK;
+	cmd[1]	|=   myGAIN;
+	aux		 =   AS7263_I2C_VirtualRegisterByteWrite ( myI2Cparameters, cmd[0], cmd[1] );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetChannelsGain ( I2C_parameters_t , AS7263_control_setup_gain* )
+ *
+ * @details     Get sensor channel gain setting ( all channels ).
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myGAIN:   			Gain for all channels.
+ *
+ *
+ * @return       Status of AS7263_GetChannelsGain.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetChannelsGain ( I2C_parameters_t myI2Cparameters, AS7263_control_setup_gain* myGAIN )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd	 =   AS7263_CONTROL_SETUP;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+	/* Parse the data	 */
+	*myGAIN	 =	 (AS7263_control_setup_gain)( cmd & CONTROL_SETUP_GAIN_MASK );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_SetDataConversionType ( I2C_parameters_t , AS7263_control_setup_bank )
+ *
+ * @details     Set data conversion type.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myBANK:   			Data conversion type.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of AS7263_SetDataConversionType.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_SetDataConversionType ( I2C_parameters_t myI2Cparameters, AS7263_control_setup_bank myBANK )
+{
+	uint8_t		 	cmd[2]	=	{ 0U };
+	AS7263_status_t aux		=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd[0]	 =   AS7263_CONTROL_SETUP;
+	aux	 	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd[0], &cmd[1] );
+
+	/* Parse the data and Write the register	 */
+	cmd[1]	&=   CONTROL_SETUP_BANK_MASK;
+	cmd[1]	|=   myBANK;
+	aux		 =   AS7263_I2C_VirtualRegisterByteWrite ( myI2Cparameters, cmd[0], cmd[1] );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetDataConversionType ( I2C_parameters_t , AS7263_control_setup_bank* )
+ *
+ * @details     Get data conversion type.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myBANK:   			Data conversion type.
+ *
+ *
+ * @return       Status of AS7263_GetDataConversionType.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetDataConversionType ( I2C_parameters_t myI2Cparameters, AS7263_control_setup_bank* myBANK )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd	 =   AS7263_CONTROL_SETUP;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+	/* Parse the data	 */
+	*myBANK	 =	 (AS7263_control_setup_bank)( cmd & CONTROL_SETUP_BANK_MASK );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetDataReadyFlag ( I2C_parameters_t , AS7263_control_setup_data_rdy* )
+ *
+ * @details     Get data ready flag.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myDATA_RDY:   		Data ready flag value.
+ *
+ *
+ * @return       Status of AS7263_GetDataReadyFlag.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetDataReadyFlag	( I2C_parameters_t myI2Cparameters, AS7263_control_setup_data_rdy* myDATA_RDY )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd	 =   AS7263_CONTROL_SETUP;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+	/* Parse the data	 */
+	*myDATA_RDY	 =	 (AS7263_control_setup_data_rdy)( cmd & CONTROL_SETUP_DATA_RDY_MASK );
 
 
 

@@ -434,3 +434,23 @@ AS7263_status_t AS7263_SetEnableIntPinOutput		( I2C_parameters_t myI2Cparameters
 /** Get interrupt pin output state.
   */
 AS7263_status_t AS7263_GetEnableIntPinOutput		( I2C_parameters_t myI2Cparameters, AS7263_control_setup_int* myINT							);
+
+/** Set sensor channel gain ( all channels ).
+  */
+AS7263_status_t AS7263_SetChannelsGain				( I2C_parameters_t myI2Cparameters, AS7263_control_setup_gain myGAIN						);
+
+/** Get sensor channel gain ( all channels ).
+  */
+AS7263_status_t AS7263_GetChannelsGain				( I2C_parameters_t myI2Cparameters, AS7263_control_setup_gain* myGAIN						);
+
+/** Set data conversion type.
+  */
+AS7263_status_t AS7263_SetDataConversionType		( I2C_parameters_t myI2Cparameters, AS7263_control_setup_bank myBANK						);
+
+/** Get data conversion type.
+  */
+AS7263_status_t AS7263_GetDataConversionType		( I2C_parameters_t myI2Cparameters, AS7263_control_setup_bank* myBANK						);
+
+/** Get data ready flag.
+  */
+AS7263_status_t AS7263_GetDataReadyFlag				( I2C_parameters_t myI2Cparameters, AS7263_control_setup_data_rdy* myDATA_RDY				);
