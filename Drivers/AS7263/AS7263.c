@@ -702,3 +702,79 @@ AS7263_status_t AS7263_GetDataReadyFlag	( I2C_parameters_t myI2Cparameters, AS72
 
 	return aux;
 }
+
+
+
+/**
+ * @brief       AS7263_SetIntegrationTime ( I2C_parameters_t , uint8_t* )
+ *
+ * @details     Set integration time: Integration time = <value> * 2.8ms.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myINT_T:   		Integration time = <value> * 2.8ms.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of AS7263_SetIntegrationTime.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_SetIntegrationTime ( I2C_parameters_t myI2Cparameters, uint8_t myINT_T )
+{
+	uint8_t		 	cmd[2]	=	{ 0U };
+	AS7263_status_t aux		=	AS7263_FAILURE;
+
+	/* Write the register	 */
+	cmd[0]	 =   AS7263_INT_T;
+	cmd[1]	 =   myINT_T;
+	aux		 =   AS7263_I2C_VirtualRegisterByteWrite ( myI2Cparameters, cmd[0], cmd[1] );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetIntegrationTime ( I2C_parameters_t , uint8_t* )
+ *
+ * @details     Get integration time: Integration time = <value> * 2.8ms.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myINT_T:   		Integration time = <value> * 2.8ms.
+ *
+ *
+ * @return       Status of AS7263_GetIntegrationTime.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         This function returns a raw data, the user must multiply the value by 2.8ms in order
+ * 				to calculate the integration time.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetIntegrationTime ( I2C_parameters_t myI2Cparameters, uint8_t* myINT_T )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd	 =   AS7263_INT_T;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+	/* Parse the data	 */
+	*myINT_T	 =	 cmd;
+
+
+
+	return aux;
+}

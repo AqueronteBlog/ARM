@@ -454,3 +454,11 @@ AS7263_status_t AS7263_GetDataConversionType		( I2C_parameters_t myI2Cparameters
 /** Get data ready flag.
   */
 AS7263_status_t AS7263_GetDataReadyFlag				( I2C_parameters_t myI2Cparameters, AS7263_control_setup_data_rdy* myDATA_RDY				);
+
+/** Set integration time: Integration time = <value> * 2.8ms.
+  */
+AS7263_status_t AS7263_SetIntegrationTime			( I2C_parameters_t myI2Cparameters, uint8_t myINT_T											);
+
+/** Get integration time: Integration time = <value> * 2.8ms.
+  */
+AS7263_status_t AS7263_GetIntegrationTime			( I2C_parameters_t myI2Cparameters, uint8_t* myINT_T										);
