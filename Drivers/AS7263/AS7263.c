@@ -816,3 +816,319 @@ AS7263_status_t AS7263_GetDeviceTemperature	( I2C_parameters_t myI2Cparameters, 
 
 	return aux;
 }
+
+
+
+/**
+ * @brief       AS7263_SetLED_DRV_CurrentLimit ( I2C_parameters_t , AS7263_led_control_icl_drv )
+ *
+ * @details     Set LED_DRV current limit.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myICL_DRV:   		LED_DRV Current limit value.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of AS7263_SetLED_DRV_CurrentLimit.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_SetLED_DRV_CurrentLimit ( I2C_parameters_t myI2Cparameters, AS7263_led_control_icl_drv myICL_DRV )
+{
+	uint8_t		 	cmd[2]	=	{ 0U };
+	AS7263_status_t aux		=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd[0]	 =   AS7263_LED_CONTROL;
+	aux	 	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd[0], &cmd[1] );
+
+	/* Parse the data	 */
+	cmd[1]	&=   LED_CONTROL_ICL_DRV_MASK;
+	cmd[1]	|=   myICL_DRV;
+	aux		 =   AS7263_I2C_VirtualRegisterByteWrite ( myI2Cparameters, cmd[0], cmd[1] );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetLED_DRV_CurrentLimit ( I2C_parameters_t , AS7263_led_control_icl_drv* )
+ *
+ * @details     Get LED_DRV current limit.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myICL_DRV:   		LED_DRV Current limit value.
+ *
+ *
+ * @return       Status of AS7263_GetLED_DRV_CurrentLimit.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetLED_DRV_CurrentLimit ( I2C_parameters_t myI2Cparameters, AS7263_led_control_icl_drv* myICL_DRV )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd	 =   AS7263_LED_CONTROL;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+	/* Parse the data	 */
+	*myICL_DRV	 =	 (AS7263_led_control_icl_drv)( cmd & LED_CONTROL_ICL_DRV_MASK );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_SetLED_DRV_Status ( I2C_parameters_t , AS7263_led_control_icl_drv )
+ *
+ * @details     Enable/Disable LED_DRV.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myLED_DRV:   		Enable/Disable.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of AS7263_SetLED_DRV_Status.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_SetLED_DRV_Status ( I2C_parameters_t myI2Cparameters, AS7263_led_control_led_drv myLED_DRV )
+{
+	uint8_t		 	cmd[2]	=	{ 0U };
+	AS7263_status_t aux		=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd[0]	 =   AS7263_LED_CONTROL;
+	aux	 	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd[0], &cmd[1] );
+
+	/* Parse the data	 */
+	cmd[1]	&=   LED_CONTROL_LED_DRV_MASK;
+	cmd[1]	|=   myLED_DRV;
+	aux		 =   AS7263_I2C_VirtualRegisterByteWrite ( myI2Cparameters, cmd[0], cmd[1] );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetLED_DRV_Status ( I2C_parameters_t , AS7263_led_control_led_drv* )
+ *
+ * @details     Get LED_DRV status: Enabled/Disabled.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myLED_DRV:   		Enable/Disable status.
+ *
+ *
+ * @return       Status of AS7263_GetLED_DRV_Status.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetLED_DRV_Status ( I2C_parameters_t myI2Cparameters, AS7263_led_control_led_drv* myLED_DRV )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd	 =   AS7263_LED_CONTROL;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+	/* Parse the data	 */
+	*myLED_DRV	 =	 (AS7263_led_control_led_drv)( cmd & LED_CONTROL_LED_DRV_MASK );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_SetLED_IND_CurrentLimit ( I2C_parameters_t , AS7263_led_control_icl_ind )
+ *
+ * @details     Set ICL_IND current limit.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myICL_IND:   		ICL_IND Current limit value.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of AS7263_SetLED_IND_CurrentLimit.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_SetLED_IND_CurrentLimit ( I2C_parameters_t myI2Cparameters, AS7263_led_control_icl_ind myICL_IND )
+{
+	uint8_t		 	cmd[2]	=	{ 0U };
+	AS7263_status_t aux		=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd[0]	 =   AS7263_LED_CONTROL;
+	aux	 	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd[0], &cmd[1] );
+
+	/* Parse the data	 */
+	cmd[1]	&=   LED_CONTROL_ICL_IND_MASK;
+	cmd[1]	|=   myICL_IND;
+	aux		 =   AS7263_I2C_VirtualRegisterByteWrite ( myI2Cparameters, cmd[0], cmd[1] );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetLED_IND_CurrentLimit ( I2C_parameters_t , AS7263_led_control_icl_ind* )
+ *
+ * @details     Get LED_IND current limit.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myICL_DRV:   		LED_IND Current limit value.
+ *
+ *
+ * @return       Status of AS7263_GetLED_IND_CurrentLimit.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetLED_IND_CurrentLimit ( I2C_parameters_t myI2Cparameters, AS7263_led_control_icl_ind* myICL_IND )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd	 =   AS7263_LED_CONTROL;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+	/* Parse the data	 */
+	*myICL_IND	 =	 (AS7263_led_control_icl_ind)( cmd & LED_CONTROL_ICL_IND_MASK );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_SetLED_IND_Status ( I2C_parameters_t , AS7263_led_control_led_ind )
+ *
+ * @details     Enable/Disable LED_IND.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ * @param[in]    myLED_IND:   		Enable/Disable.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of AS7263_SetLED_IND_Status.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_SetLED_IND_Status ( I2C_parameters_t myI2Cparameters, AS7263_led_control_led_ind myLED_IND )
+{
+	uint8_t		 	cmd[2]	=	{ 0U };
+	AS7263_status_t aux		=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd[0]	 =   AS7263_LED_CONTROL;
+	aux	 	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd[0], &cmd[1] );
+
+	/* Parse the data	 */
+	cmd[1]	&=   LED_CONTROL_LED_IND_MASK;
+	cmd[1]	|=   myLED_IND;
+	aux		 =   AS7263_I2C_VirtualRegisterByteWrite ( myI2Cparameters, cmd[0], cmd[1] );
+
+
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetLED_IND_Status ( I2C_parameters_t , AS7263_led_control_led_drv* )
+ *
+ * @details     Get LED_IND status: Enabled/Disabled.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myLED_IND:   		Enable/Disable status.
+ *
+ *
+ * @return       Status of AS7263_GetLED_IND_Status.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetLED_IND_Status ( I2C_parameters_t myI2Cparameters, AS7263_led_control_led_ind* myLED_IND )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd	 =   AS7263_LED_CONTROL;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+	/* Parse the data	 */
+	*myLED_IND	 =	 (AS7263_led_control_led_ind)( cmd & LED_CONTROL_LED_IND_MASK );
+
+
+
+	return aux;
+}

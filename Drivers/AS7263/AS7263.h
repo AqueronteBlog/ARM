@@ -466,3 +466,35 @@ AS7263_status_t AS7263_GetIntegrationTime			( I2C_parameters_t myI2Cparameters, 
 /** Get device temperature (°C).
   */
 AS7263_status_t AS7263_GetDeviceTemperature			( I2C_parameters_t myI2Cparameters, uint8_t* myDevice_Temp									);
+
+/** Set LED_DRV current limit.
+  */
+AS7263_status_t AS7263_SetLED_DRV_CurrentLimit		( I2C_parameters_t myI2Cparameters, AS7263_led_control_icl_drv myICL_DRV					);
+
+/** Get LED_DRV current limit.
+  */
+AS7263_status_t AS7263_GetLED_DRV_CurrentLimit		( I2C_parameters_t myI2Cparameters, AS7263_led_control_icl_drv* myICL_DRV					);
+
+/** Enable/Disable LED_DRV.
+  */
+AS7263_status_t AS7263_SetLED_DRV_Status			( I2C_parameters_t myI2Cparameters, AS7263_led_control_led_drv myLED_DRV					);
+
+/** Get LED_DRV status: Enabled/Disabled.
+  */
+AS7263_status_t AS7263_GetLED_DRV_Status			( I2C_parameters_t myI2Cparameters, AS7263_led_control_led_drv* myLED_DRV					);
+
+/** Set LED_IND current limit.
+  */
+AS7263_status_t AS7263_SetLED_IND_CurrentLimit		( I2C_parameters_t myI2Cparameters, AS7263_led_control_icl_ind myICL_IND					);
+
+/** Get LED_IND current limit.
+  */
+AS7263_status_t AS7263_GetLED_IND_CurrentLimit		( I2C_parameters_t myI2Cparameters, AS7263_led_control_icl_ind* myICL_IND					);
+
+/** Enable/Disable LED_IND.
+  */
+AS7263_status_t AS7263_SetLED_IND_Status			( I2C_parameters_t myI2Cparameters, AS7263_led_control_led_ind myLED_IND					);
+
+/** Get LED_IND status: Enabled/Disabled.
+  */
+AS7263_status_t AS7263_GetLED_IND_Status			( I2C_parameters_t myI2Cparameters, AS7263_led_control_led_ind* myLED_IND					);
