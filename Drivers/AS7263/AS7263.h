@@ -462,3 +462,7 @@ AS7263_status_t AS7263_SetIntegrationTime			( I2C_parameters_t myI2Cparameters, 
 /** Get integration time: Integration time = <value> * 2.8ms.
   */
 AS7263_status_t AS7263_GetIntegrationTime			( I2C_parameters_t myI2Cparameters, uint8_t* myINT_T										);
+
+/** Get device temperature (°C).
+  */
+AS7263_status_t AS7263_GetDeviceTemperature			( I2C_parameters_t myI2Cparameters, uint8_t* myDevice_Temp									);

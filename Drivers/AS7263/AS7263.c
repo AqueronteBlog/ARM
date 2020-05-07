@@ -778,3 +778,41 @@ AS7263_status_t AS7263_GetIntegrationTime ( I2C_parameters_t myI2Cparameters, ui
 
 	return aux;
 }
+
+
+
+/**
+ * @brief       AS7263_GetDeviceTemperature ( I2C_parameters_t , uint8_t* )
+ *
+ * @details     Get device temperature (°C).
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   myDevice_Temp:   	Device temperature (°C).
+ *
+ *
+ * @return       Status of AS7263_GetDeviceTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/May/2020
+ * @version     07/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetDeviceTemperature	( I2C_parameters_t myI2Cparameters, uint8_t* myDevice_Temp )
+{
+	uint8_t		 	cmd	=	0U;
+	AS7263_status_t aux	=	AS7263_FAILURE;
+
+	/* Read the register	 */
+	cmd	 =   AS7263_DEVICE_TEMP;
+	aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+
+	/* Parse the data	 */
+	*myDevice_Temp	 =	 cmd;
+
+
+
+	return aux;
+}
