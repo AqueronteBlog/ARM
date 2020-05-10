@@ -1150,7 +1150,8 @@ AS7263_status_t AS7263_GetLED_IND_Status ( I2C_parameters_t myI2Cparameters, AS7
  *
  * @author      Manuel Caballero
  * @date        07/May/2020
- * @version     07/May/2020   The ORIGIN
+ * @version     10/May/2020   Some unnecessary code was removed.
+ * 				07/May/2020   The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -1168,8 +1169,7 @@ AS7263_status_t AS7263_GetSensorRawData	( I2C_parameters_t myI2Cparameters, AS72
 	for ( i = AS7263_R_HIGH; i < ( AS7263_W_LOW + 1U ); i++ )
 	{
 		/* Read the register	 */
-		cmd	 =   i;
-		aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, cmd, &cmd );
+		aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, i, &cmd );
 
 		/* Check byte position	 */
 		if ( dataByte == HIGH_DATA_BYTE )
@@ -1196,6 +1196,109 @@ AS7263_status_t AS7263_GetSensorRawData	( I2C_parameters_t myI2Cparameters, AS72
 	mySensorRawData->w	 =	 auxSensor[5];
 
 
+
+	return aux;
+}
+
+
+
+/**
+ * @brief       AS7263_GetSensorCalibratedData ( I2C_parameters_t , AS7263_sensor_calibrated_data* )
+ *
+ * @details     Get sensor calibrated data ( all channels ).
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   mySensorCalData:   Sensor calibrated data ( all channels ).
+ *
+ *
+ * @return       Status of AS7263_GetSensorCalibratedData.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        10/May/2020
+ * @version     10/May/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AS7263_status_t AS7263_GetSensorCalibratedData ( I2C_parameters_t myI2Cparameters, AS7263_sensor_calibrated_data* mySensorCalData )
+{
+	uint8_t		 	cmd			  =	 0U;
+	uint8_t			i			  =	 0U;
+	uint8_t			auxSensor[24] =  { 0U };
+	uint32_t		auxCalData	  =	 0UL;
+	AS7263_status_t aux			  =	 AS7263_FAILURE;
+
+
+	for ( i = AS7263_R_CAL; i < ( AS7263_W_CAL + 1U ); i++ )
+	{
+		/* Read the register	 */
+		aux	 =   AS7263_I2C_VirtualRegisterByteRead ( myI2Cparameters, i, &cmd );
+
+		/* Store bytes	 */
+		auxSensor[i - AS7263_R_CAL]	 =	 cmd;
+	}
+
+	/* Parse the data	 */
+	auxCalData	 =	 auxSensor[3];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[2];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[1];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[0];
+
+	mySensorCalData->r_cal	 =	 auxCalData;
+
+	auxCalData	 =	 auxSensor[7];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[6];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[5];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[4];
+
+	mySensorCalData->s_cal	 =	 auxCalData;
+
+	auxCalData	 =	 auxSensor[11];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[10];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[9];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[8];
+
+	mySensorCalData->t_cal	 =	 auxCalData;
+
+	auxCalData	 =	 auxSensor[15];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[14];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[13];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[12];
+
+	mySensorCalData->u_cal	 =	 auxCalData;
+
+	auxCalData	 =	 auxSensor[19];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[18];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[17];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[16];
+
+	mySensorCalData->v_cal	 =	 auxCalData;
+
+	auxCalData	 =	 auxSensor[23];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[22];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[21];
+	auxCalData <<=	 8U;
+	auxCalData	|=	 auxSensor[20];
+
+	mySensorCalData->w_cal	 =	 auxCalData;
 
 
 	return aux;

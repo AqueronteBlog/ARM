@@ -503,3 +503,7 @@ AS7263_status_t AS7263_GetLED_IND_Status			( I2C_parameters_t myI2Cparameters, A
   */
 AS7263_status_t AS7263_GetSensorRawData				( I2C_parameters_t myI2Cparameters, AS7263_sensor_raw_data* mySensorRawData					);
 
+/** Get sensor calibrated data.
+  */
+AS7263_status_t AS7263_GetSensorCalibratedData		( I2C_parameters_t myI2Cparameters, AS7263_sensor_calibrated_data* mySensorCalData			);
+
