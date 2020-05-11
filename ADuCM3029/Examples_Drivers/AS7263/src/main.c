@@ -61,38 +61,62 @@ int main(int argc, char *argv[])
 	conf_Timer0 ();
 
 
-//	/* I2C definition   */
-//	myAS7263_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
-//	myAS7263_I2C_parameters.sda         	 =    I2C0_SDA;
-//	myAS7263_I2C_parameters.scl         	 =    I2C0_SCL;
-//	myAS7263_I2C_parameters.addr        	 =    AS7263_ADDRESS;
-//	myAS7263_I2C_parameters.freq        	 =    100000;
-//	myAS7263_I2C_parameters.pclkFrequency 	 =	  6400000;
-//	myAS7263_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
-//	myAS7263_I2C_parameters.sclPort     	 =    pADI_GPIO0;
-//
-//	/* Configure I2C peripheral */
-//	aux  =   AS7263_Init ( myAS7263_I2C_parameters );
-//
-//	/* Power off the device	 */
-//	myAS7263_Data.configuration.als_sd	 =	 ALS_CONF_ALS_SD_SHUTDOWN;
-//	aux	 =	 AS7263_SetShutDownMode ( myAS7263_I2C_parameters, myAS7263_Data );
-//
-//	/* Set sensitivity: low sensitivity ( 1/8x )	 */
-//	myAS7263_Data.configuration.als_sens	 =	 ALS_CONF_SENS_LOW_SENSITIVITY;
-//	aux	 =	 AS7263_SetSensitivity ( myAS7263_I2C_parameters, myAS7263_Data );
-//
-//	/* Set digital gain (DG): Double	 */
-//	myAS7263_Data.configuration.als_dg	 =	 ALS_CONF_DG_DOUBLE;
-//	aux	 =	 AS7263_SetDG ( myAS7263_I2C_parameters, myAS7263_Data );
-//
-//	/* Set Gain: Double sensitivity	 */
-//	myAS7263_Data.configuration.als_gain	 =	 ALS_CONF_GAIN_DOUBLE_SENSITIVITY;
-//	aux	 =	 AS7263_SetGain ( myAS7263_I2C_parameters, myAS7263_Data );
-//
-//	/* Set ALS integration time: Integration time 100ms	 */
-//	myAS7263_Data.configuration.als_it	 =	 ALS_CONF_ALS_IT_100MS;
-//	aux	 =	 AS7263_SetIntegrationTime ( myAS7263_I2C_parameters, myAS7263_Data );
+	/* I2C definition   */
+	myAS7263_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
+	myAS7263_I2C_parameters.sda         	 =    I2C0_SDA;
+	myAS7263_I2C_parameters.scl         	 =    I2C0_SCL;
+	myAS7263_I2C_parameters.addr        	 =    AS7263_ADDRESS;
+	myAS7263_I2C_parameters.freq        	 =    100000;
+	myAS7263_I2C_parameters.pclkFrequency 	 =	  6400000;
+	myAS7263_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
+	myAS7263_I2C_parameters.sclPort     	 =    pADI_GPIO0;
+
+	/* Configure I2C peripheral */
+	aux  =   AS7263_Init ( myAS7263_I2C_parameters );
+
+	/* Get the device type version	 */
+	aux	 =	 AS7263_GetDeviceType ( myAS7263_I2C_parameters, &myAS7263_Data.hw_version );
+
+	/* Get the Hardware version	 */
+	aux	 =	 AS7263_GetHardwareVersion ( myAS7263_I2C_parameters, &myAS7263_Data.hw_version );
+
+	/* Get the Firmware version	 */
+	aux	 =	 AS7263_GetFirmwareVersion ( myAS7263_I2C_parameters, &myAS7263_Data.fw_version );
+
+	/* Reset the device by software	 */
+	aux	 =	 AS7263_SetSoftReset ( myAS7263_I2C_parameters );
+	do{
+		aux	 =	 AS7263_GetSoftResetStatus ( myAS7263_I2C_parameters, &myAS7263_Data.control_setup.rst );
+	}while( myAS7263_Data.control_setup.rst != CONTROL_SETUP_RST_NORMAL);
+
+	/* Disable interrupt pin output	 */
+	myAS7263_Data.control_setup.intpin	 =	 CONTROL_SETUP_INT_DISABLE;
+	aux	 =	 AS7263_SetEnableIntPinOutput ( myAS7263_I2C_parameters, myAS7263_Data.control_setup.intpin );
+
+	/* Gain x1 ( all channels )	 */
+	myAS7263_Data.control_setup.gain	 =	 CONTROL_SETUP_GAIN_1X;
+	aux	 =	 AS7263_SetChannelsGain ( myAS7263_I2C_parameters, myAS7263_Data.control_setup.gain );
+
+	/* Data conversion type: One-shot	 */
+	myAS7263_Data.control_setup.bankmode	 =	 CONTROL_SETUP_BANK_MODE_3;
+	aux	 =	 AS7263_SetDataConversionType ( myAS7263_I2C_parameters, myAS7263_Data.control_setup.bankmode );
+
+	/* LED_DRV current limit: 12mA	 */
+	myAS7263_Data.led_control.icl_drv	 =	 LED_CONTROL_ICL_DRV_12_5_MA;
+	aux	 =	 AS7263_SetLED_DRV_CurrentLimit ( myAS7263_I2C_parameters, myAS7263_Data.led_control.icl_drv );
+
+	/* LED_DRV: Enabled	 */
+	myAS7263_Data.led_control.led_drv	 =	 LED_CONTROL_LED_DRV_ENABLED;
+	aux	 =	 AS7263_SetLED_DRV_Status ( myAS7263_I2C_parameters, myAS7263_Data.led_control.icl_drv );
+
+	/* LED_IND current limit: 12mA	 */
+	myAS7263_Data.led_control.icl_ind	 =	 LED_CONTROL_ICL_IND_1_MA;
+	aux	 =	 AS7263_SetLED_IND_CurrentLimit ( myAS7263_I2C_parameters, myAS7263_Data.led_control.icl_drv );
+
+	/* LED_IND: Enabled	 */
+	myAS7263_Data.led_control.led_ind	 =	 LED_CONTROL_LED_IND_ENABLED;
+	aux	 =	 AS7263_SetLED_IND_Status ( myAS7263_I2C_parameters, myAS7263_Data.led_control.icl_drv );
+
 
 
 	/* Enable Timer0	 */
@@ -124,16 +148,10 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-//			/* Get the raw light data	 */
-//			aux  	 =   AS7263_GetALS_HighResOutputData ( myAS7263_I2C_parameters, &myAS7263_Data );
-//
-//			/* Get the raw white channel output data	 */
-//			aux  	 =   AS7263_GetWhiteChannelOutputData ( myAS7263_I2C_parameters, &myAS7263_Data );
-//
-//			/* Calculate light data and resolution	 */
-//			AS7263_CalculateLuxLevel ( &myAS7263_Data );
-//
-//
+			/* Get the temperature value	 */
+			aux  	 =   AS7263_GetDeviceTemperature ( myAS7263_I2C_parameters, &myAS7263_Data.device_temp );
+
+
 //			/* Transmit data through the UART	 */
 //			sprintf ( (char*)myMessage, "White counter: %d | Lux: %0.4f lx\r\n", myAS7263_Data.white_channel_output_data, myAS7263_Data.light_level );
 //
