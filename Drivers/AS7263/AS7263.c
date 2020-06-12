@@ -89,10 +89,10 @@ AS7263_status_t AS7263_I2C_VirtualRegisterByteWrite	( I2C_parameters_t myI2Cpara
 	myTimeout	 =	 0x23232;
 	do{
 		cmd[0]	 =   AS7263_STATUS_REGISTER;
-		aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+		aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_STOP_BIT );
 		aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], 1U );
 		myTimeout--;
-		for (uint32_t ii = 0UL; ii < 6*0x232; ii++);
+		//for (uint32_t ii = 0UL; ii < 6*0x232; ii++);
 	}while( ( ( cmd[0] & AS7263_STATUS_REGISTER_TX_VALID_MASK) == AS7263_STATUS_REGISTER_TX_VALID_BUSY ) && ( aux == I2C_SUCCESS ) && ( myTimeout > 0UL ) );
 
 	/* Check the status	 */
@@ -107,7 +107,7 @@ AS7263_status_t AS7263_I2C_VirtualRegisterByteWrite	( I2C_parameters_t myI2Cpara
 		myTimeout	 =	 0x23232;
 		do{
 			cmd[0]	 =   AS7263_STATUS_REGISTER;
-			aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+			aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_STOP_BIT );
 			aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], 1U );
 			myTimeout--;
 			for (uint32_t ii = 0UL; ii < 6*0x232; ii++);
@@ -179,7 +179,7 @@ AS7263_status_t AS7263_I2C_VirtualRegisterByteRead	( I2C_parameters_t myI2Cparam
 	myTimeout	 =	 0x23232;
 	do{
 		cmd[0]	 =   AS7263_STATUS_REGISTER;
-		aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+		aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_STOP_BIT );
 		aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], 1U );
 		myTimeout--;
 		for (uint32_t ii = 0UL; ii < 6*0x232; ii++);
@@ -197,7 +197,7 @@ AS7263_status_t AS7263_I2C_VirtualRegisterByteRead	( I2C_parameters_t myI2Cparam
 		myTimeout	 =	 0x23232;
 		do{
 			cmd[0]	 =   AS7263_STATUS_REGISTER;
-			aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+			aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_STOP_BIT );
 			aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], 1U );
 			myTimeout--;
 			for (uint32_t ii = 0UL; ii < 6*0x232; ii++);
@@ -208,7 +208,7 @@ AS7263_status_t AS7263_I2C_VirtualRegisterByteRead	( I2C_parameters_t myI2Cparam
 		{
 			/* 4. Read the data to complete the operation	 */
 			cmd[0]	 =   AS7263_READ_REGISTER;
-			aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+			aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_STOP_BIT );
 			aux		|=   i2c_read  ( myI2Cparameters, &cmd[0], 1U );
 
 			*d	 	 =	 cmd[0];
