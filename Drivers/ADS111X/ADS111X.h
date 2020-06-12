@@ -42,7 +42,7 @@ typedef enum
   ADS111X_CONFIG        =   0x01,           /*!<  Config register                               */
   ADS111X_LO_THRESH     =   0x02,           /*!<  Lo threshold register                         */
   ADS111X_HI_THRESH     =   0x03,           /*!<  Hi threshold register                         */
-  ADS111X_RESET_COMMAND =   0x06            /*!<  Reset command                                 */
+  ADS111X_RESET_COMMAND =   0x06            /*!<  Reset command ( with a general call )         */
 } ADS111X_register_map_t;
 
 
@@ -53,9 +53,9 @@ typedef enum
   */
 typedef enum
 {
-    DEVICE_ADS1013    =   0x00,             /*!<  Device: ADS1013                                */
-    DEVICE_ADS1014    =   0x01,             /*!<  Device: ADS1014                                */
-    DEVICE_ADS1015    =   0x02              /*!<  Device: ADS1015                                */
+    DEVICE_ADS1113    =   0x00,             /*!<  Device: ADS1113                                */
+    DEVICE_ADS1114    =   0x01,             /*!<  Device: ADS1114                                */
+    DEVICE_ADS1115    =   0x02              /*!<  Device: ADS1115                                */
 } ADS111X_device_t;
 
 
@@ -63,14 +63,14 @@ typedef enum
 /**
   * @brief   CONVERSION REGISTER. ( Default: 0x0000 )
   *           NOTE: The 16-bit Conversion register contains the result of the last conversion in binary two's complement format.
-  *                 Following power-up, the Conversion register is cleared to 0, and remains 0 until the first conversion is completed.
+					Following power-up, the Conversion register is cleared to 0, and remains 0 until the first conversion is completed.
   */
 /* D <15:4>
- *    NOTE: 12-bit conversion result.
+ *    NOTE: 16-bit conversion result.
  */
 typedef enum
 {
-    CONVERSION_D_MASK   =   ( 0b111111111111 << 4U )  /*!<  D mask                                                    */
+    CONVERSION_D_MASK   =   0xFFFF  	/*!<  D mask                                                    */
 } ADS111X_conversion_t;
 
 
@@ -85,14 +85,14 @@ typedef enum
  */
 typedef enum
 {
-    CONFIG_OS_MASK      =   ( 1U << 15U ),            /*!<  OS mask                                                     */
-    CONFIG_OS_BUSY      =   ( 1U << 15U ),            /*!<  Device is currently performing a conversion                 */
-    CONFIG_OS_NOT_BUSY  =   ( 0U << 15U )             /*!<  Device is not currently performing a conversion [ Default ] */
+    CONFIG_OS_MASK      =   ( 1U << 15U ),            /*!<  OS mask                                                     													*/
+    CONFIG_OS_BUSY      =   ( 1U << 15U ),            /*!<  Device is not currently performing a conversion/Start a single conversion (when in power-down state) [Default]	*/
+    CONFIG_OS_NOT_BUSY  =   ( 0U << 15U )             /*!<  Device is currently performing a conversion	 																	*/
 } ADS111X_config_os_t;
 
 
 /* MUX <14:12>
- *    NOTE: Input multiplexer configuration ( ADS1015 only ).
+ *    NOTE: Input multiplexer configuration ( ADS1115 only ).
  */
 typedef enum
 { 
@@ -109,7 +109,7 @@ typedef enum
 
 
 /* PGA <11:9>
- *    NOTE: Programmable gain amplifier configuration ( These bits serve NO function on the ADS1013 ).
+ *    NOTE: Programmable gain amplifier configuration ( These bits serve NO function on the ADS1113 ).
  */
 typedef enum
 { 
@@ -140,18 +140,19 @@ typedef enum
 typedef enum
 { 
     CONFIG_DR_MASK                      =   ( 0b111 << 5U ),    /*!<  DR mask                                                       */
-    CONFIG_DR_128_SPS                   =   ( 0b000 << 5U ),    /*!<  128 SPS                                                       */
-    CONFIG_DR_250_SPS                   =   ( 0b001 << 5U ),    /*!<  250 SPS                                                       */
-    CONFIG_DR_490_SPS                   =   ( 0b010 << 5U ),    /*!<  490 SPS                                                       */
-    CONFIG_DR_920_SPS                   =   ( 0b011 << 5U ),    /*!<  920 SPS                                                       */
-    CONFIG_DR_1600_SPS                  =   ( 0b100 << 5U ),    /*!<  1600 SPS                                          [ Default ] */
-    CONFIG_DR_2400_SPS                  =   ( 0b101 << 5U ),    /*!<  2400 SPS                                                      */
-    CONFIG_DR_3300_SPS                  =   ( 0b110 << 5U )     /*!<  3300 SPS                                                      */
+    CONFIG_DR_8_SPS                   	=   ( 0b000 << 5U ),    /*!<    8 SPS                                                       */
+    CONFIG_DR_16_SPS                   	=   ( 0b001 << 5U ),    /*!<   16 SPS                                                       */
+    CONFIG_DR_32_SPS                   	=   ( 0b010 << 5U ),    /*!<   32 SPS                                                       */
+    CONFIG_DR_64_SPS                   	=   ( 0b011 << 5U ),    /*!<   64 SPS                                                       */
+    CONFIG_DR_128_SPS                  	=   ( 0b100 << 5U ),    /*!<  128 SPS                                          	[ Default ] */
+    CONFIG_DR_250_SPS                  	=   ( 0b101 << 5U ),    /*!<  250 SPS                                           	        */
+    CONFIG_DR_475_SPS                  	=   ( 0b110 << 5U ),    /*!<  475 SPS                                               	    */
+	CONFIG_DR_860_SPS                  	=   ( 0b111 << 5U )     /*!<  860 SPS                                                      	*/
 } ADS111X_config_dr_t;
 
 
 /* COMP_MODE <4>
- *    NOTE: Comparator mode ( ADS1014 and ADS1015 only )
+ *    NOTE: Comparator mode ( ADS1114 and ADS1115 only )
  */
 typedef enum
 { 
@@ -162,7 +163,7 @@ typedef enum
 
 
 /* COMP_POL <3>
- *    NOTE: Comparator polarity ( ADS1014 and ADS1015 only )
+ *    NOTE: Comparator polarity ( ADS1114 and ADS1115 only )
  */
 typedef enum
 { 
@@ -173,7 +174,7 @@ typedef enum
 
 
 /* COMP_LAT <2>
- *    NOTE: Latching comparator ( ADS1014 and ADS1015 only )
+ *    NOTE: Latching comparator ( ADS1114 and ADS1115 only )
  */
 typedef enum
 { 
@@ -184,7 +185,7 @@ typedef enum
 
 
 /* COMP_QUE <1:0>
- *    NOTE: Comparator queue and disable ( ADS1014 and ADS1015 only )
+ *    NOTE: Comparator queue and disable ( ADS1114 and ADS1115 only )
  */
 typedef enum
 { 
@@ -200,12 +201,12 @@ typedef enum
 /**
   * @brief   LO_THRESH REGISTER. ( Default: 0x8000 )
   */
-/* LO_THRESH <15:4>
+/* LO_THRESH <15:0>
  *    NOTE: N/A.
  */
 typedef enum
 {
-    LO_THRESH_MASK      =   ( 0b111111111111 << 4U )            /*!<  LO_THRESH mask                                                */
+    LO_THRESH_MASK      =   0xFFFF            /*!<  LO_THRESH mask                                                */
 } ADS111X_lo_thresh_t;
 
 
@@ -213,15 +214,13 @@ typedef enum
 /**
   * @brief   HI_THRESH REGISTER. ( Default: 0x7FFF )
   */
-/* HI_THRESH <15:4>
+/* HI_THRESH <15:0>
  *    NOTE: N/A.
  */
 typedef enum
 {
-    HI_THRESH_MASK      =   ( 0b111111111111 << 4U )            /*!<  HI_THRESH mask                                                */
+    HI_THRESH_MASK      =   0xFFFF            /*!<  HI_THRESH mask                                                */
 } ADS111X_hi_thresh_t;
-
-
 
 
 
@@ -266,7 +265,7 @@ typedef enum
     ADS111X_SUCCESS               =   0U,   /*!<  I2C communication success                       */
     ADS111X_FAILURE               =   1U,   /*!<  I2C communication failure                       */
     ADS111X_DEVICE_NOT_SUPPORTED  =   2U,   /*!<  Device not supported                            */
-    ADS111X_VALUE_OUT_OF_RANGE    =   3U,   /*!<  Value aout of range                             */
+    ADS111X_VALUE_OUT_OF_RANGE    =   3U,   /*!<  Value out of range                              */
     ADS111X_DATA_CORRUPTED        =   4U    /*!<  D and lo/hi threshold data                      */
 } ADS111X_status_t;
 
