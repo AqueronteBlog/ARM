@@ -61,21 +61,6 @@ typedef enum
 
 
 /**
-  * @brief   CONVERSION REGISTER. ( Default: 0x0000 )
-  *           NOTE: The 16-bit Conversion register contains the result of the last conversion in binary two's complement format.
-					Following power-up, the Conversion register is cleared to 0, and remains 0 until the first conversion is completed.
-  */
-/* D <15:4>
- *    NOTE: 16-bit conversion result.
- */
-typedef enum
-{
-    CONVERSION_D_MASK   =   0xFFFF  	/*!<  D mask                                                    */
-} ADS111X_conversion_t;
-
-
-
-/**
   * @brief   CONFIG REGISTER. ( Default: 0x8583 )
   *           NOTE: The 16-bit Config register is used to control the operating mode, input selection, data rate, full-scale range, and
   *                 comparator modes.
@@ -228,13 +213,9 @@ typedef enum
 
 #ifndef ADS111X_VECTOR_STRUCT_H
 #define ADS111X_VECTOR_STRUCT_H
+/* Configuration parameters	 */
 typedef struct
 {
-  /* Output  */
-  float     conversion;                     /*!<  Conversion value                                        */
-  int16_t   raw_conversion;                 /*!<  Raw conversion value                                    */
-
-  /* Configuration  */
   ADS111X_config_os_t         os;           /*!<  Operational status                                      */
   ADS111X_config_mux_t        mux;          /*!<  Input multiplexer configuration (ADS1015 only)          */
   ADS111X_config_pga_t        pga;          /*!<  Programmable gain amplifier configuration (not ADS1013) */
@@ -244,13 +225,40 @@ typedef struct
   ADS111X_config_comp_pol_t   comp_pol;     /*!<  Comparator polarity (ADS1014 and ADS1015 only)          */
   ADS111X_config_comp_lat_t   comp_lat;     /*!<  Latching comparator (ADS1014 and ADS1015 only)          */
   ADS111X_config_comp_que_t   comp_que;     /*!<  Comparator queue and disable (ADS1014 and ADS1015 only) */
+} ADS111X_config_t;
+
+
+/* Thresholds: High and low thresholds	 */
+typedef struct
+{
+	int16_t		lo_thresh;       			/*!<  Low threshold value                        	*/
+	int16_t		hi_thresh;       			/*!<  High threshold value                     		*/
+} ADS111X_thresh_t;
+
+
+/* Result Conversion: Raw value and conversion value	 */
+typedef struct
+{
+	float     conversion;               	/*!<  Conversion value                         		*/
+	int16_t   raw_conversion;       		/*!<  Raw conversion value                        	*/
+} ADS111X_conversion_t;
+
+
+
+/* USER: User's global variables	 */
+typedef struct
+{
+  /* Output  */
+  ADS111X_conversion_t	conversion;       	/*!<  Conversion values                        		*/
+
+  /* Configuration  */
+  ADS111X_config_t		config;           	/*!<  Configuration register                     	*/
 
   /* Thresholds  */
-  int16_t           lo_thresh;              /*!<  Low threshold value                                     */
-  int16_t           hi_thresh;              /*!<  High threshold value                                    */
+  ADS111X_thresh_t		thresh;       		/*!<  High/Low threshold values                		*/
 
   /* Device identification   */
-  ADS111X_device_t  device;                 /*!<  Device. The user MUST identify the device               */
+  ADS111X_device_t  	device;          	/*!<  Device. The user MUST identify the device		*/
 } ADS111X_data_t;
 #endif
 
@@ -277,82 +285,82 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-ADS111X_status_t ADS111X_Init                   ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myADS111X  );
+ADS111X_status_t ADS111X_Init                   ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myADS111X  		);
 
 /** It triggers a softreset.
   */
-ADS111X_status_t ADS111X_SoftReset              ( I2C_parameters_t myI2Cparameters                            );
+ADS111X_status_t ADS111X_SoftReset              ( I2C_parameters_t myI2Cparameters                            		);
 
 /** It gets the raw conversion value.
   */
-ADS111X_status_t ADS111X_GetRawConversion       ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myRawD    );
+ADS111X_status_t ADS111X_GetRawConversion       ( I2C_parameters_t myI2Cparameters, ADS111X_conversion_t* myRawD	);
 
 /** It gets the conversion value.
   */
-ADS111X_status_t ADS111X_GetConversion          ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myD       );
+ADS111X_status_t ADS111X_GetConversion          ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myD       		);
 
 /** It starts a new single conversion.
   */
-ADS111X_status_t ADS111X_StartSingleConversion  ( I2C_parameters_t myI2Cparameters                            );
+ADS111X_status_t ADS111X_StartSingleConversion  ( I2C_parameters_t myI2Cparameters                            		);
 
 /** It checks if the device is not currently performing a conversion.
   */
-ADS111X_status_t ADS111X_GetOS                  ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myADS111X );
+ADS111X_status_t ADS111X_GetOS                  ( I2C_parameters_t myI2Cparameters, ADS111X_config_t* myADS111X 	);
 
 /** It sets input multiplexer configuration ( ADS1015 only ).
   */
-ADS111X_status_t ADS111X_SetMux                 ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myADS111X  );
+ADS111X_status_t ADS111X_SetMux                 ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myADS111X  		);
 
 /** It gets input multiplexer configuration ( ADS1015 only ).
   */
-ADS111X_status_t ADS111X_GetMux                 ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myADS111X );
+ADS111X_status_t ADS111X_GetMux                 ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myADS111X 		);
 
 /** It sets programmable gain amplifier ( not ADS1013 ).
   */
-ADS111X_status_t ADS111X_SetGain                ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myPGA      );
+ADS111X_status_t ADS111X_SetGain                ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myPGA      		);
 
 /** It gets programmable gain amplifier ( not ADS1013 ).
   */
-ADS111X_status_t ADS111X_GetGain                ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myPGA     );
+ADS111X_status_t ADS111X_GetGain                ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myPGA     		);
 
 /** It sets the device operating mode.
   */
-ADS111X_status_t ADS111X_SetMode                ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myMode     );
+ADS111X_status_t ADS111X_SetMode                ( I2C_parameters_t myI2Cparameters, ADS111X_config_t myMode     	);
 
 /** It gets the device operating mode.
   */
-ADS111X_status_t ADS111X_GetMode                ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myMode    );
+ADS111X_status_t ADS111X_GetMode                ( I2C_parameters_t myI2Cparameters, ADS111X_config_t* myMode   		);
 
 /** It sets the data rate.
   */
-ADS111X_status_t ADS111X_SetDataRate            ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myDR       );
+ADS111X_status_t ADS111X_SetDataRate            ( I2C_parameters_t myI2Cparameters, ADS111X_config_t myDR       	);
 
 /** It gets the data rate.
   */
-ADS111X_status_t ADS111X_GetDataRate            ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myDR      );
+ADS111X_status_t ADS111X_GetDataRate            ( I2C_parameters_t myI2Cparameters, ADS111X_config_t* myDR     		);
 
 /** It sets the comparator configuration.
   */
-ADS111X_status_t ADS111X_SetComparator          ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myCOMP     );
+ADS111X_status_t ADS111X_SetComparator          ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myCOMP     		);
 
 /** It gets the comparator configuration.
   */
-ADS111X_status_t ADS111X_GetComparator          ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myCOMP    );
+ADS111X_status_t ADS111X_GetComparator          ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myCOMP    		);
 
 /** It sets the low threshold value.
   */
-ADS111X_status_t ADS111X_SetLowThresholdValue   ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myLoThres  );
+ADS111X_status_t ADS111X_SetLowThresholdValue   ( I2C_parameters_t myI2Cparameters, ADS111X_thresh_t myLoThres  	);
 
 /** It gets the low threshold value.
   */
-ADS111X_status_t ADS111X_GetLowThresholdValue   ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myLoThres );
+ADS111X_status_t ADS111X_GetLowThresholdValue   ( I2C_parameters_t myI2Cparameters, ADS111X_thresh_t* myLoThres 	);
 
 /** It sets the high threshold value.
   */
-ADS111X_status_t ADS111X_SetHighThresholdValue  ( I2C_parameters_t myI2Cparameters, ADS111X_data_t myHiThres  );
+ADS111X_status_t ADS111X_SetHighThresholdValue  ( I2C_parameters_t myI2Cparameters, ADS111X_thresh_t myHiThres  	);
 
 /** It gets the high threshold value.
   */
-ADS111X_status_t ADS111X_GetHighThresholdValue  ( I2C_parameters_t myI2Cparameters, ADS111X_data_t* myHiThres );
+ADS111X_status_t ADS111X_GetHighThresholdValue  ( I2C_parameters_t myI2Cparameters, ADS111X_thresh_t* myHiThres 	);
 
 
