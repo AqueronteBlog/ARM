@@ -41,7 +41,7 @@ ADS111X_status_t ADS111X_Init ( I2C_parameters_t myI2Cparameters, ADS111X_data_t
 {
   i2c_status_t aux =  I2C_SUCCESS;;
 
-  aux  =   i2c_init ( myI2Cparameters );
+  aux  |=   i2c_init ( myI2Cparameters );
 
 
 
@@ -901,7 +901,6 @@ ADS111X_status_t ADS111X_SetHighThresholdValue ( I2C_parameters_t myI2Cparameter
 ADS111X_status_t ADS111X_GetHighThresholdValue ( I2C_parameters_t myI2Cparameters, ADS111X_thresh_t* myHiThres )
 {
   uint8_t      cmd[2]   =  { 0U };
-  uint16_t     myConfig =  0U;
   i2c_status_t aux      =  I2C_SUCCESS;
 
   /* Read the register to mask it  */
@@ -1002,7 +1001,7 @@ ADS111X_status_t ADS111X_GetConversion ( I2C_parameters_t myI2Cparameters, ADS11
   ADS111X_status_t  aux       =  ADS111X_SUCCESS;
 
   /* Get the raw conversion value   */
-  aux  =   ADS111X_GetRawConversion ( myI2Cparameters, &(*myD) );
+  aux  =   ADS111X_GetRawConversion ( myI2Cparameters, &(myD->conversion) );
 
   /* Set up the gain accordingly   */
   switch ( myD->device )
@@ -1044,15 +1043,21 @@ ADS111X_status_t ADS111X_GetConversion ( I2C_parameters_t myI2Cparameters, ADS11
       break;
   }
 
-  /* Calculate the conversion. Check full of scale  */
-  if ( myD->conversion.raw_conversion == 0x7FFF )
+
+  /* Check the scale	 */
+  if ( myD->conversion.raw_conversion == 0x8000 )
   {
-    myFactor  =   ( myGain * ( 32768.0 - 1.0 ) ) / 32768.0;
+	  myFactor  =   myGain;
+  }
+  else if ( myD->conversion.raw_conversion == 0x7FFF )
+  {
+	  myFactor  =   ( myGain * ( 32768.0 - 1.0 ) ) / 32768.0;
   }
   else
   {
-    myFactor  =   myGain / 32768.0;
+	  myFactor  =   myGain / 32768.0;
   }
+
 
   /* Result  */
   myD->conversion.conversion  =   (float)( myFactor * myD->conversion.raw_conversion );
@@ -1084,8 +1089,8 @@ ADS111X_status_t ADS111X_GetConversion ( I2C_parameters_t myI2Cparameters, ADS11
  */
 ADS111X_status_t ADS111X_SoftReset ( I2C_parameters_t myI2Cparameters )
 {
-  uint8_t           cmd  =  0U;
-  i2c_status_t      aux;
+  uint8_t      cmd  =  0U;
+  i2c_status_t aux  =  I2C_SUCCESS;
 
   /* General address: 0x00   */
   myI2Cparameters.addr   =   0x00;
