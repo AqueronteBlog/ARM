@@ -42,8 +42,8 @@ int main(int argc, char *argv[])
 {
 	uint8_t  			myMessage[ TX_BUFF_SIZE ];
 	I2C_parameters_t    myADS111X_I2C_parameters;
-//	ADS111X_data_t 		myADS111X_Data;
-//	ADS111X_status_t  	aux;
+	ADS111X_data_t 		myADS111X_Data;
+	ADS111X_status_t  	aux;
 
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
@@ -62,23 +62,42 @@ int main(int argc, char *argv[])
 
 
 	/* I2C definition   */
-//	myADS111X_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
-//	myADS111X_I2C_parameters.sda         	 =    I2C0_SDA;
-//	myADS111X_I2C_parameters.scl         	 =    I2C0_SCL;
-//	myADS111X_I2C_parameters.addr        	 =    ADS111X_ADDRESS;
-//	myADS111X_I2C_parameters.freq        	 =    100000;
-//	myADS111X_I2C_parameters.pclkFrequency 	 =	  6400000;
-//	myADS111X_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
-//	myADS111X_I2C_parameters.sclPort     	 =    pADI_GPIO0;
+	myADS111X_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
+	myADS111X_I2C_parameters.sda         	 =    I2C0_SDA;
+	myADS111X_I2C_parameters.scl         	 =    I2C0_SCL;
+	myADS111X_I2C_parameters.addr        	 =    ADS111X_ADDRESS_GND;
+	myADS111X_I2C_parameters.freq        	 =    100000;
+	myADS111X_I2C_parameters.pclkFrequency 	 =	  6400000;
+	myADS111X_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
+	myADS111X_I2C_parameters.sclPort     	 =    pADI_GPIO0;
 
-	/* Configure I2C peripheral */
-	//aux  =   ADS111X_Init ( myADS111X_I2C_parameters );
+	/* Configure I2C peripheral  */
+	myADS111X_Data.device  =   DEVICE_ADS1115;
+	aux  =   ADS111X_Init  ( myADS111X_I2C_parameters, myADS111X_Data );
 
-	/* Get the device type version	 */
-	//aux	 =	 ADS111X_GetDeviceType ( myADS111X_I2C_parameters, &myADS111X_Data.hw_version );
+	/* Perform a softreset   */
+	aux  =   ADS111X_SoftReset  ( myADS111X_I2C_parameters );
+	for( uint32_t i = 0UL; i < 0x232; i++ );
 
+	/* Input multiplexor configuration ( channels ): AINp = AIN0 | AINn = GND  */
+	myADS111X_Data.config.mux  =   CONFIG_MUX_AINP_AIN0_AND_AINN_GND;
+	aux  =   ADS111X_SetMux  ( myADS111X_I2C_parameters, myADS111X_Data );
 
+	/* Gain: ±4.096V  */
+	myADS111X_Data.config.pga  =   CONFIG_PGA_FSR_4_096_V;
+	aux  =   ADS111X_SetGain  ( myADS111X_I2C_parameters, myADS111X_Data );
 
+	/* Mode: Single-shot  */
+	myADS111X_Data.config.mode	=	CONFIG_MODE_SINGLE_SHOT;
+	aux  =   ADS111X_SetMode  ( myADS111X_I2C_parameters, myADS111X_Data.config );
+
+	/* Data rate: 1600 SPS  */
+	myADS111X_Data.config.dr  =   CONFIG_DR_128_SPS;
+	aux  =   ADS111X_SetDataRate  ( myADS111X_I2C_parameters, myADS111X_Data.config );
+
+	/* Comparator: Disabled  */
+	myADS111X_Data.config.comp_que  =   CONFIG_COMP_QUE_DISABLED;
+	aux  =   ADS111X_SetComparator  ( myADS111X_I2C_parameters, myADS111X_Data );
 
 
 	/* Enable Timer0	 */
@@ -110,22 +129,30 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-			/* Get the temperature value	 */
-			//aux  	 =   ADS111X_GetDeviceTemperature ( myADS111X_I2C_parameters, &myADS111X_Data.device_temp );
+			/* Trigger a new conversion  */
+			aux  =   ADS111X_StartSingleConversion ( myADS111X_I2C_parameters );
+
+			/* Wait until the conversion is completed  */
+			do{
+				aux  =   ADS111X_GetOS ( myADS111X_I2C_parameters, &myADS111X_Data.config );
+			}while( ( myADS111X_Data.config.os & CONFIG_OS_MASK ) == CONFIG_OS_BUSY );      // [TODO] Too dangerous! the uC may get stuck here
+			                                                                                // [WORKAROUND] Insert a counter.
+			/* Get the result  */
+			aux  =   ADS111X_GetConversion ( myADS111X_I2C_parameters, &myADS111X_Data );
+
+			/* Transmit result through the UART  */
+			sprintf ( (char*)myMessage, "V = %ld mV\r\n", (int32_t)( 1000 * myADS111X_Data.conversion.conversion ) );
 
 
-//			/* Transmit data through the UART	 */
-//			sprintf ( (char*)myMessage, "White counter: %d | Lux: %0.4f lx\r\n", myADS111X_Data.white_channel_output_data, myADS111X_Data.light_level );
-//
-//			/* Check that is safe to send data	 */
-//			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
-//
-//			/* Transmit data back	 */
-//			myPtr            =   &myMessage[0];
-//			pADI_UART0->TX	 =	 *myPtr;
-//
-//			/* Transmit Buffer Empty Interrupt: Enabled	 */
-//			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
+			/* Check that is safe to send data	 */
+			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
+
+			/* Transmit data back	 */
+			myPtr            =   &myMessage[0];
+			pADI_UART0->TX	 =	 *myPtr;
+
+			/* Transmit Buffer Empty Interrupt: Enabled	 */
+			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
 
 			/* Reset variables and turn both LEDs off	 */
 			myState	 		 =	 0UL;
