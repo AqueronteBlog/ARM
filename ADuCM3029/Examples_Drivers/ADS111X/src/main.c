@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: ADS111X.
+ * @details     This example shows how to work with the external device: ADS111X.
  * 				A new sample is read every 1 second and transmitted through the UART (115200 baud)
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
