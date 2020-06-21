@@ -16,6 +16,8 @@
 
 #include "i2c.h"
 
+
+
 /**
  * @brief       i2c_init   ( I2C_parameters_t )
  * @details     It configures the I2C peripheral.
@@ -136,11 +138,9 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 	 *  - The master operates in 7-bit addressing mode
 	 *  - Auto-end disabled
 	 *  - The transfer is completed after the NBYTES data transfer (STOP or RESTART will follow)
-	 *  - The master only sends the 1st 7 bits of the 10 bit address, followed by Read direction
 	 *  - The master operates in 7-bit addressing mode
 	 */
 	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_ADD10 | I2C_CR2_AUTOEND | I2C_CR2_RELOAD | I2C_CR2_ADD10 );
-	myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_HEAD10R );
 
 
 	/* Clear all the flags	 */
@@ -151,6 +151,8 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 	/* Peripheral configured successfully	 */
 	return I2C_SUCCESS;
 }
+
+
 
 /**
  * @brief       i2c_write   ( I2C_parameters_t , uint8_t* , uint32_t , i2c_stop_bit_t  )
@@ -179,18 +181,24 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    uint32_t i2c_timeout2 	= 	I2C_TIMEOUT;
    uint32_t i2c_timeout3 	= 	I2C_TIMEOUT;
 
+   /* I2C is disabled	 */
+   	myI2Cparameters.i2cInstance->CR1	&=	~( I2C_CR1_PE );
+
    /* I2C
    	 *  - Master requests a write transfer
    	 *  - Update the slave address
    	 *  - Update the number of bytes to be transmitted
    	 */
    	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_RD_WRN | I2C_CR2_SADD | I2C_CR2_NBYTES );
-   	myI2Cparameters.i2cInstance->CR2	|=	 ( ( myI2Cparameters.addr << 1UL ) | ( i2c_data_length << I2C_CR2_NBYTES_Pos ) );
+   	myI2Cparameters.i2cInstance->CR2	|=	 ( ( myI2Cparameters.addr << I2C_CR2_SADD_Pos ) | ( i2c_data_length << I2C_CR2_NBYTES_Pos ) );
 
    	/* I2C
    	  *  - Reset all the interrupts ( flags )
    	  */
    	 myI2Cparameters.i2cInstance->ICR	|=	 ( I2C_ICR_ADDRCF | I2C_ICR_NACKCF | I2C_ICR_STOPCF | I2C_ICR_BERRCF | I2C_ICR_ARLOCF | I2C_ICR_OVRCF );
+
+   	/* I2C is enabled	 */
+   	myI2Cparameters.i2cInstance->CR1	|=	 ( I2C_CR1_PE );
 
    	 /* Start sequence	 */
    	 myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_START );
@@ -268,7 +276,8 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
  *
  * @author      Manuel Caballero
  * @date        16/January/2020
- * @version     16/January/2020         The ORIGIN
+ * @version     19/June/2020        The whole setup was completed.
+ * 				16/January/2020		The ORIGIN
  * @pre         I2C communication is by polling mode.
  * @warning     This function only implements 7-bit address for the moment.
  */
@@ -278,7 +287,73 @@ i2c_status_t i2c_read ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uin
 	uint32_t i2c_timeout1 = I2C_TIMEOUT;
 	uint32_t i2c_timeout2 = I2C_TIMEOUT;
 
+	/* I2C is disabled	 */
+	myI2Cparameters.i2cInstance->CR1	&=	~( I2C_CR1_PE );
 
+	/* I2C
+	 *	- General call enabled
+	 *	- Wakeup from Stop mode disable
+	 *	- DMA mode disabled for reception
+	 *	- DMA transmission requests enable
+	 *	- Analog noise filter enabled
+	 *	- Digital filter disabled
+	 *	- Error detection interrupts disabled
+	 *	- Transfer Complete interrupt disabled
+	 *	- Stop detection (STOPF) interrupt disabled
+	 *	- Not acknowledge (NACKF) received interrupts disabled
+	 *	- Address match (ADDR) interrupts disabled
+	 *	- Receive (RXNE) interrupt disabled
+	 *	- Transmit (TXIS) interrupt disabled
+	 */
+	myI2Cparameters.i2cInstance->CR1	&=	~( I2C_CR1_GCEN | I2C_CR1_WUPEN | I2C_CR1_RXDMAEN | I2C_CR1_TXDMAEN | I2C_CR1_ANFOFF | I2C_CR1_DNF | I2C_CR1_ERRIE | I2C_CR1_TCIE | I2C_CR1_STOPIE | I2C_CR1_NACKIE | I2C_CR1_ADDRIE | I2C_CR1_RXIE | I2C_CR1_TXIE );
+
+
+	/* I2C
+	 * 	- Software end mode
+	 * 	- The transfer is completed after the NBYTES data transfer ( STOP or RESTART will follow )
+	 * 	- Load NBYTES with how many bytes to read
+	 * 	- The master operates in 7-bit addressing mode
+	 * 	- Master requests a read transfer
+	 * 	- Update the slave address
+	 * 	- Start RX mode
+	 */
+	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_RELOAD | I2C_CR2_AUTOEND | I2C_CR2_RELOAD | I2C_CR2_ADD10 | I2C_CR2_SADD );
+	myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_RD_WRN | ( (uint8_t)( i2c_data_length ) << I2C_CR2_NBYTES_Pos ) | ( myI2Cparameters.addr << I2C_CR2_SADD_Pos ) );
+	myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_START );
+
+	/* I2C is enabled	 */
+	myI2Cparameters.i2cInstance->CR1	|=	 ( I2C_CR1_PE );
+
+
+	/* Read the data	 */
+	for ( i = 0UL; i < i2c_data_length; i++ )
+	{
+		/* Wait until there is a byte into the RXNE or timeout	 */
+		i2c_timeout1 	= 	I2C_TIMEOUT;
+		while ( ( ( myI2Cparameters.i2cInstance->ICR & I2C_ISR_RXNE_Msk ) != I2C_ISR_RXNE ) && ( i2c_timeout1 > 0UL ) )
+		{
+			i2c_timeout1--;
+		}
+
+		*i2c_buff++	 =	 myI2Cparameters.i2cInstance->RXDR;
+	}
+
+	/* Generate STOP condition	 */
+	myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_STOP );
+
+	/* Wait until STOP condition is sent or timeout	 */
+	i2c_timeout2 	= 	I2C_TIMEOUT;
+	while ( ( ( myI2Cparameters.i2cInstance->ICR & I2C_ISR_STOPF_Msk ) != I2C_ISR_STOPF ) && ( i2c_timeout2 > 0UL ) )
+	{
+		i2c_timeout2--;
+	}
+
+	/* Clear STOP flag	 */
+	myI2Cparameters.i2cInstance->ICR	|=	 ( I2C_ICR_STOPCF );
+
+
+	/* I2C is disabled	 */
+	myI2Cparameters.i2cInstance->CR1	&=	~( I2C_CR1_PE );
 
 
 
