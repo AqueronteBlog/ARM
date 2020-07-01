@@ -100,7 +100,10 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint8_t  myMessage[ TX_BUFF_SIZE ];
+	I2C_parameters_t    myBH1790GLC_I2C_parameters;
+	BH1790GLC_data_t 	myBH1790GLC_Data;
+	BH1790GLC_status_t  aux;
+	uint8_t  			myMessage[ TX_BUFF_SIZE ];
 
   /* USER CODE END 1 */
   
@@ -127,161 +130,40 @@ int main(void)
   Conf_UART2 ( UART2_CLK, 115200 );
   Conf_Range ();
 
+  /* I2C definition   */
+  myBH1790GLC_I2C_parameters.i2cInstance 	 =   I2C1;
+  myBH1790GLC_I2C_parameters.sda         	 =   I2C1_SDA;
+  myBH1790GLC_I2C_parameters.scl         	 =   I2C1_SCL;
+  myBH1790GLC_I2C_parameters.addr        	 =   BH1790GLC_ADDRESS;
+  myBH1790GLC_I2C_parameters.freq        	 =   I2C_STANDARD_MODE_100KHZ;
+  myBH1790GLC_I2C_parameters.i2cClockSource	 =	 I2C_CLOCK_SOURCE_SYSCLK;
+  myBH1790GLC_I2C_parameters.pclkFrequency 	 =	 SYSTEM_CORE_CLK;
+  myBH1790GLC_I2C_parameters.sdaPort     	 =   GPIOB;
+  myBH1790GLC_I2C_parameters.sclPort     	 =   GPIOB;
+
+  /* Configure I2C peripheral  */
+  aux  =   BH1790GLC_Init  ( myBH1790GLC_I2C_parameters );
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  __HAL_PWR_CLEAR_FLAG (PWR_FLAG_WU);
-	  HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	__HAL_PWR_CLEAR_FLAG (PWR_FLAG_WU);
+	HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if ( ( myState == 1UL ) && ( myUART_TxEnd == 0UL ) )
-	  {
-		  switch ( myRX )
-		  {
-		  case '1':
-			  if ( ( GPIOB->ODR & ( 1UL << LD1 ) ) == ( 1UL << LD1 ) )
-			  {
-				  myMessage[ 0 ]   =  'L';
-				  myMessage[ 1 ]   =  'E';
-				  myMessage[ 2 ]   =  'D';
-				  myMessage[ 3 ]   =  '1';
-				  myMessage[ 4 ]   =  ' ';
-				  myMessage[ 5 ]   =  'O';
-				  myMessage[ 6 ]   =  'F';
-				  myMessage[ 7 ]   =  'F';
-				  myMessage[ 8 ]   =  '\n';
 
-				  GPIOB->BRR	 =	( 1UL << LD1 );				// Turn it OFF
-			  }
-			  else
-			  {
-				  myMessage[ 0 ]   =  'L';
-				  myMessage[ 1 ]   =  'E';
-				  myMessage[ 2 ]   =  'D';
-				  myMessage[ 3 ]   =  '1';
-				  myMessage[ 4 ]   =  ' ';
-				  myMessage[ 5 ]   =  'O';
-				  myMessage[ 6 ]   =  'N';
-				  myMessage[ 7 ]   =  '\n';
 
-				  GPIOB->BSRR	 =	 ( 1UL << LD1 );			// Turn it ON
-			  }
-			  break;
+	/* Transmit data through the UART	 */
+	myPtr   	 =   &myMessage[0];
+	USART2->TDR	 =	 *myPtr;
+	USART2->CR1	|=	 USART_CR1_TE;						// Transmitter Enabled
 
-		  case '2':
-			  if ( ( GPIOA->ODR & ( 1UL << LD2 ) ) == ( 1UL << LD2 ) )
-			  {
-				  myMessage[ 0 ]   =  'L';
-				  myMessage[ 1 ]   =  'E';
-				  myMessage[ 2 ]   =  'D';
-				  myMessage[ 3 ]   =  '2';
-				  myMessage[ 4 ]   =  ' ';
-				  myMessage[ 5 ]   =  'O';
-				  myMessage[ 6 ]   =  'F';
-				  myMessage[ 7 ]   =  'F';
-				  myMessage[ 8 ]   =  '\n';
-
-			  	  GPIOA->BRR	 =	( 1UL << LD2 );				// Turn it OFF
-			  }
-			  else
-			  {
-				  myMessage[ 0 ]   =  'L';
-				  myMessage[ 1 ]   =  'E';
-				  myMessage[ 2 ]   =  'D';
-				  myMessage[ 3 ]   =  '2';
-				  myMessage[ 4 ]   =  ' ';
-				  myMessage[ 5 ]   =  'O';
-				  myMessage[ 6 ]   =  'N';
-				  myMessage[ 7 ]   =  '\n';
-
-			  	  GPIOA->BSRR	 =	 ( 1UL << LD2 );			// Turn it ON
-			  }
-			  break;
-
-		  case '3':
-			  if ( ( GPIOB->ODR & ( 1UL << LD3 ) ) == ( 1UL << LD3 ) )
-			  {
-				  myMessage[ 0 ]   =  'L';
-				  myMessage[ 1 ]   =  'E';
-				  myMessage[ 2 ]   =  'D';
-				  myMessage[ 3 ]   =  '3';
-				  myMessage[ 4 ]   =  ' ';
-				  myMessage[ 5 ]   =  'O';
-				  myMessage[ 6 ]   =  'F';
-				  myMessage[ 7 ]   =  'F';
-				  myMessage[ 8 ]   =  '\n';
-
-			  	  GPIOB->BRR	 =	( 1UL << LD3 );				// Turn it OFF
-			  }
-			  else
-			  {
-				  myMessage[ 0 ]   =  'L';
-				  myMessage[ 1 ]   =  'E';
-				  myMessage[ 2 ]   =  'D';
-				  myMessage[ 3 ]   =  '3';
-				  myMessage[ 4 ]   =  ' ';
-				  myMessage[ 5 ]   =  'O';
-				  myMessage[ 6 ]   =  'N';
-				  myMessage[ 7 ]   =  '\n';
-
-			   	  GPIOB->BSRR	 =	 ( 1UL << LD3 );			// Turn it ON
-			  }
-			  break;
-
-		  case '4':
-			  if ( ( GPIOB->ODR & ( 1UL << LD4 ) ) == ( 1UL << LD4 ) )
-			  {
-				  myMessage[ 0 ]   =  'L';
-				  myMessage[ 1 ]   =  'E';
-				  myMessage[ 2 ]   =  'D';
-				  myMessage[ 3 ]   =  '4';
-				  myMessage[ 4 ]   =  ' ';
-				  myMessage[ 5 ]   =  'O';
-				  myMessage[ 6 ]   =  'F';
-				  myMessage[ 7 ]   =  'F';
-				  myMessage[ 8 ]   =  '\n';
-
-  			  	  GPIOB->BRR	 =	( 1UL << LD4 );				// Turn it OFF
-  			  }
-  			  else
-  			  {
-  				  myMessage[ 0 ]   =  'L';
-  				  myMessage[ 1 ]   =  'E';
-  				  myMessage[ 2 ]   =  'D';
-  				  myMessage[ 3 ]   =  '4';
-  				  myMessage[ 4 ]   =  ' ';
-  				  myMessage[ 5 ]   =  'O';
-  				  myMessage[ 6 ]   =  'N';
-  				  myMessage[ 7 ]   =  '\n';
-
-  			  	  GPIOB->BSRR	 =	 ( 1UL << LD4 );			// Turn it ON
-  			  }
-			  break;
-
-		  default:
-			  myMessage[ 0 ]   =  'E';
-			  myMessage[ 1 ]   =  'R';
-			  myMessage[ 2 ]   =  'R';
-			  myMessage[ 3 ]   =  'O';
-			  myMessage[ 4 ]   =  'R';
-			  myMessage[ 5 ]   =  '\n';
-			  break;
-
-		  }
-
-		  /* Transmit data through the UART	 */
-		  myPtr   	 	 =   &myMessage[0];
-		  USART2->TDR	 =	 *myPtr;
-		  USART2->CR1	|=	 USART_CR1_TE;						// Transmitter Enabled
-
-		  /* Reset variables	 */
-		  myUART_TxEnd   =   1UL;
-		  myState	 	 =	 0UL;
-	  }
+	/* Reset variables	 */
+	myUART_TxEnd   =   1UL;
+	myState	 	 =	 0UL;
   }
   /* USER CODE END 3 */
 }
