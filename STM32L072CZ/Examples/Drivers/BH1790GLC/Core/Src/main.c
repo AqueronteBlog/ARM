@@ -42,6 +42,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 #include "board.h"
 #include "variables.h"
 #include "functions.h"
@@ -142,7 +143,29 @@ int main(void)
   myBH1790GLC_I2C_parameters.sclPort     	 =   GPIOB;
 
   /* Configure I2C peripheral  */
-  aux  =   BH1790GLC_Init  ( myBH1790GLC_I2C_parameters );
+  aux	 =   BH1790GLC_Init  ( myBH1790GLC_I2C_parameters );
+
+  /* Get Manufacturer IDs	 */
+  aux	 =	 BH1790GLC_GetManufacturerID ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
+
+  /* Get part IDs	 */
+  aux	 =	 BH1790GLC_GetPartID ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
+
+  /* Performs a software reset	 */
+  aux	 =	 BH1790GLC_SoftReset ( myBH1790GLC_I2C_parameters );
+
+  /* Configure the system control setting	 */
+  myBH1790GLC_Data.rdy				 	 =	 MEAS_CONTROL1_RDY_OSC_BLOCK_ACTIVE;
+  myBH1790GLC_Data.led_lighting_freq	 =	 MEAS_CONTROL1_LED_LIGHTING_FREQ_64HZ_MODE;
+  myBH1790GLC_Data.rcycle				 =	 MEAS_CONTROL1_RCYCLE_32HZ_MODE;
+
+  /* Configure the measurement control setting	 */
+  myBH1790GLC_Data.led_en	 	=	 MEAS_CONTROL2_LED_EN_0;
+  myBH1790GLC_Data.led_on_time	=	 MEAS_CONTROL2_LED_ON_TIME_0_6_MS_MODE;
+  myBH1790GLC_Data.led_current	=	 MEAS_CONTROL2_LED_CURRENT_1_MA_MODE;
+
+  /* Start measurement	 */
+  aux	 =	 BH1790GLC_StartMeasurement ( myBH1790GLC_I2C_parameters, myBH1790GLC_Data );
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -154,16 +177,29 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	if ( ( myState == 1UL ) && ( myUART_TxEnd == 0UL ) )
+	{
+		/* Turn LED1 on	 */
+		GPIOB->BSRR	 =	 ( 1UL << LD1 );
 
+		/* Get the raw DATAOUT values: DATAOUT_LEDOFF and DATAOUT_LEDON	 */
+		aux  	 =   BH1790GLC_GetRawDataOut ( myBH1790GLC_I2C_parameters, &myBH1790GLC_Data );
 
-	/* Transmit data through the UART	 */
-	myPtr   	 =   &myMessage[0];
-	USART2->TDR	 =	 *myPtr;
-	USART2->CR1	|=	 USART_CR1_TE;						// Transmitter Enabled
+		/* Transmit data through the UART	 */
+		sprintf ( (char*)myMessage, "LED OFF: %x | LED ON: %x\r\n", myBH1790GLC_Data.dataOut_LED_OFF, myBH1790GLC_Data.dataOut_LED_ON );
 
-	/* Reset variables	 */
-	myUART_TxEnd   =   1UL;
-	myState	 	 =	 0UL;
+		/* Transmit data through the UART	 */
+		myPtr   	 =   &myMessage[0];
+		USART2->TDR	 =	 *myPtr;
+		USART2->CR1	|=	 USART_CR1_TE;						// Transmitter Enabled
+
+		/* Reset variables	 */
+		myUART_TxEnd =   1UL;
+		myState	 	 =	 0UL;
+
+		/* Turn LED1 off	 */
+		GPIOB->BRR	 =	( 1UL << LD1 );
+	}
   }
   /* USER CODE END 3 */
 }
