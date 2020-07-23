@@ -107,6 +107,10 @@ SFM4100_status_t SFM4100_Init           ( I2C_parameters_t myI2Cparameters  				
   */
 SFM4100_status_t SFM4100_SoftReset      ( I2C_parameters_t myI2Cparameters                            	);
 
+/** It triggers a new flow measurement.
+  */
+SFM4100_status_t SFM4100_TriggerNewFlow	( I2C_parameters_t myI2Cparameters								);
+
 /** It gets the raw flow value.
   */
 SFM4100_status_t SFM4100_GetRawFlow		( I2C_parameters_t myI2Cparameters, SFM4100_data_t* myRawFlow	);

@@ -99,6 +99,50 @@ SFM4100_status_t SFM4100_SoftReset ( I2C_parameters_t myI2Cparameters )
 
 
 /**
+ * @brief       SFM4100_TriggerNewFlow ( I2C_parameters_t );
+ *
+ * @details     It triggers a new flow measurement.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of SFM4100_TriggerNewFlow.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        23/June/2020
+ * @version     23/June/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     This function must be called before any measurement is read.
+ * @warning     This function doesn't generate any STOP command on the I2C so, a read
+ * 				function either SFM4100_GetRawFlow or SFM4100_GetFlow must be called.
+ */
+SFM4100_status_t SFM4100_TriggerNewFlow ( I2C_parameters_t myI2Cparameters )
+{
+  uint8_t      cmd   =  0U;
+  i2c_status_t aux   =  I2C_SUCCESS;
+
+  /* Write the register  */
+  cmd   =   SFM4100_TRIGGER_FLOW_MEASUREMENT;
+  aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   SFM4100_SUCCESS;
+  }
+  else
+  {
+    return   SFM4100_FAILURE;
+  }
+}
+
+
+
+/**
  * @brief       SFM4100_GetRawFlow ( I2C_parameters_t , SFM4100_data_t* );
  *
  * @details     It gets the raw flow value.
@@ -113,9 +157,11 @@ SFM4100_status_t SFM4100_SoftReset ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        22/June/2020
- * @version     22/June/2020   The ORIGIN
+ * @version     23/June/2020   To trigger a new flow value was removed from this function,
+ * 							   a separate function was created to do such a task.
+ * 				22/June/2020   The ORIGIN
  * @pre         This function also checks that the data is valid ( CRC )
- * @warning     N/A.
+ * @warning     SFM4100_TriggerNewFlow function must be called before.
  */
 SFM4100_status_t SFM4100_GetRawFlow	( I2C_parameters_t myI2Cparameters, SFM4100_data_t* myRawFlow )
 {
@@ -125,8 +171,6 @@ SFM4100_status_t SFM4100_GetRawFlow	( I2C_parameters_t myI2Cparameters, SFM4100_
 
 
   /* Read the register  */
-  cmd[0]   	 =   SFM4100_TRIGGER_FLOW_MEASUREMENT;
-  aux		|=   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
   aux  		|=   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
   /* Parse the data	 */
@@ -154,6 +198,41 @@ SFM4100_status_t SFM4100_GetRawFlow	( I2C_parameters_t myI2Cparameters, SFM4100_
   {
     return   SFM4100_FAILURE;
   }
+}
+
+
+
+/**
+ * @brief       SFM4100_GetFlow ( I2C_parameters_t , SFM4100_data_t* );
+ *
+ * @details     It gets the flow value.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myFlow:		Current flow ( in slm ) and CRC value.
+ *
+ *
+ * @return       Status of SFM4100_GetFlow.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        23/June/2020
+ * @version     23/June/2020   The ORIGIN
+ * @pre         This function also checks that the data is valid ( CRC ) and updates the flow raw value.
+ * @warning     SFM4100_TriggerNewFlow function must be called before.
+ */
+SFM4100_status_t SFM4100_GetFlow ( I2C_parameters_t myI2Cparameters, SFM4100_data_t* myFlow )
+{
+  SFM4100_status_t 	aux 	=  SFM4100_SUCCESS;
+
+  /* Read the register  */
+  aux	 =	 SFM4100_GetRawFlow	( myI2Cparameters, &(*myFlow) );
+
+  /* Parse the data	 */
+  myFlow->conversion.flow_slm	/=	 1000.0;
+
+
+  return aux;
 }
 
 
