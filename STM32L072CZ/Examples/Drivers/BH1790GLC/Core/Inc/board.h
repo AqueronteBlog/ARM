@@ -48,4 +48,14 @@ typedef enum
 	USART5_RX   =   4              /*!<  PB_4                        */
 } B_L072Z_LRWAN1_uart5_t;
 
+
+/**
+  * @brief   I2C1
+*/
+typedef enum
+{
+	I2C1_SDA   	=   9,             /*!<  PB_9                        */
+	I2C1_SCL    =   8              /*!<  PB_8                        */
+} B_L072Z_LRWAN1_i2c1_t;
+
 #endif /* BOARD_H_ */
