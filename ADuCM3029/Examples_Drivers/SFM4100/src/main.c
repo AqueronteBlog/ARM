@@ -41,9 +41,9 @@ volatile uint8_t   *myPtr;             	/*!<   Pointer to point out myMessage   
 int main(int argc, char *argv[])
 {
 	uint8_t  			myMessage[ TX_BUFF_SIZE ];
-//	I2C_parameters_t    mySFM4100_I2C_parameters;
-//	SFM4100_data_t 		mySFM4100_Data;
-//	SFM4100_status_t  	aux;
+	I2C_parameters_t    mySFM4100_I2C_parameters;
+	SFM4100_data_t 		mySFM4100_Data;
+	SFM4100_status_t  	aux;
 
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
@@ -61,23 +61,22 @@ int main(int argc, char *argv[])
 	conf_Timer0 ();
 
 
-//	/* I2C definition   */
-//	mySFM4100_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
-//	mySFM4100_I2C_parameters.sda         	 =    I2C0_SDA;
-//	mySFM4100_I2C_parameters.scl         	 =    I2C0_SCL;
-//	mySFM4100_I2C_parameters.addr        	 =    SFM4100_ADDRESS_GND;
-//	mySFM4100_I2C_parameters.freq        	 =    100000;
-//	mySFM4100_I2C_parameters.pclkFrequency 	 =	  6400000;
-//	mySFM4100_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
-//	mySFM4100_I2C_parameters.sclPort     	 =    pADI_GPIO0;
-//
-//	/* Configure I2C peripheral  */
-//	mySFM4100_Data.device  =   DEVICE_ADS1115;
-//	aux  =   SFM4100_Init  ( mySFM4100_I2C_parameters, mySFM4100_Data );
-//
-//	/* Perform a softreset   */
-//	aux  =   SFM4100_SoftReset  ( mySFM4100_I2C_parameters );
+	/* I2C definition   */
+	mySFM4100_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
+	mySFM4100_I2C_parameters.sda         	 =    I2C0_SDA;
+	mySFM4100_I2C_parameters.scl         	 =    I2C0_SCL;
+	mySFM4100_I2C_parameters.addr        	 =    SFM4100_ADDRESS_AIR;
+	mySFM4100_I2C_parameters.freq        	 =    100000;
+	mySFM4100_I2C_parameters.pclkFrequency 	 =	  6400000;
+	mySFM4100_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
+	mySFM4100_I2C_parameters.sclPort     	 =    pADI_GPIO0;
 
+	/* Configure I2C peripheral  */
+	aux  =   SFM4100_Init  ( mySFM4100_I2C_parameters );
+
+	/* Perform a softreset   */
+	aux  =   SFM4100_SoftReset  ( mySFM4100_I2C_parameters );
+	for ( uint32_t ii = 0UL; ii < 0x2323; ii++ );
 
 
 	/* Enable Timer0	 */
@@ -109,30 +108,25 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-//			/* Trigger a new conversion  */
-//			aux  =   SFM4100_StartSingleConversion ( mySFM4100_I2C_parameters );
-//
-//			/* Wait until the conversion is completed  */
-//			do{
-//				aux  =   SFM4100_GetOS ( mySFM4100_I2C_parameters, &mySFM4100_Data.config );
-//			}while( ( mySFM4100_Data.config.os & CONFIG_OS_MASK ) == CONFIG_OS_BUSY );      // [TODO] Too dangerous! the uC may get stuck here
-//			                                                                                // [WORKAROUND] Insert a counter.
-//			/* Get the result  */
-//			aux  =   SFM4100_GetConversion ( mySFM4100_I2C_parameters, &mySFM4100_Data );
-//
-//			/* Transmit result through the UART  */
-//			sprintf ( (char*)myMessage, "V = %ld mV\r\n", (int32_t)( 1000 * mySFM4100_Data.conversion.conversion ) );
-//
-//
-//			/* Check that is safe to send data	 */
-//			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
-//
-//			/* Transmit data back	 */
-//			myPtr            =   &myMessage[0];
-//			pADI_UART0->TX	 =	 *myPtr;
-//
-//			/* Transmit Buffer Empty Interrupt: Enabled	 */
-//			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
+			/* Trigger a new conversion  */
+			aux  =   SFM4100_TriggerNewFlow ( mySFM4100_I2C_parameters );
+
+			/* Get the result  */
+			aux  =   SFM4100_GetFlow ( mySFM4100_I2C_parameters, &mySFM4100_Data );
+
+			/* Transmit result through the UART  */
+			sprintf ( (char*)myMessage, "Flow = %d sccm | Current CRC: %x | Calculated CRC: %x\r\n", (int16_t)mySFM4100_Data.conversion.flow_sccm, mySFM4100_Data.crc.current_crc, mySFM4100_Data.crc.calculated_crc );
+
+
+			/* Check that is safe to send data	 */
+			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
+
+			/* Transmit data back	 */
+			myPtr            =   &myMessage[0];
+			pADI_UART0->TX	 =	 *myPtr;
+
+			/* Transmit Buffer Empty Interrupt: Enabled	 */
+			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
 
 			/* Reset variables and turn both LEDs off	 */
 			myState	 		 =	 0UL;
