@@ -102,3 +102,4 @@ STM32L072CZ/Examples/Peripherals/UART/Debug/
 STM32L072CZ/Examples/Drivers/BH1790GLC/Debug/
 ADuCM3029/Examples_Drivers/ADS111X/Debug/
 ADuCM3029/Examples_Drivers/LIS3DHH/Debug/
+ADuCM3029/Examples_Drivers/ezPyo_SMD_Sensor/Debug/
