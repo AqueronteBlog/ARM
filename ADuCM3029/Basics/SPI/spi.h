@@ -75,13 +75,13 @@ typedef struct{
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-/** SPI writing function.
+/** SPI write/read function.
   */
-//spi_status_t    spi_write   ( spi_parameters_t mySPIparameters, uint8_t* SPI_buff, uint32_t length, SPI_stop_bit_t SPI_generate_stop );
+spi_status_t	spi_transfer	( spi_parameters_t mySPIparameters, uint8_t* spi_tx_buff, uint32_t spi_tx_length, uint8_t* spi_rx_buff, uint32_t spi_rx_length );
 
 /** SPI init function.
   */
-spi_status_t    spi_init    ( spi_parameters_t mySPIparameters );
+spi_status_t    spi_init        ( spi_parameters_t mySPIparameters );
 
 
 #ifdef __cplusplus
