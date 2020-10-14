@@ -418,6 +418,179 @@ typedef enum
 
 
 
+/* Register: STATUS	*/
+/**
+  * @brief   ZYXOR <7>.  Logic OR of the single X-, Y- and Z-axis data overrun.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	STATUS_ZYXOR_MASK		=   ( 1U << 7U ),	/*!<  ZYXOR mask           			               			*/
+	STATUS_ZYXOR_NO_OVERRUN	=   ( 0U << 7U ),   /*!<  no overrun has occurred	    	 		  [Default] */
+	STATUS_ZYXOR_NEW_DATA	=   ( 1U << 7U )    /*!<  a new set of data has overwritten the previous set	*/
+} LIS3DHH_status_zyxor_t;
+
+
+/**
+  * @brief   ZOR <6>.  Z-axis data overrun.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	STATUS_ZOR_MASK			=   ( 1U << 6U ),	/*!<  ZOR mask           			               				*/
+	STATUS_ZOR_NO_OVERRUN	=   ( 0U << 6U ),   /*!<  no overrun has occurred	    	 		  	  [Default] */
+	STATUS_ZOR_NEW_DATA		=   ( 1U << 6U )    /*!<  new data for the Z-axis has overwritten the previous data	*/
+} LIS3DHH_status_zor_t;
+
+
+/**
+  * @brief   YOR <5>.  Y-axis data overrun.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	STATUS_YOR_MASK			=   ( 1U << 5U ),	/*!<  YOR mask           			               				*/
+	STATUS_YOR_NO_OVERRUN	=   ( 0U << 5U ),   /*!<  no overrun has occurred	    	 		  	  [Default] */
+	STATUS_YOR_NEW_DATA		=   ( 1U << 5U )    /*!<  new data for the Y-axis has overwritten the previous data	*/
+} LIS3DHH_status_yor_t;
+
+
+/**
+  * @brief   XOR <4>.  X-axis data overrun.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	STATUS_XOR_MASK			=   ( 1U << 4U ),	/*!<  XOR mask           			               				*/
+	STATUS_XOR_NO_OVERRUN	=   ( 0U << 4U ),   /*!<  no overrun has occurred	    	 		  	  [Default] */
+	STATUS_XOR_NEW_DATA		=   ( 1U << 4U )    /*!<  new data for the X-axis has overwritten the previous data	*/
+} LIS3DHH_status_xor_t;
+
+
+/**
+  * @brief   ZYXDA <3>.  Logic AND of the single X-, Y- and Z-axis new data available.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	STATUS_ZYXDA_MASK		=   ( 1U << 3U ),	/*!<  ZYXDA mask           			               				*/
+	STATUS_ZYXDA_NO_OVERRUN	=   ( 0U << 3U ),   /*!<  no overrun has occurred	    	 		  	  [Default] */
+	STATUS_ZYXDA_NEW_DATA	=   ( 1U << 3U )    /*!<  a new set of data is available							*/
+} LIS3DHH_status_zyxda_t;
+
+
+/**
+  * @brief   ZDA <2>.  Z-axis new data available.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	STATUS_ZDA_MASK			=   ( 1U << 2U ),	/*!<  ZDA mask           			               				*/
+	STATUS_ZDA_NO_OVERRUN	=   ( 0U << 2U ),   /*!<  new data for the Z-axis is not yet available	  [Default] */
+	STATUS_ZDA_NEW_DATA		=   ( 1U << 2U )    /*!<  new data for the Z-axis is available						*/
+} LIS3DHH_status_zda_t;
+
+
+/**
+  * @brief   YDA <1>.  Y-axis new data available.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	STATUS_YDA_MASK			=   ( 1U << 1U ),	/*!<  YDA mask           			               				*/
+	STATUS_YDA_NO_OVERRUN	=   ( 0U << 1U ),   /*!<  new data for the Y-axis is not yet available	  [Default] */
+	STATUS_YDA_NEW_DATA		=   ( 1U << 1U )    /*!<  new data for the Y-axis is available						*/
+} LIS3DHH_status_yda_t;
+
+
+/**
+  * @brief   XDA <0>.  X-axis new data available.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	STATUS_XDA_MASK			=   ( 1U << 0U ),	/*!<  XDA mask           			               				*/
+	STATUS_XDA_NO_OVERRUN	=   ( 0U << 0U ),   /*!<  new data for the X-axis is not yet available	  [Default] */
+	STATUS_XDA_NEW_DATA		=   ( 1U << 0U )    /*!<  new data for the X-axis is available						*/
+} LIS3DHH_status_xda_t;
+
+
+
+/* Register: FIFO_CTRL	*/
+/**
+  * @brief   FMODE <7:5>.  Logic OR of the single X-, Y- and Z-axis data overrun.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	FIFO_CTRL_FMODE_MASK									=   ( 0b111 << 5U ),	/*!<  FMODE mask           			               										*/
+	FIFO_CTRL_FMODE_FIFO_OFF								=   ( 0b000 << 5U ),   	/*!<  Bypass mode. FIFO turned off    	 		  	  						  [Default] */
+	FIFO_CTRL_FMODE_FIFO_MODE								=   ( 0b001 << 5U ),   	/*!<  FIFO mode. Stops collecting data when FIFO is full								*/
+	FIFO_CTRL_FMODE_CONTINUOUS_MODE_UNTIL_TRIGGER_ASSERTED	=   ( 0b011 << 5U ),   	/*!<  Continuous mode until trigger is asserted, then FIFO mode							*/
+	FIFO_CTRL_FMODE_BYPASS_MODE_UNTIL_TRIGGER_ASSERTED		=   ( 0b100 << 5U ),   	/*!<  Bypass mode until trigger is asserted, then Continuous mode						*/
+	FIFO_CTRL_FMODE_FIFO_MODE_CONTINUOUS_MODE				=   ( 0b110 << 5U )    	/*!<  Continuous mode. If the FIFO is full, the new sample over-writes the older sample	*/
+} LIS3DHH_fifo_ctrl_fmode_t;
+
+
+/**
+  * @brief   FTH <4:0>.  FIFO threshold level setting.
+  *
+  *          NOTE: Default value: 0 0000
+  */
+typedef enum
+{
+	FIFO_FTH_MASK		=   ( 0b11111 << 0U ) 	/*!<  FTH mask           			               				*/
+} LIS3DHH_fifo_ctrl_fth_t;
+
+
+
+/* Register: FIFO_SRC	*/
+/**
+  * @brief   FTH <7>.  FIFO threshold status.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	FIFO_SRC_FTH_MASK								=   ( 1U << 7U ),	/*!<  FTH mask           			               					*/
+	FIFO_SRC_FTH_FIFO_LOWER_THAN_THRESHOLD			=   ( 0U << 7U ),   /*!<  FIFO filling is lower than threshold level					*/
+	FIFO_SRC_FTH_FIFO_EQUAL_HIGHER_THAN_THRESHOLD	=   ( 1U << 7U )    /*!<  FIFO filling is equal to or higher than the threshold level	*/
+} LIS3DHH_fifo_src_fth_t;
+
+
+/**
+  * @brief   OVRN <6>.  FIFO overrun status.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	FIFO_SRC_OVRN_MASK				=   ( 1U << 6U ),	/*!<  OVRN mask           			               								*/
+	FIFO_SRC_OVRN_FIFO_NOT_FILLED	=   ( 0U << 6U ),   /*!<  FIFO is not completely filled												*/
+	FIFO_SRC_OVRN_FIFO_FILLED		=   ( 1U << 6U )    /*!<  FIFO is completely filled and at least one sample has been overwritten	*/
+} LIS3DHH_fifo_src_ovr_t;
+
+
+/**
+  * @brief   FSS <5:0>.  FIFO overrun status.
+  *
+  *          NOTE: N/A
+  */
+typedef enum
+{
+	FIFO_SRC_FSS_MASK				=   ( 0b111111 << 0U )	/*!<  FSS mask           			               								*/
+} LIS3DHH_fifo_src_fss_t;
+
+
 
 
 
