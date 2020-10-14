@@ -53,4 +53,10 @@
 			<location>D:/Workspace/ARM/ADuCM3029/Basics/I2C</location>
 		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>CCES</name>
+			<value>file:/C:/Analog%20Devices/CrossCore%20Embedded%20Studio%202.8.3</value>
+		</variable>
+	</variableList>
 </projectDescription>
