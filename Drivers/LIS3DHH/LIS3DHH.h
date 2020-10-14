@@ -33,9 +33,8 @@ extern "C" {
   */
 typedef enum
 {
-    LIS3DHH_WRITE            =   ( 0x00 << 6 ),  /*!<  WRITE                 */
-    LIS3DHH_READ             =   ( 0x01 << 6 ),  /*!<  READ                  */
-    LIS3DHH_DIRECT_COMMAND   =   ( 0x03 << 6 )   /*!<  DIRECT COMMAND        */
+    LIS3DHH_WRITE            =   ( 0U << 7U ),  /*!<  WRITE                 */
+    LIS3DHH_READ             =   ( 1U << 7U)    /*!<  READ                  */
 } LIS3DHH_spi_command_structure_mode_t;
 
 
@@ -599,14 +598,9 @@ typedef enum
 /* LIS3DHH DATA */
 typedef struct
 {
-    int8_t      f_wake;                  /*!<  False wakeup register                */
-    uint8_t     patt2b;                  /*!<  Wakeup pattern PATT2B ( Manchester ) */
-    uint8_t     patt1b;                  /*!<  Wakeup pattern PATT1B ( Manchester ) */
-    uint8_t     rssi1;                   /*!<  RSSI1 Channel 1                      */
-    uint8_t     rssi2;                   /*!<  RSSI2 Channel 2                      */
-    uint8_t     rssi3;                   /*!<  RSSI3 Channel 3                      */
 
-    uint32_t    data;                    /*!<  Data                                 */
+
+    uint8_t	who_am_i;			/*!<  Device identification register       */
 } LIS3DHH_data_t;
 #endif
 
@@ -630,7 +624,13 @@ typedef enum
   */
 /** It configures the SPI peripheral.
     */
-LIS3DHH_status_t  LIS3DHH_Init                            ( spi_parameters_t mySPI_parameters                                                                                                                         );
+LIS3DHH_status_t  LIS3DHH_Init	( spi_parameters_t mySPI_parameters	);
+
+/** It gets the device identification.
+    */
+LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification	( spi_parameters_t mySPI_parameters, LIS3DHH_data_t* myID	);
+
+
 
 
 
