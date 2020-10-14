@@ -23,6 +23,12 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>com.analog.crosscore.deviceprogrammer.deviceprogrammerbuilder</name>
+			<triggers>auto,full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.cdt.core.cnature</nature>
