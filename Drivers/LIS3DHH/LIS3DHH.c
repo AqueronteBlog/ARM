@@ -90,6 +90,7 @@ LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification ( spi_parameters_t mySPI_param
 
 
 
+
     if ( mySPI_status == SPI_SUCCESS )
     {
         return   LIS3DHH_SUCCESS;
