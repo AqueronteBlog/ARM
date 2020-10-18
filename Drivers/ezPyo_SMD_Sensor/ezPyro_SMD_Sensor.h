@@ -27,16 +27,13 @@ extern "C" {
 #endif
 
 
-/* SPI COMMAND STRUCTURE */
 /**
-  * @brief   MODE. ( B15:B14 )
+  * @brief   DEFAULT ADDRESSES
   */
 typedef enum
 {
-    EZPYRO_SMD_SENSOR_WRITE            =   ( 0x00 << 6 ),  /*!<  WRITE                 */
-    EZPYRO_SMD_SENSOR_READ             =   ( 0x01 << 6 ),  /*!<  READ                  */
-    EZPYRO_SMD_SENSOR_DIRECT_COMMAND   =   ( 0x03 << 6 )   /*!<  DIRECT COMMAND        */
-} EZPYRO_SMD_SENSOR_spi_command_structure_mode_t;
+	EZPYRO_SMD_SENSOR_DEFAULT_ADDRESS =   0b1100101	       /*!<   ADDR: Default			                         	*/
+} EZPYRO_SMD_SENSOR_addresses_t;
 
 
 /**
@@ -44,24 +41,25 @@ typedef enum
   */
 typedef enum
 {
-    EZPYRO_SMD_SENSOR_WHO_AM_I         =   0x0F,           /*!<  Device identification register						*/
-    EZPYRO_SMD_SENSOR_CTRL_REG1        =   0x20,           /*!<  Control register 1			    					*/
-    EZPYRO_SMD_SENSOR_INT1_CTRL        =   0x21,           /*!<  INT1 pin control register	    					*/
-    EZPYRO_SMD_SENSOR_INT2_CTRL        =   0x22,           /*!<  INT2 pin control register	    					*/
-    EZPYRO_SMD_SENSOR_CTRL_REG4        =   0x23,           /*!<  Control register 4			    					*/
-    EZPYRO_SMD_SENSOR_CTRL_REG5        =   0x24,           /*!<  Control register 5			    					*/
-    EZPYRO_SMD_SENSOR_OUT_TEMP_L       =   0x25,           /*!<  Temperature data output register 					*/
-    EZPYRO_SMD_SENSOR_OUT_TEMP_H       =   0x26,           /*!<  Temperature data output register 					*/
-    EZPYRO_SMD_SENSOR_STATUS           =   0x27,           /*!<  Status register			        					*/
-    EZPYRO_SMD_SENSOR_OUT_X_L_XL       =   0x28,           /*!<  Linear acceleration sensor X-axis output register	*/
-    EZPYRO_SMD_SENSOR_OUT_X_H_XL       =   0x29,           /*!<  Linear acceleration sensor X-axis output register	*/
-    EZPYRO_SMD_SENSOR_OUT_Y_L_XL       =   0x2A,           /*!<  Linear acceleration sensor Y-axis output register	*/
-    EZPYRO_SMD_SENSOR_OUT_Y_H_XL       =   0x2B,           /*!<  Linear acceleration sensor Y-axis output register	*/
-    EZPYRO_SMD_SENSOR_OUT_Z_L_XL       =   0x2C,           /*!<  Linear acceleration sensor Z-axis output register	*/
-    EZPYRO_SMD_SENSOR_OUT_Z_H_XL       =   0x2D,           /*!<  Linear acceleration sensor Z-axis output register	*/
-    EZPYRO_SMD_SENSOR_FIFO_CTRL        =   0x2E,           /*!<  FIFO control register								*/
-    EZPYRO_SMD_SENSOR_FIFO_SRC         =   0x2F            /*!<  FIFO status register									*/
-} EZPYRO_SMD_SENSOR_register_mapping_t;
+    EZPYRO_SMD_SENSOR_TEST		       =   0x00,           /*!<  Verify communication by reading the response packet		*/
+    EZPYRO_SMD_SENSOR_VERSION	       =   0x02,           /*!<  Version Packet					    						*/
+    EZPYRO_SMD_SENSOR_FIFO_STATUS      =   0x04,           /*!<  FIFO Status Packet				    						*/
+    EZPYRO_SMD_SENSOR_FIFO_READ_FULL   =   0x06,           /*!<  Read full data packet (17 bytes) of all channels			*/
+    EZPYRO_SMD_SENSOR_FIFO_READ_ACTIVE =   0x08,           /*!<  Read data packet (up to 17 bytes) for only active channel	*/
+    EZPYRO_SMD_SENSOR_FIFO_CLEAR       =   0x0A,           /*!<  Clear the current Packet (Read pointer moves on next)		*/
+    EZPYRO_SMD_SENSOR_FIFO_RESET       =   0x0C,           /*!<  Clear the entire FIFO (Rd/Wr pointer reset with the Empty)	*/
+    EZPYRO_SMD_SENSOR_CH_READ	       =   0x0E,           /*!<  Channel Control Packet										*/
+    EZPYRO_SMD_SENSOR_CH_WRITE         =   0x10,           /*!<  Channel Control Packet			        					*/
+    EZPYRO_SMD_SENSOR_ANA_READ         =   0x12,           /*!<  Analogue Settings											*/
+    EZPYRO_SMD_SENSOR_ANA_WRITE        =   0x14,           /*!<  Analogue Settings											*/
+    EZPYRO_SMD_SENSOR_WAKE_READ        =   0x16,           /*!<  Wake-up Packet												*/
+    EZPYRO_SMD_SENSOR_WAKE_WRITE       =   0x18,           /*!<  Wake-up Packet												*/
+    EZPYRO_SMD_SENSOR_ADDR_WRITE       =   0x1E,           /*!<  I2C Address												*/
+    EZPYRO_SMD_SENSOR_GO_TO_SLEEP      =   0x20,           /*!<  Put the device in Sleep Mode								*/
+    EZPYRO_SMD_SENSOR_WAKE_UP	       =   0x22,           /*!<  Wake up and resume normal mode								*/
+    EZPYRO_SMD_SENSOR_RESET_SOFT       =   0x24,           /*!<  Soft reset													*/
+	EZPYRO_SMD_SENSOR_RESET_FULL       =   0x26            /*!<  Full reset													*/
+} EZPYRO_SMD_SENSOR_register_list_t;
 
 
 /* Register: WHO_AM_I */
