@@ -62,6 +62,7 @@ typedef enum
 } EZPYRO_SMD_SENSOR_register_list_t;
 
 
+
 /* Register: WHO_AM_I */
 /**
   * @brief   WHO_AM_I fixed value
