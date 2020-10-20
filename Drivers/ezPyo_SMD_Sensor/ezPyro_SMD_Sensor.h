@@ -63,16 +63,30 @@ typedef enum
 
 
 
-/* Register: WHO_AM_I */
-/**
-  * @brief   WHO_AM_I fixed value
-  *
-  *          NOTE: N/A
-  */
+/* Commands data replay */
 typedef enum
 {
-    WHO_I_AM_VALUE          =   0b00010001			/*!<  Fixed value                      			*/
-} EZPYRO_SMD_SENSOR_who_i_am_t;
+    CMD_DATA_TEST_OK          =   0b00000001,				/*!<  Command replay TEST Data OK                      			*/
+	CMD_DATA_TEST_ERR         =   0b00000010,				/*!<  Command replay TEST Data ERROR                   			*/
+
+	CMD_DATA_FIFO_CLEAR_OK    =   0b00101001,				/*!<  Command replay FIFO_CLEAR Data OK                			*/
+	CMD_DATA_FIFO_CLEAR_ERR   =   0b00101010,				/*!<  Command replay FIFO_CLEAR Data ERROR             			*/
+
+	CMD_DATA_FIFO_RESET_OK    =   0b00110001,				/*!<  Command replay FIFO_RESET Data OK                			*/
+	CMD_DATA_FIFO_RESET_ERR   =   0b00110010,				/*!<  Command replay FIFO_RESET Data ERROR             			*/
+
+	CMD_DATA_GO_TO_SLEEP_OK   =   0b10000001,				/*!<  Command replay GO_TO_SLEEP Data OK              			*/
+	CMD_DATA_GO_TO_SLEEP_ERR  =   0b10000010,				/*!<  Command replay GO_TO_SLEEP Data ERROR            			*/
+
+	CMD_DATA_WAKE_UP_OK   	  =   0b10001001,				/*!<  Command replay WAKE_UP Data OK              				*/
+	CMD_DATA_WAKE_UP_ERR      =   0b10001010,				/*!<  Command replay WAKE_UP Data ERROR            				*/
+
+	CMD_DATA_RESET_SOFT_OK    =   0b10010001,				/*!<  Command replay RESET_SOFT Data OK             			*/
+	CMD_DATA_RESET_SOFT_ERR   =   0b10010010,				/*!<  Command replay RESET_SOFT Data ERROR          			*/
+
+	CMD_DATA_RESET_FULL_OK    =   0b10011001,				/*!<  Command replay RESET_FULL Data OK             			*/
+	CMD_DATA_RESET_FULL_ERR   =   0b10011010				/*!<  Command replay RESET_FULL Data ERROR          			*/
+} EZPYRO_SMD_SENSOR_commands_data_ok_err_t;
 
 
 
