@@ -89,6 +89,97 @@ LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification ( spi_parameters_t mySPI_param
 
 
 
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_SetPowerMode ( spi_parameters_t , LIS3DHH_ctrl_reg1_norm_mod_en_t )
+ *
+ * @details     It sets the power mode: Normal/Power down.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myPowerMode:  		Power mode: CTRL_REG1_NORM_MOD_EN_POWER_DOWN/CTRL_REG1_NORM_MOD_EN_ENABLED.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LIS3DHH_SetPowerMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/October/2020
+ * @version     20/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_SetPowerMode ( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_norm_mod_en_t myPowerMode )
+{
+	uint8_t      cmd[2]   =    { 0U };
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
+
+	/* Mask the data and update the register	 */
+	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG1 );
+	cmd[1]		 =	 ( cmd[1] & CTRL_REG1_NORM_MOD_EN_MASK ) | myPowerMode;
+    mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetPowerMode ( spi_parameters_t , LIS3DHH_ctrl_reg1_norm_mod_en_t* )
+ *
+ * @details     It gets the power mode: Normal/Power down.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myPowerMode:  		Power mode: CTRL_REG1_NORM_MOD_EN_POWER_DOWN/CTRL_REG1_NORM_MOD_EN_ENABLED.
+ *
+ *
+ * @return       Status of LIS3DHH_GetPowerMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        20/October/2020
+ * @version     20/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetPowerMode	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_norm_mod_en_t* myPowerMode )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)(&myPowerMode), 1U );
+
+
 
 
     if ( mySPI_status == SPI_SUCCESS )
