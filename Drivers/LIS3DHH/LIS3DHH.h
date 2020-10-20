@@ -33,8 +33,8 @@ extern "C" {
   */
 typedef enum
 {
-    LIS3DHH_WRITE            =   ( 0U << 7U ),  /*!<  WRITE                 */
-    LIS3DHH_READ             =   ( 1U << 7U)    /*!<  READ                  */
+    LIS3DHH_WRITE            =   0x7F,  		/*!<  WRITE                 */
+    LIS3DHH_READ             =   0x80    		/*!<  READ                  */
 } LIS3DHH_spi_command_structure_mode_t;
 
 
@@ -598,9 +598,10 @@ typedef enum
 /* LIS3DHH DATA */
 typedef struct
 {
+	/* Control register 1	 */
+	LIS3DHH_ctrl_reg1_norm_mod_en_t	norm_mod_en;						/*!<  Normal mode enable			       */
 
-
-    uint8_t	who_am_i;			/*!<  Device identification register       */
+    uint8_t	who_am_i;													/*!<  Device identification register       */
 } LIS3DHH_data_t;
 #endif
 
@@ -624,11 +625,19 @@ typedef enum
   */
 /** It configures the SPI peripheral.
     */
-LIS3DHH_status_t  LIS3DHH_Init	( spi_parameters_t mySPI_parameters	);
+LIS3DHH_status_t  LIS3DHH_Init						( spi_parameters_t mySPI_parameters													);
 
 /** It gets the device identification.
     */
-LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification	( spi_parameters_t mySPI_parameters, LIS3DHH_data_t* myID	);
+LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification	( spi_parameters_t mySPI_parameters, LIS3DHH_data_t* myID							);
+
+/** It sets the power mode: Normal/Power down.
+    */
+LIS3DHH_status_t  LIS3DHH_SetPowerMode				( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_norm_mod_en_t myPowerMode	);
+
+/** It gets the current power mode.
+    */
+LIS3DHH_status_t  LIS3DHH_GetPowerMode				( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_norm_mod_en_t* myPowerMode	);
 
 
 
