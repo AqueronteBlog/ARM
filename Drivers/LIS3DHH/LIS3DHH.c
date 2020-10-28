@@ -659,7 +659,7 @@ LIS3DHH_status_t  LIS3DHH_GetBlockDataUpdate ( spi_parameters_t mySPI_parameters
 
 
 /**
- * @brief       LIS3DHH_SetINT1 ( spi_parameters_t , LIS3DHH_ctrl_reg1_bdu_t )
+ * @brief       LIS3DHH_SetINT1 ( spi_parameters_t , LIS3DHH_int1_data_t )
  *
  * @details     It sets the set of interrupts INT1 pin.
  *
@@ -704,7 +704,7 @@ LIS3DHH_status_t  LIS3DHH_SetINT1 ( spi_parameters_t mySPI_parameters, LIS3DHH_i
 
 
 /**
- * @brief       LIS3DHH_GetBlockDataUpdate ( spi_parameters_t , LIS3DHH_int1_data_t* )
+ * @brief       LIS3DHH_GetINT1 ( spi_parameters_t , LIS3DHH_int1_data_t* )
  *
  * @details     It gets the configuration of the set of interrupts INT1 pin.
  *
@@ -713,7 +713,7 @@ LIS3DHH_status_t  LIS3DHH_SetINT1 ( spi_parameters_t mySPI_parameters, LIS3DHH_i
  * @param[out]   myINT1: 			Set of interrupts (INT1) on pin..
  *
  *
- * @return       Status of LIS3DHH_GetBlockDataUpdate.
+ * @return       Status of LIS3DHH_GetINT1.
  *
  *
  * @author      Manuel Caballero
@@ -739,6 +739,102 @@ LIS3DHH_status_t  LIS3DHH_GetINT1 ( spi_parameters_t mySPI_parameters, LIS3DHH_i
 	myINT1->int1_fss5	 =	(LIS3DHH_int1_ctrl_int1_fss5_t)( cmd & INT1_CTRL_INT1_FSS5_MASK );
 	myINT1->int1_fth	 =	(LIS3DHH_int1_ctrl_int1_fth_t)( cmd & INT1_CTRL_INT1_FTH_MASK );
 	myINT1->int1_ext	 =	(LIS3DHH_int1_ctrl_int1_ext_t)( cmd & INT1_CTRL_INT1_EXT_MASK );
+
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_SetINT2 ( spi_parameters_t , LIS3DHH_int2_data_t )
+ *
+ * @details     It sets the set of interrupts INT2 pin.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myINT2: 			Set of interrupts (INT2) on pin.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LIS3DHH_SetINT2.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        28/October/2020
+ * @version     28/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_SetINT2 ( spi_parameters_t mySPI_parameters, LIS3DHH_int2_data_t myINT2 )
+{
+	uint8_t      cmd[2]   =    { 0U };
+	spi_status_t mySPI_status;
+
+
+	/* Update the register	 */
+	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_INT2_CTRL );
+	cmd[1]		 =	 ( myINT2.int2_drdy | myINT2.int2_boot | myINT2.int2_ovr | myINT2.int2_fss5 | myINT2.int2_fth );
+    mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetINT2 ( spi_parameters_t , LIS3DHH_int2_data_t* )
+ *
+ * @details     It gets the configuration of the set of interrupts INT1 pin.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myINT2: 			Set of interrupts (INT2) on pin..
+ *
+ *
+ * @return       Status of LIS3DHH_GetINT2.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        28/October/2020
+ * @version     28/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetINT2 ( spi_parameters_t mySPI_parameters, LIS3DHH_int2_data_t* myINT2 )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_INT2_CTRL );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Parse the data	 */
+	myINT2->int2_drdy	 =	(LIS3DHH_int2_ctrl_int2_drdy_t)( cmd & INT2_CTRL_INT2_DRDY_MASK );
+	myINT2->int2_boot	 =	(LIS3DHH_int2_ctrl_int2_boot_t)( cmd & INT2_CTRL_INT2_BOOT_MASK );
+	myINT2->int2_ovr	 =	(LIS3DHH_int2_ctrl_int2_ovr_t)( cmd & INT2_CTRL_INT2_OVR_MASK );
+	myINT2->int2_fss5	 =	(LIS3DHH_int2_ctrl_int2_fss5_t)( cmd & INT2_CTRL_INT2_FSS5_MASK );
+	myINT2->int2_fth	 =	(LIS3DHH_int2_ctrl_int2_fth_t)( cmd & INT2_CTRL_INT2_FTH_MASK );
 
 
 
