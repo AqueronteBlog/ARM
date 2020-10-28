@@ -595,7 +595,19 @@ typedef enum
 
 #ifndef LIS3DHH_VECTOR_STRUCT_H
 #define LIS3DHH_VECTOR_STRUCT_H
-/* LIS3DHH DATA */
+/* LIS3DHH INT1 DATA */
+typedef struct
+{
+	LIS3DHH_int1_ctrl_int1_drdy_t	int1_drdy;							/*!<  Accelerometer data ready on INT1 pin 			 */
+	LIS3DHH_int1_ctrl_int1_boot_t   int1_boot;							/*!<  Boot status available on INT1 pin				 */
+	LIS3DHH_int1_ctrl_int1_ovr_t	int1_ovr;							/*!<  Overrun flag on INT1 pin						 */
+	LIS3DHH_int1_ctrl_int1_fss5_t	int1_fss5;							/*!<  FSS5 full FIFO flag on INT1 pin				 */
+	LIS3DHH_int1_ctrl_int1_fth_t	int1_fth;							/*!<  FIFO threshold flag on INT1 pin				 */
+	LIS3DHH_int1_ctrl_int1_ext_t	int1_ext;							/*!<  INT1 pin configuration						 */
+} LIS3DHH_int1_data_t;
+
+
+/* LIS3DHH USER DATA */
 typedef struct
 {
 	/* Control register 1	 */
@@ -605,6 +617,10 @@ typedef struct
 	LIS3DHH_ctrl_reg1_sw_reset_t	sw_reset;							/*!<  Software reset status							 */
 	LIS3DHH_ctrl_reg1_drdy_pulse_t	drdy_pulse;							/*!<  Data ready on INT1 pin						 */
 	LIS3DHH_ctrl_reg1_bdu_t			bdu;								/*!<  Block data update								 */
+
+	/* INT1 pin control register	 */
+	LIS3DHH_int1_data_t				int1;								/*!<  Set of interrupts on pin 1					 */
+
 
 
     uint8_t	who_am_i;													/*!<  Device identification register       			 */
@@ -684,6 +700,14 @@ LIS3DHH_status_t  LIS3DHH_SetBlockDataUpdate		( spi_parameters_t mySPI_parameter
 /** It gets the block data update status.
     */
 LIS3DHH_status_t  LIS3DHH_GetBlockDataUpdate		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_bdu_t* myBDU					);
+
+/** It sets the set of interrupts INT1 pin.
+    */
+LIS3DHH_status_t  LIS3DHH_SetINT1					( spi_parameters_t mySPI_parameters, LIS3DHH_int1_data_t myINT1						);
+
+/** It gets the configuration of the set of interrupts INT1 pin.
+    */
+LIS3DHH_status_t  LIS3DHH_GetINT1					( spi_parameters_t mySPI_parameters, LIS3DHH_int1_data_t* myINT1					);
 
 
 
