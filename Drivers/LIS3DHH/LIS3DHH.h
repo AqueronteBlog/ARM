@@ -599,9 +599,15 @@ typedef enum
 typedef struct
 {
 	/* Control register 1	 */
-	LIS3DHH_ctrl_reg1_norm_mod_en_t	norm_mod_en;						/*!<  Normal mode enable			       */
+	LIS3DHH_ctrl_reg1_norm_mod_en_t	norm_mod_en;						/*!<  Normal mode enable			       			 */
+	LIS3DHH_ctrl_reg1_if_add_inc_t  if_add_inc;							/*!<  Register address automatically incremented	 */
+	LIS3DHH_ctrl_reg1_boot_t		boot;								/*!<  Reboot memory content							 */
+	LIS3DHH_ctrl_reg1_sw_reset_t	sw_reset;							/*!<  Software reset status							 */
+	LIS3DHH_ctrl_reg1_drdy_pulse_t	drdy_pulse;							/*!<  Data ready on INT1 pin						 */
+	LIS3DHH_ctrl_reg1_bdu_t			bdu;								/*!<  Block data update								 */
 
-    uint8_t	who_am_i;													/*!<  Device identification register       */
+
+    uint8_t	who_am_i;													/*!<  Device identification register       			 */
 } LIS3DHH_data_t;
 #endif
 
@@ -638,6 +644,46 @@ LIS3DHH_status_t  LIS3DHH_SetPowerMode				( spi_parameters_t mySPI_parameters, L
 /** It gets the current power mode.
     */
 LIS3DHH_status_t  LIS3DHH_GetPowerMode				( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_norm_mod_en_t* myPowerMode	);
+
+/** It sets the register address automatically incremented during a multiple byte access with SPI serial interface.
+    */
+LIS3DHH_status_t  LIS3DHH_SetRegisterAutoIncrement	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_if_add_inc_t myIF_ADD_INC	);
+
+/** It gets the register address automatically incremented during a multiple byte access with SPI serial interface.
+    */
+LIS3DHH_status_t  LIS3DHH_GetRegisterAutoIncrement	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_if_add_inc_t* myIF_ADD_INC	);
+
+/** It sets Reboot memory content.
+    */
+LIS3DHH_status_t  LIS3DHH_SetRebootMemoryContent	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_boot_t myBoot				);
+
+/** It gets Reboot memory content value.
+    */
+LIS3DHH_status_t  LIS3DHH_GetRebootMemoryContent	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_boot_t* myBoot				);
+
+/** It performs a software reset
+    */
+LIS3DHH_status_t  LIS3DHH_SoftwareReset				( spi_parameters_t mySPI_parameters													);
+
+/** It gets the status of the device after a software reset.
+    */
+LIS3DHH_status_t  LIS3DHH_GetSoftwareResetStatus	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_sw_reset_t* mySW_Reset		);
+
+/** It sets data ready on INT1 pin.
+    */
+LIS3DHH_status_t  LIS3DHH_SetDataReadyOnINT1		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_drdy_pulse_t myDRDY_PULSE	);
+
+/** It gets the status of data ready on INT1 pin.
+    */
+LIS3DHH_status_t  LIS3DHH_GetDataReadyOnINT1		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_drdy_pulse_t* myDRDY_PULSE	);
+
+/** It sets block data update.
+    */
+LIS3DHH_status_t  LIS3DHH_SetBlockDataUpdate		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_bdu_t myBDU					);
+
+/** It gets the block data update status.
+    */
+LIS3DHH_status_t  LIS3DHH_GetBlockDataUpdate		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_bdu_t* myBDU					);
 
 
 
