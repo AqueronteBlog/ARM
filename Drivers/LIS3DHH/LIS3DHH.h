@@ -607,6 +607,18 @@ typedef struct
 } LIS3DHH_int1_data_t;
 
 
+/* LIS3DHH INT2 DATA */
+typedef struct
+{
+	LIS3DHH_int2_ctrl_int2_drdy_t	int2_drdy;							/*!<  Accelerometer data ready on INT2 pin 			 */
+	LIS3DHH_int2_ctrl_int2_boot_t   int2_boot;							/*!<  Boot status available on INT2 pin				 */
+	LIS3DHH_int2_ctrl_int2_ovr_t	int2_ovr;							/*!<  Overrun flag on INT2 pin						 */
+	LIS3DHH_int2_ctrl_int2_fss5_t	int2_fss5;							/*!<  FSS5 full FIFO flag on INT2 pin				 */
+	LIS3DHH_int2_ctrl_int2_fth_t	int2_fth;							/*!<  FIFO threshold flag on INT2 pin				 */
+} LIS3DHH_int2_data_t;
+
+
+
 /* LIS3DHH USER DATA */
 typedef struct
 {
@@ -620,6 +632,9 @@ typedef struct
 
 	/* INT1 pin control register	 */
 	LIS3DHH_int1_data_t				int1;								/*!<  Set of interrupts on pin 1					 */
+
+	/* INT2 pin control register	 */
+	LIS3DHH_int2_data_t				int2;								/*!<  Set of interrupts on pin 2					 */
 
 
 
@@ -708,6 +723,14 @@ LIS3DHH_status_t  LIS3DHH_SetINT1					( spi_parameters_t mySPI_parameters, LIS3D
 /** It gets the configuration of the set of interrupts INT1 pin.
     */
 LIS3DHH_status_t  LIS3DHH_GetINT1					( spi_parameters_t mySPI_parameters, LIS3DHH_int1_data_t* myINT1					);
+
+/** It sets the set of interrupts INT2 pin.
+    */
+LIS3DHH_status_t  LIS3DHH_SetINT2					( spi_parameters_t mySPI_parameters, LIS3DHH_int2_data_t myINT2						);
+
+/** It gets the configuration of the set of interrupts INT2 pin.
+    */
+LIS3DHH_status_t  LIS3DHH_GetINT2					( spi_parameters_t mySPI_parameters, LIS3DHH_int2_data_t* myINT2					);
 
 
 
