@@ -165,7 +165,8 @@ LIS3DHH_status_t  LIS3DHH_SetPowerMode ( spi_parameters_t mySPI_parameters, LIS3
  *
  * @author      Manuel Caballero
  * @date        20/October/2020
- * @version     20/October/2020   The ORIGIN
+ * @version     29/October/2020   The output must be masked! This bug was fixed.
+ * 				20/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -177,8 +178,10 @@ LIS3DHH_status_t  LIS3DHH_GetPowerMode	( spi_parameters_t mySPI_parameters, LIS3
 
 	/* Read the register	 */
 	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
-	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)(&myPowerMode), 1U );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
+	/* Mask and parse the data	 */
+	*myPowerMode	 =	(LIS3DHH_ctrl_reg1_norm_mod_en_t)( cmd & CTRL_REG1_NORM_MOD_EN_MASK );
 
 
 
@@ -258,7 +261,8 @@ LIS3DHH_status_t  LIS3DHH_SetRegisterAutoIncrement ( spi_parameters_t mySPI_para
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     29/October/2020   The output must be masked! This bug was fixed.
+ * 				28/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -270,8 +274,10 @@ LIS3DHH_status_t  LIS3DHH_GetRegisterAutoIncrement ( spi_parameters_t mySPI_para
 
 	/* Read the register	 */
 	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
-	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)(&myIF_ADD_INC), 1U );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
+	/* Mask and parse the data	 */
+	*myIF_ADD_INC	 =	(LIS3DHH_ctrl_reg1_if_add_inc_t)( cmd & CTRL_REG1_IF_ADD_INC_MASK );
 
 
 
@@ -351,7 +357,8 @@ LIS3DHH_status_t  LIS3DHH_SetRebootMemoryContent ( spi_parameters_t mySPI_parame
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     29/October/2020   The output must be masked! This bug was fixed.
+ * 				28/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -363,8 +370,10 @@ LIS3DHH_status_t  LIS3DHH_GetRebootMemoryContent ( spi_parameters_t mySPI_parame
 
 	/* Read the register	 */
 	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
-	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)(&myBoot), 1U );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
+	/* Mask and parse the data	 */
+	*myBoot	 =	(LIS3DHH_ctrl_reg1_boot_t)( cmd & CTRL_REG1_BOOT_MASK );
 
 
 
@@ -443,7 +452,8 @@ LIS3DHH_status_t  LIS3DHH_SoftwareReset ( spi_parameters_t mySPI_parameters )
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     29/October/2020   The output must be masked! This bug was fixed.
+ * 				28/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -455,8 +465,10 @@ LIS3DHH_status_t  LIS3DHH_GetSoftwareResetStatus ( spi_parameters_t mySPI_parame
 
 	/* Read the register	 */
 	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
-	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)(&mySW_Reset), 1U );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
+	/* Mask and parse the data	 */
+	*mySW_Reset	 =	(LIS3DHH_ctrl_reg1_sw_reset_t)( cmd & CTRL_REG1_SW_RESET_MASK );
 
 
 
@@ -536,7 +548,8 @@ LIS3DHH_status_t  LIS3DHH_SetDataReadyOnINT1 ( spi_parameters_t mySPI_parameters
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     29/October/2020   The output must be masked!, this bug was fixed.
+ * 				28/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -548,8 +561,10 @@ LIS3DHH_status_t  LIS3DHH_GetDataReadyOnINT1 ( spi_parameters_t mySPI_parameters
 
 	/* Read the register	 */
 	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
-	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)(&myDRDY_PULSE), 1U );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
+	/* Mask and parse the data	 */
+	*myDRDY_PULSE	 =	(LIS3DHH_ctrl_reg1_drdy_pulse_t)( cmd & CTRL_REG1_DRDY_PULSE_MASK );
 
 
 
@@ -629,7 +644,8 @@ LIS3DHH_status_t  LIS3DHH_SetBlockDataUpdate ( spi_parameters_t mySPI_parameters
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     29/October/2020   The output must be masked!, this bug was fixed.
+ * 				28/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -641,7 +657,10 @@ LIS3DHH_status_t  LIS3DHH_GetBlockDataUpdate ( spi_parameters_t mySPI_parameters
 
 	/* Read the register	 */
 	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
-	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)(&myBDU), 1U );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Mask and parse the data	 */
+	*myBDU	 =	(LIS3DHH_ctrl_reg1_bdu_t)( cmd & CTRL_REG1_BDU_MASK );
 
 
 
@@ -836,6 +855,576 @@ LIS3DHH_status_t  LIS3DHH_GetINT2 ( spi_parameters_t mySPI_parameters, LIS3DHH_i
 	myINT2->int2_fss5	 =	(LIS3DHH_int2_ctrl_int2_fss5_t)( cmd & INT2_CTRL_INT2_FSS5_MASK );
 	myINT2->int2_fth	 =	(LIS3DHH_int2_ctrl_int2_fth_t)( cmd & INT2_CTRL_INT2_FTH_MASK );
 
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_SetDigitalFilter ( spi_parameters_t , LIS3DHH_ctr_reg4_dsp_lp_type_t )
+ *
+ * @details     It sets the digital filter.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myDSP_LP_TYPE: 	Digital filtering selection: CTRL_REG4_DSP_LP_TYPE_FIR_LINEAR_PHASE/CTRL_REG4_DSP_LP_TYPE_IIR_NONLINEAR_PHASE.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LIS3DHH_SetDigitalFilter.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_SetDigitalFilter ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_lp_type_t myDSP_LP_TYPE )
+{
+	uint8_t      cmd[2]   =    { 0U };
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
+
+	/* Mask the data and update the register	 */
+	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG4 );
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG4_DSP_LP_TYPE_MASK ) | myDSP_LP_TYPE ) | 0x01;
+    mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetDigitalFilter ( spi_parameters_t , LIS3DHH_ctr_reg4_dsp_lp_type_t* )
+ *
+ * @details     It gets the digital filtering selection.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myDSP_LP_TYPE: 	Digital filtering selection: CTRL_REG4_DSP_LP_TYPE_FIR_LINEAR_PHASE/CTRL_REG4_DSP_LP_TYPE_IIR_NONLINEAR_PHASE.
+ *
+ *
+ * @return       Status of LIS3DHH_GetDigitalFilter.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetDigitalFilter ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_lp_type_t* myDSP_LP_TYPE )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Mask and parse the data	 */
+	*myDSP_LP_TYPE	 =	(LIS3DHH_ctr_reg4_dsp_lp_type_t)( cmd & CTRL_REG4_DSP_LP_TYPE_MASK );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_SetUserBandwidth ( spi_parameters_t , LIS3DHH_ctr_reg4_dsp_bw_sel_t )
+ *
+ * @details     It sets the user-selectable bandwidth.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myDSP_BW_SEL: 		User-selectable bandwidth: CTRL_REG4_DSP_BW_SEL_440_HZ_TYP/CTRL_REG4_DSP_BW_SEL_235_HZ_TYP.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LIS3DHH_SetUserBandwidth.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_SetUserBandwidth ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_bw_sel_t myDSP_BW_SEL )
+{
+	uint8_t      cmd[2]   =    { 0U };
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
+
+	/* Mask the data and update the register	 */
+	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG4 );
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG4_DSP_BW_SEL_MASK ) | myDSP_BW_SEL ) | 0x01;
+    mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetUserBandwidth ( spi_parameters_t , LIS3DHH_ctr_reg4_dsp_bw_sel_t* )
+ *
+ * @details     It gets the user-selectable bandwidth.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myDSP_BW_SEL: 		User-selectable bandwidth: CTRL_REG4_DSP_BW_SEL_440_HZ_TYP/CTRL_REG4_DSP_BW_SEL_235_HZ_TYP.
+ *
+ *
+ * @return       Status of LIS3DHH_GetUserBandwidth.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetUserBandwidth ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_bw_sel_t* myDSP_BW_SEL )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Mask and parse the data	 */
+	*myDSP_BW_SEL	 =	(LIS3DHH_ctr_reg4_dsp_bw_sel_t)( cmd & CTRL_REG4_DSP_BW_SEL_MASK );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_SetSelfTest ( spi_parameters_t , LIS3DHH_ctr_reg4_st_t )
+ *
+ * @details     It sets the user-selectable bandwidth.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myST: 				Self-test enable: CTRL_REG4_ST_NORMAL_MODE/CTRL_REG4_ST_POSITIVE_SIGN_SELFTEST/CTRL_REG4_ST_NEGATIVE_SIGN_SELFTEST.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LIS3DHH_SetSelfTest.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_SetSelfTest ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_st_t myST	 )
+{
+	uint8_t      cmd[2]   =    { 0U };
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
+
+	/* Mask the data and update the register	 */
+	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG4 );
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG4_ST_MASK ) | myST ) | 0x01;
+    mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetSelfTest ( spi_parameters_t , LIS3DHH_ctr_reg4_st_t* )
+ *
+ * @details     It gets the self-test functionality.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myST: 				Self-test enable: CTRL_REG4_ST_NORMAL_MODE/CTRL_REG4_ST_POSITIVE_SIGN_SELFTEST/CTRL_REG4_ST_NEGATIVE_SIGN_SELFTEST.
+ *
+ *
+ * @return       Status of LIS3DHH_GetSelfTest.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetSelfTest ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_st_t* myST )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Mask and parse the data	 */
+	*myST	 =	(LIS3DHH_ctr_reg4_st_t)( cmd & CTRL_REG4_ST_MASK );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_SetINT2_PinMode ( spi_parameters_t , LIS3DHH_ctr_reg4_pp_od_int2_t )
+ *
+ * @details     It sets the Push-pull/open drain selection on INT2 pin.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myPP_OD_INT2: 		Push-pull/open drain selection on INT2 pin: CTRL_REG4_PP_OD_INT2_PUSH_PULL_MODE/CTRL_REG4_PP_OD_INT2_OPEM_DRAIN_MODE.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LIS3DHH_SetINT2_PinMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_SetINT2_PinMode ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int2_t myPP_OD_INT2 )
+{
+	uint8_t      cmd[2]   =    { 0U };
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
+
+	/* Mask the data and update the register	 */
+	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG4 );
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG4_PP_OD_INT2_MASK ) | myPP_OD_INT2 ) | 0x01;
+    mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetINT2_PinMode ( spi_parameters_t , LIS3DHH_ctr_reg4_pp_od_int2_t* )
+ *
+ * @details     It gets the Push-pull/open drain selection on INT2 pin.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myPP_OD_INT2: 		Push-pull/open drain selection on INT2 pin: CTRL_REG4_PP_OD_INT2_PUSH_PULL_MODE/CTRL_REG4_PP_OD_INT2_OPEM_DRAIN_MODE.
+ *
+ *
+ * @return       Status of LIS3DHH_GetINT2_PinMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetINT2_PinMode ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int2_t* myPP_OD_INT2 )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Mask and parse the data	 */
+	*myPP_OD_INT2	 =	(LIS3DHH_ctr_reg4_pp_od_int2_t)( cmd & CTRL_REG4_PP_OD_INT2_MASK );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_SetINT1_PinMode ( spi_parameters_t , LIS3DHH_ctr_reg4_pp_od_int1_t )
+ *
+ * @details     It sets the Push-pull/open drain selection on INT2 pin.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myPP_OD_INT1: 		Push-pull/open drain selection on INT1 pin: CTRL_REG4_PP_OD_INT1_PUSH_PULL_MODE/CTRL_REG4_PP_OD_INT1_OPEM_DRAIN_MODE.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LIS3DHH_SetINT1_PinMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_SetINT1_PinMode ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int1_t myPP_OD_INT1 )
+{
+	uint8_t      cmd[2]   =    { 0U };
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
+
+	/* Mask the data and update the register	 */
+	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG4 );
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG4_PP_OD_INT1_MASK ) | myPP_OD_INT1 ) | 0x01;
+    mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetINT1_PinMode ( spi_parameters_t , LIS3DHH_ctr_reg4_pp_od_int1_t* )
+ *
+ * @details     It gets the Push-pull/open drain selection on INT1 pin.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myPP_OD_INT1: 		Push-pull/open drain selection on INT1 pin: CTRL_REG4_PP_OD_INT1_PUSH_PULL_MODE/CTRL_REG4_PP_OD_INT1_OPEM_DRAIN_MODE.
+ *
+ *
+ * @return       Status of LIS3DHH_GetINT1_PinMode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetINT1_PinMode ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int1_t* myPP_OD_INT1 )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Mask and parse the data	 */
+	*myPP_OD_INT1	 =	(LIS3DHH_ctr_reg4_pp_od_int1_t)( cmd & CTRL_REG4_PP_OD_INT1_MASK );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_SetFIFO_MemoryEnable ( spi_parameters_t , LIS3DHH_ctr_reg4_fifo_en_t )
+ *
+ * @details     It sets the FIFO memory enable.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myFIFO_EN: 		FIFO memory enable: CTRL_REG4_FIFO_EN_DISABLED/CTRL_REG4_FIFO_EN_ENABLED.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LIS3DHH_SetFIFO_MemoryEnable.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_SetFIFO_MemoryEnable ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_fifo_en_t myFIFO_EN )
+{
+	uint8_t      cmd[2]   =    { 0U };
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
+
+	/* Mask the data and update the register	 */
+	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG4 );
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG4_FIFO_EN_MASK ) | myFIFO_EN ) | 0x01;
+    mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetFIFO_MemoryEnable ( spi_parameters_t , LIS3DHH_ctr_reg4_fifo_en_t* )
+ *
+ * @details     It gets the FIFO memory enable.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myFIFO_EN: 		FIFO memory enable: CTRL_REG4_FIFO_EN_DISABLED/CTRL_REG4_FIFO_EN_ENABLED.
+ *
+ *
+ * @return       Status of LIS3DHH_GetFIFO_MemoryEnable.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        29/October/2020
+ * @version     29/October/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetFIFO_MemoryEnable ( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_fifo_en_t* myFIFO_EN )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Mask and parse the data	 */
+	*myFIFO_EN	 =	(LIS3DHH_ctr_reg4_fifo_en_t)( cmd & CTRL_REG4_FIFO_EN_MASK );
 
 
 
