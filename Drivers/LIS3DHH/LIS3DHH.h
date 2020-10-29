@@ -636,6 +636,12 @@ typedef struct
 	/* INT2 pin control register	 */
 	LIS3DHH_int2_data_t				int2;								/*!<  Set of interrupts on pin 2					 */
 
+	/* Control register 4	 */
+	LIS3DHH_ctr_reg4_dsp_lp_type_t	dsp_lp_type;						/*!<  Digital filter type							 */
+	LIS3DHH_ctr_reg4_dsp_bw_sel_t	dsp_bw_sel;							/*!<  User-selectable bandwidth						 */
+	LIS3DHH_ctr_reg4_st_t			st;									/*!<  Self-test										 */
+	LIS3DHH_ctr_reg4_pp_od_int2_t	pp_od_int2;							/*!<  Push-pull/open drain selection on INT2 pin	 */
+	LIS3DHH_ctr_reg4_pp_od_int1_t	pp_od_int1;							/*!<  Push-pull/open drain selection on INT1 pin	 */
 
 
     uint8_t	who_am_i;													/*!<  Device identification register       			 */
@@ -731,6 +737,54 @@ LIS3DHH_status_t  LIS3DHH_SetINT2					( spi_parameters_t mySPI_parameters, LIS3D
 /** It gets the configuration of the set of interrupts INT2 pin.
     */
 LIS3DHH_status_t  LIS3DHH_GetINT2					( spi_parameters_t mySPI_parameters, LIS3DHH_int2_data_t* myINT2					);
+
+/** It sets the digital filter.
+    */
+LIS3DHH_status_t  LIS3DHH_SetDigitalFilter			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_lp_type_t myDSP_LP_TYPE	);
+
+/** It gets the digital filter.
+    */
+LIS3DHH_status_t  LIS3DHH_GetDigitalFilter			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_lp_type_t* myDSP_LP_TYPE	);
+
+/** It sets the user-selectable bandwidth.
+    */
+LIS3DHH_status_t  LIS3DHH_SetUserBandwidth			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_bw_sel_t myDSP_BW_SEL		);
+
+/** It gets the user-selectable bandwidth.
+    */
+LIS3DHH_status_t  LIS3DHH_GetUserBandwidth			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_bw_sel_t* myDSP_BW_SEL	);
+
+/** It sets the self-test functionality.
+    */
+LIS3DHH_status_t  LIS3DHH_SetSelfTest				( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_st_t myST						);
+
+/** It gets the self-test functionality.
+    */
+LIS3DHH_status_t  LIS3DHH_GetSelfTest				( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_st_t* myST					);
+
+/** It sets the Push-pull/open drain selection on INT2 pin.
+    */
+LIS3DHH_status_t  LIS3DHH_SetINT2_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int2_t myPP_OD_INT2		);
+
+/** It gets the Push-pull/open drain selection on INT2 pin.
+    */
+LIS3DHH_status_t  LIS3DHH_GetINT2_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int2_t* myPP_OD_INT2	);
+
+/** It sets the Push-pull/open drain selection on INT1 pin.
+    */
+LIS3DHH_status_t  LIS3DHH_SetINT1_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int1_t myPP_OD_INT1		);
+
+/** It gets the Push-pull/open drain selection on INT1 pin.
+    */
+LIS3DHH_status_t  LIS3DHH_GetINT1_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int1_t* myPP_OD_INT1	);
+
+/** It sets the FIFO memory enable.
+    */
+LIS3DHH_status_t  LIS3DHH_SetFIFO_MemoryEnable		( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_fifo_en_t myFIFO_EN			);
+
+/** It gets the FIFO memory enable.
+    */
+LIS3DHH_status_t  LIS3DHH_GetFIFO_MemoryEnable		( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_fifo_en_t* myFIFO_EN			);
 
 
 
