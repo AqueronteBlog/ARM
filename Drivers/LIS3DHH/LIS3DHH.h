@@ -618,6 +618,14 @@ typedef struct
 } LIS3DHH_int2_data_t;
 
 
+/* LIS3DHH OUT_TEMP DATA */
+typedef struct
+{
+	int16_t		raw_temperature;										/*!<  Raw temperature value				 			 */
+	float		temperature;											/*!<  Temperature value								 */
+} LIS3DHH_out_temp_data_t;
+
+
 
 /* LIS3DHH USER DATA */
 typedef struct
@@ -642,6 +650,10 @@ typedef struct
 	LIS3DHH_ctr_reg4_st_t			st;									/*!<  Self-test										 */
 	LIS3DHH_ctr_reg4_pp_od_int2_t	pp_od_int2;							/*!<  Push-pull/open drain selection on INT2 pin	 */
 	LIS3DHH_ctr_reg4_pp_od_int1_t	pp_od_int1;							/*!<  Push-pull/open drain selection on INT1 pin	 */
+
+	/* Temperature	 */
+	LIS3DHH_out_temp_data_t			out_temp;							/*!<  Temperature value								 */
+
 
 
     uint8_t	who_am_i;													/*!<  Device identification register       			 */
@@ -785,6 +797,14 @@ LIS3DHH_status_t  LIS3DHH_SetFIFO_MemoryEnable		( spi_parameters_t mySPI_paramet
 /** It gets the FIFO memory enable.
     */
 LIS3DHH_status_t  LIS3DHH_GetFIFO_MemoryEnable		( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_fifo_en_t* myFIFO_EN			);
+
+/** It gets the raw temperature data output.
+    */
+LIS3DHH_status_t  LIS3DHH_GetRawTemperature			( spi_parameters_t mySPI_parameters, LIS3DHH_out_temp_data_t* myRawTemperature		);
+
+/** It gets the current temperature data output in degree Celsius.
+    */
+LIS3DHH_status_t  LIS3DHH_GetTemperature			( spi_parameters_t mySPI_parameters, LIS3DHH_out_temp_data_t* myTemperature			);
 
 
 
