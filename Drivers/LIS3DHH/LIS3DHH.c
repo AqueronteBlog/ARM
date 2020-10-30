@@ -1437,3 +1437,95 @@ LIS3DHH_status_t  LIS3DHH_GetFIFO_MemoryEnable ( spi_parameters_t mySPI_paramete
         return   LIS3DHH_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       LIS3DHH_GetRawTemperature ( spi_parameters_t , LIS3DHH_out_temp_data_t* )
+ *
+ * @details     It gets the raw temperature data output.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myRawTemperature: 	Raw temperature value.
+ *
+ *
+ * @return       Status of LIS3DHH_GetRawTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        30/October/2020
+ * @version     30/October/2020   The ORIGIN
+ * @pre         This function doesn't consider the register auto increment mode.
+ * @warning     This function returns the data shifted thus, the temperature is ready ( Temp<11:0> ).
+ */
+LIS3DHH_status_t  LIS3DHH_GetRawTemperature	( spi_parameters_t mySPI_parameters, LIS3DHH_out_temp_data_t* myRawTemperature )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_OUT_TEMP_H );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Mask and parse the data	 */
+	myRawTemperature->raw_temperature	 =	 cmd;
+	myRawTemperature->raw_temperature  <<=	 8U;
+
+	/* Read the register	 */
+	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_OUT_TEMP_L );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Mask and parse the data	 */
+	myRawTemperature->raw_temperature	|=	cmd;
+
+	/* Shift the bits	 */
+	myRawTemperature->raw_temperature	>>=	 4U;
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetTemperature ( spi_parameters_t , LIS3DHH_out_temp_data_t* )
+ *
+ * @details     It gets the current temperature data output in degree Celsius.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myTemperature: 	Temperature value in degree Celsius.
+ *
+ *
+ * @return       Status of LIS3DHH_GetTemperature.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        30/October/2020
+ * @version     30/October/2020   The ORIGIN
+ * @pre         This function updates the raw_temperature variable too.
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetTemperature ( spi_parameters_t mySPI_parameters, LIS3DHH_out_temp_data_t* myTemperature )
+{
+	LIS3DHH_status_t aux;
+
+	/* Get the raw temperature value	 */
+	aux	 =	 LIS3DHH_GetRawTemperature	( mySPI_parameters, (LIS3DHH_out_temp_data_t*)&myTemperature );
+
+	/* Calculate the current temperature value	 */
+	myTemperature->temperature	 = (float)( ( myTemperature->raw_temperature / 16.0f ) + 25.0f );
+
+
+    return   aux;
+}
