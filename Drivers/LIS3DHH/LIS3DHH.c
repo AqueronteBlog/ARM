@@ -1529,3 +1529,4 @@ LIS3DHH_status_t  LIS3DHH_GetTemperature ( spi_parameters_t mySPI_parameters, LI
 
     return   aux;
 }
+
