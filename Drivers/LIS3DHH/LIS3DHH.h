@@ -654,6 +654,8 @@ typedef struct
 	/* Temperature	 */
 	LIS3DHH_out_temp_data_t			out_temp;							/*!<  Temperature value								 */
 
+	/* Status register	 */
+	uint8_t							status;								/*!<  The whole status register to be masked		 */
 
 
     uint8_t	who_am_i;													/*!<  Device identification register       			 */
@@ -805,6 +807,10 @@ LIS3DHH_status_t  LIS3DHH_GetRawTemperature			( spi_parameters_t mySPI_parameter
 /** It gets the current temperature data output in degree Celsius.
     */
 LIS3DHH_status_t  LIS3DHH_GetTemperature			( spi_parameters_t mySPI_parameters, LIS3DHH_out_temp_data_t* myTemperature			);
+
+/** It gets the status register.
+    */
+LIS3DHH_status_t  LIS3DHH_GetStatusRegister			( spi_parameters_t mySPI_parameters, uint8_t* myStatus								);
 
 
 
