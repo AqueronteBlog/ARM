@@ -1574,3 +1574,60 @@ LIS3DHH_status_t  LIS3DHH_GetStatusRegister ( spi_parameters_t mySPI_parameters,
     }
 }
 
+
+
+/**
+ * @brief       LIS3DHH_GetRawAcceleration ( spi_parameters_t , LIS3DHH_raw_out_data_t* )
+ *
+ * @details     It gets the raw Linear acceleration sensor X/Y/Z-axis outputs.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myRawAcceleration: It gets the raw data from all the axis ( X/Y/Z-axis ).
+ *
+ *
+ * @return       Status of LIS3DHH_GetRawAcceleration.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        05/November/2020
+ * @version     05/November/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     This function takes for granted that auto-increment functionality is enabled.
+ */
+LIS3DHH_status_t  LIS3DHH_GetRawAcceleration ( spi_parameters_t mySPI_parameters, LIS3DHH_raw_out_data_t* myRawAcceleration )
+{
+	uint8_t      cmd[6]   =    { 0U };
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_OUT_X_L_XL );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+	/* Parse the data	 */
+	myRawAcceleration->out_x	 =	 cmd[1];
+	myRawAcceleration->out_x   <<=	 8U;
+	myRawAcceleration->out_x	|=	 cmd[0];
+
+	myRawAcceleration->out_y	 =	 cmd[3];
+	myRawAcceleration->out_y   <<=	 8U;
+	myRawAcceleration->out_y	|=	 cmd[2];
+
+	myRawAcceleration->out_z	 =	 cmd[5];
+	myRawAcceleration->out_z   <<=	 8U;
+	myRawAcceleration->out_z	|=	 cmd[4];
+
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
