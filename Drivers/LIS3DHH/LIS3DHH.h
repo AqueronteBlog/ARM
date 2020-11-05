@@ -618,6 +618,15 @@ typedef struct
 } LIS3DHH_int2_data_t;
 
 
+/* LIS3DHH RAW ACCELERATION DATA */
+typedef struct
+{
+	int16_t							out_x;								/*!<  Raw data for X-axis							 */
+	int16_t							out_y;								/*!<  Raw data for Y-axis							 */
+	int16_t							out_z;								/*!<  Raw data for Z-axis							 */
+} LIS3DHH_raw_out_data_t;
+
+
 /* LIS3DHH OUT_TEMP DATA */
 typedef struct
 {
@@ -656,6 +665,10 @@ typedef struct
 
 	/* Status register	 */
 	uint8_t							status;								/*!<  The whole status register to be masked		 */
+
+	/* Raw acceleration data	 */
+	LIS3DHH_raw_out_data_t			raw_acc;							/*!<  Raw acceleration data							 */
+
 
 
     uint8_t	who_am_i;													/*!<  Device identification register       			 */
@@ -811,6 +824,10 @@ LIS3DHH_status_t  LIS3DHH_GetTemperature			( spi_parameters_t mySPI_parameters, 
 /** It gets the status register.
     */
 LIS3DHH_status_t  LIS3DHH_GetStatusRegister			( spi_parameters_t mySPI_parameters, uint8_t* myStatus								);
+
+/** It gets the raw Linear acceleration sensor X/Y/Z-axis outputs.
+    */
+LIS3DHH_status_t  LIS3DHH_GetRawAcceleration		( spi_parameters_t mySPI_parameters, LIS3DHH_raw_out_data_t* myRawAcceleration		);
 
 
 
