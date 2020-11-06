@@ -700,6 +700,9 @@ typedef struct
 	/* FIFO control	 */
 	LIS3DHH_fifo_ctrl_t				fifo;								/*!<  FIFO mode and threshold level					 */
 
+	/* FIFO status register	 */
+	uint8_t							fifo_status;						/*!<  FIFO status register							 */
+
 
     uint8_t	who_am_i;													/*!<  Device identification register       			 */
 } LIS3DHH_data_t;
@@ -875,6 +878,10 @@ LIS3DHH_status_t  LIS3DHH_GetFIFO_Mode				( spi_parameters_t mySPI_parameters, L
 /** It gets the FIFO threshold level.
     */
 LIS3DHH_status_t  LIS3DHH_GetFIFO_ThresholdLevel	( spi_parameters_t mySPI_parameters, uint8_t* myFTH										);
+
+/** It gets the FIFO status register.
+    */
+LIS3DHH_status_t  LIS3DHH_GetFIFO_Status			( spi_parameters_t mySPI_parameters, uint8_t* myFIFO_status								);
 
 
 
