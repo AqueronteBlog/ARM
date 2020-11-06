@@ -621,10 +621,30 @@ typedef struct
 /* LIS3DHH RAW ACCELERATION DATA */
 typedef struct
 {
-	int16_t							out_x;								/*!<  Raw data for X-axis							 */
-	int16_t							out_y;								/*!<  Raw data for Y-axis							 */
-	int16_t							out_z;								/*!<  Raw data for Z-axis							 */
+	int16_t							raw_out_x;							/*!<  Raw data for X-axis							 */
+	int16_t							raw_out_y;							/*!<  Raw data for Y-axis							 */
+	int16_t							raw_out_z;							/*!<  Raw data for Z-axis							 */
 } LIS3DHH_raw_out_data_t;
+
+#define	SENSITIVITY_MG_DIGIT	0.076f
+
+
+/* LIS3DHH ACCELERATION DATA */
+typedef struct
+{
+	float							out_x;								/*!<  Data for X-axis								 */
+	float							out_y;								/*!<  Data for Y-axis								 */
+	float							out_z;								/*!<  Data for Z-axis								 */
+} LIS3DHH_out_data_t;
+
+
+/* LIS3DHH TOTAL ACCELERATION DATA */
+typedef struct
+{
+	LIS3DHH_raw_out_data_t			raw_acc;							/*!<  Raw Acceleration Data 						 */
+	LIS3DHH_out_data_t				acc;								/*!<  Acceleration Data 							 */
+} LIS3DHH_acc_data_t;
+
 
 
 /* LIS3DHH OUT_TEMP DATA */
@@ -666,8 +686,8 @@ typedef struct
 	/* Status register	 */
 	uint8_t							status;								/*!<  The whole status register to be masked		 */
 
-	/* Raw acceleration data	 */
-	LIS3DHH_raw_out_data_t			raw_acc;							/*!<  Raw acceleration data							 */
+	/* Acceleration data	 */
+	LIS3DHH_acc_data_t				acc;								/*!<  Acceleration data								 */
 
 
 
@@ -827,7 +847,11 @@ LIS3DHH_status_t  LIS3DHH_GetStatusRegister			( spi_parameters_t mySPI_parameter
 
 /** It gets the raw Linear acceleration sensor X/Y/Z-axis outputs.
     */
-LIS3DHH_status_t  LIS3DHH_GetRawAcceleration		( spi_parameters_t mySPI_parameters, LIS3DHH_raw_out_data_t* myRawAcceleration		);
+LIS3DHH_status_t  LIS3DHH_GetRawAccelerationData	( spi_parameters_t mySPI_parameters, LIS3DHH_raw_out_data_t* myRawAcceleration		);
+
+/** It gets the Linear acceleration sensor X/Y/Z-axis outputs.
+    */
+LIS3DHH_status_t  LIS3DHH_GetAccelerationData		( spi_parameters_t mySPI_parameters, LIS3DHH_acc_data_t* myAcceleration				);
 
 
 
