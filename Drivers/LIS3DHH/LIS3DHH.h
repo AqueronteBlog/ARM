@@ -646,13 +646,21 @@ typedef struct
 } LIS3DHH_acc_data_t;
 
 
-
 /* LIS3DHH OUT_TEMP DATA */
 typedef struct
 {
 	int16_t		raw_temperature;										/*!<  Raw temperature value				 			 */
 	float		temperature;											/*!<  Temperature value								 */
 } LIS3DHH_out_temp_data_t;
+
+
+/* LIS3DHH FIFO CONTROL AND THRESHOLD LEVEL */
+typedef struct
+{
+	LIS3DHH_fifo_ctrl_fmode_t		fmode;								/*!<  FIFO mode							 			 */
+	uint8_t							fth;								/*!<  FIFO threshold level							 */
+} LIS3DHH_fifo_ctrl_t;
+
 
 
 
@@ -689,6 +697,8 @@ typedef struct
 	/* Acceleration data	 */
 	LIS3DHH_acc_data_t				acc;								/*!<  Acceleration data								 */
 
+	/* FIFO control	 */
+	LIS3DHH_fifo_ctrl_t				fifo;								/*!<  FIFO mode and threshold level					 */
 
 
     uint8_t	who_am_i;													/*!<  Device identification register       			 */
@@ -702,8 +712,9 @@ typedef struct
   */
 typedef enum
 {
-    LIS3DHH_SUCCESS     =       0,
-    LIS3DHH_FAILURE     =       1
+    LIS3DHH_SUCCESS     				=       0,
+    LIS3DHH_FAILURE     				=       1,
+	LIS3DHH_FIFO_THRESHOLD_LEVEL_ERROR	=       2
 } LIS3DHH_status_t;
 
 
@@ -715,143 +726,155 @@ typedef enum
   */
 /** It configures the SPI peripheral.
     */
-LIS3DHH_status_t  LIS3DHH_Init						( spi_parameters_t mySPI_parameters													);
+LIS3DHH_status_t  LIS3DHH_Init						( spi_parameters_t mySPI_parameters														);
 
 /** It gets the device identification.
     */
-LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification	( spi_parameters_t mySPI_parameters, LIS3DHH_data_t* myID							);
+LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification	( spi_parameters_t mySPI_parameters, LIS3DHH_data_t* myID								);
 
 /** It sets the power mode: Normal/Power down.
     */
-LIS3DHH_status_t  LIS3DHH_SetPowerMode				( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_norm_mod_en_t myPowerMode	);
+LIS3DHH_status_t  LIS3DHH_SetPowerMode				( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_norm_mod_en_t myPowerMode		);
 
 /** It gets the current power mode.
     */
-LIS3DHH_status_t  LIS3DHH_GetPowerMode				( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_norm_mod_en_t* myPowerMode	);
+LIS3DHH_status_t  LIS3DHH_GetPowerMode				( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_norm_mod_en_t* myPowerMode		);
 
 /** It sets the register address automatically incremented during a multiple byte access with SPI serial interface.
     */
-LIS3DHH_status_t  LIS3DHH_SetRegisterAutoIncrement	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_if_add_inc_t myIF_ADD_INC	);
+LIS3DHH_status_t  LIS3DHH_SetRegisterAutoIncrement	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_if_add_inc_t myIF_ADD_INC		);
 
 /** It gets the register address automatically incremented during a multiple byte access with SPI serial interface.
     */
-LIS3DHH_status_t  LIS3DHH_GetRegisterAutoIncrement	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_if_add_inc_t* myIF_ADD_INC	);
+LIS3DHH_status_t  LIS3DHH_GetRegisterAutoIncrement	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_if_add_inc_t* myIF_ADD_INC		);
 
 /** It sets Reboot memory content.
     */
-LIS3DHH_status_t  LIS3DHH_SetRebootMemoryContent	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_boot_t myBoot				);
+LIS3DHH_status_t  LIS3DHH_SetRebootMemoryContent	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_boot_t myBoot					);
 
 /** It gets Reboot memory content value.
     */
-LIS3DHH_status_t  LIS3DHH_GetRebootMemoryContent	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_boot_t* myBoot				);
+LIS3DHH_status_t  LIS3DHH_GetRebootMemoryContent	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_boot_t* myBoot					);
 
 /** It performs a software reset
     */
-LIS3DHH_status_t  LIS3DHH_SoftwareReset				( spi_parameters_t mySPI_parameters													);
+LIS3DHH_status_t  LIS3DHH_SoftwareReset				( spi_parameters_t mySPI_parameters														);
 
 /** It gets the status of the device after a software reset.
     */
-LIS3DHH_status_t  LIS3DHH_GetSoftwareResetStatus	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_sw_reset_t* mySW_Reset		);
+LIS3DHH_status_t  LIS3DHH_GetSoftwareResetStatus	( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_sw_reset_t* mySW_Reset			);
 
 /** It sets data ready on INT1 pin.
     */
-LIS3DHH_status_t  LIS3DHH_SetDataReadyOnINT1		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_drdy_pulse_t myDRDY_PULSE	);
+LIS3DHH_status_t  LIS3DHH_SetDataReadyOnINT1		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_drdy_pulse_t myDRDY_PULSE		);
 
 /** It gets the status of data ready on INT1 pin.
     */
-LIS3DHH_status_t  LIS3DHH_GetDataReadyOnINT1		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_drdy_pulse_t* myDRDY_PULSE	);
+LIS3DHH_status_t  LIS3DHH_GetDataReadyOnINT1		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_drdy_pulse_t* myDRDY_PULSE		);
 
 /** It sets block data update.
     */
-LIS3DHH_status_t  LIS3DHH_SetBlockDataUpdate		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_bdu_t myBDU					);
+LIS3DHH_status_t  LIS3DHH_SetBlockDataUpdate		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_bdu_t myBDU						);
 
 /** It gets the block data update status.
     */
-LIS3DHH_status_t  LIS3DHH_GetBlockDataUpdate		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_bdu_t* myBDU					);
+LIS3DHH_status_t  LIS3DHH_GetBlockDataUpdate		( spi_parameters_t mySPI_parameters, LIS3DHH_ctrl_reg1_bdu_t* myBDU						);
 
 /** It sets the set of interrupts INT1 pin.
     */
-LIS3DHH_status_t  LIS3DHH_SetINT1					( spi_parameters_t mySPI_parameters, LIS3DHH_int1_data_t myINT1						);
+LIS3DHH_status_t  LIS3DHH_SetINT1					( spi_parameters_t mySPI_parameters, LIS3DHH_int1_data_t myINT1							);
 
 /** It gets the configuration of the set of interrupts INT1 pin.
     */
-LIS3DHH_status_t  LIS3DHH_GetINT1					( spi_parameters_t mySPI_parameters, LIS3DHH_int1_data_t* myINT1					);
+LIS3DHH_status_t  LIS3DHH_GetINT1					( spi_parameters_t mySPI_parameters, LIS3DHH_int1_data_t* myINT1						);
 
 /** It sets the set of interrupts INT2 pin.
     */
-LIS3DHH_status_t  LIS3DHH_SetINT2					( spi_parameters_t mySPI_parameters, LIS3DHH_int2_data_t myINT2						);
+LIS3DHH_status_t  LIS3DHH_SetINT2					( spi_parameters_t mySPI_parameters, LIS3DHH_int2_data_t myINT2							);
 
 /** It gets the configuration of the set of interrupts INT2 pin.
     */
-LIS3DHH_status_t  LIS3DHH_GetINT2					( spi_parameters_t mySPI_parameters, LIS3DHH_int2_data_t* myINT2					);
+LIS3DHH_status_t  LIS3DHH_GetINT2					( spi_parameters_t mySPI_parameters, LIS3DHH_int2_data_t* myINT2						);
 
 /** It sets the digital filter.
     */
-LIS3DHH_status_t  LIS3DHH_SetDigitalFilter			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_lp_type_t myDSP_LP_TYPE	);
+LIS3DHH_status_t  LIS3DHH_SetDigitalFilter			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_lp_type_t myDSP_LP_TYPE		);
 
 /** It gets the digital filter.
     */
-LIS3DHH_status_t  LIS3DHH_GetDigitalFilter			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_lp_type_t* myDSP_LP_TYPE	);
+LIS3DHH_status_t  LIS3DHH_GetDigitalFilter			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_lp_type_t* myDSP_LP_TYPE		);
 
 /** It sets the user-selectable bandwidth.
     */
-LIS3DHH_status_t  LIS3DHH_SetUserBandwidth			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_bw_sel_t myDSP_BW_SEL		);
+LIS3DHH_status_t  LIS3DHH_SetUserBandwidth			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_bw_sel_t myDSP_BW_SEL			);
 
 /** It gets the user-selectable bandwidth.
     */
-LIS3DHH_status_t  LIS3DHH_GetUserBandwidth			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_bw_sel_t* myDSP_BW_SEL	);
+LIS3DHH_status_t  LIS3DHH_GetUserBandwidth			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_dsp_bw_sel_t* myDSP_BW_SEL		);
 
 /** It sets the self-test functionality.
     */
-LIS3DHH_status_t  LIS3DHH_SetSelfTest				( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_st_t myST						);
+LIS3DHH_status_t  LIS3DHH_SetSelfTest				( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_st_t myST							);
 
 /** It gets the self-test functionality.
     */
-LIS3DHH_status_t  LIS3DHH_GetSelfTest				( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_st_t* myST					);
+LIS3DHH_status_t  LIS3DHH_GetSelfTest				( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_st_t* myST						);
 
 /** It sets the Push-pull/open drain selection on INT2 pin.
     */
-LIS3DHH_status_t  LIS3DHH_SetINT2_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int2_t myPP_OD_INT2		);
+LIS3DHH_status_t  LIS3DHH_SetINT2_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int2_t myPP_OD_INT2			);
 
 /** It gets the Push-pull/open drain selection on INT2 pin.
     */
-LIS3DHH_status_t  LIS3DHH_GetINT2_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int2_t* myPP_OD_INT2	);
+LIS3DHH_status_t  LIS3DHH_GetINT2_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int2_t* myPP_OD_INT2		);
 
 /** It sets the Push-pull/open drain selection on INT1 pin.
     */
-LIS3DHH_status_t  LIS3DHH_SetINT1_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int1_t myPP_OD_INT1		);
+LIS3DHH_status_t  LIS3DHH_SetINT1_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int1_t myPP_OD_INT1			);
 
 /** It gets the Push-pull/open drain selection on INT1 pin.
     */
-LIS3DHH_status_t  LIS3DHH_GetINT1_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int1_t* myPP_OD_INT1	);
+LIS3DHH_status_t  LIS3DHH_GetINT1_PinMode			( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_pp_od_int1_t* myPP_OD_INT1		);
 
 /** It sets the FIFO memory enable.
     */
-LIS3DHH_status_t  LIS3DHH_SetFIFO_MemoryEnable		( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_fifo_en_t myFIFO_EN			);
+LIS3DHH_status_t  LIS3DHH_SetFIFO_MemoryEnable		( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_fifo_en_t myFIFO_EN				);
 
 /** It gets the FIFO memory enable.
     */
-LIS3DHH_status_t  LIS3DHH_GetFIFO_MemoryEnable		( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_fifo_en_t* myFIFO_EN			);
+LIS3DHH_status_t  LIS3DHH_GetFIFO_MemoryEnable		( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_fifo_en_t* myFIFO_EN				);
 
 /** It gets the raw temperature data output.
     */
-LIS3DHH_status_t  LIS3DHH_GetRawTemperature			( spi_parameters_t mySPI_parameters, LIS3DHH_out_temp_data_t* myRawTemperature		);
+LIS3DHH_status_t  LIS3DHH_GetRawTemperature			( spi_parameters_t mySPI_parameters, LIS3DHH_out_temp_data_t* myRawTemperature			);
 
 /** It gets the current temperature data output in degree Celsius.
     */
-LIS3DHH_status_t  LIS3DHH_GetTemperature			( spi_parameters_t mySPI_parameters, LIS3DHH_out_temp_data_t* myTemperature			);
+LIS3DHH_status_t  LIS3DHH_GetTemperature			( spi_parameters_t mySPI_parameters, LIS3DHH_out_temp_data_t* myTemperature				);
 
 /** It gets the status register.
     */
-LIS3DHH_status_t  LIS3DHH_GetStatusRegister			( spi_parameters_t mySPI_parameters, uint8_t* myStatus								);
+LIS3DHH_status_t  LIS3DHH_GetStatusRegister			( spi_parameters_t mySPI_parameters, uint8_t* myStatus									);
 
 /** It gets the raw Linear acceleration sensor X/Y/Z-axis outputs.
     */
-LIS3DHH_status_t  LIS3DHH_GetRawAccelerationData	( spi_parameters_t mySPI_parameters, LIS3DHH_raw_out_data_t* myRawAcceleration		);
+LIS3DHH_status_t  LIS3DHH_GetRawAccelerationData	( spi_parameters_t mySPI_parameters, LIS3DHH_raw_out_data_t* myRawAcceleration			);
 
 /** It gets the Linear acceleration sensor X/Y/Z-axis outputs.
     */
-LIS3DHH_status_t  LIS3DHH_GetAccelerationData		( spi_parameters_t mySPI_parameters, LIS3DHH_acc_data_t* myAcceleration				);
+LIS3DHH_status_t  LIS3DHH_GetAccelerationData		( spi_parameters_t mySPI_parameters, LIS3DHH_acc_data_t* myAcceleration					);
+
+/** It sets FIFO mode and threshold level.
+    */
+LIS3DHH_status_t  LIS3DHH_SetFIFO_Control			( spi_parameters_t mySPI_parameters, LIS3DHH_fifo_ctrl_t myFIFO							);
+
+/** It gets the FIFO mode.
+    */
+LIS3DHH_status_t  LIS3DHH_GetFIFO_Mode				( spi_parameters_t mySPI_parameters, LIS3DHH_fifo_ctrl_fmode_t* myFMODE					);
+
+/** It gets the FIFO threshold level.
+    */
+LIS3DHH_status_t  LIS3DHH_GetFIFO_ThresholdLevel	( spi_parameters_t mySPI_parameters, uint8_t* myFTH										);
 
 
 
