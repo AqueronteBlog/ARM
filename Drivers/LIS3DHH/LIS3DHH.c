@@ -1815,3 +1815,47 @@ LIS3DHH_status_t  LIS3DHH_GetFIFO_ThresholdLevel ( spi_parameters_t mySPI_parame
     }
 }
 
+
+
+/**
+ * @brief       LIS3DHH_GetFIFO_Status ( spi_parameters_t , uint8_t* )
+ *
+ * @details     It gets the FIFO status register.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myFIFO_status: 	It gets the FIFO status register, this data must be masked to be useful.
+ *
+ *
+ * @return       Status of LIS3DHH_GetFIFO_Status.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        06/November/2020
+ * @version     06/November/2020   The ORIGIN
+ * @pre         The returned value must be masked.
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetFIFO_Status ( spi_parameters_t mySPI_parameters, uint8_t* myFIFO_status	 )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 	 =	 ( LIS3DHH_READ & LIS3DHH_FIFO_SRC );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)&myFIFO_status, 1U );
+
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
