@@ -1670,3 +1670,148 @@ LIS3DHH_status_t  LIS3DHH_GetAccelerationData ( spi_parameters_t mySPI_parameter
     return   aux;
 }
 
+
+
+/**
+ * @brief       LIS3DHH_SetFIFO_Control ( spi_parameters_t , LIS3DHH_fifo_ctrl_t )
+ *
+ * @details     It sets FIFO mode and threshold level.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myFIFO: 			FIFO mode and threshold level.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LIS3DHH_SetFIFO_Control.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        06/November/2020
+ * @version     06/November/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_SetFIFO_Control ( spi_parameters_t mySPI_parameters, LIS3DHH_fifo_ctrl_t myFIFO )
+{
+	uint8_t      cmd[2]   =    { 0U };
+	spi_status_t mySPI_status;
+
+	/* Check FIFO threshold level	 */
+	if ( myFIFO.fth > 31U )
+	{
+		return LIS3DHH_FIFO_THRESHOLD_LEVEL_ERROR;
+	}
+	else
+	{
+		/* Update the register	 */
+		cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_FIFO_CTRL );
+		cmd[1]		 =	 ( myFIFO.fmode | myFIFO.fth );
+		mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+	}
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetFIFO_Mode ( spi_parameters_t , LIS3DHH_fifo_ctrl_fmode_t* )
+ *
+ * @details     It gets the FIFO mode.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myFMODE: 			It gets the FIFO mode.
+ *
+ *
+ * @return       Status of LIS3DHH_GetFIFO_Mode.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        06/November/2020
+ * @version     06/November/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetFIFO_Mode ( spi_parameters_t mySPI_parameters, LIS3DHH_fifo_ctrl_fmode_t* myFMODE )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 	 =	 ( LIS3DHH_READ & LIS3DHH_FIFO_CTRL );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Parse the data	 */
+	*myFMODE	 =	(LIS3DHH_fifo_ctrl_fmode_t)( cmd & FIFO_CTRL_FMODE_MASK );
+
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetFIFO_ThresholdLevel ( spi_parameters_t , uint8_t* )
+ *
+ * @details     It gets the FIFO threshold level.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myFTH: 			It gets the FIFO threshold level.
+ *
+ *
+ * @return       Status of LIS3DHH_GetFIFO_ThresholdLevel.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        06/November/2020
+ * @version     06/November/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetFIFO_ThresholdLevel ( spi_parameters_t mySPI_parameters, uint8_t* myFTH	 )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 	 =	 ( LIS3DHH_READ & LIS3DHH_FIFO_CTRL );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Parse the data	 */
+	*myFTH	 =	 ( cmd & FIFO_FTH_MASK );
+
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
