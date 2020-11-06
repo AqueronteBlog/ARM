@@ -1606,17 +1606,17 @@ LIS3DHH_status_t  LIS3DHH_GetRawAcceleration ( spi_parameters_t mySPI_parameters
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 	/* Parse the data	 */
-	myRawAcceleration->out_x	 =	 cmd[1];
-	myRawAcceleration->out_x   <<=	 8U;
-	myRawAcceleration->out_x	|=	 cmd[0];
+	myRawAcceleration->raw_out_x	 =	 cmd[1];
+	myRawAcceleration->raw_out_x   <<=	 8U;
+	myRawAcceleration->raw_out_x	|=	 cmd[0];
 
-	myRawAcceleration->out_y	 =	 cmd[3];
-	myRawAcceleration->out_y   <<=	 8U;
-	myRawAcceleration->out_y	|=	 cmd[2];
+	myRawAcceleration->raw_out_y	 =	 cmd[3];
+	myRawAcceleration->raw_out_y   <<=	 8U;
+	myRawAcceleration->raw_out_y	|=	 cmd[2];
 
-	myRawAcceleration->out_z	 =	 cmd[5];
-	myRawAcceleration->out_z   <<=	 8U;
-	myRawAcceleration->out_z	|=	 cmd[4];
+	myRawAcceleration->raw_out_z	 =	 cmd[5];
+	myRawAcceleration->raw_out_z   <<=	 8U;
+	myRawAcceleration->raw_out_z	|=	 cmd[4];
 
 
 
@@ -1629,5 +1629,44 @@ LIS3DHH_status_t  LIS3DHH_GetRawAcceleration ( spi_parameters_t mySPI_parameters
     {
         return   LIS3DHH_FAILURE;
     }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetAccelerationData ( spi_parameters_t , LIS3DHH_acc_data_t* )
+ *
+ * @details     It gets the Linear acceleration sensor X/Y/Z-axis outputs.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myAcceleration: 	Acceleration data.
+ *
+ *
+ * @return       Status of LIS3DHH_GetAccelerationData.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        06/November/2020
+ * @version     06/November/2020   The ORIGIN
+ * @pre         This function also updates the raw acceleration data.
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetAccelerationData ( spi_parameters_t mySPI_parameters, LIS3DHH_acc_data_t* myAcceleration )
+{
+	LIS3DHH_status_t aux;
+
+
+	/* Get the raw acceleration data	 */
+	aux =   LIS3DHH_GetRawAcceleration ( mySPI_parameters, (LIS3DHH_raw_out_data_t*)&myAcceleration->raw_acc );
+
+	/* Parse the data	 */
+	myAcceleration->acc.out_x	 =	(float)( myAcceleration->raw_acc.raw_out_x * SENSITIVITY_MG_DIGIT );
+	myAcceleration->acc.out_y	 =	(float)( myAcceleration->raw_acc.raw_out_y * SENSITIVITY_MG_DIGIT );
+	myAcceleration->acc.out_z	 =	(float)( myAcceleration->raw_acc.raw_out_z * SENSITIVITY_MG_DIGIT );
+
+
+
+    return   aux;
 }
 
