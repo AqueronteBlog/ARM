@@ -687,6 +687,10 @@ typedef struct
 	LIS3DHH_ctr_reg4_st_t			st;									/*!<  Self-test										 */
 	LIS3DHH_ctr_reg4_pp_od_int2_t	pp_od_int2;							/*!<  Push-pull/open drain selection on INT2 pin	 */
 	LIS3DHH_ctr_reg4_pp_od_int1_t	pp_od_int1;							/*!<  Push-pull/open drain selection on INT1 pin	 */
+	LIS3DHH_ctr_reg4_fifo_en_t		fifo_en;							/*!<  FIFO memory enable							 */
+
+	/* Control register 5	 */
+	LIS3DHH_ctr_reg5_fifo_spi_hs_on_t fifo_spi_hs_on;					/*!<  SPI high speed configuration for FIFO block	*/
 
 	/* Temperature	 */
 	LIS3DHH_out_temp_data_t			out_temp;							/*!<  Temperature value								 */
@@ -703,9 +707,9 @@ typedef struct
 	/* FIFO status register	 */
 	uint8_t							fifo_status;						/*!<  FIFO status register							 */
 
-
+	/* Device ID	 */
     uint8_t	who_am_i;													/*!<  Device identification register       			 */
-} LIS3DHH_data_t;
+} LIS3DHH_user_data_t;
 #endif
 
 
@@ -733,7 +737,7 @@ LIS3DHH_status_t  LIS3DHH_Init						( spi_parameters_t mySPI_parameters									
 
 /** It gets the device identification.
     */
-LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification	( spi_parameters_t mySPI_parameters, LIS3DHH_data_t* myID								);
+LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification	( spi_parameters_t mySPI_parameters, uint8_t* myID										);
 
 /** It sets the power mode: Normal/Power down.
     */
@@ -846,6 +850,14 @@ LIS3DHH_status_t  LIS3DHH_SetFIFO_MemoryEnable		( spi_parameters_t mySPI_paramet
 /** It gets the FIFO memory enable.
     */
 LIS3DHH_status_t  LIS3DHH_GetFIFO_MemoryEnable		( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg4_fifo_en_t* myFIFO_EN				);
+
+/** It enables the SPI high speed configuration for the FIFO block.
+    */
+LIS3DHH_status_t  LIS3DHH_SetFIFO_SPI_HighSpeed		( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg5_fifo_spi_hs_on_t myFIFO_SPI_HS_ON	);
+
+/** It gets the SPI high speed configuration for the FIFO block value.
+    */
+LIS3DHH_status_t  LIS3DHH_GetFIFO_SPI_HighSpeed		( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg5_fifo_spi_hs_on_t* myFIFO_SPI_HS_ON);
 
 /** It gets the raw temperature data output.
     */
