@@ -42,9 +42,9 @@ volatile uint8_t  *myPtr;                   /*!<   Pointer to point out myMessag
 int main(int argc, char *argv[])
 {
 	uint8_t  			 myMessage[ TX_BUFF_SIZE ];
-//	I2C_parameters_t     myTMP102_I2C_parameters;
-//	TMP102_vector_data_t myTMP102_Data;
-//	TMP102_status_t      aux;
+	spi_parameters_t     myLIS3DHH_SPI_parameters;
+	LIS3DHH_user_data_t  myLIS3DHH_Data;
+	LIS3DHH_status_t     aux;
 
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
@@ -64,35 +64,72 @@ int main(int argc, char *argv[])
 
 
 //	/* I2C definition   */
-//	myTMP102_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
-//	myTMP102_I2C_parameters.sda         	 =    I2C0_SDA;
-//	myTMP102_I2C_parameters.scl         	 =    I2C0_SCL;
-//	myTMP102_I2C_parameters.addr        	 =    TMP102_ADDRESS_A0_GROUND;
-//	myTMP102_I2C_parameters.freq        	 =    100000;
-//	myTMP102_I2C_parameters.pclkFrequency	 =	  6400000;
-//	myTMP102_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
-//	myTMP102_I2C_parameters.sclPort     	 =    pADI_GPIO0;
-//
-//	/* Configure I2C peripheral */
-//	aux  =   TMP102_Init ( myTMP102_I2C_parameters );
-//
-//	/* Read TLOW value */
-//	aux  =   TMP102_Read_T_LOW_Register         ( myTMP102_I2C_parameters, &myTMP102_Data );
-//
-//	/* Read THIGH value */
-//	aux  =   TMP102_Read_T_HIGH_Register        ( myTMP102_I2C_parameters, &myTMP102_Data );
-//
-//	/* Set polarity LOW */
-//	aux  =   TMP102_SetPolarityAlertPinOutput   ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_POL_ALERT_PIN_ACTIVE_LOW );
-//
-//	/* Set Normal mode operation */
-//	aux  =   TMP102_SetModeOperation            ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_EM_NORMAL_MODE_OPERATION );
-//
-//	/* Set Conversion Rate: 4Hz */
-//	aux  =   TMP102_SetConversionRate           ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_CR_4_HZ );
-//
-//	/* Set Shutdown mode */
-//	aux  =   TMP102_SetShutdownMode             ( myTMP102_I2C_parameters, TMP102_CONFIGURATION_SD_ENABLED );
+//	myLIS3DHH_SPI_parameters.i2cInstance 	 =    pADI_I2C0;
+//	myLIS3DHH_SPI_parameters.sda         	 =    I2C0_SDA;
+//	myLIS3DHH_SPI_parameters.scl         	 =    I2C0_SCL;
+//	myLIS3DHH_SPI_parameters.addr        	 =    LIS3DHH_ADDRESS_A0_GROUND;
+//	myLIS3DHH_SPI_parameters.freq        	 =    100000;
+//	myLIS3DHH_SPI_parameters.pclkFrequency	 =	  6400000;
+//	myLIS3DHH_SPI_parameters.sdaPort     	 =    pADI_GPIO0;
+//	myLIS3DHH_SPI_parameters.sclPort     	 =    pADI_GPIO0;
+
+	/* Configure I2C peripheral */
+	aux  =   LIS3DHH_Init ( myLIS3DHH_SPI_parameters );
+
+	/* Get device ID */
+	aux  =   LIS3DHH_GetDeviceIdentification	( myLIS3DHH_SPI_parameters, &myLIS3DHH_Data.who_am_i );
+
+	/* Reset the device, wait until the device resets */
+	aux  =   LIS3DHH_SoftwareReset ( myLIS3DHH_SPI_parameters );
+	do{
+		LIS3DHH_GetSoftwareResetStatus ( myLIS3DHH_SPI_parameters, &myLIS3DHH_Data.sw_reset );
+	}while( myLIS3DHH_Data.sw_reset == CTRL_REG1_SW_RESET_RESET_DEVICE );
+
+	/* Set register address auto incremented */
+	myLIS3DHH_Data.if_add_inc	=	 CTRL_REG1_IF_ADD_INC_ENABLED;
+	aux  =   LIS3DHH_SetRegisterAutoIncrement ( myLIS3DHH_SPI_parameters, myLIS3DHH_Data.if_add_inc );
+
+	/* Set block data update: Continuous */
+	myLIS3DHH_Data.bdu	=	 CTRL_REG1_BDU_CONTINUOUS_UPDATE;
+	aux  =   LIS3DHH_SetBlockDataUpdate	( myLIS3DHH_SPI_parameters, myLIS3DHH_Data.bdu );
+
+	/* Set Digital filtering selection: FIR Linear Phase */
+	myLIS3DHH_Data.dsp_lp_type	 =	 CTRL_REG4_DSP_LP_TYPE_FIR_LINEAR_PHASE;
+	aux  =   LIS3DHH_SetDigitalFilter ( myLIS3DHH_SPI_parameters, myLIS3DHH_Data.dsp_lp_type );
+
+	/* Set User-selectable bandwidth: 440Hz */
+	myLIS3DHH_Data.dsp_bw_sel	 =	 CTRL_REG4_DSP_BW_SEL_440_HZ_TYP;
+	aux  =   LIS3DHH_SetUserBandwidth ( myLIS3DHH_SPI_parameters, myLIS3DHH_Data.dsp_bw_sel );
+
+	/* Set Self-test enable: Self-test disabled ( Normal mode ) */
+	myLIS3DHH_Data.st	 =	 CTRL_REG4_ST_NORMAL_MODE;
+	aux  =   LIS3DHH_SetSelfTest ( myLIS3DHH_SPI_parameters, myLIS3DHH_Data.st );
+
+	/* Push-pull/open drain selection on INT2 pin: push-pull mode */
+	myLIS3DHH_Data.pp_od_int2	 =	 CTRL_REG4_PP_OD_INT2_PUSH_PULL_MODE;
+	aux  =   LIS3DHH_SetINT2_PinMode ( myLIS3DHH_SPI_parameters, myLIS3DHH_Data.pp_od_int2 );
+
+	/* Push-pull/open drain selection on INT1 pin: push-pull mode */
+	myLIS3DHH_Data.pp_od_int1	 =	 CTRL_REG4_PP_OD_INT1_PUSH_PULL_MODE;
+	aux  =   LIS3DHH_SetINT1_PinMode ( myLIS3DHH_SPI_parameters, myLIS3DHH_Data.pp_od_int1 );
+
+	/* FIFO memory enable: disabled */
+	myLIS3DHH_Data.fifo_en	 =	 CTRL_REG4_FIFO_EN_DISABLED;
+	aux  =   LIS3DHH_SetFIFO_MemoryEnable ( myLIS3DHH_SPI_parameters, myLIS3DHH_Data.fifo_en );
+
+	/* Disables the SPI high speed configuration for the FIFO block */
+	myLIS3DHH_Data.fifo_spi_hs_on	 =	 CTRL_REG5_FIFO_SPI_HS_ON_DISABLED;
+	aux  =   LIS3DHH_SetFIFO_SPI_HighSpeed ( myLIS3DHH_SPI_parameters, myLIS3DHH_Data.fifo_spi_hs_on );
+
+	/* Bypass mode. FIFO turned off, FIFO threshold level setting = 0 */
+	myLIS3DHH_Data.fifo.fmode	 =	 FIFO_CTRL_FMODE_FIFO_OFF;
+	myLIS3DHH_Data.fifo.fth		 =	 0U;
+	aux  =   LIS3DHH_SetFIFO_Control ( myLIS3DHH_SPI_parameters, myLIS3DHH_Data.fifo );
+
+	/* Power mode: Normal mode */
+	myLIS3DHH_Data.norm_mod_en	 =	 CTRL_REG1_NORM_MOD_EN_ENABLED;
+	aux  =   LIS3DHH_SetPowerMode ( myLIS3DHH_SPI_parameters, myLIS3DHH_Data.norm_mod_en );
+
 
 
 	/* Enable Timer0	 */
@@ -124,32 +161,32 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-//			/* New reading */
-//			aux  =   TMP102_TriggerSingleTemperatureConversion ( myTMP102_I2C_parameters );
-//
-//			/* Wait until the conversion is finished    */
-//			do
-//			{
-//				aux      =   TMP102_ReadConfigurationRegister ( myTMP102_I2C_parameters, &myTMP102_Data );
-//			}while( ( myTMP102_Data.ConfigurationRegister & TMP102_CONFIGURATION_OS_MASK ) == TMP102_CONFIGURATION_OS_BUSY );   // [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
-//			                                                                                                                    // [WORKAROUND] Insert a counter.
-//
-//			/* Read the new temperature value */
-//			aux  =   TMP102_GetTemperature ( myTMP102_I2C_parameters, &myTMP102_Data );
-//
-//
-//			/* Transmit data through the UART	 */
-//			sprintf ( (char*)myMessage, "T: %0.4f C\r\n", myTMP102_Data.Temperature );
-//
-//			/* Check that is safe to send data	 */
-//			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
-//
-//			/* Transmit data back	 */
-//			myPtr            =   &myMessage[0];
-//			pADI_UART0->TX	 =	 *myPtr;
-//
-//			/* Transmit Buffer Empty Interrupt: Enabled	 */
-//			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
+			/* Wait until new data is available	 */
+			do
+			{
+				aux	 =	 LIS3DHH_GetStatusRegister ( myLIS3DHH_SPI_parameters, &myLIS3DHH_Data.status );
+			}while( ( myLIS3DHH_Data.status & STATUS_ZYXDA_MASK ) != STATUS_ZYXDA_NEW_DATA );   			// [TODO] Dangerous!!! The uC may get stuck here if something goes wrong!
+			                                                                                                // [WORKAROUND] Insert a counter.
+
+			/* Read the new acceleration data, X-axis, Y-axis and Z-axis */
+			aux  =   LIS3DHH_GetAccelerationData ( myLIS3DHH_SPI_parameters, &myLIS3DHH_Data.acc );
+
+			/* Read the new temperature value */
+			aux  =   LIS3DHH_GetRawTemperature ( myLIS3DHH_SPI_parameters, &myLIS3DHH_Data.out_temp );
+
+
+			/* Transmit data through the UART	 */
+			sprintf ( (char*)myMessage, "X: %0.3f mG | Y: %0.3f mG | Z: %0.3f mG |T: %0.2f C\r\n", myLIS3DHH_Data.acc.acc.out_x, myLIS3DHH_Data.acc.acc.out_y, myLIS3DHH_Data.acc.acc.out_z, myLIS3DHH_Data.out_temp.temperature );
+
+			/* Check that is safe to send data	 */
+			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
+
+			/* Transmit data back	 */
+			myPtr            =   &myMessage[0];
+			pADI_UART0->TX	 =	 *myPtr;
+
+			/* Transmit Buffer Empty Interrupt: Enabled	 */
+			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
 
 			/* Reset variables and turn both LEDs off	 */
 			myState	 		 =	 0UL;
