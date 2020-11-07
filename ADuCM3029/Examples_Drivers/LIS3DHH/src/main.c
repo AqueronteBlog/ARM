@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
  * @details     [TODO]This example shows how to work with the external device: LIS3DHH.
- * 				xxx
+ * 				It gets a new acceleration data and temperature data every 250ms and then, it is sent through
  * 				the UART (115200 baud).
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
