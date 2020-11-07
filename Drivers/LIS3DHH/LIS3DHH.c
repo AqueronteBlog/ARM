@@ -60,7 +60,7 @@ LIS3DHH_status_t  LIS3DHH_Init ( spi_parameters_t mySPI_parameters )
 
 
 /**
- * @brief       LIS3DHH_GetDeviceIdentification ( spi_parameters_t , LIS3DHH_data_t* )
+ * @brief       LIS3DHH_GetDeviceIdentification ( spi_parameters_t , uint8_t* )
  *
  * @details     It gets the device identification.
  *
@@ -74,18 +74,19 @@ LIS3DHH_status_t  LIS3DHH_Init ( spi_parameters_t mySPI_parameters )
  *
  * @author      Manuel Caballero
  * @date        14/October/2020
- * @version     14/October/2020   The ORIGIN
+ * @version     07/November/2020  The variable has been changed to unint8_t to optimise memory.
+ * 				14/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification ( spi_parameters_t mySPI_parameters, LIS3DHH_data_t* myID )
+LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification ( spi_parameters_t mySPI_parameters, uint8_t* myID )
 {
 	uint8_t      cmd   =    ( LIS3DHH_READ | LIS3DHH_WHO_AM_I );
 	spi_status_t mySPI_status;
 
 
     /* Read the device identifier	 */
-    mySPI_status	 =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)(&myID->who_am_i), 1U );
+    mySPI_status	 =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)&myID, 1U );
 
 
 
@@ -117,7 +118,8 @@ LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification ( spi_parameters_t mySPI_param
  *
  * @author      Manuel Caballero
  * @date        20/October/2020
- * @version     20/October/2020   The ORIGIN
+ * @version     07/November/2020  Certain bits must be 0 for the correct operation of the device.
+ * 				20/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -133,7 +135,7 @@ LIS3DHH_status_t  LIS3DHH_SetPowerMode ( spi_parameters_t mySPI_parameters, LIS3
 
 	/* Mask the data and update the register	 */
 	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG1 );
-	cmd[1]		 =	 ( cmd[1] & CTRL_REG1_NORM_MOD_EN_MASK ) | myPowerMode;
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG1_NORM_MOD_EN_MASK ) | myPowerMode ) & 0xCF;
     mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
 
@@ -213,7 +215,8 @@ LIS3DHH_status_t  LIS3DHH_GetPowerMode	( spi_parameters_t mySPI_parameters, LIS3
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     07/November/2020  Certain bits must be 0 for the correct operation of the device.
+ * 				28/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -229,7 +232,7 @@ LIS3DHH_status_t  LIS3DHH_SetRegisterAutoIncrement ( spi_parameters_t mySPI_para
 
 	/* Mask the data and update the register	 */
 	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG1 );
-	cmd[1]		 =	 ( cmd[1] & CTRL_REG1_IF_ADD_INC_MASK ) | myIF_ADD_INC;
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG1_IF_ADD_INC_MASK ) | myIF_ADD_INC ) & 0xCF;
     mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
 
@@ -309,7 +312,8 @@ LIS3DHH_status_t  LIS3DHH_GetRegisterAutoIncrement ( spi_parameters_t mySPI_para
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     07/November/2020  Certain bits must be 0 for the correct operation of the device.
+ * 				28/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -325,7 +329,7 @@ LIS3DHH_status_t  LIS3DHH_SetRebootMemoryContent ( spi_parameters_t mySPI_parame
 
 	/* Mask the data and update the register	 */
 	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG1 );
-	cmd[1]		 =	 ( cmd[1] & CTRL_REG1_BOOT_MASK ) | myBoot;
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG1_BOOT_MASK ) | myBoot ) & 0xCF;
     mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
 
@@ -404,7 +408,8 @@ LIS3DHH_status_t  LIS3DHH_GetRebootMemoryContent ( spi_parameters_t mySPI_parame
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     07/November/2020  Certain bits must be 0 for the correct operation of the device.
+ * 				28/October/2020   The ORIGIN
  * @pre         This bit is cleared by hardware at the end of the operation.
  * @warning     N/A.
  */
@@ -420,7 +425,7 @@ LIS3DHH_status_t  LIS3DHH_SoftwareReset ( spi_parameters_t mySPI_parameters )
 
 	/* Mask the data and update the register	 */
 	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG1 );
-	cmd[1]		 =	 ( cmd[1] & CTRL_REG1_SW_RESET_MASK ) | CTRL_REG1_SW_RESET_RESET_DEVICE;
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG1_SW_RESET_MASK ) | CTRL_REG1_SW_RESET_RESET_DEVICE ) & 0xCF;
     mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
 
@@ -500,7 +505,8 @@ LIS3DHH_status_t  LIS3DHH_GetSoftwareResetStatus ( spi_parameters_t mySPI_parame
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     07/November/2020  Certain bits must be 0 for the correct operation of the device.
+ * 				28/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -516,7 +522,7 @@ LIS3DHH_status_t  LIS3DHH_SetDataReadyOnINT1 ( spi_parameters_t mySPI_parameters
 
 	/* Mask the data and update the register	 */
 	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG1 );
-	cmd[1]		 =	 ( cmd[1] & CTRL_REG1_DRDY_PULSE_MASK ) | myDRDY_PULSE;
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG1_DRDY_PULSE_MASK ) | myDRDY_PULSE ) & 0xCF;
     mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
 
@@ -596,7 +602,8 @@ LIS3DHH_status_t  LIS3DHH_GetDataReadyOnINT1 ( spi_parameters_t mySPI_parameters
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     07/November/2020  Certain bits must be 0 for the correct operation of the device.
+ * 				28/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -612,7 +619,7 @@ LIS3DHH_status_t  LIS3DHH_SetBlockDataUpdate ( spi_parameters_t mySPI_parameters
 
 	/* Mask the data and update the register	 */
 	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG1 );
-	cmd[1]		 =	 ( cmd[1] & CTRL_REG1_BDU_MASK ) | myBDU;
+	cmd[1]		 =	 ( ( cmd[1] & CTRL_REG1_BDU_MASK ) | myBDU ) & 0xCF;
     mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
 
@@ -693,7 +700,8 @@ LIS3DHH_status_t  LIS3DHH_GetBlockDataUpdate ( spi_parameters_t mySPI_parameters
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     07/November/2020  Certain bits must be 0 for the correct operation of the device.
+ * 				28/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -705,7 +713,7 @@ LIS3DHH_status_t  LIS3DHH_SetINT1 ( spi_parameters_t mySPI_parameters, LIS3DHH_i
 
 	/* Update the register	 */
 	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_INT1_CTRL );
-	cmd[1]		 =	 ( myINT1.int1_drdy | myINT1.int1_boot | myINT1.int1_ovr | myINT1.int1_fss5 | myINT1.int1_fth | myINT1.int1_ext );
+	cmd[1]		 =	 ( myINT1.int1_drdy | myINT1.int1_boot | myINT1.int1_ovr | myINT1.int1_fss5 | myINT1.int1_fth | myINT1.int1_ext ) & 0xFC;
     mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
 
@@ -790,7 +798,8 @@ LIS3DHH_status_t  LIS3DHH_GetINT1 ( spi_parameters_t mySPI_parameters, LIS3DHH_i
  *
  * @author      Manuel Caballero
  * @date        28/October/2020
- * @version     28/October/2020   The ORIGIN
+ * @version     07/November/2020  Certain bits must be 0 for the correct operation of the device.
+ * 				28/October/2020   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
@@ -802,7 +811,7 @@ LIS3DHH_status_t  LIS3DHH_SetINT2 ( spi_parameters_t mySPI_parameters, LIS3DHH_i
 
 	/* Update the register	 */
 	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_INT2_CTRL );
-	cmd[1]		 =	 ( myINT2.int2_drdy | myINT2.int2_boot | myINT2.int2_ovr | myINT2.int2_fss5 | myINT2.int2_fth );
+	cmd[1]		 =	 ( myINT2.int2_drdy | myINT2.int2_boot | myINT2.int2_ovr | myINT2.int2_fss5 | myINT2.int2_fth ) & 0xF8;
     mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
 
 
@@ -1425,6 +1434,97 @@ LIS3DHH_status_t  LIS3DHH_GetFIFO_MemoryEnable ( spi_parameters_t mySPI_paramete
 
 	/* Mask and parse the data	 */
 	*myFIFO_EN	 =	(LIS3DHH_ctr_reg4_fifo_en_t)( cmd & CTRL_REG4_FIFO_EN_MASK );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_SetFIFO_SPI_HighSpeed ( spi_parameters_t , LIS3DHH_ctr_reg5_fifo_spi_hs_on_t )
+ *
+ * @details     It enables the SPI high speed configuration for the FIFO block.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ * @param[in]    myFIFO_SPI_HS_ON: 	Enables/Disables the SPI high speed for the FIFO block.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of LIS3DHH_SetFIFO_SPI_HighSpeed.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/November/2020
+ * @version     07/November/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_SetFIFO_SPI_HighSpeed	( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg5_fifo_spi_hs_on_t myFIFO_SPI_HS_ON )
+{
+	uint8_t      cmd[2]   =    { 0U };
+	spi_status_t mySPI_status;
+
+
+	/* Update the register	 */
+	cmd[0]		 =	 ( LIS3DHH_WRITE & LIS3DHH_CTRL_REG5 );
+	cmd[1]		 =	 ( myFIFO_SPI_HS_ON & 0x01 );
+    mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0U );
+
+
+
+    if ( mySPI_status == SPI_SUCCESS )
+    {
+        return   LIS3DHH_SUCCESS;
+    }
+    else
+    {
+        return   LIS3DHH_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       LIS3DHH_GetFIFO_SPI_HighSpeed ( spi_parameters_t , LIS3DHH_ctr_reg5_fifo_spi_hs_on_t* )
+ *
+ * @details     It gets the SPI high speed configuration for the FIFO block value.
+ *
+ * @param[in]    mySPI_parameters:  SPI instance, MOSI pin, MISO pin, SCLK pin, CS pin, SPI frequency and the port for each pin.
+ *
+ * @param[out]   myFIFO_SPI_HS_ON: 	Enables/Disables the SPI high speed for the FIFO block.
+ *
+ *
+ * @return       Status of LIS3DHH_GetFIFO_SPI_HighSpeed.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        07/November/2020
+ * @version     07/November/2020   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+LIS3DHH_status_t  LIS3DHH_GetFIFO_SPI_HighSpeed	( spi_parameters_t mySPI_parameters, LIS3DHH_ctr_reg5_fifo_spi_hs_on_t* myFIFO_SPI_HS_ON )
+{
+	uint8_t      cmd   =    0U;
+	spi_status_t mySPI_status;
+
+
+	/* Read the register	 */
+	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG5 );
+	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
+
+	/* Mask and parse the data	 */
+	*myFIFO_SPI_HS_ON	 =	(LIS3DHH_ctr_reg5_fifo_spi_hs_on_t)( cmd & CTRL_REG5_FIFO_SPI_HS_ON_MASK );
 
 
 
