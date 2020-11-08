@@ -48,19 +48,21 @@ typedef enum
   * @brief   SPI PARAMETERS
   */
 typedef struct{
-    /* Port for pins: SDA and SCL  */
-	ADI_GPIO_TypeDef* sdaPort;
-	ADI_GPIO_TypeDef* sclPort;
+    /* Port for pins: MISO, MOSI, SCLK and CS  */
+	ADI_GPIO_TypeDef* misoPort;
+	ADI_GPIO_TypeDef* mosiPort;
+	ADI_GPIO_TypeDef* sclkPort;
+	ADI_GPIO_TypeDef* csPort;
 
     /* Pin number  */
-    uint32_t sda;
-    uint32_t scl;
+    uint32_t miso;
+    uint32_t mosi;
+    uint32_t sclk;
+    uint32_t cs;
 
     /* SPI frequency   */
     uint32_t freq;
 
-    /* SPI Address   */
-    uint32_t addr;
 
     /* SPI instance  */
     ADI_SPI_TypeDef* SPIInstance;
