@@ -57,6 +57,7 @@ spi_status_t spi_init ( spi_parameters_t mySPIparameters )
 
 
 
+
 /**
  * @brief       spi_transfer ( spi_parameters_t , uint8_t* , uint32_t , uint8_t* , uint32_t  )
  *
