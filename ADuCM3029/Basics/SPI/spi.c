@@ -40,6 +40,7 @@
  */
 spi_status_t spi_init ( spi_parameters_t mySPIparameters )
 {
+
 	/* Make sure the SPI is not in use	 */ // [todo] add a counter for sefty
 	do{
 
