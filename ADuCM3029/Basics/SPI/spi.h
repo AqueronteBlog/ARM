@@ -79,8 +79,8 @@ typedef enum
 {
     SPI_SUCCESS  	     			=   0x00,
     SPI_FAILURE  		 			=   0x01,
-	SPI_WRONG_FREQUENCY  			=   0x02,
-	SPI_SILICON_ANOMALY_21000011  	=   0x03			/*!<   It applies to revision 1.2	 */
+	SPI_ERROR_FREQUENCY_TOO_LOW		=   0x02,
+	SPI_ERROR_FREQUENCY_TOO_HIGH  	=   0x03
 } spi_status_t;
 
 
@@ -100,13 +100,13 @@ typedef struct{
     uint32_t sclk;
     uint32_t cs;
 
-    /* SPI frequency   */
+    /* SPI frequency in Hz   */
     uint32_t freq;
 
     /* SPI instance  */
     ADI_SPI_TypeDef* SPIInstance;
 
-    /* Core clock that drives the SPI peripheral	 */
+    /* Core clock that drives the SPI peripheral in Hz	 */
     uint32_t pclkFrequency;
 
     /* SPI Mode */
