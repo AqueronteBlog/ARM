@@ -182,8 +182,19 @@ spi_status_t spi_init ( spi_parameters_t mySPIparameters )
  */
 spi_status_t spi_transfer ( spi_parameters_t mySPIparameters, uint8_t* spi_tx_buff, uint32_t spi_tx_length, uint8_t* spi_rx_buff, uint32_t spi_rx_length )
 {
+	/* Make sure the SPI is not in use	 */ // [todo] add a counter for sefty
+	do{
+
+	}while( ( mySPIparameters.SPIInstance->STAT & ( 1U << BITP_SPI_STAT_XFRDONE ) ) != ( 1U << BITP_SPI_STAT_XFRDONE ) );
+
 	/* Turn on the SPI	 */
 	mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_SPIEN );
+
+	/* SPI: Transmit data	 */
+
+
+
+
 
 
 
