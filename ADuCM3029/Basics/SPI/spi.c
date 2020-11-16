@@ -175,25 +175,62 @@ spi_status_t spi_init ( spi_parameters_t mySPIparameters )
  *
  * @author      Manuel Caballero
  * @date        07/October/2020
- * @version     08/November/2020    SPI ON/OFF was added.
+ * @version     16/November/2020    SPI Tx and Rx were added, timeouts were added too.
+ * 				08/November/2020    SPI ON/OFF was added.
  * 				07/October/2020     The ORIGIN
  * @pre         SPI communication is by polling mode.
  * @warning     N/A.
  */
 spi_status_t spi_transfer ( spi_parameters_t mySPIparameters, uint8_t* spi_tx_buff, uint32_t spi_tx_length, uint8_t* spi_rx_buff, uint32_t spi_rx_length )
 {
+	uint32_t i	 			= 0UL;
+	uint32_t spi_timeout1	= 0UL;
+	uint32_t spi_timeout2   = 0UL;
+
+
 	/* Make sure the SPI is not in use	 */ // [todo] add a counter for sefty
 	do{
 
 	}while( ( mySPIparameters.SPIInstance->STAT & ( 1U << BITP_SPI_STAT_XFRDONE ) ) != ( 1U << BITP_SPI_STAT_XFRDONE ) );
 
-	/* Turn on the SPI	 */
-	mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_SPIEN );
+	/* Turn on the SPI, Continuous transfer and flush for Tx and Rx FIFO enabled	 */
+	mySPIparameters.SPIInstance->CTL	|=	 ( ( 1U << BITP_SPI_CTL_SPIEN ) | ( 1U << BITP_SPI_CTL_TFLUSH ) | ( 1U << BITP_SPI_CTL_RFLUSH ) );
+
+	/* Frame disabled	 */
+	mySPIparameters.SPIInstance->CNT	&=	~( 1U << BITP_SPI_CNT_FRAMECONT );
+
 
 	/* SPI: Transmit data	 */
+	mySPIparameters.SPIInstance->CTL	&=	~( 1U << BITP_SPI_CTL_TFLUSH );				// Flush for Tx disabled
+	mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_TIM );				// Initiate transfer with a write to the SPI_TX register.
+	mySPIparameters.SPIInstance->CNT	|=	 ( spi_tx_length << BITP_SPI_CNT_VALUE );	// Bytes to be transfered
+
+	mySPIparameters.SPIInstance->RD_CTL	|=	 ( 1U << BITP_SPI_RD_CTL_CMDEN );			// Read mode command is enabled [todo] this can go to spi_init function
 
 
+	for ( i = 0UL; i < spi_tx_length; i++ )
+	{
+		mySPIparameters.SPIInstance->TX	 =	 *spi_tx_buff++;                            // Send byte
 
+		spi_timeout1	 =	 232323UL;
+		while( ( ( mySPIparameters.SPIInstance->STAT & ( 1U << BITP_SPI_STAT_TXDONE ) ) != ( 1U << BITP_SPI_STAT_TXDONE ) ) && ( --spi_timeout1 ) );      // Wait until the data is transmitted or timeout1
+		mySPIparameters.SPIInstance->STAT	|=	 ( 1U << BITP_SPI_STAT_TXDONE );		// Clear the flag
+	}
+
+	/* SPI: Receive data	 */
+	mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_TFLUSH );				// Flush for Tx enabled
+	mySPIparameters.SPIInstance->CTL	&=	~( 1U << BITP_SPI_CTL_RFLUSH );				// Flush for Rx disabled
+	mySPIparameters.SPIInstance->CTL	&=	~( 1U << BITP_SPI_CTL_TIM );				// initiate transfer with a read of the SPI_RX register.
+	mySPIparameters.SPIInstance->CNT	|=	 ( spi_rx_length << BITP_SPI_CNT_VALUE );	// Bytes to be transfered
+
+	for ( i = 0UL; i < spi_rx_length; i++ )
+	{
+		*spi_rx_buff++	 =   mySPIparameters.SPIInstance->RX;							// Read byte
+
+		spi_timeout2	 =	 232323UL;
+		while( ( ( mySPIparameters.SPIInstance->STAT & ( 1U << BITP_SPI_STAT_RXIRQ ) ) != ( 1U << BITP_SPI_STAT_RXIRQ ) ) && ( --spi_timeout2 ) );      // Wait until the data is received or timeout2
+		mySPIparameters.SPIInstance->STAT	|=	 ( 1U << BITP_SPI_STAT_RXIRQ );			// Clear the flag
+	}
 
 
 
@@ -202,6 +239,13 @@ spi_status_t spi_transfer ( spi_parameters_t mySPIparameters, uint8_t* spi_tx_bu
 	mySPIparameters.SPIInstance->CTL	&=	~( 1U << BITP_SPI_CTL_SPIEN );
 
 
-	/* Peripheral configured successfully	 */
-	return SPI_SUCCESS;
+	/* Check if everything went fine */
+	if ( ( spi_timeout1 < 1UL ) || ( spi_timeout2 < 1UL ) )
+	{
+		return SPI_FAILURE;
+	}
+	else
+	{
+		return SPI_SUCCESS;
+	}
 }
