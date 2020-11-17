@@ -44,10 +44,10 @@ spi_status_t spi_init ( spi_parameters_t mySPIparameters )
 	uint32_t spi_frequency_div	 =	 0UL;
 	uint32_t spi_frequency_mul	 =	 0UL;
 
-	/* Make sure the SPI is not in use	 */ // [todo] add a counter for sefty
-	do{
-
-	}while( ( mySPIparameters.SPIInstance->STAT & ( 1U << BITP_SPI_STAT_XFRDONE ) ) != ( 1U << BITP_SPI_STAT_XFRDONE ) );
+//	/* Make sure the SPI is not in use	 */ // [todo] add a counter for sefty
+//	do{
+//
+//	}while( ( mySPIparameters.SPIInstance->STAT & ( 1U << BITP_SPI_STAT_XFRDONE ) ) != ( 1U << BITP_SPI_STAT_XFRDONE ) );
 
 	/* Disable the SPI peripheral	 */
 	mySPIparameters.SPIInstance->CTL	&=	~( 1U << BITP_SPI_CTL_SPIEN );
@@ -60,7 +60,7 @@ spi_status_t spi_init ( spi_parameters_t mySPIparameters )
 	}
 	else
 	{
-		spi_frequency_mul	 =	 ( mySPIparameters.freq << 2UL );	// SPI_freq * 2
+		spi_frequency_mul	 =	 ( mySPIparameters.freq << 1UL );	// SPI_freq * 2
 		if ( spi_frequency_mul > mySPIparameters.pclkFrequency )
 		{
 			return SPI_ERROR_FREQUENCY_TOO_HIGH;
@@ -188,10 +188,10 @@ spi_status_t spi_transfer ( spi_parameters_t mySPIparameters, uint8_t* spi_tx_bu
 	uint32_t spi_timeout2   = 0UL;
 
 
-	/* Make sure the SPI is not in use	 */ // [todo] add a counter for sefty
-	do{
-
-	}while( ( mySPIparameters.SPIInstance->STAT & ( 1U << BITP_SPI_STAT_XFRDONE ) ) != ( 1U << BITP_SPI_STAT_XFRDONE ) );
+//	/* Make sure the SPI is not in use	 */ // [todo] add a counter for sefty
+//	do{
+//
+//	}while( ( mySPIparameters.SPIInstance->STAT & ( 1U << BITP_SPI_STAT_XFRDONE ) ) != ( 1U << BITP_SPI_STAT_XFRDONE ) );
 
 	/* Turn on the SPI, Continuous transfer and flush for Tx and Rx FIFO enabled	 */
 	mySPIparameters.SPIInstance->CTL	|=	 ( ( 1U << BITP_SPI_CTL_SPIEN ) | ( 1U << BITP_SPI_CTL_TFLUSH ) | ( 1U << BITP_SPI_CTL_RFLUSH ) );
