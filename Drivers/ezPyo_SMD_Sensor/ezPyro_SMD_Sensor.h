@@ -207,6 +207,101 @@ typedef enum
 
 
 
+/* Register: ANALOGUE FRONT END PACKET ( AFEP_BYTE0 )	*/
+/**
+  * @brief   S <7:0>.
+  *
+  *          NOTE: Sampling rate (8 bit) :Sampling Rate = 1000/(N+1). DefauLt: N = 0x00 -> Sampling Rate = 1000/(0+1) = 1000.
+  */
+typedef enum
+{
+	AFEP__BYTE0_S_MASK										=   0xFF		    	/*!<  S mask    		                       								*/
+} EZPYRO_SMD_SENSOR_afep_byte0_s_t;
+
+
+
+/* Register: ANALOGUE FRONT END PACKET ( AFEP_BYTE1 )	*/
+/**
+  * @brief   LP <7>.
+  *
+  *          NOTE: Enable Low Power Mode
+  */
+typedef enum
+{
+	AFEP_BYTE1_LP_MASK										=   ( 1U << 7U ),    	/*!<  LP mask    		                       								*/
+	AFEP_BYTE1_LP_LOW_POWER_DISABLED						=   ( 0U << 7U ),    	/*!<  Low power disabled    		                       		  [Default] */
+	AFEP_BYTE1_LP_LOW_POWER_ENABLED							=   ( 1U << 7U )    	/*!<  Low power enabled	                       								*/
+} EZPYRO_SMD_SENSOR_afep_byte1_lp_t;
+
+
+/**
+  * @brief   HP <6>.
+  *
+  *          NOTE: Enable high pass filter
+  */
+typedef enum
+{
+	AFEP_BYTE1_HP_MASK										=   ( 1U << 6U ),    	/*!<  HP mask    		                       								*/
+	AFEP_BYTE1_HP_HIGH_PASS_FILTER_DISABLED					=   ( 0U << 6U ),    	/*!<  High pass filter disabled 	                       		  [Default] */
+	AFEP_BYTE1_HP_HIGH_PASS_FILTER_ENABLED					=   ( 1U << 6U )    	/*!<  High pass filter enabled	               								*/
+} EZPYRO_SMD_SENSOR_afep_byte1_hp_t;
+
+
+/**
+  * @brief   C_LP <5:4>.
+  *
+  *          NOTE: Low-Pass Signal Filter Frequency Selection
+  */
+typedef enum
+{
+	AFEP_BYTE1_C_LP_MASK																	=   ( 0b11 << 4U ),	/*!<  C_LP mask    		                       									*/
+	AFEP_BYTE1_C_LP_NORMAL_POWER_MODE_LOW_PASS_FREQ_180HZ_LOW_POWER_MODE_LOW_PASS_30HZ		=   ( 0b00 << 4U ), /*!<  Normal Power Mode: 180Hz   | Low Power Mode: 30Hz      		  [Default] */
+	AFEP_BYTE1_C_LP_NORMAL_POWER_MODE_LOW_PASS_FREQ_90HZ_LOW_POWER_MODE_LOW_PASS_15HZ		=   ( 0b01 << 4U ), /*!<  Normal Power Mode:  90Hz   | Low Power Mode: 15Hz							*/
+	AFEP_BYTE1_C_LP_NORMAL_POWER_MODE_LOW_PASS_FREQ_45HZ_LOW_POWER_MODE_LOW_PASS_7_5HZ		=   ( 0b10 << 4U ), /*!<  Normal Power Mode:  45Hz   | Low Power Mode: 7.5Hz						*/
+	AFEP_BYTE1_C_LP_NORMAL_POWER_MODE_LOW_PASS_FREQ_22_5HZ_LOW_POWER_MODE_LOW_PASS_3_75HZ	=   ( 0b11 << 4U )  /*!<  Normal Power Mode:  22.5Hz | Low Power Mode: 3.75Hz						*/
+} EZPYRO_SMD_SENSOR_afep_byte1_c_lp_t;
+
+
+/**
+  * @brief   CLK_OUT <3>.
+  *
+  *          NOTE: Enable internal clock output on Clk pin ( only apply for Master. For Slave, this is ignored, because the Clk pin is used as input ).
+  */
+typedef enum
+{
+	AFEP_BYTE1_CLK_OUT_MASK									=   ( 1U << 3U ),    	/*!<  CLK_OUT mask    	                       								*/
+	AFEP_BYTE1_CLK_OUT_DISABLED								=   ( 0U << 3U ),    	/*!<  Disable internal clock output on the Clk pin                     		*/
+	AFEP_BYTE1_CLK_OUT_ENABLED								=   ( 1U << 3U )    	/*!<  Enable internal clock output on Clk pin            		  [Default] */
+} EZPYRO_SMD_SENSOR_afep_byte1_clk_out_t;
+
+
+/**
+  * @brief   SYNC <2>.
+  *
+  *          NOTE: Sync & Clk Pin option.
+  */
+typedef enum
+{
+	AFEP_BYTE1_SYNC_MASK									=   ( 1U << 2U ),    	/*!<  SYNC mask    	                       									*/
+	AFEP_BYTE1_SYNC_MASTER									=   ( 0U << 2U ),    	/*!<  Master									                  [Default] */
+	AFEP_BYTE1_SYNC_SLAVE									=   ( 1U << 2U )    	/*!<  Slave									            		  			*/
+} EZPYRO_SMD_SENSOR_afep_byte1_sync_t;
+
+
+/**
+  * @brief   INT <0>.
+  *
+  *          NOTE: Interrupt output ( only apply at Normal Operation Mode and not in Sleep Mode ).
+  */
+typedef enum
+{
+	AFEP_BYTE1_INT_MASK										=   ( 1U << 0U ),    	/*!<  INT mask    	                       									*/
+	AFEP_BYTE1_INT_DISABLED									=   ( 0U << 0U ),    	/*!<  INT disabled								                  [Default] */
+	AFEP_BYTE1_INT_ENABLED									=   ( 1U << 0U )    	/*!<  INT enabled							            		  			*/
+} EZPYRO_SMD_SENSOR_afep_byte1_int_t;
+
+
+
 
 
 
