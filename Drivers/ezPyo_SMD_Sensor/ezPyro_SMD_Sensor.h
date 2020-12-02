@@ -302,6 +302,20 @@ typedef enum
 
 
 
+/* Register: I2C ADDRESS PACKET ( I2CADD )	*/
+/**
+  * @brief   I2C_NEW_ADDR <7:1>.
+  *
+  *          NOTE: Single byte containing the 7 bit new I2C address ( Default: 0xCA )
+  */
+typedef enum
+{
+	I2CADD_I2C_NEW_ADDR_MASK								=   ( 0b1111111 << 1U ), /*!<  I2C_NEW_ADDR mask                       								*/
+	I2CADD_I2C_NEW_ADDR_DEFAULT								=   ( 0xCA << 1U )	     /*!<  Default I2C address    		                       		  [Default] */
+} EZPYRO_SMD_SENSOR_i2cadd_lp_t;
+
+
+
 
 
 
