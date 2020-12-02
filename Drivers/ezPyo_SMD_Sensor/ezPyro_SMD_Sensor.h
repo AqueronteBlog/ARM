@@ -90,7 +90,7 @@ typedef enum
 
 
 
-/* Register: FIFO STATUS PACKET. Single byte with the status of the FIFO or wake up algorithm	*/
+/* Register: FIFO STATUS PACKET ( FS ). Single byte with the status of the FIFO or wake up algorithm	*/
 /**
   * @brief   WAKE_DETECTED <7>.
   *
@@ -98,10 +98,10 @@ typedef enum
   */
 typedef enum
 {
-	FIFO_STATUS_PACKET_WAKE_DETECTED_MASK									=   ( 1U << 7U ),    /*!<  WAKE_DETECTED mask                           */
-	FIFO_STATUS_PACKET_WAKE_DETECTED_OTHERWISE								=   ( 0U << 7U ),    /*!<  if in Sleep Mode and wake up event detected  */
-	FIFO_STATUS_PACKET_WAKE_DETECTED_SLEEP_MODE_AND_WAKEUP_EVENT_DETECTED	=   ( 1U << 7U )     /*!<  if in Sleep Mode and wake up event detected  */
-} EZPYRO_SMD_SENSOR_fifo_status_packet_wake_detected_t;
+	FS_WAKE_DETECTED_MASK									=   ( 1U << 7U ),    /*!<  WAKE_DETECTED mask                           */
+	FS_WAKE_DETECTED_OTHERWISE								=   ( 0U << 7U ),    /*!<  if in Sleep Mode and wake up event detected  */
+	FS_WAKE_DETECTED_SLEEP_MODE_AND_WAKEUP_EVENT_DETECTED	=   ( 1U << 7U )     /*!<  if in Sleep Mode and wake up event detected  */
+} EZPYRO_SMD_SENSOR_fs_wake_detected_t;
 
 
 /**
@@ -111,12 +111,12 @@ typedef enum
   */
 typedef enum
 {
-	FIFO_STATUS_ERROR_STATUS_MASK									=   ( 0b11 << 5U ),   		/*!<  ERROR_STATUS mask                            											*/
-	FIFO_STATUS_ERROR_STATUS_NO_ERROR								=   ( 0b00 << 5U ),   		/*!<  No error									 											*/
-	FIFO_STATUS_ERROR_STATUS_WRITE_FIFO_FULL_OR_READ_FIFO_EMPTY		=   ( 0b01 << 5U ),   		/*!<  Write when FIFO is full (FIFO count = 14) or read when FIFO is empty (FIFO count = 0)  	*/
-	FIFO_STATUS_ERROR_STATUS_READ_FIFO_EARLY_TERMINATION			=   ( 0b10 << 5U ),   		/*!<  Detect I2C read FIFO early termination (read less bytes than expected)  				*/
-	FIFO_STATUS_ERROR_STATUS_READ_FIFO_EXTRA_BYTES					=   ( 0b11 << 5U )    		/*!<  Detect I2C read FIFO extra (read more bytes than expected)  							*/
-} EZPYRO_SMD_SENSOR_fifo_status_packet_error_status_t;
+	FS_ERROR_STATUS_MASK									=   ( 0b11 << 5U ),   		/*!<  ERROR_STATUS mask                            											*/
+	FS_ERROR_STATUS_NO_ERROR								=   ( 0b00 << 5U ),   		/*!<  No error									 											*/
+	FS_ERROR_STATUS_WRITE_FIFO_FULL_OR_READ_FIFO_EMPTY		=   ( 0b01 << 5U ),   		/*!<  Write when FIFO is full (FIFO count = 14) or read when FIFO is empty (FIFO count = 0)	*/
+	FS_ERROR_STATUS_READ_FIFO_EARLY_TERMINATION				=   ( 0b10 << 5U ),   		/*!<  Detect I2C read FIFO early termination (read less bytes than expected)  				*/
+	FS_ERROR_STATUS_READ_FIFO_EXTRA_BYTES					=   ( 0b11 << 5U )    		/*!<  Detect I2C read FIFO extra (read more bytes than expected)  							*/
+} EZPYRO_SMD_SENSOR_fs_error_status_t;
 
 
 /**
@@ -126,8 +126,8 @@ typedef enum
   */
 typedef enum
 {
-	FIFO_STATUS_PACKET_WAKE_DETECTED_MASK							=   ( 0b1111 << 1U )	    /*!<  FIFO_COUNT mask                              */
-} EZPYRO_SMD_SENSOR_fifo_status_packet_fifo_count_t;
+	FS_WAKE_DETECTED_MASK									=   ( 0b1111 << 1U )	    /*!<  FIFO_COUNT mask                              */
+} EZPYRO_SMD_SENSOR_fs_fifo_count_t;
 
 
 /**
@@ -137,10 +137,73 @@ typedef enum
   */
 typedef enum
 {
-	FIFO_STATUS_PACKET_INVERTED_STATUS_MASK								=   ( 1U << 0U ),		/*!<  INVERTED_STATUS mask  								                    */
-	FIFO_STATUS_PACKET_INVERTED_STATUS_NORMAL_OPERATION_FIFO_NOT_EMPTY	=   ( 1U << 0U ),		/*!<  In Normal Operation Mode, this bit is set (1) when the FIFO is not empty	*/
-	FIFO_STATUS_PACKET_INVERTED_STATUS_NORMAL_OPERATION_FIFO_EMPTY		=   ( 0U << 0U ) 		/*!<  Reset(0) when the FIFO is empty								            */
-} EZPYRO_SMD_SENSOR_fifo_status_packet_inverted_status_t;
+	FS_INVERTED_STATUS_MASK									=   ( 1U << 0U ),		/*!<  INVERTED_STATUS mask  								                    */
+	FS_INVERTED_STATUS_NORMAL_OPERATION_FIFO_NOT_EMPTY		=   ( 1U << 0U ),		/*!<  In Normal Operation Mode, this bit is set (1) when the FIFO is not empty	*/
+	FS_INVERTED_STATUS_NORMAL_OPERATION_FIFO_EMPTY			=   ( 0U << 0U ) 		/*!<  Reset(0) when the FIFO is empty								            */
+} EZPYRO_SMD_SENSOR_fs_inverted_status_t;
+
+
+
+/* Register: CHANNELS CONTROL PACKET ( CCP ). The channel control packet contains 5 bytes, each of which corresponds to a single channel with its individual settings. Note that channel 0 is currently used for internal test purposes only	*/
+/**
+  * @brief   CH_TC <7:6>.
+  *
+  *          NOTE: Feedback Transconductance (Ohm)
+  */
+typedef enum
+{
+	CCP_CH_TC_MASK											=   ( 0b11 << 6U ),    	/*!<  CH_TC mask    		                       								*/
+	CCP_CH_TC_1_2T											=   ( 0b00 << 6U ),		/*!<  Feedback Transconductance: 1.6 Ohm							  [Default] */
+	CCP_CH_TC_0_6T											=   ( 0b01 << 6U ),		/*!<  Feedback Transconductance: 0.6 Ohm	   									*/
+	CCP_CH_TC_0_3T											=   ( 0b10 << 6U ),		/*!<  Feedback Transconductance: 0.3 Ohm	   									*/
+	CCP_CH_TC_0_15T											=   ( 0b11 << 6U )		/*!<  Feedback Transconductance: 0.15 Ohm	   									*/
+} EZPYRO_SMD_SENSOR_ccp_ch_tc_t;
+
+
+/**
+  * @brief   CH_HP <5:4>.
+  *
+  *          NOTE: High-Pass Signal Filter Frequency Selection ( Hz )
+  */
+typedef enum
+{
+	CCP_CH_HP_MASK											=   ( 0b11 << 4U ),    	/*!<  CH_HP mask    		                       								*/
+	CCP_CH_HP_NORMAL_POWER_MODE_1HZ_LOW_POWER_MODE_0_17HZ	=   ( 0b00 << 4U ),		/*!<  Normal power mode: 1Hz | Low power mode: 0.17Hz				  [Default] */
+	CCP_CH_HP_NORMAL_POWER_MODE_2HZ_LOW_POWER_MODE_0_33HZ	=   ( 0b01 << 4U ),		/*!<  Normal power mode: 2Hz | Low power mode: 0.33Hz							*/
+	CCP_CH_HP_NORMAL_POWER_MODE_4HZ_LOW_POWER_MODE_0_66HZ	=   ( 0b10 << 4U ),		/*!<  Normal power mode: 4Hz | Low power mode: 0.66Hz							*/
+	CCP_CH_HP_NORMAL_POWER_MODE_8HZ_LOW_POWER_MODE_1_30HZ	=   ( 0b11 << 4U )		/*!<  Normal power mode: 8Hz | Low power mode: 1.30Hz							*/
+} EZPYRO_SMD_SENSOR_ccp_ch_hp_t;
+
+
+/**
+  * @brief   CH_G <3:1>.
+  *
+  *          NOTE: Feedback Capacitor Selection ( fF ), Relative gain
+  */
+typedef enum
+{
+	CCP_CH_G_MASK											=   ( 0b111 << 1U ),   	/*!<  CH_G mask	    		                       								*/
+	CCP_CH_G_FEEDBACK_CAPACITANCE_50_RELATIVE_GAIN_X64		=   ( 0b000 << 1U ),	/*!<  Feedback capacitance:   50fF | Relative gain: 64x				  [Default] */
+	CCP_CH_G_FEEDBACK_CAPACITANCE_100_RELATIVE_GAIN_X32		=   ( 0b001 << 1U ),	/*!<  Feedback capacitance:  100fF | Relative gain: 32x							*/
+	CCP_CH_G_FEEDBACK_CAPACITANCE_200_RELATIVE_GAIN_X16		=   ( 0b010 << 1U ),	/*!<  Feedback capacitance:  200fF | Relative gain: 16x							*/
+	CCP_CH_G_FEEDBACK_CAPACITANCE_400_RELATIVE_GAIN_X8		=   ( 0b011 << 1U ),	/*!<  Feedback capacitance:  400fF | Relative gain: 8x							*/
+	CCP_CH_G_FEEDBACK_CAPACITANCE_800_RELATIVE_GAIN_X4		=   ( 0b100 << 1U ),	/*!<  Feedback capacitance:  800fF | Relative gain: 4x							*/
+	CCP_CH_G_FEEDBACK_CAPACITANCE_1600_RELATIVE_GAIN_X2		=   ( 0b101 << 1U ),	/*!<  Feedback capacitance: 1600fF | Relative gain: 2x							*/
+	CCP_CH_G_FEEDBACK_CAPACITANCE_3200_RELATIVE_GAIN_X1		=   ( 0b110 << 1U )		/*!<  Feedback capacitance: 3200fF | Relative gain: 1x							*/
+} EZPYRO_SMD_SENSOR_ccp_ch_g_t;
+
+
+/**
+  * @brief   CH_ST <0>.
+  *
+  *          NOTE: Channel Status Selection
+  */
+typedef enum
+{
+	CCP_CH_ST_MASK											=   ( 1U << 0U ),   	/*!<  CH_ST mask    		                       								*/
+	CCP_CH_ST_CHANNEL_DISABLED								=   ( 0U << 0U ),		/*!<  Channel Disabled												  [Default] */
+	CCP_CH_ST_CHANNEL_ENABLED								=   ( 1U << 0U )		/*!<  Channel Enabled															*/
+} EZPYRO_SMD_SENSOR_ccp_ch_st_t;
 
 
 
