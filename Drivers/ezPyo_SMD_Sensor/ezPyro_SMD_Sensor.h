@@ -126,7 +126,7 @@ typedef enum
   */
 typedef enum
 {
-	FS_WAKE_DETECTED_MASK									=   ( 0b1111 << 1U )	    /*!<  FIFO_COUNT mask                              */
+	FS_FIFO_COUNT_MASK										=   ( 0b1111 << 1U )	    /*!<  FIFO_COUNT mask                              */
 } EZPYRO_SMD_SENSOR_fs_fifo_count_t;
 
 
@@ -312,7 +312,54 @@ typedef enum
 {
 	I2CADD_I2C_NEW_ADDR_MASK								=   ( 0b1111111 << 1U ), /*!<  I2C_NEW_ADDR mask                       								*/
 	I2CADD_I2C_NEW_ADDR_DEFAULT								=   ( 0xCA << 1U )	     /*!<  Default I2C address    		                       		  [Default] */
-} EZPYRO_SMD_SENSOR_i2cadd_lp_t;
+} EZPYRO_SMD_SENSOR_i2cadd_i2c_new_addr_t;
+
+
+
+/* Register: WAKE UP PACKET ( WUP ). Byte5 - Ch Setting -	*/
+/**
+  * @brief   ST <6>.
+  *
+  *          NOTE: Sleep Mode type
+  */
+typedef enum
+{
+	CH_SETTING_ST_MASK										=   ( 1U << 6U ), 		 /*!<  ST mask           		            								*/
+	CH_SETTING_ST_ONE_CHANNEL_SLEEP_TYPE					=   ( 0U << 6U ),	     /*!<  One channel sleep type, set by ch0-ch2			  		  [Default] */
+	CH_SETTING_ST_TWO_CHANNELS_SLEEP_TYPE					=   ( 1U << 6U )	     /*!<  Two channel sleep type, set by both dp0-dp2 and ch0-ch2	  			*/
+} EZPYRO_SMD_SENSOR_ch_setting_st_t;
+
+
+/**
+  * @brief   DP <5:3>.
+  *
+  *          NOTE: The Reference channel coding
+  */
+typedef enum
+{
+	CH_SETTING_DP_MASK										=   ( 0b111 << 3U ), 	/*!<  DP mask           		            								*/
+	CH_SETTING_DP_SELECT_CHANNEL_0							=   ( 0b000 << 3U ),	/*!<  Select channel 0		  									  [Default] */
+	CH_SETTING_DP_SELECT_CHANNEL_1							=   ( 0b001 << 3U ),    /*!<  Select channel 1											  			*/
+	CH_SETTING_DP_SELECT_CHANNEL_2							=   ( 0b010 << 3U ),    /*!<  Select channel 2											  			*/
+	CH_SETTING_DP_SELECT_CHANNEL_3							=   ( 0b011 << 3U ),    /*!<  Select channel 3											  			*/
+	CH_SETTING_DP_SELECT_CHANNEL_4							=   ( 0b100 << 3U )     /*!<  Select channel 4											  			*/
+} EZPYRO_SMD_SENSOR_ch_setting_dp_t;
+
+
+/**
+  * @brief   CH <2:0>.
+  *
+  *          NOTE: The selected channel coding
+  */
+typedef enum
+{
+	CH_SETTING_CH_MASK										=   ( 0b111 << 0U ), 	/*!<  CH mask           		            								*/
+	CH_SETTING_CH_SELECT_CHANNEL_0							=   ( 0b000 << 0U ),	/*!<  Select channel 0		  									  [Default] */
+	CH_SETTING_CH_SELECT_CHANNEL_1							=   ( 0b001 << 0U ),    /*!<  Select channel 1											  			*/
+	CH_SETTING_CH_SELECT_CHANNEL_2							=   ( 0b010 << 0U ),    /*!<  Select channel 2											  			*/
+	CH_SETTING_CH_SELECT_CHANNEL_3							=   ( 0b011 << 0U ),    /*!<  Select channel 3											  			*/
+	CH_SETTING_CH_SELECT_CHANNEL_4							=   ( 0b100 << 0U )     /*!<  Select channel 4											  			*/
+} EZPYRO_SMD_SENSOR_ch_setting_ch_t;
 
 
 
