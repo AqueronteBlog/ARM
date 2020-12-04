@@ -41,25 +41,33 @@ typedef enum
   */
 typedef enum
 {
-    EZPYRO_SMD_SENSOR_TEST		       =   0x00,           /*!<  Verify communication by reading the response packet		*/
     EZPYRO_SMD_SENSOR_VERSION	       =   0x02,           /*!<  Version Packet					    						*/
     EZPYRO_SMD_SENSOR_FIFO_STATUS      =   0x04,           /*!<  FIFO Status Packet				    						*/
     EZPYRO_SMD_SENSOR_FIFO_READ_FULL   =   0x06,           /*!<  Read full data packet (17 bytes) of all channels			*/
     EZPYRO_SMD_SENSOR_FIFO_READ_ACTIVE =   0x08,           /*!<  Read data packet (up to 17 bytes) for only active channel	*/
-    EZPYRO_SMD_SENSOR_FIFO_CLEAR       =   0x0A,           /*!<  Clear the current Packet (Read pointer moves on next)		*/
-    EZPYRO_SMD_SENSOR_FIFO_RESET       =   0x0C,           /*!<  Clear the entire FIFO (Rd/Wr pointer reset with the Empty)	*/
     EZPYRO_SMD_SENSOR_CH_READ	       =   0x0E,           /*!<  Channel Control Packet										*/
     EZPYRO_SMD_SENSOR_CH_WRITE         =   0x10,           /*!<  Channel Control Packet			        					*/
     EZPYRO_SMD_SENSOR_ANA_READ         =   0x12,           /*!<  Analogue Settings											*/
     EZPYRO_SMD_SENSOR_ANA_WRITE        =   0x14,           /*!<  Analogue Settings											*/
     EZPYRO_SMD_SENSOR_WAKE_READ        =   0x16,           /*!<  Wake-up Packet												*/
     EZPYRO_SMD_SENSOR_WAKE_WRITE       =   0x18,           /*!<  Wake-up Packet												*/
-    EZPYRO_SMD_SENSOR_ADDR_WRITE       =   0x1E,           /*!<  I2C Address												*/
+    EZPYRO_SMD_SENSOR_ADDR_WRITE       =   0x1E            /*!<  I2C Address												*/
+} EZPYRO_SMD_SENSOR_register_list_t;
+
+
+/**
+  * @brief   COMMAND MAPPING
+  */
+typedef enum
+{
+    EZPYRO_SMD_SENSOR_TEST		       =   0x00,           /*!<  Verify communication by reading the response packet		*/
+    EZPYRO_SMD_SENSOR_FIFO_CLEAR       =   0x0A,           /*!<  Clear the current Packet (Read pointer moves on next)		*/
+    EZPYRO_SMD_SENSOR_FIFO_RESET       =   0x0C,           /*!<  Clear the entire FIFO (Rd/Wr pointer reset with the Empty)	*/
     EZPYRO_SMD_SENSOR_GO_TO_SLEEP      =   0x20,           /*!<  Put the device in Sleep Mode								*/
     EZPYRO_SMD_SENSOR_WAKE_UP	       =   0x22,           /*!<  Wake up and resume normal mode								*/
     EZPYRO_SMD_SENSOR_RESET_SOFT       =   0x24,           /*!<  Soft reset													*/
 	EZPYRO_SMD_SENSOR_RESET_FULL       =   0x26            /*!<  Full reset													*/
-} EZPYRO_SMD_SENSOR_register_list_t;
+} EZPYRO_SMD_SENSOR_command_list_t;
 
 
 
@@ -369,17 +377,42 @@ typedef enum
 
 #ifndef EZPYRO_SMD_SENSOR_VECTOR_STRUCT_H
 #define EZPYRO_SMD_SENSOR_VECTOR_STRUCT_H
-/* EZPYRO_SMD_SENSOR DATA */
+/* EZPYRO_SMD_CHANNEL CONTROL PACKET */
 typedef struct
 {
-    int8_t      f_wake;                  /*!<  False wakeup register                */
-    uint8_t     patt2b;                  /*!<  Wakeup pattern PATT2B ( Manchester ) */
-    uint8_t     patt1b;                  /*!<  Wakeup pattern PATT1B ( Manchester ) */
-    uint8_t     rssi1;                   /*!<  RSSI1 Channel 1                      */
-    uint8_t     rssi2;                   /*!<  RSSI2 Channel 2                      */
-    uint8_t     rssi3;                   /*!<  RSSI3 Channel 3                      */
+	EZPYRO_SMD_SENSOR_ccp_ch_tc_t	cx_tc;		/*!<  Feedback Transconductance (Ohm)								*/
+	EZPYRO_SMD_SENSOR_ccp_ch_hp_t	cx_hp;		/*!<  High-Pass Filter Frequency Selection							*/
+	EZPYRO_SMD_SENSOR_ccp_ch_g_t	cx_g;		/*!<  Feedback Capacitor Selection									*/
+	EZPYRO_SMD_SENSOR_ccp_ch_st_t	cx_st;		/*!<  Channel Status Selection										*/
+} EZPYRO_SMD_SENSOR_ch_x_t;
 
-    uint32_t    data;                    /*!<  Data                                 */
+
+typedef struct
+{
+	EZPYRO_SMD_SENSOR_ch_x_t		ch0;		/*!<  Channel 0	( currently used for internal test purposes only )	*/
+	EZPYRO_SMD_SENSOR_ch_x_t		ch1;		/*!<  Channel 1														*/
+	EZPYRO_SMD_SENSOR_ch_x_t		ch2;		/*!<  Channel 2														*/
+	EZPYRO_SMD_SENSOR_ch_x_t		ch3;		/*!<  Channel 3														*/
+	EZPYRO_SMD_SENSOR_ch_x_t		ch4;		/*!<  Channel 4														*/
+} EZPYRO_SMD_SENSOR_ccp_channel_t;
+
+
+
+/* EZPYRO_SMD_USER DATA */
+typedef struct
+{
+	/* Configuration	 */
+	EZPYRO_SMD_SENSOR_ccp_channel_t				ccp;				/*!<  Channel control packet					*/
+
+    /* Command Ok/Err	 */
+    EZPYRO_SMD_SENSOR_commands_data_ok_err_t	command_ok_err;		/*!<  Sensor response after a command is sent	*/
+
+    /* FIFO status packet	 */
+    uint8_t		fs;													/*!<  FIFO status packet ( whole register )		*/
+    uint8_t		fifo_count;											/*!<  Number of data packets available in FIFO	*/
+
+    /* Version Packet	 */
+    uint8_t		version;											/*!<  Version packet							*/
 } EZPYRO_SMD_SENSOR_data_t;
 #endif
 
@@ -401,10 +434,33 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-/** It configures the SPI peripheral.
+/** It configures the I2C peripheral.
     */
-EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_Init                            ( I2C_parameters_t myI2C_parameters                                                                                                                         );
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_Init 						( I2C_parameters_t myI2C_parameters																												);
 
+/** It sends a command to the sensor.
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_SendCommand 				( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_command_list_t myCommand, EZPYRO_SMD_SENSOR_commands_data_ok_err_t* myCommandResponse	);
+
+/** It gets the version packet.
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetVersionPacket			( I2C_parameters_t myI2C_parameters, uint8_t* myVersionPacket																					);
+
+/** It gets the FIFO status packet ( it reads the whole register ).
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetFIFO_StatusPacket		( I2C_parameters_t myI2C_parameters, uint8_t* myFS																								);
+
+/** It gets the number of data packets available in the FIFO.
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetNumberDataInFIFO		( I2C_parameters_t myI2C_parameters, uint8_t* myFIFO_count																						);
+
+/** It reads the channel control packet ( all the channels from channel 0 to channel 4 ).
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetChannelControlPacket	( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_ccp_channel_t* myCCP																		);
+
+/** It configures the channel control packet ( it can configure just one channel, two/three channels or all at the same time ).
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_SetChannelControlPacket	( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_ccp_channel_t myCCP																		);
 
 
 #ifdef __cplusplus
