@@ -350,3 +350,103 @@ EZPYRO_SMD_SENSOR_status_t EZPYRO_SMD_SENSOR_SetChannelControlPacket ( I2C_param
         return   EZPYRO_SMD_SENSOR_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       EZPYRO_SMD_SENSOR_GetAnalogueFrontEndPacket   ( I2C_parameters_t , EZPYRO_SMD_SENSOR_afep_t* )
+ *
+ * @details     It reads the analogue front end packet register.
+ *
+ * @param[in]    myI2C_parameters:  I2C instance.
+ *
+ * @param[out]   myAFEP:			Analogue Front end package register.
+ *
+ *
+ * @return       Status of EZPYRO_SMD_SENSOR_GetAnalogueFrontEndPacket.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        08/December/2020
+ * @version     08/December/2020   The ORIGIN
+ * @pre         This function reads and updates the configuration for the whole register.
+ * @warning     N/A.
+ */
+EZPYRO_SMD_SENSOR_status_t EZPYRO_SMD_SENSOR_GetAnalogueFrontEndPacket	( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_afep_t* myAFEP )
+{
+	uint8_t		 cmd[2] = { 0U };
+    i2c_status_t myI2C_status;
+
+    /* Send data	 */
+    cmd[0]			 =	 EZPYRO_SMD_SENSOR_ANA_READ;
+    myI2C_status	 =	 i2c_write ( myI2C_parameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+
+    /* Get data	 */
+    myI2C_status	 =	 i2c_read ( myI2C_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    /* Parse the data	 */
+    myAFEP->sampling_rate	 =	  cmd[0];
+
+    myAFEP->lp	 			 =	(EZPYRO_SMD_SENSOR_afep_byte1_lp_t)( cmd[1] & AFEP_BYTE1_LP_MASK );
+    myAFEP->hp				 =	(EZPYRO_SMD_SENSOR_afep_byte1_hp_t)( cmd[1] & AFEP_BYTE1_HP_MASK );
+    myAFEP->c_lp			 =	(EZPYRO_SMD_SENSOR_afep_byte1_c_lp_t)( cmd[1] & AFEP_BYTE1_C_LP_MASK );
+    myAFEP->clk_out			 =	(EZPYRO_SMD_SENSOR_afep_byte1_clk_out_t)( cmd[1] & AFEP_BYTE1_CLK_OUT_MASK );
+    myAFEP->sync			 =	(EZPYRO_SMD_SENSOR_afep_byte1_sync_t)( cmd[1] & AFEP_BYTE1_SYNC_MASK );
+    myAFEP->int_mode		 =	(EZPYRO_SMD_SENSOR_afep_byte1_int_t)( cmd[1] & AFEP_BYTE1_INT_MASK );
+
+
+
+    if ( myI2C_status == I2C_SUCCESS )
+    {
+        return   EZPYRO_SMD_SENSOR_SUCCESS;
+    }
+    else
+    {
+        return   EZPYRO_SMD_SENSOR_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       EZPYRO_SMD_SENSOR_SetAnalogueFrontEndPacket   ( I2C_parameters_t , EZPYRO_SMD_SENSOR_afep_t )
+ *
+ * @details     It sets the analogue front end packet register.
+ *
+ * @param[in]    myI2C_parameters:  I2C instance.
+ * @param[in]    myAFEP:			Analogue Front end package register.
+ *
+ * @param[out]   N/A
+ *
+ *
+ * @return       Status of EZPYRO_SMD_SENSOR_SetAnalogueFrontEndPacket.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        08/December/2020
+ * @version     08/December/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     Before using this function, the user MUST call the function: EZPYRO_SMD_SENSOR_GetAnalogueFrontEndPacket in order to mask the values.
+ */
+EZPYRO_SMD_SENSOR_status_t EZPYRO_SMD_SENSOR_SetAnalogueFrontEndPacket ( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_afep_t myAFEP	)
+{
+	uint8_t			cmd[3] = { 0U };
+    i2c_status_t 	myI2C_status;
+
+    /* Send data	 */
+    cmd[0]			 =	 EZPYRO_SMD_SENSOR_ANA_WRITE;
+    cmd[1]			 =	 myAFEP.sampling_rate;
+    cmd[2]			 =	 ( myAFEP.lp | myAFEP.hp | myAFEP.c_lp | myAFEP.clk_out | myAFEP.sync | myAFEP.int_mode ) & 0xFD;
+    myI2C_status	 =	 i2c_write ( myI2C_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    if ( myI2C_status == I2C_SUCCESS )
+    {
+        return   EZPYRO_SMD_SENSOR_SUCCESS;
+    }
+    else
+    {
+        return   EZPYRO_SMD_SENSOR_FAILURE;
+    }
+}
