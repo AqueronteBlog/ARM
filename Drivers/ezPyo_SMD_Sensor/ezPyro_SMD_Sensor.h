@@ -418,6 +418,7 @@ typedef struct
 	EZPYRO_SMD_SENSOR_ccp_channel_t				ccp;				/*!<  Channel control packet					*/
 	EZPYRO_SMD_SENSOR_afep_t					afep;				/*!<  Analogue Front End Packet					*/
 
+	uint8_t										i2c_add;			/*!<  I2C address packet						*/
 
     /* Command Ok/Err	 */
     EZPYRO_SMD_SENSOR_commands_data_ok_err_t	command_ok_err;		/*!<  Sensor response after a command is sent	*/
@@ -484,6 +485,10 @@ EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetAnalogueFrontEndPacket	( I2C_pa
 /** It sets the analogue front end packet register.
     */
 EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_SetAnalogueFrontEndPacket	( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_afep_t myAFEP																			);
+
+/** It sets a new I2C address packet.
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_SetNewI2C_AddressPacket	( I2C_parameters_t myI2C_parameters, uint8_t myI2CADD																							);
 
 
 #ifdef __cplusplus
