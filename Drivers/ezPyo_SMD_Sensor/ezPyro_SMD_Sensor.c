@@ -450,3 +450,48 @@ EZPYRO_SMD_SENSOR_status_t EZPYRO_SMD_SENSOR_SetAnalogueFrontEndPacket ( I2C_par
         return   EZPYRO_SMD_SENSOR_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       EZPYRO_SMD_SENSOR_SetI2C_AddressPacket   ( I2C_parameters_t , uint8_t )
+ *
+ * @details     It sets a new I2C address packet.
+ *
+ * @param[in]    myI2C_parameters:  I2C instance.
+ * @param[in]    myI2CADD:			A new I2C address for the device.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return       Status of EZPYRO_SMD_SENSOR_SetI2C_AddressPacket.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        08/December/2020
+ * @version     08/December/2020   The ORIGIN
+ * @pre         This function shifts the I2C address to MSB to make reading easier with read/write bit.
+ * @warning     N/A.
+ */
+EZPYRO_SMD_SENSOR_status_t EZPYRO_SMD_SENSOR_SetI2C_AddressPacket ( I2C_parameters_t myI2C_parameters, uint8_t myI2CADD )
+{
+	uint8_t		 cmd[2] = { 0U };
+    i2c_status_t myI2C_status;
+
+    /* Send data	 */
+    cmd[0]			 =	 EZPYRO_SMD_SENSOR_ADDR_WRITE;
+    cmd[1]			 =	 ( myI2CADD << 1U );
+    myI2C_status	 =	 i2c_write ( myI2C_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+
+    if ( myI2C_status == I2C_SUCCESS )
+    {
+        return   EZPYRO_SMD_SENSOR_SUCCESS;
+    }
+    else
+    {
+        return   EZPYRO_SMD_SENSOR_FAILURE;
+    }
+}
