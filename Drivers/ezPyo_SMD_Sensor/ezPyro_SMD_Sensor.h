@@ -223,7 +223,7 @@ typedef enum
   */
 typedef enum
 {
-	AFEP__BYTE0_S_MASK										=   0xFF		    	/*!<  S mask    		                       								*/
+	AFEP_BYTE0_S_MASK										=   0xFF		    	/*!<  S mask    		                       								*/
 } EZPYRO_SMD_SENSOR_afep_byte0_s_t;
 
 
@@ -377,24 +377,37 @@ typedef enum
 
 #ifndef EZPYRO_SMD_SENSOR_VECTOR_STRUCT_H
 #define EZPYRO_SMD_SENSOR_VECTOR_STRUCT_H
-/* EZPYRO_SMD_CHANNEL CONTROL PACKET */
+/* EZPYRO_SMD_SENSOR CHANNEL CONTROL PACKET */
 typedef struct
 {
-	EZPYRO_SMD_SENSOR_ccp_ch_tc_t	cx_tc;		/*!<  Feedback Transconductance (Ohm)								*/
-	EZPYRO_SMD_SENSOR_ccp_ch_hp_t	cx_hp;		/*!<  High-Pass Filter Frequency Selection							*/
-	EZPYRO_SMD_SENSOR_ccp_ch_g_t	cx_g;		/*!<  Feedback Capacitor Selection									*/
-	EZPYRO_SMD_SENSOR_ccp_ch_st_t	cx_st;		/*!<  Channel Status Selection										*/
+	EZPYRO_SMD_SENSOR_ccp_ch_tc_t	cx_tc;							/*!<  Feedback Transconductance (Ohm)								*/
+	EZPYRO_SMD_SENSOR_ccp_ch_hp_t	cx_hp;							/*!<  High-Pass Filter Frequency Selection							*/
+	EZPYRO_SMD_SENSOR_ccp_ch_g_t	cx_g;							/*!<  Feedback Capacitor Selection									*/
+	EZPYRO_SMD_SENSOR_ccp_ch_st_t	cx_st;							/*!<  Channel Status Selection										*/
 } EZPYRO_SMD_SENSOR_ch_x_t;
 
 
 typedef struct
 {
-	EZPYRO_SMD_SENSOR_ch_x_t		ch0;		/*!<  Channel 0	( currently used for internal test purposes only )	*/
-	EZPYRO_SMD_SENSOR_ch_x_t		ch1;		/*!<  Channel 1														*/
-	EZPYRO_SMD_SENSOR_ch_x_t		ch2;		/*!<  Channel 2														*/
-	EZPYRO_SMD_SENSOR_ch_x_t		ch3;		/*!<  Channel 3														*/
-	EZPYRO_SMD_SENSOR_ch_x_t		ch4;		/*!<  Channel 4														*/
+	EZPYRO_SMD_SENSOR_ch_x_t		ch0;							/*!<  Channel 0	( currently used for internal test purposes only )	*/
+	EZPYRO_SMD_SENSOR_ch_x_t		ch1;							/*!<  Channel 1														*/
+	EZPYRO_SMD_SENSOR_ch_x_t		ch2;							/*!<  Channel 2														*/
+	EZPYRO_SMD_SENSOR_ch_x_t		ch3;							/*!<  Channel 3														*/
+	EZPYRO_SMD_SENSOR_ch_x_t		ch4;							/*!<  Channel 4														*/
 } EZPYRO_SMD_SENSOR_ccp_channel_t;
+
+
+/* EZPYRO_SMD_SENSOR ANALOGUE FRONT END PACKET */
+typedef struct
+{
+	uint8_t									sampling_rate;			/*!<  Sampling Rate: Sampling Rate = 1000/(N+1)						*/
+	EZPYRO_SMD_SENSOR_afep_byte1_lp_t		lp;						/*!<  Enable Low Power Mode											*/
+	EZPYRO_SMD_SENSOR_afep_byte1_hp_t		hp;						/*!<  Enable high pass filter										*/
+	EZPYRO_SMD_SENSOR_afep_byte1_c_lp_t		c_lp;					/*!<  Low-Pass Signal Filter Frequency Selection					*/
+	EZPYRO_SMD_SENSOR_afep_byte1_clk_out_t	clk_out;				/*!<  Enable internal clock output on Clk pin						*/
+	EZPYRO_SMD_SENSOR_afep_byte1_sync_t		sync;					/*!<  Sync & Clk Pin option											*/
+	EZPYRO_SMD_SENSOR_afep_byte1_int_t		int_mode;				/*!<  Enable Interrupt output										*/
+} EZPYRO_SMD_SENSOR_afep_t;
 
 
 
@@ -403,6 +416,8 @@ typedef struct
 {
 	/* Configuration	 */
 	EZPYRO_SMD_SENSOR_ccp_channel_t				ccp;				/*!<  Channel control packet					*/
+	EZPYRO_SMD_SENSOR_afep_t					afep;				/*!<  Analogue Front End Packet					*/
+
 
     /* Command Ok/Err	 */
     EZPYRO_SMD_SENSOR_commands_data_ok_err_t	command_ok_err;		/*!<  Sensor response after a command is sent	*/
@@ -454,13 +469,21 @@ EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetFIFO_StatusPacket		( I2C_parame
     */
 EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetNumberDataInFIFO		( I2C_parameters_t myI2C_parameters, uint8_t* myFIFO_count																						);
 
-/** It reads the channel control packet ( all the channels from channel 0 to channel 4 ).
+/** It reads the channel control packet register ( all the channels from channel 0 to channel 4 ).
     */
 EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetChannelControlPacket	( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_ccp_channel_t* myCCP																		);
 
-/** It configures the channel control packet ( it can configure just one channel, two/three channels or all at the same time ).
+/** It configures the channel control packet register ( it can configure just one channel, two/three channels or all at the same time ).
     */
 EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_SetChannelControlPacket	( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_ccp_channel_t myCCP																		);
+
+/** It reads the analogue front end packet register.
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetAnalogueFrontEndPacket	( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_afep_t* myAFEP																			);
+
+/** It sets the analogue front end packet register.
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_SetAnalogueFrontEndPacket	( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_afep_t myAFEP																			);
 
 
 #ifdef __cplusplus
