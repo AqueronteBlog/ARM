@@ -495,3 +495,110 @@ EZPYRO_SMD_SENSOR_status_t EZPYRO_SMD_SENSOR_SetI2C_AddressPacket ( I2C_paramete
         return   EZPYRO_SMD_SENSOR_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       EZPYRO_SMD_SENSOR_GetWakeUpPacket   ( I2C_parameters_t , EZPYRO_SMD_SENSOR_wup_t* )
+ *
+ * @details     It reads the wake-up packet register.
+ *
+ * @param[in]    myI2C_parameters:  I2C instance.
+ *
+ * @param[out]   myWUP:				Wake-up packet register.
+ *
+ *
+ * @return       Status of EZPYRO_SMD_SENSOR_GetWakeUpPacket.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        09/December/2020
+ * @version     09/December/2020   The ORIGIN
+ * @pre         This function reads and updates the configuration for the whole register.
+ * @warning     N/A.
+ */
+EZPYRO_SMD_SENSOR_status_t EZPYRO_SMD_SENSOR_GetWakeUpPacket ( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_wup_t* myWUP )
+{
+	uint8_t		 cmd[6] = { 0U };
+    i2c_status_t myI2C_status;
+
+    /* Send data	 */
+    cmd[0]			 =	 EZPYRO_SMD_SENSOR_WAKE_READ;
+    myI2C_status	 =	 i2c_write ( myI2C_parameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+
+    /* Get data	 */
+    myI2C_status	 =	 i2c_read ( myI2C_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    /* Parse the data	 */
+    myWUP->uht				 =	  cmd[0];
+    myWUP->ult				 =	  cmd[1];
+
+    myWUP->lht				 =	  cmd[2];
+    myWUP->llt				 =	  cmd[3];
+
+    myWUP->wt				 =	  cmd[4];
+
+    myWUP->ch_settings.st	 =	 (EZPYRO_SMD_SENSOR_ch_setting_st_t)( cmd[5] & CH_SETTING_ST_MASK );
+    myWUP->ch_settings.dp	 =	 (EZPYRO_SMD_SENSOR_ch_setting_dp_t)( cmd[5] & CH_SETTING_DP_MASK );
+    myWUP->ch_settings.ch	 =	 (EZPYRO_SMD_SENSOR_ch_setting_ch_t)( cmd[5] & CH_SETTING_CH_MASK );
+
+
+
+    if ( myI2C_status == I2C_SUCCESS )
+    {
+        return   EZPYRO_SMD_SENSOR_SUCCESS;
+    }
+    else
+    {
+        return   EZPYRO_SMD_SENSOR_FAILURE;
+    }
+}
+
+
+
+/**
+ * @brief       EZPYRO_SMD_SENSOR_SetWakeUpPacket   ( I2C_parameters_t , EZPYRO_SMD_SENSOR_wup_t )
+ *
+ * @details     It sets the wake-up packet register.
+ *
+ * @param[in]    myI2C_parameters:  I2C instance.
+ * @param[in]    myWUP:				Wake-up packet register.
+ *
+ * @param[out]   N/A
+ *
+ *
+ * @return       Status of EZPYRO_SMD_SENSOR_SetWakeUpPacket.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        09/December/2020
+ * @version     09/December/2020   The ORIGIN
+ * @pre         N/A.
+ * @warning     Before using this function, the user MUST call the function: EZPYRO_SMD_SENSOR_GetWakeUpPacket in order to mask the values.
+ */
+EZPYRO_SMD_SENSOR_status_t EZPYRO_SMD_SENSOR_SetWakeUpPacket ( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_wup_t myWUP )
+{
+	uint8_t			cmd[7] = { 0U };
+    i2c_status_t 	myI2C_status;
+
+    /* Send data	 */
+    cmd[0]			 =	 EZPYRO_SMD_SENSOR_WAKE_WRITE;
+    cmd[1]			 =	 myWUP.uht;
+    cmd[2]			 =	 myWUP.ult;
+    cmd[3]			 =	 myWUP.lht;
+    cmd[4]			 =	 myWUP.llt;
+    cmd[5]			 =	 myWUP.wt;
+    cmd[6]			 =	 ( myWUP.ch_settings.st | myWUP.ch_settings.dp | myWUP.ch_settings.ch );
+    myI2C_status	 =	 i2c_write ( myI2C_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
+
+
+    if ( myI2C_status == I2C_SUCCESS )
+    {
+        return   EZPYRO_SMD_SENSOR_SUCCESS;
+    }
+    else
+    {
+        return   EZPYRO_SMD_SENSOR_FAILURE;
+    }
+}
