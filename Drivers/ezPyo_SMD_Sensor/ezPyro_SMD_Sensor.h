@@ -410,6 +410,26 @@ typedef struct
 } EZPYRO_SMD_SENSOR_afep_t;
 
 
+/* EZPYRO_SMD_SENSOR WAKE-UP PACKET */
+typedef struct
+{
+	EZPYRO_SMD_SENSOR_ch_setting_st_t		st;						/*!<  Sleep Mode type												*/
+	EZPYRO_SMD_SENSOR_ch_setting_dp_t		dp;						/*!<  The Reference channel coding									*/
+	EZPYRO_SMD_SENSOR_ch_setting_ch_t		ch;						/*!<  The selected channel coding									*/
+} EZPYRO_SMD_SENSOR_ch_settings_t;
+
+
+typedef struct
+{
+	uint8_t									uht;					/*!<  UHT and ULT to detect positive wake-up event (UHT > ULT)		*/
+	uint8_t									ult;					/*!<  UHT and ULT to detect positive wake-up event (UHT > ULT)		*/
+	uint8_t									lht;					/*!<  Number of sample where the signal is in between threshold		*/
+	uint8_t									llt;					/*!<  Low-Pass Signal Filter Frequency Selection					*/
+	uint8_t									wt;						/*!<  Number of sample where the signal is in between threshold		*/
+	EZPYRO_SMD_SENSOR_ch_settings_t			ch_settings;			/*!<  Channels settings												*/
+} EZPYRO_SMD_SENSOR_wup_t;
+
+
 
 /* EZPYRO_SMD_USER DATA */
 typedef struct
@@ -489,6 +509,14 @@ EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_SetAnalogueFrontEndPacket	( I2C_pa
 /** It sets a new I2C address packet.
     */
 EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_SetNewI2C_AddressPacket	( I2C_parameters_t myI2C_parameters, uint8_t myI2CADD																							);
+
+/** It reads the wake-up packet register.
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetWakeUpPacket			( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_wup_t* myWUP																				);
+
+/** It sets the wake-up packet register.
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_SetWakeUpPacket			( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_wup_t myWUP																				);
 
 
 #ifdef __cplusplus
