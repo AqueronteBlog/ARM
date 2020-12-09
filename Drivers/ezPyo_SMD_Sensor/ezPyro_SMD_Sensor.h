@@ -430,25 +430,43 @@ typedef struct
 } EZPYRO_SMD_SENSOR_wup_t;
 
 
+/* EZPYRO_SMD_SENSOR FIFO DATA PACKET FULL */
+typedef struct
+{
+	uint32_t								ch0_data;				/*!<  Channel 0 data												*/
+	uint32_t								ch1_data;				/*!<  Channel 1 data												*/
+	uint32_t								ch2_data;				/*!<  Channel 2 data												*/
+	uint32_t								ch3_data;				/*!<  Channel 3 data												*/
+	uint32_t								ch4_data;				/*!<  Channel 4 data												*/
+
+	uint16_t								frame_count;			/*!<  Frame count													*/
+} EZPYRO_SMD_SENSOR_fifo_dpf_t;
+
+
+
 
 /* EZPYRO_SMD_USER DATA */
 typedef struct
 {
 	/* Configuration	 */
-	EZPYRO_SMD_SENSOR_ccp_channel_t				ccp;				/*!<  Channel control packet					*/
-	EZPYRO_SMD_SENSOR_afep_t					afep;				/*!<  Analogue Front End Packet					*/
+	EZPYRO_SMD_SENSOR_ccp_channel_t				ccp;				/*!<  Channel control packet								*/
+	EZPYRO_SMD_SENSOR_afep_t					afep;				/*!<  Analogue Front End Packet								*/
+	EZPYRO_SMD_SENSOR_wup_t						wup;				/*!<  Wake-up Packet										*/
 
-	uint8_t										i2c_add;			/*!<  I2C address packet						*/
+	uint8_t										i2c_add;			/*!<  I2C address packet									*/
 
     /* Command Ok/Err	 */
-    EZPYRO_SMD_SENSOR_commands_data_ok_err_t	command_ok_err;		/*!<  Sensor response after a command is sent	*/
+    EZPYRO_SMD_SENSOR_commands_data_ok_err_t	command_ok_err;		/*!<  Sensor response after a command is sent				*/
 
     /* FIFO status packet	 */
-    uint8_t		fs;													/*!<  FIFO status packet ( whole register )		*/
-    uint8_t		fifo_count;											/*!<  Number of data packets available in FIFO	*/
+    uint8_t										fs;					/*!<  FIFO status packet ( whole register )					*/
+    uint8_t										fifo_count;			/*!<  Number of data packets available in FIFO				*/
+
+    /* FIFO data packet full	 */
+    EZPYRO_SMD_SENSOR_fifo_dpf_t				fifo_dpf;			/*!< Top frame available in the FIFO and the frame counter	*/
 
     /* Version Packet	 */
-    uint8_t		version;											/*!<  Version packet							*/
+    uint8_t										version;			/*!<  Version packet										*/
 } EZPYRO_SMD_SENSOR_data_t;
 #endif
 
@@ -459,8 +477,13 @@ typedef struct
   */
 typedef enum
 {
-    EZPYRO_SMD_SENSOR_SUCCESS     =       0,
-    EZPYRO_SMD_SENSOR_FAILURE     =       1
+    EZPYRO_SMD_SENSOR_SUCCESS     				=       0U,
+    EZPYRO_SMD_SENSOR_FAILURE     				=       1U,
+	EZPYRO_SMD_SENSOR_SUCCESS_CH0_OVER_RANGE	=       2U,
+	EZPYRO_SMD_SENSOR_SUCCESS_CH1_OVER_RANGE	=       3U,
+	EZPYRO_SMD_SENSOR_SUCCESS_CH2_OVER_RANGE	=       4U,
+	EZPYRO_SMD_SENSOR_SUCCESS_CH3_OVER_RANGE	=       5U,
+	EZPYRO_SMD_SENSOR_SUCCESS_CH4_OVER_RANGE	=       6U
 } EZPYRO_SMD_SENSOR_status_t;
 
 
@@ -517,6 +540,10 @@ EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetWakeUpPacket			( I2C_parameters
 /** It sets the wake-up packet register.
     */
 EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_SetWakeUpPacket			( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_wup_t myWUP																				);
+
+/** It reads the FIFO data packet full register ( all the channels and the frame counter ).
+    */
+EZPYRO_SMD_SENSOR_status_t  EZPYRO_SMD_SENSOR_GetFIFO_DataPacketFull	( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_fifo_dpf_t* myFIFO_DPF																	);
 
 
 #ifdef __cplusplus
