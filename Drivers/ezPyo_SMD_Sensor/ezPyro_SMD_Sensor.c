@@ -602,3 +602,107 @@ EZPYRO_SMD_SENSOR_status_t EZPYRO_SMD_SENSOR_SetWakeUpPacket ( I2C_parameters_t 
         return   EZPYRO_SMD_SENSOR_FAILURE;
     }
 }
+
+
+
+/**
+ * @brief       EZPYRO_SMD_SENSOR_GetFIFO_DataPacketFull   ( I2C_parameters_t , EZPYRO_SMD_SENSOR_fifo_dpf_t* )
+ *
+ * @details     It reads the FIFO data packet full register ( all the channels and the frame counter ).
+ *
+ * @param[in]    myI2C_parameters:  I2C instance.
+ *
+ * @param[out]   myFIFO_DPF:		FIFO data packet full register.
+ *
+ *
+ * @return       Status of EZPYRO_SMD_SENSOR_GetFIFO_DataPacketFull.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        09/December/2020
+ * @version     09/December/2020   The ORIGIN
+ * @pre         This function reads and updates the configuration for the whole register.
+ * @warning     N/A.
+ */
+EZPYRO_SMD_SENSOR_status_t EZPYRO_SMD_SENSOR_GetFIFO_DataPacketFull	( I2C_parameters_t myI2C_parameters, EZPYRO_SMD_SENSOR_fifo_dpf_t* myFIFO_DPF )
+{
+	uint8_t		 cmd[17] = { 0U };
+    i2c_status_t myI2C_status;
+
+    /* Send data	 */
+    cmd[0]			 =	 EZPYRO_SMD_SENSOR_FIFO_READ_FULL;
+    myI2C_status	 =	 i2c_write ( myI2C_parameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+
+    /* Get data	 */
+    myI2C_status	 =	 i2c_read ( myI2C_parameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
+
+    /* Parse the data	 */
+    myFIFO_DPF->ch0_data	   =	  cmd[0];
+    myFIFO_DPF->ch0_data     <<=	  8U;
+    myFIFO_DPF->ch0_data	  |=	  cmd[1];
+    myFIFO_DPF->ch0_data     <<=	  8U;
+    myFIFO_DPF->ch0_data	  |=	  cmd[2];
+
+    myFIFO_DPF->ch1_data	   =	  cmd[3];
+    myFIFO_DPF->ch1_data     <<=	  8U;
+    myFIFO_DPF->ch1_data	  |=	  cmd[4];
+    myFIFO_DPF->ch1_data     <<=	  8U;
+    myFIFO_DPF->ch1_data	  |=	  cmd[5];
+
+    myFIFO_DPF->ch2_data	   =	  cmd[6];
+    myFIFO_DPF->ch2_data     <<=	  8U;
+    myFIFO_DPF->ch2_data	  |=	  cmd[7];
+    myFIFO_DPF->ch2_data     <<=	  8U;
+    myFIFO_DPF->ch2_data	  |=	  cmd[8];
+
+    myFIFO_DPF->ch3_data	   =	  cmd[9];
+    myFIFO_DPF->ch3_data     <<=	  8U;
+    myFIFO_DPF->ch3_data	  |=	  cmd[10];
+    myFIFO_DPF->ch3_data     <<=	  8U;
+    myFIFO_DPF->ch3_data	  |=	  cmd[11];
+
+    myFIFO_DPF->ch4_data	   =	  cmd[12];
+    myFIFO_DPF->ch4_data     <<=	  8U;
+    myFIFO_DPF->ch4_data	  |=	  cmd[13];
+    myFIFO_DPF->ch4_data     <<=	  8U;
+    myFIFO_DPF->ch4_data	  |=	  cmd[14];
+
+    myFIFO_DPF->frame_count	   =	  cmd[15];
+    myFIFO_DPF->frame_count	 <<=	  8U;
+    myFIFO_DPF->frame_count	  |=	  cmd[16];
+
+
+
+
+    if ( myI2C_status == I2C_SUCCESS )
+    {
+    	if ( ( myFIFO_DPF->ch0_data & 0x800000 ) == 0x800000 )
+    	{
+    		return   EZPYRO_SMD_SENSOR_SUCCESS_CH0_OVER_RANGE;
+    	}
+    	else if ( ( myFIFO_DPF->ch1_data & 0x800000 ) == 0x800000 )
+    	{
+    		return   EZPYRO_SMD_SENSOR_SUCCESS_CH1_OVER_RANGE;
+    	}
+    	else if ( ( myFIFO_DPF->ch2_data & 0x800000 ) == 0x800000 )
+    	{
+    		return   EZPYRO_SMD_SENSOR_SUCCESS_CH2_OVER_RANGE;
+    	}
+    	else if ( ( myFIFO_DPF->ch3_data & 0x800000 ) == 0x800000 )
+    	{
+    		return   EZPYRO_SMD_SENSOR_SUCCESS_CH3_OVER_RANGE;
+    	}
+    	else if ( ( myFIFO_DPF->ch4_data & 0x800000 ) == 0x800000 )
+    	{
+    		return   EZPYRO_SMD_SENSOR_SUCCESS_CH4_OVER_RANGE;
+    	}
+    	else
+    	{
+    		return   EZPYRO_SMD_SENSOR_SUCCESS;
+    	}
+    }
+    else
+    {
+        return   EZPYRO_SMD_SENSOR_FAILURE;
+    }
+}
