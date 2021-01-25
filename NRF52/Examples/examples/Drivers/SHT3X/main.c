@@ -61,13 +61,13 @@ int main(void)
 
   
   /* I2C definition   */
-  mySHT3X_I2C_parameters.TWIinstance =    NRF_TWI0;
-  mySHT3X_I2C_parameters.SDA         =    TWI0_SDA;
-  mySHT3X_I2C_parameters.SCL         =    TWI0_SCL;
-  mySHT3X_I2C_parameters.ADDR        =    SHT3X_ADDRESS;
-  mySHT3X_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-  mySHT3X_I2C_parameters.SDAport     =    NRF_P0;
-  mySHT3X_I2C_parameters.SCLport     =    NRF_P0;
+  //mySHT3X_I2C_parameters.TWIinstance =    NRF_TWI0;
+  //mySHT3X_I2C_parameters.SDA         =    TWI0_SDA;
+  //mySHT3X_I2C_parameters.SCL         =    TWI0_SCL;
+  //mySHT3X_I2C_parameters.ADDR        =    SHT3X_ADDRESS;
+  //mySHT3X_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+  //mySHT3X_I2C_parameters.SDAport     =    NRF_P0;
+  //mySHT3X_I2C_parameters.SCLport     =    NRF_P0;
 
   /* Configure I2C peripheral  */
   aux  =   SHT3X_Init  ( mySHT3X_I2C_parameters );
