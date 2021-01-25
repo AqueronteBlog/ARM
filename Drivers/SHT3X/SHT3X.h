@@ -1,14 +1,14 @@
 /**
  * @brief       SHT3X.h
- * @details     Humidity and Temperature Sensor IC.
+ * @details     Humidity and Temperature Sensor.
  *              Header file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        3/September/2018
- * @version     3/September/2018    The ORIGIN
+ * @date        22/January/2021
+ * @version     22/January/2021    The ORIGIN
  * @pre         N/A
  * @warning     N/A
  * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ).
@@ -28,11 +28,12 @@ extern "C" {
 
 
 /**
-  * @brief   DEFAULT ADDRESS
+  * @brief   DEFAULT ADDRESSES
   */
 typedef enum
 {
-    SHT3X_ADDRESS     =   0b1000000                                             /*!<   SHT3X I2C Address                */
+    SHT3X_ADDRESS_A     =   0x44,             /*!<   SHT3X ADDR pin connected to logic low   */
+    SHT3X_ADDRESS_B     =   0x45              /*!<   SHT3X ADDR pin connected to logic high  */
 } SHT3X_address_t;
 
 

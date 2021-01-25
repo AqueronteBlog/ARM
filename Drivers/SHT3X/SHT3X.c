@@ -1,14 +1,14 @@
 /**
  * @brief       SHT3X.c
- * @details     Humidity and Temperature Sensor IC.
+ * @details     Humidity and Temperature Sensor.
  *              Functions file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        3/September/2018
- * @version     3/September/2018    The ORIGIN
+ * @date        22/January/2021
+ * @version     22/January/2021    The ORIGIN
  * @pre         N/A
  * @warning     N/A
  * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ).
@@ -31,8 +31,8 @@
  *
  *
  * @author      Manuel Caballero
- * @date        3/September/2018
- * @version     3/September/2018   The ORIGIN
+ * @date        22/January/2021
+ * @version     22/January/2021   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
