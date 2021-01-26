@@ -83,15 +83,15 @@ typedef enum
 
 
 
-// MASTER MODE
+// GENERAL CALL
 /**
-  * @brief   MODE
+  * @brief   RESET
   */
 typedef enum
 {
-    SHT3X_HOLD_MASTER_MODE                 =   0x01,           /*!<  SHT3X HOLD MASTER MODE enabled                       */
-    SHT3X_NO_HOLD_MASTER_MODE              =   0x00            /*!<  SHT3X NO HOLD MASTER MODE enabled                    */
-} SHT3X_master_mode_t;
+    SHT3X_GENERAL_CALL_RESET_ADDRESS_BYTE = 0x00,     /*!<  Reset. Address byte                                   */
+    SHT3X_GENERAL_CALL_RESET_SECOND_BYTE  = 0x06      /*!<  Reset. Second byte                                    */
+} SHT3X_general call_t;
 
 
 
