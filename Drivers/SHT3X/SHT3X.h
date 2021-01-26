@@ -43,17 +43,42 @@ typedef enum
   */
 typedef enum
 {
-    SHT3X_TRIGGER_TEMPERATURE_MEASUREMENT_HOLD_MASTER      =   0xE3,            /*!<  Hold master                           */
-    SHT3X_TRIGGER_HUMIDITY_MEASUREMENT_HOLD_MASTER         =   0xE5,            /*!<  Hold master                           */
-    SHT3X_TRIGGER_TEMPERATURE_MEASUREMENT_NO_HOLD_MASTER   =   0xF3,            /*!<  No Hold master                        */
-    SHT3X_TRIGGER_HUMIDITY_MEASUREMENT_NO_HOLD_MASTER      =   0xF5,            /*!<  No Hold master                        */
-    SHT3X_WRITE_USER_REGISTER                              =   0xE6,            /*!<  Write user register                   */
-    SHT3X_READ_USER_REGISTER                               =   0xE7,            /*!<  Read user register                    */
-    SHT3X_SOFT_RESET                                       =   0xFE,            /*!<  Software reset                        */
-    SHT3X_SERIAL_NUMBER_FIRST_MEMORY_ACCESS_MSB            =   0xFA,            /*!<  Serial number first memory access     */
-    SHT3X_SERIAL_NUMBER_FIRST_MEMORY_ACCESS_LSB            =   0x0F,            /*!<  Serial number first memory access     */
-    SHT3X_SERIAL_NUMBER_SECOND_MEMORY_ACCESS_MSB           =   0xFC,            /*!<  Serial number second memory access    */
-    SHT3X_SERIAL_NUMBER_SECOND_MEMORY_ACCESS_LSB           =   0xC9             /*!<  Serial number second memory access    */
+    SHT3X_CLOCK_STRETCHING_ENABLED_REPEATABILITY_HIGH     = 0x2C06,   /*!<  High repeatability measurement with clock stretching enabled    */
+    SHT3X_CLOCK_STRETCHING_ENABLED_REPEATABILITY_MEDIUM   = 0x2C0D,   /*!<  Medium repeatability measurement with clock stretching enabled  */
+    SHT3X_CLOCK_STRETCHING_ENABLED_REPEATABILITY_LOW      = 0x2C10,   /*!<  Low repeatability measurement with clock stretching enabled     */
+    
+    SHT3X_CLOCK_STRETCHING_DISABLED_REPEATABILITY_HIGH    = 0x2400,   /*!<  High repeatability measurement with clock stretching disabled   */
+    SHT3X_CLOCK_STRETCHING_DISABLED_REPEATABILITY_MEDIUM  = 0x240B,   /*!<  Medium repeatability measurement with clock stretching disabled */
+    SHT3X_CLOCK_STRETCHING_DISABLED_REPEATABILITY_LOW     = 0x2416,   /*!<  Low repeatability measurement with clock stretching disabled    */
+
+    SHT3X_MPS_0_5_REPEATABILITY_HIGH                      = 0x2032,   /*!<  High repeatability 0.5 measurement per second                   */
+    SHT3X_MPS_0_5_REPEATABILITY_MEDIUM                    = 0x2024,   /*!<  Medium repeatability 0.5 measurement per second                 */
+    SHT3X_MPS_0_5_REPEATABILITY_LOW                       = 0x202F,   /*!<  Low repeatability 0.5 measurement per second                    */
+    
+    SHT3X_MPS_1_REPEATABILITY_HIGH                        = 0x2130,   /*!<  High repeatability 1 measurement per second                     */
+    SHT3X_MPS_1_REPEATABILITY_MEDIUM                      = 0x2126,   /*!<  Medium repeatability 1 measurement per second                   */
+    SHT3X_MPS_1_REPEATABILITY_LOW                         = 0x212D,   /*!<  Low repeatability 1 measurement per second                      */
+    
+    SHT3X_MPS_2_REPEATABILITY_HIGH                        = 0x2236,   /*!<  High repeatability 2 measurement per second                     */
+    SHT3X_MPS_2_REPEATABILITY_MEDIUM                      = 0x2220,   /*!<  Medium repeatability 2 measurement per second                   */
+    SHT3X_MPS_2_REPEATABILITY_LOW                         = 0x222B,   /*!<  Low repeatability 2 measurement per second                      */
+    
+    SHT3X_MPS_4_REPEATABILITY_HIGH                        = 0x2334,   /*!<  High repeatability 4 measurement per second                     */
+    SHT3X_MPS_4_REPEATABILITY_MEDIUM                      = 0x2322,   /*!<  Medium repeatability 4 measurement per second                   */
+    SHT3X_MPS_4_REPEATABILITY_LOW                         = 0x2329,   /*!<  Low repeatability 4 measurement per second                      */
+    
+    SHT3X_MPS_10_REPEATABILITY_HIGH                       = 0x2737,   /*!<  High repeatability 10 measurement per second                    */
+    SHT3X_MPS_10_REPEATABILITY_MEDIUM                     = 0x2721,   /*!<  Medium repeatability 10 measurement per second                  */
+    SHT3X_MPS_10_REPEATABILITY_LOW                        = 0x272A,   /*!<  Low repeatability 10 measurement per second                     */
+
+    SHT3X_FETCH_DATA                                      = 0xE000,   /*!<  Fetch data command                                              */
+    SHT3X_PERIODIC_MESUREMENT_WITH_ART                    = 0x2B32,   /*!<  ART command                                                     */
+    SHT3X_BREAK                                           = 0x3093,   /*!<  Break command                                                   */
+    SHT3X_SOFT_RESET                                      = 0x30A2,   /*!<  Software reset command                                          */
+    SHT3X_HEATER_ENABLE                                   = 0x306D,   /*!<  Heater enable command                                           */
+    SHT3X_HEATER_DISABLE                                  = 0x3066,   /*!<  Heater disable command                                          */
+    SHT3X_STATUS_REGISTER                                 = 0xF32D,   /*!<  Status command                                                  */
+    SHT3X_CLEAR_STATUS_REGISTER                           = 0x3041    /*!<  Clear Status register command                                   */
 } SHT3X_command_registers_t;
 
 
