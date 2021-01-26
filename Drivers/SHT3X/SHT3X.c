@@ -57,7 +57,7 @@ SHT3X_status_t  SHT3X_Init ( I2C_parameters_t myI2Cparameters )
 
 
 /**
- * @brief       SHT3X_Conf    ( I2C_parameters_t , SHT3X_measurement_resolution_t , SHT3X_on_chip_heater_t )
+ * @brief       SHT3X_Conf    ( I2C_parameters_t  )
  * @details     It configures the SHT3X device.
  *
  * @param[in]    myI2Cparameters:   I2C parameters.
@@ -75,7 +75,7 @@ SHT3X_status_t  SHT3X_Init ( I2C_parameters_t myI2Cparameters )
  * @pre         N/A
  * @warning     N/A.
  */
-SHT3X_status_t  SHT3X_Conf    ( I2C_parameters_t myI2Cparameters, SHT3X_measurement_resolution_t myResolution, SHT3X_on_chip_heater_t myHeater )
+SHT3X_status_t  SHT3X_Conf    ( I2C_parameters_t myI2Cparameters )
 {
     uint8_t      cmd[]   =    { 0, 0 };
     i2c_status_t aux;
