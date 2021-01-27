@@ -50,7 +50,18 @@ typedef enum
   SHT3X_CLOCK_STRETCHING_DISABLED_REPEATABILITY_HIGH    = 0x2400,   /*!<  High repeatability measurement with clock stretching disabled   */
   SHT3X_CLOCK_STRETCHING_DISABLED_REPEATABILITY_MEDIUM  = 0x240B,   /*!<  Medium repeatability measurement with clock stretching disabled */
   SHT3X_CLOCK_STRETCHING_DISABLED_REPEATABILITY_LOW     = 0x2416,   /*!<  Low repeatability measurement with clock stretching disabled    */
+} SHT3X_command_registers_single_shot_mode_t;
 
+
+typedef enum
+{
+  SHT3X_HEATER_ENABLE                                   = 0x306D,   /*!<  Heater enable command                                           */
+  SHT3X_HEATER_DISABLE                                  = 0x3066,   /*!<  Heater disable command                                          */
+} SHT3X_command_registers_heater_t;  
+  
+
+typedef enum
+{  
   SHT3X_MPS_0_5_REPEATABILITY_HIGH                      = 0x2032,   /*!<  High repeatability 0.5 measurement per second                   */
   SHT3X_MPS_0_5_REPEATABILITY_MEDIUM                    = 0x2024,   /*!<  Medium repeatability 0.5 measurement per second                 */
   SHT3X_MPS_0_5_REPEATABILITY_LOW                       = 0x202F,   /*!<  Low repeatability 0.5 measurement per second                    */
@@ -70,13 +81,15 @@ typedef enum
   SHT3X_MPS_10_REPEATABILITY_HIGH                       = 0x2737,   /*!<  High repeatability 10 measurement per second                    */
   SHT3X_MPS_10_REPEATABILITY_MEDIUM                     = 0x2721,   /*!<  Medium repeatability 10 measurement per second                  */
   SHT3X_MPS_10_REPEATABILITY_LOW                        = 0x272A,   /*!<  Low repeatability 10 measurement per second                     */
+} SHT3X_command_registers_periodic_data_mode_t;
 
+
+typedef enum
+{
   SHT3X_FETCH_DATA                                      = 0xE000,   /*!<  Fetch data command                                              */
   SHT3X_PERIODIC_MESUREMENT_WITH_ART                    = 0x2B32,   /*!<  ART command                                                     */
   SHT3X_BREAK                                           = 0x3093,   /*!<  Break command                                                   */
   SHT3X_SOFT_RESET                                      = 0x30A2,   /*!<  Software reset command                                          */
-  SHT3X_HEATER_ENABLE                                   = 0x306D,   /*!<  Heater enable command                                           */
-  SHT3X_HEATER_DISABLE                                  = 0x3066,   /*!<  Heater disable command                                          */
   SHT3X_STATUS_REGISTER                                 = 0xF32D,   /*!<  Status command                                                  */
   SHT3X_CLEAR_STATUS_REGISTER                           = 0x3041    /*!<  Clear Status register command                                   */
 } SHT3X_command_registers_t;
@@ -181,17 +194,47 @@ typedef enum
 
 #ifndef SHT3X_VECTOR_STRUCT_H
 #define SHT3X_VECTOR_STRUCT_H
+/* RAW DATA  */
 typedef struct
 {
-    float    RelativeHumidity;
-    float    Temperature;
+    uint16_t rawRelativeHumidity;
+    uint16_t rawTemperature;
 
-    uint16_t RawRelativeHumidity;
-    uint16_t RawTemperature;
+    uint8_t  temperatureCRC;
+    uint8_t  relativeHumidityCRC;
+} SHT3X_raw_data_t;
 
-    uint8_t  BatteryStatus;
-    uint64_t SerialNumber;
-} SHT3X_vector_data_t;
+
+/* DATA: Temperature and Relative Humidity  */
+typedef struct
+{
+    float relativeHumidity;
+    float temperature;
+
+    uint8_t  temperatureCRC;
+    uint8_t  relativeHumidityCRC;
+} SHT3X_final_data_t;
+
+
+/* STATUS REGISTER  */
+typedef struct
+{
+    uint16_t status;
+    uint8_t  statusCRC;
+} SHT3X_status_data_t;
+
+
+
+/* USER: User's variables  */
+typedef struct
+{
+  /* Output data   */
+  SHT3X_raw_data_t    rawData;
+  SHT3X_final_data_t  data;
+
+  /* Status register  */
+  SHT3X_status_data_t status;
+} SHT3X_data_t;
 #endif
 
 
@@ -214,7 +257,55 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-SHT3X_status_t  SHT3X_Init               ( I2C_parameters_t myI2Cparameters                                                                                 );
+SHT3X_status_t  SHT3X_Init                      ( I2C_parameters_t myI2Cparameters                                                  );
+
+/** It triggers all the raw data in single shot mode.
+  */
+SHT3X_status_t  SHT3X_OneShotTriggerAllData     ( I2C_parameters_t myI2Cparameters, SHT3X_command_registers_single_shot_mode_t mode );
+
+/** It gets all the raw data in single shot mode.
+  */
+SHT3X_status_t  SHT3X_OneShotGetAllRawData      ( I2C_parameters_t myI2Cparameters, SHT3X_raw_data_t* rawData                       );
+
+/** It sets periodic measurement with ART (accelerated response time).
+  */
+SHT3X_status_t  SHT3X_SetPeriodicMeasurementART ( I2C_parameters_t myI2Cparameters                                                  );
+
+/** It sets the break command (stop periodic data acquisition mode).
+  */
+SHT3X_status_t  SHT3X_SetBreakCommand           ( I2C_parameters_t myI2Cparameters                                                  );
+
+/** It perfoms a software reset.
+  */
+SHT3X_status_t  SHT3X_SetSoftReset              ( I2C_parameters_t myI2Cparameters                                                  );
+
+/** It perfoms a reset through a general call address.
+  */
+SHT3X_status_t  SHT3X_SetGeneralCallReset       ( I2C_parameters_t myI2Cparameters                                                  );
+
+/** It sets the heater.
+  */
+SHT3X_status_t  SHT3X_SetHeater                 ( I2C_parameters_t myI2Cparameters, SHT3X_command_registers_heater_t heater         );
+
+/** It gets the status register.
+  */
+SHT3X_status_t  SHT3X_GetStatus                 ( I2C_parameters_t myI2Cparameters, SHT3X_status_data_t* status                     );
+
+/** It clears the status register.
+  */
+SHT3X_status_t  SHT3X_ClearStatus               ( I2C_parameters_t myI2Cparameters                                                  );
+
+/** It sets the periodic data aquisition mode.
+  */
+SHT3X_status_t  SHT3X_SetPeriodicAquisitionMode ( I2C_parameters_t myI2Cparameters, SHT3X_command_registers_periodic_data_mode_t mo );
+
+/** It gets the all raw data (in periodic aquisition mode).
+  */
+SHT3X_status_t  SHT3X_GetAllRawDataFetchData    ( I2C_parameters_t myI2Cparameters, SHT3X_raw_data_t* rawData                       );
+
+/** It processes all data: Temperature and Relative Humidity.
+  */
+void            SHT3X_ProccessData              ( SHT3X_raw_data_t rawData, SHT3X_final_data_t* data                                );
 
 
 
