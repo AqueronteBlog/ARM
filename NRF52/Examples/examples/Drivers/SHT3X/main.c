@@ -9,9 +9,9 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        22/May/2019
- * @version     22/May/2019    The ORIGIN
- * @pre         This firmware was tested on the nrf52-DK with Segger Embedded Studio v4.12 ( SDK 14.2.0 ).
+ * @date        23/January/2021
+ * @version     23/January/2021    The ORIGIN
+ * @pre         This firmware was tested on the nrf52-DK with Segger Embedded Studio v5.34 ( SDK 14.2.0 ).
  * @warning     The softdevice (s132) is taken into account, Bluetooth was not used although.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ). All rights reserved.
  */
@@ -49,9 +49,9 @@ int main(void)
 {
   uint8_t  myMessage[ TX_BUFF_SIZE ];
 
-  I2C_parameters_t     mySHT3X_I2C_parameters;
-  SHT3X_status_t      aux;
-  //SHT3X_data_t        mySHT3X_Data;
+  I2C_parameters_t  mySHT3X_I2C_parameters;
+  SHT3X_status_t    aux;
+  SHT3X_data_t      mySHT3X_Data;
 
 
   conf_CLK    ();
@@ -61,24 +61,29 @@ int main(void)
 
   
   /* I2C definition   */
-  //mySHT3X_I2C_parameters.TWIinstance =    NRF_TWI0;
-  //mySHT3X_I2C_parameters.SDA         =    TWI0_SDA;
-  //mySHT3X_I2C_parameters.SCL         =    TWI0_SCL;
-  //mySHT3X_I2C_parameters.ADDR        =    SHT3X_ADDRESS;
-  //mySHT3X_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-  //mySHT3X_I2C_parameters.SDAport     =    NRF_P0;
-  //mySHT3X_I2C_parameters.SCLport     =    NRF_P0;
+  mySHT3X_I2C_parameters.TWIinstance =    NRF_TWI0;
+  mySHT3X_I2C_parameters.SDA         =    TWI0_SDA;
+  mySHT3X_I2C_parameters.SCL         =    TWI0_SCL;
+  mySHT3X_I2C_parameters.ADDR        =    SHT3X_ADDRESS_A;
+  mySHT3X_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+  mySHT3X_I2C_parameters.SDAport     =    NRF_P0;
+  mySHT3X_I2C_parameters.SCLport     =    NRF_P0;
 
   /* Configure I2C peripheral  */
   aux  =   SHT3X_Init  ( mySHT3X_I2C_parameters );
   
-  ///* Set device in lOW-POWER mode  */
-  //aux  =   SHT3X_SetPowerDown ( mySHT3X_I2C_parameters, CTRL_REG1_PD_POWER_DOWN_MODE );
+  /* Set a software reset  */
+  aux  =   SHT3X_SetSoftReset ( mySHT3X_I2C_parameters );
+  nrf_delay_ms(2U);
 
-  ///* Get device ID  */
-  //aux  =   SHT3X_GetDeviceID ( mySHT3X_I2C_parameters, &mySHT3X_Data );
+  /* Clear the STATUS register  */
+  aux  =   SHT3X_ClearStatus ( mySHT3X_I2C_parameters );
 
-  
+  /* Disable the Heater  */
+  aux  =   SHT3X_SetHeater ( mySHT3X_I2C_parameters, SHT3X_HEATER_DISABLE );
+
+  /* Do not perform periodic measurement  */
+  aux  =   SHT3X_SetBreakCommand ( mySHT3X_I2C_parameters );
   
   
   myState  =   0;                             // Reset the variable
@@ -100,34 +105,16 @@ int main(void)
     {
       NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );   // Turn all the LEDs on
 
-      ///* Trigger to get a new data value  */
-      //aux  =   SHT3X_SetOneShot ( mySHT3X_I2C_parameters );
+      /* Trigger to get a new data set, no clock stretching and repeatibility high  */
+      aux  =   SHT3X_OneShotTriggerAllData ( mySHT3X_I2C_parameters, SHT3X_CLOCK_STRETCHING_DISABLED_REPEATABILITY_HIGH );
+      nrf_delay_ms(15U);
 
-      ///* Wait until there is a new data  */
-      //do{
-      //  aux  =   SHT3X_GetOneShot ( mySHT3X_I2C_parameters, &mySHT3X_Data );
-      //}while( mySHT3X_Data.one_shot == CTRL_REG2_ONE_SHOT_WAITING );                             // Dangerous!!! The uC may get stuck here...
-      //                                                                                            // [WORKAROUND] Insert a counter
+      /* Process all the data  */
+      SHT3X_ProccessData ( mySHT3X_Data.rawData, &mySHT3X_Data.data );
 
-      ///* Get temperature  */
-      //do{
-      //  aux  =   SHT3X_GetTemperatureDataAvailable ( mySHT3X_I2C_parameters, &mySHT3X_Data );
-      //}while( mySHT3X_Data.t_da == STATUS_REGISTER_T_DA_DATA_NOT_AVAILABLE );                    // Dangerous!!! The uC may get stuck here...
-      //                                                                                            // [WORKAROUND] Insert a counter
 
-      //aux  =   SHT3X_GetTemperature ( mySHT3X_I2C_parameters, &mySHT3X_Data );
-
-      ///* Get humidity  */
-      //do{
-      //  aux  =   SHT3X_GetHumidityDataAvailable ( mySHT3X_I2C_parameters, &mySHT3X_Data );
-      //}while( mySHT3X_Data.h_da == STATUS_REGISTER_H_DA_DATA_NOT_AVAILABLE );                    // Dangerous!!! The uC may get stuck here...
-      //                                                                                            // [WORKAROUND] Insert a counter
-
-      //aux  =   SHT3X_GetHumidity ( mySHT3X_I2C_parameters, &mySHT3X_Data );
-
-      ///* Transmit result through the UART  */
-      //sprintf ( (char*)myMessage, "T: %d.%d C, RH: %d.%d%%\r\n", (int32_t)mySHT3X_Data.temperature, (int32_t)( ( mySHT3X_Data.temperature - (uint32_t)mySHT3X_Data.temperature ) * 10.0f ), 
-      //                                                           (int32_t)mySHT3X_Data.humidity, (int32_t)( ( mySHT3X_Data.humidity - (uint32_t)mySHT3X_Data.humidity ) * 10.0f ) );
+      /* Transmit result through the UART  */
+      sprintf ( (char*)myMessage, "T: %d C, RH: %d %%\r\n", (int32_t)( mySHT3X_Data.data.temperature + 0.5 ), (int32_t)( mySHT3X_Data.data.relativeHumidity + 0.5 ) );
 
       NRF_UART0->TASKS_STOPRX  =   1UL;
       NRF_UART0->TASKS_STOPTX  =   1UL;
