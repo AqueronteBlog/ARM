@@ -322,35 +322,6 @@ typedef enum
 } PCF8523_control_3_blie_t;
 
 
-
-/**
-  * @brief   Register Offset
-  */
-/* MODE <7>: OFFSET MODE
- *    NOTE: N/A.
- */
-typedef enum
-{
-    OFFSET_MODE_MASK                            =   ( 1U << 7U ),     /*!<  MODE mask                                                   */
-    OFFSET_MODE_NORMAL_MODE                     =   ( 0U << 7U ),     /*!<  Normal mode: offset is made once every two hours[ Default ] */
-    OFFSET_MODE_COURSE_MODE                     =   ( 1U << 7U )      /*!<  Course mode: offset is made every 4 minutes                 */
-} PCF8523_offset_mode_t;
-
-
-
-/**
-  * @brief   Register RAM_byte
-  */
-/* B <7:0>: RAM CONTENT
- *    NOTE: N/A.
- */
-typedef enum
-{
-    RAM_BYTE_B_MASK                             =   0xFF              /*!<  RAM_byte mask                                     */
-} PCF8523_ram_byte_b_t;
-
-
-
 /**
   * @brief   Register Seconds
   */
@@ -492,7 +463,7 @@ typedef enum
     WEEKDAYS_WEEKDAYS_WEDNESDAY               =   ( 0b011 << 0U ),  /*!<  WEEKDAYS Wednesday                                     */
     WEEKDAYS_WEEKDAYS_THURSDAY                =   ( 0b100 << 0U ),  /*!<  WEEKDAYS Thursday                                      */
     WEEKDAYS_WEEKDAYS_FRIDAY                  =   ( 0b101 << 0U ),  /*!<  WEEKDAYS Friday                                        */
-    WEEKDAYS_WEEKDAYS_SATURDAY                =   ( 0b111 << 0U )   /*!<  WEEKDAYS Saturday                          [ Default ] */
+    WEEKDAYS_WEEKDAYS_SATURDAY                =   ( 0b110 << 0U )   /*!<  WEEKDAYS Saturday                          [ Default ] */
 } PCF8523_weekdays_weekdays_t;
 
 
