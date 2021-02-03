@@ -306,8 +306,8 @@ typedef enum
 typedef enum
 {
   CONTROL_3_BSIE_MASK                                       =   ( 1U << 1U ),     /*!<  BSIE mask                                                                           */
-  CONTROL_3_BSIE_NO_INTERRUPT_GENERATED                     =   ( 0U << 1U ),     /*!<  No interrupt generated from battery switch-over flag                    [ Default ] */
-  CONTROL_3_BSIE_INTERRUPT_GENERATED                        =   ( 1U << 1U )      /*!<  Interrupt generated when BSF is set                                                 */
+  CONTROL_3_BSIE_DISABLE_INTERRUPT                          =   ( 0U << 1U ),     /*!<  No interrupt generated from battery switch-over flag                    [ Default ] */
+  CONTROL_3_BSIE_ENABLE_INTERRUPT                           =   ( 1U << 1U )      /*!<  Interrupt generated when BSF is set                                                 */
 } PCF8523_control_3_bsie_t;
 
 
@@ -330,9 +330,9 @@ typedef enum
  */
 typedef enum
 {
-    SECONDS_OS_MASK                           =   ( 1U << 7U ),     /*!<  OS mask                                                                                         */
-    SECONDS_OS_CLOCK_INTEGRITY_IS_GUARANTEED  =   ( 0U << 7U ),     /*!<  Clock integrity is guaranteed                                                                   */
-    SECONDS_OS_CLOCK_INTEGRITY_NOT_GUARANTEED =   ( 1U << 7U )      /*!<  Clock integrity is not guaranteed, oscillator has stopped or has been interrupted  [ Default ]  */
+  SECONDS_OS_MASK                           =   ( 1U << 7U ),     /*!<  OS mask                                                                                         */
+  SECONDS_OS_CLOCK_INTEGRITY_IS_GUARANTEED  =   ( 0U << 7U ),     /*!<  Clock integrity is guaranteed                                                                   */
+  SECONDS_OS_CLOCK_INTEGRITY_NOT_GUARANTEED =   ( 1U << 7U )      /*!<  Clock integrity is not guaranteed, oscillator has stopped or has been interrupted  [ Default ]  */
 } PCF8523_seconds_os_t;
 
 
@@ -342,7 +342,7 @@ typedef enum
  */
 typedef enum
 {
-    SECONDS_SECONDS_TEN_PLACE_MASK            =   ( 0b111 << 4U )   /*!<  SECONDS TEN'S PLACE mask                              */
+  SECONDS_SECONDS_TEN_PLACE_MASK            =   ( 0b111 << 4U )   /*!<  SECONDS TEN'S PLACE mask                              */
 } PCF8523_seconds_ten_place_t;
 
 
@@ -352,7 +352,7 @@ typedef enum
  */
 typedef enum
 {
-    SECONDS_SECONDS_UNIT_PLACE_MASK           =   ( 0b1111 << 0U )  /*!<  SECONDS UNIT PLACE mask                               */
+  SECONDS_SECONDS_UNIT_PLACE_MASK           =   ( 0b1111 << 0U )  /*!<  SECONDS UNIT PLACE mask                               */
 } PCF8523_seconds_unit_place_t;
 
 
@@ -365,7 +365,7 @@ typedef enum
  */
 typedef enum
 {
-    MINUTES_MINUTES_TEN_PLACE_MASK            =   ( 0b111 << 4U )   /*!<  MINUTES TEN'S PLACE mask                              */
+  MINUTES_MINUTES_TEN_PLACE_MASK            =   ( 0b111 << 4U )   /*!<  MINUTES TEN'S PLACE mask                              */
 } PCF8523_minutes_ten_place_t;
 
 
@@ -375,7 +375,7 @@ typedef enum
  */
 typedef enum
 {
-    MINUTES_MINUTES_UNIT_PLACE_MASK           =   ( 0b1111 << 0U )  /*!<  MINUTES UNIT PLACE mask                               */
+  MINUTES_MINUTES_UNIT_PLACE_MASK           =   ( 0b1111 << 0U )  /*!<  MINUTES UNIT PLACE mask                               */
 } PCF8523_minutes_unit_place_t;
 
 
@@ -388,9 +388,9 @@ typedef enum
  */
 typedef enum
 {
-    HOURS_AMPM_MASK                           =   ( 1U << 5U ),     /*!<  AMPM mask                                             */
-    HOURS_AMPM_AM                             =   ( 0U << 5U ),     /*!<  AMPM: AM mode                                         */
-    HOURS_AMPM_PM                             =   ( 1U << 5U )      /*!<  AMPM: PM mode                                         */
+  HOURS_AMPM_MASK                           =   ( 1U << 5U ),     /*!<  AMPM mask                                             */
+  HOURS_AMPM_AM                             =   ( 0U << 5U ),     /*!<  AMPM: AM mode                                         */
+  HOURS_AMPM_PM                             =   ( 1U << 5U )      /*!<  AMPM: PM mode                                         */
 } PCF8523_hours_ampm_t;
 
 
@@ -400,7 +400,7 @@ typedef enum
  */
 typedef enum
 {
-    HOURS_12_HOUR_MODE_TEN_PLACE_MASK         =   ( 1U << 4U )      /*!<  Hours TEN'S PLACE mask                                */
+  HOURS_12_HOUR_MODE_TEN_PLACE_MASK         =   ( 1U << 4U )      /*!<  Hours TEN'S PLACE mask                                */
 } PCF8523_12_hour_mode_ten_place_t;
 
 
@@ -410,7 +410,7 @@ typedef enum
  */
 typedef enum
 {
-    HOURS_24_HOUR_MODE_TEN_PLACE_MASK         =   ( 0b11 << 4U )    /*!<  Hours TEN'S PLACE mask                                */
+  HOURS_24_HOUR_MODE_TEN_PLACE_MASK         =   ( 0b11 << 4U )    /*!<  Hours TEN'S PLACE mask                                */
 } PCF8523_24_hour_mode_ten_place_t;
 
 
@@ -420,7 +420,7 @@ typedef enum
  */
 typedef enum
 {
-    HOURS_HOURS_UNIT_PLACE_MASK               =   ( 0b1111 << 0U )  /*!<  HOURS UNIT PLACE mask                                 */
+  HOURS_HOURS_UNIT_PLACE_MASK               =   ( 0b1111 << 0U )  /*!<  HOURS UNIT PLACE mask                                 */
 } PCF8523_hours_unit_place_t;
 
 
@@ -433,7 +433,7 @@ typedef enum
  */
 typedef enum
 {
-    DAYS_DAYS_TEN_PLACE_MASK                  =   ( 0b11 << 4U )    /*!<  DAYS TEN'S PLACE mask                                 */
+  DAYS_DAYS_TEN_PLACE_MASK                  =   ( 0b11 << 4U )    /*!<  DAYS TEN'S PLACE mask                                 */
 } PCF8523_days_ten_place_t;
 
 
@@ -443,7 +443,7 @@ typedef enum
  */
 typedef enum
 {
-    DAYS_DAYS_UNIT_PLACE_MASK                 =   ( 0b1111 << 0U )  /*!<  DAYS UNIT PLACE mask                                  */
+  DAYS_DAYS_UNIT_PLACE_MASK                 =   ( 0b1111 << 0U )  /*!<  DAYS UNIT PLACE mask                                  */
 } PCF8523_days_unit_place_t;
 
 
@@ -456,14 +456,14 @@ typedef enum
  */
 typedef enum
 {
-    WEEKDAYS_WEEKDAYS_MASK                    =   ( 0b111 << 0U ),  /*!<  WEEKDAYS mask                                          */
-    WEEKDAYS_WEEKDAYS_SUNDAY                  =   ( 0b000 << 0U ),  /*!<  WEEKDAYS Sunday                                        */
-    WEEKDAYS_WEEKDAYS_MONDAY                  =   ( 0b001 << 0U ),  /*!<  WEEKDAYS Monday                                        */
-    WEEKDAYS_WEEKDAYS_TUESDAY                 =   ( 0b010 << 0U ),  /*!<  WEEKDAYS Tuesday                                       */
-    WEEKDAYS_WEEKDAYS_WEDNESDAY               =   ( 0b011 << 0U ),  /*!<  WEEKDAYS Wednesday                                     */
-    WEEKDAYS_WEEKDAYS_THURSDAY                =   ( 0b100 << 0U ),  /*!<  WEEKDAYS Thursday                                      */
-    WEEKDAYS_WEEKDAYS_FRIDAY                  =   ( 0b101 << 0U ),  /*!<  WEEKDAYS Friday                                        */
-    WEEKDAYS_WEEKDAYS_SATURDAY                =   ( 0b110 << 0U )   /*!<  WEEKDAYS Saturday                          [ Default ] */
+  WEEKDAYS_WEEKDAYS_MASK                    =   ( 0b111 << 0U ),  /*!<  WEEKDAYS mask                                          */
+  WEEKDAYS_WEEKDAYS_SUNDAY                  =   ( 0b000 << 0U ),  /*!<  WEEKDAYS Sunday                                        */
+  WEEKDAYS_WEEKDAYS_MONDAY                  =   ( 0b001 << 0U ),  /*!<  WEEKDAYS Monday                                        */
+  WEEKDAYS_WEEKDAYS_TUESDAY                 =   ( 0b010 << 0U ),  /*!<  WEEKDAYS Tuesday                                       */
+  WEEKDAYS_WEEKDAYS_WEDNESDAY               =   ( 0b011 << 0U ),  /*!<  WEEKDAYS Wednesday                                     */
+  WEEKDAYS_WEEKDAYS_THURSDAY                =   ( 0b100 << 0U ),  /*!<  WEEKDAYS Thursday                                      */
+  WEEKDAYS_WEEKDAYS_FRIDAY                  =   ( 0b101 << 0U ),  /*!<  WEEKDAYS Friday                                        */
+  WEEKDAYS_WEEKDAYS_SATURDAY                =   ( 0b110 << 0U )   /*!<  WEEKDAYS Saturday                          [ Default ] */
 } PCF8523_weekdays_weekdays_t;
 
 
@@ -476,19 +476,19 @@ typedef enum
  */
 typedef enum
 {
-   MONTHS_MONTHS_MASK                        =   ( 0b11111 << 0U ),  /*!<  MONTHS mask                                            */
-   MONTHS_MONTHS_JANUARY                     =   ( 0b00001 << 0U ),  /*!<  MONTHS January                             [ Default ] */
-   MONTHS_MONTHS_FEBRUARY                    =   ( 0b00010 << 0U ),  /*!<  MONTHS February                                        */
-   MONTHS_MONTHS_MARCH                       =   ( 0b00011 << 0U ),  /*!<  MONTHS March                                           */
-   MONTHS_MONTHS_APRIL                       =   ( 0b00100 << 0U ),  /*!<  MONTHS April                                           */
-   MONTHS_MONTHS_MAY                         =   ( 0b00101 << 0U ),  /*!<  MONTHS May                                             */
-   MONTHS_MONTHS_JUNE                        =   ( 0b00110 << 0U ),  /*!<  MONTHS June                                            */
-   MONTHS_MONTHS_JULY                        =   ( 0b00111 << 0U ),  /*!<  MONTHS July                                            */
-   MONTHS_MONTHS_AUGUST                      =   ( 0b01000 << 0U ),  /*!<  MONTHS August                                          */
-   MONTHS_MONTHS_SEPTEMBER                   =   ( 0b01001 << 0U ),  /*!<  MONTHS September                                       */
-   MONTHS_MONTHS_OCTOBER                     =   ( 0b10000 << 0U ),  /*!<  MONTHS October                                         */
-   MONTHS_MONTHS_NOVEMBER                    =   ( 0b10001 << 0U ),  /*!<  MONTHS November                                        */
-   MONTHS_MONTHS_DECEMBER                    =   ( 0b10010 << 0U )   /*!<  MONTHS December                                        */
+  MONTHS_MONTHS_MASK                        =   ( 0b11111 << 0U ),  /*!<  MONTHS mask                                            */
+  MONTHS_MONTHS_JANUARY                     =   ( 0b00001 << 0U ),  /*!<  MONTHS January                             [ Default ] */
+  MONTHS_MONTHS_FEBRUARY                    =   ( 0b00010 << 0U ),  /*!<  MONTHS February                                        */
+  MONTHS_MONTHS_MARCH                       =   ( 0b00011 << 0U ),  /*!<  MONTHS March                                           */
+  MONTHS_MONTHS_APRIL                       =   ( 0b00100 << 0U ),  /*!<  MONTHS April                                           */
+  MONTHS_MONTHS_MAY                         =   ( 0b00101 << 0U ),  /*!<  MONTHS May                                             */
+  MONTHS_MONTHS_JUNE                        =   ( 0b00110 << 0U ),  /*!<  MONTHS June                                            */
+  MONTHS_MONTHS_JULY                        =   ( 0b00111 << 0U ),  /*!<  MONTHS July                                            */
+  MONTHS_MONTHS_AUGUST                      =   ( 0b01000 << 0U ),  /*!<  MONTHS August                                          */
+  MONTHS_MONTHS_SEPTEMBER                   =   ( 0b01001 << 0U ),  /*!<  MONTHS September                                       */
+  MONTHS_MONTHS_OCTOBER                     =   ( 0b10000 << 0U ),  /*!<  MONTHS October                                         */
+  MONTHS_MONTHS_NOVEMBER                    =   ( 0b10001 << 0U ),  /*!<  MONTHS November                                        */
+  MONTHS_MONTHS_DECEMBER                    =   ( 0b10010 << 0U )   /*!<  MONTHS December                                        */
 } PCF8523_months_months_t;
 
 
@@ -501,7 +501,7 @@ typedef enum
  */
 typedef enum
 {
-    YEARS_YEARS_TEN_PLACE_MASK                =   ( 0b1111 << 4U )   /*!<  YEARS TEN'S PLACE mask                                 */
+  YEARS_YEARS_TEN_PLACE_MASK                =   ( 0b1111 << 4U )   /*!<  YEARS TEN'S PLACE mask                                 */
 } PCF8523_years_ten_place_t;
 
 
@@ -511,8 +511,140 @@ typedef enum
  */
 typedef enum
 {
-    YEARS_YEARS_UNIT_PLACE_MASK               =   ( 0b1111 << 0U )   /*!<  YEARS UNIT PLACE mask                                  */
+  YEARS_YEARS_UNIT_PLACE_MASK               =   ( 0b1111 << 0U )   /*!<  YEARS UNIT PLACE mask                                  */
 } PCF8523_years_unit_place_t;
+
+
+
+/**
+  * @brief   Minute alarm
+  */
+/* AEN_M <7>: MINUTE ALARM ENABLE/DISABLE
+ *    NOTE: CODED IN BCD FORMAT.
+ */
+typedef enum
+{
+  MINUTE_ALARM_AEN_M_MASK                   =   ( 1U << 7U ),     /*!<  AEN_M mask                                    */
+  MINUTE_ALARM_AEN_M_MINUTE_ALARM_ENABLE    =   ( 0U << 7U ),     /*!<  Minute alarm is enabled                       */
+  MINUTE_ALARM_AEN_M_MINUTE_ALARM_DISABLE   =   ( 1U << 7U )      /*!<  Minute alarm is disabled          [ Default ] */
+} PCF8523_minute_alarm_aen_m_t;
+
+
+/* MINUTE_ALARM, TEN'S PLACE <6:4>: TEN'S PLACE
+ *    NOTE: CODED IN BCD FORMAT.
+ */
+typedef enum
+{
+  MINUTE_ALARM_TEN_PLACE_MASK               =   ( 0b1111 << 4U )   /*!<  Minute alarm TEN'S PLACE mask                */
+} PCF8523_minute_alarm_ten_place_t;
+
+
+/* MINUTE_ALARM, UNIT PLACE <3:0>: UNIT PLACE
+ *    NOTE: CODED IN BCD FORMAT.
+ */
+typedef enum
+{
+  MINUTE_ALARM_UNIT_PLACE_MASK              =   ( 0b1111 << 0U )   /*!<  Minute alarm UNIT PLACE mask                   */
+} PCF8523_minute_alarm_unit_place_t;
+
+
+
+/**
+  * @brief   Hour alarm
+  */
+/* AEN_H <7>: HOUR ALARM ENABLE/DISABLE
+ *    NOTE: CODED IN BCD FORMAT.
+ */
+typedef enum
+{
+  HOUR_ALARM_AEN_H_MASK                   =   ( 1U << 7U ),     /*!<  AEN_H mask                                    */
+  HOUR_ALARM_AEN_H_MINUTE_ALARM_ENABLE    =   ( 0U << 7U ),     /*!<  Hour alarm is enabled                         */
+  HOUR_ALARM_AEN_H_MINUTE_ALARM_DISABLE   =   ( 1U << 7U )      /*!<  Hour alarm is disabled            [ Default ] */
+} PCF8523_hour_alarm_aen_h_t;
+
+
+/* AMPM <5>: INDICATES AM/PM
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  HOUR_ALARM_AMPM_MASK                    =   ( 1U << 5U ),     /*!<  AMPM mask                                     */
+  HOUR_ALARM_AMPM_AM_MODE                 =   ( 0U << 5U ),     /*!<  AM mode                                       */
+  HOUR_ALARM_AMPM_PM_MODE                 =   ( 1U << 5U )      /*!<  PM mode                                       */
+} PCF8523_hour_alarm_ampm_t;
+
+
+/* HOUR_ALARM, TEN'S PLACE <4>: TEN'S PLACE
+ *    NOTE: ONLY FOR 12-HOUR MODE, CODED IN BCD FORMAT.
+ */
+typedef enum
+{
+  HOUR_ALARM_12_HOUR_MODE_TEN_PLACE_MASK  =   ( 1U << 4U )      /*!<  HOUR_ALARM 12h TEN'S PLACE mask               */
+} PCF8523_12_hour_alarm_mode_ten_place_t;
+
+
+/* HOUR_ALARM, TEN'S PLACE <5:4>: TEN'S PLACE
+ *    NOTE: ONLY FOR 24-HOUR MODE, CODED IN BCD FORMAT.
+ */
+typedef enum
+{
+  HOUR_ALARM_24_HOUR_MODE_TEN_PLACE_MASK  =   ( 0b11 << 4U )    /*!<  HOUR_ALARM 24h TEN'S PLACE mask               */
+} PCF8523_24_hour_alarm_mode_ten_place_t;
+
+
+/* HOUR_ALARM, UNIT PLACE <3:0>: UNIT PLACE
+ *    NOTE: CODED IN BCD FORMAT.
+ */
+typedef enum
+{
+  HOUR_ALARM_HOURS_UNIT_PLACE_MASK        =   ( 0b1111 << 0U )  /*!<  HOUR_ALARM UNIT PLACE mask                   */
+} PCF8523_hour_alamr_unit_place_t;
+
+
+
+/**
+  * @brief   Day alarm
+  */
+/* AEN_D <7>: DAY ALARM ENABLE/DISABLE
+ *    NOTE: CODED IN BCD FORMAT.
+ */
+typedef enum
+{
+  DAY_ALARM_AEN_D_MASK                    =   ( 1U << 7U ),     /*!<  AEN_D mask                                    */
+  DAY_ALARM_AEN_D_DAY_ALARM_ENABLE        =   ( 0U << 7U ),     /*!<  Day alarm is enabled                          */
+  DAY_ALARM_AEN_D_DAY_ALARM_DISABLE       =   ( 1U << 7U )      /*!<  Day alarm is disabled             [ Default ] */
+} PCF8523_day_alarm_aen_d_t;
+
+
+
+/**
+  * @brief   Weekly alarm
+  */
+/* AEN_W <7>: WEEKLY ALARM ENABLE/DISABLE
+ *    NOTE: CODED IN BCD FORMAT.
+ */
+typedef enum
+{
+  WEEKLY_ALARM_AEN_W_MASK                 =   ( 1U << 7U ),     /*!<  AEN_W mask                                    */
+  WEEKLY_ALARM_AEN_W_DAY_ALARM_ENABLE     =   ( 0U << 7U ),     /*!<  Weekly alarm is enabled                       */
+  WEEKLY_ALARM_AEN_W_DAY_ALARM_DISABLE    =   ( 1U << 7U )      /*!<  Weekly alarm is disabled          [ Default ] */
+} PCF8523_weekly_alarm_aen_w_t;
+
+
+
+/**
+  * @brief   Offset mode
+  */
+/* MODE <7>: OFFSET MODE
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  OFFSET_MODE_MASK                      =   ( 1U << 7U ),     /*!<  MODE mask                                     */
+  OFFSET_MODE_ONCE_EVERY_TWO_HOURS      =   ( 0U << 7U ),     /*!<  Offset is made once every two hours[ Default] */
+  OFFSET_MODE_ONCE_EVERY_MINUTE         =   ( 1U << 7U )      /*!<  Offset is made once every minute              */
+} PCF8523_offset_mode_t;
+
 
 
 
@@ -520,19 +652,64 @@ typedef enum
 
 #ifndef PCF8523_VECTOR_STRUCT_H
 #define PCF8523_VECTOR_STRUCT_H
+/* Interrupt flags status  */
 typedef struct
 {
-    PCF8523_control_1_12_24_t    Time12H_24HMode;                    /*!<  Time mode: 12-hour or 24-hour mode                    */
-    PCF8523_hours_ampm_t         TimeAM_PM_Mode;                     /*!<  AM/PM mode ( only for 12-hour mode )                  */
+  PCF8523_control_2_wtaf_t  wtaf;                     /*!<  Watchdog timer A interrupt flag                       */
+  PCF8523_control_2_ctaf_t  ctaf;                     /*!<  Countdown timer A interrupt flag                      */
+  PCF8523_control_2_ctbf_t  ctbf;                     /*!<  Countdown timer B interrupt flag                      */
+  PCF8523_control_2_sf_t    sf;                       /*!<  Second interrupt flag                                 */
+  PCF8523_control_2_af_t    af;                       /*!<  Alarm interrupt flag                                  */
 
-    uint32_t                      BCDtime;                            /*!<  Time ( HHMMSS ) in BCD format                         */
-    uint8_t                       BCDday;                             /*!<  Day number in BCD format                              */
-    PCF8523_weekdays_weekdays_t  weekday;                            /*!<  Weekday                                               */
-    PCF8523_months_months_t      BCDmonth;                           /*!<  Month  in BCD format                                  */
-    uint8_t                       BCDyear;                            /*!<  Year in BCD format                                    */
+  PCF8523_control_3_bsf_t   bsf;                      /*!<  Battery switch-over interrupt flag                    */
+  PCF8523_control_3_blf_t   blf;                      /*!<  Battery status interrupt flag                         */
+} PCF8523_interrupt_flags_status_t;
 
-    int8_t                        ramByte;                            /*!<  RAM byte                                              */
-    PCF8523_seconds_os_t         os;                                 /*!<  Oscillator flag                                       */
+
+/* Time ( BCD )  */
+typedef struct
+{
+  uint32_t                  bcd;                      /*!<  Time in BCD format                                    */
+  PCF8523_control_1_12_24_t hourMode;                 /*!<  Time mode: 12-hour or 24-hour mode                    */
+  PCF8523_hours_ampm_t      timeMode;                 /*!<  AM/PM mode ( only for 12-hour mode )                  */
+} PCF8523_time_t;
+
+
+/* Date  */
+typedef struct
+{
+  uint8_t                      day;                    /*!<  Day in BCD format                                     */
+  PCF8523_weekdays_weekdays_t  weekday;                /*!<  Weekday                                               */
+  PCF8523_months_months_t      month;                  /*!<  Month  in BCD format                                  */
+  uint8_t                      year;                   /*!<  Year in BCD format                                    */
+} PCF8523_date_t;
+
+
+/* Offset  */
+typedef struct
+{
+  PCF8523_offset_mode_t        mode;                   /*!<  Offset mode                                           */
+  int8_t                       value;                  /*!<  Offset value: from +63 to -64                         */
+} PCF8523_offset_t;
+
+
+
+/* USER'S PARAMETERS   */
+typedef struct
+{
+  /* Interrupt flag status   */
+  PCF8523_interrupt_flags_status_t  status;           /*!<  Interrupt flag status                                 */
+  
+  /* Outputs   */
+  PCF8523_time_t    time;                             /*!<  Time ( HHMMSS ) in BCD format                         */
+  PCF8523_date_t    date;                             /*!<  Date: Day/Weekday/Month/Year                          */
+  
+  /* Offset  */
+  PCF8523_offset_t  offset;                           /*!<  Offset                                                */
+  
+
+
+  PCF8523_seconds_os_t         os;                                 /*!<  Oscillator flag                                       */
 } PCF8523_data_t;
 #endif
 
@@ -558,113 +735,128 @@ typedef enum
   */
 PCF8523_status_t  PCF8523_Init                              ( I2C_parameters_t myI2Cparameters                                                                );
 
-/** It sets the external clock test mode.
+/** It sets the internal oscillator capacitor selection for quartz crystals with a corresponding load capacitance.
   */
-PCF8523_status_t  PCF8523_SetTestMode                       ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cap_sel_t myCAP_SEL                      );
+PCF8523_status_t  PCF8523_SetInternallOscilatorCapacitor    ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cap_sel_t myCAP_SEL                         );
 
 /** It sets the RTC clock mode.
   */
-PCF8523_status_t  PCF8523_SetRTCMode                        ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_stop_t mySTOP                              );
+PCF8523_status_t  PCF8523_SetRTCMode                        ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_stop_t mySTOP                               );
 
 /** It performs a software reset.
   */
 PCF8523_status_t  PCF8523_SoftwareReset                     ( I2C_parameters_t myI2Cparameters                                                                );
 
+/** It sets 24h/12h mode.
+  */
+PCF8523_status_t  PCF8523_SetHourMode                       ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_12_24_t my12_24                             );
+
+/** It enables/disables the second interrupt.
+  */
+PCF8523_status_t  PCF8523_SetSecondInterrupt                ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_sie_t mySIE                                 );
+
+/** It enables/disables the alarm interrupt.
+  */
+PCF8523_status_t  PCF8523_SetAlarmInterrupt                 ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_aie_t myAIE             );
+
 /** It sets the correction interrupt mode.
   */
-PCF8523_status_t  PCF8523_SetCorrectionInterruptMode        ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cie_t myCIE                                );
+PCF8523_status_t  PCF8523_SetCorrectionInterruptMode        ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cie_t myCIE             );
 
-/** It sets 12 or 24 hour mode.
+/** It gets the satus interrupt flags.
   */
-PCF8523_status_t  PCF8523_Set12_24_HourMode                 ( I2C_parameters_t myI2Cparameters, PCF8523_data_t my12_24                                       );
+PCF8523_status_t  PCF8523_GetStatusInterruptFlags           ( I2C_parameters_t myI2Cparameters, PCF8523_interrupt_flags_status_t* myFlags );
 
-/** It sets the internal oscillator capacitor.
+/** It enables/disables the watchdog timer A interrupt.
   */
-PCF8523_status_t  PCF8523_SetInternalOscillatorCapacitor    ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cap_sel_t myCAP_SEL                        );
+PCF8523_status_t  PCF8523_SetWatchdogTimerA_Interrupt       ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_wtaie_t myWTAIE         );
 
-/** It enables/disables minute/half minute interrupt.
+/** It enables/disables the countdown timer A interrupt.
   */
-PCF8523_status_t  PCF8523_SetMinuteInterrupts               ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_mi_t myMI, PCF8523_control_2_hmi_t myHMI  );
+PCF8523_status_t  PCF8523_SetCountdownTimerA_Interrupt      ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_ctaie_t myCTAIE         );
 
-/** It gets the status of the timer flag.
+/** It enables/disables the countdown timer B interrupt.
   */
-PCF8523_status_t  PCF8523_GetTimerFlag                      ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_tf_t* myTF                                 );
+PCF8523_status_t  PCF8523_SetCountdownTimerB_Interrupt     ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_ctbie_t myCTBIE          );
 
-/** It resets the status of the timer flag.
+/** It enables/disables the battery switch-over interrupt.
   */
-PCF8523_status_t  PCF8523_ClearTimerFlag                    ( I2C_parameters_t myI2Cparameters                                                                );
+PCF8523_status_t  PCF8523_SetBatterySwitchOverInterrupt     ( I2C_parameters_t myI2Cparameters, PCF8523_control_3_bsie_t myBSIE           );
 
-/** It sets the clock output frequency.
+/** It enables/disables the battery low interrupt.
   */
-PCF8523_status_t  PCF8523_SetClockOutputFrequency           ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_cof_t myCOF                                );
+PCF8523_status_t  PCF8523_SetBatteryLowInterrupt            ( I2C_parameters_t myI2Cparameters, PCF8523_control_3_blie_t myBLIE           );
 
-/** It sets the offset.
+/** It sets the power mode: battery switch-over and battery low detection control.
   */
-PCF8523_status_t  PCF8523_SetOffset                         ( I2C_parameters_t myI2Cparameters, PCF8523_offset_mode_t myMODE, int8_t myOFFSET                );
-
-/** It writes into the RAM byte register.
-  */
-PCF8523_status_t  PCF8523_WriteByteRAM                      ( I2C_parameters_t myI2Cparameters, PCF8523_data_t myData                                        );
-
-/** It reads the RAM byte register.
-  */
-PCF8523_status_t  PCF8523_ReadByteRAM                       ( I2C_parameters_t myI2Cparameters, PCF8523_data_t* myData                                       );
-
-/** It checks oscillator clock integrity flag.
-  */
-PCF8523_status_t  PCF8523_CheckOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters, PCF8523_data_t* myOS                                         );
-
-/** It clears oscillator clock integrity flag.
-  */
-PCF8523_status_t  PCF8523_ClearOscillatorClockIntegrityFlag ( I2C_parameters_t myI2Cparameters                                                                );
-
-/** It sets the AM/PM indicator ( only for 12-hour mode ).
-  */
-PCF8523_status_t  PCF8523_SetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, PCF8523_data_t myAM_PM_Indicator                             );
-
-/** It gets the AM/PM indicator ( only for 12-hour mode ).
-  */
-PCF8523_status_t  PCF8523_GetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, PCF8523_data_t* myAM_PM_Indicator                            );
-
-/** It gets the day ( BCD format ).
-  */
-PCF8523_status_t  PCF8523_GetDay                            ( I2C_parameters_t myI2Cparameters, PCF8523_data_t* myActualDay                                  );
-
-/** It sets the day ( BCD format ).
-  */
-PCF8523_status_t  PCF8523_SetDay                            ( I2C_parameters_t myI2Cparameters, PCF8523_data_t myNewDay                                      );
-
-/** It gets the weekday.
-  */
-PCF8523_status_t  PCF8523_GetWeekday                        ( I2C_parameters_t myI2Cparameters, PCF8523_data_t* myActualWeekday                              );
-
-/** It sets the weekday.
-  */
-PCF8523_status_t  PCF8523_SetWeekday                        ( I2C_parameters_t myI2Cparameters, PCF8523_data_t myNewWeekday                                  );
-
-/** It gets the month ( BCD format ).
-  */
-PCF8523_status_t  PCF8523_GetMonth                          ( I2C_parameters_t myI2Cparameters, PCF8523_data_t* myActualMonth                                );
-
-/** It sets the month ( BCD format ).
-  */
-PCF8523_status_t  PCF8523_SetMonth                          ( I2C_parameters_t myI2Cparameters, PCF8523_data_t myNewMonth                                    );
+PCF8523_status_t  PCF8523_SetBatteryPowerModeControl        ( I2C_parameters_t myI2Cparameters, PCF8523_control_3_pm_t myPM               );
 
 /** It gets the time ( BCD format ).
   */
-PCF8523_status_t  PCF8523_GetTime                           ( I2C_parameters_t myI2Cparameters, PCF8523_data_t* myActualTime                                 );
+PCF8523_status_t  PCF8523_GetTime                           ( I2C_parameters_t myI2Cparameters, PCF8523_time_t* myActualTime              );
 
 /** It sets the time ( BCD format ).
   */
-PCF8523_status_t  PCF8523_SetTime                           ( I2C_parameters_t myI2Cparameters, PCF8523_data_t myNewTime                                     );
+PCF8523_status_t  PCF8523_SetTime                           ( I2C_parameters_t myI2Cparameters, PCF8523_time_t myNewTime                  );
+
+/** It sets the AM/PM indicator ( only for 12-hour mode ).
+  */
+PCF8523_status_t  PCF8523_SetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, PCF8523_time_t myAM_PM_Indicator          );
+
+/** It gets the AM/PM indicator ( only for 12-hour mode ).
+  */
+PCF8523_status_t  PCF8523_GetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, PCF8523_time_t* myAM_PM_Indicator         );
+
+/** It gets the day ( BCD format ).
+  */
+PCF8523_status_t  PCF8523_GetDay                            ( I2C_parameters_t myI2Cparameters, uint8_t* myActualDay                      );
+
+/** It sets the day ( BCD format ).
+  */
+PCF8523_status_t  PCF8523_SetDay                            ( I2C_parameters_t myI2Cparameters, uint8_t myNewDay                          );
+
+/** It gets the weekday.
+  */
+PCF8523_status_t  PCF8523_GetWeekday                        ( I2C_parameters_t myI2Cparameters, PCF8523_weekdays_weekdays_t* myActualWeekday  );
+
+/** It sets the weekday.
+  */
+PCF8523_status_t  PCF8523_SetWeekday                        ( I2C_parameters_t myI2Cparameters, PCF8523_weekdays_weekdays_t myNewWeekday      );
+
+/** It gets the month ( BCD format ).
+  */
+PCF8523_status_t  PCF8523_GetMonth                          ( I2C_parameters_t myI2Cparameters, PCF8523_months_months_t* myActualMonth        );
+
+/** It sets the month ( BCD format ).
+  */
+PCF8523_status_t  PCF8523_SetMonth                          ( I2C_parameters_t myI2Cparameters, PCF8523_months_months_t myNewMonth            );
 
 /** It gets the year ( BCD format ).
   */
-PCF8523_status_t  PCF8523_GetYear                           ( I2C_parameters_t myI2Cparameters, PCF8523_data_t* myActualYear                                 );
+PCF8523_status_t  PCF8523_GetYear                           ( I2C_parameters_t myI2Cparameters, uint8_t* myActualYear                        );
 
 /** It sets the year ( BCD format ).
   */
-PCF8523_status_t  PCF8523_SetYear                           ( I2C_parameters_t myI2Cparameters, PCF8523_data_t myNewYear                                     );
+PCF8523_status_t  PCF8523_SetYear                           ( I2C_parameters_t myI2Cparameters, uint8_t myNewYear                            );
+
+/** It sets the offset.
+  */
+PCF8523_status_t  PCF8523_SetOffset                         ( I2C_parameters_t myI2Cparameters, PCF8523_offset_t myOFFSET                                   );
+
+
+
+///** It enables/disables minute/half minute interrupt.
+//  */
+//PCF8523_status_t  PCF8523_SetMinuteInterrupts               ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_mi_t myMI, PCF8523_control_2_hmi_t myHMI  );
+
+///** It gets the status of the timer flag.
+//  */
+//PCF8523_status_t  PCF8523_GetTimerFlag                      ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_tf_t* myTF                                 );
+
+///** It resets the status of the timer flag.
+//  */
+//PCF8523_status_t  PCF8523_ClearTimerFlag                    ( I2C_parameters_t myI2Cparameters                                                                );
+
 
 
 #ifdef __cplusplus
