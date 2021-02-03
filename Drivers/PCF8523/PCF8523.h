@@ -77,15 +77,15 @@ typedef enum
 /**
   * @brief   Register Control_1
   */
-/* EXT_TEST <7>: EXTERNAL CLOCK TEST MODE
+/* CAP_SEL <7>: INTERNAL CAPACITOR SELECTION FOR QUARTZ CRYSTALS
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_1_EXT_TEST_MASK                     =   ( 1U << 7U ),     /*!<  EXT_TEST mask                                   */
-    CONTROL_1_EXT_TEST_NORMAL_MODE              =   ( 0U << 7U ),     /*!<  EXT_TEST: normal mode               [ Default ] */
-    CONTROL_1_EXT_TEST_EXTERNAL_CLOCK_TEST_MODE =   ( 1U << 7U )      /*!<  EXT_TEST: external clock test mode              */
-} PCF8523_control_1_ext_test_t;
+  CONTROL_1_CAP_SEL_MASK            =   ( 1U << 7U ),     /*!<  CAP_SEL mask                              */
+  CONTROL_1_CAP_SEL_7_PF            =   ( 0U << 7U ),     /*!<  CAP_SEL: 7pF                  [ Default ] */
+  CONTROL_1_CAP_SEL_12_5_PF         =   ( 1U << 7U )      /*!<  CAP_SEL: 12.5pF                           */
+} PCF8523_control_1_cap_sel_t;
 
 
 
@@ -94,9 +94,9 @@ typedef enum
  */
 typedef enum
 {
-    CONTROL_1_STOP_MASK                         =   ( 1U << 5U ),     /*!<  STOP mask                                       */
-    CONTROL_1_STOP_RTC_CLOCK_RUNS               =   ( 0U << 5U ),     /*!<  STOP: RTC clock runs                [ Default ] */
-    CONTROL_1_STOP_RTC_CLOCK_STOPPED            =   ( 1U << 5U )      /*!<  STOP: RTC clock is stopped                      */
+  CONTROL_1_STOP_MASK               =   ( 1U << 5U ),     /*!<  STOP mask                                 */
+  CONTROL_1_STOP_RTC_CLOCK_RUNS     =   ( 0U << 5U ),     /*!<  STOP: RTC clock runs          [ Default ] */
+  CONTROL_1_STOP_RTC_CLOCK_STOPPED  =   ( 1U << 5U )      /*!<  STOP: RTC clock is stopped                */
 } PCF8523_control_1_stop_t;
 
 
@@ -106,103 +106,220 @@ typedef enum
  */
 typedef enum
 {
-    CONTROL_1_SR_MASK                           =   ( 1U << 4U ),     /*!<  SR mask                                         */
-    CONTROL_1_SR_NO_SOFTWARE_RESET              =   ( 0U << 4U ),     /*!<  SR: no software reset               [ Default ] */
-    CONTROL_1_SR_SOFTWARE_RESET                 =   ( 1U << 4U )      /*!<  SR: initiate software reset                     */
+  CONTROL_1_SR_MASK                 =   ( 1U << 4U ),     /*!<  SR mask                                   */
+  CONTROL_1_SR_NO_SOFTWARE_RESET    =   ( 0U << 4U ),     /*!<  SR: no software reset         [ Default ] */
+  CONTROL_1_SR_SOFTWARE_RESET       =   ( 1U << 4U )      /*!<  SR: initiate software reset               */
 } PCF8523_control_1_sr_t;
 
 
 
-/* CIE <2>: CORRECTION INTERRUPT ENABLE 
+/* 12_24 <3>: 24/12 MODE SELECTED 
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_1_CIE_MASK                              =   ( 1U << 2U ), /*!<  CIE mask                                                      */
-    CONTROL_1_CIE_NO_CORRECTION_INTERRUPT_GENERATED =   ( 0U << 2U ), /*!<  CIE: no correction interrupt generated [ Default ]            */
-    CONTROL_1_CIE_INTERRUPT_PULSES_GENERATED        =   ( 1U << 2U )  /*!<  CIE: interrupt pulses are generated at every correction cycle */
-} PCF8523_control_1_cie_t;
-
-
-
-/* 12_24 <1>: SOFTWARE RESET 
- *    NOTE: N/A.
- */
-typedef enum
-{
-    CONTROL_1_12_24_MASK                        =   ( 1U << 1U ),     /*!<  12_24 mask                                      */
-    CONTROL_1_12_24_24_HOUR_MODE                =   ( 0U << 1U ),     /*!<  12_24: 24 hour mode is selected     [ Default ] */
-    CONTROL_1_12_24_12_HOUR_MODE                =   ( 1U << 1U )      /*!<  12_24: 12 hour mode is selected                 */
+  CONTROL_1_12_24_MASK              =   ( 1U << 3U ),     /*!<  12_24 mask                                */
+  CONTROL_1_12_24_MODE_24_HOUR      =   ( 0U << 3U ),     /*!<  24 hour mode                  [ Default ] */
+  CONTROL_1_12_24_MODE_12_HOUR      =   ( 1U << 3U )      /*!<  12 hour mode                              */
 } PCF8523_control_1_12_24_t;
 
 
 
-/* CAP_SEL <0>: INTERNAL OSCILLATOR CAPACITOR SELECTION 
+/* SIE <2>: SECOND INTERRUPT ENABLE 
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_1_CAP_SEL_MASK                      =   ( 1U << 0U ),     /*!<  CAP_SEL mask                                    */
-    CONTROL_1_CAP_SEL_7_PF                      =   ( 0U << 0U ),     /*!<  CAP_SEL: 7 pF                       [ Default ] */
-    CONTROL_1_CAP_SEL_12_5_PF                   =   ( 1U << 0U )      /*!<  CAP_SEL: 12.5 pF                                */
-} PCF8523_control_1_cap_sel_t;
+  CONTROL_1_SIE_MASK                      =   ( 1U << 2U ), /*!<  SIE mask                                  */
+  CONTROL_1_SIE_SECOND_INTERRUPT_DISABLED =   ( 0U << 2U ), /*!<  Second interrupt disabled     [ Default ] */
+  CONTROL_1_SIE_SECOND_INTERRUPT_ENABLED  =   ( 1U << 2U )  /*!<  Second interrupt enabled                  */
+} PCF8523_control_1_sie_t;
+
+
+
+/* AIE <1>: ALARM INTERRUPT ENABLE 
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  CONTROL_1_AIE_MASK                      =   ( 1U << 1U ), /*!<  AIE mask                                  */
+  CONTROL_1_AIE_ALARM_INTERRUPT_DISABLED  =   ( 0U << 1U ), /*!<  Alarm interrupt disabled      [ Default ] */
+  CONTROL_1_AIE_ALARM_INTERRUPT_ENABLED   =   ( 1U << 1U )  /*!<  Alarm interrupt enabled                   */
+} PCF8523_control_1_aie_t;
+
+
+
+/* CIE <0>: CORRECTION INTERRUPT ENABLE 
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  CONTROL_1_CIE_MASK                              =   ( 1U << 0U ), /*!<  CIE mask                                                      */
+  CONTROL_1_CIE_NO_CORRECTION_INTERRUPT_GENERATED =   ( 0U << 0U ), /*!<  CIE: no correction interrupt generated [ Default ]            */
+  CONTROL_1_CIE_INTERRUPT_PULSES_GENERATED        =   ( 1U << 0U )  /*!<  CIE: interrupt pulses are generated at every correction cycle */
+} PCF8523_control_1_cie_t;
 
 
 
 /**
   * @brief   Register Control_2
   */
-/* MI <5>: MINUTE INTERRUPT
+/* WTAF <7>: WATCHDOG TIMER A INTERRUPT GENERATED
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_2_MI_MASK                           =   ( 1U << 5U ),     /*!<  MI mask                                         */
-    CONTROL_2_MI_MINUTE_INTERRUPT_DISABLED      =   ( 0U << 5U ),     /*!<  Minute interrupt disabled           [ Default ] */
-    CONTROL_2_MI_MINUTE_INTERRUPT_ENABLED       =   ( 1U << 5U )      /*!<  Minute interrupt enabled                        */
-} PCF8523_control_2_mi_t;
+  CONTROL_2_WTAG_MASK                         =   ( 1U << 7U ),     /*!<  WTAF mask                                           */
+  CONTROL_2_WTAF_NO_WDT_A_INTERRUPT_GENERATED =   ( 0U << 7U ),     /*!<  No watchdog timer A interrupt generated [ Default ] */
+  CONTROL_2_WTAF_WDT_A_INTERRUPT_GENERATED    =   ( 1U << 7U )      /*!<  Flag set when watchdog timer A interrupt generated  */
+} PCF8523_control_2_wtaf_t;
 
 
 
-/* HMI <4>: HALF MINUTE INTERRUPT
+/* CTAF <6>: COUNTDOWN TIMER A INTERRUPT GENERATED
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_2_HMI_MASK                            =   ( 1U << 4U ),   /*!<  HMI mask                                        */
-    CONTROL_2_HMI_HALF_MINUTE_INTERRUPT_DISABLED  =   ( 0U << 4U ),   /*!<  Half Minute interrupt disabled      [ Default ] */
-    CONTROL_2_HMI_HALF_MINUTE_INTERRUPT_ENABLED   =   ( 1U << 4U )    /*!<  Half Minute interrupt enabled                   */
-} PCF8523_control_2_hmi_t;
+  CONTROL_2_CTAF_MASK                                     =   ( 1U << 6U ),   /*!<  CTAF mask                                             */
+  CONTROL_2_CTAF_NO_COUNTDOWN_TIMER_A_INTERRUPT_GENERATED =   ( 0U << 6U ),   /*!<  No countdown timer A interrupt generated  [ Default ] */
+  CONTROL_2_CTAF_CONTDOWN_TIMER_A_INTERRUPT_GENERATED     =   ( 1U << 6U )    /*!<  Flag set when countdown timer A interrupt generated   */
+} PCF8523_control_2_ctaf_t;
 
 
 
-/* TF <3>: TIMER FLAG
+/* CTBF <5>: COUNTDOWN TIMER B INTERRUPT GENERATED
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_2_TF_MASK                           =   ( 1U << 3U ),     /*!<  TF mask                                         */
-    CONTROL_2_TF_TIMER_INTERRUPT_NOT_GENERATED  =   ( 0U << 3U ),     /*!<  No Timer interrupt generated        [ Default ] */
-    CONTROL_2_TF_TIMER_INTERRUPT_GENERATED      =   ( 1U << 3U )      /*!<  Timer interrupt generated                       */
-} PCF8523_control_2_tf_t;
+  CONTROL_2_CTBF_MASK                                     =   ( 1U << 5U ),   /*!<  CTBF mask                                             */
+  CONTROL_2_CTBF_NO_COUNTDOWN_TIMER_B_INTERRUPT_GENERATED =   ( 0U << 5U ),   /*!<  No countdown timer B interrupt generated  [ Default ] */
+  CONTROL_2_CTBF_CONTDOWN_TIMER_B_INTERRUPT_GENERATED     =   ( 1U << 5U )    /*!<  Flag set when countdown timer B interrupt generated   */
+} PCF8523_control_2_ctbf_t;
 
 
 
-/* COF <2:0>: CLKOUT CONTROL
+/* SF <4>: SECOND INTERRUPT GENERATED
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTROL_2_COF_MASK                          =   ( 0b111 << 0U ),  /*!<  COF mask                                        */
-    CONTROL_2_COF_CLKOUT_32768_HZ               =   ( 0b000 << 0U ),  /*!<  CLKOUT: 32768 Hz                    [ Default ] */
-    CONTROL_2_COF_CLKOUT_16384_HZ               =   ( 0b001 << 0U ),  /*!<  CLKOUT: 16384 Hz                                */
-    CONTROL_2_COF_CLKOUT_8192_HZ                =   ( 0b010 << 0U ),  /*!<  CLKOUT: 8192  Hz                                */
-    CONTROL_2_COF_CLKOUT_4096_HZ                =   ( 0b011 << 0U ),  /*!<  CLKOUT: 4096  Hz                                */
-    CONTROL_2_COF_CLKOUT_2048_HZ                =   ( 0b100 << 0U ),  /*!<  CLKOUT: 2048  Hz                                */
-    CONTROL_2_COF_CLKOUT_1024_HZ                =   ( 0b101 << 0U ),  /*!<  CLKOUT: 1024  Hz                                */
-    CONTROL_2_COF_CLKOUT_1_HZ                   =   ( 0b110 << 0U ),  /*!<  CLKOUT: 1     Hz                                */
-    CONTROL_2_COF_CLKOUT_LOW                    =   ( 0b111 << 0U )   /*!<  CLKOUT: LOW                                     */
-} PCF8523_control_2_cof_t;
+  CONTROL_2_SF_MASK                                       =   ( 1U << 4U ),   /*!<  SF mask                                               */
+  CONTROL_2_SF_NO_SECOND_INTERRUPT_GENERATED              =   ( 0U << 4U ),   /*!<  No second interrupt generated             [ Default ] */
+  CONTROL_2_SF_SECOND_INTERRUPT_GENERATED                 =   ( 1U << 4U )    /*!<  Second interrupt generated                            */
+} PCF8523_control_2_sf_t;
+
+
+
+/* AF <3>: ALARM INTERRUPT GENERATED
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  CONTROL_2_AF_MASK                                       =   ( 1U << 3U ),   /*!<  AF mask                                               */
+  CONTROL_2_AF_NO_SECOND_INTERRUPT_GENERATED              =   ( 0U << 3U ),   /*!<  No alarm interrupt generated              [ Default ] */
+  CONTROL_2_AF_SECOND_INTERRUPT_GENERATED                 =   ( 1U << 3U )    /*!<  Alarm interrupt generated                             */
+} PCF8523_control_2_af_t;
+
+
+
+/* WTAIE <2>: WATCHDOG TIMER A INTERRUPT
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  CONTROL_2_WTAIE_MASK                                    =   ( 1U << 2U ),   /*!<  WTAIE mask                                            */
+  CONTROL_2_WTAIE_WTD_TIMER_A_INTERRUPT_DISABLED          =   ( 0U << 2U ),   /*!<  Watchdog timer A interrupt is disabled    [ Default ] */
+  CONTROL_2_WTAIE_WTD_TIMER_A_INTERRUPT_ENABLED           =   ( 1U << 2U )    /*!<  Watchdog timer A interrupt is enabled                 */
+} PCF8523_control_2_wtaie_t;
+
+
+
+/* CTAIE <1>: COUNTDOWN TIMER A INTERRUPT
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  CONTROL_2_CTAIE_MASK                                    =   ( 1U << 1U ),   /*!<  CTAIE mask                                            */
+  CONTROL_2_CTAIE_COUNTDOWN_TIMER_A_INTERRUPT_DISABLED    =   ( 0U << 1U ),   /*!<  Countdown timer A interrupt is disabled   [ Default ] */
+  CONTROL_2_CTAIE_COUNTDOWN_TIMER_A_INTERRUPT_ENABLED     =   ( 1U << 1U )    /*!<  Countdown timer A interrupt is enabled                */
+} PCF8523_control_2_ctaie_t;
+
+
+
+/* CTBIE <0>: COUNTDOWN TIMER B INTERRUPT
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  CONTROL_2_CTBIE_MASK                                    =   ( 1U << 0U ),   /*!<  CTBIE mask                                            */
+  CONTROL_2_CTBIE_COUNTDOWN_TIMER_B_INTERRUPT_DISABLED    =   ( 0U << 0U ),   /*!<  Countdown timer B interrupt is disabled   [ Default ] */
+  CONTROL_2_CTBIE_COUNTDOWN_TIMER_B_INTERRUPT_ENABLED     =   ( 1U << 0U )    /*!<  Countdown timer B interrupt is enabled                */
+} PCF8523_control_2_ctbie_t;
+
+
+
+/**
+  * @brief   Register Control_3
+  */
+/* PM <7:5>: BATTERY SWITCH-OVER AND BATTERY LOW DETECTION CONTROL
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  CONTROL_3_PM_MASK               =   ( 0b111 << 5U ),  /*!<  PM mask                                                                                                                       */
+  CONTROL_3_PM_POWER_MODE_0       =   ( 0b000 << 5U ),  /*!<  Battery switch-over function is enabled in standard mode; Battery low detection function is enabled                           */
+  CONTROL_3_PM_POWER_MODE_1       =   ( 0b001 << 5U ),  /*!<  Battery switch-over function is enabled in direct switching mode; Battery low detection function is enabled                   */
+  CONTROL_3_PM_POWER_MODE_2       =   ( 0b010 << 5U ),  /*!<  Battery switch-over function is disabled - only one power supply (VDD); Battery low detection function is enabled [ Default ] */
+  CONTROL_3_PM_POWER_MODE_3       =   ( 0b100 << 5U ),  /*!<  Battery switch-over function is enabled in standard mode; Battery low detection function is disabled                          */
+  CONTROL_3_PM_POWER_MODE_4       =   ( 0b101 << 5U ),  /*!<  Battery switch-over function is enabled in direct switching mode; Battery low detection function is disabled                  */
+  CONTROL_3_PM_POWER_MODE_5       =   ( 0b111 << 5U ),  /*!<  Battery switch-over function is disabled - only one power supply (VDD); Battery low detection function is disabled            */
+} PCF8523_control_3_pm_t;
+
+
+/* BSF <3>: BATTERY SWITCH-OVER INTERRUPT GENERATED
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  CONTROL_3_BSF_MASK                                        =   ( 1U << 3U ),     /*!<  BSF mask                                                                            */
+  CONTROL_3_BSF_NO_BATTERY_SWITCH_OVER_INTERRUPT_GENERATED  =   ( 0U << 3U ),     /*!<  No battery switch-over interrupt generated                              [ Default ] */
+  CONTROL_3_BSF_BATTERY_SWITCH_OVER_INTERRUPT_GENERATED     =   ( 1U << 3U )      /*!<  Flag set when battery switch-over occurs                                            */
+} PCF8523_control_3_bsf_t;
+
+
+/* BLF <2>: BATTERY STATUS
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  CONTROL_3_BLF_MASK                                        =   ( 1U << 2U ),     /*!<  BLF mask                                                                           */
+  CONTROL_3_BLF_BATTERY_STATUS_OK                           =   ( 0U << 2U ),     /*!<  Battery status ok                                                      [ Default ] */
+  CONTROL_3_BLF_BATTERY_STATUS_LOW                          =   ( 1U << 2U )      /*!<  Battery status low                                                                 */
+} PCF8523_control_3_blf_t;
+
+
+/* BSIE <1>: BATTERY SWITCH-OVER INTERRUPT GENERATED
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  CONTROL_3_BSIE_MASK                                       =   ( 1U << 1U ),     /*!<  BSIE mask                                                                           */
+  CONTROL_3_BSIE_NO_INTERRUPT_GENERATED                     =   ( 0U << 1U ),     /*!<  No interrupt generated from battery switch-over flag                    [ Default ] */
+  CONTROL_3_BSIE_INTERRUPT_GENERATED                        =   ( 1U << 1U )      /*!<  Interrupt generated when BSF is set                                                 */
+} PCF8523_control_3_bsie_t;
+
+
+/* BLIE <0>: BATTERY STATUS
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+  CONTROL_3_BLIE_MASK                                       =   ( 1U << 0U ),     /*!<  BLIE mask                                                                           */
+  CONTROL_3_BLIE_NO_INTERRUPT_GENERATED                     =   ( 0U << 0U ),     /*!<  No interrupt generated from battery low flag                            [ Default ] */
+  CONTROL_3_BLIE_INTERRUPT_GENERATED                        =   ( 1U << 0U )      /*!<  Interrupt generated when BLF is set                                                 */
+} PCF8523_control_3_blie_t;
 
 
 
@@ -472,7 +589,7 @@ PCF8523_status_t  PCF8523_Init                              ( I2C_parameters_t m
 
 /** It sets the external clock test mode.
   */
-PCF8523_status_t  PCF8523_SetTestMode                       ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_ext_test_t myEXT_TEST                      );
+PCF8523_status_t  PCF8523_SetTestMode                       ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cap_sel_t myCAP_SEL                      );
 
 /** It sets the RTC clock mode.
   */
