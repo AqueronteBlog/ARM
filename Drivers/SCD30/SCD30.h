@@ -128,12 +128,20 @@ typedef struct
 } SCD30_raw_output_data_t;
 
 
-/* Measurement data  */
+/* Measurement processed data  */
 typedef struct
 {
   float  co2;  
   float  temperature; 
   float  humidity;  
+} SCD30_processed_data_t;
+
+
+/* Measurement data: Raw and processed data  */
+typedef struct
+{
+  SCD30_raw_output_data_t raw;  
+  SCD30_processed_data_t  processed;  
 } SCD30_output_data_t;
 
 
@@ -142,11 +150,8 @@ typedef struct
 /* USER: User's variables  */
 typedef struct
 {
-  /* Raw output data   */
-  SCD30_raw_output_data_t         raw_data;               /*< Raw data                                                                  */
-
   /* Output data   */
-  SCD30_output_data_t             data;                   /*< Data: CO2, Temperature and Humidity                                       */
+  SCD30_output_data_t             data;                   /*< Data (processed and raw): CO2, Temperature and Humidity                   */
 
   /* Pressure compensation   */
   uint16_t                        pressure_compensation;  /*< 0 (desactivates pressure compensation) or [700 - 1400]. Pressure in mBar  */
@@ -158,7 +163,7 @@ typedef struct
   SCD30_get_ready_status_bit_t    status;                 /*< Measurement is ready to be read from the sensor                           */
   
   /* (De-)Activate automatic self-calibration  */
-  SCD30_continuous_auto_selfcal_t asc;                    /*< Measurement is ready to be read from the sensor                           */
+  SCD30_continuous_auto_selfcal_t asc;                    /*< Continuos automatic self-calibration                                      */
   
   /* Forced recalibration  */
   uint16_t                        frc;                    /*< Value of C02 concentration in ppm                                         */
@@ -194,27 +199,79 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-SCD30_status_t  SCD30_Init                          ( I2C_parameters_t myI2Cparameters                                  );
+SCD30_status_t  SCD30_Init                          ( I2C_parameters_t myI2Cparameters                                        );
 
 /** It triggers continuous measurement with or without ambient pressure compensation.
   */
-SCD30_status_t  SCD30_TriggerContinuousMeasurement  ( I2C_parameters_t myI2Cparameters, uint16_t pressure_compensation  );
+SCD30_status_t  SCD30_TriggerContinuousMeasurement  ( I2C_parameters_t myI2Cparameters, uint16_t pressure_compensation        );
 
 /** It stops the continuous measurement.
   */
-SCD30_status_t  SCD30_StopContinuousMeasurement     ( I2C_parameters_t myI2Cparameters                                  );
+SCD30_status_t  SCD30_StopContinuousMeasurement     ( I2C_parameters_t myI2Cparameters                                        );
 
 /** It sets the measurement interval.
   */
-SCD30_status_t  SCD30_SetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t measurement_interval   );
+SCD30_status_t  SCD30_SetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t measurement_interval         );
 
 /** It sets the measurement interval.
   */
-SCD30_status_t  SCD30_SetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t measurement_interval   );
+SCD30_status_t  SCD30_SetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t measurement_interval         );
 
 /** It gets the measurement interval.
   */
-SCD30_status_t  SCD30_GetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t* measurement_interval  );
+SCD30_status_t  SCD30_GetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t* measurement_interval        );
+
+/** It gets the status when the data is ready to be read.
+  */
+SCD30_status_t  SCD30_GetDataReadyStatus            ( I2C_parameters_t myI2Cparameters, SCD30_get_ready_status_bit_t* status  );
+
+/** It gets all the raw data.
+  */
+SCD30_status_t  SCD30_ReadRawMeasurement            ( I2C_parameters_t myI2Cparameters, SCD30_raw_output_data_t* raw_data     );
+
+/** It gets all the data.
+  */
+SCD30_status_t  SCD30_ReadMeasurement               ( I2C_parameters_t myI2Cparameters, SCD30_output_data_t* data             );
+
+/** It enables/disables the continuous automatic self-calibration.
+  */
+SCD30_status_t  SCD30_SetContinuousASC              ( I2C_parameters_t myI2Cparameters, SCD30_continuous_auto_selfcal_t asc   );
+
+/** It gets the continuous automatic self-calibration bit.
+  */
+SCD30_status_t  SCD30_GetContinuousASC              ( I2C_parameters_t myI2Cparameters, SCD30_continuous_auto_selfcal_t* asc  );
+
+/** It sets the forced recalibration value.
+  */
+SCD30_status_t  SCD30_SetForcedRecalibrationValue   ( I2C_parameters_t myI2Cparameters, uint16_t frc                          );
+
+/** It gets the forced recalibration value.
+  */
+SCD30_status_t  SCD30_GetForcedRecalibrationValue   ( I2C_parameters_t myI2Cparameters, uint16_t* frc                         );
+
+/** It sets the temperature offset value.
+  */
+SCD30_status_t  SCD30_SetTemperatureOffsetValue     ( I2C_parameters_t myI2Cparameters, uint16_t temp_offset                  );
+
+/** It gets the temperature offset value.
+  */
+SCD30_status_t  SCD30_GetTemperatureOffsetValue     ( I2C_parameters_t myI2Cparameters, uint16_t* temp_offset                 );
+
+/** It sets the altitude compensation value.
+  */
+SCD30_status_t  SCD30_SetAltitudeCompensationValue  ( I2C_parameters_t myI2Cparameters, uint16_t alt_comp                     );
+
+/** It gets the altitude compensation value.
+  */
+SCD30_status_t  SCD30_GetAltitudeCompensationValue  ( I2C_parameters_t myI2Cparameters, uint16_t* alt_comp                    );
+
+/** It gets the firmware version value.
+  */
+SCD30_status_t  SCD30_GetFirmwareVersion            ( I2C_parameters_t myI2Cparameters, SCD30_fw_version_t* fw                );
+
+/** It performs a software reset.
+  */
+SCD30_status_t  SCD30_SoftReset                     ( I2C_parameters_t myI2Cparameters                                        );
 
 
 
