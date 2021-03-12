@@ -190,7 +190,7 @@ MICS_VZ_89TE_status_t MICS_VZ_89TE_GetUpdateValues ( I2C_parameters_t myI2Cparam
   MICS_VZ_89TE_status_t aux;
   
   /* Read the register   */
-  aux  =   MICS_VZ_89TE_GetStatus  ( myI2Cparameters, (MICS_VZ_89TE_get_status_t*)&status );
+  aux  =   MICS_VZ_89TE_GetStatus  ( myI2Cparameters, status );
   
   /* Parse the data  */
   values->tvoc     =  (float)( ( status->d1 - 13.0 ) * ( 1000.0 / 229.0 ) );
@@ -435,7 +435,7 @@ MICS_VZ_89TE_status_t MICS_VZ_89TE_GetR0 ( I2C_parameters_t myI2Cparameters, MIC
  MICS_VZ_89TE_status_t aux;
   
   /* Read the register   */
-  aux  =   MICS_VZ_89TE_GetRawR0 ( myI2Cparameters, (MICS_VZ_89TE_r0_t*)&rawR0 );
+  aux  =   MICS_VZ_89TE_GetRawR0 ( myI2Cparameters, rawR0 );
   
   /* Parse the data  */
   *r0   =  rawR0->r0_msb;
