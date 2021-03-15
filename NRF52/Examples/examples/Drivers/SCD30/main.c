@@ -1,10 +1,7 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: SCD30. Every 1 seconds, a new
- *              pressure/temperature value is read and the data is transmitted through the UART ( Baud Rate: 230400 ).
- *
- * @details     This example shows how to work with the external device: SCD30. Every 1 seconds, a new
- *              set of values ( CO2 and Resistor ) is measured and the data is transmitted through the UART ( Baud Rate: 230400 ).
+ * @details     This example shows how to work with the external device: SCD30. Every 4 seconds, a new
+ *              CO2, pressure and temperature values are read and the data is transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
  *
@@ -53,9 +50,9 @@ int main(void)
   uint8_t  myMessage[ TX_BUFF_SIZE ];
 
 
-  //I2C_parameters_t      mySCD30_I2C_parameters;
-  //SCD30_status_t aux;
-  //SCD30_data_t   mySCD30_Data;
+  I2C_parameters_t  mySCD30_I2C_parameters;
+  SCD30_status_t    aux;
+  SCD30_data_t      mySCD30_Data;
 
 
 
@@ -66,28 +63,37 @@ int main(void)
 
   
 
-  ///* I2C definition   */
-  //mySCD30_I2C_parameters.TWIinstance =    NRF_TWI0;
-  //mySCD30_I2C_parameters.SDA         =    TWI0_SDA;
-  //mySCD30_I2C_parameters.SCL         =    TWI0_SCL;
-  //mySCD30_I2C_parameters.ADDR        =    SCD30_ADDRESS;
-  //mySCD30_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K100;
-  //mySCD30_I2C_parameters.SDAport     =    NRF_P0;
-  //mySCD30_I2C_parameters.SCLport     =    NRF_P0;
+  /* I2C definition   */
+  mySCD30_I2C_parameters.TWIinstance =    NRF_TWI0;
+  mySCD30_I2C_parameters.SDA         =    TWI0_SDA;
+  mySCD30_I2C_parameters.SCL         =    TWI0_SCL;
+  mySCD30_I2C_parameters.ADDR        =    SCD30_ADDRESS;
+  mySCD30_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K100;
+  mySCD30_I2C_parameters.SDAport     =    NRF_P0;
+  mySCD30_I2C_parameters.SCLport     =    NRF_P0;
 
-  ///* Configure I2C peripheral  */
-  //aux  =   SCD30_Init  ( mySCD30_I2C_parameters );
+  /* Configure I2C peripheral  */
+  aux  =   SCD30_Init  ( mySCD30_I2C_parameters );
 
-  ///* It triggers the Revision command and gets the result  */
-  //aux  =   SCD30_TriggersRevision ( mySCD30_I2C_parameters );
-  //nrf_delay_ms (100);
-  //aux  =   SCD30_GetRevision ( mySCD30_I2C_parameters, &mySCD30_Data.device );
+  /* It performs a software reset  */
+  aux  =   SCD30_SoftReset ( mySCD30_I2C_parameters );
+  nrf_delay_ms (2000);
 
-  ///* It triggers the R0 ( calibration ) command and gets the result  */
-  //aux  =   SCD30_TriggersR0 ( mySCD30_I2C_parameters );
-  //nrf_delay_ms (100);
-  //aux  =   SCD30_GetR0 ( mySCD30_I2C_parameters, &mySCD30_Data.r0_raw, &mySCD30_Data.r0 );
-  
+  /* It gets the firmware version   */
+  aux  =   SCD30_GetFirmwareVersion ( mySCD30_I2C_parameters, &mySCD30_Data.firmware );
+
+  /* It sets two mesurement interval   */
+  mySCD30_Data.measurement_interval  =   2U;
+  aux  =   SCD30_SetMeasurementInterval ( mySCD30_I2C_parameters, mySCD30_Data.measurement_interval );
+
+  /* It configures the continuous automatic self-calibration   */ 
+  mySCD30_Data.asc  =   CONTINUOUS_AUTOMATIC_SELF_CALIBRATION_ASC_ACTIVATE;
+  aux  =   SCD30_SetContinuousASC ( mySCD30_I2C_parameters, mySCD30_Data.asc );
+  nrf_delay_ms (2000);
+
+  /* It sets the trigger without pressure compensation   */
+  mySCD30_Data.pressure_compensation  =   0U;
+  aux  =   SCD30_TriggerContinuousMeasurement ( mySCD30_I2C_parameters, mySCD30_Data.pressure_compensation );
 
 
   myState  =   0;                             // Reset the variable
@@ -109,24 +115,27 @@ int main(void)
     {
       NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );   // Turn all the LEDs on
 
+      aux  =   SCD30_TriggerContinuousMeasurement ( mySCD30_I2C_parameters, mySCD30_Data.pressure_compensation );
 
-      ///* Trigger to get a new data value  */
-      //aux  =   SCD30_TriggersStatus ( mySCD30_I2C_parameters );
-      //nrf_delay_ms (100);
+      /* Wait for a new data value  */
+      do{
+        aux  =   SCD30_GetDataReadyStatus ( mySCD30_I2C_parameters, &mySCD30_Data.status );
+        nrf_delay_ms (100);
+      }while( mySCD30_Data.status == GET_READY_STATUS_BIT_DATA_NO_READY );
 
-      ///* Get the values: tVOC, CO2_equ and Resistor  */
-      //aux  =   SCD30_GetUpdateValues ( mySCD30_I2C_parameters, &mySCD30_Data.status, &mySCD30_Data.values );
+      /* Get all the values  */
+      aux  =   SCD30_ReadMeasurement ( mySCD30_I2C_parameters, &mySCD30_Data.data );
 
 
-      ///* Transmit result through the UART  */
-      //sprintf ( (char*)myMessage, "tVOC: %d [ppb], CO2_equ: %d [ppm], R: %d [kOhms]\r\n", (uint32_t)mySCD30_Data.values.tvoc, (uint32_t)mySCD30_Data.values.co2_equ, (uint32_t)mySCD30_Data.values.resistor );
+      /* Transmit result through the UART  */
+      sprintf ( (char*)myMessage, "CO2: %d ppm, T: %d C, RH: %d %%\r\n", (uint32_t)mySCD30_Data.data.processed.co2, (uint32_t)mySCD30_Data.data.processed.temperature, (uint32_t)mySCD30_Data.data.processed.humidity );
 
-      //NRF_UART0->TASKS_STOPRX  =   1UL;
-      //NRF_UART0->TASKS_STOPTX  =   1UL;
-      //myPtr                    =   &myMessage[0];
+      NRF_UART0->TASKS_STOPRX  =   1UL;
+      NRF_UART0->TASKS_STOPTX  =   1UL;
+      myPtr                    =   &myMessage[0];
 
-      //NRF_UART0->TASKS_STARTTX =   1UL;
-      //NRF_UART0->TXD           =   *myPtr;
+      NRF_UART0->TASKS_STARTTX =   1UL;
+      NRF_UART0->TXD           =   *myPtr;
 
 
       /* Reset the variables   */
