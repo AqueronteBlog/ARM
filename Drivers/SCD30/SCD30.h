@@ -27,7 +27,7 @@ extern "C" {
 
 
 /**
-  * @brief   DEFAULT ADDRESSES
+  * @brief   DEFAULT ADDRESS
   */
 typedef enum
 {
@@ -84,6 +84,18 @@ typedef enum
     CONTINUOUS_AUTOMATIC_SELF_CALIBRATION_ASC_DEACTIVATE  =   ( 0U << 0U ),   /*!<  Deactivate continuous ASC                                       */
     CONTINUOUS_AUTOMATIC_SELF_CALIBRATION_ASC_ACTIVATE    =   ( 1U << 0U )    /*!<  Activate continuous ASC                                         */
 } SCD30_continuous_auto_selfcal_t;
+
+
+/**
+  * @brief   CRC-8.
+  *           NOTE: Polynomial:     0x31 (x^8 + x^5 + x^4 + 1)
+  *                 Initialization: 0xFF
+  *                 Final XOR:      0x00.
+  */
+#define SCD30_CRC8_POLYNOMIAL       0x31                                      /*!<  SCD30 CRC-8: Polynomial                                         */
+#define SCD30_CRC8_INITIALIZATION   0xFF                                      /*!<  SCD30 CRC-8: Initialization                                     */
+#define SCD30_CRC8_FINAL_XOR        0x00                                      /*!<  SCD30 CRC-8: Final XOR                                          */
+
 
 
 
@@ -188,8 +200,9 @@ typedef struct
   */
 typedef enum
 {
-    SCD30_SUCCESS     =       0,
-    SCD30_FAILURE     =       1
+    SCD30_SUCCESS         =       0,
+    SCD30_FAILURE         =       1,
+    SCD30_DATA_CORRUPTED  =       2
 } SCD30_status_t;
 
 
@@ -208,10 +221,6 @@ SCD30_status_t  SCD30_TriggerContinuousMeasurement  ( I2C_parameters_t myI2Cpara
 /** It stops the continuous measurement.
   */
 SCD30_status_t  SCD30_StopContinuousMeasurement     ( I2C_parameters_t myI2Cparameters                                        );
-
-/** It sets the measurement interval.
-  */
-SCD30_status_t  SCD30_SetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t measurement_interval         );
 
 /** It sets the measurement interval.
   */
@@ -272,6 +281,10 @@ SCD30_status_t  SCD30_GetFirmwareVersion            ( I2C_parameters_t myI2Cpara
 /** It performs a software reset.
   */
 SCD30_status_t  SCD30_SoftReset                     ( I2C_parameters_t myI2Cparameters                                        );
+
+/** It calculates the I2C checksum calculation (CRC-8).
+  */
+uint8_t         SCD30_CalculateI2C_CRC8             ( uint16_t seed                                                           );
 
 
 

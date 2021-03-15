@@ -76,7 +76,7 @@ SCD30_status_t  SCD30_Init ( I2C_parameters_t myI2Cparameters )
  */
 SCD30_status_t  SCD30_TriggerContinuousMeasurement ( I2C_parameters_t myI2Cparameters, uint16_t pressure_compensation )
 {
-  uint8_t       cmd[4] = { 0U };
+  uint8_t       cmd[5] = { 0U };
   i2c_status_t  aux;
 
   /* Write the register  */
@@ -84,6 +84,7 @@ SCD30_status_t  SCD30_TriggerContinuousMeasurement ( I2C_parameters_t myI2Cparam
   cmd[1]   =  (uint8_t)( SCD30_TRIGGERS_CONTINUOUS_MEASUREMENT & 0xFF );
   cmd[2]   =  (uint8_t)( pressure_compensation >> 8U );
   cmd[3]   =  (uint8_t)( pressure_compensation & 0xFF );
+  cmd[4]   =  SCD30_CalculateI2C_CRC8 ( pressure_compensation );
   aux      =  i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -159,7 +160,7 @@ SCD30_status_t  SCD30_StopContinuousMeasurement ( I2C_parameters_t myI2Cparamete
  */
 SCD30_status_t  SCD30_SetMeasurementInterval ( I2C_parameters_t myI2Cparameters, uint16_t measurement_interval )
 {
-  uint8_t       cmd[4] = { 0U };
+  uint8_t       cmd[5] = { 0U };
   i2c_status_t  aux;
 
   /* Write the register  */
@@ -167,6 +168,7 @@ SCD30_status_t  SCD30_SetMeasurementInterval ( I2C_parameters_t myI2Cparameters,
   cmd[1]   =  (uint8_t)( SCD30_STOP_CONTINUOUS_MEASUREMENT & 0xFF );
   cmd[2]   =  (uint8_t)( measurement_interval >> 8U );
   cmd[3]   =  (uint8_t)( measurement_interval & 0xFF );
+  cmd[4]   =  SCD30_CalculateI2C_CRC8 ( measurement_interval );
   aux      =  i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -202,6 +204,7 @@ SCD30_status_t  SCD30_SetMeasurementInterval ( I2C_parameters_t myI2Cparameters,
 SCD30_status_t  SCD30_GetMeasurementInterval ( I2C_parameters_t myI2Cparameters, uint16_t* measurement_interval )
 {
   uint8_t       cmd[4] = { 0U };
+  uint8_t       aux_crc;
   i2c_status_t  aux;
 
   /* Write the register  */
@@ -217,12 +220,19 @@ SCD30_status_t  SCD30_GetMeasurementInterval ( I2C_parameters_t myI2Cparameters,
   *measurement_interval <<=   8U;
   *measurement_interval  |=   cmd[1];
 
-  //[TODO]CRC has to be implemented 
-
+  /* Check the CRC   */
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( *measurement_interval );
 
   if ( aux == I2C_SUCCESS )
   {
+    if ( ( aux_crc - cmd[2] ) == 0U )
+    {
       return   SCD30_SUCCESS;
+    }
+    else
+    {
+      return   SCD30_DATA_CORRUPTED;
+    }
   }
   else
   {
@@ -252,6 +262,7 @@ SCD30_status_t  SCD30_GetMeasurementInterval ( I2C_parameters_t myI2Cparameters,
 SCD30_status_t  SCD30_GetDataReadyStatus ( I2C_parameters_t myI2Cparameters, SCD30_get_ready_status_bit_t* status )
 {
   uint8_t       cmd[3] = { 0U };
+  uint8_t       aux_crc;
   i2c_status_t  aux;
 
   /* Write the register  */
@@ -267,12 +278,19 @@ SCD30_status_t  SCD30_GetDataReadyStatus ( I2C_parameters_t myI2Cparameters, SCD
   *status <<=   8U;
   *status  |=   cmd[1];
 
-  //[TODO]CRC has to be implemented 
-
+  /* Check the CRC   */
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( *status );
 
   if ( aux == I2C_SUCCESS )
   {
+    if ( ( aux_crc - cmd[2] ) == 0U )
+    {
       return   SCD30_SUCCESS;
+    }
+    else
+    {
+      return   SCD30_DATA_CORRUPTED;
+    }
   }
   else
   {
@@ -302,6 +320,9 @@ SCD30_status_t  SCD30_GetDataReadyStatus ( I2C_parameters_t myI2Cparameters, SCD
 SCD30_status_t  SCD30_ReadRawMeasurement ( I2C_parameters_t myI2Cparameters, SCD30_raw_output_data_t* raw_data )
 {
   uint8_t       cmd[18] = { 0U };
+  uint16_t      aux_seed;
+  uint8_t       aux_crc;
+  uint8_t       aux_return = 0U;
   i2c_status_t  aux;
 
   /* Write the register  */
@@ -317,32 +338,103 @@ SCD30_status_t  SCD30_ReadRawMeasurement ( I2C_parameters_t myI2Cparameters, SCD
   raw_data->co2_mlsb                  =   cmd[1];
   raw_data->co2_mmsb_mlsb_crc         =   cmd[2];
 
+  /* Check the CRC   */
+  aux_seed   =  raw_data->co2_mmsb;
+  aux_seed <<=  8U;
+  aux_seed  |=  raw_data->co2_mlsb;
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( aux_seed );
+
+  if ( ( aux_crc - raw_data->co2_mmsb_mlsb_crc ) != 0U )
+  {
+    aux_return++;
+  }
+
   raw_data->co2_lmsb                  =   cmd[3];
   raw_data->co2_llsb                  =   cmd[4];
   raw_data->co2_lmsb_llsb_crc         =   cmd[5];
+
+  /* Check the CRC   */
+  aux_seed   =  raw_data->co2_lmsb;
+  aux_seed <<=  8U;
+  aux_seed  |=  raw_data->co2_llsb;
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( aux_seed );
+
+  if ( ( aux_crc - raw_data->co2_lmsb_llsb_crc ) != 0U )
+  {
+    aux_return++;
+  }
 
   raw_data->temperature_mmsb          =   cmd[6];
   raw_data->temperature_mlsb          =   cmd[7];
   raw_data->temperature_mmsb_mlsb_crc =   cmd[8];
 
+  /* Check the CRC   */
+  aux_seed   =  raw_data->temperature_mmsb;
+  aux_seed <<=  8U;
+  aux_seed  |=  raw_data->temperature_mlsb;
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( aux_seed );
+
+  if ( ( aux_crc - raw_data->temperature_mmsb_mlsb_crc ) != 0U )
+  {
+    aux_return++;
+  }
+
   raw_data->temperature_lmsb          =   cmd[9];
   raw_data->temperature_llsb          =   cmd[10];
   raw_data->temperature_lmsb_llsb_crc =   cmd[11];
+
+  /* Check the CRC   */
+  aux_seed   =  raw_data->temperature_lmsb;
+  aux_seed <<=  8U;
+  aux_seed  |=  raw_data->temperature_llsb;
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( aux_seed );
+
+  if ( ( aux_crc - raw_data->temperature_lmsb_llsb_crc ) != 0U )
+  {
+    aux_return++;
+  }
 
   raw_data->humidity_mmsb             =   cmd[12];
   raw_data->humidity_mlsb             =   cmd[13];
   raw_data->humidity_mmsb_mlsb_crc    =   cmd[14];
 
+  /* Check the CRC   */
+  aux_seed   =  raw_data->humidity_mmsb;
+  aux_seed <<=  8U;
+  aux_seed  |=  raw_data->humidity_mlsb;
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( aux_seed );
+
+  if ( ( aux_crc - raw_data->humidity_mmsb_mlsb_crc ) != 0U )
+  {
+    aux_return++;
+  }
+
   raw_data->humidity_lmsb             =   cmd[15];
   raw_data->humidity_llsb             =   cmd[16];
   raw_data->humidity_lmsb_llsb_crc    =   cmd[17];
 
-  //[TODO]CRC has to be implemented 
+  /* Check the CRC   */
+  aux_seed   =  raw_data->humidity_lmsb;
+  aux_seed <<=  8U;
+  aux_seed  |=  raw_data->humidity_llsb;
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( aux_seed );
 
+  if ( ( aux_crc - raw_data->humidity_lmsb_llsb_crc ) != 0U )
+  {
+    aux_return++;
+  }
 
+  
   if ( aux == I2C_SUCCESS )
   {
+    if ( aux_return == 0U )
+    {
       return   SCD30_SUCCESS;
+    }
+    else
+    {
+      return   SCD30_DATA_CORRUPTED;
+    }
   }
   else
   {
@@ -435,7 +527,7 @@ SCD30_status_t  SCD30_ReadMeasurement ( I2C_parameters_t myI2Cparameters, SCD30_
  */
 SCD30_status_t  SCD30_SetContinuousASC ( I2C_parameters_t myI2Cparameters, SCD30_continuous_auto_selfcal_t asc )
 {
-  uint8_t       cmd[4] = { 0U };
+  uint8_t       cmd[5] = { 0U };
   i2c_status_t  aux;
 
   /* Write the register  */
@@ -443,6 +535,7 @@ SCD30_status_t  SCD30_SetContinuousASC ( I2C_parameters_t myI2Cparameters, SCD30
   cmd[1]   =  (uint8_t)( SCD30_CONTINUOUS_AUTOMATIC_SELF_CALIBRATION & 0xFF );
   cmd[2]   =  (uint8_t)( asc >> 8U );
   cmd[3]   =  (uint8_t)( asc & 0xFF );
+  cmd[4]   =  SCD30_CalculateI2C_CRC8 ( asc );
   aux      =  i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -478,6 +571,7 @@ SCD30_status_t  SCD30_SetContinuousASC ( I2C_parameters_t myI2Cparameters, SCD30
 SCD30_status_t  SCD30_GetContinuousASC ( I2C_parameters_t myI2Cparameters, SCD30_continuous_auto_selfcal_t* asc )
 {
   uint8_t       cmd[4] = { 0U };
+  uint8_t       aux_crc;
   i2c_status_t  aux;
 
   /* Write the register  */
@@ -493,12 +587,19 @@ SCD30_status_t  SCD30_GetContinuousASC ( I2C_parameters_t myI2Cparameters, SCD30
   *asc <<=   8U;
   *asc  |=   cmd[1];
 
-  //[TODO]CRC has to be implemented 
-
+  /* Check the CRC   */
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( *asc );
 
   if ( aux == I2C_SUCCESS )
   {
+    if ( ( aux_crc - cmd[2] ) == 0U )
+    {
       return   SCD30_SUCCESS;
+    }
+    else
+    {
+      return   SCD30_DATA_CORRUPTED;
+    }
   }
   else
   {
@@ -536,7 +637,7 @@ SCD30_status_t  SCD30_SetForcedRecalibrationValue ( I2C_parameters_t myI2Cparame
   cmd[1]   =  (uint8_t)( SCD30_SET_FORCED_RECALIBRATION & 0xFF );
   cmd[2]   =  (uint8_t)( frc >> 8U );
   cmd[3]   =  (uint8_t)( frc & 0xFF );
-  //cmd[4]   =  crc;
+  cmd[4]   =  SCD30_CalculateI2C_CRC8 ( frc );
   aux      =  i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -572,6 +673,7 @@ SCD30_status_t  SCD30_SetForcedRecalibrationValue ( I2C_parameters_t myI2Cparame
 SCD30_status_t  SCD30_GetForcedRecalibrationValue ( I2C_parameters_t myI2Cparameters, uint16_t* frc )
 {
   uint8_t       cmd[3] = { 0U };
+  uint8_t       aux_crc;
   i2c_status_t  aux;
 
   /* Write the register  */
@@ -587,12 +689,19 @@ SCD30_status_t  SCD30_GetForcedRecalibrationValue ( I2C_parameters_t myI2Cparame
   *frc <<=   8U;
   *frc  |=   cmd[1];
 
-  //[TODO]CRC has to be implemented 
-
+  /* Check the CRC   */
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( *frc );
 
   if ( aux == I2C_SUCCESS )
   {
+    if ( ( aux_crc - cmd[2] ) == 0U )
+    {
       return   SCD30_SUCCESS;
+    }
+    else
+    {
+      return   SCD30_DATA_CORRUPTED;
+    }
   }
   else
   {
@@ -630,7 +739,7 @@ SCD30_status_t  SCD30_SetTemperatureOffsetValue ( I2C_parameters_t myI2Cparamete
   cmd[1]   =  (uint8_t)( SCD30_SET_TEMPERATURE_OFFSET & 0xFF );
   cmd[2]   =  (uint8_t)( temp_offset >> 8U );
   cmd[3]   =  (uint8_t)( temp_offset & 0xFF );
-  //cmd[4]   =  crc;
+  cmd[4]   =  SCD30_CalculateI2C_CRC8 ( temp_offset );
   aux      =  i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -666,6 +775,7 @@ SCD30_status_t  SCD30_SetTemperatureOffsetValue ( I2C_parameters_t myI2Cparamete
 SCD30_status_t  SCD30_GetTemperatureOffsetValue ( I2C_parameters_t myI2Cparameters, uint16_t* temp_offset )
 {
   uint8_t       cmd[3] = { 0U };
+  uint8_t       aux_crc;
   i2c_status_t  aux;
 
   /* Write the register  */
@@ -681,12 +791,19 @@ SCD30_status_t  SCD30_GetTemperatureOffsetValue ( I2C_parameters_t myI2Cparamete
   *temp_offset <<=   8U;
   *temp_offset  |=   cmd[1];
 
-  //[TODO]CRC has to be implemented 
-
+  /* Check the CRC   */
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( *temp_offset );
 
   if ( aux == I2C_SUCCESS )
   {
+    if ( ( aux_crc - cmd[2] ) == 0U )
+    {
       return   SCD30_SUCCESS;
+    }
+    else
+    {
+      return   SCD30_DATA_CORRUPTED;
+    }
   }
   else
   {
@@ -724,7 +841,7 @@ SCD30_status_t  SCD30_SetAltitudeCompensationValue ( I2C_parameters_t myI2Cparam
   cmd[1]   =  (uint8_t)( SCD30_SET_ALTITUDE_COMPENSATION & 0xFF );
   cmd[2]   =  (uint8_t)( alt_comp >> 8U );
   cmd[3]   =  (uint8_t)( alt_comp & 0xFF );
-  //cmd[4]   =  crc;
+  cmd[4]   =  SCD30_CalculateI2C_CRC8 ( alt_comp );
   aux      =  i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
@@ -760,6 +877,7 @@ SCD30_status_t  SCD30_SetAltitudeCompensationValue ( I2C_parameters_t myI2Cparam
 SCD30_status_t  SCD30_GetAltitudeCompensationValue ( I2C_parameters_t myI2Cparameters, uint16_t* alt_comp )
 {
   uint8_t       cmd[3] = { 0U };
+  uint8_t       aux_crc;
   i2c_status_t  aux;
 
   /* Write the register  */
@@ -775,12 +893,19 @@ SCD30_status_t  SCD30_GetAltitudeCompensationValue ( I2C_parameters_t myI2Cparam
   *alt_comp <<=   8U;
   *alt_comp  |=   cmd[1];
 
-  //[TODO]CRC has to be implemented 
-
+  /* Check the CRC   */
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( *alt_comp );
 
   if ( aux == I2C_SUCCESS )
   {
+    if ( ( aux_crc - cmd[2] ) == 0U )
+    {
       return   SCD30_SUCCESS;
+    }
+    else
+    {
+      return   SCD30_DATA_CORRUPTED;
+    }
   }
   else
   {
@@ -810,6 +935,8 @@ SCD30_status_t  SCD30_GetAltitudeCompensationValue ( I2C_parameters_t myI2Cparam
 SCD30_status_t  SCD30_GetFirmwareVersion ( I2C_parameters_t myI2Cparameters, SCD30_fw_version_t* fw )
 {
   uint8_t       cmd[3] = { 0U };
+  uint16_t      aux_seed;
+  uint8_t       aux_crc;
   i2c_status_t  aux;
 
   /* Write the register  */
@@ -823,13 +950,23 @@ SCD30_status_t  SCD30_GetFirmwareVersion ( I2C_parameters_t myI2Cparameters, SCD
   /* Parse the data  */
   fw->version_major  =   cmd[0];
   fw->version_minor  =   cmd[1];
-
-  //[TODO]CRC has to be implemented 
-
+  
+  /* Check the CRC   */
+  aux_seed   =  fw->version_major;
+  aux_seed <<=  8U;
+  aux_seed  |=  fw->version_minor;
+  aux_crc    =  SCD30_CalculateI2C_CRC8 ( aux_seed );
 
   if ( aux == I2C_SUCCESS )
   {
+    if ( ( aux_crc - cmd[2] ) == 0U )
+    {
       return   SCD30_SUCCESS;
+    }
+    else
+    {
+      return   SCD30_DATA_CORRUPTED;
+    }
   }
   else
   {
@@ -876,6 +1013,61 @@ SCD30_status_t  SCD30_SoftReset ( I2C_parameters_t myI2Cparameters )
   {
       return   SCD30_FAILURE;
   }
+}
+
+
+
+/**
+ * @brief       SCD30_CalculateI2C_CRC8    ( uint16_t )
+ * @details     It calculates the I2C checksum calculation (CRC-8).
+ *
+ * @param[in]    seed: Data to calculate the CRC-8.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      Status of SCD30_CalculateI2C_CRC8.
+ *
+ * @author      Manuel Caballero
+ * @date        27/January/2021
+ * @version     27/January/2021    The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+uint8_t  SCD30_CalculateI2C_CRC8 ( uint16_t seed )
+{
+  uint8_t bit;                  
+  uint8_t crc = SCD30_CRC8_INITIALIZATION; 
+
+  // calculates 8-Bit checksum with given polynomial
+ 
+  crc ^= ( seed >> 8U ) & 255U;
+  for(bit = 8U; bit > 0U; --bit)
+  {
+    if( crc & 0x80U )
+    {
+      crc = ( crc << 1U ) ^ SCD30_CRC8_POLYNOMIAL;
+    }
+    else
+    {
+      crc = ( crc << 1U );
+    }
+  }
+ 
+  crc ^= seed & 255U;
+  for( bit = 8U; bit > 0U; --bit )
+  {
+    if( crc & 0x80 )
+    {
+      crc = ( crc << 1U ) ^ SCD30_CRC8_POLYNOMIAL;
+    }
+    else
+    {
+      crc = ( crc << 1U );
+    }
+  }
+    
+  return crc;
 }
 
 
