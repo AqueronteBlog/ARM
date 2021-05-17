@@ -1,6 +1,6 @@
 <!DOCTYPE CrossStudio_Project_File>
-<solution Name="SCD30" target="8" version="2">
-  <project Name="SCD30">
+<solution Name="AMBIMATE_MS4" target="8" version="2">
+  <project Name="AMBIMATE_MS4">
     <configuration
       Name="Common"
       arm_architecture="v7EM"
@@ -128,8 +128,8 @@
           <file file_name="../../../../../Basics/I2C/i2c.c" />
         </folder>
       </folder>
-      <folder Name="SCD30">
-        <file file_name="../../../../../../../../Drivers/SCD30/SCD30.c" />
+      <folder Name="AMBIMATE_MS4">
+        <file file_name="../../../../../../../../Drivers/AMBIMATE_MS4/AMBIMATE_MS4.c" />
       </folder>
     </folder>
   </project>
