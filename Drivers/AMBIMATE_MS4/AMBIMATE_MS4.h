@@ -215,89 +215,42 @@ typedef enum
 
 
 
+/**
+  * @brief   OPTIONAL SENSORS BYTE.
+  *           NOTE: N/A.
+  */
+typedef enum
+{
+    OPTIONAL_SENSORS_NONE                               =   0,            /*!<  No optional sensors on board                                      */
+    OPTIONAL_SENSORS_CO2                                =   1,            /*!<  Optional sensors: C02 only                                        */
+    OPTIONAL_SENSORS_MIC                                =   3,            /*!<  Optional sensors: MIC only                                        */
+    OPTIONAL_SENSORS_CO2_AND_MIC                        =   4             /*!<  Optional sensors: CO2 and MIC                                     */
+} AMBIMATE_MS4_op_sensors_byte_t;
+
+
+
+
 
 
 #ifndef AMBIMATE_MS4_VECTOR_STRUCT_H
 #define AMBIMATE_MS4_VECTOR_STRUCT_H
-/* Firmware version  */
+/* OTHER REGISTERS  */
 typedef struct
 {
-  uint8_t  version_major;  
-  uint8_t  version_minor;  
-} AMBIMATE_MS4_fw_version_t;
-
-
-/* Raw measurement data  */
-typedef struct
-{
-  uint8_t  co2_mmsb;  
-  uint8_t  co2_mlsb;  
-  uint8_t  co2_mmsb_mlsb_crc;
-
-  uint8_t  co2_lmsb;  
-  uint8_t  co2_llsb;  
-  uint8_t  co2_lmsb_llsb_crc;
-
-  uint8_t  temperature_mmsb;  
-  uint8_t  temperature_mlsb;  
-  uint8_t  temperature_mmsb_mlsb_crc;
-
-  uint8_t  temperature_lmsb;  
-  uint8_t  temperature_llsb;  
-  uint8_t  temperature_lmsb_llsb_crc;
-
-  uint8_t  humidity_mmsb;  
-  uint8_t  humidity_mlsb;  
-  uint8_t  humidity_mmsb_mlsb_crc;
-
-  uint8_t  humidity_lmsb;  
-  uint8_t  humidity_llsb;  
-  uint8_t  humidity_lmsb_llsb_crc;
-} AMBIMATE_MS4_raw_output_data_t;
-
-
-/* Measurement processed data  */
-typedef struct
-{
-  float  co2;  
-  float  temperature; 
-  float  humidity;  
-} AMBIMATE_MS4_processed_data_t;
-
-
-/* Measurement data: Raw and processed data  */
-typedef struct
-{
-  AMBIMATE_MS4_raw_output_data_t raw;  
-  AMBIMATE_MS4_processed_data_t  processed;  
-} AMBIMATE_MS4_output_data_t;
-
+  uint8_t                         firmware_version;                 /*< Firmware version                                                */
+  uint8_t                         firmware_sub_version;             /*< Firmware sub-version                                            */
+  AMBIMATE_MS4_op_sensors_byte_t  optional_sensors;                 /*< Optional sensors                                                */
+} AMBIMATE_MS4_other_reg_param_t;
 
 
 
 /* USER: User's variables  */
 typedef struct
 {
-  /* Output data   */
-  AMBIMATE_MS4_output_data_t             data;                   /*< Data (processed and raw): CO2, Temperature and Humidity                   */
+  
+  
 
-  /* Pressure compensation   */
-  uint16_t                        pressure_compensation;  /*< 0 (desactivates pressure compensation) or [700 - 1400]. Pressure in mBar  */
-  
-  /* Set measurement interval  */
-  uint16_t                        measurement_interval;   /*< [2 - 1800]. Interval in seconds                                           */
-  
-  /* Forced recalibration  */
-  uint16_t                        frc;                    /*< Value of C02 concentration in ppm                                         */
-  
-  /* Set temperature offset  */
-  uint16_t                        temperature_offset;     /*< Value of Temperature offset. [°C x 100]. One tick corresponds to 0.01 C   */
-  
-  /* Altitude compensation  */
-  uint16_t                        altitude_compensation;  /*< Altitude compensation value. Height over sea level in [m] above 0         */
-  
-  /* Firmware version  */
-  AMBIMATE_MS4_fw_version_t              firmware;               /*< Firmware version                                                          */
+  AMBIMATE_MS4_other_reg_param_t  info;                             /*< Other registers: Info regarding the device                     */
 } AMBIMATE_MS4_data_t;
 #endif
 
@@ -322,15 +275,27 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_Init                          ( I2C_parameters_t myI2Cparameters                                        );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_Init                    ( I2C_parameters_t myI2Cparameters                                        );
 
-/** It triggers continuous measurement with or without ambient pressure compensation.
+/** It initiates a new measurements of the chosen sensors.
   */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_TriggerContinuousMeasurement  ( I2C_parameters_t myI2Cparameters, uint16_t pressure_compensation        );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_ScanStartByte           ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_writeable_reg_gas_t gas, AMBIMATE_MS4_writeable_reg_batt_t batt, AMBIMATE_MS4_writeable_reg_aud_t aud, AMBIMATE_MS4_writeable_reg_light_t light, AMBIMATE_MS4_writeable_reg_hum_t hum, AMBIMATE_MS4_writeable_reg_temp_t temp, AMBIMATE_MS4_writeable_reg_status_t status );
 
-/** It stops the continuous measurement.
+/** It gets the firmware version.
   */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_StopContinuousMeasurement     ( I2C_parameters_t myI2Cparameters                                        );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetFirmwareVersion      ( I2C_parameters_t myI2Cparameters, uint8_t* fw_version );
+
+/** It gets the firmware sub-version.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetFirmwareSubVersion   ( I2C_parameters_t myI2Cparameters, uint8_t* fw_subversion );
+
+/** It gets the optional sensors on board.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetOptionalSensorsByte  ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_op_sensors_byte_t* op_sensors );
+
+/** It performs a processor reset.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_ProcessorReset          ( I2C_parameters_t myI2Cparameters );
 
 
 #ifdef __cplusplus
