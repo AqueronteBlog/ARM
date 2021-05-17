@@ -1,5 +1,5 @@
 /**
- * @brief       SCD30.h
+ * @brief       AMBIMATE_MS4.h
  * @details     CO2, humidity and temperature sensor.
  *              Header file.
  *
@@ -14,8 +14,8 @@
  * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ).
  */
 
-#ifndef SCD30_H_
-#define SCD30_H_
+#ifndef AMBIMATE_MS4_H_
+#define AMBIMATE_MS4_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,8 +31,8 @@ extern "C" {
   */
 typedef enum
 {
-  SCD30_ADDRESS     =   0x61               /*!<   SCD30 ADDR              */
-} SCD30_address_t;
+  AMBIMATE_MS4_ADDRESS     =   0x61               /*!<   AMBIMATE_MS4 ADDR              */
+} AMBIMATE_MS4_address_t;
 
 
 
@@ -41,18 +41,18 @@ typedef enum
   */
 typedef enum
 {
-  SCD30_TRIGGERS_CONTINUOUS_MEASUREMENT       =   0x0010,   /*!<  Triggers continuous measurement. Ambient pressure is optional   */
-  SCD30_STOP_CONTINUOUS_MEASUREMENT           =   0x0104,   /*!<  Stop continuous measurement                                     */
-  SCD30_SET_MEASUREMENT_INTERVAL              =   0x4600,   /*!<  Set measurement interval for continuous measurement mode        */
-  SCD30_GET_DATA_READY_STATUS                 =   0x0202,   /*!<  Data ready status                                               */
-  SCD30_READ_MEASUREMENT                      =   0x0300,   /*!<  Reads a single measurement of C02 concentration                 */
-  SCD30_CONTINUOUS_AUTOMATIC_SELF_CALIBRATION =   0x5306,   /*!<  Continuous automatic self-calibration can be (de-)activated     */
-  SCD30_SET_FORCED_RECALIBRATION              =   0x5204,   /*!<  Forced recalibration (FRC)                                      */
-  SCD30_SET_TEMPERATURE_OFFSET                =   0x5403,   /*!<  Temperature offset                                              */
-  SCD30_SET_ALTITUDE_COMPENSATION             =   0x5102,   /*!<  Altitude compensation                                           */
-  SCD30_FIRMWARE_VERSION                      =   0xD100,   /*!<  Firmware version                                                */
-  SCD30_SOFTRESET                             =   0xD304    /*!<  Software reset: Restart the sensor                              */
-} SCD30_command_registers_t;
+  AMBIMATE_MS4_TRIGGERS_CONTINUOUS_MEASUREMENT       =   0x0010,   /*!<  Triggers continuous measurement. Ambient pressure is optional   */
+  AMBIMATE_MS4_STOP_CONTINUOUS_MEASUREMENT           =   0x0104,   /*!<  Stop continuous measurement                                     */
+  AMBIMATE_MS4_SET_MEASUREMENT_INTERVAL              =   0x4600,   /*!<  Set measurement interval for continuous measurement mode        */
+  AMBIMATE_MS4_GET_DATA_READY_STATUS                 =   0x0202,   /*!<  Data ready status                                               */
+  AMBIMATE_MS4_READ_MEASUREMENT                      =   0x0300,   /*!<  Reads a single measurement of C02 concentration                 */
+  AMBIMATE_MS4_CONTINUOUS_AUTOMATIC_SELF_CALIBRATION =   0x5306,   /*!<  Continuous automatic self-calibration can be (de-)activated     */
+  AMBIMATE_MS4_SET_FORCED_RECALIBRATION              =   0x5204,   /*!<  Forced recalibration (FRC)                                      */
+  AMBIMATE_MS4_SET_TEMPERATURE_OFFSET                =   0x5403,   /*!<  Temperature offset                                              */
+  AMBIMATE_MS4_SET_ALTITUDE_COMPENSATION             =   0x5102,   /*!<  Altitude compensation                                           */
+  AMBIMATE_MS4_FIRMWARE_VERSION                      =   0xD100,   /*!<  Firmware version                                                */
+  AMBIMATE_MS4_SOFTRESET                             =   0xD304    /*!<  Software reset: Restart the sensor                              */
+} AMBIMATE_MS4_command_registers_t;
 
 
 
@@ -68,7 +68,7 @@ typedef enum
     GET_READY_STATUS_BIT_MASK           =   ( 1U << 0U ),   /*!<  BIT mask                                                        */
     GET_READY_STATUS_BIT_DATA_NO_READY  =   ( 0U << 0U ),   /*!<  Measurement is not ready to be read from the sensor             */
     GET_READY_STATUS_BIT_DATA_READY     =   ( 1U << 0U )    /*!<  Measurement is ready to be read from the sensor                 */
-} SCD30_get_ready_status_bit_t;
+} AMBIMATE_MS4_get_ready_status_bit_t;
 
 
 /**
@@ -83,7 +83,7 @@ typedef enum
     CONTINUOUS_AUTOMATIC_SELF_CALIBRATION_ASC_MASK        =   ( 1U << 0U ),   /*!<  ASC mask                                                        */
     CONTINUOUS_AUTOMATIC_SELF_CALIBRATION_ASC_DEACTIVATE  =   ( 0U << 0U ),   /*!<  Deactivate continuous ASC                                       */
     CONTINUOUS_AUTOMATIC_SELF_CALIBRATION_ASC_ACTIVATE    =   ( 1U << 0U )    /*!<  Activate continuous ASC                                         */
-} SCD30_continuous_auto_selfcal_t;
+} AMBIMATE_MS4_continuous_auto_selfcal_t;
 
 
 /**
@@ -92,23 +92,23 @@ typedef enum
   *                 Initialization: 0xFF
   *                 Final XOR:      0x00.
   */
-#define SCD30_CRC8_POLYNOMIAL       0x31                                      /*!<  SCD30 CRC-8: Polynomial                                         */
-#define SCD30_CRC8_INITIALIZATION   0xFF                                      /*!<  SCD30 CRC-8: Initialization                                     */
-#define SCD30_CRC8_FINAL_XOR        0x00                                      /*!<  SCD30 CRC-8: Final XOR                                          */
+#define AMBIMATE_MS4_CRC8_POLYNOMIAL       0x31                                      /*!<  AMBIMATE_MS4 CRC-8: Polynomial                                         */
+#define AMBIMATE_MS4_CRC8_INITIALIZATION   0xFF                                      /*!<  AMBIMATE_MS4 CRC-8: Initialization                                     */
+#define AMBIMATE_MS4_CRC8_FINAL_XOR        0x00                                      /*!<  AMBIMATE_MS4 CRC-8: Final XOR                                          */
 
 
 
 
 
 
-#ifndef SCD30_VECTOR_STRUCT_H
-#define SCD30_VECTOR_STRUCT_H
+#ifndef AMBIMATE_MS4_VECTOR_STRUCT_H
+#define AMBIMATE_MS4_VECTOR_STRUCT_H
 /* Firmware version  */
 typedef struct
 {
   uint8_t  version_major;  
   uint8_t  version_minor;  
-} SCD30_fw_version_t;
+} AMBIMATE_MS4_fw_version_t;
 
 
 /* Raw measurement data  */
@@ -137,7 +137,7 @@ typedef struct
   uint8_t  humidity_lmsb;  
   uint8_t  humidity_llsb;  
   uint8_t  humidity_lmsb_llsb_crc;
-} SCD30_raw_output_data_t;
+} AMBIMATE_MS4_raw_output_data_t;
 
 
 /* Measurement processed data  */
@@ -146,15 +146,15 @@ typedef struct
   float  co2;  
   float  temperature; 
   float  humidity;  
-} SCD30_processed_data_t;
+} AMBIMATE_MS4_processed_data_t;
 
 
 /* Measurement data: Raw and processed data  */
 typedef struct
 {
-  SCD30_raw_output_data_t raw;  
-  SCD30_processed_data_t  processed;  
-} SCD30_output_data_t;
+  AMBIMATE_MS4_raw_output_data_t raw;  
+  AMBIMATE_MS4_processed_data_t  processed;  
+} AMBIMATE_MS4_output_data_t;
 
 
 
@@ -163,7 +163,7 @@ typedef struct
 typedef struct
 {
   /* Output data   */
-  SCD30_output_data_t             data;                   /*< Data (processed and raw): CO2, Temperature and Humidity                   */
+  AMBIMATE_MS4_output_data_t             data;                   /*< Data (processed and raw): CO2, Temperature and Humidity                   */
 
   /* Pressure compensation   */
   uint16_t                        pressure_compensation;  /*< 0 (desactivates pressure compensation) or [700 - 1400]. Pressure in mBar  */
@@ -172,10 +172,10 @@ typedef struct
   uint16_t                        measurement_interval;   /*< [2 - 1800]. Interval in seconds                                           */
   
   /* Status  */
-  SCD30_get_ready_status_bit_t    status;                 /*< Measurement is ready to be read from the sensor                           */
+  AMBIMATE_MS4_get_ready_status_bit_t    status;                 /*< Measurement is ready to be read from the sensor                           */
   
   /* (De-)Activate automatic self-calibration  */
-  SCD30_continuous_auto_selfcal_t asc;                    /*< Continuos automatic self-calibration                                      */
+  AMBIMATE_MS4_continuous_auto_selfcal_t asc;                    /*< Continuos automatic self-calibration                                      */
   
   /* Forced recalibration  */
   uint16_t                        frc;                    /*< Value of C02 concentration in ppm                                         */
@@ -187,8 +187,8 @@ typedef struct
   uint16_t                        altitude_compensation;  /*< Altitude compensation value. Height over sea level in [m] above 0         */
   
   /* Firmware version  */
-  SCD30_fw_version_t              firmware;               /*< Firmware version                                                          */
-} SCD30_data_t;
+  AMBIMATE_MS4_fw_version_t              firmware;               /*< Firmware version                                                          */
+} AMBIMATE_MS4_data_t;
 #endif
 
 
@@ -200,10 +200,10 @@ typedef struct
   */
 typedef enum
 {
-    SCD30_SUCCESS         =       0,
-    SCD30_FAILURE         =       1,
-    SCD30_DATA_CORRUPTED  =       2
-} SCD30_status_t;
+    AMBIMATE_MS4_SUCCESS         =       0,
+    AMBIMATE_MS4_FAILURE         =       1,
+    AMBIMATE_MS4_DATA_CORRUPTED  =       2
+} AMBIMATE_MS4_status_t;
 
 
 
@@ -212,79 +212,79 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-SCD30_status_t  SCD30_Init                          ( I2C_parameters_t myI2Cparameters                                        );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_Init                          ( I2C_parameters_t myI2Cparameters                                        );
 
 /** It triggers continuous measurement with or without ambient pressure compensation.
   */
-SCD30_status_t  SCD30_TriggerContinuousMeasurement  ( I2C_parameters_t myI2Cparameters, uint16_t pressure_compensation        );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_TriggerContinuousMeasurement  ( I2C_parameters_t myI2Cparameters, uint16_t pressure_compensation        );
 
 /** It stops the continuous measurement.
   */
-SCD30_status_t  SCD30_StopContinuousMeasurement     ( I2C_parameters_t myI2Cparameters                                        );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_StopContinuousMeasurement     ( I2C_parameters_t myI2Cparameters                                        );
 
 /** It sets the measurement interval.
   */
-SCD30_status_t  SCD30_SetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t measurement_interval         );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_SetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t measurement_interval         );
 
 /** It gets the measurement interval.
   */
-SCD30_status_t  SCD30_GetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t* measurement_interval        );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t* measurement_interval        );
 
 /** It gets the status when the data is ready to be read.
   */
-SCD30_status_t  SCD30_GetDataReadyStatus            ( I2C_parameters_t myI2Cparameters, SCD30_get_ready_status_bit_t* status  );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetDataReadyStatus            ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_get_ready_status_bit_t* status  );
 
 /** It gets all the raw data.
   */
-SCD30_status_t  SCD30_ReadRawMeasurement            ( I2C_parameters_t myI2Cparameters, SCD30_raw_output_data_t* raw_data     );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_ReadRawMeasurement            ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_raw_output_data_t* raw_data     );
 
 /** It gets all the data.
   */
-SCD30_status_t  SCD30_ReadMeasurement               ( I2C_parameters_t myI2Cparameters, SCD30_output_data_t* data             );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_ReadMeasurement               ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_output_data_t* data             );
 
 /** It enables/disables the continuous automatic self-calibration.
   */
-SCD30_status_t  SCD30_SetContinuousASC              ( I2C_parameters_t myI2Cparameters, SCD30_continuous_auto_selfcal_t asc   );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_SetContinuousASC              ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_continuous_auto_selfcal_t asc   );
 
 /** It gets the continuous automatic self-calibration bit.
   */
-SCD30_status_t  SCD30_GetContinuousASC              ( I2C_parameters_t myI2Cparameters, SCD30_continuous_auto_selfcal_t* asc  );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetContinuousASC              ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_continuous_auto_selfcal_t* asc  );
 
 /** It sets the forced recalibration value.
   */
-SCD30_status_t  SCD30_SetForcedRecalibrationValue   ( I2C_parameters_t myI2Cparameters, uint16_t frc                          );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_SetForcedRecalibrationValue   ( I2C_parameters_t myI2Cparameters, uint16_t frc                          );
 
 /** It gets the forced recalibration value.
   */
-SCD30_status_t  SCD30_GetForcedRecalibrationValue   ( I2C_parameters_t myI2Cparameters, uint16_t* frc                         );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetForcedRecalibrationValue   ( I2C_parameters_t myI2Cparameters, uint16_t* frc                         );
 
 /** It sets the temperature offset value.
   */
-SCD30_status_t  SCD30_SetTemperatureOffsetValue     ( I2C_parameters_t myI2Cparameters, uint16_t temp_offset                  );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_SetTemperatureOffsetValue     ( I2C_parameters_t myI2Cparameters, uint16_t temp_offset                  );
 
 /** It gets the temperature offset value.
   */
-SCD30_status_t  SCD30_GetTemperatureOffsetValue     ( I2C_parameters_t myI2Cparameters, uint16_t* temp_offset                 );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetTemperatureOffsetValue     ( I2C_parameters_t myI2Cparameters, uint16_t* temp_offset                 );
 
 /** It sets the altitude compensation value.
   */
-SCD30_status_t  SCD30_SetAltitudeCompensationValue  ( I2C_parameters_t myI2Cparameters, uint16_t alt_comp                     );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_SetAltitudeCompensationValue  ( I2C_parameters_t myI2Cparameters, uint16_t alt_comp                     );
 
 /** It gets the altitude compensation value.
   */
-SCD30_status_t  SCD30_GetAltitudeCompensationValue  ( I2C_parameters_t myI2Cparameters, uint16_t* alt_comp                    );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetAltitudeCompensationValue  ( I2C_parameters_t myI2Cparameters, uint16_t* alt_comp                    );
 
 /** It gets the firmware version value.
   */
-SCD30_status_t  SCD30_GetFirmwareVersion            ( I2C_parameters_t myI2Cparameters, SCD30_fw_version_t* fw                );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetFirmwareVersion            ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_fw_version_t* fw                );
 
 /** It performs a software reset.
   */
-SCD30_status_t  SCD30_SoftReset                     ( I2C_parameters_t myI2Cparameters                                        );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_SoftReset                     ( I2C_parameters_t myI2Cparameters                                        );
 
 /** It calculates the I2C checksum calculation (CRC-8).
   */
-uint8_t         SCD30_CalculateI2C_CRC8             ( uint16_t seed                                                           );
+uint8_t         AMBIMATE_MS4_CalculateI2C_CRC8             ( uint16_t seed                                                           );
 
 
 
@@ -292,4 +292,4 @@ uint8_t         SCD30_CalculateI2C_CRC8             ( uint16_t seed             
 }
 #endif
 
-#endif /* SCD30_H */
+#endif /* AMBIMATE_MS4_H */
