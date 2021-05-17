@@ -91,44 +91,126 @@ typedef enum
 
 
 /**
-  * @brief   GET DATA READY STATUS.
+  * @brief   OPTIONAL SENSORS BYTE REGISTER.
   *           NOTE: N/A.
   */
-/* BIT <0>
+/* CO2 <0>
  *    NOTE: N/A.
  */
 typedef enum
 {
-    GET_READY_STATUS_BIT_MASK           =   ( 1U << 0U ),   /*!<  BIT mask                                                        */
-    GET_READY_STATUS_BIT_DATA_NO_READY  =   ( 0U << 0U ),   /*!<  Measurement is not ready to be read from the sensor             */
-    GET_READY_STATUS_BIT_DATA_READY     =   ( 1U << 0U )    /*!<  Measurement is ready to be read from the sensor                 */
-} AMBIMATE_MS4_get_ready_status_bit_t;
+    OPTIONAL_SENSORS_BYTE_CO2_MASK                  =   ( 1U << 0U ),   /*!<  CO2 mask                                                        */
+    OPTIONAL_SENSORS_BYTE_CO2_SENSOR_NOT_INSTALLED  =   ( 0U << 0U ),   /*!<  CO2 sensor is not installed                                     */
+    OPTIONAL_SENSORS_BYTE_CO2_SENSOR_INSTALLED      =   ( 1U << 0U )    /*!<  CO2 sensor is installed                                         */
+} AMBIMATE_MS4_optional_sensors_byte_co2_t;
 
 
-/**
-  * @brief   CONTINUOUS AUTOMATIC SELF CALIBRATION.
-  *           NOTE: N/A.
-  */
-/* ASC <0>
+/* MIC <2>
  *    NOTE: N/A.
  */
 typedef enum
 {
-    CONTINUOUS_AUTOMATIC_SELF_CALIBRATION_ASC_MASK        =   ( 1U << 0U ),   /*!<  ASC mask                                                        */
-    CONTINUOUS_AUTOMATIC_SELF_CALIBRATION_ASC_DEACTIVATE  =   ( 0U << 0U ),   /*!<  Deactivate continuous ASC                                       */
-    CONTINUOUS_AUTOMATIC_SELF_CALIBRATION_ASC_ACTIVATE    =   ( 1U << 0U )    /*!<  Activate continuous ASC                                         */
-} AMBIMATE_MS4_continuous_auto_selfcal_t;
+    OPTIONAL_SENSORS_BYTE_MIC_MASK                  =   ( 1U << 2U ),   /*!<  MIC mask                                                        */
+    OPTIONAL_SENSORS_BYTE_MIC_SENSOR_NOT_INSTALLED  =   ( 0U << 2U ),   /*!<  MIC sensor is not installed                                     */
+    OPTIONAL_SENSORS_BYTE_MIC_SENSOR_INSTALLED      =   ( 1U << 2U )    /*!<  MIC sensor is installed                                         */
+} AMBIMATE_MS4_optional_sensors_byte_mic_t;
+
 
 
 /**
-  * @brief   CRC-8.
-  *           NOTE: Polynomial:     0x31 (x^8 + x^5 + x^4 + 1)
-  *                 Initialization: 0xFF
-  *                 Final XOR:      0x00.
+  * @brief   WRITEABLE REGISTERS.
+  *           NOTE: N/A.
   */
-#define AMBIMATE_MS4_CRC8_POLYNOMIAL       0x31                                      /*!<  AMBIMATE_MS4 CRC-8: Polynomial                                         */
-#define AMBIMATE_MS4_CRC8_INITIALIZATION   0xFF                                      /*!<  AMBIMATE_MS4 CRC-8: Initialization                                     */
-#define AMBIMATE_MS4_CRC8_FINAL_XOR        0x00                                      /*!<  AMBIMATE_MS4 CRC-8: Final XOR                                          */
+/* GAS <6>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    WRITEABLE_REGISTERS_GAS_MASK                        =   ( 1U << 6U ),   /*!<  GAS mask                                                        */
+    WRITEABLE_REGISTERS_GAS_MEASUREMENT_COMPLETED       =   ( 0U << 6U ),   /*!<  Measurement is completed                                        */
+    WRITEABLE_REGISTERS_GAS_INITIATE_NEW_MEASUREMENT    =   ( 1U << 6U )    /*!<  Initiates a measurement of the VOC sensor if installed          */
+} AMBIMATE_MS4_writeable_reg_gas_t;
+
+
+/* BATT <5>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    WRITEABLE_REGISTERS_BATT_MASK                       =   ( 1U << 5U ),   /*!<  BATT mask                                                       */
+    WRITEABLE_REGISTERS_BATT_MEASUREMENT_COMPLETED      =   ( 0U << 5U ),   /*!<  Measurement is completed                                        */
+    WRITEABLE_REGISTERS_BATT_INITIATE_NEW_MEASUREMENT   =   ( 1U << 5U )    /*!<  Initiates a measurement of the BATTERY voltage                  */
+} AMBIMATE_MS4_writeable_reg_batt_t;
+
+
+/* AUD <4>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    WRITEABLE_REGISTERS_AUD_MASK                        =   ( 1U << 4U ),   /*!<  AUD mask                                                        */
+    WRITEABLE_REGISTERS_AUD_MEASUREMENT_COMPLETED       =   ( 0U << 4U ),   /*!<  Measurement is completed                                        */
+    WRITEABLE_REGISTERS_AUD_INITIATE_NEW_MEASUREMENT    =   ( 1U << 4U )    /*!<  Initiates a measurement of the AUDIO sensor if installed        */
+} AMBIMATE_MS4_writeable_reg_aud_t;
+
+
+/* LIGHT <3>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    WRITEABLE_REGISTERS_LIGHT_MASK                      =   ( 1U << 3U ),   /*!<  LIGHT mask                                                      */
+    WRITEABLE_REGISTERS_LIGHT_MEASUREMENT_COMPLETED     =   ( 0U << 3U ),   /*!<  Measurement is completed                                        */
+    WRITEABLE_REGISTERS_LIGHT_INITIATE_NEW_MEASUREMENT  =   ( 1U << 3U )    /*!<  Initiates a measurement of the LIGHT sensor                     */
+} AMBIMATE_MS4_writeable_reg_light_t;
+
+
+/* HUM <2>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    WRITEABLE_REGISTERS_HUM_MASK                        =   ( 1U << 2U ),   /*!<  HUM mask                                                        */
+    WRITEABLE_REGISTERS_HUM_MEASUREMENT_COMPLETED       =   ( 0U << 2U ),   /*!<  Measurement is completed                                        */
+    WRITEABLE_REGISTERS_HUM_INITIATE_NEW_MEASUREMENT    =   ( 1U << 2U )    /*!<  Initiates a measurement of the HUMIDITY sensor                  */
+} AMBIMATE_MS4_writeable_reg_hum_t;
+
+
+/* TEMP <1>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    WRITEABLE_REGISTERS_TEMP_MASK                       =   ( 1U << 1U ),   /*!<  TEMP mask                                                       */
+    WRITEABLE_REGISTERS_TEMP_MEASUREMENT_COMPLETED      =   ( 0U << 1U ),   /*!<  Measurement is completed                                        */
+    WRITEABLE_REGISTERS_TEMP_INITIATE_NEW_MEASUREMENT   =   ( 1U << 1U )    /*!<  Initiates a measurement of the TEMPERATURE sensor               */
+} AMBIMATE_MS4_writeable_reg_temp_t;
+
+
+/* STATUS <0>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    WRITEABLE_REGISTERS_STATUS_MASK                     =   ( 1U << 0U ),   /*!<  STATUS mask                                                     */
+    WRITEABLE_REGISTERS_STATUS_MEASUREMENT_COMPLETED    =   ( 0U << 0U ),   /*!<  Measurement is completed                                        */
+    WRITEABLE_REGISTERS_STATUS_INITIATE_NEW_MEASUREMENT =   ( 1U << 0U )    /*!<  Initiates a measurement of the STATUS                           */
+} AMBIMATE_MS4_writeable_reg_status_t;
+
+
+
+
+/**
+  * @brief   RESET REGISTER.
+  *           NOTE: N/A.
+  */
+/* PROCESSOR_RESET <7:0>
+ *    NOTE: N/A.
+ */
+typedef enum
+{
+    RESET_REGISTER_PROCESSOR_RESET                      =   0xA5            /*!<  It initiates an AmbiMate processor reset                        */
+} AMBIMATE_MS4_reset_t;
 
 
 
@@ -205,12 +287,6 @@ typedef struct
   /* Set measurement interval  */
   uint16_t                        measurement_interval;   /*< [2 - 1800]. Interval in seconds                                           */
   
-  /* Status  */
-  AMBIMATE_MS4_get_ready_status_bit_t    status;                 /*< Measurement is ready to be read from the sensor                           */
-  
-  /* (De-)Activate automatic self-calibration  */
-  AMBIMATE_MS4_continuous_auto_selfcal_t asc;                    /*< Continuos automatic self-calibration                                      */
-  
   /* Forced recalibration  */
   uint16_t                        frc;                    /*< Value of C02 concentration in ppm                                         */
   
@@ -255,71 +331,6 @@ AMBIMATE_MS4_status_t  AMBIMATE_MS4_TriggerContinuousMeasurement  ( I2C_paramete
 /** It stops the continuous measurement.
   */
 AMBIMATE_MS4_status_t  AMBIMATE_MS4_StopContinuousMeasurement     ( I2C_parameters_t myI2Cparameters                                        );
-
-/** It sets the measurement interval.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_SetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t measurement_interval         );
-
-/** It gets the measurement interval.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetMeasurementInterval        ( I2C_parameters_t myI2Cparameters, uint16_t* measurement_interval        );
-
-/** It gets the status when the data is ready to be read.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetDataReadyStatus            ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_get_ready_status_bit_t* status  );
-
-/** It gets all the raw data.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_ReadRawMeasurement            ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_raw_output_data_t* raw_data     );
-
-/** It gets all the data.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_ReadMeasurement               ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_output_data_t* data             );
-
-/** It enables/disables the continuous automatic self-calibration.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_SetContinuousASC              ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_continuous_auto_selfcal_t asc   );
-
-/** It gets the continuous automatic self-calibration bit.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetContinuousASC              ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_continuous_auto_selfcal_t* asc  );
-
-/** It sets the forced recalibration value.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_SetForcedRecalibrationValue   ( I2C_parameters_t myI2Cparameters, uint16_t frc                          );
-
-/** It gets the forced recalibration value.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetForcedRecalibrationValue   ( I2C_parameters_t myI2Cparameters, uint16_t* frc                         );
-
-/** It sets the temperature offset value.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_SetTemperatureOffsetValue     ( I2C_parameters_t myI2Cparameters, uint16_t temp_offset                  );
-
-/** It gets the temperature offset value.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetTemperatureOffsetValue     ( I2C_parameters_t myI2Cparameters, uint16_t* temp_offset                 );
-
-/** It sets the altitude compensation value.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_SetAltitudeCompensationValue  ( I2C_parameters_t myI2Cparameters, uint16_t alt_comp                     );
-
-/** It gets the altitude compensation value.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetAltitudeCompensationValue  ( I2C_parameters_t myI2Cparameters, uint16_t* alt_comp                    );
-
-/** It gets the firmware version value.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetFirmwareVersion            ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_fw_version_t* fw                );
-
-/** It performs a software reset.
-  */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_SoftReset                     ( I2C_parameters_t myI2Cparameters                                        );
-
-/** It calculates the I2C checksum calculation (CRC-8).
-  */
-uint8_t         AMBIMATE_MS4_CalculateI2C_CRC8             ( uint16_t seed                                                           );
-
 
 
 #ifdef __cplusplus
