@@ -75,25 +75,6 @@ int main(void)
   /* Configure I2C peripheral  */
   aux  =   AMBIMATE_MS4_Init  ( myAMBIMATE_MS4_I2C_parameters );
 
-  /* It performs a software reset  */
-  aux  =   AMBIMATE_MS4_SoftReset ( myAMBIMATE_MS4_I2C_parameters );
-  nrf_delay_ms (2000);
-
-  /* It gets the firmware version   */
-  aux  =   AMBIMATE_MS4_GetFirmwareVersion ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.firmware );
-
-  /* It sets two mesurement interval   */
-  myAMBIMATE_MS4_Data.measurement_interval  =   2U;
-  aux  =   AMBIMATE_MS4_SetMeasurementInterval ( myAMBIMATE_MS4_I2C_parameters, myAMBIMATE_MS4_Data.measurement_interval );
-
-  /* It configures the continuous automatic self-calibration   */ 
-  myAMBIMATE_MS4_Data.asc  =   CONTINUOUS_AUTOMATIC_SELF_CALIBRATION_ASC_ACTIVATE;
-  aux  =   AMBIMATE_MS4_SetContinuousASC ( myAMBIMATE_MS4_I2C_parameters, myAMBIMATE_MS4_Data.asc );
-  nrf_delay_ms (2000);
-
-  /* It sets the trigger without pressure compensation   */
-  myAMBIMATE_MS4_Data.pressure_compensation  =   0U;
-  aux  =   AMBIMATE_MS4_TriggerContinuousMeasurement ( myAMBIMATE_MS4_I2C_parameters, myAMBIMATE_MS4_Data.pressure_compensation );
 
 
   myState  =   0;                             // Reset the variable
@@ -115,27 +96,27 @@ int main(void)
     {
       NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );   // Turn all the LEDs on
 
-      aux  =   AMBIMATE_MS4_TriggerContinuousMeasurement ( myAMBIMATE_MS4_I2C_parameters, myAMBIMATE_MS4_Data.pressure_compensation );
+      //aux  =   AMBIMATE_MS4_TriggerContinuousMeasurement ( myAMBIMATE_MS4_I2C_parameters, myAMBIMATE_MS4_Data.pressure_compensation );
 
-      /* Wait for a new data value  */
-      do{
-        aux  =   AMBIMATE_MS4_GetDataReadyStatus ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.status );
-        nrf_delay_ms (100);
-      }while( myAMBIMATE_MS4_Data.status == GET_READY_STATUS_BIT_DATA_NO_READY );
+      ///* Wait for a new data value  */
+      //do{
+      //  aux  =   AMBIMATE_MS4_GetDataReadyStatus ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.status );
+      //  nrf_delay_ms (100);
+      //}while( myAMBIMATE_MS4_Data.status == GET_READY_STATUS_BIT_DATA_NO_READY );
 
-      /* Get all the values  */
-      aux  =   AMBIMATE_MS4_ReadMeasurement ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.data );
+      ///* Get all the values  */
+      //aux  =   AMBIMATE_MS4_ReadMeasurement ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.data );
 
 
-      /* Transmit result through the UART  */
-      sprintf ( (char*)myMessage, "CO2: %d ppm, T: %d C, RH: %d %%\r\n", (uint32_t)myAMBIMATE_MS4_Data.data.processed.co2, (uint32_t)myAMBIMATE_MS4_Data.data.processed.temperature, (uint32_t)myAMBIMATE_MS4_Data.data.processed.humidity );
+      ///* Transmit result through the UART  */
+      //sprintf ( (char*)myMessage, "CO2: %d ppm, T: %d C, RH: %d %%\r\n", (uint32_t)myAMBIMATE_MS4_Data.data.processed.co2, (uint32_t)myAMBIMATE_MS4_Data.data.processed.temperature, (uint32_t)myAMBIMATE_MS4_Data.data.processed.humidity );
 
-      NRF_UART0->TASKS_STOPRX  =   1UL;
-      NRF_UART0->TASKS_STOPTX  =   1UL;
-      myPtr                    =   &myMessage[0];
+      //NRF_UART0->TASKS_STOPRX  =   1UL;
+      //NRF_UART0->TASKS_STOPTX  =   1UL;
+      //myPtr                    =   &myMessage[0];
 
-      NRF_UART0->TASKS_STARTTX =   1UL;
-      NRF_UART0->TXD           =   *myPtr;
+      //NRF_UART0->TASKS_STARTTX =   1UL;
+      //NRF_UART0->TXD           =   *myPtr;
 
 
       /* Reset the variables   */
