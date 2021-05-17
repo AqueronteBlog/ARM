@@ -1,14 +1,14 @@
 /**
  * @brief       AMBIMATE_MS4.h
- * @details     CO2, humidity and temperature sensor.
+ * @details     AmbiMate Sensor Module.
  *              Header file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        22/January/2021
- * @version     22/January/2021    The ORIGIN
+ * @date        17/May/2021
+ * @version     17/May/2021    The ORIGIN
  * @pre         N/A
  * @warning     N/A
  * @pre         This code belongs to Nimbus Centre ( http://www.nimbus.cit.ie ).
@@ -31,7 +31,7 @@ extern "C" {
   */
 typedef enum
 {
-  AMBIMATE_MS4_ADDRESS     =   0x61               /*!<   AMBIMATE_MS4 ADDR              */
+  AMBIMATE_MS4_ADDRESS     =   0x2A                 /*!<   AMBIMATE_MS4 ADDR                    */
 } AMBIMATE_MS4_address_t;
 
 
@@ -41,18 +41,52 @@ typedef enum
   */
 typedef enum
 {
-  AMBIMATE_MS4_TRIGGERS_CONTINUOUS_MEASUREMENT       =   0x0010,   /*!<  Triggers continuous measurement. Ambient pressure is optional   */
-  AMBIMATE_MS4_STOP_CONTINUOUS_MEASUREMENT           =   0x0104,   /*!<  Stop continuous measurement                                     */
-  AMBIMATE_MS4_SET_MEASUREMENT_INTERVAL              =   0x4600,   /*!<  Set measurement interval for continuous measurement mode        */
-  AMBIMATE_MS4_GET_DATA_READY_STATUS                 =   0x0202,   /*!<  Data ready status                                               */
-  AMBIMATE_MS4_READ_MEASUREMENT                      =   0x0300,   /*!<  Reads a single measurement of C02 concentration                 */
-  AMBIMATE_MS4_CONTINUOUS_AUTOMATIC_SELF_CALIBRATION =   0x5306,   /*!<  Continuous automatic self-calibration can be (de-)activated     */
-  AMBIMATE_MS4_SET_FORCED_RECALIBRATION              =   0x5204,   /*!<  Forced recalibration (FRC)                                      */
-  AMBIMATE_MS4_SET_TEMPERATURE_OFFSET                =   0x5403,   /*!<  Temperature offset                                              */
-  AMBIMATE_MS4_SET_ALTITUDE_COMPENSATION             =   0x5102,   /*!<  Altitude compensation                                           */
-  AMBIMATE_MS4_FIRMWARE_VERSION                      =   0xD100,   /*!<  Firmware version                                                */
-  AMBIMATE_MS4_SOFTRESET                             =   0xD304    /*!<  Software reset: Restart the sensor                              */
-} AMBIMATE_MS4_command_registers_t;
+  AMBIMATE_MS4_STATUS_HIGH_BYTE             =   0x00,   /*!<  Status register                       */
+  AMBIMATE_MS4_TEMPERATURE_HIGH_BYTE        =   0x01,   /*!<  Temperature register. High byte       */
+  AMBIMATE_MS4_TEMPERATURE_LOW_BYTE         =   0x02,   /*!<  Temperature register. Low byte        */
+  AMBIMATE_MS4_HUMIDITY_HIGH_BYTE           =   0x03,   /*!<  Humidity register. High byte          */
+  AMBIMATE_MS4_HUMIDITY_LOW_BYTE            =   0x03,   /*!<  Humidity register. Low byte           */
+  AMBIMATE_MS4_LIGHT_HIGH_BYTE              =   0x04,   /*!<  Light register. High byte             */
+  AMBIMATE_MS4_LIGHT_LOW_BYTE               =   0x05,   /*!<  Light register. Low byte              */
+  AMBIMATE_MS4_AUDIO_HIGH_BYTE              =   0x06,   /*!<  Audio register. High byte             */
+  AMBIMATE_MS4_AUDIO_LOW_BYTE               =   0x07,   /*!<  Audio register. Low byte              */
+  AMBIMATE_MS4_BATTERY_VOLTS_HIGH_BYTE      =   0x08,   /*!<  Battery voltage register. High byte   */
+  AMBIMATE_MS4_BATTERY_VOLTS_LOW_BYTE       =   0x09,   /*!<  Battery voltage register. Low byte    */
+  AMBIMATE_MS4_ECO2_HIGH_BYTE               =   0x0A,   /*!<  eCO2 register. High byte              */
+  AMBIMATE_MS4_ECO2_LOW_BYTE                =   0x0B,   /*!<  eCO2 register. Low byte               */
+  AMBIMATE_MS4_VOC_HIGH_BYTE                =   0x0C,   /*!<  VOC register. High byte               */
+  AMBIMATE_MS4_VOC_LOW_BYTE                 =   0x0D    /*!<  VOC register. Low byte                */
+} AMBIMATE_MS4_sensor_data_registers_t;
+
+
+typedef enum
+{
+  AMBIMATE_MS4_8BIT_STATUS_HIGH_BYTE        =   0x40,   /*!<  Status register                       */
+  AMBIMATE_MS4_8BIT_TEMPERATURE_HIGH_BYTE   =   0x41,   /*!<  Temperature register. High byte       */
+  AMBIMATE_MS4_8BIT_HUMIDITY_HIGH_BYTE      =   0x42,   /*!<  Humidity register. High byte          */
+  AMBIMATE_MS4_8BIT_LIGHT_HIGH_BYTE         =   0x43,   /*!<  Light register. High byte             */
+  AMBIMATE_MS4_8BIT_AUDIO_HIGH_BYTE         =   0x44,   /*!<  Audio register. High byte             */
+  AMBIMATE_MS4_8BIT_BATTERY_VOLTS_HIGH_BYTE =   0x45,   /*!<  Battery voltage register. High byte   */
+  AMBIMATE_MS4_8BIT_ECO2_HIGH_BYTE          =   0x46,   /*!<  eCO2 register. High byte              */
+  AMBIMATE_MS4_8BIT_VOC_HIGH_BYTE           =   0x47    /*!<  VOC register. High byte               */
+} AMBIMATE_MS4_8bit_sensor_data_registers_t;
+
+
+typedef enum
+{
+  AMBIMATE_MS4_FIRMWARE_VERSION             =   0x80,   /*!<  Firmware version                      */
+  AMBIMATE_MS4_FIRMWARE_SUB_VERSION         =   0x81,   /*!<  Firmware sub-version                  */
+  AMBIMATE_MS4_OPTIONAL_SENSORS             =   0x82    /*!<  Optional sensors                      */
+} AMBIMATE_MS4_other_registers_t;
+
+
+typedef enum
+{
+  AMBIMATE_MS4_SCAN_START_BYTE              =   0xC0,   /*!<  Scan start byte                       */
+  AMBIMATE_MS4_AUDIO_EVENT_LEVEL            =   0xC1,   /*!<  Audio level event                     */
+  AMBIMATE_MS4_PROCESSOR_RESET              =   0xF0    /*!<  Initiates a processor reset           */
+} AMBIMATE_MS4_writable_registers_t;
+
 
 
 
