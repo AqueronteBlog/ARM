@@ -266,3 +266,44 @@ AMBIMATE_MS4_status_t  AMBIMATE_MS4_ProcessorReset ( I2C_parameters_t myI2Cparam
   }
 }
 
+
+
+/**
+ * @brief       AMBIMATE_MS4_GetStatus    ( I2C_parameters_t , uint8_t* )
+ * @details     It gets the Status value.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   status:            Status register.
+ *
+ *
+ * @return      Status of AMBIMATE_MS4_GetStatus.
+ *
+ * @author      Manuel Caballero
+ * @date        21/May/2021
+ * @version     21/May/2021    The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetStatus ( I2C_parameters_t myI2Cparameters, uint8_t* status )
+{
+  uint8_t       cmd = 0U;
+  i2c_status_t  aux;
+
+  /* Write the register  */
+  cmd   =  AMBIMATE_MS4_STATUS_HIGH_BYTE;
+  aux   =  i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  |=  i2c_read ( myI2Cparameters, &(*status), 1U );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+      return   AMBIMATE_MS4_SUCCESS;
+  }
+  else
+  {
+      return   AMBIMATE_MS4_FAILURE;
+  }
+}
+
