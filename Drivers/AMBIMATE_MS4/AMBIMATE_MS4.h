@@ -243,14 +243,42 @@ typedef struct
 } AMBIMATE_MS4_other_reg_param_t;
 
 
+/* RAW DATA VALUES: 16-bit  */
+typedef struct
+{
+  uint16_t  raw_temperature;                                        /*< Raw temperature value                                           */
+  uint16_t  raw_humidity;                                           /*< Raw humidity value                                              */
+  uint16_t  raw_light;                                              /*< Raw light value                                                 */
+  uint16_t  raw_audio;                                              /*< Raw audio value                                                 */
+  uint16_t  raw_battery_volts;                                      /*< Raw battery volts value                                         */
+  uint16_t  raw_eco2;                                               /*< Raw eCO2 value                                                  */
+  uint16_t  raw_voc;                                                /*< Raw VOC value                                                   */
+} AMBIMATE_MS4_raw_data_values_t;
+
+
+/* RAW DATA VALUES: 8-bit  */
+typedef struct
+{
+  uint16_t  raw_8bit_temperature;                                   /*< Raw temperature value                                           */
+  uint16_t  raw_8bit_humidity;                                      /*< Raw humidity value                                              */
+  uint16_t  raw_8bit_light;                                         /*< Raw light value                                                 */
+  uint16_t  raw_8bit_audio;                                         /*< Raw audio value                                                 */
+  uint16_t  raw_8bit_battery_volts;                                 /*< Raw battery volts value                                         */
+  uint16_t  raw_8bit_eco2;                                          /*< Raw eCO2 value                                                  */
+  uint16_t  raw_8bit_voc;                                           /*< Raw VOC value                                                   */
+} AMBIMATE_MS4_raw_8bit_data_values_t;
+
+
 
 /* USER: User's variables  */
 typedef struct
 {
+  uint16_t  status;                                                 /*< Status register                                                 */
   
-  
+  AMBIMATE_MS4_raw_data_values_t      data;                         /*< Raw data values                                                 */
+  AMBIMATE_MS4_raw_8bit_data_values_t data8bit;                     /*< 8-bit Raw data values                                           */
 
-  AMBIMATE_MS4_other_reg_param_t  info;                             /*< Other registers: Info regarding the device                     */
+  AMBIMATE_MS4_other_reg_param_t      info;                         /*< Other registers: Info regarding the device                      */
 } AMBIMATE_MS4_data_t;
 #endif
 
@@ -296,6 +324,14 @@ AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetOptionalSensorsByte  ( I2C_parameters_t m
 /** It performs a processor reset.
   */
 AMBIMATE_MS4_status_t  AMBIMATE_MS4_ProcessorReset          ( I2C_parameters_t myI2Cparameters );
+
+/** It gets the Status value.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetStatus               ( I2C_parameters_t myI2Cparameters, uint8_t* status );
+
+/** It gets the raw value for temperature.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetStatus               ( I2C_parameters_t myI2Cparameters, uint8_t* status );
 
 
 #ifdef __cplusplus
