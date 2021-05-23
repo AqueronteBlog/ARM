@@ -45,17 +45,17 @@ typedef enum
   AMBIMATE_MS4_TEMPERATURE_HIGH_BYTE        =   0x01,   /*!<  Temperature register. High byte       */
   AMBIMATE_MS4_TEMPERATURE_LOW_BYTE         =   0x02,   /*!<  Temperature register. Low byte        */
   AMBIMATE_MS4_HUMIDITY_HIGH_BYTE           =   0x03,   /*!<  Humidity register. High byte          */
-  AMBIMATE_MS4_HUMIDITY_LOW_BYTE            =   0x03,   /*!<  Humidity register. Low byte           */
-  AMBIMATE_MS4_LIGHT_HIGH_BYTE              =   0x04,   /*!<  Light register. High byte             */
-  AMBIMATE_MS4_LIGHT_LOW_BYTE               =   0x05,   /*!<  Light register. Low byte              */
-  AMBIMATE_MS4_AUDIO_HIGH_BYTE              =   0x06,   /*!<  Audio register. High byte             */
-  AMBIMATE_MS4_AUDIO_LOW_BYTE               =   0x07,   /*!<  Audio register. Low byte              */
-  AMBIMATE_MS4_BATTERY_VOLTS_HIGH_BYTE      =   0x08,   /*!<  Battery voltage register. High byte   */
-  AMBIMATE_MS4_BATTERY_VOLTS_LOW_BYTE       =   0x09,   /*!<  Battery voltage register. Low byte    */
-  AMBIMATE_MS4_ECO2_HIGH_BYTE               =   0x0A,   /*!<  eCO2 register. High byte              */
-  AMBIMATE_MS4_ECO2_LOW_BYTE                =   0x0B,   /*!<  eCO2 register. Low byte               */
-  AMBIMATE_MS4_VOC_HIGH_BYTE                =   0x0C,   /*!<  VOC register. High byte               */
-  AMBIMATE_MS4_VOC_LOW_BYTE                 =   0x0D    /*!<  VOC register. Low byte                */
+  AMBIMATE_MS4_HUMIDITY_LOW_BYTE            =   0x04,   /*!<  Humidity register. Low byte           */
+  AMBIMATE_MS4_LIGHT_HIGH_BYTE              =   0x05,   /*!<  Light register. High byte             */
+  AMBIMATE_MS4_LIGHT_LOW_BYTE               =   0x06,   /*!<  Light register. Low byte              */
+  AMBIMATE_MS4_AUDIO_HIGH_BYTE              =   0x07,   /*!<  Audio register. High byte             */
+  AMBIMATE_MS4_AUDIO_LOW_BYTE               =   0x08,   /*!<  Audio register. Low byte              */
+  AMBIMATE_MS4_BATTERY_VOLTS_HIGH_BYTE      =   0x09,   /*!<  Battery voltage register. High byte   */
+  AMBIMATE_MS4_BATTERY_VOLTS_LOW_BYTE       =   0x0A,   /*!<  Battery voltage register. Low byte    */
+  AMBIMATE_MS4_ECO2_HIGH_BYTE               =   0x0B,   /*!<  eCO2 register. High byte              */
+  AMBIMATE_MS4_ECO2_LOW_BYTE                =   0x0C,   /*!<  eCO2 register. Low byte               */
+  AMBIMATE_MS4_VOC_HIGH_BYTE                =   0x0D,   /*!<  VOC register. High byte               */
+  AMBIMATE_MS4_VOC_LOW_BYTE                 =   0x0E    /*!<  VOC register. Low byte                */
 } AMBIMATE_MS4_sensor_data_registers_t;
 
 
@@ -269,14 +269,31 @@ typedef struct
 } AMBIMATE_MS4_raw_8bit_data_values_t;
 
 
+/* DATA VALUES: 16-bit resolution  */
+typedef struct
+{
+  double    temperature;                                            /*< Temperature value                                               */
+  double    humidity;                                               /*< Humidity value                                                  */
+  uint16_t  light;                                                  /*< Light value                                                     */
+  uint16_t  audio;                                                  /*< Audio value                                                     */
+  double    battery_volts;                                          /*< Battery volts value                                             */
+  uint16_t  eco2;                                                   /*< eCO2 value                                                      */
+  uint16_t  voc;                                                    /*< VOC value                                                       */
+} AMBIMATE_MS4_data_values_t;
+
+
+
 
 /* USER: User's variables  */
 typedef struct
 {
-  uint16_t  status;                                                 /*< Status register                                                 */
+  uint8_t  status;                                                  /*< Status register                                                 */
   
-  AMBIMATE_MS4_raw_data_values_t      data;                         /*< Raw data values                                                 */
-  AMBIMATE_MS4_raw_8bit_data_values_t data8bit;                     /*< 8-bit Raw data values                                           */
+  AMBIMATE_MS4_raw_data_values_t      raw_data;                     /*< Raw data values                                                 */
+  AMBIMATE_MS4_raw_8bit_data_values_t raw_data8bit;                 /*< 8-bit Raw data values                                           */
+  
+  AMBIMATE_MS4_data_values_t          data;                         /*< Data values                                                     */
+
 
   AMBIMATE_MS4_other_reg_param_t      info;                         /*< Other registers: Info regarding the device                      */
 } AMBIMATE_MS4_data_t;
@@ -331,7 +348,71 @@ AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetStatus               ( I2C_parameters_t m
 
 /** It gets the raw value for temperature.
   */
-AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetStatus               ( I2C_parameters_t myI2Cparameters, uint8_t* status );
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetRawTemperature       ( I2C_parameters_t myI2Cparameters, uint16_t* raw_temp );
+
+/** It gets the raw value for humidity.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetRawHumidity       ( I2C_parameters_t myI2Cparameters, uint16_t* raw_hum );
+
+/** It gets the raw value for light.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetRawLight       ( I2C_parameters_t myI2Cparameters, uint16_t* raw_light );
+
+/** It gets the raw value for audio.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetRawAudio       ( I2C_parameters_t myI2Cparameters, uint16_t* raw_audio );
+
+/** It gets the raw value for battery volts.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetRawBatteryVolts       ( I2C_parameters_t myI2Cparameters, uint16_t* raw_batt );
+
+/** It gets the raw value for eCO2.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetRawECO2         ( I2C_parameters_t myI2Cparameters, uint16_t* raw_eco2 );
+
+/** It gets the raw value for VOC.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetRawVOC         ( I2C_parameters_t myI2Cparameters, uint16_t* raw_voc );
+
+/** It gets the raw value for all the sensors.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetRawAllSensors         ( I2C_parameters_t myI2Cparameters, uint8_t* status, AMBIMATE_MS4_raw_data_values_t* raw_all );
+
+/** It gets the 8bit raw value for temperature.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_Get8bitRawTemperature       ( I2C_parameters_t myI2Cparameters, uint8_t* raw_8bit_temp );
+
+/** It gets the 8bit raw value for humidity.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_Get8bitRawHumidity       ( I2C_parameters_t myI2Cparameters, uint8_t* raw_8bit_hum );
+
+/** It gets the 8bit raw value for light.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_Get8bitRawLight       ( I2C_parameters_t myI2Cparameters, uint8_t* raw_8bit_light );
+
+/** It gets the 8bit raw value for audio.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_Get8bitRawAudio       ( I2C_parameters_t myI2Cparameters, uint8_t* raw_8bit_audio );
+
+/** It gets the 8bit raw value for battery volts.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_Get8bitRawBatteryVolts       ( I2C_parameters_t myI2Cparameters, uint8_t* raw_8bit_batt );
+
+/** It gets the 8bit raw value for eCO2.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_Get8bitRawECO2         ( I2C_parameters_t myI2Cparameters, uint8_t* raw_8bit_eco2 );
+
+/** It gets the 8bit raw value for VOC.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_Get8bitRawVOC         ( I2C_parameters_t myI2Cparameters, uint8_t* raw_8bit_voc );
+
+/** It gets the 8bit raw value for all the sensors.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetRaw8bitAllSensors         ( I2C_parameters_t myI2Cparameters, uint8_t* status, AMBIMATE_MS4_raw_8bit_data_values_t* raw_8bit_all );
+
+/** It process all the data to human readable values for all the sensors.
+  */
+AMBIMATE_MS4_data_values_t  AMBIMATE_MS4_ProcessAllData         ( AMBIMATE_MS4_raw_data_values_t raw_all );
 
 
 #ifdef __cplusplus
