@@ -1078,19 +1078,19 @@ AMBIMATE_MS4_data_values_t  AMBIMATE_MS4_ProcessAllData ( AMBIMATE_MS4_raw_data_
   myData.humidity = ((double)((uint8_t)(raw_all.raw_humidity >> 8U)*256 + (uint8_t)(raw_all.raw_humidity & 0x00FF)))/10.0;
   
   /* Light  */
-  myData.light = ((uint8_t)(raw_all.raw_humidity >> 8U)*256 + (uint8_t)(raw_all.raw_humidity & 0x00FF));
+  myData.light = (uint16_t)((uint8_t)(raw_all.raw_humidity >> 8U)*256 + (uint8_t)(raw_all.raw_humidity & 0x00FF));
   
   /* Audio  */
-  myData.audio = ((uint8_t)(raw_all.raw_audio >> 8U)*256 + (uint8_t)(raw_all.raw_audio & 0x00FF));
+  myData.audio = (uint16_t)((uint8_t)(raw_all.raw_audio >> 8U)*256 + (uint8_t)(raw_all.raw_audio & 0x00FF));
   
   /* Battery volts  */
   myData.battery_volts = ((double)((uint8_t)(raw_all.raw_battery_volts >> 8U)*256 + (uint8_t)(raw_all.raw_battery_volts & 0x00FF))/1024.0)*(3.3/0.330);
   
   /* Gas, eCO2  */
-  myData.eco2 = ((uint8_t)(raw_all.raw_eco2 >> 8U)*256 + (uint8_t)(raw_all.raw_eco2 & 0x00FF));
+  myData.eco2 = (uint16_t)((uint8_t)(raw_all.raw_eco2 >> 8U)*256 + (uint8_t)(raw_all.raw_eco2 & 0x00FF));
   
   /* VOC  */
-  myData.voc = ((uint8_t)(raw_all.raw_voc >> 8U)*256 + (uint8_t)(raw_all.raw_voc & 0x00FF));
+  myData.voc = (uint16_t)((uint8_t)(raw_all.raw_voc >> 8U)*256 + (uint8_t)(raw_all.raw_voc & 0x00FF));
 
 
   return   myData;
