@@ -49,7 +49,6 @@ int main(void)
 {
   uint8_t  myMessage[ TX_BUFF_SIZE ];
 
-
   I2C_parameters_t  myAMBIMATE_MS4_I2C_parameters;
   AMBIMATE_MS4_status_t    aux;
   AMBIMATE_MS4_data_t      myAMBIMATE_MS4_Data;
@@ -73,7 +72,20 @@ int main(void)
   myAMBIMATE_MS4_I2C_parameters.SCLport     =    NRF_P0;
 
   /* Configure I2C peripheral  */
-  aux  =   AMBIMATE_MS4_Init  ( myAMBIMATE_MS4_I2C_parameters );
+  aux  =   AMBIMATE_MS4_Init ( myAMBIMATE_MS4_I2C_parameters );
+
+  /* Reset the Ambimate MS4 sensor  */
+  aux  =   AMBIMATE_MS4_ProcessorReset ( myAMBIMATE_MS4_I2C_parameters );
+  nrf_delay_ms (1000);
+
+  /* Get the firmware version  */
+  aux  =   AMBIMATE_MS4_GetFirmwareVersion ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.info.firmware_version );
+
+  /* Get the firmware sub-version  */
+  aux  =   AMBIMATE_MS4_GetFirmwareSubVersion ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.info.firmware_sub_version );
+
+  /* Get the optional sensors on the board  */
+  aux  =   AMBIMATE_MS4_GetOptionalSensorsByte ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.info.optional_sensors );
 
 
 
@@ -96,16 +108,16 @@ int main(void)
     {
       NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );   // Turn all the LEDs on
 
-      //aux  =   AMBIMATE_MS4_TriggerContinuousMeasurement ( myAMBIMATE_MS4_I2C_parameters, myAMBIMATE_MS4_Data.pressure_compensation );
+      aux  =   AMBIMATE_MS4_ScanStartByte ( myAMBIMATE_MS4_I2C_parameters, WRITEABLE_REGISTERS_GAS_INITIATE_NEW_MEASUREMENT, WRITEABLE_REGISTERS_BATT_INITIATE_NEW_MEASUREMENT, WRITEABLE_REGISTERS_AUD_INITIATE_NEW_MEASUREMENT, WRITEABLE_REGISTERS_LIGHT_INITIATE_NEW_MEASUREMENT, WRITEABLE_REGISTERS_HUM_INITIATE_NEW_MEASUREMENT, WRITEABLE_REGISTERS_TEMP_INITIATE_NEW_MEASUREMENT, WRITEABLE_REGISTERS_STATUS_INITIATE_NEW_MEASUREMENT );
 
-      ///* Wait for a new data value  */
+      /* Wait for a new data value  */
       //do{
       //  aux  =   AMBIMATE_MS4_GetDataReadyStatus ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.status );
       //  nrf_delay_ms (100);
       //}while( myAMBIMATE_MS4_Data.status == GET_READY_STATUS_BIT_DATA_NO_READY );
 
-      ///* Get all the values  */
-      //aux  =   AMBIMATE_MS4_ReadMeasurement ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.data );
+      /* Get all the raw values  */
+      aux  =   AMBIMATE_MS4_GetRawAllSensors ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.status, &myAMBIMATE_MS4_Data.raw_data );
 
 
       ///* Transmit result through the UART  */
