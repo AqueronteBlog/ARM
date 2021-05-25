@@ -104,6 +104,46 @@ AMBIMATE_MS4_status_t  AMBIMATE_MS4_ScanStartByte ( I2C_parameters_t myI2Cparame
 
 
 /**
+ * @brief       AMBIMATE_MS4_ScanStartByte    ( I2C_parameters_t , uint8_t* )
+ * @details     It gets the scan byte values.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   scan_byte:         Scan start byte value
+ *
+ *
+ * @return      Status of AMBIMATE_MS4_ScanStartByte.
+ *
+ * @author      Manuel Caballero
+ * @date        25/May/2021
+ * @version     25/May/2021    The ORIGIN
+ * @pre         Scanning all channels requires minimum 100 milliseconds therefore, the user must take that time into consideration.
+ * @warning     N/A.
+ */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetScanStartByte ( I2C_parameters_t myI2Cparameters, uint8_t* scan_byte )
+{
+  uint8_t       cmd = 0U;
+  i2c_status_t  aux;
+
+  /* Read the register  */
+  cmd   =  AMBIMATE_MS4_SCAN_START_BYTE;
+  aux   =  i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  |=  i2c_read ( myI2Cparameters, &(*scan_byte), 1U );
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+      return   AMBIMATE_MS4_SUCCESS;
+  }
+  else
+  {
+      return   AMBIMATE_MS4_FAILURE;
+  }
+}
+
+
+
+/**
  * @brief       AMBIMATE_MS4_GetFirmwareVersion    ( I2C_parameters_t , uint8_t* )
  * @details     It gets the firmware version.
  *

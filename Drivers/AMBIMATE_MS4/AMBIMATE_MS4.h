@@ -289,11 +289,12 @@ typedef struct
 {
   uint8_t  status;                                                  /*< Status register                                                 */
   
+  uint8_t  start_scan_byte;                                         /*< StartScanByte register                                          */
+
   AMBIMATE_MS4_raw_data_values_t      raw_data;                     /*< Raw data values                                                 */
   AMBIMATE_MS4_raw_8bit_data_values_t raw_data8bit;                 /*< 8-bit Raw data values                                           */
   
   AMBIMATE_MS4_data_values_t          data;                         /*< Data values                                                     */
-
 
   AMBIMATE_MS4_other_reg_param_t      info;                         /*< Other registers: Info regarding the device                      */
 } AMBIMATE_MS4_data_t;
@@ -325,6 +326,10 @@ AMBIMATE_MS4_status_t  AMBIMATE_MS4_Init                    ( I2C_parameters_t m
 /** It initiates a new measurements of the chosen sensors.
   */
 AMBIMATE_MS4_status_t  AMBIMATE_MS4_ScanStartByte           ( I2C_parameters_t myI2Cparameters, AMBIMATE_MS4_writeable_reg_gas_t gas, AMBIMATE_MS4_writeable_reg_batt_t batt, AMBIMATE_MS4_writeable_reg_aud_t aud, AMBIMATE_MS4_writeable_reg_light_t light, AMBIMATE_MS4_writeable_reg_hum_t hum, AMBIMATE_MS4_writeable_reg_temp_t temp, AMBIMATE_MS4_writeable_reg_status_t status );
+
+/** It gets the scan byte values.
+  */
+AMBIMATE_MS4_status_t  AMBIMATE_MS4_GetScanStartByte        ( I2C_parameters_t myI2Cparameters, uint8_t* scan_byte );
 
 /** It gets the firmware version.
   */
