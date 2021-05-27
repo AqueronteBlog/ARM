@@ -75,7 +75,7 @@ int main(void)
   aux  =   AMBIMATE_MS4_Init ( myAMBIMATE_MS4_I2C_parameters );
 
   /* Reset the Ambimate MS4 sensor  */
-  aux  =   AMBIMATE_MS4_ProcessorReset ( myAMBIMATE_MS4_I2C_parameters );
+  //aux  =   AMBIMATE_MS4_ProcessorReset ( myAMBIMATE_MS4_I2C_parameters );
   nrf_delay_ms (1000);
 
   /* Get the firmware version  */
@@ -121,6 +121,9 @@ int main(void)
 
       /* Get all the raw values  */
       aux  =   AMBIMATE_MS4_GetRawAllSensors ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.status, &myAMBIMATE_MS4_Data.raw_data );
+      
+      /* Process all the data  */
+      myAMBIMATE_MS4_Data.data  =   AMBIMATE_MS4_ProcessAllData ( myAMBIMATE_MS4_Data.raw_data );
 
 
       /* Transmit result through the UART  */
