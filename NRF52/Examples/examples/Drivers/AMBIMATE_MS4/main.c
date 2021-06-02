@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: AMBIMATE_MS4. Every 4 seconds, a new
+ * @details     This example shows how to work with the external device: AMBIMATE_MS4. Every 4 seconds, a new
  *              set of values are read and the data is transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
@@ -11,7 +11,7 @@
  * @author      Manuel Caballero
  * @date        23/May/2021
  * @version     23/May/2021    The ORIGIN
- * @pre         This firmware was tested on the nrf52-DK with Segger Embedded Studio v5.44 ( SDK 14.2.0 ).
+ * @pre         This firmware was tested on the nrf52-DK with Segger Embedded Studio v5.50 ( SDK 14.2.0 ).
  * @warning     The softdevice (s132) is taken into account, Bluetooth was not used although.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
@@ -116,9 +116,9 @@ int main(void)
         myAMBIMATE_MS4_Data.start_scan_byte  =  (uint8_t)( WRITEABLE_REGISTERS_GAS_INITIATE_NEW_MEASUREMENT | WRITEABLE_REGISTERS_BATT_INITIATE_NEW_MEASUREMENT | WRITEABLE_REGISTERS_AUD_INITIATE_NEW_MEASUREMENT | WRITEABLE_REGISTERS_LIGHT_INITIATE_NEW_MEASUREMENT | WRITEABLE_REGISTERS_HUM_INITIATE_NEW_MEASUREMENT | WRITEABLE_REGISTERS_TEMP_INITIATE_NEW_MEASUREMENT | WRITEABLE_REGISTERS_STATUS_INITIATE_NEW_MEASUREMENT ); 
         
         aux  =   AMBIMATE_MS4_GetScanStartByte ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.start_scan_byte );
-        nrf_delay_ms (100);
+        nrf_delay_ms (700);
       }while( ( myAMBIMATE_MS4_Data.start_scan_byte & ( WRITEABLE_REGISTERS_GAS_MASK | WRITEABLE_REGISTERS_BATT_MASK | WRITEABLE_REGISTERS_AUD_MASK | WRITEABLE_REGISTERS_LIGHT_MASK | WRITEABLE_REGISTERS_HUM_MASK | WRITEABLE_REGISTERS_TEMP_MASK | WRITEABLE_REGISTERS_STATUS_MASK ) ) != 0x00 );
-
+      
       /* Get all the raw values  */
       aux  =   AMBIMATE_MS4_GetRawAllSensors ( myAMBIMATE_MS4_I2C_parameters, &myAMBIMATE_MS4_Data.status, &myAMBIMATE_MS4_Data.raw_data );
       
@@ -127,7 +127,7 @@ int main(void)
 
 
       /* Transmit result through the UART  */
-      sprintf ( (char*)myMessage, "CO2: %d ppm, VOC: %d, T: %d C, RH: %d %%, Lux: %d, Batt: %d V, Aud: %d db\r\n", (uint32_t)myAMBIMATE_MS4_Data.data.eco2, (uint32_t)myAMBIMATE_MS4_Data.data.voc, (uint32_t)myAMBIMATE_MS4_Data.data.temperature, (uint32_t)myAMBIMATE_MS4_Data.data.humidity, myAMBIMATE_MS4_Data.data.light, myAMBIMATE_MS4_Data.data.battery_volts, myAMBIMATE_MS4_Data.data.audio );
+-     sprintf ( (char*)myMessage, "CO2: %d ppm, VOC: %d, T: %d C, RH: %d %%, Lux: %d, Batt: %d V, Aud: %d db\r\n", (uint32_t)myAMBIMATE_MS4_Data.data.eco2, (uint32_t)myAMBIMATE_MS4_Data.data.voc, (uint32_t)myAMBIMATE_MS4_Data.data.temperature, (uint32_t)myAMBIMATE_MS4_Data.data.humidity, myAMBIMATE_MS4_Data.data.light, (uint32_t)myAMBIMATE_MS4_Data.data.battery_volts, myAMBIMATE_MS4_Data.data.audio );
 
       NRF_UART0->TASKS_STOPRX  =   1UL;
       NRF_UART0->TASKS_STOPTX  =   1UL;
