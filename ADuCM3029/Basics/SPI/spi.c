@@ -203,13 +203,15 @@ spi_status_t spi_transfer ( spi_parameters_t mySPIparameters, uint8_t* spi_tx_bu
 	/* SPI: Transmit data	 */
 	mySPIparameters.SPIInstance->CTL	&=	~( 1U << BITP_SPI_CTL_TFLUSH );				// Flush for Tx disabled
 	mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_TIM );				// Initiate transfer with a write to the SPI_TX register.
-	mySPIparameters.SPIInstance->CNT	|=	 ( spi_tx_length << BITP_SPI_CNT_VALUE );	// Bytes to be transfered
+	//mySPIparameters.SPIInstance->CNT	|=	 ( spi_tx_length << BITP_SPI_CNT_VALUE );	// Bytes to be transfered
 
 	mySPIparameters.SPIInstance->RD_CTL	|=	 ( 1U << BITP_SPI_RD_CTL_CMDEN );			// Read mode command is enabled [todo] this can go to spi_init function
 
 
 	for ( i = 0UL; i < spi_tx_length; i++ )
 	{
+		spi_timeout1	 =	 232323UL;
+		while( ( ( mySPIparameters.SPIInstance->FIFO_STAT & ( 1U << BITP_SPI_FIFO_STAT_TX ) ) != ( 1U << BITP_SPI_FIFO_STAT_TX ) ) && ( --spi_timeout1 ) );      // Wait until the TX FIFO is empty or timeout1
 		mySPIparameters.SPIInstance->TX	 =	 *spi_tx_buff++;                            // Send byte
 
 		spi_timeout1	 =	 232323UL;

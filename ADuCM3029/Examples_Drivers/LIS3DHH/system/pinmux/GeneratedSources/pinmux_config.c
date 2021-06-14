@@ -1,8 +1,8 @@
 /*
  **
- ** Source file generated on October 11, 2020 at 20:48:26.	
+ ** Source file generated on June 11, 2021 at 17:06:09.	
  **
- ** Copyright (C) 2011-2020 Analog Devices Inc., All Rights Reserved.
+ ** Copyright (C) 2011-2021 Analog Devices Inc., All Rights Reserved.
  **
  ** This file is generated automatically based upon the options selected in 
  ** the Pin Multiplexing configuration editor. Changes to the Pin Multiplexing
