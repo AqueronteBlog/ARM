@@ -24,7 +24,7 @@
 #include "functions.h"
 #include "interrupts.h"
 #if defined (WORK_FROM_HOME)
-#include "D:/Workspace/ARM/Drivers/MICS_VZ_89TE/MICS_VZ_89TE.h" 
+#include "D:/Workspaces/Personal/ARM/Drivers/MiCS_VZ_89TE/MICS_VZ_89TE.h" 
 #else
 #include "D:/vsProjects/ARM/Drivers/MICS_VZ_89TE/MICS_VZ_89TE.h" 
 #endif

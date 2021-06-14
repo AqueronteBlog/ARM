@@ -24,7 +24,7 @@
 #include "functions.h"
 #include "interrupts.h"
 #if defined (WORK_FROM_HOME)
-#include "C:/Users/mcm/Documents/ARM/Drivers/SHT3X/SHT3X.h" 
+#include "D:/Workspaces/Personal/ARM/Drivers/SHT3X/SHT3X.h" 
 #else
 #include "D:/vsProjects/ARM/Drivers/SHT3X/SHT3X.h" 
 #endif
@@ -64,7 +64,7 @@ int main(void)
   mySHT3X_I2C_parameters.TWIinstance =    NRF_TWI0;
   mySHT3X_I2C_parameters.SDA         =    TWI0_SDA;
   mySHT3X_I2C_parameters.SCL         =    TWI0_SCL;
-  mySHT3X_I2C_parameters.ADDR        =    SHT3X_ADDRESS_A;
+  mySHT3X_I2C_parameters.ADDR        =    SHT3X_ADDRESS_B;
   mySHT3X_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
   mySHT3X_I2C_parameters.SDAport     =    NRF_P0;
   mySHT3X_I2C_parameters.SCLport     =    NRF_P0;
@@ -108,6 +108,10 @@ int main(void)
       /* Trigger to get a new data set, no clock stretching and repeatibility high  */
       aux  =   SHT3X_OneShotTriggerAllData ( mySHT3X_I2C_parameters, SHT3X_CLOCK_STRETCHING_DISABLED_REPEATABILITY_HIGH );
       nrf_delay_ms(15U);
+      
+      /* Get all the data  */
+      aux  =   SHT3X_OneShotGetAllRawData ( mySHT3X_I2C_parameters, &mySHT3X_Data.rawData );
+
 
       /* Process all the data  */
       SHT3X_ProccessData ( mySHT3X_Data.rawData, &mySHT3X_Data.data );
