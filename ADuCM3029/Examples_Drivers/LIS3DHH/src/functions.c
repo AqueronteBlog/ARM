@@ -217,7 +217,7 @@ void conf_UART  ( void )
  * 						- Count down
  * 						- Periodic mode
  * 						- Interrupt enabled
- * 						- Overflow: 1s ( 8192 / 8192Hz = 1s )
+ * 						- Overflow: 1s ( 2048 / 8192Hz = 250ms )
  *
  * @param[in]    N/A.
  *
@@ -250,7 +250,7 @@ void conf_Timer0  ( void )
 	pADI_TMR0->CTL	|=	 ( ( 0b10 << BITP_TMR_CTL_CLK ) | ( 1U << BITP_TMR_CTL_MODE ) );
 
 	/* Timer0
-	 *  - Overflow every ~ 1 second ( 8192 * ( 1/ 8192 ) = 1s )
+	 *  - Overflow every ~ 1 second ( 2048 * ( 1/ 8192 ) = 250ms )
 	 */
 	pADI_TMR0->LOAD	 =	 8192U;
 

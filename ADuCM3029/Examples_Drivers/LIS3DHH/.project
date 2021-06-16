@@ -51,18 +51,12 @@
 		<link>
 			<name>Drivers/LIS3DHH</name>
 			<type>2</type>
-			<location>D:/Workspace/ARM/Drivers/LIS3DHH</location>
+			<location>D:/Workspaces/Personal/ARM/Drivers/LIS3DHH</location>
 		</link>
 		<link>
 			<name>Drivers/Basics/SPI</name>
 			<type>2</type>
-			<location>D:/Workspace/ARM/ADuCM3029/Basics/SPI</location>
+			<location>D:/Workspaces/Personal/ARM/ADuCM3029/Basics/SPI</location>
 		</link>
 	</linkedResources>
-	<variableList>
-		<variable>
-			<name>CCES</name>
-			<value>file:/C:/Analog%20Devices/CrossCore%20Embedded%20Studio%202.8.3</value>
-		</variable>
-	</variableList>
 </projectDescription>

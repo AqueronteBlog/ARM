@@ -85,7 +85,7 @@ MICS_VZ_89TE_status_t MICS_VZ_89TE_TriggersStatus ( I2C_parameters_t myI2Cparame
   /* Write the register   */
   cmd[0]   =   MICS_VZ_89TE_GET_STATUS;
   cmd[5]   =   MICS_VZ_89TE_GetCRC ( &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );                 // Calculate the CRC
-  aux      =   i2c_write  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), true );
+  aux      =   i2c_write  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), false );
   
 
 
@@ -231,7 +231,7 @@ MICS_VZ_89TE_status_t MICS_VZ_89TE_TriggersRevision ( I2C_parameters_t myI2Cpara
   /* Write the register   */
   cmd[0]   =   MICS_VZ_89TE_GET_REVISION;
   cmd[5]   =   MICS_VZ_89TE_GetCRC ( &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );                 // Calculate the CRC
-  aux      =   i2c_write  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), true );
+  aux      =   i2c_write  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), false );
   
 
 
@@ -335,7 +335,7 @@ MICS_VZ_89TE_status_t MICS_VZ_89TE_TriggersR0 ( I2C_parameters_t myI2Cparameters
   /* Write the register   */
   cmd[0]   =   MICS_VZ_89TE_GET_R0;
   cmd[5]   =   MICS_VZ_89TE_GetCRC ( &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );                 // Calculate the CRC
-  aux      =   i2c_write  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), true );
+  aux      =   i2c_write  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), false );
   
 
 
