@@ -51,9 +51,9 @@ int main(void)
 
   uint8_t  myMessage[ TX_BUFF_SIZE ];
 
-  //I2C_parameters_t   myPCF8523_I2C_parameters;
-  //PCF8523_status_t  aux;
-  //PCF8523_data_t    myPCF8523_Data;
+  I2C_parameters_t   myPCF8523_I2C_parameters;
+  PCF8523_status_t  aux;
+  PCF8523_data_t    myPCF8523_Data;
 
 
   conf_CLK    ();
@@ -63,97 +63,76 @@ int main(void)
 
   
 
-  ///* I2C definition   */
-  //myPCF8523_I2C_parameters.TWIinstance =    NRF_TWI0;
-  //myPCF8523_I2C_parameters.SDA         =    TWI0_SDA;
-  //myPCF8523_I2C_parameters.SCL         =    TWI0_SCL;
-  //myPCF8523_I2C_parameters.ADDR        =    PCF8523_ADDRESS;
-  //myPCF8523_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-  //myPCF8523_I2C_parameters.SDAport     =    NRF_P0;
-  //myPCF8523_I2C_parameters.SCLport     =    NRF_P0;
+  /* I2C definition   */
+  myPCF8523_I2C_parameters.TWIinstance =    NRF_TWI0;
+  myPCF8523_I2C_parameters.SDA         =    TWI0_SDA;
+  myPCF8523_I2C_parameters.SCL         =    TWI0_SCL;
+  myPCF8523_I2C_parameters.ADDR        =    PCF8523_ADDRESS;
+  myPCF8523_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
+  myPCF8523_I2C_parameters.SDAport     =    NRF_P0;
+  myPCF8523_I2C_parameters.SCLport     =    NRF_P0;
 
-  ///* Configure I2C peripheral  */
-  //aux  =   PCF8523_Init           ( myPCF8523_I2C_parameters );
+  /* Configure I2C peripheral  */
+  aux  =   PCF8523_Init           ( myPCF8523_I2C_parameters );
 
-  ///* Perform a software reset  */
-  //aux  =   PCF8523_SoftwareReset ( myPCF8523_I2C_parameters );
+  /* Perform a software reset  */
+  aux  =   PCF8523_SoftwareReset ( myPCF8523_I2C_parameters );
 
-  ///* Wait until the oscillator is stable   */
-  //do{ 
-  //  /* Clear Clock integrity flag.  */
-  //  aux  =   PCF8523_ClearOscillatorClockIntegrityFlag ( myPCF8523_I2C_parameters );
-
-  //  /* Clear Clock integrity flag.  */
-  //  aux  =   PCF8523_CheckOscillatorClockIntegrityFlag ( myPCF8523_I2C_parameters, &myPCF8523_Data );
-  //}while( myPCF8523_Data.os == SECONDS_OS_CLOCK_INTEGRITY_NOT_GUARANTEED );
+  /* Wait until the oscillator is stable   */
+  do{ 
+    aux  =   PCF8523_GetClockIntegrityFlag ( myPCF8523_I2C_parameters, &myPCF8523_Data.os );
+  }while( myPCF8523_Data.os == SECONDS_OS_CLOCK_INTEGRITY_NOT_GUARANTEED );
   
-  ///* External clock test mode: Normal mode ( no test at all )  */
-  //aux  =   PCF8523_SetTestMode ( myPCF8523_I2C_parameters, CONTROL_1_EXT_TEST_NORMAL_MODE );
+  /* RTC clock is enabled  */
+  aux  =   PCF8523_SetRTCMode ( myPCF8523_I2C_parameters, CONTROL_1_STOP_RTC_CLOCK_RUNS );
 
-  ///* RTC clock is enabled  */
-  //aux  =   PCF8523_SetRTCMode ( myPCF8523_I2C_parameters, CONTROL_1_STOP_RTC_CLOCK_RUNS );
+  /* No correction interrupt generated  */
+  aux  =   PCF8523_SetCorrectionInterruptMode ( myPCF8523_I2C_parameters, CONTROL_1_CIE_NO_CORRECTION_INTERRUPT_GENERATED );
 
-  ///* No correction interrupt generated  */
-  //aux  =   PCF8523_SetCorrectionInterruptMode ( myPCF8523_I2C_parameters, CONTROL_1_CIE_NO_CORRECTION_INTERRUPT_GENERATED );
+  /* 24 hour mode is selected  */
+  myPCF8523_Data.time.hourMode  =   CONTROL_1_12_24_MODE_24_HOUR;
+  aux  =   PCF8523_SetHourMode ( myPCF8523_I2C_parameters, myPCF8523_Data.time.hourMode );
 
-  ///* 24 hour mode is selected  */
-  //myPCF8523_Data.Time12H_24HMode  =   CONTROL_1_12_24_24_HOUR_MODE;
-  //aux  =   PCF8523_Set12_24_HourMode ( myPCF8523_I2C_parameters, myPCF8523_Data );
+  /* Internal oscillator capacitor selection: 7 pF  */
+  aux  =   PCF8523_SetInternalOscillatorCapacitor ( myPCF8523_I2C_parameters, CONTROL_1_CAP_SEL_7_PF );
 
-  ///* Internal oscillator capacitor selection: 7 pF  */
-  //aux  =   PCF8523_SetInternalOscillatorCapacitor ( myPCF8523_I2C_parameters, CONTROL_1_CAP_SEL_7_PF );
+  /* Normal mode offset at 0.  */
+  myPCF8523_Data.offset.mode  = OFFSET_MODE_ONCE_EVERY_TWO_HOURS;
+  myPCF8523_Data.offset.value = 0U;
+  aux  =   PCF8523_SetOffset ( myPCF8523_I2C_parameters, myPCF8523_Data.offset );
 
-  ///* Minute interrupt and half minute interrupt are disabled  */
-  //aux  =   PCF8523_SetMinuteInterrupts ( myPCF8523_I2C_parameters, CONTROL_2_MI_MINUTE_INTERRUPT_DISABLED, CONTROL_2_HMI_HALF_MINUTE_INTERRUPT_DISABLED );
+  /* Get day. After reset, we expect to get 0x01  */
+  aux  =   PCF8523_GetDay ( myPCF8523_I2C_parameters, &myPCF8523_Data.date.day );
 
-  ///* Clear timer flag  */
-  //aux  =   PCF8523_ClearTimerFlag ( myPCF8523_I2C_parameters );
+  /* Set day: 23  */
+  myPCF8523_Data.date.day   =   0x23;
+  aux  =   PCF8523_SetDay ( myPCF8523_I2C_parameters, myPCF8523_Data.date.day );
 
-  ///* CLKOUT: 1Hz  */
-  //aux  =   PCF8523_SetClockOutputFrequency ( myPCF8523_I2C_parameters, CONTROL_2_COF_CLKOUT_1_HZ );
+  /* Get month. After reset, we expect to get 0x01 ( January )  */
+  aux  =   PCF8523_GetMonth ( myPCF8523_I2C_parameters, &myPCF8523_Data.date.month );
 
-  ///* Normal mode offset at 0.  */
-  //aux  =   PCF8523_SetOffset ( myPCF8523_I2C_parameters, OFFSET_MODE_NORMAL_MODE, 0 );
+  /* Set month: September  */
+  myPCF8523_Data.date.month   =   MONTHS_MONTHS_SEPTEMBER;
+  aux  =   PCF8523_SetMonth ( myPCF8523_I2C_parameters, myPCF8523_Data.date.month );
 
-  ///* Write data ( 0x23 ) into device's RAM */
-  //myPCF8523_Data.ramByte  =   0x23;
-  //aux  =   PCF8523_WriteByteRAM ( myPCF8523_I2C_parameters, myPCF8523_Data );
+  /* Get weekday. After reset, we expect to get Saturday  */
+  aux  =   PCF8523_GetWeekday ( myPCF8523_I2C_parameters, &myPCF8523_Data.date.weekday );
 
-  ///* Read data from device's RAM */
-  //myPCF8523_Data.ramByte  =   0;                                                       // Reset the variable
-  //aux  =   PCF8523_ReadByteRAM ( myPCF8523_I2C_parameters, &myPCF8523_Data );
+  /* Set weekday: Friday  */
+  myPCF8523_Data.date.weekday   =   WEEKDAYS_WEEKDAYS_FRIDAY;
+  aux  =   PCF8523_SetWeekday ( myPCF8523_I2C_parameters, myPCF8523_Data.date.weekday );
 
-  ///* Get day. After reset, we expect to get 0x01  */
-  //aux  =   PCF8523_GetDay ( myPCF8523_I2C_parameters, &myPCF8523_Data );
+  /* Get year. After reset, we expect to get 00 ( it corresponds to 2000 )  */
+  aux  =   PCF8523_GetYear ( myPCF8523_I2C_parameters, &myPCF8523_Data.date.year );
 
-  ///* Set day: 23  */
-  //myPCF8523_Data.BCDday   =   0x23;
-  //aux  =   PCF8523_SetDay ( myPCF8523_I2C_parameters, myPCF8523_Data );
+  /* Set year: 21 ( 2021 )  */
+  myPCF8523_Data.date.year   =   0x21;
+  aux  =   PCF8523_SetYear ( myPCF8523_I2C_parameters, myPCF8523_Data.date.year );
 
-  ///* Get month. After reset, we expect to get 0x01 ( January )  */
-  //aux  =   PCF8523_GetMonth ( myPCF8523_I2C_parameters, &myPCF8523_Data );
-
-  ///* Set month: September  */
-  //myPCF8523_Data.BCDmonth   =   MONTHS_MONTHS_SEPTEMBER;
-  //aux  =   PCF8523_SetMonth ( myPCF8523_I2C_parameters, myPCF8523_Data );
-
-  ///* Get weekday. After reset, we expect to get Saturday  */
-  //aux  =   PCF8523_GetWeekday ( myPCF8523_I2C_parameters, &myPCF8523_Data );
-
-  ///* Set weekday: Friday  */
-  //myPCF8523_Data.weekday   =   WEEKDAYS_WEEKDAYS_FRIDAY;
-  //aux  =   PCF8523_SetWeekday ( myPCF8523_I2C_parameters, myPCF8523_Data );
-
-  ///* Get year. After reset, we expect to get 00 ( it corresponds to 2000 )  */
-  //aux  =   PCF8523_GetYear ( myPCF8523_I2C_parameters, &myPCF8523_Data );
-
-  ///* Set year: 19 ( 2019 )  */
-  //myPCF8523_Data.BCDyear   =   0x19;
-  //aux  =   PCF8523_SetYear ( myPCF8523_I2C_parameters, myPCF8523_Data );
-
-  ///* Set time: 235955 ( 23:59:55 )  */
-  //myPCF8523_Data.BCDtime   =   0x235955;
-  //aux  =   PCF8523_SetTime ( myPCF8523_I2C_parameters, myPCF8523_Data );
+  /* Set time: 235955 ( 23:59:55 )  */
+  myPCF8523_Data.time.bcd       =   0x235955;
+  myPCF8523_Data.time.hourMode  =   CONTROL_1_12_24_MODE_24_HOUR;
+  aux  =   PCF8523_SetTime ( myPCF8523_I2C_parameters, myPCF8523_Data.time );
   
   
     
@@ -176,32 +155,32 @@ int main(void)
     {
       NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );          // Turn all the LEDs on
 
-      ///* Get time  */
-      //aux  =   PCF8523_GetTime ( myPCF8523_I2C_parameters, &myPCF8523_Data );
+      /* Get time  */
+      aux  =   PCF8523_GetTime ( myPCF8523_I2C_parameters, &myPCF8523_Data.time );
 
-      ///* Get day  */
-      //aux  =   PCF8523_GetDay ( myPCF8523_I2C_parameters, &myPCF8523_Data );
+      /* Get day  */
+      aux  =   PCF8523_GetDay ( myPCF8523_I2C_parameters, &myPCF8523_Data.date.day );
 
-      ///* Get month  */
-      //aux  =   PCF8523_GetMonth ( myPCF8523_I2C_parameters, &myPCF8523_Data );
+      /* Get month  */
+      aux  =   PCF8523_GetMonth ( myPCF8523_I2C_parameters, &myPCF8523_Data.date.month );
 
-      ///* Get weekday  */
-      //aux  =   PCF8523_GetWeekday ( myPCF8523_I2C_parameters, &myPCF8523_Data );
+      /* Get weekday  */
+      aux  =   PCF8523_GetWeekday ( myPCF8523_I2C_parameters, &myPCF8523_Data.date.weekday );
 
-      ///* Get year  */
-      //aux  =   PCF8523_GetYear ( myPCF8523_I2C_parameters, &myPCF8523_Data );
+      /* Get year  */
+      aux  =   PCF8523_GetYear ( myPCF8523_I2C_parameters, &myPCF8523_Data.date.year );
 
 
-      ///* Transmit result through the UART  */
-      //sprintf ( (char*)myMessage, "Time: %0.2x:%0.2x:%0.2x, Month %x Day %x %s 20%x\r\n", ( ( myPCF8523_Data.BCDtime & 0xFF0000 ) >> 16U ), ( ( myPCF8523_Data.BCDtime & 0x00FF00 ) >> 8U ), 
-      //                                                        ( myPCF8523_Data.BCDtime & 0x0000FF ), myPCF8523_Data.BCDmonth, myPCF8523_Data.BCDday, MY_WEEK_DAY_STRING[myPCF8523_Data.weekday], myPCF8523_Data.BCDyear );
+      /* Transmit result through the UART  */
+      sprintf ( (char*)myMessage, "Time: %0.2x:%0.2x:%0.2x, Month %x Day %x %s 20%x\r\n", ( ( myPCF8523_Data.time.bcd & 0xFF0000 ) >> 16U ), ( ( myPCF8523_Data.time.bcd & 0x00FF00 ) >> 8U ), 
+                                                              ( myPCF8523_Data.time.bcd & 0x0000FF ), myPCF8523_Data.date.month, myPCF8523_Data.date.day, MY_WEEK_DAY_STRING[myPCF8523_Data.date.weekday], myPCF8523_Data.date.year );
 
-      //NRF_UART0->TASKS_STOPRX  =   1UL;
-      //NRF_UART0->TASKS_STOPTX  =   1UL;
-      //myPtr                    =   &myMessage[0];
+      NRF_UART0->TASKS_STOPRX  =   1UL;
+      NRF_UART0->TASKS_STOPTX  =   1UL;
+      myPtr                    =   &myMessage[0];
 
-      //NRF_UART0->TASKS_STARTTX =   1UL;
-      //NRF_UART0->TXD           =   *myPtr;
+      NRF_UART0->TASKS_STARTTX =   1UL;
+      NRF_UART0->TXD           =   *myPtr;
 
       
       /* Reset the variables   */
