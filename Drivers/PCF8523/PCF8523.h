@@ -733,87 +733,87 @@ typedef enum
   */
 /** It configures the I2C peripheral.
   */
-PCF8523_status_t  PCF8523_Init                              ( I2C_parameters_t myI2Cparameters                                                                );
+PCF8523_status_t  PCF8523_Init                              ( I2C_parameters_t myI2Cparameters                                                );
 
 /** It sets the internal oscillator capacitor selection for quartz crystals with a corresponding load capacitance.
   */
-PCF8523_status_t  PCF8523_SetInternallOscilatorCapacitor    ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cap_sel_t myCAP_SEL                         );
+PCF8523_status_t  PCF8523_SetInternallOscilatorCapacitor    ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cap_sel_t myCAP_SEL         );
 
 /** It sets the RTC clock mode.
   */
-PCF8523_status_t  PCF8523_SetRTCMode                        ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_stop_t mySTOP                               );
+PCF8523_status_t  PCF8523_SetRTCMode                        ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_stop_t mySTOP               );
 
 /** It performs a software reset.
   */
-PCF8523_status_t  PCF8523_SoftwareReset                     ( I2C_parameters_t myI2Cparameters                                                                );
+PCF8523_status_t  PCF8523_SoftwareReset                     ( I2C_parameters_t myI2Cparameters                                                );
 
 /** It sets 24h/12h mode.
   */
-PCF8523_status_t  PCF8523_SetHourMode                       ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_12_24_t my12_24                             );
+PCF8523_status_t  PCF8523_SetHourMode                       ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_12_24_t my12_24             );
 
 /** It enables/disables the second interrupt.
   */
-PCF8523_status_t  PCF8523_SetSecondInterrupt                ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_sie_t mySIE                                 );
+PCF8523_status_t  PCF8523_SetSecondInterrupt                ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_sie_t mySIE                 );
 
 /** It enables/disables the alarm interrupt.
   */
-PCF8523_status_t  PCF8523_SetAlarmInterrupt                 ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_aie_t myAIE             );
+PCF8523_status_t  PCF8523_SetAlarmInterrupt                 ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_aie_t myAIE                 );
 
 /** It sets the correction interrupt mode.
   */
-PCF8523_status_t  PCF8523_SetCorrectionInterruptMode        ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cie_t myCIE             );
+PCF8523_status_t  PCF8523_SetCorrectionInterruptMode        ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cie_t myCIE                 );
 
 /** It gets the satus interrupt flags.
   */
-PCF8523_status_t  PCF8523_GetStatusInterruptFlags           ( I2C_parameters_t myI2Cparameters, PCF8523_interrupt_flags_status_t* myFlags );
+PCF8523_status_t  PCF8523_GetStatusInterruptFlags           ( I2C_parameters_t myI2Cparameters, PCF8523_interrupt_flags_status_t* myFlags     );
 
 /** It enables/disables the watchdog timer A interrupt.
   */
-PCF8523_status_t  PCF8523_SetWatchdogTimerA_Interrupt       ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_wtaie_t myWTAIE         );
+PCF8523_status_t  PCF8523_SetWatchdogTimerA_Interrupt       ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_wtaie_t myWTAIE             );
 
 /** It enables/disables the countdown timer A interrupt.
   */
-PCF8523_status_t  PCF8523_SetCountdownTimerA_Interrupt      ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_ctaie_t myCTAIE         );
+PCF8523_status_t  PCF8523_SetCountdownTimerA_Interrupt      ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_ctaie_t myCTAIE             );
 
 /** It enables/disables the countdown timer B interrupt.
   */
-PCF8523_status_t  PCF8523_SetCountdownTimerB_Interrupt     ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_ctbie_t myCTBIE          );
+PCF8523_status_t  PCF8523_SetCountdownTimerB_Interrupt     ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_ctbie_t myCTBIE              );
 
 /** It enables/disables the battery switch-over interrupt.
   */
-PCF8523_status_t  PCF8523_SetBatterySwitchOverInterrupt     ( I2C_parameters_t myI2Cparameters, PCF8523_control_3_bsie_t myBSIE           );
+PCF8523_status_t  PCF8523_SetBatterySwitchOverInterrupt     ( I2C_parameters_t myI2Cparameters, PCF8523_control_3_bsie_t myBSIE               );
 
 /** It enables/disables the battery low interrupt.
   */
-PCF8523_status_t  PCF8523_SetBatteryLowInterrupt            ( I2C_parameters_t myI2Cparameters, PCF8523_control_3_blie_t myBLIE           );
+PCF8523_status_t  PCF8523_SetBatteryLowInterrupt            ( I2C_parameters_t myI2Cparameters, PCF8523_control_3_blie_t myBLIE               );
 
 /** It sets the power mode: battery switch-over and battery low detection control.
   */
-PCF8523_status_t  PCF8523_SetBatteryPowerModeControl        ( I2C_parameters_t myI2Cparameters, PCF8523_control_3_pm_t myPM               );
+PCF8523_status_t  PCF8523_SetBatteryPowerModeControl        ( I2C_parameters_t myI2Cparameters, PCF8523_control_3_pm_t myPM                   );
 
 /** It gets the time ( BCD format ).
   */
-PCF8523_status_t  PCF8523_GetTime                           ( I2C_parameters_t myI2Cparameters, PCF8523_time_t* myActualTime              );
+PCF8523_status_t  PCF8523_GetTime                           ( I2C_parameters_t myI2Cparameters, PCF8523_time_t* myActualTime                  );
 
 /** It sets the time ( BCD format ).
   */
-PCF8523_status_t  PCF8523_SetTime                           ( I2C_parameters_t myI2Cparameters, PCF8523_time_t myNewTime                  );
+PCF8523_status_t  PCF8523_SetTime                           ( I2C_parameters_t myI2Cparameters, PCF8523_time_t myNewTime                      );
 
 /** It sets the AM/PM indicator ( only for 12-hour mode ).
   */
-PCF8523_status_t  PCF8523_SetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, PCF8523_time_t myAM_PM_Indicator          );
+PCF8523_status_t  PCF8523_SetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, PCF8523_time_t myAM_PM_Indicator              );
 
 /** It gets the AM/PM indicator ( only for 12-hour mode ).
   */
-PCF8523_status_t  PCF8523_GetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, PCF8523_time_t* myAM_PM_Indicator         );
+PCF8523_status_t  PCF8523_GetAM_PM_Indicator                ( I2C_parameters_t myI2Cparameters, PCF8523_time_t* myAM_PM_Indicator             );
 
 /** It gets the day ( BCD format ).
   */
-PCF8523_status_t  PCF8523_GetDay                            ( I2C_parameters_t myI2Cparameters, uint8_t* myActualDay                      );
+PCF8523_status_t  PCF8523_GetDay                            ( I2C_parameters_t myI2Cparameters, uint8_t* myActualDay                          );
 
 /** It sets the day ( BCD format ).
   */
-PCF8523_status_t  PCF8523_SetDay                            ( I2C_parameters_t myI2Cparameters, uint8_t myNewDay                          );
+PCF8523_status_t  PCF8523_SetDay                            ( I2C_parameters_t myI2Cparameters, uint8_t myNewDay                              );
 
 /** It gets the weekday.
   */
@@ -833,15 +833,19 @@ PCF8523_status_t  PCF8523_SetMonth                          ( I2C_parameters_t m
 
 /** It gets the year ( BCD format ).
   */
-PCF8523_status_t  PCF8523_GetYear                           ( I2C_parameters_t myI2Cparameters, uint8_t* myActualYear                        );
+PCF8523_status_t  PCF8523_GetYear                           ( I2C_parameters_t myI2Cparameters, uint8_t* myActualYear                         );
 
 /** It sets the year ( BCD format ).
   */
-PCF8523_status_t  PCF8523_SetYear                           ( I2C_parameters_t myI2Cparameters, uint8_t myNewYear                            );
+PCF8523_status_t  PCF8523_SetYear                           ( I2C_parameters_t myI2Cparameters, uint8_t myNewYear                             );
 
 /** It sets the offset.
   */
-PCF8523_status_t  PCF8523_SetOffset                         ( I2C_parameters_t myI2Cparameters, PCF8523_offset_t myOFFSET                                   );
+PCF8523_status_t  PCF8523_SetOffset                         ( I2C_parameters_t myI2Cparameters, PCF8523_offset_t myOFFSET                     );
+
+/** It gets the offset configuration.
+  */
+PCF8523_status_t  PCF8523_GetOffset                         ( I2C_parameters_t myI2Cparameters, PCF8523_offset_t* myOFFSET                    );
 
 
 

@@ -1393,6 +1393,53 @@ PCF8523_status_t  PCF8523_SetOffset ( I2C_parameters_t myI2Cparameters, PCF8523_
 
 
 
+/**
+ * @brief       PCF8523_GetOffset ( I2C_parameters_t , PCF8523_offset_t* )
+ *
+ * @details     It gets the offset values.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myOFFSET:        Offset mode and Offset value: from +63 to -64.
+ *
+ *
+ * @return       Status of PCF8523_GetOffset.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        21/June/2021
+ * @version     21/June/2021     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF8523_status_t  PCF8523_GetOffset ( I2C_parameters_t myI2Cparameters, PCF8523_offset_t* myOFFSET )
+{
+  uint8_t      cmd  =  0U;
+  i2c_status_t aux  =  I2C_SUCCESS;
+  
+  /* Read the register   */
+  cmd   =   PCF8523_OFFSET;
+  aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  |=   i2c_read ( myI2Cparameters, &cmd, 1U );
+  
+  /* Parse the data  */
+  myOFFSET->mode   =  (PCF8523_offset_mode_t)( cmd & OFFSET_MODE_MASK );
+  myOFFSET->value  =  ( cmd & 0x7F );
+
+
+
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF8523_SUCCESS;
+  }
+  else
+  {
+    return   PCF8523_FAILURE;
+  }
+}
+
+
+
 ///**
 // * @brief       PCF8523_SetMinuteInterrupts ( I2C_parameters_t , PCF8523_control_2_mi_t , PCF8523_control_2_hmi_t )
 // *
