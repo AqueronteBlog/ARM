@@ -708,8 +708,7 @@ typedef struct
   PCF8523_offset_t  offset;                           /*!<  Offset                                                */
   
 
-
-  PCF8523_seconds_os_t         os;                                 /*!<  Oscillator flag                                       */
+  PCF8523_seconds_os_t         os;                    /*!<  Clock integrity flag                                  */
 } PCF8523_data_t;
 #endif
 
@@ -737,7 +736,7 @@ PCF8523_status_t  PCF8523_Init                              ( I2C_parameters_t m
 
 /** It sets the internal oscillator capacitor selection for quartz crystals with a corresponding load capacitance.
   */
-PCF8523_status_t  PCF8523_SetInternallOscilatorCapacitor    ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cap_sel_t myCAP_SEL         );
+PCF8523_status_t  PCF8523_SetInternalOscillatorCapacitor    ( I2C_parameters_t myI2Cparameters, PCF8523_control_1_cap_sel_t myCAP_SEL         );
 
 /** It sets the RTC clock mode.
   */
@@ -847,20 +846,13 @@ PCF8523_status_t  PCF8523_SetOffset                         ( I2C_parameters_t m
   */
 PCF8523_status_t  PCF8523_GetOffset                         ( I2C_parameters_t myI2Cparameters, PCF8523_offset_t* myOFFSET                    );
 
+/** It gets the clock integrity flag.
+  */
+PCF8523_status_t  PCF8523_GetClockIntegrityFlag             ( I2C_parameters_t myI2Cparameters, PCF8523_seconds_os_t* myOS                    );
 
 
-///** It enables/disables minute/half minute interrupt.
-//  */
-//PCF8523_status_t  PCF8523_SetMinuteInterrupts               ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_mi_t myMI, PCF8523_control_2_hmi_t myHMI  );
 
-///** It gets the status of the timer flag.
-//  */
-//PCF8523_status_t  PCF8523_GetTimerFlag                      ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_tf_t* myTF                                 );
-
-///** It resets the status of the timer flag.
-//  */
-//PCF8523_status_t  PCF8523_ClearTimerFlag                    ( I2C_parameters_t myI2Cparameters                                                                );
-
+///ALARM AND TIMER FUNCTIONS ARE MISSING
 
 
 #ifdef __cplusplus

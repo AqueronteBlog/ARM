@@ -1440,52 +1440,47 @@ PCF8523_status_t  PCF8523_GetOffset ( I2C_parameters_t myI2Cparameters, PCF8523_
 
 
 
-///**
-// * @brief       PCF8523_SetMinuteInterrupts ( I2C_parameters_t , PCF8523_control_2_mi_t , PCF8523_control_2_hmi_t )
-// *
-// * @details     It enables/disables minute/half minute interrupt.
-// *
-// * @param[in]    myI2Cparameters: I2C parameters.
-// * @param[in]    myMI:            Minute interrupt.
-// * @param[in]    myHMI:           Half minute interrupt.
-// *
-// * @param[out]   N/A.
-// *
-// *
-// * @return       Status of PCF8523_SetMinuteInterrupts.
-// *
-// *
-// * @author      Manuel Caballero
-// * @date        03/February/2021
-// * @version     03/February/2021     The ORIGIN
-// * @pre         N/A
-// * @warning     N/A.
-// */
-//PCF8523_status_t  PCF8523_SetMinuteInterrupts ( I2C_parameters_t myI2Cparameters, PCF8523_control_2_mi_t myMI, PCF8523_control_2_hmi_t myHMI )
-//{
-//  uint8_t      cmd[2]  = { 0U };
-//  i2c_status_t aux;
-
-//  /* Read the register   */
-//  cmd[0]   =   PCF8523_CONTROL_2;
-//  aux      =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
-//  aux      =   i2c_read ( myI2Cparameters, &cmd[1], 1U );
+/**
+ * @brief       PCF8523_GetClockIntegrityFlag ( I2C_parameters_t , PCF8523_seconds_os_t* )
+ *
+ * @details     It gets the clock integrity flag.
+ *
+ * @param[in]    myI2Cparameters: I2C parameters.
+ *
+ * @param[out]   myOS:            Clock integrity flag.
+ *
+ *
+ * @return       Status of PCF8523_GetClockIntegrityFlag.
+ *
+ *
+ * @author      Manuel Caballero
+ * @date        21/June/2021
+ * @version     21/June/2021     The ORIGIN
+ * @pre         N/A
+ * @warning     N/A.
+ */
+PCF8523_status_t  PCF8523_GetClockIntegrityFlag ( I2C_parameters_t myI2Cparameters, PCF8523_seconds_os_t* myOS )
+{
+  uint8_t      cmd  =  0U;
+  i2c_status_t aux  =  I2C_SUCCESS;
   
-//  /* Mask it and update it with the new value  */
-//  cmd[1]   =   ( ( cmd[1] & ~( CONTROL_2_MI_MASK | CONTROL_2_HMI_MASK ) ) | myMI | myHMI );
-//  aux      =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+  /* Read the register   */
+  cmd   =   PCF8523_SECONDS;
+  aux  |=   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
+  aux  |=   i2c_read ( myI2Cparameters, &cmd, 1U );
+  
+  /* Parse the data  */
+  *myOS  =  (PCF8523_seconds_os_t)( cmd & SECONDS_OS_MASK );
 
 
 
-//  if ( aux == I2C_SUCCESS )
-//  {
-//    return   PCF8523_SUCCESS;
-//  }
-//  else
-//  {
-//    return   PCF8523_FAILURE;
-//  }
-//}
-
-
+  if ( aux == I2C_SUCCESS )
+  {
+    return   PCF8523_SUCCESS;
+  }
+  else
+  {
+    return   PCF8523_FAILURE;
+  }
+}
 
