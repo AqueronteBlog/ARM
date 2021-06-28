@@ -40,9 +40,9 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="227" y="175" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../main.c" selected="1" top="153" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="56" y="78" useTextEdit="1" openedFrom="D:/vsProjects/ARM/NRF52/Examples/examples/Drivers/PCF8523/main.c" useBinaryEdit="0" left="0" path="../../../../../../../../Drivers/PCF8523/PCF8523.c" selected="0" top="59" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="56" y="738" useTextEdit="1" openedFrom="D:/vsProjects/ARM/NRF52/Examples/examples/Drivers/PCF8523/main.c" useBinaryEdit="0" left="0" path="../../../../../../../../Drivers/PCF8523/PCF8523.h" selected="0" top="717" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="175" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../main.c" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="78" useTextEdit="1" openedFrom="D:/vsProjects/ARM/NRF52/Examples/examples/Drivers/PCF8523/main.c" useBinaryEdit="0" left="0" path="../../../../../../../../Drivers/PCF8523/PCF8523.c" selected="0" top="59" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="738" useTextEdit="1" openedFrom="D:/vsProjects/ARM/NRF52/Examples/examples/Drivers/PCF8523/main.c" useBinaryEdit="0" left="0" path="../../../../../../../../Drivers/PCF8523/PCF8523.h" selected="0" top="717" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="PCF8523" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="C:/Users/mcm/Documents/ARM/Drivers/PCF8523" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>
