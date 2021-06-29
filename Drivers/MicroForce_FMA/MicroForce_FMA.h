@@ -13,51 +13,81 @@
  * @warning     N/A
  * @pre         This code belongs to Nimbus Centre ( https://www.nimbus.cit.ie ).
  */
+#ifndef MicroForce_FMA_H_
+#define MicroForce_FMA_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "stdint.h"
 #include "stdbool.h"
 #include "spi.h"
 
 
-#ifndef MicroForce_FMA_H_
-#define MicroForce_FMAH_
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
-/* Command Byte */
 /**
-  * @brief   COMMAND SELECTION BITS
+  * @brief   STATUS BITS
   */
 typedef enum{
-    MicroForce_FMA_COMMAND_NONE         =   ( 0b00 << 4 ),      /*!<   No Command will be executed                                                                                                          */
-    MicroForce_FMA_COMMAND_WRITE_DATA   =   ( 0b01 << 4 ),      /*!<   Write the data contained in Data Byte to the potentiometer(s) determined by the potentiometer selection bits                         */
-    MicroForce_FMA_COMMAND_SHUTDOWN     =   ( 0b10 << 4 )       /*!<   Potentiometer(s) determined by potentiometer selection bits will enter Shutdown Mode. Data bits for this command are 'don't cares'   */
-} MicroForce_FMA_command_selection_bits_t;
+    MicroForce_FMA_STATUS_BITS_MASK                   =   ( 0b11 << 6 ),      /*!<   STATUS BITS mask                 */
+    MicroForce_FMA_STATUS_BITS_NORMAL_OPERATION       =   ( 0b00 << 6 ),      /*!<   Normal operation, valid data     */
+    MicroForce_FMA_STATUS_BITS_DEVICE_IN_COMMAND_MODE =   ( 0b01 << 6 ),      /*!<   Device in command mode           */
+    MicroForce_FMA_STATUS_BITS_STALE_DATA             =   ( 0b10 << 6 ),      /*!<   Stale data                       */
+    MicroForce_FMA_STATUS_BITS_DIAGNOSTIC_CONDITION   =   ( 0b11 << 6 )       /*!<   Diagnostic condition             */
+} MicroForce_FMA_status_bits_t;
 
 
 /**
-  * @brief   POTENTIOMETER SELECTION BITS
+  * @brief   TRANSFER FUCNTION
   */
 typedef enum{
-    MicroForce_FMA_POTENTIOMETER_DUMMY_CODE                     =   ( 0b00 << 0 ),      /*!<   Dummy Code: Neither Potentiometer affected               */
-    MicroForce_FMA_POTENTIOMETER_COMMAND_POTENTIOMETER_0        =   ( 0b01 << 0 ),      /*!<   Command executed on Potentiometer 0                      */
-    MicroForce_FMA_POTENTIOMETER_COMMAND_POTENTIOMETER_1        =   ( 0b10 << 0 ),      /*!<   Command executed on Potentiometer 1                      */
-    MicroForce_FMA_POTENTIOMETER_COMMAND_BOTH_POTENTIOMETERS    =   ( 0b11 << 0 )       /*!<   Command executed on both Potentiometers */
-} MicroForce_FMA_potentiometer_selection_bits_t;
+    MicroForce_FMA_TRANSFER_FUNCTION_10_TO_90         =   0U,                 /*!<   Tranfer function A: 10% to 90%   */
+    MicroForce_FMA_TRANSFER_FUNCTION_20_TO_80         =   1U                  /*!<   Tranfer function C: 20% to 80%   */
+} MicroForce_FMA_transfer_function_t;
+
+
+/**
+  * @brief   FORCE RANGE
+  */
+
+#define FMA_FORCE_RANGE_5_N     5U                 /*!<   Force range:  5N                 */
+#define FMA_FORCE_RANGE_15_N   15U                 /*!<   Force range: 15N                 */
+#define FMA_FORCE_RANGE_25_N   25U                 /*!<   Force range: 25N                 */
 
 
 
 
 
-#ifndef MicroForce_FMA_VECTOR_STRUCT_H
-#define MicroForce_FMA_VECTOR_STRUCT_H
+#ifndef MicroForce_FMA_STRUCT_H
+#define MicroForce_FMA_STRUCT_H
 typedef struct{
-    uint8_t Dn;
-} MicroForce_FMA_vector_data_t;
+    MicroForce_FMA_status_bits_t status_bits;
+} MicroForce_FMA_status_bits_data_t;
+
+
+typedef struct{
+    uint16_t  raw_bridge_data;
+    float     bridge_data;                                              /*!<   Force data in Newton (N)           */
+} MicroForce_FMA_bridge_data_t;
+
+
+typedef struct{
+    uint8_t   raw_8bit_temperature;
+    uint16_t  raw_11bit_temperature;
+    float     temperature_data;                                         /*!<   Temperature data in Celsius degree */
+} MicroForce_FMA_temperature_data_t;
+
+
+/* User's data   */
+typedef struct{
+    MicroForce_FMA_transfer_function_t  transfer_function;              /*!<   Transfer function. Calibration     */
+    uint8_t                             force_range;                    /*!<   Force Range                        */
+
+    MicroForce_FMA_status_bits_data_t   status;                         /*!<   Status bits. Device condition      */
+
+    MicroForce_FMA_bridge_data_t        force;                          /*!<   Force data                         */
+    MicroForce_FMA_temperature_data_t   temperature;                    /*!<   Temperature data                   */  
+} MicroForce_FMA_data_t;
 #endif
 
 
@@ -78,15 +108,35 @@ typedef enum{
   */
 /** It configures the SPI peripheral.
     */
-MicroForce_FMA_status_t  MicroForce_FMA_Init                ( SPI_parameters_t mySPIparameters                                                                                                     );
+MicroForce_FMA_status_t  MicroForce_FMA_Init                      ( SPI_parameters_t mySPIparameters                                                                                                    );
 
-/** It updates the wiper value on the given channel.
+/** It gets the raw force data.
     */
-MicroForce_FMA_status_t  MicroForce_FMA_SetWiper            ( SPI_parameters_t mySPIparameters, MicroForce_FMA_potentiometer_selection_bits_t myChannel, MicroForce_FMA_vector_data_t myWiperValue );
+MicroForce_FMA_status_t  MicroForce_FMA_GetRawForce               ( SPI_parameters_t mySPIparameters, MicroForce_FMA_status_bits_data_t* myStatus, uint16_t* myRawBridgeData                            );
 
-/** It performs a software shutdown.
+/** It calculates the force data in Newton (N).
     */
-MicroForce_FMA_status_t  MicroForce_FMA_SoftwareShutdown    ( SPI_parameters_t mySPIparameters, MicroForce_FMA_potentiometer_selection_bits_t myChannel                                            );
+float                    MicroForce_FMA_CalculateForce            ( MicroForce_FMA_transfer_function_t myCalibration, uint8_t myForceRange, uint16_t myRawBridgeData                                    );
+
+/** It gets the raw 8-bit temperature.
+    */
+MicroForce_FMA_status_t  MicroForce_FMA_GetRaw8bitTemperature     ( SPI_parameters_t mySPIparameters, MicroForce_FMA_status_bits_data_t* myStatus, uint8_t* myRaw8bitTemp                               );
+
+/** It gets the raw 11-bit temperature.
+    */
+MicroForce_FMA_status_t  MicroForce_FMA_GetRaw11bitTemperature    ( SPI_parameters_t mySPIparameters, MicroForce_FMA_status_bits_data_t* myStatus, uint16_t* myRaw11bitTemp                             );
+
+/** It calculates the 8-bit temperature in Celsius degree.
+    */
+float                    MicroForce_FMA_Calculate8bitTemperature  ( uint8_t myRawTemperature                                                                                                            );
+
+/** It calculates the 11-bit temperature in Celsius degree.
+    */
+float                    MicroForce_FMA_Calculate11bitTemperature ( uint16_t myRawTemperature                                                                                                           );
+
+/** It gets the all raw data ( bridge data and 11-bit temperature ).
+    */
+MicroForce_FMA_status_t  MicroForce_FMA_GetAllRawData             ( SPI_parameters_t mySPIparameters, MicroForce_FMA_status_bits_data_t* myStatus, uint16_t* myRawBridgeData, uint16_t* myRaw11bitTemp  );
 
 
 #ifdef __cplusplus
