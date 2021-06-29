@@ -1,24 +1,24 @@
 /**
- * @brief       MCP41XXX_42XXX.c
- * @details     Single/Dual Digital Potentiometer with SPI™ Interface.
+ * @brief       MicroForce_FMA.c
+ * @details     MicroForce Sensors, Compensated/Amplified.
  *              Functions file.
  *
  *
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        21/August/2018
- * @version     21/August/2018    The ORIGIN
+ * @date        29/June/2021
+ * @version     29/June/2021    The ORIGIN
  * @pre         N/A.
  * @warning     N/A
- * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
+ * @pre         This code belongs to Nimbus Centre ( https://www.nimbus.cit.ie ).
  */
 
- #include "MCP41XXX_42XXX.h"
+ #include "MicroForce_FMA.h"
 
 
 /**
- * @brief       MCP41XXX_42XXX_Init ( SPI_parameters_t )
+ * @brief       MicroForce_FMA_Init ( SPI_parameters_t )
  *
  * @details     It configures the SPI peripheral.
  *
@@ -27,16 +27,16 @@
  * @param[out]   N/A.
  *
  *
- * @return       Status of MCP41XXX_42XXX_Init.
+ * @return       Status of MicroForce_FMA_Init.
  *
  *
  * @author      Manuel Caballero
- * @date        21/August/2018
- * @version     21/August/2018   The ORIGIN
+ * @date        29/June/2021
+ * @version     29/June/2021   The ORIGIN
  * @pre         N/A
  * @warning     N/A.
  */
-MCP41XXX_42XXX_status_t  MCP41XXX_42XXX_Init ( SPI_parameters_t mySPIparameters )
+MicroForce_FMA_status_t  MicroForce_FMA_Init ( SPI_parameters_t mySPIparameters )
 {
     spi_status_t    mySPI_status;
 
@@ -47,18 +47,18 @@ MCP41XXX_42XXX_status_t  MCP41XXX_42XXX_Init ( SPI_parameters_t mySPIparameters 
 
     if ( mySPI_status == SPI_SUCCESS )
     {
-        return   MCP41XXX_42XXX_SUCCESS;
+        return   MicroForce_FMA_SUCCESS;
     }
     else
     {
-        return   MCP41XXX_42XXX_FAILURE;
+        return   MicroForce_FMA_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       MCP41XXX_42XXX_SetWiper   ( SPI_parameters_t , MCP41XXX_42XXX_potentiometer_selection_bits_t , MCP41XXX_42XXX_vector_data_t )
+ * @brief       MicroForce_FMA_SetWiper   ( SPI_parameters_t , MicroForce_FMA_potentiometer_selection_bits_t , MicroForce_FMA_vector_data_t )
  *
  * @details     It updates the wiper value on the given channel.
  *
@@ -69,24 +69,24 @@ MCP41XXX_42XXX_status_t  MCP41XXX_42XXX_Init ( SPI_parameters_t mySPIparameters 
  * @param[out]   N/A.
  *
  *
- * @return       Status of MCP41XXX_42XXX_SetWiper.
+ * @return       Status of MicroForce_FMA_SetWiper.
  *
  *
  * @author      Manuel Caballero
- * @date        21/August/2018
- * @version     21/August/2018   The ORIGIN
+ * @date        29/June/2021
+ * @version     29/June/2021   The ORIGIN
  * @pre         The MCP42XXX contains two independent channels in a 14-pin PDIP, SOIC or TSSOP package while the MCP41XXX is a single-channel device
  *              and is offered in an 8-pin PDIP or SOIC package.
  * @warning     N/A.
  */
-MCP41XXX_42XXX_status_t  MCP41XXX_42XXX_SetWiper ( SPI_parameters_t mySPIparameters, MCP41XXX_42XXX_potentiometer_selection_bits_t myChannel, MCP41XXX_42XXX_vector_data_t myWiperValue )
+MicroForce_FMA_status_t  MicroForce_FMA_SetWiper ( SPI_parameters_t mySPIparameters, MicroForce_FMA_potentiometer_selection_bits_t myChannel, MicroForce_FMA_vector_data_t myWiperValue )
 {
     uint8_t         cmd[]   =    { 0, 0 };
     spi_status_t    mySPI_status;
 
 
     /* Make the command byte and the new wiper value, update the register then     */
-    cmd[0]           =   (uint8_t)( MCP41XXX_42XXX_COMMAND_WRITE_DATA | myChannel );
+    cmd[0]           =   (uint8_t)( MicroForce_FMA_COMMAND_WRITE_DATA | myChannel );
     cmd[1]           =   (uint8_t)myWiperValue.Dn;
     mySPI_status     =   spi_transfer ( mySPIparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
@@ -95,18 +95,18 @@ MCP41XXX_42XXX_status_t  MCP41XXX_42XXX_SetWiper ( SPI_parameters_t mySPIparamet
 
     if ( mySPI_status == SPI_SUCCESS )
     {
-        return   MCP41XXX_42XXX_SUCCESS;
+        return   MicroForce_FMA_SUCCESS;
     }
     else
     {
-        return   MCP41XXX_42XXX_FAILURE;
+        return   MicroForce_FMA_FAILURE;
     }
 }
 
 
 
 /**
- * @brief       MCP41XXX_42XXX_SoftwareShutdown   ( SPI_parameters_t , MCP41XXX_42XXX_potentiometer_selection_bits_t )
+ * @brief       MicroForce_FMA_SoftwareShutdown   ( SPI_parameters_t , MicroForce_FMA_potentiometer_selection_bits_t )
  *
  * @details     It performs a software shutdown.
  *
@@ -116,24 +116,24 @@ MCP41XXX_42XXX_status_t  MCP41XXX_42XXX_SetWiper ( SPI_parameters_t mySPIparamet
  * @param[out]   N/A.
  *
  *
- * @return       Status of MCP41XXX_42XXX_SoftwareShutdown.
+ * @return       Status of MicroForce_FMA_SoftwareShutdown.
  *
  *
  * @author      Manuel Caballero
- * @date        21/August/2018
- * @version     21/August/2018   The ORIGIN
+ * @date        29/June/2021
+ * @version     29/June/2021   The ORIGIN
  * @pre         The MCP42XXX contains two independent channels in a 14-pin PDIP, SOIC or TSSOP package while the MCP41XXX is a single-channel device
  *              and is offered in an 8-pin PDIP or SOIC package.
  * @warning     N/A.
  */
-MCP41XXX_42XXX_status_t  MCP41XXX_42XXX_SoftwareShutdown ( SPI_parameters_t mySPIparameters, MCP41XXX_42XXX_potentiometer_selection_bits_t myChannel )
+MicroForce_FMA_status_t  MicroForce_FMA_SoftwareShutdown ( SPI_parameters_t mySPIparameters, MicroForce_FMA_potentiometer_selection_bits_t myChannel )
 {
     uint8_t         cmd[]   =    { 0, 0 };
     spi_status_t    mySPI_status;
 
 
     /* Make the command byte, the new wiper value does not take place, update the register then     */
-    cmd[0]           =   (uint8_t)( MCP41XXX_42XXX_COMMAND_SHUTDOWN | myChannel );
+    cmd[0]           =   (uint8_t)( MicroForce_FMA_COMMAND_SHUTDOWN | myChannel );
     cmd[1]           =   0;
     mySPI_status     =   spi_transfer ( mySPIparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), &cmd[0], 0 );
 
@@ -142,10 +142,10 @@ MCP41XXX_42XXX_status_t  MCP41XXX_42XXX_SoftwareShutdown ( SPI_parameters_t mySP
 
     if ( mySPI_status == SPI_SUCCESS )
     {
-        return   MCP41XXX_42XXX_SUCCESS;
+        return   MicroForce_FMA_SUCCESS;
     }
     else
     {
-        return   MCP41XXX_42XXX_FAILURE;
+        return   MicroForce_FMA_FAILURE;
     }
 }
