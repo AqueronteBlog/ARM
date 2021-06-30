@@ -45,6 +45,16 @@ typedef enum{
 } NRF52DK_board_twi0_t;
 
 
+/**@brief SPI0.
+ */
+typedef enum{
+  SPI0_SCK  =   29,         /*!<   SPI0 SCLK: P0.29  */
+  SPI0_MOSI =   25,         /*!<   SPI0 MOSI: P0.25  */
+  SPI0_MISO =   28,         /*!<   SPI0 MISO: P0.28  */
+  SPI0_CS   =   5           /*!<   SPI0 CS:   P0.5   */
+} NRF52DK_board_spi0_t;
+
+
 #ifdef __cplusplus
 }
 #endif
