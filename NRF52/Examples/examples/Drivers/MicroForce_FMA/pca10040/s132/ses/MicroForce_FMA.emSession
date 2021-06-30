@@ -15,7 +15,6 @@
   <ProjectSessionItem path="MicroForce_FMA;MicroForce_FMA"/>
   <ProjectSessionItem path="MicroForce_FMA;MicroForce_FMA;Application"/>
   <ProjectSessionItem path="MicroForce_FMA;MicroForce_FMA;Drivers"/>
-  <ProjectSessionItem path="MicroForce_FMA;MicroForce_FMA;Drivers;MicroForce_FMA"/>
  </Project>
  <Register1/>
  <Register2/>
@@ -40,9 +39,9 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="91" y="13" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../main.c" selected="0" top="9" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="35" y="350" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../../../Drivers/MicroForce_FMA/MicroForce_FMA.c" selected="1" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="25" useTextEdit="1" openedFrom="D:/vsProjects/ARM/Drivers/MicroForce_FMA/MicroForce_FMA.c" useBinaryEdit="0" left="0" path="../../../../../../../../Drivers/MicroForce_FMA/MicroForce_FMA.h" selected="0" top="78" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="9" y="59" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../main.c" selected="1" top="30" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="25" y="335" useTextEdit="1" openedFrom="D:/vsProjects/ARM/NRF52/Examples/examples/Drivers/MicroForce_FMA/main.c" useBinaryEdit="0" left="0" path="../../../../../../../../Drivers/MicroForce_FMA/MicroForce_FMA.c" selected="0" top="325" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="47" y="32" useTextEdit="1" openedFrom="D:/vsProjects/ARM/NRF52/Examples/examples/Drivers/MicroForce_FMA/main.c" useBinaryEdit="0" left="0" path="../../../../../../../../Drivers/MicroForce_FMA/MicroForce_FMA.h" selected="0" top="17" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="SX1272_SX1273" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="D:/vsProjects/ARM/Drivers/MicroForce_FMA" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <ARMCrossStudioWindow activeProject="MicroForce_FMA" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="D:/vsProjects/ARM/Drivers/MicroForce_FMA" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

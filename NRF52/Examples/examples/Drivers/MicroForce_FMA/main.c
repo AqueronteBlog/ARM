@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the external device: MCP9808. Every 1 seconds, a new
- *              temperature value is read and the data is transmitted through the UART ( Baud Rate: 230400 ).
+ * @details     This example shows how to work with the external device: MicroForce_FMA. Every 1 seconds, a new
+ *              force and temperature data are read and the data is transmitted through the UART ( Baud Rate: 230400 ).
  *
  *              The microcontroller is in low power the rest of the time.
  *
@@ -49,10 +49,9 @@ int main(void)
 {
   uint8_t  myMessage[ TX_BUFF_SIZE ];
 
-//  I2C_parameters_t      myMCP9808_I2C_parameters;
-//  MCP9808_status_t      aux;
-//  MCP9808_config_reg_t  myMCP9808_Config;
-//  MCP9808_data_t        myMCP9808_Data;
+  SPI_parameters_t             myMicroForce_FMA_SPI_parameters;
+  MicroForce_FMA_status_t      aux;
+  MicroForce_FMA_data_t        myMicroForce_FMA_Data;
 
 
   conf_CLK    ();
@@ -62,55 +61,22 @@ int main(void)
 
   
 
-  /* I2C definition   */
-//  myMCP9808_I2C_parameters.TWIinstance =    NRF_TWI0;
-//  myMCP9808_I2C_parameters.SDA         =    TWI0_SDA;
-//  myMCP9808_I2C_parameters.SCL         =    TWI0_SCL;
-//  myMCP9808_I2C_parameters.ADDR        =    MCP9808_ADDRESS_0;
-//  myMCP9808_I2C_parameters.Freq        =    TWI_FREQUENCY_FREQUENCY_K400;
-//  myMCP9808_I2C_parameters.SDAport     =    NRF_P0;
-//  myMCP9808_I2C_parameters.SCLport     =    NRF_P0;
-//
-//  /* Configure I2C peripheral  */
-//  aux  =   MCP9808_Init  ( myMCP9808_I2C_parameters );
-//
-//  /* Shutdown the device, low-power mode enabled  */
-//  aux  =   MCP9808_GetCONFIG ( myMCP9808_I2C_parameters, &myMCP9808_Config );
-//  
-//  myMCP9808_Config.shdn  =   CONFIG_SHDN_SHUTDOWN;
-//  aux  =   MCP9808_SetCONFIG ( myMCP9808_I2C_parameters, myMCP9808_Config );
-//  
-//  /* Get manufacturer ID  */
-//  aux  =   MCP9808_GetManufacturerID ( myMCP9808_I2C_parameters, &myMCP9808_Data );
-//
-//  /* Get device ID and device revision  */
-//  aux  =   MCP9808_GetDeviceID ( myMCP9808_I2C_parameters, &myMCP9808_Data );
-//  
-//  /* Configure the device
-//   *  - T_UPPER and T_LOWER limit hysteresis at 0C
-//   *  - Continuous conversion mode
-//   *  - T_CRIT unlocked
-//   *  - Window lock unlocked
-//   *  - Alert output control disabled
-//   *  - Alert output select: Alert for T_UPPER, T_LOWER and T_CRIT
-//   *  - Alert output polaruty: Active-low
-//   *  - Alert output mode: Comparator output
-//   */
-//  myMCP9808_Config.t_hyst      =   CONFIG_T_HYST_0_C;
-//  myMCP9808_Config.shdn        =   CONFIG_SHDN_CONTINUOUS_CONVERSION;
-//  myMCP9808_Config.t_crit      =   CONFIG_CRIT_LOCK_UNLOCKED;
-//  myMCP9808_Config.t_win_lock  =   CONFIG_WIN_LOCK_UNLOCKED;
-//  myMCP9808_Config.alert_cnt   =   CONFIG_ALERT_CNT_DISABLED;
-//  myMCP9808_Config.alert_sel   =   CONFIG_ALERT_SEL_TUPPER_TLOWER_TCRIT;
-//  myMCP9808_Config.alert_pol   =   CONFIG_ALERT_POL_ACTIVE_LOW;
-//  myMCP9808_Config.alert_mod   =   CONFIG_ALERT_MOD_COMPARATOR_OUTPUT;
-//  aux  =   MCP9808_SetCONFIG ( myMCP9808_I2C_parameters, myMCP9808_Config );
-//
-//  /* Set resolution: +0.0625C ( t_CON ~ 250ms )  */
-//  myMCP9808_Data.resolution  =   RESOLUTION_0_0625_C;
-//  aux  =   MCP9808_SetResolution ( myMCP9808_I2C_parameters, myMCP9808_Data );
-  
-  
+  /* SPI definition   */
+  myMicroForce_FMA_SPI_parameters.SPIinstance =    NRF_SPI0;
+  myMicroForce_FMA_SPI_parameters.MOSI        =    SPI0_MOSI;
+  myMicroForce_FMA_SPI_parameters.MISO        =    SPI0_MISO;
+  myMicroForce_FMA_SPI_parameters.SCLK        =    SPI0_SCK;
+  myMicroForce_FMA_SPI_parameters.CS          =    SPI0_CS;
+  myMicroForce_FMA_SPI_parameters.Freq        =    SPI_FREQUENCY_FREQUENCY_K500;
+  myMicroForce_FMA_SPI_parameters.MISOport    =    NRF_GPIO;
+  myMicroForce_FMA_SPI_parameters.MOSIport    =    NRF_GPIO;
+  myMicroForce_FMA_SPI_parameters.SCLKport    =    NRF_GPIO;
+  myMicroForce_FMA_SPI_parameters.CSport      =    NRF_GPIO;
+
+  /* Configure SPI peripheral  */
+  aux  =   MicroForce_FMA_Init  ( myMicroForce_FMA_SPI_parameters );
+
+
     
   myState  =   0;                             // Reset the variable
   NRF_TIMER0->TASKS_START  =   1;             // Start Timer0
@@ -130,19 +96,29 @@ int main(void)
     if ( myState == 1UL )
     {
       NRF_P0->OUTCLR  |= ( ( 1U << LED1 ) | ( 1U << LED2 ) | ( 1U << LED3 ) | ( 1U << LED4 ) );          // Turn all the LEDs on
+      
+      do{
+        /* Get all the data  */
+        aux  =   MicroForce_FMA_GetAllRawData ( myMicroForce_FMA_SPI_parameters, &myMicroForce_FMA_Data.status, &myMicroForce_FMA_Data.force.raw_bridge_data, &myMicroForce_FMA_Data.temperature.raw_11bit_temperature );
+        nrf_delay_ms(1U);
+      }while( myMicroForce_FMA_Data.status.status_bits != MicroForce_FMA_STATUS_BITS_NORMAL_OPERATION );
 
-//      /* Get ambient temperature  */
-//      aux  =   MCP9808_GetTA ( myMCP9808_I2C_parameters, &myMCP9808_Data );
-//
-//      /* Transmit result through the UART  */
-//      sprintf ( (char*)myMessage, "T: %d.%d C\r\n", (int32_t)myMCP9808_Data.t_a, (int32_t)( ( myMCP9808_Data.t_a - (uint32_t)myMCP9808_Data.t_a ) * 10000.0f ) );
-//
-//      NRF_UART0->TASKS_STOPRX  =   1UL;
-//      NRF_UART0->TASKS_STOPTX  =   1UL;
-//      myPtr                    =   &myMessage[0];
-//
-//      NRF_UART0->TASKS_STARTTX =   1UL;
-//      NRF_UART0->TXD           =   *myPtr;
+      /* It processes all the data   */
+      myMicroForce_FMA_Data.transfer_function             =  MicroForce_FMA_TRANSFER_FUNCTION_20_TO_80;
+      myMicroForce_FMA_Data.force_range                   =  FMA_FORCE_RANGE_15_N;
+      myMicroForce_FMA_Data.force.bridge_data             =  MicroForce_FMA_CalculateForce ( myMicroForce_FMA_Data.transfer_function, myMicroForce_FMA_Data.force_range, myMicroForce_FMA_Data.force.raw_bridge_data );
+      myMicroForce_FMA_Data.temperature.temperature_data  =  MicroForce_FMA_Calculate11bitTemperature ( myMicroForce_FMA_Data.temperature.raw_11bit_temperature );
+
+
+      /* Transmit result through the UART  */
+      sprintf ( (char*)myMessage, "Force: %d N | Temp: %d C\r\n", (uint32_t)myMicroForce_FMA_Data.force.bridge_data, (uint32_t)myMicroForce_FMA_Data.temperature.temperature_data );
+
+      NRF_UART0->TASKS_STOPRX  =   1UL;
+      NRF_UART0->TASKS_STOPTX  =   1UL;
+      myPtr                    =   &myMessage[0];
+
+      NRF_UART0->TASKS_STARTTX =   1UL;
+      NRF_UART0->TXD           =   *myPtr;
 
       
       /* Reset the variables   */
