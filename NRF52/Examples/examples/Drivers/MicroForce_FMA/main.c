@@ -62,16 +62,19 @@ int main(void)
   
 
   /* SPI definition   */
-  myMicroForce_FMA_SPI_parameters.SPIinstance =    NRF_SPI0;
-  myMicroForce_FMA_SPI_parameters.MOSI        =    SPI0_MOSI;
-  myMicroForce_FMA_SPI_parameters.MISO        =    SPI0_MISO;
-  myMicroForce_FMA_SPI_parameters.SCLK        =    SPI0_SCK;
-  myMicroForce_FMA_SPI_parameters.CS          =    SPI0_CS;
-  myMicroForce_FMA_SPI_parameters.Freq        =    SPI_FREQUENCY_FREQUENCY_K500;
-  myMicroForce_FMA_SPI_parameters.MISOport    =    NRF_GPIO;
-  myMicroForce_FMA_SPI_parameters.MOSIport    =    NRF_GPIO;
-  myMicroForce_FMA_SPI_parameters.SCLKport    =    NRF_GPIO;
-  myMicroForce_FMA_SPI_parameters.CSport      =    NRF_GPIO;
+  myMicroForce_FMA_SPI_parameters.SPIinstance         =    NRF_SPI0;
+  myMicroForce_FMA_SPI_parameters.SPImode             =    SPI_MODE_0;
+  myMicroForce_FMA_SPI_parameters.SPIenable_line_mode =    SPI_ENABLE_LINE_LOW;
+  myMicroForce_FMA_SPI_parameters.SPIbyte_order       =    SPI_ORDER_MSB_FIRST;
+  myMicroForce_FMA_SPI_parameters.MOSI                =    SPI0_MOSI;
+  myMicroForce_FMA_SPI_parameters.MISO                =    SPI0_MISO;
+  myMicroForce_FMA_SPI_parameters.SCLK                =    SPI0_SCK;
+  myMicroForce_FMA_SPI_parameters.CS                  =    SPI0_CS;
+  myMicroForce_FMA_SPI_parameters.Freq                =    SPI_FREQUENCY_FREQUENCY_K500;
+  myMicroForce_FMA_SPI_parameters.MISOport            =    NRF_GPIO;
+  myMicroForce_FMA_SPI_parameters.MOSIport            =    NRF_GPIO;
+  myMicroForce_FMA_SPI_parameters.SCLKport            =    NRF_GPIO;
+  myMicroForce_FMA_SPI_parameters.CSport              =    NRF_GPIO;
 
   /* Configure SPI peripheral  */
   aux  =   MicroForce_FMA_Init  ( myMicroForce_FMA_SPI_parameters );
