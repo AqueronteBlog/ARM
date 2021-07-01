@@ -3,3 +3,4 @@ NRF52/Examples/examples/Drivers/SCD30/pca10040/s132/ses/Output/
 NRF52/Examples/examples/Drivers/AMBIMATE_MS4/pca10040/s132/ses/Output/
 NRF52/Examples/examples/Drivers/PCF8523/pca10040/s132/ses/Output/Debug/
 NRF52/Examples/examples/Drivers/MicroForce_FMA/pca10040/s132/ses/Output/
+*.jlink
