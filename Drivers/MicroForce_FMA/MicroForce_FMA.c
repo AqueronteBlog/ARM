@@ -10,7 +10,7 @@
  * @date        29/June/2021
  * @version     29/June/2021    The ORIGIN
  * @pre         N/A.
- * @warning     N/A
+ * @warning     This driver only supports SPI communication: FMAMSDXX005WCSC3,FMAMSDXX015WCSC3 and FMAMSDXX025WCSC3.
  * @pre         This code belongs to Nimbus Centre ( https://www.nimbus.cit.ie ).
  */
 
