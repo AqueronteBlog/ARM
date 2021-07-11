@@ -48,7 +48,7 @@
 #include "functions.h"
 #include "interrupts.h"
 #if defined (WORK_FROM_HOME)
-#include "D:/Workspace/ARM/Drivers/BH1790GLC/BH1790GLC.h"
+#include "C:/Users/mcm/OneDrive/Documents/Workspaces/ARM/Drivers/BH1790GLC/BH1790GLC.h"
 #else
 #include "D:/vsProjects/ARM/Drivers/BH1790GLC/BH1790GLC.h"
 #endif
