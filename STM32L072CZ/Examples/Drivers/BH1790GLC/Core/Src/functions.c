@@ -57,11 +57,16 @@ void Conf_Range ( void )
  * 						- UART2_TX:	PA_2
  * 						- UART2_RX:	PA_3
  *
+ * 					I2C1:
+ * 						- I2C1_SDA:	PB_9
+ * 						- I2C1_SCL:	PB_8
+ *
  * @return      N/A
  *
  * @author      Manuel Caballero
  * @date        16/January/2020
- * @version		16/January/2020   	The ORIGIN
+ * @version		06/September/2021   I2C1 was added.
+ * 				16/January/2020   	The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -110,6 +115,15 @@ void Conf_GPIO ( void )
 
 	GPIOA->AFR[0]	&=	~( GPIO_AFRL_AFSEL2 | GPIO_AFRL_AFSEL3 );
 	GPIOA->AFR[0]	|=	 ( ( 0b0100 << GPIO_AFRL_AFSEL2_Pos ) | ( 0b0100 << GPIO_AFRL_AFSEL3_Pos ) );
+
+	/* I2C1:
+	 * 	- Alternate function mode
+	 */
+	GPIOB->MODER	&=	~( GPIO_MODER_MODE8 | GPIO_MODER_MODE9 );
+	GPIOB->MODER	|=	 ( GPIO_MODER_MODE8_1 | GPIO_MODER_MODE9_1 );
+
+	GPIOB->AFR[1]	&=	~( GPIO_AFRH_AFSEL8 | GPIO_AFRH_AFSEL9 );
+	GPIOB->AFR[1]	|=	 ( ( 0b0100 << GPIO_AFRH_AFSEL8_Pos ) | ( 0b0100 << GPIO_AFRH_AFSEL9_Pos ) );
 }
 
 
