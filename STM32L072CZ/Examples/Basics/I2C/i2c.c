@@ -40,7 +40,6 @@
  */
 i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 {
-
 	/* Turn on the I2C peripheral clock	 */
 	switch ( myI2Cparameters.i2cClockSource )
 	{
@@ -187,9 +186,11 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    /* I2C
    	 *  - Master requests a write transfer
    	 *  - Update the slave address
+   	 *  - The master operates in 7-bit addressing mode
+   	 *  - Software end mode
    	 *  - Update the number of bytes to be transmitted
    	 */
-   	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_RD_WRN | I2C_CR2_SADD | I2C_CR2_NBYTES );
+   	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_RD_WRN | I2C_CR2_ADD10 | I2C_CR2_SADD | I2C_CR2_AUTOEND | I2C_CR2_NBYTES );
    	myI2Cparameters.i2cInstance->CR2	|=	 ( ( myI2Cparameters.addr << I2C_CR2_SADD_Pos ) | ( i2c_data_length << I2C_CR2_NBYTES_Pos ) );
 
    	/* I2C
@@ -204,7 +205,7 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    	 myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_START );
 
    	 /* Transmit all the data	 */
-   	 while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_TC_Msk ) != I2C_ISR_TC ) && ( i2c_timeout1 != 0UL ) )
+   	 while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_TXIS_Msk ) != I2C_ISR_TXIS ) && ( i2c_timeout1 != 0UL ) )
    	 {
    		 /* Check NACK flag ( device not found)	 */
    		 if ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_NACKF_Msk ) == I2C_ISR_NACKF )
