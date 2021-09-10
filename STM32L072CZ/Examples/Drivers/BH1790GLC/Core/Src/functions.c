@@ -65,7 +65,8 @@ void Conf_Range ( void )
  *
  * @author      Manuel Caballero
  * @date        16/January/2020
- * @version		06/September/2021   I2C1 was added.
+ * @version		10/September/2021   I2C1: GPIOs pull-up, very high speed and open drain.
+ * 				06/September/2021   I2C1 was added.
  * 				16/January/2020   	The ORIGIN
  * @pre         N/A
  * @warning     N/A
@@ -118,12 +119,22 @@ void Conf_GPIO ( void )
 
 	/* I2C1:
 	 * 	- Alternate function mode
+	 * 	- Output open-drain
+	 * 	- Very high speed
+	 * 	- Pull-up enabled
 	 */
 	GPIOB->MODER	&=	~( GPIO_MODER_MODE8 | GPIO_MODER_MODE9 );
 	GPIOB->MODER	|=	 ( GPIO_MODER_MODE8_1 | GPIO_MODER_MODE9_1 );
 
 	GPIOB->AFR[1]	&=	~( GPIO_AFRH_AFSEL8 | GPIO_AFRH_AFSEL9 );
 	GPIOB->AFR[1]	|=	 ( ( 0b0100 << GPIO_AFRH_AFSEL8_Pos ) | ( 0b0100 << GPIO_AFRH_AFSEL9_Pos ) );
+
+	GPIOB->OTYPER	|=	 ( GPIO_OTYPER_OT_8 | GPIO_OTYPER_OT_9);
+
+	GPIOB->OSPEEDR	|=	 ( GPIO_OSPEEDER_OSPEED8_0 | GPIO_OSPEEDER_OSPEED8_1 | GPIO_OSPEEDER_OSPEED9_0 | GPIO_OSPEEDER_OSPEED9_1 );
+
+	GPIOB->PUPDR	&=	~( GPIO_PUPDR_PUPD8 | GPIO_PUPDR_PUPD9 );
+	GPIOB->PUPDR	|=	 ( GPIO_PUPDR_PUPD8_0 | GPIO_PUPDR_PUPD9_0 );
 }
 
 
