@@ -72,7 +72,7 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 		{
 			RCC->CCIPR		&=	~( RCC_CCIPR_I2C1SEL_Msk );
 			RCC->CCIPR		|=	 ( RCC_CCIPR_I2C1SEL_1 );
-			//RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C1EN );
+			RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C1EN );
 		}
 		else if ( myI2Cparameters.i2cInstance == I2C2 )
 		{
@@ -82,7 +82,7 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 		{
 			RCC->CCIPR		&=	~( RCC_CCIPR_I2C3SEL_Msk );
 			RCC->CCIPR		|=	 ( RCC_CCIPR_I2C1SEL_1 );
-			//RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C3EN );
+			RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C3EN );
 		}
 		else
 		{
@@ -95,7 +95,7 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 		{
 			RCC->CCIPR		&=	~( RCC_CCIPR_I2C1SEL_Msk );
 			RCC->CCIPR		|=	 ( RCC_CCIPR_I2C1SEL_0 );
-			//RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C1EN );
+			RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C1EN );
 		}
 		else if ( myI2Cparameters.i2cInstance == I2C2 )
 		{
@@ -105,7 +105,7 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
 		{
 			RCC->CCIPR		&=	~( RCC_CCIPR_I2C3SEL_Msk );
 			RCC->CCIPR		|=	 ( RCC_CCIPR_I2C1SEL_0 );
-			//RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C3EN );
+			RCC->APB1ENR	|=	 ( RCC_APB1ENR_I2C3EN );
 		}
 		else
 		{
@@ -176,14 +176,15 @@ i2c_status_t i2c_init ( I2C_parameters_t myI2Cparameters )
  */
 i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uint32_t i2c_data_length, i2c_stop_bit_t i2c_generate_stop )
 {
-   uint32_t i2c_timeout1 	= 	I2C_TIMEOUT;
-   uint32_t i2c_timeout2 	= 	I2C_TIMEOUT;
-   uint32_t i2c_timeout3 	= 	I2C_TIMEOUT;
+	uint32_t i 				= 	0UL;
+	uint32_t i2c_timeout1 	= 	I2C_TIMEOUT;
+	uint32_t i2c_timeout2 	= 	I2C_TIMEOUT;
+	uint32_t i2c_timeout3 	= 	I2C_TIMEOUT;
 
-   /* I2C is disabled	 */
-   	myI2Cparameters.i2cInstance->CR1	&=	~( I2C_CR1_PE );
+	/* I2C is disabled	 */
+   	//myI2Cparameters.i2cInstance->CR1	&=	~( I2C_CR1_PE );
 
-   /* I2C
+   	/* I2C
    	 *  - Master requests a write transfer
    	 *  - Update the slave address
    	 *  - The master operates in 7-bit addressing mode
@@ -191,7 +192,7 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    	 *  - Update the number of bytes to be transmitted
    	 */
    	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_RD_WRN | I2C_CR2_ADD10 | I2C_CR2_SADD | I2C_CR2_AUTOEND | I2C_CR2_NBYTES );
-   	myI2Cparameters.i2cInstance->CR2	|=	 ( ( myI2Cparameters.addr << I2C_CR2_SADD_Pos ) | ( i2c_data_length << I2C_CR2_NBYTES_Pos ) );
+   	myI2Cparameters.i2cInstance->CR2	|=	 ( ( myI2Cparameters.addr << ( I2C_CR2_SADD_Pos + 1U ) ) | ( i2c_data_length << I2C_CR2_NBYTES_Pos ) );
 
    	/* I2C
    	  *  - Reset all the interrupts ( flags )
@@ -205,7 +206,7 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    	 myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_START );
 
    	 /* Transmit all the data	 */
-   	 while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_TXIS_Msk ) != I2C_ISR_TXIS ) && ( i2c_timeout1 != 0UL ) )
+   	 for ( i = 0UL; i < i2c_data_length; i++ )
    	 {
    		 /* Check NACK flag ( device not found)	 */
    		 if ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_NACKF_Msk ) == I2C_ISR_NACKF )
@@ -219,14 +220,14 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    			 i2c_timeout1						 =	 I2C_TIMEOUT;
 
    			 /* Wait until the data is transmitted or timeout	 */
-   			 while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_TXIS_Msk ) != I2C_ISR_TXIS ) && ( i2c_timeout1 != 0UL) )
+   			 while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_TXE_Msk ) != I2C_ISR_TXE ) && ( i2c_timeout1 != 0UL) )
    			 {
    				i2c_timeout1--;
    			 }
    		 }
    	 }
 
-   	 /* Wait until all data was transmitted or timeout	 */
+   	 /* Wait until all data was transmitted or timeout	*/
    	 while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_TC_Msk ) != I2C_ISR_TC ) && ( i2c_timeout1 != 0UL) && ( i2c_timeout2 != 0UL) )
    	 {
    		 i2c_timeout2--;
@@ -238,7 +239,7 @@ i2c_status_t i2c_write ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, ui
    		myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_STOP );
 
    		/* Wait until the STOP signal is transmitted or timeout	 */
-   		while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_TXIS_Msk ) != I2C_ISR_TXIS ) && ( i2c_timeout1 != 0UL) && ( i2c_timeout2 != 0UL) && ( i2c_timeout3 != 0UL) )
+   		while ( ( ( myI2Cparameters.i2cInstance->ISR & I2C_ISR_STOPF_Msk ) != I2C_ISR_STOPF ) && ( i2c_timeout1 != 0UL) && ( i2c_timeout2 != 0UL) && ( i2c_timeout3 != 0UL) )
    		{
    			i2c_timeout3--;
    		}
@@ -289,7 +290,7 @@ i2c_status_t i2c_read ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uin
 	uint32_t i2c_timeout2 = I2C_TIMEOUT;
 
 	/* I2C is disabled	 */
-	myI2Cparameters.i2cInstance->CR1	&=	~( I2C_CR1_PE );
+	//myI2Cparameters.i2cInstance->CR1	&=	~( I2C_CR1_PE );
 
 	/* I2C
 	 *	- General call enabled
@@ -319,11 +320,12 @@ i2c_status_t i2c_read ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uin
 	 * 	- Start RX mode
 	 */
 	myI2Cparameters.i2cInstance->CR2	&=	~( I2C_CR2_RELOAD | I2C_CR2_AUTOEND | I2C_CR2_RELOAD | I2C_CR2_ADD10 | I2C_CR2_SADD );
-	myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_RD_WRN | ( (uint8_t)( i2c_data_length ) << I2C_CR2_NBYTES_Pos ) | ( myI2Cparameters.addr << I2C_CR2_SADD_Pos ) );
-	myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_START );
+	myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_RD_WRN | I2C_CR2_AUTOEND | ( myI2Cparameters.addr << ( I2C_CR2_SADD_Pos + 1U ) ) | ( (uint8_t)( i2c_data_length ) << I2C_CR2_NBYTES_Pos ) );
 
 	/* I2C is enabled	 */
-	myI2Cparameters.i2cInstance->CR1	|=	 ( I2C_CR1_PE );
+	//myI2Cparameters.i2cInstance->CR1	|=	 ( I2C_CR1_PE );
+
+	myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_START );
 
 
 	/* Read the data	 */
@@ -336,18 +338,21 @@ i2c_status_t i2c_read ( I2C_parameters_t myI2Cparameters, uint8_t *i2c_buff, uin
 			i2c_timeout1--;
 		}
 
+		if ( ( i2c_data_length - i ) == 1U )
+		{
+			/* Generate STOP condition	 */
+			myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_STOP );
+		}
 		*i2c_buff++	 =	 myI2Cparameters.i2cInstance->RXDR;
 	}
 
-	/* Generate STOP condition	 */
-	myI2Cparameters.i2cInstance->CR2	|=	 ( I2C_CR2_STOP );
 
-	/* Wait until STOP condition is sent or timeout	 */
-	i2c_timeout2 	= 	I2C_TIMEOUT;
-	while ( ( ( myI2Cparameters.i2cInstance->ICR & I2C_ISR_STOPF_Msk ) != I2C_ISR_STOPF ) && ( i2c_timeout2 > 0UL ) )
-	{
-		i2c_timeout2--;
-	}
+//	/* Wait until STOP condition is sent or timeout	 */
+//	i2c_timeout2 	= 	I2C_TIMEOUT;
+//	while ( ( ( myI2Cparameters.i2cInstance->ICR & I2C_ISR_STOPF_Msk ) != I2C_ISR_STOPF ) && ( i2c_timeout2 > 0UL ) )
+//	{
+//		i2c_timeout2--;
+//	}
 
 	/* Clear STOP flag	 */
 	myI2Cparameters.i2cInstance->ICR	|=	 ( I2C_ICR_STOPCF );
