@@ -53,3 +53,29 @@ void USART2_IRQHandler ( void )
 		}
 	}
 }
+
+
+
+/**
+ * @brief       void TIM2_IRQHandler ()
+ * @details     If TIM2 happens, set myState variable.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        16/September/2021
+ * @version     16/September/2021   The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A
+ */
+void TIM2_IRQHandler(void)
+{
+	if ( ( TIM2->SR & TIM_SR_UIF_Msk ) == TIM_SR_UIF )
+    {
+		myState = 1UL;
+
+    	/* Clear flag	 */
+    	TIM2->SR	&=	~TIM_SR_UIF;
+    }
+}

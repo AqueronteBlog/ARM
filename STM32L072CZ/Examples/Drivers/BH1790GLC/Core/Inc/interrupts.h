@@ -20,8 +20,8 @@
 
 /**@brief Subroutine prototypes.
  */
-extern void USART2_IRQHandler (void);
-
+extern void USART2_IRQHandler 	(void);
+extern void TIM2_IRQHandler 	(void);
 
 /**@brief Constants.
  */
