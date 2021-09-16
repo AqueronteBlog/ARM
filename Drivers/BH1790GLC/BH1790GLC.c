@@ -210,9 +210,9 @@ BH1790GLC_status_t BH1790GLC_SoftReset ( I2C_parameters_t myI2Cparameters )
  * @version     22/November/2019   System and Measurement Control settings are added. It seems that the device
  * 								   must be configured writing to all the registers without a STOP bit (I2C).
  * 				20/November/2019   The ORIGIN
- * @pre         Start measurement by writing “MEAS_ST=1” after writing “RDY=1”. Measurement doesn’t
- * 				restart if writing “MEAS_ST=1” after start measurement. When stop measurement, write “SWRESET=1”
- * 				without writing “MEAS_ST=0” (for changing some parameters as well).
+ * @pre         Start measurement by writing ï¿½MEAS_ST=1ï¿½ after writing ï¿½RDY=1ï¿½. Measurement doesnï¿½t
+ * 				restart if writing ï¿½MEAS_ST=1ï¿½ after start measurement. When stop measurement, write ï¿½SWRESET=1ï¿½
+ * 				without writing ï¿½MEAS_ST=0ï¿½ (for changing some parameters as well).
  * @pre         The user MUST RESPECT the measurement time, T_INT = 28ms ( maximum ).
  * @pre         The function uses auto-increment.
  * @warning     System control setting and measurement control setting must be initialized in order to guarantee
@@ -259,7 +259,8 @@ BH1790GLC_status_t BH1790GLC_StartMeasurement ( I2C_parameters_t myI2Cparameters
  *
  * @author      Manuel Caballero
  * @date        20/November/2019
- * @version     20/November/2019   The ORIGIN
+ * @version     16/September/2021  Bug was fixed, the data must be switched.
+ * 				20/November/2019   The ORIGIN
  * @pre         This function uses auto-increment.
  * @warning     N/A.
  */
@@ -274,13 +275,13 @@ BH1790GLC_status_t BH1790GLC_GetRawDataOut ( I2C_parameters_t myI2Cparameters, B
 	aux	 	 =   i2c_read  ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 	/* Parse the data	 */
-	myRawDataOut->dataOut_LED_OFF	 =	 cmd[1];
-	myRawDataOut->dataOut_LED_OFF  <<=	 8U;
-	myRawDataOut->dataOut_LED_OFF	 =	 cmd[0];
+	myRawDataOut->dataOut_LED_OFF   =	 cmd[1];
+	myRawDataOut->dataOut_LED_OFF <<=	 8U;
+	myRawDataOut->dataOut_LED_OFF  |=	 cmd[0];
 
-	myRawDataOut->dataOut_LED_ON	 =	 cmd[3];
+	myRawDataOut->dataOut_LED_ON	=	 cmd[3];
 	myRawDataOut->dataOut_LED_ON  <<=	 8U;
-	myRawDataOut->dataOut_LED_ON	 =	 cmd[2];
+	myRawDataOut->dataOut_LED_ON   |=	 cmd[2];
 
 
 
