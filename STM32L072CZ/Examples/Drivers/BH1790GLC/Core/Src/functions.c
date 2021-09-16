@@ -259,3 +259,73 @@ uart_status_t Conf_UART2 ( uint32_t myCK, uint32_t myBaudRate )
 
 	return UART_SUCCESS;
 }
+
+
+
+/**
+ * @brief       void Conf_TimerTIM2 ( uint32_t )
+ * @details     It configures timer TIM2.
+ *
+ *				-TIM2:
+ * 					-- f_TIM2 = myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz
+ * 					-- Interrupt ENABLED.
+ * 					-- Overflow: Every 1 second ( ARR / f_TIM2 ) = ( 2097 / 2097 ) = 1
+ * 						--- Downcounter.
+ * 						--- Prescaler = 1000 - 1 = 999.
+ * 						--- ARR = 2097.
+ *
+ * @param[in]    myCLK:	Timer TIM2 clock.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ *
+ * @return      NA
+ *
+ * @author      Manuel Caballero
+ * @date        01/October/2019
+ * @version		01/October/2019   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void Conf_TimerTIM2 ( uint32_t myCLK )
+{
+	/* Timer TIM2 clock enable	 */
+	RCC->APB1ENR	|=	 RCC_APB1ENR_TIM2EN;
+
+	/* Timer TIM2:
+	 * 	- Disable timer TIM2
+	 * 	- Clock division: t_DTS = t_CK_INT
+	 * 	- Edge-aligned mode
+	 * 	- Counter is not stopped at update event
+	 * 	- UEV enabled
+	 */
+	TIM2->CR1	&=	~( TIM_CR1_CEN | TIM_CR1_CKD | TIM_CR1_CMS | TIM_CR1_DIR | TIM_CR1_OPM | TIM_CR1_UDIS );
+
+	/* Timer TIM2:
+	 *  - Master mode
+	 */
+	TIM2->SMCR	&=	~( TIM_SMCR_SMS | TIM_SMCR_TS );
+
+	/* Reset counter	 */
+	TIM2->CNT	 =	 (uint16_t)0U;
+	TIM2->PSC	 =	 (uint16_t)( 1000U - 1U );									// Prescaler = 999
+	TIM2->ARR	 =	 (uint16_t)( 1 * ( myCLK / ( TIM2->PSC + 1U ) ) + 0.5 );	// Overflow every ~ 1s: f_Timer TIM2: myCLK / ( PSC + 1 ) = 2.097MHz / ( 999 + 1 ) = 2.097 kHz )
+
+	/* Clear Update interrupt flag	 */
+	TIM2->SR	&=	~( TIM_SR_UIF );
+
+	/* Enable Interrupt	 */
+	NVIC_SetPriority ( TIM2_IRQn, 1 ); 								// Set Priority to 1
+	NVIC_EnableIRQ   ( TIM2_IRQn );  								// Enable TIM2_IRQn interrupt in NVIC
+
+	/* Update interrupt enable	 */
+	TIM2->DIER	|=	 ( TIM_DIER_UIE );
+
+	/* Timer TIM2:
+	 * 	- Auto-reload preload enable
+	 * 	- Only counter overflow/underflow generates an update interrupt
+	 * 	- Counter used as downcounter
+	 */
+	TIM2->CR1	|=	 ( TIM_CR1_ARPE | TIM_CR1_URS | TIM_CR1_DIR );
+}

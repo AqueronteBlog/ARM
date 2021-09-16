@@ -20,9 +20,9 @@
 
 /**@brief Functions prototypes.
  */
-void 			Conf_GPIO 	( void );
-uart_status_t	Conf_UART2	( uint32_t myCK, uint32_t myBaudRate );
-void 			Conf_Range ( void );
-
+void 			Conf_GPIO 		( void );
+uart_status_t	Conf_UART2		( uint32_t myCK, uint32_t myBaudRate );
+void 			Conf_Range 		( void );
+void 			Conf_TimerTIM2 	( uint32_t myCLK );
 
 #endif /* FUNCTIONS_H_ */
