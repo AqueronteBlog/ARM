@@ -64,6 +64,7 @@
 /* USER CODE BEGIN PD */
 #define SYSTEM_CORE_CLK		2097000U
 #define UART2_CLK			SYSTEM_CORE_CLK
+#define TIMER_TIM2_CLK		SYSTEM_CORE_CLK
 
 #define TX_BUFF_SIZE  		32	                     		/*!<   UART buffer size                              		*/
 /* USER CODE END PD */
@@ -130,6 +131,7 @@ int main(void)
   Conf_GPIO  ();
   Conf_UART2 ( UART2_CLK, 115200 );
   Conf_Range ();
+  Conf_TimerTIM2 ( TIMER_TIM2_CLK );
 
   /* I2C definition   */
   myBH1790GLC_I2C_parameters.i2cInstance 	 =   I2C1;
@@ -170,10 +172,11 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  TIM2->CR1	|=	 TIM_CR1_CEN;		// Enable Timer TIM2
   while (1)
   {
-	__HAL_PWR_CLEAR_FLAG (PWR_FLAG_WU);
-	HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	//__HAL_PWR_CLEAR_FLAG (PWR_FLAG_WU);
+	//HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
