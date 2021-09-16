@@ -1,9 +1,8 @@
 /* USER CODE BEGIN Header */
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the UART5. The LEDs will change their state if the user
- * 				sends a command through the serial port.
- *
+ * @details     This example shows how to work with the external device: BH1790GLC. Every second, the external device is read and
+ * 				the data is sent though the UART.
  *
  * 				The rest of the time, the uC is on SLEEP mode ( low-power mode ).
  *
@@ -175,8 +174,8 @@ int main(void)
   TIM2->CR1	|=	 TIM_CR1_CEN;		// Enable Timer TIM2
   while (1)
   {
-	//__HAL_PWR_CLEAR_FLAG (PWR_FLAG_WU);
-	//HAL_PWR_EnterSLEEPMode ( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+	__HAL_PWR_CLEAR_FLAG (PWR_FLAG_WU);
+	HAL_PWR_EnterSLEEPMode ( PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI );
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
