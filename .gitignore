@@ -9,3 +9,4 @@ STM32L072CZ/Examples/Drivers/BH1790GLC/Debug/
 STM32L072CZ/Examples/Peripherals/IWDG/Debug/
 *.launch
 STM32L072CZ/Examples/Peripherals/IWDG/.settings/
+ADuCM3029/Examples_Drivers/AHT20/Debug/
