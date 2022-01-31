@@ -21,7 +21,7 @@
 #include "board.h"
 #include "functions.h"
 #include "interrupts.h"
-#include "AHT20.h"
+//#include "AHT20.h"
 
 
 /**@brief Constants.
