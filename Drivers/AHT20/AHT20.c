@@ -1,6 +1,6 @@
 /**
  * @brief       AHT20.h
- * @details     Digital Relative Humidity sensor with Temperature output.
+ * @details     Humidity and Temperature Sensor.
  *              Functions file.
  *
  *

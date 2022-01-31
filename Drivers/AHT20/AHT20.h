@@ -1,6 +1,6 @@
 /**
  * @brief       AHT20.h
- * @details     Digital Relative Humidity sensor with Temperature output.
+ * @details     Humidity and Temperature Sensor.
  *              Header file.
  *
  *
@@ -24,7 +24,7 @@
   */
 typedef enum
 {
-    AHT20_ADDRESS     =   0x40                                                         /*!<   AHT20 I2C Address                                   */
+    AHT20_ADDRESS     =   0x38                                                         /*!<   AHT20 I2C Address                                   */
 } AHT20_address_t;
 
 
