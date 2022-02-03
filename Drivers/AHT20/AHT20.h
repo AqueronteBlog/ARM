@@ -24,7 +24,7 @@
   */
 typedef enum
 {
-    AHT20_ADDRESS     =   0x38                                                         /*!<   AHT20 I2C Address                                   */
+    AHT20_ADDRESS     =   0x38                		/*!<   AHT20 I2C Address                  	*/
 } AHT20_address_t;
 
 
@@ -35,94 +35,98 @@ typedef enum
   */
 typedef enum
 {
-    AHT20_TRIGGER_TEMPERATURE_MEASUREMENT_HOLD_MASTER      =   0xE3,               /*!<  Hold master                       */
-    AHT20_TRIGGER_HUMIDITY_MEASUREMENT_HOLD_MASTER         =   0xE5,               /*!<  Hold master                       */
-    AHT20_TRIGGER_TEMPERATURE_MEASUREMENT_NO_HOLD_MASTER   =   0xF3,               /*!<  No Hold master                    */
-    AHT20_TRIGGER_HUMIDITY_MEASUREMENT_NO_HOLD_MASTER      =   0xF5,               /*!<  No Hold master                    */
-    AHT20_WRITE_REGISTER                                   =   0xE6,               /*!<  Write register                    */
-    AHT20_READ_REGISTER                                    =   0xE7,               /*!<  Read register                     */
-    AHT20_SOFT_RESET                                       =   0xFE                /*!<  Software reset                    */
-} AHT20_command_registers_t;
+    AHT20_TRIGGER_MEASUREMENT	=   0xAC,			/*!<  Trigger measurement command			*/
+    AHT20_STATUS         		=   0x71,      		/*!<  Status command                       	*/
+    AHT20_INITIALIZATION   		=   0xBE,     		/*!<  Initialization                    	*/
+    AHT20_SOFTRESET      		=   0xBA         	/*!<  Soft reset	                    	*/
+} AHT20_basic_commands_t;
 
 
 
-// MASTER MODE
+// TRIGGER MESUREMENT
 /**
-  * @brief   MODE
+  * @brief   DATA
+  * 			NOTE: N/A
   */
 typedef enum
 {
-    AHT20_HOLD_MASTER_MODE                 =   0x01,           /*!<  AHT20 HOLD MASTER MODE enabled                       */
-    AHT20_NO_HOLD_MASTER_MODE              =   0x00            /*!<  AHT20 NO HOLD MASTER MODE enabled                    */
-} AHT20_master_mode_t;
+    TRIGGER_MEASUREMENT_DATA_1	=   0x33,           /*!<  Data 1                       			*/
+	TRIGGER_MEASUREMENT_DATA_2	=   0x00            /*!<  Data 2                    			*/
+} AHT20_trigger_measurement_t;
 
 
 
-// USER REGISTER
-/*
-    NOTE:   Reserved bits must not be changed and default
-            values of respective reserved bits may change over time without prior notice. Therefore, for any writing to user
-            register, default values of reserved bits must be read first.
-*/
+// STATUS
 /**
-  * @brief   RESOLUTION
+  * @brief   BUS_INDICATION <7>
+  * 			NOTE: N/A
   */
 typedef enum
 {
-    USER_REGISTER_RESOLUTION_MASK                =   0x81,           /*!<  AHT20 Measurement Resolution                         */
-    USER_REGISTER_RESOLUTION_12RH_14TEMP         =   0x00,           /*!<  AHT20 12b RH 14b Temp.                               */
-    USER_REGISTER_RESOLUTION_8RH_12TEMP          =   0x01,           /*!<  AHT20 9b  RH 12b Temp.                               */
-    USER_REGISTER_RESOLUTION_10RH_13TEMP         =   0x80,           /*!<  AHT20 10b RH 13b Temp.                               */
-    USER_REGISTER_RESOLUTION_11RH_11TEMP         =   0x81            /*!<  AHT20 11b RH 11b Temp.                               */
-} AHT20_measurement_resolution_t;
+    STATUS_BUS_INDICATION_MASK	=   ( 1U << 7U ),	/*!<  BUS_INDICATION mask                	*/
+    STATUS_BUS_INDICATION_BUSY	=   ( 1U << 7U ),	/*!<  Busy in measurement                	*/
+	STATUS_BUS_INDICATION_FREE	=   ( 0U << 7U ) 	/*!<  Free in dormant state                	*/
+} AHT20_status_bus_indication_t;
 
 
 
 /**
-  * @brief   STATUS END OF BATTERY
+  * @brief   CAL <3>
+  * 			NOTE: N/A
   */
 typedef enum
 {
-    USER_REGISTER_STATUS_END_BATTERY_MASK         =   0x40,           /*!<  End battery mask                                      */
-    USER_REGISTER_STATUS_END_BATTERY_HIGH_2V25    =   0x40,           /*!<  VDD > 2.25V.                                          */
-    USER_REGISTER_STATUS_END_BATTERY_LOW_2V25     =   0x00            /*!<  VDD < 2.25V.                                          */
-} AHT20_status_end_battery_t;
+    STATUS_CAL_MASK				=   ( 1U << 3U ),	/*!<  CAL mask                				*/
+	STATUS_CAL_CALIBRATED    	=   ( 1U << 3U ),	/*!<  Calibrated					       	*/
+	STATUS_CAL_UNCALIBRATED 	=   ( 0U << 3U ) 	/*!<  Uncalibrated			              	*/
+} AHT20_status_cal_t;
 
 
 
+// INITIALIZATION
 /**
-  * @brief   ON-CHIP HEATER
+  * @brief   INITIALIZATION
+  * 			NOTE: N/A
   */
 typedef enum
 {
-    USER_REGISTER_HEATER_MASK                     =   0x04,           /*!<  ON-chip heater mask                                   */
-    USER_REGISTER_HEATER_ENABLED                  =   0x04,           /*!<  Heater enabled.                                       */
-    USER_REGISTER_HEATER_DISABLED                 =   0x00            /*!<  Heater disabled.                                      */
-} AHT20_on_chip_heater_t;
+    INITIALIZATION_DATA_1		=   0x08,			/*!<  Data 1               					*/
+    INITIALIZATION_DATA_2		=   0x00 			/*!<  Data 2                				*/
+} AHT20_initialization_t;
 
 
 
-/**
-  * @brief   OTP RELOAD
-  */
-typedef enum
-{
-    USER_REGISTER_OTP_MASK                        =   0x02,           /*!<  OTP heater mask                                       */
-    USER_REGISTER_OTP_ENABLED                     =   0x00,           /*!<  OTP enabled.                                          */
-    USER_REGISTER_OTP_DISABLED                    =   0x02            /*!<  OTP disabled.                                         */
-} AHT20_otp_t;
 
 
 
 #ifndef AHT20_VECTOR_STRUCT_H
 #define AHT20_VECTOR_STRUCT_H
+/* Temperature data	*/
 typedef struct
 {
-    float    RelativeHumidity;
-    float    Temperature;
+	uint32_t raw_temperature;						/*!<  Raw temperature data 					*/
+	float	 temperature;							/*!<  Temperature          					*/
+} AHT20_temperature_data_t;
 
-    uint8_t  BatteryStatus;
-} AHT20_vector_data_t;
+
+/* Humidity data	*/
+typedef struct
+{
+	uint32_t raw_humidity;							/*!<  Raw humidity data 					*/
+	float	 humidity;								/*!<  Humidity          					*/
+} AHT20_humidity_data_t;
+
+
+/* User's variables	*/
+typedef struct
+{
+	AHT20_temperature_data_t	temperature;		/*!<  Temperature variables					*/
+	AHT20_humidity_data_t	    humidity;			/*!<  Humidity variables   					*/
+
+    uint8_t  					state;				/*!<  State              					*/
+
+    uint8_t  					crc;				/*!<  CRC	              					*/
+} AHT20_user_data_t;
 #endif
 
 
@@ -143,13 +147,34 @@ typedef enum
 /**
   * @brief   FUNCTION PROTOTYPES
   */
-AHT20_status_t  AHT20_Init               ( I2C_parameters_t myI2Cparameters );
-AHT20_status_t  AHT20_Conf               ( I2C_parameters_t myI2Cparameters, AHT20_measurement_resolution_t myResolution, AHT20_on_chip_heater_t myHeater );
-AHT20_status_t  AHT20_SoftReset          ( I2C_parameters_t myI2Cparameters );
-AHT20_status_t  AHT20_TriggerTemperature ( I2C_parameters_t myI2Cparameters, AHT20_master_mode_t myMode );
-AHT20_status_t  AHT20_ReadTemperature    ( I2C_parameters_t myI2Cparameters, AHT20_vector_data_t* myTemperature );
-AHT20_status_t  AHT20_ReadRawTemperature ( I2C_parameters_t myI2Cparameters, AHT20_vector_data_t* myRawTemperature );
-AHT20_status_t  AHT20_TriggerHumidity    ( I2C_parameters_t myI2Cparameters, AHT20_master_mode_t myMode );
-AHT20_status_t  AHT20_ReadHumidity       ( I2C_parameters_t myI2Cparameters, AHT20_vector_data_t* myHumidity );
-AHT20_status_t  AHT20_ReadRawHumidity    ( I2C_parameters_t myI2Cparameters, AHT20_vector_data_t* myRawHumidity );
-AHT20_status_t  AHT20_BatteryStatus      ( I2C_parameters_t myI2Cparameters, AHT20_vector_data_t* myBattStatus );
+/** It configures the I2C bus.
+ */
+AHT20_status_t  AHT20_Init               	( I2C_parameters_t myI2Cparameters 									);
+
+/** It calibrates the device.
+ */
+AHT20_status_t  AHT20_Calibrate          	( I2C_parameters_t myI2Cparameters 									);
+
+/** It performs a soft-reset.
+ */
+AHT20_status_t  AHT20_SoftReset          	( I2C_parameters_t myI2Cparameters 									);
+
+/** It triggers a new measurement data (raw data).
+ */
+AHT20_status_t  AHT20_TriggerMeasurement	( I2C_parameters_t myI2Cparameters 									);
+
+/** It gets the state byte.
+ */
+AHT20_status_t  AHT20_GetStatus		     	( I2C_parameters_t myI2Cparameters, uint8_t* myState 				);
+
+/** It gets all the raw data.
+ */
+AHT20_status_t  AHT20_GetAllData	    	( I2C_parameters_t myI2Cparameters, AHT20_user_data_t* myAllData	);
+
+/** It processes the temperature data.
+ */
+float  AHT20_ProcessTemperature 			( uint32_t myRawTemperature											);
+
+/** It processes the humidity data.
+ */
+float  AHT20_ProcessHumidity    			( uint32_t myRawHumidity 											);
