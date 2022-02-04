@@ -21,7 +21,7 @@
 #include "board.h"
 #include "functions.h"
 #include "interrupts.h"
-//#include "AHT20.h"
+#include "AHT20.h"
 
 
 /**@brief Constants.
@@ -41,9 +41,9 @@ volatile uint8_t   *myPtr;             	/*!<   Pointer to point out myMessage   
 int main(int argc, char *argv[])
 {
 	uint8_t  			myMessage[ TX_BUFF_SIZE ];
-//	I2C_parameters_t    myAHT20_I2C_parameters;
-//	AHT20_data_t 		myAHT20_Data;
-//	AHT20_status_t  	aux;
+	I2C_parameters_t    myAHT20_I2C_parameters;
+	AHT20_data_t 		myAHT20_Data;
+	AHT20_status_t  	aux;
 
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
@@ -62,23 +62,27 @@ int main(int argc, char *argv[])
 
 
 	/* I2C definition   */
-//	myAHT20_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
-//	myAHT20_I2C_parameters.sda         	 =    I2C0_SDA;
-//	myAHT20_I2C_parameters.scl         	 =    I2C0_SCL;
-//	myAHT20_I2C_parameters.addr        	 =    AHT20_ADDRESS;
-//	myAHT20_I2C_parameters.freq        	 =    100000;
-//	myAHT20_I2C_parameters.pclkFrequency 	 =	  6400000;
-//	myAHT20_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
-//	myAHT20_I2C_parameters.sclPort     	 =    pADI_GPIO0;
-//
-//	/* Configure I2C peripheral */
-//	aux  =   AHT20_Init ( myAHT20_I2C_parameters );
-//
-//	/* Get the device type version	 */
-//	aux	 =	 AHT20_GetDeviceType ( myAHT20_I2C_parameters, &myAHT20_Data.hw_version );
+	myAHT20_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
+	myAHT20_I2C_parameters.sda         	 =    I2C0_SDA;
+	myAHT20_I2C_parameters.scl         	 =    I2C0_SCL;
+	myAHT20_I2C_parameters.addr        	 =    AHT20_ADDRESS;
+	myAHT20_I2C_parameters.freq        	 =    100000;
+	myAHT20_I2C_parameters.pclkFrequency =	  6400000;
+	myAHT20_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
+	myAHT20_I2C_parameters.sclPort     	 =    pADI_GPIO0;
 
+	/* Configure I2C peripheral */
+	aux  =   AHT20_Init ( myAHT20_I2C_parameters );
 
+	/* Get the device type version	 */
+	aux	 =	 AHT20_GetStatus ( myAHT20_I2C_parameters, (uint8_t*)&myAHT20_Data.state );
 
+	/* Check if the device is calibrated	 */
+	if ( ( myAHT20_Data.state & STATUS_CAL_MASK ) == STATUS_CAL_UNCALIBRATED )
+	{
+		/* Calibrate the sensor */
+		aux  =   AHT20_Calibrate ( myAHT20_I2C_parameters );
+	}
 
 
 	/* Enable Timer0	 */
@@ -110,22 +114,31 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
+			/* Trigger a new measurement data	 */
+			aux	 =	AHT20_TriggerMeasurement ( myAHT20_I2C_parameters );
+
 			/* Get the temperature value	 */
-			//aux  	 =   AHT20_GetDeviceTemperature ( myAHT20_I2C_parameters, &myAHT20_Data.device_temp );
+			aux	 =	AHT20_GetAllData ( myAHT20_I2C_parameters, (uint8_t*)&myAHT20_Data );
+
+			/* Process the temperature data	 */
+			myAHT20_Data.temperature.temperature = AHT20_ProcessTemperature ( myAHT20_Data.temperature.raw_temperature );
+
+			/* Process the humidity data	 */
+			myAHT20_Data.humidity.humidity = AHT20_ProcessHumidity ( myAHT20_Data.humidity.raw_humidity );
 
 
-//			/* Transmit data through the UART	 */
-//			sprintf ( (char*)myMessage, "White counter: %d | Lux: %0.4f lx\r\n", myAHT20_Data.white_channel_output_data, myAHT20_Data.light_level );
-//
-//			/* Check that is safe to send data	 */
-//			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
-//
-//			/* Transmit data back	 */
-//			myPtr            =   &myMessage[0];
-//			pADI_UART0->TX	 =	 *myPtr;
-//
-//			/* Transmit Buffer Empty Interrupt: Enabled	 */
-//			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
+			/* Transmit data through the UART	 */
+			sprintf ( (char*)myMessage, "Temp: %0.2f C | RH: %0.3f %%\r\n", myAHT20_Data.temperature.temperature, myAHT20_Data.humidity.humidity );
+
+			/* Check that is safe to send data	 */
+			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
+
+			/* Transmit data back	 */
+			myPtr            =   &myMessage[0];
+			pADI_UART0->TX	 =	 *myPtr;
+
+			/* Transmit Buffer Empty Interrupt: Enabled	 */
+			pADI_UART0->IEN	|=	 ( 1U << BITP_UART_IEN_ETBEI );
 
 			/* Reset variables and turn both LEDs off	 */
 			myState	 		 =	 0UL;
@@ -137,4 +150,3 @@ int main(int argc, char *argv[])
 	/* It should never reach here	 */
 	return 0;
 }
-
