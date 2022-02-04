@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 {
 	uint8_t  			myMessage[ TX_BUFF_SIZE ];
 	I2C_parameters_t    myAHT20_I2C_parameters;
-	AHT20_data_t 		myAHT20_Data;
+	AHT20_user_data_t	myAHT20_Data;
 	AHT20_status_t  	aux;
 
 	/**
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 			aux	 =	AHT20_TriggerMeasurement ( myAHT20_I2C_parameters );
 
 			/* Get the temperature value	 */
-			aux	 =	AHT20_GetAllData ( myAHT20_I2C_parameters, (uint8_t*)&myAHT20_Data );
+			aux	 =	AHT20_GetAllData ( myAHT20_I2C_parameters, (AHT20_user_data_t*)&myAHT20_Data );
 
 			/* Process the temperature data	 */
 			myAHT20_Data.temperature.temperature = AHT20_ProcessTemperature ( myAHT20_Data.temperature.raw_temperature );
