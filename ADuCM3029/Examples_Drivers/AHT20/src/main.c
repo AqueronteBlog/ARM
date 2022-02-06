@@ -40,6 +40,7 @@ volatile uint8_t   *myPtr;             	/*!<   Pointer to point out myMessage   
  */
 int main(int argc, char *argv[])
 {
+	uint32_t 			i;
 	uint8_t  			myMessage[ TX_BUFF_SIZE ];
 	I2C_parameters_t    myAHT20_I2C_parameters;
 	AHT20_user_data_t	myAHT20_Data;
@@ -73,6 +74,10 @@ int main(int argc, char *argv[])
 
 	/* Configure I2C peripheral */
 	aux  =   AHT20_Init ( myAHT20_I2C_parameters );
+
+	/* Reset the device	 */
+	aux  =   AHT20_SoftReset ( myAHT20_I2C_parameters );
+	for ( i = 0UL; i < 0x232; i++ ){}
 
 	/* Get the device type version	 */
 	aux	 =	 AHT20_GetStatus ( myAHT20_I2C_parameters, (uint8_t*)&myAHT20_Data.state );
@@ -116,6 +121,7 @@ int main(int argc, char *argv[])
 
 			/* Trigger a new measurement data	 */
 			aux	 =	AHT20_TriggerMeasurement ( myAHT20_I2C_parameters );
+			for ( i = 0UL; i < 0x232; i++ ){}
 
 			/* Get the temperature value	 */
 			aux	 =	AHT20_GetAllData ( myAHT20_I2C_parameters, (AHT20_user_data_t*)&myAHT20_Data );

@@ -169,7 +169,7 @@ AHT20_status_t  AHT20_TriggerMeasurement ( I2C_parameters_t myI2Cparameters )
     cmd[0]	 =	 AHT20_TRIGGER_MEASUREMENT;
     cmd[1]	 =	 TRIGGER_MEASUREMENT_DATA_1;
     cmd[2]	 =	 TRIGGER_MEASUREMENT_DATA_2;
-    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_NO_STOP_BIT );
 
 
 
@@ -210,7 +210,8 @@ AHT20_status_t  AHT20_GetStatus ( I2C_parameters_t myI2Cparameters, uint8_t* myS
 
     /* Update the register	 */
     cmd	 =	 AHT20_STATUS;
-    aux	|=   i2c_write ( myI2Cparameters, (uint8_t*)&cmd, 1U, I2C_STOP_BIT );
+    aux	 =   i2c_write ( myI2Cparameters, (uint8_t*)&cmd, 1U, I2C_NO_STOP_BIT );
+    for ( uint32_t i = 0; i < 0x23232; i++ ){}
 
     /* Read the register	 */
     aux	|=   i2c_read ( myI2Cparameters, &(*myState), 1U );
