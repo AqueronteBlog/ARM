@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: AHT20.
+ * @details     This example shows how to work with the external device: AHT20.
  * 				A new sample is read every 1 second and transmitted through the UART (115200 baud)
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
@@ -11,7 +11,7 @@
  * @author      Manuel Caballero
  * @date        31/January/2022
  * @version     31/January/2022    The ORIGIN
- * @pre         This firmware was tested on the ADICUP3029 with CrossCore Embedded Studio v2.8.3.0.
+ * @pre         This firmware was tested on the ADICUP3029 with CrossCore Embedded Studio v2.9.4.0.
  * @warning     N/A.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ). All rights reserved.
  */
@@ -79,7 +79,10 @@ int main(int argc, char *argv[])
 	aux  =   AHT20_SoftReset ( myAHT20_I2C_parameters );
 	for ( i = 0UL; i < 0x232; i++ ){}
 
-	/* Get the device type version	 */
+	/* Get the state byte	 */
+	aux	 =	 AHT20_TriggerStatus ( myAHT20_I2C_parameters );
+	for ( i = 0UL; i < 0x2323; i++ ){}
+
 	aux	 =	 AHT20_GetStatus ( myAHT20_I2C_parameters, (uint8_t*)&myAHT20_Data.state );
 
 	/* Check if the device is calibrated	 */
