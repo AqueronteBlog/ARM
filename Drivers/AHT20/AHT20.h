@@ -163,6 +163,10 @@ AHT20_status_t  AHT20_SoftReset          	( I2C_parameters_t myI2Cparameters 			
  */
 AHT20_status_t  AHT20_TriggerMeasurement	( I2C_parameters_t myI2Cparameters 									);
 
+/** It triggers the state byte.
+ */
+AHT20_status_t  AHT20_TriggerStatus		    ( I2C_parameters_t myI2Cparameters					 				);
+
 /** It gets the state byte.
  */
 AHT20_status_t  AHT20_GetStatus		     	( I2C_parameters_t myI2Cparameters, uint8_t* myState 				);

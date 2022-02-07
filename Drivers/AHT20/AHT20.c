@@ -186,6 +186,46 @@ AHT20_status_t  AHT20_TriggerMeasurement ( I2C_parameters_t myI2Cparameters )
 
 
 /**
+ * @brief       AHT20_TriggerStatus ( I2C_parameters_t )
+ * @details     It triggers the state byte.
+ *
+ * @param[in]    myI2Cparameters:   I2C parameters.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      Status of AHT20_TriggerStatus
+ *
+ * @author      Manuel Caballero
+ * @date        07/February/2022
+ * @version     07/February/2022        The ORIGIN
+ * @pre         N/A.
+ * @warning     N/A.
+ */
+AHT20_status_t  AHT20_TriggerStatus ( I2C_parameters_t myI2Cparameters )
+{
+    uint8_t      cmd	=	0U;
+    i2c_status_t aux;
+
+    /* Update the register	 */
+    cmd	 =	 AHT20_STATUS;
+    aux	 =   i2c_write ( myI2Cparameters, (uint8_t*)&cmd, 1U, I2C_NO_STOP_BIT );
+
+
+
+    if ( aux == I2C_SUCCESS )
+    {
+        return   AHT20_SUCCESS;
+    }
+    else
+    {
+        return   AHT20_FAILURE;
+    }
+}
+
+
+
+/**
  * @brief       AHT20_GetStatus ( I2C_parameters_t , uint8_t* )
  * @details     It gets the state byte.
  *
@@ -198,7 +238,8 @@ AHT20_status_t  AHT20_TriggerMeasurement ( I2C_parameters_t myI2Cparameters )
  *
  * @author      Manuel Caballero
  * @date        04/February/2022
- * @version     04/February/2022        The ORIGIN
+ * @version     07/February/2022        AHT20_TriggerStatus function must be called first.
+ * 				04/February/2022        The ORIGIN
  * @pre         N/A.
  * @warning     N/A.
  */
@@ -207,15 +248,8 @@ AHT20_status_t  AHT20_GetStatus ( I2C_parameters_t myI2Cparameters, uint8_t* myS
     uint8_t      cmd	=	0U;
     i2c_status_t aux;
 
-
-    /* Update the register	 */
-    cmd	 =	 AHT20_STATUS;
-    aux	 =   i2c_write ( myI2Cparameters, (uint8_t*)&cmd, 1U, I2C_NO_STOP_BIT );
-    for ( uint32_t i = 0; i < 0x23232; i++ ){}
-
     /* Read the register	 */
-    aux	|=   i2c_read ( myI2Cparameters, &(*myState), 1U );
-
+    aux	 =   i2c_read ( myI2Cparameters, &(*myState), 1U );
 
 
     if ( aux == I2C_SUCCESS )
