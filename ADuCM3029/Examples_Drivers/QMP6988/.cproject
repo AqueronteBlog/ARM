@@ -56,14 +56,14 @@
 								<option id="arm.toolchain.cpp.compiler.option.coreid.219104896" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="arm.toolchain.cpp.compiler.option.coreid" useByScannerDiscovery="false" value="0" valueType="string"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="arm.base.compiler.option.include.paths.23767421" name="Additional include directories (-I):" superClass="arm.base.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/system}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${cmsis_pack_root}/ARM/CMSIS/5.8.0/CMSIS/Core/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${cmsis_pack_root}/AnalogDevices/ADuCM302x_DFP/3.2.0/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/RTE&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/RTE/Device/ADuCM3029&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;D:\Workspaces\Personal\ARM\ADuCM3029\Basics\I2C&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;D:\Workspaces\Personal\ARM\Drivers\QMP6988&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${cmsis_pack_root}/ARM/CMSIS/5.8.0/CMSIS/Core/Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${cmsis_pack_root}/AnalogDevices/ADuCM302x_DFP/3.2.0/Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/RTE&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/RTE/Device/ADuCM3029&quot;"/>
 								</option>
 								<inputType id="arm.toolchain.gcc.c.input.686774081" superClass="arm.toolchain.gcc.c.input"/>
 							</tool>
@@ -78,12 +78,12 @@
 									<listOptionValue builtIn="false" value="__ADUCM3029__"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="arm.linker.option.include.paths.1285672149" name="Additional include directories (-I):" superClass="arm.linker.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${cmsis_pack_root}/ARM/CMSIS/5.8.0/CMSIS/Core/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${cmsis_pack_root}/AnalogDevices/ADuCM302x_DFP/3.2.0/Include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/RTE&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}/RTE/Device/ADuCM3029&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 								</option>
 								<option id="arm.toolchain.gcc.c.linker.option.fpu.abi.1187813300" name="Float ABI" superClass="arm.toolchain.gcc.c.linker.option.fpu.abi" useByScannerDiscovery="false" value="" valueType="enumerated"/>
 								<option id="arm.linker.option.ldprocessing.ldfile.885274177" name="Custom linker script (-T)" superClass="arm.linker.option.ldprocessing.ldfile" useByScannerDiscovery="false" value="${workspace_loc:/${ProjName}}/RTE/Device/ADuCM3029/ADuCM3029.ld" valueType="string"/>
