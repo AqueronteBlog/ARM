@@ -20,12 +20,13 @@
 
 
 /**
-  * @brief   DEFAULT ADDRESS
+  * @brief   DEFAULT ADDRESSES
   */
 typedef enum
 {
-    QMP6988_ADDRESS     =   0x38                		/*!<   QMP6988 I2C Address                  	*/
-} QMP6988_address_t;
+    QMP6988_ADDRESS_SDO_HIGH    =   0x56,                		/*!<   QMP6988 I2C Address, SDO High           	*/
+	QMP6988_ADDRESS_SDO_LOW     =   0x70                		/*!<   QMP6988 I2C Address, SDO Low           	*/
+} QMP6988_addresses_t;
 
 
 
@@ -35,11 +36,45 @@ typedef enum
   */
 typedef enum
 {
-    QMP6988_TRIGGER_MEASUREMENT	=   0xAC,			/*!<  Trigger measurement command			*/
-    QMP6988_STATUS         		=   0x71,      		/*!<  Status command                       	*/
-    QMP6988_INITIALIZATION   		=   0xBE,     		/*!<  Initialization                    	*/
-    QMP6988_SOFTRESET      		=   0xBA         	/*!<  Soft reset	                    	*/
-} QMP6988_basic_commands_t;
+	QMP6988_TEMP_TXD0		=   0xFC,			/*!<  Temperature DATA[8:1] in 24bit		*/
+    QMP6988_TEMP_TXD1     	=   0xFB,      		/*!<  Temperature DATA[16:9] in 24bit      	*/
+    QMP6988_TEMP_TXD2   	=   0xFA,     		/*!<  Temperature DATA[24:17] in 24bit     	*/
+    QMP6988_PRESS_TXD0		=   0xF9,        	/*!<  Pressure DATA[8:1] in 24bit          	*/
+	QMP6988_PRESS_TXD1		=   0xF8,        	/*!<  Pressure DATA[16:9] in 24bit         	*/
+	QMP6988_PRESS_TXD2		=   0xF7,        	/*!<  Pressure DATA[24:17] in 24bit        	*/
+	QMP6988_IO_SETUP		=   0xF5,        	/*!<  Set-up		                    	*/
+	QMP6988_CTRL_MEAS		=   0xF4,        	/*!<  Control		                    	*/
+	QMP6988_DEVICE_STAT		=   0xF3,        	/*!<  Stat			                    	*/
+	QMP6988_I2C_SET			=   0xF2,        	/*!<  Master code setting at I2C HS mode   	*/
+	QMP6988_IIR_CNT			=   0xF1,        	/*!<  IIR filter co-efficient setting      	*/
+	QMP6988_RESET			=   0xE0,        	/*!<  Soft reset	                    	*/
+	QMP6988_CHIP_ID			=   0xD1,        	/*!<  CHIP_ID: 5D		                  	*/
+	QMP6988_COE_B00_A0_EX	=   0xB8,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_A2_0		=   0xB7,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_A2_1		=   0xB6,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_A1_0		=   0xB5,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_A1_1		=   0xB4,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_A0_0		=   0xB3,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_A0_1		=   0xB2,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_BP3_0		=   0xB1,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_BP3_1		=   0xB0,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_B21_0		=   0xAF,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_B21_1		=   0xAE,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_B12_0		=   0xAD,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_B12_1		=   0xAC,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_BP2_0		=   0xAB,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_BP2_1		=   0xAA,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_B11_0		=   0xA9,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_B11_1		=   0xA8,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_BP1_0		=   0xA7,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_BP1_1		=   0xA6,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_BT2_0		=   0xA5,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_BT2_1		=   0xA4,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_BT1_0		=   0xA3,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_BT1_1		=   0xA2,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_B00_0		=   0xA1,        	/*!<  Compensation Coefficient             	*/
+	QMP6988_COE_B00_1		=   0xA0        	/*!<  Compensation Coefficient             	*/
+} QMP6988_register_list_t;
 
 
 
