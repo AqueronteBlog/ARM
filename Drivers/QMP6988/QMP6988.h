@@ -78,56 +78,186 @@ typedef enum
 
 
 
-// TRIGGER MESUREMENT
+// IO SETUP
 /**
-  * @brief   DATA
+  * @brief   T_STANDBY <7:5>. Standby time setting
   * 			NOTE: N/A
   */
 typedef enum
 {
-    TRIGGER_MEASUREMENT_DATA_1	=   0x33,           /*!<  Data 1                       			*/
-	TRIGGER_MEASUREMENT_DATA_2	=   0x00            /*!<  Data 2                    			*/
-} QMP6988_trigger_measurement_t;
+	IO_SETUP_T_STANDBY_MASK				=   ( 0b111 < 5U ),		/*!<  T_STANDBY Mask                     	*/
+	IO_SETUP_T_STANDBY_1MS				=   ( 0b000 < 5U ),		/*!<  T_STANDBY: 1ms          	  [Default] */
+	IO_SETUP_T_STANDBY_5MS				=   ( 0b001 < 5U ),		/*!<  T_STANDBY: 5ms                    	*/
+	IO_SETUP_T_STANDBY_50MS				=   ( 0b010 < 5U ),		/*!<  T_STANDBY: 50ms                    	*/
+	IO_SETUP_T_STANDBY_250MS			=   ( 0b011 < 5U ),		/*!<  T_STANDBY: 250ms                    	*/
+	IO_SETUP_T_STANDBY_500MS			=   ( 0b100 < 5U ),		/*!<  T_STANDBY: 500ms                    	*/
+	IO_SETUP_T_STANDBY_1S				=   ( 0b101 < 5U ),		/*!<  T_STANDBY: 1s                    		*/
+	IO_SETUP_T_STANDBY_2S				=   ( 0b110 < 5U ),		/*!<  T_STANDBY: 2s                    		*/
+	IO_SETUP_T_STANDBY_4S				=   ( 0b111 < 5U ) 		/*!<  T_STANDBY: 4s                    		*/
+} QMP6988_io_setup_t_standby_t;
 
 
-
-// STATUS
 /**
-  * @brief   BUS_INDICATION <7>
+  * @brief   SPI3_SDIM <2>. Select output type of SDI terminal
   * 			NOTE: N/A
   */
 typedef enum
 {
-    STATUS_BUS_INDICATION_MASK	=   ( 1U << 7U ),	/*!<  BUS_INDICATION mask                	*/
-    STATUS_BUS_INDICATION_BUSY	=   ( 1U << 7U ),	/*!<  Busy in measurement                	*/
-	STATUS_BUS_INDICATION_FREE	=   ( 0U << 7U ) 	/*!<  Free in dormant state                	*/
-} QMP6988_status_bus_indication_t;
-
+	IO_SETUP_SPI3_SDIM_MASK				=   ( 1U < 2U ),		/*!<  SPI3_SDIM Mask                     	*/
+	IO_SETUP_SPI3_SDIM_LO_HIZ_OUTPUT	=   ( 0U < 2U ),		/*!<  SPI3_SDIM: Lo/Hiz output    [Default] */
+	IO_SETUP_SPI3_SDIM_LO_HI_OUTPUT		=   ( 1U < 2U )			/*!<  SPI3_SDIM: Lo/Hi output               */
+} QMP6988_io_setup_spi3_sdim_t;
 
 
 /**
-  * @brief   CAL <3>
+  * @brief   SPI3W <0>. Change mode between SPI 4-wire and SPI 3-wire
   * 			NOTE: N/A
   */
 typedef enum
 {
-    STATUS_CAL_MASK				=   ( 1U << 3U ),	/*!<  CAL mask                				*/
-	STATUS_CAL_CALIBRATED    	=   ( 1U << 3U ),	/*!<  Calibrated					       	*/
-	STATUS_CAL_UNCALIBRATED 	=   ( 0U << 3U ) 	/*!<  Uncalibrated			              	*/
-} QMP6988_status_cal_t;
+	IO_SETUP_SPI3W_MASK					=   ( 1U < 0U ),		/*!<  SPI3W Mask                     		*/
+	IO_SETUP_SPI3W_4_WIRE				=   ( 0U < 0U ),		/*!<  SPI3W: 4-wire			      [Default] */
+	IO_SETUP_SPI3W_3_WIRE				=   ( 1U < 0U )			/*!<  SPI3W: 3-wire			                */
+} QMP6988_io_setup_spi3w_t;
 
 
 
-// INITIALIZATION
+// CTRL_MEAS
 /**
-  * @brief   INITIALIZATION
-  * 			NOTE: N/A
+  * @brief   TEMP_AVERAGE <7:5>. Averaging times setting for Temperature measurement
+  * 			NOTE: Skip means no measurement.
   */
 typedef enum
 {
-    INITIALIZATION_DATA_1		=   0x08,			/*!<  Data 1               					*/
-    INITIALIZATION_DATA_2		=   0x00 			/*!<  Data 2                				*/
-} QMP6988_initialization_t;
+	CTRL_MEAS_TEMP_AVERAGE_MASK			=   ( 0b111 < 5U ),		/*!<  TEMP_AVERAGE Mask                     */
+	CTRL_MEAS_TEMP_AVERAGE_SKIP			=   ( 0b000 < 5U ),		/*!<  TEMP_AVERAGE: Skip          [Default] */
+	CTRL_MEAS_TEMP_AVERAGE_1			=   ( 0b001 < 5U ),		/*!<  TEMP_AVERAGE:  1                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_2			=   ( 0b010 < 5U ),		/*!<  TEMP_AVERAGE:  2                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_4			=   ( 0b011 < 5U ),		/*!<  TEMP_AVERAGE:  4                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_8			=   ( 0b100 < 5U ),		/*!<  TEMP_AVERAGE:  8                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_16			=   ( 0b101 < 5U ),		/*!<  TEMP_AVERAGE: 16                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_32			=   ( 0b110 < 5U ),		/*!<  TEMP_AVERAGE: 32                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_64			=   ( 0b111 < 5U ) 		/*!<  TEMP_AVERAGE: 64                    	*/
+} QMP6988_ctrl_meas_temp_average_t;
+
+
+/**
+  * @brief   PRESS_AVERAGE <4:2>. Averaging times setting for Pressure measurement
+  * 			NOTE: Skip means no measurement.
+  */
+typedef enum
+{
+	CTRL_MEAS_PRESS_AVERAGE_MASK		=   ( 0b111 < 2U ),		/*!<  PRESS_AVERAGE Mask                    */
+	CTRL_MEAS_PRESS_AVERAGE_SKIP		=   ( 0b000 < 2U ),		/*!<  PRESS_AVERAGE: Skip         [Default] */
+	CTRL_MEAS_PRESS_AVERAGE_1			=   ( 0b001 < 2U ),		/*!<  PRESS_AVERAGE:  1                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_2			=   ( 0b010 < 2U ),		/*!<  PRESS_AVERAGE:  2                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_4			=   ( 0b011 < 2U ),		/*!<  PRESS_AVERAGE:  4                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_8			=   ( 0b100 < 2U ),		/*!<  PRESS_AVERAGE:  8                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_16			=   ( 0b101 < 2U ),		/*!<  PRESS_AVERAGE: 16                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_32			=   ( 0b110 < 2U ),		/*!<  PRESS_AVERAGE: 32                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_64			=   ( 0b111 < 2U ) 		/*!<  PRESS_AVERAGE: 64                    	*/
+} QMP6988_ctrl_meas_press_average_t;
+
+
+/**
+  * @brief   POWER_MODE <1:0>. Operation mode setting
+  * 			NOTE: N/A.
+  */
+typedef enum
+{
+	CTRL_MEAS_POWER_MODE_MASK			=   ( 0b11 < 0U ),		/*!<  POWER_MODE Mask                    	*/
+	CTRL_MEAS_POWER_MODE_SLEEP_MODE		=   ( 0b00 < 0U ),		/*!<  POWER_MODE: Sleep mode      [Default] */
+	CTRL_MEAS_POWER_MODE_FORCED_MODE	=   ( 0b01 < 0U ),		/*!<  POWER_MODE: Forced mode              	*/
+	CTRL_MEAS_POWER_MODE_NORMAL_MODE	=   ( 0b11 < 0U )		/*!<  POWER_MODE: Normal mode              	*/
+} QMP6988_ctrl_meas_power_mode_t;
+
+
+
+// DEVICE_STAT
+/**
+  * @brief   MEASURE <3>. Device operation status
+  * 			NOTE: This value automatically changes.
+  */
+typedef enum
+{
+	DEVICE_STAT_MEASURE_MASK			=   ( 1U < 3U ),		/*!<  MEASURE Mask                     									*/
+	DEVICE_STAT_MEASURE_DONE			=   ( 0U < 3U ),		/*!<  Finish a measurement, waiting for next measurement	[Default] 	*/
+	DEVICE_STAT_MEASURE_BUSY			=   ( 1U < 3U )			/*!<  On a measurement, waiting for finishing the data store         	*/
+} QMP6988_device_stat_measure_t;
+
+
+/**
+  * @brief   OTP_UPDATE <0>. The status of OTP data access
+  * 			NOTE: This value automatically changes.
+  */
+typedef enum
+{
+	DEVICE_STAT_OTP_UPDATE_MASK			=   ( 1U < 3U ),		/*!<  OTP_UPDATE Mask                  			*/
+	DEVICE_STAT_OTP_UPDATE_DONE			=   ( 0U < 3U ),		/*!<  No accessing OTP data			[Default] 	*/
+	DEVICE_STAT_OTP_UPDATE_BUSY			=   ( 1U < 3U )			/*!<  While accessing OTP data				 	*/
+} QMP6988_device_otp_update_t;
+
+
+
+// I2C_SET
+/**
+  * @brief   MASTER_CODE <2:0>. Master code setting at I2C high-speed mode
+  * 			NOTE: N/A.
+  */
+typedef enum
+{
+	I2C_SET_MASTER_CODE_MASK			=   ( 0b111 < 0U ),		/*!<  MASTER_CODE Mask                     	*/
+	I2C_SET_MASTER_CODE_H08				=   ( 0b000 < 0U ),		/*!<  MASTER_CODE: 0x08           			*/
+	I2C_SET_MASTER_CODE_H09				=   ( 0b001 < 0U ),		/*!<  MASTER_CODE: 0x09           [Default] */
+	I2C_SET_MASTER_CODE_H0A				=   ( 0b010 < 0U ),		/*!<  MASTER_CODE: 0x0A                    	*/
+	I2C_SET_MASTER_CODE_H0B				=   ( 0b011 < 0U ),		/*!<  MASTER_CODE: 0x0B                    	*/
+	I2C_SET_MASTER_CODE_H0C				=   ( 0b100 < 0U ),		/*!<  MASTER_CODE: 0x0C                    	*/
+	I2C_SET_MASTER_CODE_HOD				=   ( 0b101 < 0U ),		/*!<  MASTER_CODE: 0x0D                    	*/
+	I2C_SET_MASTER_CODE_HOE				=   ( 0b110 < 0U ),		/*!<  MASTER_CODE: 0x0E                    	*/
+	I2C_SET_MASTER_CODE_H0F				=   ( 0b111 < 0U ) 		/*!<  MASTER_CODE: 0x0F                    	*/
+} QMP6988_i2c_set_master_code_t;
+
+
+
+// IIR
+/**
+  * @brief   FILTER <2:0>. IIR filter co-efficient setting
+  * 			NOTE: Write access to this register address, IIR filter will be initialized.
+  */
+typedef enum
+{
+	IIR_FILTER_MASK						=   ( 0b111 < 0U ),		/*!<  FILTER Mask                     		*/
+	IIR_FILTER_OFF						=   ( 0b000 < 0U ),		/*!<  FILTER: OFF           	  [Default] */
+	IIR_FILTER_N_2						=   ( 0b001 < 0U ),		/*!<  FILTER: N = 2           				*/
+	IIR_FILTER_N_4						=   ( 0b010 < 0U ),		/*!<  FILTER: N = 4                    		*/
+	IIR_FILTER_N_8						=   ( 0b011 < 0U ),		/*!<  FILTER: N = 8                    		*/
+	IIR_FILTER_N_16						=   ( 0b100 < 0U ),		/*!<  FILTER: N = 16                    	*/
+	IIR_FILTER_N_32			 			=   ( 0b101 < 0U )		/*!<  FILTER: N = 32                    	*/
+} QMP6988_iir_filter_t;
+
+
+
+// RESET
+/**
+  * @brief   RESET <7:0>. Reset Control. When input 'E6h', the software reset will be effective
+  * 			NOTE: Except for that, nothing is to happen.
+  */
+typedef enum
+{
+	RESET_RESET_COMMAND					=   ( 0xE6 < 0U )		/*!<  Reset command	                		*/
+} QMP6988_reset_reset_t;
+
+
+
+// CHIP_ID
+/**
+  * @brief   CHIP_ID <7:0>. Chip ID Confirmation
+  * 			NOTE: N/A.
+  */
+typedef enum
+{
+	CHIP_ID_CHIP_ID						=   ( 0xE65C < 0U )		/*!<  Chip ID		                		*/
+} QMP6988_chip_id_chip_id_t;
 
 
 

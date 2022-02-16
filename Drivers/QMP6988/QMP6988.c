@@ -81,8 +81,8 @@ QMP6988_status_t  QMP6988_Calibrate ( I2C_parameters_t myI2Cparameters )
 
     /* Update the register	*/
     //cmd[0]	 =	 QMP6988_INITIALIZATION;
-    cmd[1]	 =	 INITIALIZATION_DATA_1;
-    cmd[2]	 =	 INITIALIZATION_DATA_2;
+    //cmd[1]	 =	 INITIALIZATION_DATA_1;
+    //cmd[2]	 =	 INITIALIZATION_DATA_2;
     aux 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
