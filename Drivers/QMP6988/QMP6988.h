@@ -13,7 +13,12 @@
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
+#ifndef QMP6988_H_
+#define QMP6988_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "stdint.h"
 #include "i2c.h"
@@ -263,34 +268,82 @@ typedef enum
 
 
 
-
 #ifndef QMP6988_VECTOR_STRUCT_H
 #define QMP6988_VECTOR_STRUCT_H
-/* Temperature data	*/
+/* No compensated data	*/
 typedef struct
 {
-	uint32_t raw_temperature;						/*!<  Raw temperature data 					*/
-	float	 temperature;							/*!<  Temperature          					*/
-} QMP6988_temperature_data_t;
+	uint32_t	dt;											/*!<  Raw temperature data 					*/
+	uint32_t	dp;											/*!<  Raw humidity data 					*/
+} QMP6988_raw_measured_data_t;
 
 
-/* Humidity data	*/
+/* Compensated data	*/
 typedef struct
 {
-	uint32_t raw_humidity;							/*!<  Raw humidity data 					*/
-	float	 humidity;								/*!<  Humidity          					*/
-} QMP6988_humidity_data_t;
+	float 		temperature;								/*!<  Temperature		 					*/
+	float	 	humidity;									/*!<  Humidity          					*/
+} QMP6988_compensated_measured_data_t;
+
+
+/* Compensation coefficients (raw values)	*/
+typedef struct
+{
+	uint32_t 	raw_b00;									/*!<  Raw Compensation Coefficient: b00		*/
+	uint32_t 	raw_a0;										/*!<  Raw Compensation Coefficient: a0		*/
+	uint16_t 	raw_a2;										/*!<  Raw Compensation Coefficient: a2		*/
+	uint16_t 	raw_a1;										/*!<  Raw Compensation Coefficient: a1		*/
+	uint16_t 	raw_bp3;									/*!<  Raw Compensation Coefficient: bp3		*/
+	uint16_t 	raw_b21;									/*!<  Raw Compensation Coefficient: b21		*/
+	uint16_t 	raw_b12;									/*!<  Raw Compensation Coefficient: b12		*/
+	uint16_t 	raw_bp2;									/*!<  Raw Compensation Coefficient: bp2		*/
+	uint16_t 	raw_b11;									/*!<  Raw Compensation Coefficient: b11		*/
+	uint16_t 	raw_bp1;									/*!<  Raw Compensation Coefficient: bp1		*/
+	uint16_t 	raw_bt2;									/*!<  Raw Compensation Coefficient: bt2		*/
+	uint16_t 	raw_bt1;									/*!<  Raw Compensation Coefficient: bt1		*/
+} QMP6988_raw_compensation_coefficients_t;
+
+
+/* Compensation coefficients	*/
+typedef struct
+{
+	float 	b00;											/*!<  Compensation Coefficient: b00			*/
+	float 	a0;												/*!<  Compensation Coefficient: a0			*/
+	float 	a2;												/*!<  Compensation Coefficient: a2			*/
+	float 	a1;												/*!<  Compensation Coefficient: a1			*/
+	float 	bp3;											/*!<  Compensation Coefficient: bp3			*/
+	float 	b21;											/*!<  Compensation Coefficient: b21			*/
+	float 	b12;											/*!<  Compensation Coefficient: b12			*/
+	float 	bp2;											/*!<  Compensation Coefficient: bp2			*/
+	float 	b11;											/*!<  Compensation Coefficient: b11			*/
+	float 	bp1;											/*!<  Compensation Coefficient: bp1			*/
+	float 	bt2;											/*!<  Compensation Coefficient: bt2			*/
+	float 	bt1;											/*!<  Compensation Coefficient: bt1			*/
+} QMP6988_compensation_coefficients_t;
+
 
 
 /* User's variables	*/
 typedef struct
 {
-	QMP6988_temperature_data_t	temperature;		/*!<  Temperature variables					*/
-	QMP6988_humidity_data_t	    humidity;			/*!<  Humidity variables   					*/
+	QMP6988_raw_measured_data_t				raw_txd;		/*!<  Non compensated data					*/
+	QMP6988_compensated_measured_data_t		txd;			/*!<  Compensated data   					*/
 
-    uint8_t  					state;				/*!<  State              					*/
+	QMP6988_ctrl_meas_temp_average_t		temp_average;	/*!<  Temperature average times				*/
+	QMP6988_ctrl_meas_press_average_t		press_average;	/*!<  Pressure average times				*/
 
-    uint8_t  					crc;				/*!<  CRC	              					*/
+	QMP6988_raw_compensation_coefficients_t	raw_k;			/*!<  Raw Compensation Coefficients			*/
+	QMP6988_compensation_coefficients_t		k;				/*!<  Compensation Coefficients				*/
+
+	QMP6988_iir_filter_t					filter;			/*!<  IIR filter co-efficient				*/
+
+	uint8_t									device_stat;	/*!<  Device stat: Measure and OTP_update	*/
+
+	QMP6988_ctrl_meas_power_mode_t			power_mode;		/*!<  Power mode setting					*/
+
+	QMP6988_io_setup_t_standby_t			t_standby;		/*!<  Standby time setting					*/
+
+    uint8_t  								chip_id;		/*!<  Chip ID              					*/
 } QMP6988_user_data_t;
 #endif
 
@@ -314,36 +367,112 @@ typedef enum
   */
 /** It configures the I2C bus.
  */
-QMP6988_status_t  QMP6988_Init               	( I2C_parameters_t myI2Cparameters 									);
+QMP6988_status_t  QMP6988_Init               				( I2C_parameters_t myI2Cparameters 													);
 
-/** It calibrates the device.
+/** It gets the raw compensation coefficients.
  */
-QMP6988_status_t  QMP6988_Calibrate          	( I2C_parameters_t myI2Cparameters 									);
+QMP6988_status_t  QMP6988_GetRawCompensationCoefficients	( I2C_parameters_t myI2Cparameters, QMP6988_raw_compensation_coefficients_t* myRawK	);
 
-/** It performs a soft-reset.
+/** It gets the chip ID.
  */
-QMP6988_status_t  QMP6988_SoftReset          	( I2C_parameters_t myI2Cparameters 									);
+QMP6988_status_t  QMP6988_GetChipID				          	( I2C_parameters_t myI2Cparameters, uint8_t* myChipID								);
 
-/** It triggers a new measurement data (raw data).
+/** It performs a software reset.
  */
-QMP6988_status_t  QMP6988_TriggerMeasurement	( I2C_parameters_t myI2Cparameters 									);
+QMP6988_status_t  QMP6988_SoftReset				          	( I2C_parameters_t myI2Cparameters													);
 
-/** It triggers the state byte.
+/** It sets the IIR filter co-efficient.
  */
-QMP6988_status_t  QMP6988_TriggerStatus		    ( I2C_parameters_t myI2Cparameters					 				);
+QMP6988_status_t  QMP6988_SetIIR_Filter				        ( I2C_parameters_t myI2Cparameters, QMP6988_iir_filter_t myFilter					);
 
-/** It gets the state byte.
+/** It gets the IIR filter co-efficient.
  */
-QMP6988_status_t  QMP6988_GetStatus		     	( I2C_parameters_t myI2Cparameters, uint8_t* myState 				);
+QMP6988_status_t  QMP6988_GetIIR_Filter				        ( I2C_parameters_t myI2Cparameters, QMP6988_iir_filter_t* myFilter					);
 
-/** It gets all the raw data.
+/** It sets the master code setting at I2C HS mode.
  */
-QMP6988_status_t  QMP6988_GetAllData	    	( I2C_parameters_t myI2Cparameters, QMP6988_user_data_t* myAllData	);
+QMP6988_status_t  QMP6988_SetMasterCodeI2C			        ( I2C_parameters_t myI2Cparameters, QMP6988_i2c_set_master_code_t myMasterCode		);
 
-/** It processes the temperature data.
+/** It gets the master code setting at I2C HS mode.
  */
-float  QMP6988_ProcessTemperature 			( uint32_t myRawTemperature											);
+QMP6988_status_t  QMP6988_GetMasterCodeI2C			        ( I2C_parameters_t myI2Cparameters, QMP6988_i2c_set_master_code_t* myMasterCode		);
 
-/** It processes the humidity data.
+/** It gets the device stat.
  */
-float  QMP6988_ProcessHumidity    			( uint32_t myRawHumidity 											);
+QMP6988_status_t  QMP6988_GetDeviceStat			        	( I2C_parameters_t myI2Cparameters, uint8_t* myDeviceStat							);
+
+/** It sets the power mode.
+ */
+QMP6988_status_t  QMP6988_SetPowerMode			        	( I2C_parameters_t myI2Cparameters, QMP6988_ctrl_meas_power_mode_t myPowerMode		);
+
+/** It gets the power mode.
+ */
+QMP6988_status_t  QMP6988_GetPowerMode			        	( I2C_parameters_t myI2Cparameters, QMP6988_ctrl_meas_power_mode_t* myPowerMode		);
+
+/** It sets the temperature averaging time.
+ */
+QMP6988_status_t  QMP6988_SetTemperatureAverage	        	( I2C_parameters_t myI2Cparameters, QMP6988_ctrl_meas_temp_average_t myTempAvrg		);
+
+/** It gets the temperature averaging time.
+ */
+QMP6988_status_t  QMP6988_GetTemperatureAverage			    ( I2C_parameters_t myI2Cparameters, QMP6988_ctrl_meas_temp_average_t* myTempAvrg	);
+
+/** It sets the pressure averaging time.
+ */
+QMP6988_status_t  QMP6988_SetPressureAverage	        	( I2C_parameters_t myI2Cparameters, QMP6988_ctrl_meas_press_average_t myPressAvrg	);
+
+/** It gets the pressure averaging time.
+ */
+QMP6988_status_t  QMP6988_GetPressureAverage			    ( I2C_parameters_t myI2Cparameters, QMP6988_ctrl_meas_press_average_t* myPressAvrg	);
+
+/** It sets the standby time setting.
+ */
+QMP6988_status_t  QMP6988_SetStandbyTimeSetting	        	( I2C_parameters_t myI2Cparameters, QMP6988_io_setup_t_standby_t myStandbyTime		);
+
+/** It gets the standby time setting.
+ */
+QMP6988_status_t  QMP6988_GetStandbyTimeSetting			    ( I2C_parameters_t myI2Cparameters, QMP6988_io_setup_t_standby_t* myStandbyTime		);
+
+/** It sets the SPI mode setting (4 or 3 wire).
+ */
+QMP6988_status_t  QMP6988_SetSPI_ModeSetting	        	( I2C_parameters_t myI2Cparameters, QMP6988_io_setup_spi3w_t mySPI					);
+
+/** It gets the SPI mode setting (4 or 3 wire).
+ */
+QMP6988_status_t  QMP6988_GetSPI_ModeSetting			    ( I2C_parameters_t myI2Cparameters, QMP6988_io_setup_spi3w_t* mySPI					);
+
+/** It sets the selected output type of SDI terminal.
+ */
+QMP6988_status_t  QMP6988_SetSDI_Output			        	( I2C_parameters_t myI2Cparameters, QMP6988_io_setup_spi3_sdim_t mySDI				);
+
+/** It gets the selected output type of SDI terminal.
+ */
+QMP6988_status_t  QMP6988_GetSDI_Output					    ( I2C_parameters_t myI2Cparameters, QMP6988_io_setup_spi3_sdim_t* mySDI				);
+
+/** It gets the raw temperature data and raw pressure data.
+ */
+QMP6988_status_t  QMP6988_GetRawMeasurements			    ( I2C_parameters_t myI2Cparameters, QMP6988_raw_measured_data_t* myData				);
+
+/** It calculates the compensation coefficients.
+ */
+QMP6988_compensation_coefficients_t	QMP6988_CalculateCompensationCoefficients	( QMP6988_raw_compensation_coefficients_t myRawK				);
+
+/** It calculates the compensated temperature value.
+ */
+QMP6988_compensated_measured_data_t	QMP6988_CalculateCompensatedMeasuredData	( QMP6988_raw_measured_data_t myData, QMP6988_compensation_coefficients_t myK );
+
+/** It calculates the conversion factor. K = A + ( S * OTP ) / 32767.
+ */
+float QMP6988_CalculateK	( float a, float s, uint16_t otp );
+
+/** It calculates the conversion factor. K = OTP / 16.
+ */
+float QMP6988_CalculateK0	( uint32_t otp );
+
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* QMP6988_H */
