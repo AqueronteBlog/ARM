@@ -90,15 +90,15 @@ typedef enum
   */
 typedef enum
 {
-	IO_SETUP_T_STANDBY_MASK				=   ( 0b111 < 5U ),		/*!<  T_STANDBY Mask                     	*/
-	IO_SETUP_T_STANDBY_1MS				=   ( 0b000 < 5U ),		/*!<  T_STANDBY: 1ms          	  [Default] */
-	IO_SETUP_T_STANDBY_5MS				=   ( 0b001 < 5U ),		/*!<  T_STANDBY: 5ms                    	*/
-	IO_SETUP_T_STANDBY_50MS				=   ( 0b010 < 5U ),		/*!<  T_STANDBY: 50ms                    	*/
-	IO_SETUP_T_STANDBY_250MS			=   ( 0b011 < 5U ),		/*!<  T_STANDBY: 250ms                    	*/
-	IO_SETUP_T_STANDBY_500MS			=   ( 0b100 < 5U ),		/*!<  T_STANDBY: 500ms                    	*/
-	IO_SETUP_T_STANDBY_1S				=   ( 0b101 < 5U ),		/*!<  T_STANDBY: 1s                    		*/
-	IO_SETUP_T_STANDBY_2S				=   ( 0b110 < 5U ),		/*!<  T_STANDBY: 2s                    		*/
-	IO_SETUP_T_STANDBY_4S				=   ( 0b111 < 5U ) 		/*!<  T_STANDBY: 4s                    		*/
+	IO_SETUP_T_STANDBY_MASK				=   ( 0b111 << 5U ),	/*!<  T_STANDBY Mask                     	*/
+	IO_SETUP_T_STANDBY_1MS				=   ( 0b000 << 5U ),	/*!<  T_STANDBY: 1ms          	  [Default] */
+	IO_SETUP_T_STANDBY_5MS				=   ( 0b001 << 5U ),	/*!<  T_STANDBY: 5ms                    	*/
+	IO_SETUP_T_STANDBY_50MS				=   ( 0b010 << 5U ),	/*!<  T_STANDBY: 50ms                    	*/
+	IO_SETUP_T_STANDBY_250MS			=   ( 0b011 << 5U ),	/*!<  T_STANDBY: 250ms                    	*/
+	IO_SETUP_T_STANDBY_500MS			=   ( 0b100 << 5U ),	/*!<  T_STANDBY: 500ms                    	*/
+	IO_SETUP_T_STANDBY_1S				=   ( 0b101 << 5U ),	/*!<  T_STANDBY: 1s                    		*/
+	IO_SETUP_T_STANDBY_2S				=   ( 0b110 << 5U ),	/*!<  T_STANDBY: 2s                    		*/
+	IO_SETUP_T_STANDBY_4S				=   ( 0b111 << 5U ) 	/*!<  T_STANDBY: 4s                    		*/
 } QMP6988_io_setup_t_standby_t;
 
 
@@ -108,9 +108,9 @@ typedef enum
   */
 typedef enum
 {
-	IO_SETUP_SPI3_SDIM_MASK				=   ( 1U < 2U ),		/*!<  SPI3_SDIM Mask                     	*/
-	IO_SETUP_SPI3_SDIM_LO_HIZ_OUTPUT	=   ( 0U < 2U ),		/*!<  SPI3_SDIM: Lo/Hiz output    [Default] */
-	IO_SETUP_SPI3_SDIM_LO_HI_OUTPUT		=   ( 1U < 2U )			/*!<  SPI3_SDIM: Lo/Hi output               */
+	IO_SETUP_SPI3_SDIM_MASK				=   ( 1U << 2U ),		/*!<  SPI3_SDIM Mask                     	*/
+	IO_SETUP_SPI3_SDIM_LO_HIZ_OUTPUT	=   ( 0U << 2U ),		/*!<  SPI3_SDIM: Lo/Hiz output    [Default] */
+	IO_SETUP_SPI3_SDIM_LO_HI_OUTPUT		=   ( 1U << 2U )		/*!<  SPI3_SDIM: Lo/Hi output               */
 } QMP6988_io_setup_spi3_sdim_t;
 
 
@@ -120,9 +120,9 @@ typedef enum
   */
 typedef enum
 {
-	IO_SETUP_SPI3W_MASK					=   ( 1U < 0U ),		/*!<  SPI3W Mask                     		*/
-	IO_SETUP_SPI3W_4_WIRE				=   ( 0U < 0U ),		/*!<  SPI3W: 4-wire			      [Default] */
-	IO_SETUP_SPI3W_3_WIRE				=   ( 1U < 0U )			/*!<  SPI3W: 3-wire			                */
+	IO_SETUP_SPI3W_MASK					=   ( 1U << 0U ),		/*!<  SPI3W Mask                     		*/
+	IO_SETUP_SPI3W_4_WIRE				=   ( 0U << 0U ),		/*!<  SPI3W: 4-wire			      [Default] */
+	IO_SETUP_SPI3W_3_WIRE				=   ( 1U << 0U )		/*!<  SPI3W: 3-wire			                */
 } QMP6988_io_setup_spi3w_t;
 
 
@@ -134,15 +134,15 @@ typedef enum
   */
 typedef enum
 {
-	CTRL_MEAS_TEMP_AVERAGE_MASK			=   ( 0b111 < 5U ),		/*!<  TEMP_AVERAGE Mask                     */
-	CTRL_MEAS_TEMP_AVERAGE_SKIP			=   ( 0b000 < 5U ),		/*!<  TEMP_AVERAGE: Skip          [Default] */
-	CTRL_MEAS_TEMP_AVERAGE_1			=   ( 0b001 < 5U ),		/*!<  TEMP_AVERAGE:  1                    	*/
-	CTRL_MEAS_TEMP_AVERAGE_2			=   ( 0b010 < 5U ),		/*!<  TEMP_AVERAGE:  2                    	*/
-	CTRL_MEAS_TEMP_AVERAGE_4			=   ( 0b011 < 5U ),		/*!<  TEMP_AVERAGE:  4                    	*/
-	CTRL_MEAS_TEMP_AVERAGE_8			=   ( 0b100 < 5U ),		/*!<  TEMP_AVERAGE:  8                    	*/
-	CTRL_MEAS_TEMP_AVERAGE_16			=   ( 0b101 < 5U ),		/*!<  TEMP_AVERAGE: 16                    	*/
-	CTRL_MEAS_TEMP_AVERAGE_32			=   ( 0b110 < 5U ),		/*!<  TEMP_AVERAGE: 32                    	*/
-	CTRL_MEAS_TEMP_AVERAGE_64			=   ( 0b111 < 5U ) 		/*!<  TEMP_AVERAGE: 64                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_MASK			=   ( 0b111 << 5U ),	/*!<  TEMP_AVERAGE Mask                     */
+	CTRL_MEAS_TEMP_AVERAGE_SKIP			=   ( 0b000 << 5U ),	/*!<  TEMP_AVERAGE: Skip          [Default] */
+	CTRL_MEAS_TEMP_AVERAGE_1			=   ( 0b001 << 5U ),	/*!<  TEMP_AVERAGE:  1                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_2			=   ( 0b010 << 5U ),	/*!<  TEMP_AVERAGE:  2                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_4			=   ( 0b011 << 5U ),	/*!<  TEMP_AVERAGE:  4                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_8			=   ( 0b100 << 5U ),	/*!<  TEMP_AVERAGE:  8                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_16			=   ( 0b101 << 5U ),	/*!<  TEMP_AVERAGE: 16                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_32			=   ( 0b110 << 5U ),	/*!<  TEMP_AVERAGE: 32                    	*/
+	CTRL_MEAS_TEMP_AVERAGE_64			=   ( 0b111 << 5U ) 	/*!<  TEMP_AVERAGE: 64                    	*/
 } QMP6988_ctrl_meas_temp_average_t;
 
 
@@ -152,15 +152,15 @@ typedef enum
   */
 typedef enum
 {
-	CTRL_MEAS_PRESS_AVERAGE_MASK		=   ( 0b111 < 2U ),		/*!<  PRESS_AVERAGE Mask                    */
-	CTRL_MEAS_PRESS_AVERAGE_SKIP		=   ( 0b000 < 2U ),		/*!<  PRESS_AVERAGE: Skip         [Default] */
-	CTRL_MEAS_PRESS_AVERAGE_1			=   ( 0b001 < 2U ),		/*!<  PRESS_AVERAGE:  1                    	*/
-	CTRL_MEAS_PRESS_AVERAGE_2			=   ( 0b010 < 2U ),		/*!<  PRESS_AVERAGE:  2                    	*/
-	CTRL_MEAS_PRESS_AVERAGE_4			=   ( 0b011 < 2U ),		/*!<  PRESS_AVERAGE:  4                    	*/
-	CTRL_MEAS_PRESS_AVERAGE_8			=   ( 0b100 < 2U ),		/*!<  PRESS_AVERAGE:  8                    	*/
-	CTRL_MEAS_PRESS_AVERAGE_16			=   ( 0b101 < 2U ),		/*!<  PRESS_AVERAGE: 16                    	*/
-	CTRL_MEAS_PRESS_AVERAGE_32			=   ( 0b110 < 2U ),		/*!<  PRESS_AVERAGE: 32                    	*/
-	CTRL_MEAS_PRESS_AVERAGE_64			=   ( 0b111 < 2U ) 		/*!<  PRESS_AVERAGE: 64                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_MASK		=   ( 0b111 << 2U ),	/*!<  PRESS_AVERAGE Mask                    */
+	CTRL_MEAS_PRESS_AVERAGE_SKIP		=   ( 0b000 << 2U ),	/*!<  PRESS_AVERAGE: Skip         [Default] */
+	CTRL_MEAS_PRESS_AVERAGE_1			=   ( 0b001 << 2U ),	/*!<  PRESS_AVERAGE:  1                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_2			=   ( 0b010 << 2U ),	/*!<  PRESS_AVERAGE:  2                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_4			=   ( 0b011 << 2U ),	/*!<  PRESS_AVERAGE:  4                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_8			=   ( 0b100 << 2U ),	/*!<  PRESS_AVERAGE:  8                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_16			=   ( 0b101 << 2U ),	/*!<  PRESS_AVERAGE: 16                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_32			=   ( 0b110 << 2U ),	/*!<  PRESS_AVERAGE: 32                    	*/
+	CTRL_MEAS_PRESS_AVERAGE_64			=   ( 0b111 << 2U ) 	/*!<  PRESS_AVERAGE: 64                    	*/
 } QMP6988_ctrl_meas_press_average_t;
 
 
@@ -170,10 +170,10 @@ typedef enum
   */
 typedef enum
 {
-	CTRL_MEAS_POWER_MODE_MASK			=   ( 0b11 < 0U ),		/*!<  POWER_MODE Mask                    	*/
-	CTRL_MEAS_POWER_MODE_SLEEP_MODE		=   ( 0b00 < 0U ),		/*!<  POWER_MODE: Sleep mode      [Default] */
-	CTRL_MEAS_POWER_MODE_FORCED_MODE	=   ( 0b01 < 0U ),		/*!<  POWER_MODE: Forced mode              	*/
-	CTRL_MEAS_POWER_MODE_NORMAL_MODE	=   ( 0b11 < 0U )		/*!<  POWER_MODE: Normal mode              	*/
+	CTRL_MEAS_POWER_MODE_MASK			=   ( 0b11 << 0U ),		/*!<  POWER_MODE Mask                    	*/
+	CTRL_MEAS_POWER_MODE_SLEEP_MODE		=   ( 0b00 << 0U ),		/*!<  POWER_MODE: Sleep mode      [Default] */
+	CTRL_MEAS_POWER_MODE_FORCED_MODE	=   ( 0b01 << 0U ),		/*!<  POWER_MODE: Forced mode              	*/
+	CTRL_MEAS_POWER_MODE_NORMAL_MODE	=   ( 0b11 << 0U )		/*!<  POWER_MODE: Normal mode              	*/
 } QMP6988_ctrl_meas_power_mode_t;
 
 
@@ -185,9 +185,9 @@ typedef enum
   */
 typedef enum
 {
-	DEVICE_STAT_MEASURE_MASK			=   ( 1U < 3U ),		/*!<  MEASURE Mask                     									*/
-	DEVICE_STAT_MEASURE_DONE			=   ( 0U < 3U ),		/*!<  Finish a measurement, waiting for next measurement	[Default] 	*/
-	DEVICE_STAT_MEASURE_BUSY			=   ( 1U < 3U )			/*!<  On a measurement, waiting for finishing the data store         	*/
+	DEVICE_STAT_MEASURE_MASK			=   ( 1U << 3U ),		/*!<  MEASURE Mask                     									*/
+	DEVICE_STAT_MEASURE_DONE			=   ( 0U << 3U ),		/*!<  Finish a measurement, waiting for next measurement	[Default] 	*/
+	DEVICE_STAT_MEASURE_BUSY			=   ( 1U << 3U )		/*!<  On a measurement, waiting for finishing the data store         	*/
 } QMP6988_device_stat_measure_t;
 
 
@@ -197,9 +197,9 @@ typedef enum
   */
 typedef enum
 {
-	DEVICE_STAT_OTP_UPDATE_MASK			=   ( 1U < 3U ),		/*!<  OTP_UPDATE Mask                  			*/
-	DEVICE_STAT_OTP_UPDATE_DONE			=   ( 0U < 3U ),		/*!<  No accessing OTP data			[Default] 	*/
-	DEVICE_STAT_OTP_UPDATE_BUSY			=   ( 1U < 3U )			/*!<  While accessing OTP data				 	*/
+	DEVICE_STAT_OTP_UPDATE_MASK			=   ( 1U << 0U ),		/*!<  OTP_UPDATE Mask                  			*/
+	DEVICE_STAT_OTP_UPDATE_DONE			=   ( 0U << 0U ),		/*!<  No accessing OTP data			[Default] 	*/
+	DEVICE_STAT_OTP_UPDATE_BUSY			=   ( 1U << 0U )		/*!<  While accessing OTP data				 	*/
 } QMP6988_device_otp_update_t;
 
 
@@ -211,15 +211,15 @@ typedef enum
   */
 typedef enum
 {
-	I2C_SET_MASTER_CODE_MASK			=   ( 0b111 < 0U ),		/*!<  MASTER_CODE Mask                     	*/
-	I2C_SET_MASTER_CODE_H08				=   ( 0b000 < 0U ),		/*!<  MASTER_CODE: 0x08           			*/
-	I2C_SET_MASTER_CODE_H09				=   ( 0b001 < 0U ),		/*!<  MASTER_CODE: 0x09           [Default] */
-	I2C_SET_MASTER_CODE_H0A				=   ( 0b010 < 0U ),		/*!<  MASTER_CODE: 0x0A                    	*/
-	I2C_SET_MASTER_CODE_H0B				=   ( 0b011 < 0U ),		/*!<  MASTER_CODE: 0x0B                    	*/
-	I2C_SET_MASTER_CODE_H0C				=   ( 0b100 < 0U ),		/*!<  MASTER_CODE: 0x0C                    	*/
-	I2C_SET_MASTER_CODE_HOD				=   ( 0b101 < 0U ),		/*!<  MASTER_CODE: 0x0D                    	*/
-	I2C_SET_MASTER_CODE_HOE				=   ( 0b110 < 0U ),		/*!<  MASTER_CODE: 0x0E                    	*/
-	I2C_SET_MASTER_CODE_H0F				=   ( 0b111 < 0U ) 		/*!<  MASTER_CODE: 0x0F                    	*/
+	I2C_SET_MASTER_CODE_MASK			=   ( 0b111 << 0U ),	/*!<  MASTER_CODE Mask                     	*/
+	I2C_SET_MASTER_CODE_H08				=   ( 0b000 << 0U ),	/*!<  MASTER_CODE: 0x08           			*/
+	I2C_SET_MASTER_CODE_H09				=   ( 0b001 << 0U ),	/*!<  MASTER_CODE: 0x09           [Default] */
+	I2C_SET_MASTER_CODE_H0A				=   ( 0b010 << 0U ),	/*!<  MASTER_CODE: 0x0A                    	*/
+	I2C_SET_MASTER_CODE_H0B				=   ( 0b011 << 0U ),	/*!<  MASTER_CODE: 0x0B                    	*/
+	I2C_SET_MASTER_CODE_H0C				=   ( 0b100 << 0U ),	/*!<  MASTER_CODE: 0x0C                    	*/
+	I2C_SET_MASTER_CODE_HOD				=   ( 0b101 << 0U ),	/*!<  MASTER_CODE: 0x0D                    	*/
+	I2C_SET_MASTER_CODE_HOE				=   ( 0b110 << 0U ),	/*!<  MASTER_CODE: 0x0E                    	*/
+	I2C_SET_MASTER_CODE_H0F				=   ( 0b111 << 0U ) 	/*!<  MASTER_CODE: 0x0F                    	*/
 } QMP6988_i2c_set_master_code_t;
 
 
@@ -231,13 +231,13 @@ typedef enum
   */
 typedef enum
 {
-	IIR_FILTER_MASK						=   ( 0b111 < 0U ),		/*!<  FILTER Mask                     		*/
-	IIR_FILTER_OFF						=   ( 0b000 < 0U ),		/*!<  FILTER: OFF           	  [Default] */
-	IIR_FILTER_N_2						=   ( 0b001 < 0U ),		/*!<  FILTER: N = 2           				*/
-	IIR_FILTER_N_4						=   ( 0b010 < 0U ),		/*!<  FILTER: N = 4                    		*/
-	IIR_FILTER_N_8						=   ( 0b011 < 0U ),		/*!<  FILTER: N = 8                    		*/
-	IIR_FILTER_N_16						=   ( 0b100 < 0U ),		/*!<  FILTER: N = 16                    	*/
-	IIR_FILTER_N_32			 			=   ( 0b101 < 0U )		/*!<  FILTER: N = 32                    	*/
+	IIR_FILTER_MASK						=   ( 0b111 << 0U ),	/*!<  FILTER Mask                     		*/
+	IIR_FILTER_OFF						=   ( 0b000 << 0U ),	/*!<  FILTER: OFF           	  [Default] */
+	IIR_FILTER_N_2						=   ( 0b001 << 0U ),	/*!<  FILTER: N = 2           				*/
+	IIR_FILTER_N_4						=   ( 0b010 << 0U ),	/*!<  FILTER: N = 4                    		*/
+	IIR_FILTER_N_8						=   ( 0b011 << 0U ),	/*!<  FILTER: N = 8                    		*/
+	IIR_FILTER_N_16						=   ( 0b100 << 0U ),	/*!<  FILTER: N = 16                    	*/
+	IIR_FILTER_N_32			 			=   ( 0b101 << 0U )		/*!<  FILTER: N = 32                    	*/
 } QMP6988_iir_filter_t;
 
 
@@ -249,7 +249,7 @@ typedef enum
   */
 typedef enum
 {
-	RESET_RESET_COMMAND					=   ( 0xE6 < 0U )		/*!<  Reset command	                		*/
+	RESET_RESET_COMMAND					=   ( 0xE6 << 0U )		/*!<  Reset command	                		*/
 } QMP6988_reset_reset_t;
 
 
@@ -261,7 +261,7 @@ typedef enum
   */
 typedef enum
 {
-	CHIP_ID_CHIP_ID						=   ( 0xE65C < 0U )		/*!<  Chip ID		                		*/
+	CHIP_ID_CHIP_ID						=   ( 0x5C << 0U )		/*!<  Chip ID		                		*/
 } QMP6988_chip_id_chip_id_t;
 
 
@@ -274,7 +274,7 @@ typedef enum
 typedef struct
 {
 	uint32_t	dt;											/*!<  Raw temperature data 					*/
-	uint32_t	dp;											/*!<  Raw humidity data 					*/
+	uint32_t	dp;											/*!<  Raw pressure data 					*/
 } QMP6988_raw_measured_data_t;
 
 
@@ -282,43 +282,43 @@ typedef struct
 typedef struct
 {
 	float 		temperature;								/*!<  Temperature		 					*/
-	float	 	humidity;									/*!<  Humidity          					*/
+	float	 	pressure;									/*!<  Pressure          					*/
 } QMP6988_compensated_measured_data_t;
 
 
 /* Compensation coefficients (raw values)	*/
 typedef struct
 {
-	uint32_t 	raw_b00;									/*!<  Raw Compensation Coefficient: b00		*/
-	uint32_t 	raw_a0;										/*!<  Raw Compensation Coefficient: a0		*/
-	uint16_t 	raw_a2;										/*!<  Raw Compensation Coefficient: a2		*/
-	uint16_t 	raw_a1;										/*!<  Raw Compensation Coefficient: a1		*/
-	uint16_t 	raw_bp3;									/*!<  Raw Compensation Coefficient: bp3		*/
-	uint16_t 	raw_b21;									/*!<  Raw Compensation Coefficient: b21		*/
-	uint16_t 	raw_b12;									/*!<  Raw Compensation Coefficient: b12		*/
-	uint16_t 	raw_bp2;									/*!<  Raw Compensation Coefficient: bp2		*/
-	uint16_t 	raw_b11;									/*!<  Raw Compensation Coefficient: b11		*/
-	uint16_t 	raw_bp1;									/*!<  Raw Compensation Coefficient: bp1		*/
-	uint16_t 	raw_bt2;									/*!<  Raw Compensation Coefficient: bt2		*/
-	uint16_t 	raw_bt1;									/*!<  Raw Compensation Coefficient: bt1		*/
+	int32_t 	raw_b00;									/*!<  Raw Compensation Coefficient: b00		*/
+	int32_t 	raw_a0;										/*!<  Raw Compensation Coefficient: a0		*/
+	int16_t 	raw_a2;										/*!<  Raw Compensation Coefficient: a2		*/
+	int16_t 	raw_a1;										/*!<  Raw Compensation Coefficient: a1		*/
+	int16_t 	raw_bp3;									/*!<  Raw Compensation Coefficient: bp3		*/
+	int16_t 	raw_b21;									/*!<  Raw Compensation Coefficient: b21		*/
+	int16_t 	raw_b12;									/*!<  Raw Compensation Coefficient: b12		*/
+	int16_t 	raw_bp2;									/*!<  Raw Compensation Coefficient: bp2		*/
+	int16_t 	raw_b11;									/*!<  Raw Compensation Coefficient: b11		*/
+	int16_t 	raw_bp1;									/*!<  Raw Compensation Coefficient: bp1		*/
+	int16_t 	raw_bt2;									/*!<  Raw Compensation Coefficient: bt2		*/
+	int16_t 	raw_bt1;									/*!<  Raw Compensation Coefficient: bt1		*/
 } QMP6988_raw_compensation_coefficients_t;
 
 
 /* Compensation coefficients	*/
 typedef struct
 {
-	float 	b00;											/*!<  Compensation Coefficient: b00			*/
-	float 	a0;												/*!<  Compensation Coefficient: a0			*/
-	float 	a2;												/*!<  Compensation Coefficient: a2			*/
-	float 	a1;												/*!<  Compensation Coefficient: a1			*/
-	float 	bp3;											/*!<  Compensation Coefficient: bp3			*/
-	float 	b21;											/*!<  Compensation Coefficient: b21			*/
-	float 	b12;											/*!<  Compensation Coefficient: b12			*/
-	float 	bp2;											/*!<  Compensation Coefficient: bp2			*/
-	float 	b11;											/*!<  Compensation Coefficient: b11			*/
-	float 	bp1;											/*!<  Compensation Coefficient: bp1			*/
-	float 	bt2;											/*!<  Compensation Coefficient: bt2			*/
-	float 	bt1;											/*!<  Compensation Coefficient: bt1			*/
+	int32_t		b00;										/*!<  Compensation Coefficient: b00			*/
+	int32_t		a0;											/*!<  Compensation Coefficient: a0			*/
+	int32_t		a2;											/*!<  Compensation Coefficient: a2			*/
+	int32_t		a1;											/*!<  Compensation Coefficient: a1			*/
+	uint64_t	bp3;										/*!<  Compensation Coefficient: bp3			*/
+	uint64_t	b21;										/*!<  Compensation Coefficient: b21			*/
+	uint64_t	b12;										/*!<  Compensation Coefficient: b12			*/
+	uint64_t	bp2;										/*!<  Compensation Coefficient: bp2			*/
+	uint64_t	b11;										/*!<  Compensation Coefficient: b11			*/
+	uint64_t	bp1;										/*!<  Compensation Coefficient: bp1			*/
+	uint64_t	bt2;										/*!<  Compensation Coefficient: bt2			*/
+	uint64_t	bt1;										/*!<  Compensation Coefficient: bt1			*/
 } QMP6988_compensation_coefficients_t;
 
 

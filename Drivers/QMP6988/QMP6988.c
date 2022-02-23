@@ -81,7 +81,7 @@ QMP6988_status_t  QMP6988_GetRawCompensationCoefficients ( I2C_parameters_t myI2
 
     /* Read the register	*/
     cmd[0]	 =	 QMP6988_COE_B00_1;
-    aux 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_NO_STOP_BIT );
+    aux 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
     aux 	|=   i2c_read ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
     /* Parse the data	 */
@@ -89,7 +89,7 @@ QMP6988_status_t  QMP6988_GetRawCompensationCoefficients ( I2C_parameters_t myI2
     myRawK->raw_b00	  <<=	8U;
     myRawK->raw_b00	   |=	cmd[1];
     myRawK->raw_b00	  <<=	4U;
-    myRawK->raw_b00	   |=	( ( cmd[24] & 0xF0 ) >> 3U );
+    myRawK->raw_b00	   |=	( ( cmd[24] & 0xF0 ) >> 4U );
 
     myRawK->raw_bt1		=	cmd[2];
     myRawK->raw_bt1	  <<=	8U;
@@ -177,7 +177,10 @@ QMP6988_status_t  QMP6988_GetChipID ( I2C_parameters_t myI2Cparameters, uint8_t*
     /* Read the register	*/
     cmd	 =	 QMP6988_CHIP_ID;
     aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-    aux |=   i2c_read ( myI2Cparameters, (uint8_t*)&myChipID, 1U );
+    aux |=   i2c_read ( myI2Cparameters, &cmd, 1U );
+
+    /* Parse the data	 */
+    *myChipID = cmd;
 
 
 
@@ -303,7 +306,10 @@ QMP6988_status_t  QMP6988_GetIIR_Filter ( I2C_parameters_t myI2Cparameters, QMP6
     /* Read the register	*/
     cmd	 =	 QMP6988_IIR_CNT;
     aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-    aux	|=   i2c_read ( myI2Cparameters, (uint8_t*)&myFilter, 1U );
+    aux	|=   i2c_read ( myI2Cparameters, &cmd, 1U );
+
+    /* Parse the data	 */
+    *myFilter = (QMP6988_iir_filter_t)cmd;
 
 
 
@@ -388,7 +394,10 @@ QMP6988_status_t  QMP6988_GetMasterCodeI2C ( I2C_parameters_t myI2Cparameters, Q
     /* Read the register	*/
     cmd	 =	 QMP6988_I2C_SET;
     aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-    aux	|=   i2c_read ( myI2Cparameters, (uint8_t*)&myMasterCode, 1U );
+    aux	|=   i2c_read ( myI2Cparameters, &cmd, 1U );
+
+    /* Parse the data	 */
+    *myMasterCode = (QMP6988_i2c_set_master_code_t)cmd;
 
 
 
@@ -430,7 +439,10 @@ QMP6988_status_t  QMP6988_GetDeviceStat ( I2C_parameters_t myI2Cparameters, uint
     /* Read the register	*/
     cmd	 =	 QMP6988_DEVICE_STAT;
     aux	 =   i2c_write ( myI2Cparameters, &cmd, 1U, I2C_NO_STOP_BIT );
-    aux	|=   i2c_read ( myI2Cparameters, (uint8_t*)&myDeviceStat, 1U );
+    aux	|=   i2c_read ( myI2Cparameters, &cmd, 1U );
+
+    /* Parse the data	 */
+    *myDeviceStat = cmd;
 
 
 
@@ -471,9 +483,15 @@ QMP6988_status_t  QMP6988_SetPowerMode ( I2C_parameters_t myI2Cparameters, QMP69
 
 
     /* Read the register	*/
+     cmd[0]	 =	 QMP6988_CTRL_MEAS;
+     aux	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+     aux	|=   i2c_read ( myI2Cparameters, &cmd[1], 1U );
+
+    /* Update the register	*/
     cmd[0]	 =	 QMP6988_CTRL_MEAS;
-    cmd[1]	 =	 myPowerMode;
-    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    cmd[1]	&=	 ~CTRL_MEAS_POWER_MODE_MASK;
+    cmd[1]	|=	 myPowerMode;
+    aux	 	|=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -560,8 +578,14 @@ QMP6988_status_t  QMP6988_SetTemperatureAverage ( I2C_parameters_t myI2Cparamete
 
     /* Read the register	*/
     cmd[0]	 =	 QMP6988_CTRL_MEAS;
-    cmd[1]	 =	 myTempAvrg;
-    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux	 	|=   i2c_read ( myI2Cparameters, &cmd[1], 1U );
+
+    /* Update the register	*/
+    cmd[0]	 =	 QMP6988_CTRL_MEAS;
+    cmd[1]	&=	 ~CTRL_MEAS_TEMP_AVERAGE_MASK;
+    cmd[1]	|=	 myTempAvrg;
+    aux	 	|=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -648,8 +672,14 @@ QMP6988_status_t  QMP6988_SetPressureAverage ( I2C_parameters_t myI2Cparameters,
 
     /* Read the register	*/
     cmd[0]	 =	 QMP6988_CTRL_MEAS;
-    cmd[1]	 =	 myPressAvrg;
-    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux	 	|=   i2c_read ( myI2Cparameters, &cmd[1], 1U );
+
+    /* Update the register	*/
+    cmd[0]	 =	 QMP6988_CTRL_MEAS;
+    cmd[1]	&=	 ~CTRL_MEAS_PRESS_AVERAGE_MASK;
+    cmd[1]	|=	 myPressAvrg;
+    aux	 	|=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -736,8 +766,14 @@ QMP6988_status_t  QMP6988_SetStandbyTimeSetting ( I2C_parameters_t myI2Cparamete
 
     /* Read the register	*/
     cmd[0]	 =	 QMP6988_IO_SETUP;
-    cmd[1]	 =	 myStandbyTime;
-    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux	 	|=   i2c_read ( myI2Cparameters, &cmd[1], 1U );
+
+    /* Update the register	*/
+    cmd[0]	 =	 QMP6988_IO_SETUP;
+    cmd[1]	&=	 ~IO_SETUP_T_STANDBY_MASK;
+    cmd[1]	|=	 myStandbyTime;
+    aux	 	|=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -824,8 +860,15 @@ QMP6988_status_t  QMP6988_SetSPI_ModeSetting ( I2C_parameters_t myI2Cparameters,
 
     /* Read the register	*/
     cmd[0]	 =	 QMP6988_IO_SETUP;
-    cmd[1]	 =	 mySPI;
-    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux	 	|=   i2c_read ( myI2Cparameters, &cmd[1], 1U );
+
+    /* Update the register	*/
+    cmd[0]	 =	 QMP6988_IO_SETUP;
+    cmd[1]	&=	 ~IO_SETUP_SPI3W_MASK;
+    cmd[1]	|=	 mySPI;
+    aux	 	|=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+
 
 
 
@@ -912,8 +955,14 @@ QMP6988_status_t  QMP6988_SetSDI_Output ( I2C_parameters_t myI2Cparameters, QMP6
 
     /* Read the register	*/
     cmd[0]	 =	 QMP6988_IO_SETUP;
-    cmd[1]	 =	 mySDI;
-    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
+    aux	 	 =   i2c_write ( myI2Cparameters, &cmd[0], 1U, I2C_NO_STOP_BIT );
+    aux	 	|=   i2c_read ( myI2Cparameters, &cmd[1], 1U );
+
+    /* Update the register	*/
+    cmd[0]	 =	 QMP6988_IO_SETUP;
+    cmd[1]	&=	 ~IO_SETUP_SPI3_SDIM_MASK;
+    cmd[1]	|=	 mySDI;
+    aux	 	|=   i2c_write ( myI2Cparameters, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ), I2C_STOP_BIT );
 
 
 
@@ -1016,8 +1065,8 @@ QMP6988_status_t  QMP6988_GetRawMeasurements ( I2C_parameters_t myI2Cparameters,
     myData->dt	 |=	cmd[5];
 
 
-    myData->dp	-=	8388608;
-    myData->dt	-=	8388608;
+    //myData->dp	-=	8388608;
+    //myData->dt	-=	8388608;
 
 
 
@@ -1097,26 +1146,27 @@ float  QMP6988_CalculateK0 ( uint32_t otp )
  * @author      Manuel Caballero
  * @date        18/February/2022
  * @version     18/February/2022        The ORIGIN
- * @pre         N/A
+ * @pre         Due to in the datasheet is not clear how to calculate the compensated values, those have been taken from the origin repo:
+ * 				https://github.com/m5stack/UNIT_ENV/tree/master/src.
  * @warning     N/A.
  */
 QMP6988_compensation_coefficients_t  QMP6988_CalculateCompensationCoefficients	( QMP6988_raw_compensation_coefficients_t myRawK )
 {
 	QMP6988_compensation_coefficients_t	auxK;
 
-	auxK.a1		= QMP6988_CalculateK ( -0.0063, 0.00043, myRawK.raw_a1 );
-	auxK.a2		= QMP6988_CalculateK ( -0.000000000019, 0.00000000012, myRawK.raw_a2 );
-	auxK.bt1	= QMP6988_CalculateK ( 0.1, 0.091, myRawK.raw_bt1 );
-	auxK.bt2	= QMP6988_CalculateK ( 0.000000012, 0.0000012, myRawK.raw_bt2 );
-	auxK.bp1	= QMP6988_CalculateK ( 0.033, 0.019, myRawK.raw_bp1 );
-	auxK.b11	= QMP6988_CalculateK ( 0.00000021, 0.00000014, myRawK.raw_b11 );
-	auxK.bp2	= QMP6988_CalculateK ( -0.00000000063, 0.00000000035, myRawK.raw_bp2 );
-	auxK.b12	= QMP6988_CalculateK ( 0.00000000000029, 0.00000000000076, myRawK.raw_b12 );
-	auxK.b21	= QMP6988_CalculateK ( 0.0000000000000021, 0.000000000000012, myRawK.raw_b21 );
-	auxK.bp3	= QMP6988_CalculateK ( 0.00000000000000013, 0.000000000000000079, myRawK.raw_bp3 );
+	auxK.a1		= 3608L * (int32_t)myRawK.raw_a1 - 1731677965L;
+	auxK.a2		= 16889L * (int32_t)myRawK.raw_a2 - 87619360L;
+	auxK.bt1	= 2982L * (int64_t)myRawK.raw_bt1 + 107370906L;
+	auxK.bt2	= 329854L * (int64_t)myRawK.raw_bt2 + 108083093L;
+	auxK.bp1	= 19923L * (int64_t)myRawK.raw_bp1 + 1133836764L;
+	auxK.b11	= 2406L * (int64_t)myRawK.raw_b11 + 118215883L;
+	auxK.bp2	= 3079L * (int64_t)myRawK.raw_bp2 - 181579595L;
+	auxK.b12	= 6846L * (int64_t)myRawK.raw_b12 + 85590281L;
+	auxK.b21	= 6846L * (int64_t)myRawK.raw_b21 + 85590281L;
+	auxK.bp3	= 2915L * (int64_t)myRawK.raw_bp3 + 157155561L;
 
-	auxK.a0		= QMP6988_CalculateK0 ( myRawK.raw_a0 );
-	auxK.b00	= QMP6988_CalculateK0 ( myRawK.raw_b00 );
+	auxK.a0		= myRawK.raw_a0;
+	auxK.b00	= myRawK.raw_b00;
 
 
     return auxK;
@@ -1139,24 +1189,66 @@ QMP6988_compensation_coefficients_t  QMP6988_CalculateCompensationCoefficients	(
  * @author      Manuel Caballero
  * @date        18/February/2022
  * @version     18/February/2022        The ORIGIN
- * @pre         N/A
+ * @pre         Due to in the datasheet is not clear how to calculate the compensated values, those have been taken from the origin repo:
+ * 				https://github.com/m5stack/UNIT_ENV/tree/master/src
  * @warning     N/A.
  */
 QMP6988_compensated_measured_data_t	QMP6988_CalculateCompensatedMeasuredData ( QMP6988_raw_measured_data_t myData, QMP6988_compensation_coefficients_t myK )
 {
 	QMP6988_compensated_measured_data_t	auxData;
-	uint32_t auxT2, auxDp2, auxDp3;
+	int32_t  auxT, auxP;
+	int64_t  wk1, wk2, wk3;
+	int16_t  t_int;
+	uint32_t p_int;
+
 
 	/* Aux data	 */
-	auxT2			    =	( myData.dt << 1U );
-	auxDp2			    =	( myData.dp << 1U );
-	auxDp3				=	( auxDp2 * myData.dp );
+	auxT	=	(int32_t)( myData.dt - 8388608 );
+	auxP	=	(int32_t)( myData.dp - 8388608 );
 
 	/* Calculate the compensated temperature	 */
-	auxData.temperature	=	myK.a0 + ( myK.a1 * myData.dt ) + ( myK.a2 * auxT2 );
+	wk1 	= 	((int64_t)myK.a1 * (int64_t)auxT); 			// 31Q23+24-1=54 (54Q23)
+	wk2 	= 	((int64_t)myK.a2 * (int64_t)auxT) >> 14; 	// 30Q47+24-1=53 (39Q33)
+	wk2 	= 	(wk2 * (int64_t)auxT) >> 10; 				// 39Q33+24-1=62 (52Q23)
+	wk2 	= 	((wk1 + wk2) / 32767) >> 19; 				// 54,52->55Q23 (20Q04)
+	t_int 	= 	(int16_t)((myK.a0 + wk2) >> 4); 			// 21Q4 -> 17Q0
+
+	auxData.temperature	=	(float)t_int / 256.0;
 
 	/* Calculate the compensated pressure	 */
-	auxData.humidity	=	myK.b00 + ( myK.bt1 * myData.dt ) + ( myK.bp1 * myData.dp ) + ( myK.b11 * myData.dt * myData.dp ) + ( myK.bt2 * auxT2 ) + ( myK.bp2 * auxDp2 ) + ( myK.b12 * myData.dp * auxT2 ) + ( myK.b21 * auxDp2 * myData.dt ) + ( myK.bp3 * auxDp3 );
+	wk1 	= 	((int64_t)myK.bt1 * (int64_t)t_int); 		// 28Q15+16-1=43 (43Q15)
+	wk2 	= 	((int64_t)myK.bp1 * (int64_t)auxP) >> 5; 	// 31Q20+24-1=54 (49Q15)
+	wk1    += 	wk2; 										// 43,49->50Q15
+	wk2 	= 	((int64_t)myK.bt2 * (int64_t)t_int) >> 1; 	// 34Q38+16-1=49 (48Q37)
+	wk2 	= 	(wk2 * (int64_t)t_int) >> 8; 				// 48Q37+16-1=63 (55Q29)
+	wk3 	= 	wk2; 										// 55Q29
+	wk2 	= 	((int64_t)myK.b11 * (int64_t)t_int) >> 4; 	// 28Q34+16-1=43 (39Q30)
+	wk2 	= 	(wk2 * (int64_t)auxP) >> 1; 				// 39Q30+24-1=62 (61Q29)
+	wk3    += 	wk2; 										// 55,61->62Q29
+	wk2 	= 	((int64_t)myK.bp2 * (int64_t)auxP) >> 13; 	// 29Q43+24-1=52 (39Q30)
+	wk2 	= 	(wk2 * (int64_t)auxP) >> 1; 				// 39Q30+24-1=62 (61Q29)
+	wk3    += 	wk2; 										// 62,61->63Q29
+	wk1    +=	wk3 >> 14; 									// Q29 >> 14 -> Q15
+	wk2 	= 	((int64_t)myK.b12 * (int64_t)t_int); 		// 29Q53+16-1=45 (45Q53)
+	wk2 	= 	(wk2 * (int64_t)t_int) >> 22; 				// 45Q53+16-1=61 (39Q31)
+	wk2 	= 	(wk2 * (int64_t)auxP) >> 1; 				// 39Q31+24-1=62 (61Q30)
+	wk3 	= 	wk2; 										// 61Q30
+	wk2 	= 	((int64_t)myK.b21 * (int64_t)t_int) >> 6; 	// 29Q60+16-1=45 (39Q54)
+	wk2 	= 	(wk2 * (int64_t)auxP) >> 23; 				// 39Q54+24-1=62 (39Q31)
+	wk2 	= 	(wk2 * (int64_t)auxP) >> 1; 				// 39Q31+24-1=62 (61Q20)
+	wk3    += 	wk2; 										// 61,61->62Q30
+	wk2 	= 	((int64_t)myK.bp3 * (int64_t)auxP) >> 12; 	// 28Q65+24-1=51 (39Q53)
+	wk2 	= 	(wk2 * (int64_t)auxP) >> 23; 				// 39Q53+24-1=62 (39Q30)
+	wk2 	= 	(wk2 * (int64_t)auxP);	 					// 39Q30+24-1=62 (62Q30)
+	wk3    += 	wk2; 										// 62,62->63Q30
+	wk1    += 	wk3 >> 15; 									// Q30 >> 15 = Q15
+	wk1    /= 	32767L;
+	wk1   >>= 11; 											// Q15 >> 7 = Q4
+	wk1    += myK.b00; 										// Q4 + 20Q4
+	//wk1 >>= 4;
+	p_int = (int32_t)wk1;
+
+	auxData.pressure	=	(float)p_int / 16.0;
 
     return auxData;
 }
