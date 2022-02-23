@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the external device: QMP6988.
+ * @details     This example shows how to work with the external device: QMP6988.
  * 				A new sample is read every 1 second and transmitted through the UART (115200 baud)
  *
  * 				The rest of the time, the microcontroller is in low-power: Flexi Mode.
@@ -21,7 +21,7 @@
 #include "board.h"
 #include "functions.h"
 #include "interrupts.h"
-//#include "QMP6988.h"
+#include "QMP6988.h"
 
 
 /**@brief Constants.
@@ -42,9 +42,9 @@ int main(int argc, char *argv[])
 {
 	uint32_t 			i;
 	uint8_t  			myMessage[ TX_BUFF_SIZE ];
-//	I2C_parameters_t    myQMP6988_I2C_parameters;
-//	QMP6988_user_data_t	myQMP6988_Data;
-//	QMP6988_status_t  	aux;
+	I2C_parameters_t    myQMP6988_I2C_parameters;
+	QMP6988_user_data_t	myQMP6988_Data;
+	QMP6988_status_t  	aux;
 
 	/**
 	 * Initialize managed drivers and/or services that have been added to 
@@ -62,22 +62,52 @@ int main(int argc, char *argv[])
 	conf_Timer0 ();
 
 
-//	/* I2C definition   */
-//	myQMP6988_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
-//	myQMP6988_I2C_parameters.sda         	 =    I2C0_SDA;
-//	myQMP6988_I2C_parameters.scl         	 =    I2C0_SCL;
-//	myQMP6988_I2C_parameters.addr        	 =    QMP6988_ADDRESS;
-//	myQMP6988_I2C_parameters.freq        	 =    100000;
-//	myQMP6988_I2C_parameters.pclkFrequency =	  6400000;
-//	myQMP6988_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
-//	myQMP6988_I2C_parameters.sclPort     	 =    pADI_GPIO0;
-//
-//	/* Configure I2C peripheral */
-//	aux  =   QMP6988_Init ( myQMP6988_I2C_parameters );
-//
-//	/* Reset the device	 */
-//	aux  =   QMP6988_SoftReset ( myQMP6988_I2C_parameters );
+	/* I2C definition   */
+	myQMP6988_I2C_parameters.i2cInstance 	 =    pADI_I2C0;
+	myQMP6988_I2C_parameters.sda         	 =    I2C0_SDA;
+	myQMP6988_I2C_parameters.scl         	 =    I2C0_SCL;
+	myQMP6988_I2C_parameters.addr        	 =    QMP6988_ADDRESS_SDO_LOW;
+	myQMP6988_I2C_parameters.freq        	 =    100000;
+	myQMP6988_I2C_parameters.pclkFrequency =	  6400000;
+	myQMP6988_I2C_parameters.sdaPort     	 =    pADI_GPIO0;
+	myQMP6988_I2C_parameters.sclPort     	 =    pADI_GPIO0;
 
+	/* Configure I2C peripheral */
+	aux  =   QMP6988_Init ( myQMP6988_I2C_parameters );
+
+	/* Reset the device	 */
+	//aux  =   QMP6988_SoftReset ( myQMP6988_I2C_parameters );
+	for ( i = 0UL; i < 0x232; i++ );
+
+	/* Get chip ID */
+	aux  =   QMP6988_GetChipID ( myQMP6988_I2C_parameters, &myQMP6988_Data.chip_id );
+
+	/* Wait until the OTP values are available	 */
+	do{
+		aux  =   QMP6988_GetDeviceStat ( myQMP6988_I2C_parameters, &myQMP6988_Data.device_stat );
+	}while( ( myQMP6988_Data.device_stat & DEVICE_STAT_OTP_UPDATE_MASK ) == DEVICE_STAT_OTP_UPDATE_BUSY );
+
+	/* Raw compensation coefficients */
+	aux  =   QMP6988_GetRawCompensationCoefficients	( myQMP6988_I2C_parameters, &myQMP6988_Data.raw_k );
+
+	/* Calculate compensation coefficients */
+	myQMP6988_Data.k  =   QMP6988_CalculateCompensationCoefficients	( myQMP6988_Data.raw_k );
+
+	/* Temperature average: FILTER: N = 4 */
+	myQMP6988_Data.filter = IIR_FILTER_N_4;
+	aux  =   QMP6988_SetIIR_Filter ( myQMP6988_I2C_parameters, myQMP6988_Data.filter );
+
+	/* Temperature average: TEMP_AVERAGE:  8 */
+	myQMP6988_Data.temp_average = CTRL_MEAS_TEMP_AVERAGE_8;
+	aux  =   QMP6988_SetTemperatureAverage ( myQMP6988_I2C_parameters, myQMP6988_Data.temp_average );
+
+	/* Pressure average: PRESS_AVERAGE:  8 */
+	myQMP6988_Data.press_average = CTRL_MEAS_PRESS_AVERAGE_8;
+	aux  =   QMP6988_SetPressureAverage ( myQMP6988_I2C_parameters, myQMP6988_Data.press_average );
+
+	/* Power mode: Sleep mode */
+	myQMP6988_Data.power_mode = CTRL_MEAS_POWER_MODE_SLEEP_MODE;
+	aux  =   QMP6988_SetPowerMode ( myQMP6988_I2C_parameters, myQMP6988_Data.power_mode );
 
 
 	/* Enable Timer0	 */
@@ -109,22 +139,24 @@ int main(int argc, char *argv[])
 			pADI_GPIO1->SET	|=	 DS4;
 			pADI_GPIO2->SET	|=	 DS3;
 
-//			/* Trigger a new measurement data	 */
-//			aux	 =	QMP6988_TriggerMeasurement ( myQMP6988_I2C_parameters );
-//			for ( i = 0UL; i < 0x232; i++ ){}
-//
-//			/* Get the temperature value	 */
-//			aux	 =	QMP6988_GetAllData ( myQMP6988_I2C_parameters, (QMP6988_user_data_t*)&myQMP6988_Data );
-//
-//			/* Process the temperature data	 */
-//			myQMP6988_Data.temperature.temperature = QMP6988_ProcessTemperature ( myQMP6988_Data.temperature.raw_temperature );
-//
-//			/* Process the humidity data	 */
-//			myQMP6988_Data.humidity.humidity = QMP6988_ProcessHumidity ( myQMP6988_Data.humidity.raw_humidity );
-//
-//
-//			/* Transmit data through the UART	 */
-//			sprintf ( (char*)myMessage, "Temp: %0.2f C | RH: %0.3f %%\r\n", myQMP6988_Data.temperature.temperature, myQMP6988_Data.humidity.humidity );
+			/* Power mode: Forced mode */
+			myQMP6988_Data.power_mode = CTRL_MEAS_POWER_MODE_FORCED_MODE;
+			aux  =   QMP6988_SetPowerMode ( myQMP6988_I2C_parameters, myQMP6988_Data.power_mode );
+
+			/* Wait until a new set of data is available	 */
+			do{
+				aux  =   QMP6988_GetDeviceStat ( myQMP6988_I2C_parameters, &myQMP6988_Data.device_stat );
+			}while( ( myQMP6988_Data.device_stat & DEVICE_STAT_MEASURE_MASK ) == DEVICE_STAT_MEASURE_BUSY );
+
+			/* Get the raw data */
+			aux  =   QMP6988_GetRawMeasurements ( myQMP6988_I2C_parameters, &myQMP6988_Data.raw_txd );
+
+			/* Process both temperature and pressure data	 */
+			myQMP6988_Data.txd	 =	QMP6988_CalculateCompensatedMeasuredData( myQMP6988_Data.raw_txd, myQMP6988_Data.k );
+
+
+			/* Transmit data through the UART	 */
+			sprintf ( (char*)myMessage, "Temp: %0.2f C | Press: %0.3f Pa\r\n", myQMP6988_Data.txd.temperature, myQMP6988_Data.txd.pressure );
 
 			/* Check that is safe to send data	 */
 			while( ( pADI_UART0->LSR & ( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) ) == ~( ( 1U << BITP_UART_LSR_THRE ) | ( 1U << BITP_UART_LSR_TEMT ) ) );
