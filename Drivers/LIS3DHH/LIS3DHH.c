@@ -1,6 +1,6 @@
 /**
  * @brief       LIS3DHH.c
- * @details     3D Low Frequency Wakeup Receiver.
+ * @details     MEMS motion sensor: Three-axis digital output accelerometer.
  *              Functions file.
  *
  *
