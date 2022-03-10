@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 	myLIS3DHH_SPI_parameters.mosi         	 		 =   SPI0_MOSI;
 	myLIS3DHH_SPI_parameters.miso         	 		 =   SPI0_MISO;
 	myLIS3DHH_SPI_parameters.sclk         	 		 =   SPI0_CLK;
-	myLIS3DHH_SPI_parameters.cs         	 		 =   SPI0_CS;
+	myLIS3DHH_SPI_parameters.cs         	 		 =   SPI0_CS1;
 	myLIS3DHH_SPI_parameters.SPImode		 		 =	 SPI_MODE_0;
 	myLIS3DHH_SPI_parameters.SPIenable_line_mode	 =	 SPI_ENABLE_LINE_LOW;
 	myLIS3DHH_SPI_parameters.SPIbyte_order			 =	 SPI_ORDER_MSB_FIRST;
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 	myLIS3DHH_SPI_parameters.mosiPort     	 		 =   pADI_GPIO0;
 	myLIS3DHH_SPI_parameters.misoPort     	 		 =   pADI_GPIO0;
 	myLIS3DHH_SPI_parameters.sclkPort     	 		 =   pADI_GPIO0;
-	myLIS3DHH_SPI_parameters.csPort     	 		 =   pADI_GPIO0;
+	myLIS3DHH_SPI_parameters.csPort     	 		 =   pADI_GPIO1;
 
 	/* Configure I2C peripheral */
 	aux  =   LIS3DHH_Init ( myLIS3DHH_SPI_parameters );

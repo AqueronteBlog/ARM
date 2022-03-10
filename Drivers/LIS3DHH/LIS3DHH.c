@@ -86,7 +86,7 @@ LIS3DHH_status_t  LIS3DHH_GetDeviceIdentification ( spi_parameters_t mySPI_param
 
 
     /* Read the device identifier	 */
-    mySPI_status	 =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)&myID, 1U );
+    mySPI_status	 =   spi_transfer ( mySPI_parameters, &cmd, 1U, myID, 1U );
 
 
 

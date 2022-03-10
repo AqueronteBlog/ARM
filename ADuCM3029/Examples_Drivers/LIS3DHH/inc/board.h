@@ -64,7 +64,7 @@ typedef enum{
   SPI0_MOSI  = 1U,						/*!<   SPI0_MOSI: P0_01   				*/
   SPI0_MISO  = 2U,						/*!<   SPI0_MISO: P0_02   				*/
   SPI0_CLK   = 0U,						/*!<   SPI0_CLK:  P0_00   				*/
-  SPI0_CS    = 3U						/*!<   SPI0_CD:   P0_03   				*/
+  SPI0_CS1   = 10U						/*!<   SPI0_CS1:  P1_10   				*/
 } ADICUP3029_board_spi0_t;
 
 
