@@ -130,7 +130,7 @@ LIS3DHH_status_t  LIS3DHH_SetPowerMode ( spi_parameters_t mySPI_parameters, LIS3
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd[0]		 =	 ( LIS3DHH_READ |  LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -179,7 +179,7 @@ LIS3DHH_status_t  LIS3DHH_GetPowerMode	( spi_parameters_t mySPI_parameters, LIS3
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd		 =	 ( LIS3DHH_READ |  LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -227,7 +227,7 @@ LIS3DHH_status_t  LIS3DHH_SetRegisterAutoIncrement ( spi_parameters_t mySPI_para
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd[0]		 =	 ( LIS3DHH_READ |  LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -276,7 +276,7 @@ LIS3DHH_status_t  LIS3DHH_GetRegisterAutoIncrement ( spi_parameters_t mySPI_para
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -324,7 +324,7 @@ LIS3DHH_status_t  LIS3DHH_SetRebootMemoryContent ( spi_parameters_t mySPI_parame
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd[0]		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -373,7 +373,7 @@ LIS3DHH_status_t  LIS3DHH_GetRebootMemoryContent ( spi_parameters_t mySPI_parame
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -420,7 +420,7 @@ LIS3DHH_status_t  LIS3DHH_SoftwareReset ( spi_parameters_t mySPI_parameters )
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd[0]		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -469,7 +469,7 @@ LIS3DHH_status_t  LIS3DHH_GetSoftwareResetStatus ( spi_parameters_t mySPI_parame
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -517,7 +517,7 @@ LIS3DHH_status_t  LIS3DHH_SetDataReadyOnINT1 ( spi_parameters_t mySPI_parameters
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd[0]		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -566,7 +566,7 @@ LIS3DHH_status_t  LIS3DHH_GetDataReadyOnINT1 ( spi_parameters_t mySPI_parameters
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -614,7 +614,7 @@ LIS3DHH_status_t  LIS3DHH_SetBlockDataUpdate ( spi_parameters_t mySPI_parameters
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd[0]		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -663,7 +663,7 @@ LIS3DHH_status_t  LIS3DHH_GetBlockDataUpdate ( spi_parameters_t mySPI_parameters
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG1 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG1 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -756,7 +756,7 @@ LIS3DHH_status_t  LIS3DHH_GetINT1 ( spi_parameters_t mySPI_parameters, LIS3DHH_i
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_INT1_CTRL );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_INT1_CTRL );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Parse the data	 */
@@ -854,7 +854,7 @@ LIS3DHH_status_t  LIS3DHH_GetINT2 ( spi_parameters_t mySPI_parameters, LIS3DHH_i
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_INT2_CTRL );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_INT2_CTRL );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Parse the data	 */
@@ -906,7 +906,7 @@ LIS3DHH_status_t  LIS3DHH_SetDigitalFilter ( spi_parameters_t mySPI_parameters, 
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd[0]		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -954,7 +954,7 @@ LIS3DHH_status_t  LIS3DHH_GetDigitalFilter ( spi_parameters_t mySPI_parameters, 
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -1001,7 +1001,7 @@ LIS3DHH_status_t  LIS3DHH_SetUserBandwidth ( spi_parameters_t mySPI_parameters, 
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd[0]		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -1049,7 +1049,7 @@ LIS3DHH_status_t  LIS3DHH_GetUserBandwidth ( spi_parameters_t mySPI_parameters, 
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -1096,7 +1096,7 @@ LIS3DHH_status_t  LIS3DHH_SetSelfTest ( spi_parameters_t mySPI_parameters, LIS3D
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd[0]		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -1144,7 +1144,7 @@ LIS3DHH_status_t  LIS3DHH_GetSelfTest ( spi_parameters_t mySPI_parameters, LIS3D
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -1191,7 +1191,7 @@ LIS3DHH_status_t  LIS3DHH_SetINT2_PinMode ( spi_parameters_t mySPI_parameters, L
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd[0]		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -1239,7 +1239,7 @@ LIS3DHH_status_t  LIS3DHH_GetINT2_PinMode ( spi_parameters_t mySPI_parameters, L
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -1286,7 +1286,7 @@ LIS3DHH_status_t  LIS3DHH_SetINT1_PinMode ( spi_parameters_t mySPI_parameters, L
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd[0]		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -1334,7 +1334,7 @@ LIS3DHH_status_t  LIS3DHH_GetINT1_PinMode ( spi_parameters_t mySPI_parameters, L
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -1381,7 +1381,7 @@ LIS3DHH_status_t  LIS3DHH_SetFIFO_MemoryEnable ( spi_parameters_t mySPI_paramete
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd[0]		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[1], 1U );
 
 	/* Mask the data and update the register	 */
@@ -1429,7 +1429,7 @@ LIS3DHH_status_t  LIS3DHH_GetFIFO_MemoryEnable ( spi_parameters_t mySPI_paramete
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG4 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG4 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -1520,7 +1520,7 @@ LIS3DHH_status_t  LIS3DHH_GetFIFO_SPI_HighSpeed	( spi_parameters_t mySPI_paramet
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_CTRL_REG5 );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_CTRL_REG5 );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -1566,7 +1566,7 @@ LIS3DHH_status_t  LIS3DHH_GetRawTemperature	( spi_parameters_t mySPI_parameters,
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_OUT_TEMP_H );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_OUT_TEMP_H );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -1574,7 +1574,7 @@ LIS3DHH_status_t  LIS3DHH_GetRawTemperature	( spi_parameters_t mySPI_parameters,
 	myRawTemperature->raw_temperature  <<=	 8U;
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_OUT_TEMP_L );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_OUT_TEMP_L );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Mask and parse the data	 */
@@ -1658,7 +1658,7 @@ LIS3DHH_status_t  LIS3DHH_GetStatusRegister ( spi_parameters_t mySPI_parameters,
 
 
 	/* Read the register	 */
-	cmd		 =	 ( LIS3DHH_READ & LIS3DHH_STATUS );
+	cmd		 =	 ( LIS3DHH_READ | LIS3DHH_STATUS );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)&myStatus, 1U );
 
 
@@ -1702,7 +1702,7 @@ LIS3DHH_status_t  LIS3DHH_GetRawAcceleration ( spi_parameters_t mySPI_parameters
 
 
 	/* Read the register	 */
-	cmd[0]		 =	 ( LIS3DHH_READ & LIS3DHH_OUT_X_L_XL );
+	cmd[0]		 =	 ( LIS3DHH_READ | LIS3DHH_OUT_X_L_XL );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd[0], 1U, &cmd[0], sizeof( cmd )/sizeof( cmd[0] ) );
 
 	/* Parse the data	 */
@@ -1849,7 +1849,7 @@ LIS3DHH_status_t  LIS3DHH_GetFIFO_Mode ( spi_parameters_t mySPI_parameters, LIS3
 
 
 	/* Read the register	 */
-	cmd		 	 =	 ( LIS3DHH_READ & LIS3DHH_FIFO_CTRL );
+	cmd		 	 =	 ( LIS3DHH_READ | LIS3DHH_FIFO_CTRL );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Parse the data	 */
@@ -1896,7 +1896,7 @@ LIS3DHH_status_t  LIS3DHH_GetFIFO_ThresholdLevel ( spi_parameters_t mySPI_parame
 
 
 	/* Read the register	 */
-	cmd		 	 =	 ( LIS3DHH_READ & LIS3DHH_FIFO_CTRL );
+	cmd		 	 =	 ( LIS3DHH_READ | LIS3DHH_FIFO_CTRL );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, &cmd, 1U );
 
 	/* Parse the data	 */
@@ -1943,7 +1943,7 @@ LIS3DHH_status_t  LIS3DHH_GetFIFO_Status ( spi_parameters_t mySPI_parameters, ui
 
 
 	/* Read the register	 */
-	cmd		 	 =	 ( LIS3DHH_READ & LIS3DHH_FIFO_SRC );
+	cmd		 	 =	 ( LIS3DHH_READ | LIS3DHH_FIFO_SRC );
 	mySPI_status =   spi_transfer ( mySPI_parameters, &cmd, 1U, (uint8_t*)&myFIFO_status, 1U );
 
 

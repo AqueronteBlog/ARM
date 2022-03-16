@@ -143,6 +143,12 @@ spi_status_t spi_init ( spi_parameters_t mySPIparameters )
 				/* SPI: Master mode enabled	 */
 				mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_MASEN );
 
+				/* SPI: MISO normal	 */
+				//mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_OEN );
+
+				/* SPI: Rx Overflow Overwrite Enable	 */
+				//mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_RXOF );
+
 				/* SPI: No DMA for transfer data	 */
 				mySPIparameters.SPIInstance->DMA	&=	~( 1U << BITP_SPI_DMA_EN );
 
@@ -197,21 +203,21 @@ spi_status_t spi_transfer ( spi_parameters_t mySPIparameters, uint8_t* spi_tx_bu
 //
 //	}while( ( mySPIparameters.SPIInstance->STAT & ( 1U << BITP_SPI_STAT_XFRDONE ) ) != ( 1U << BITP_SPI_STAT_XFRDONE ) );
 
-	/* Turn on the SPI, Continuous transfer and flush for Tx and Rx FIFO enabled	 */
-	mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_SPIEN );
 
 	/* Frame disabled	 */
-	mySPIparameters.SPIInstance->CNT	&=	~( 1U << BITP_SPI_CNT_FRAMECONT );
+	mySPIparameters.SPIInstance->CNT	|=	 ( 1U << BITP_SPI_CNT_FRAMECONT );
 
+	mySPIparameters.SPIInstance->RD_CTL	|=	 ( 1U << BITP_SPI_RD_CTL_CMDEN );			// Read mode command is disabled [todo] this can go to spi_init function
+
+	mySPIparameters.SPIInstance->RD_CTL	&=	~( 0b1111 << BITP_SPI_RD_CTL_TXBYTES );		// [todo]Bytes to be transfered
+	mySPIparameters.SPIInstance->RD_CTL	|=	 ( ( spi_tx_length - 1U ) << BITP_SPI_RD_CTL_TXBYTES );
+
+	/* Turn on the SPI	 */
+	mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_SPIEN );
 
 	/* SPI: Transmit data	 */
 	mySPIparameters.csPort->CLR			|=	 ( 1U << mySPIparameters.cs );
-	//mySPIparameters.SPIInstance->CTL	&=	~( 1U << BITP_SPI_CTL_TFLUSH );				// Flush for Tx disabled
 	mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_TIM );				// Initiate transfer with a write to the SPI_TX register.
-	mySPIparameters.SPIInstance->CNT	&=	~( 0b11111111111111 << BITP_SPI_CNT_VALUE );	// Bytes to be transfered
-	mySPIparameters.SPIInstance->CNT	|=	 ( ( spi_tx_length + spi_rx_length ) << BITP_SPI_CNT_VALUE );	// Bytes to be transfered
-
-	mySPIparameters.SPIInstance->RD_CTL	|=	 ( 1U << BITP_SPI_RD_CTL_CMDEN );			// Read mode command is enabled [todo] this can go to spi_init function
 
 
 	for ( i = 0UL; i < spi_tx_length; i++ )
@@ -226,11 +232,16 @@ spi_status_t spi_transfer ( spi_parameters_t mySPIparameters, uint8_t* spi_tx_bu
 	}
 
 	/* SPI: Receive data	 */
-	//mySPIparameters.SPIInstance->CTL	|=	 ( 1U << BITP_SPI_CTL_TFLUSH );				// Flush for Tx enabled
-	mySPIparameters.SPIInstance->CTL	&=	~( 1U << BITP_SPI_CTL_RFLUSH );				// Flush for Rx disabled
+	mySPIparameters.SPIInstance->RD_CTL	&=	~( 1U << BITP_SPI_RD_CTL_OVERLAP );
+
+
+	mySPIparameters.SPIInstance->CTL	&=	~( 1U << BITP_SPI_CTL_RFLUSH );
 	mySPIparameters.SPIInstance->CTL	&=	~( 1U << BITP_SPI_CTL_TIM );				// initiate transfer with a read of the SPI_RX register.
 	mySPIparameters.SPIInstance->CNT	&=	~( 0b11111111111111 << BITP_SPI_CNT_VALUE );
 	mySPIparameters.SPIInstance->CNT	|=	 ( spi_rx_length << BITP_SPI_CNT_VALUE );	// Bytes to be transfered
+
+	mySPIparameters.SPIInstance->FLOW_CTL	&=	~( 0b1111 << BITP_SPI_FLOW_CTL_RDBURSTSZ );
+	mySPIparameters.SPIInstance->FLOW_CTL	|=	 ( ( spi_rx_length - 1U ) << BITP_SPI_FLOW_CTL_RDBURSTSZ );	//
 
 	for ( i = 0UL; i < spi_rx_length; i++ )
 	{
@@ -240,8 +251,6 @@ spi_status_t spi_transfer ( spi_parameters_t mySPIparameters, uint8_t* spi_tx_bu
 		while( ( ( mySPIparameters.SPIInstance->STAT & ( 0b1111 << BITP_SPI_STAT_RXIRQ ) ) != ( 0U << BITP_SPI_STAT_RXIRQ ) ) && ( --spi_timeout2 ) );      // Wait until the data is received or timeout2
 		mySPIparameters.SPIInstance->STAT	|=	 ( 1U << BITP_SPI_STAT_RXIRQ );			// Clear the flag
 	}
-
-
 
 
 	/* Turn off the SPI	 */
